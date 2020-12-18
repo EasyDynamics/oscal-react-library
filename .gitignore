@@ -7,6 +7,18 @@
 node_modules/
 dist/
 
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+.eslintcache
+
+# testing
+/coverage
+
+# production
+/build
+
 # Compiled Java class files
 *.class
 
@@ -25,6 +37,9 @@ dist/
 
 # JetBrains IDE
 .idea/
+
+# Eclipse
+.project
 
 # Unit test reports
 TEST*.xml
