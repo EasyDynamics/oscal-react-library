@@ -7,10 +7,11 @@ const useStyles = makeStyles((theme) => ({
 		  'padding-left': '2em'
 	  },
 	  OSCALCatalogGroupControlStatement: {
-		  'padding-left': '3.5em'
+		  'padding-left': '0em'
 	  }
 	}));
 
+// TODO - This is probably 800-53 specific?
 function getPartLabel(properties) {
 	if (!properties) {return;}
 	var property;
@@ -21,6 +22,7 @@ function getPartLabel(properties) {
 	}
 }
 
+// TODO - This is probably 800-53 specific?
 function getParameterReplacedProse(prose, parameters) {
 	if (!prose) {return;}
 	function getParameter(match) {

@@ -1,52 +1,65 @@
 import React from 'react';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
-import Collapse from '@material-ui/core/Collapse';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import OSCALCatalogGroupControlPart from './OSCALCatalogGroupControlPart.js';
 
 const useStyles = makeStyles((theme) => ({
-	  OSCALCatalogGroupControlId: {
-		  'text-transform': 'uppercase',
-		  'backgroundColor': '#FF6600',
-		  'font-size': '0.85em'
+	  OSCALCatalogGroupControl: {
+		  'margin': '1em 0 1em 0'
 	  },
-	  OSCALCatalogGroupControlEnhancements: {
-		  'margin-left': '1.5em'
-	  }
-	}));
+	  OSCALCatalogGroupControlId: {
+		  'text-transform': 'uppercase'
+	  },
+	  OSCALCatalogGroupControlChildLevel: props => (props.childLevel > 0 ?
+			  {
+		  		'margin': '1em 1.5em 1em 1.5em',
+		  	    'background-color': '#fffefa'
+			  } : ''
+	  ),
+	  OSCALCatalogGroupControlChildLevelTitle: props => (props.childLevel > 0 ?
+			  {
+		  		'font-size': '1.1rem'
+			  } : ''
+	  ),
+	 // TODO - This is probably 800-53 specific?
+	  OSCALCatalogGroupControlStatus: props => getControlStatusCss(props)
+	  }));
+
+// TODO - This is probably 800-53 specific?
+function getControlStatusCss(props) {
+	if (!props.control.properties) {return;}
+	var property;
+	for (property of props.control.properties) {
+		if (property.name === 'status') {
+			return { 
+				'text-decoration': 'line-through',
+				'color': '#d4d4d4'
+			};
+		}
+	}
+	return '';
+}
 
 export default function OSCALCatalogGroupControl(props) {
-	const classes = useStyles();
-	
-	const [open, setOpen] = React.useState(true);
 
-	const handleClick = () => {
-	    setOpen(!open);
-	  };
+	const classes = useStyles(props);
 	
 	return (
-			<React.Fragment key={props.control.id + "-fragment"}>
-			<ListItem key={props.control.id} button onClick={handleClick}>
-				<ListItemAvatar key={props.control.id + "=avatar"}>
-		          <Avatar className={classes.OSCALCatalogGroupControlId}>{props.control.id}</Avatar>
-		        </ListItemAvatar>
-				<ListItemText key={props.control.id + "-text"} primary={props.control.title} />
-		        {open ? <ExpandLess /> : <ExpandMore />}
-			</ListItem>
-			<Collapse key={props.control.id + "-controls"} in={open} timeout="auto" unmountOnExit>
-				{props.control.parts && props.control.parts.map(part => (
-		          <OSCALCatalogGroupControlPart part={part} parameters={props.control.parameters} />
-	            ))}
-				{props.control.controls && props.control.controls.map(control => (
-		          <OSCALCatalogGroupControl control={control} parameters={control.parameters} />
-	            ))}
-		    </Collapse>
-		    </React.Fragment>
+			<Card className={`${classes.OSCALCatalogGroupControl} ${classes.OSCALCatalogGroupControlStatus} ${classes.OSCALCatalogGroupControlChildLevel}`}>
+				<CardContent>
+			        <Typography variant="h6" component="h2" className={classes.OSCALCatalogGroupControlChildLevelTitle}>
+			        	<span className={classes.OSCALCatalogGroupControlId}>{props.control.id}</span> - {props.control.title}
+			        </Typography>
+			        {props.control.parts && props.control.parts.map(part => (
+			          <OSCALCatalogGroupControlPart part={part} parameters={props.control.parameters} />
+		            ))}
+					{props.control.controls && props.control.controls.map(control => (
+			          <OSCALCatalogGroupControl control={control} parameters={control.parameters} childLevel={props.childLevel+1}/>
+		            ))}
+		        </CardContent>
+		     </Card>
 		  );
 	
 }

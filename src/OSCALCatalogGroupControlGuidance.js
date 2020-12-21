@@ -5,13 +5,13 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
 	  OSCALCatalogGroupControlGuidanceButton: {
-		  'margin': '0 0 1em 2em',
-		  'color': '#002867'
+		  'color': '#002867',
+		  'margin-top': '1em',
+		  'margin-bottom': '0.5em'
 	  }
 	}));
 
@@ -39,8 +39,8 @@ export default function OSCALCatalogGroupControlGuidance(props) {
 	
 	return (
 			<React.Fragment>
-			<Button className={classes.OSCALCatalogGroupControlGuidanceButton} onClick={handleClick}>
-				<HelpOutlineIcon/>
+			<Button variant="outlined" size="small" className={classes.OSCALCatalogGroupControlGuidanceButton} onClick={handleClick}>
+				Guidance
 			</Button>
 			<Dialog
 		        open={open}

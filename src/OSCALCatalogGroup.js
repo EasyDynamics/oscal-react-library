@@ -40,7 +40,7 @@ export default function OSCALCatalogGroup(props) {
 			<Collapse key={props.group.id + "-collapse"} in={open} timeout="auto" unmountOnExit>
 				<List className={classes.OSCALCatalogGroupControlList}>
 	        	{props.group.controls.map(control => (
-			          <OSCALCatalogGroupControl control={control} indentLevel={0} />
+			          <OSCALCatalogGroupControl control={control} childLevel={0} />
 		            ))}
 	        	</List>
 		     </Collapse>
