@@ -4,11 +4,20 @@ import OSCALCatalog from './OSCALCatalog.js';
 import Alert from '@material-ui/lab/Alert';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import ReplayIcon from '@material-ui/icons/Replay';
 
 const useStyles = makeStyles((theme) => ({
 	  catalogForm: {
 	    marginTop: theme.spacing(4),
 	    marginBottom: theme.spacing(3),
+	  },
+	  // TODO - This is a bit hacky
+	  catalogUrlInput: {
+		 maxWidth: '80%'
+	  },
+	  reloadButton: {
+		 marginLeft: theme.spacing(3)
 	  }
 	}));
 
@@ -41,7 +50,10 @@ export default function OSCALCatalogLoader() {
   
   const handleChange = (event) => {
 	  setCatalogUrl(event.target.value);
-	  loadCatalog(event.target.value);
+  };
+  
+  const handleReloadClick = (event) => {
+	  loadCatalog(catalogUrl);
   };
 
   // Note: the empty deps array [] means
@@ -65,6 +77,7 @@ export default function OSCALCatalogLoader() {
 		<form className={classes.catalogForm} noValidate autoComplete="off" onSubmit={e => { e.preventDefault(); }}>
 			<TextField
 	          id="oscal-catalog"
+	          className={classes.catalogUrlInput}
 	          label="OSCAL Catalog URL"
 	          defaultValue={catalogUrl}
 	          helperText="(JSON Format)"
@@ -72,6 +85,15 @@ export default function OSCALCatalogLoader() {
 	          fullWidth
 	          onChange={handleChange}
 	        />
+			<Button
+		        variant="contained"
+		        color="primary"
+		        className={classes.reloadButton}
+		        endIcon={<ReplayIcon>send</ReplayIcon>}
+			    onClick={handleReloadClick}
+		      >
+			  Reload
+			</Button>
 		</form>
 	    {result}
 	  	</React.Fragment>
