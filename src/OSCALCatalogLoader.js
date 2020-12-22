@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import OSCALCatalog from './OSCALCatalog.js';
+import Grid from '@material-ui/core/Grid';
 import Alert from '@material-ui/lab/Alert';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
@@ -10,14 +11,7 @@ import ReplayIcon from '@material-ui/icons/Replay';
 const useStyles = makeStyles((theme) => ({
 	  catalogForm: {
 	    marginTop: theme.spacing(4),
-	    marginBottom: theme.spacing(3),
-	  },
-	  // TODO - This is a bit hacky
-	  catalogUrlInput: {
-		 maxWidth: '80%'
-	  },
-	  reloadButton: {
-		 marginLeft: theme.spacing(3)
+	    marginBottom: theme.spacing(4),
 	  }
 	}));
 
@@ -76,25 +70,29 @@ export default function OSCALCatalogLoader() {
 	return (
 		<React.Fragment>
 		<form className={classes.catalogForm} noValidate autoComplete="off" onSubmit={e => { e.preventDefault(); }}>
-			<TextField
-	          id="oscal-catalog"
-	          className={classes.catalogUrlInput}
-	          label="OSCAL Catalog URL"
-	          defaultValue={catalogUrl}
-	          helperText="(JSON Format)"
-	          variant="outlined"
-	          fullWidth
-	          onChange={handleChange}
-	        />
-			<Button
-		        variant="contained"
-		        color="primary"
-		        className={classes.reloadButton}
-		        endIcon={<ReplayIcon>send</ReplayIcon>}
-			    onClick={handleReloadClick}
-		      >
-			  Reload
-			</Button>
+			<Grid container spacing={3}>
+				<Grid item xs={10}>
+					<TextField
+			          id="oscal-catalog"
+			          label="OSCAL Catalog URL"
+			          defaultValue={catalogUrl}
+			          helperText="(JSON Format)"
+			          variant="outlined"
+			          fullWidth
+			          onChange={handleChange}
+			        />
+			     </Grid>
+				 <Grid item xs={2}>
+					<Button
+				        variant="contained"
+				        color="primary"
+				        endIcon={<ReplayIcon>send</ReplayIcon>}
+					    onClick={handleReloadClick}
+				      >
+					  Reload
+					</Button>
+				  </Grid>
+			</Grid>
 		</form>
 	    {result}
 	  	</React.Fragment>

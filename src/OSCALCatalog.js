@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListSubheader from '@material-ui/core/ListSubheader';
+import OSCALMetadata from './OSCALMetadata.js';
 import OSCALCatalogGroup from './OSCALCatalogGroup.js';
 
 const useStyles = makeStyles((theme) => ({
@@ -17,12 +17,7 @@ export default function OSCALCatalog(props) {
 	
 	  return (
 	    <div className={classes.paper}>
-		    <Typography variant="h6">
-	        	{props.catalog.metadata.title}
-	        </Typography>
-	        <Typography variant="body2">
-	          	({props.catalog.metadata.version})
-	        </Typography>
+	        <OSCALMetadata metadata={props.catalog.metadata} />
 	        <List
 	        	subheader={
 	        		<ListSubheader component="div" disableSticky={true} id="nested-list-subheader">

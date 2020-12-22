@@ -50,7 +50,7 @@ export default function OSCALCatalogGroupControl(props) {
 		<Card className={`${classes.OSCALCatalogGroupControl} ${classes.OSCALCatalogGroupControlStatus} ${classes.OSCALCatalogGroupControlChildLevel}`}>
 			<CardContent>
 		        <Typography variant="h6" component="h2" className={classes.OSCALCatalogGroupControlChildLevelTitle}>
-		        	<span className={classes.OSCALCatalogGroupControlId}>{props.control.id}</span> - {props.control.title}
+		        	<span className={classes.OSCALCatalogGroupControlId}>{props.control.id}</span> {props.control.title}
 		        </Typography>
 		        {props.control.parts && props.control.parts.map(part => (
 		          <OSCALCatalogGroupControlPart part={part} parameters={props.control.parameters} />
