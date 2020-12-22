@@ -61,6 +61,7 @@ export default function OSCALCatalogLoader() {
   // similar to componentDidMount()
   useEffect(() => {
     loadCatalog(catalogUrl);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
 
   let result;
