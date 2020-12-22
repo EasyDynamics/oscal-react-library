@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 	  OSCALCatalogGroupControlChildLevel: props => (props.childLevel > 0 ?
 			  {
 		  		'margin': '1em 1.5em 1em 1.5em',
-		  	    'background-color': '#fffefa'
+		  	    'background-color': '#fffcf0'
 			  } : ''
 	  ),
 	  OSCALCatalogGroupControlChildLevelTitle: props => (props.childLevel > 0 ?
@@ -29,9 +29,9 @@ const useStyles = makeStyles((theme) => ({
 
 // TODO - This is probably 800-53 specific?
 function getControlStatusCss(props) {
-	if (!props.control.properties) {return;}
+	if (!props.control.props) {return;}
 	var property;
-	for (property of props.control.properties) {
+	for (property of props.control.props) {
 		if (property.name === 'status') {
 			return { 
 				'text-decoration': 'line-through',
@@ -47,19 +47,19 @@ export default function OSCALCatalogGroupControl(props) {
 	const classes = useStyles(props);
 	
 	return (
-			<Card className={`${classes.OSCALCatalogGroupControl} ${classes.OSCALCatalogGroupControlStatus} ${classes.OSCALCatalogGroupControlChildLevel}`}>
-				<CardContent>
-			        <Typography variant="h6" component="h2" className={classes.OSCALCatalogGroupControlChildLevelTitle}>
-			        	<span className={classes.OSCALCatalogGroupControlId}>{props.control.id}</span> - {props.control.title}
-			        </Typography>
-			        {props.control.parts && props.control.parts.map(part => (
-			          <OSCALCatalogGroupControlPart part={part} parameters={props.control.parameters} />
-		            ))}
-					{props.control.controls && props.control.controls.map(control => (
-			          <OSCALCatalogGroupControl control={control} parameters={control.parameters} childLevel={props.childLevel+1}/>
-		            ))}
-		        </CardContent>
-		     </Card>
-		  );
+		<Card className={`${classes.OSCALCatalogGroupControl} ${classes.OSCALCatalogGroupControlStatus} ${classes.OSCALCatalogGroupControlChildLevel}`}>
+			<CardContent>
+		        <Typography variant="h6" component="h2" className={classes.OSCALCatalogGroupControlChildLevelTitle}>
+		        	<span className={classes.OSCALCatalogGroupControlId}>{props.control.id}</span> - {props.control.title}
+		        </Typography>
+		        {props.control.parts && props.control.parts.map(part => (
+		          <OSCALCatalogGroupControlPart part={part} parameters={props.control.parameters} />
+	            ))}
+				{props.control.controls && props.control.controls.map(control => (
+		          <OSCALCatalogGroupControl control={control} parameters={control.parameters} childLevel={props.childLevel+1}/>
+	            ))}
+	        </CardContent>
+	     </Card>
+	  );
 	
 }

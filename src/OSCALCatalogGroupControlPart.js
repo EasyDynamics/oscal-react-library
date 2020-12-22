@@ -12,10 +12,10 @@ const useStyles = makeStyles((theme) => ({
 	}));
 
 // TODO - This is probably 800-53 specific?
-function getPartLabel(properties) {
-	if (!properties) {return;}
+function getPartLabel(props) {
+	if (!props) {return;}
 	var property;
-	for (property of properties) {
+	for (property of props) {
 		if (property.name === 'label') {
 			return property.value;
 		}
@@ -42,7 +42,7 @@ function getParameterReplacedProse(prose, parameters) {
 export default function OSCALCatalogGroupControlPart(props) {
 	const classes = useStyles();
 	
-	const label = getPartLabel(props.part.properties);
+	const label = getPartLabel(props.part.props);
 	const replacedProse = getParameterReplacedProse(props.part.prose, props.parameters);
 	const isGuidance = props.part.name === 'guidance';
 	const isStatement = props.part.name === 'statement';
