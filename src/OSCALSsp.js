@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 import OSCALMetadata from './OSCALMetadata.js';
+import OSCALSystemCharacteristics from './OSCALSystemCharacteristics.js';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -15,7 +16,9 @@ export default function OSCALSsp(props) {
 	  return (
 	    <div className={classes.paper}>
 	        <OSCALMetadata metadata={props.['system-security-plan'].metadata} />
-	          TODO
+	        <OSCALSystemCharacteristics 
+	        	systemCharacteristics={props.['system-security-plan'].['system-characteristics']}
+	        />
 	    </div>
 	  );
 	}

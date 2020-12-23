@@ -50,7 +50,7 @@ function App() {
 		          </IconButton>
 		    	<Typography variant="h6" className={classes.title}>
 		    		<Route path="/catalog">OSCAL Catalog Browser</Route>
-		    		<Route path="/ssp">OSCAL SSP Browser</Route>
+		    		<Route path="/ssp">OSCAL System Security Plan Browser</Route>
 			      </Typography>
 		    </Toolbar>
     	</AppBar>
@@ -62,7 +62,7 @@ function App() {
 	        onClose={handleAppNavClose}
 	      >
 	        <MenuItem onClick={handleAppNavClose}><Link component={RouterLink} to="/catalog">Catalog Browser</Link></MenuItem>
-	        <MenuItem onClick={handleAppNavClose}><Link component={RouterLink} to="/ssp">SSP Browser</Link></MenuItem>
+	        <MenuItem onClick={handleAppNavClose}><Link component={RouterLink} to="/system-security-plan">System Security Plan Browser</Link></MenuItem>
 	    </Menu>
     	<Container component="main">
     	  <Switch>
@@ -73,7 +73,7 @@ function App() {
 	    			oscalUrl={defaultOscalCatalogUrl}
 	    		/>
 	    	</Route>
-    		<Route exact path="/ssp">
+    		<Route exact path="/system-security-plan">
 	    		<OSCALLoader 
 	    			oscalModelType="SSP"
 	    			oscalUrl={defaultOscalSspUrl}

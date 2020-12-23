@@ -20,6 +20,12 @@ const useStyles = makeStyles((theme) => ({
 		'color': '#0000008a'
 	},
 	OSCALMetadataParties: {
+		backgroundColor: theme.palette.background.paper,
+		position: 'relative',
+	    overflow: 'auto',
+		maxHeight: '12em'
+	},
+	OSCALMetadataPartiesHeader: {
 		backgroundColor: theme.palette.background.paper
 	}
 	}));
@@ -67,7 +73,7 @@ export default function OSCALCatalogGroupControlGuidance(props) {
         		<Paper className={classes.OSCALMetadataParties}>
 		        	<List
 		        		subheader={
-			    	        <ListSubheader component="div" id="oscal-metadata-parties">
+			    	        <ListSubheader className={classes.OSCALMetadataPartiesHeader} component="div" id="oscal-metadata-parties">
 			    	          Parties
 			    	        </ListSubheader>
 			    	      }
