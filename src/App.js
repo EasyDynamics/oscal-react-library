@@ -50,7 +50,7 @@ function App() {
 		          </IconButton>
 		    	<Typography variant="h6" className={classes.title}>
 		    		<Route path="/catalog">OSCAL Catalog Browser</Route>
-		    		<Route path="/ssp">OSCAL System Security Plan Browser</Route>
+		    		<Route path="/system-security-plan">OSCAL System Security Plan Browser</Route>
 			      </Typography>
 		    </Toolbar>
     	</AppBar>
