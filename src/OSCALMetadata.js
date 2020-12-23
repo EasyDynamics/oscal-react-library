@@ -27,6 +27,35 @@ const useStyles = makeStyles((theme) => ({
 export default function OSCALCatalogGroupControlGuidance(props) {
 	const classes = useStyles();
 	
+	const getRoleLabel = (roleId) => {
+		if (!props.metadata.roles) { return null; }
+		var role;
+		for (role of props.metadata.roles) {
+			if (role.id === roleId) {
+				return role.title;
+			}
+		}
+		return null;
+	}
+	
+	const getPartyRolesText = (party) => {
+		if (!props.metadata.['responsible-parties']) { return null; }
+		var partyRolesText = '';
+		var delimiter = ', ';
+		var responsibleParty;
+		for (responsibleParty in props.metadata.['responsible-parties']) {
+			var responsiblePartyUuids = props.metadata.['responsible-parties'][responsibleParty]['party-uuids'];
+			if (responsiblePartyUuids && responsiblePartyUuids.includes(party.uuid)) {
+				var roleLabel = getRoleLabel(responsibleParty);
+				if (roleLabel) { partyRolesText += roleLabel + delimiter; }
+			}
+		}
+		if (partyRolesText.endsWith(delimiter)) { 
+			partyRolesText = partyRolesText.substring(0, partyRolesText.length - delimiter.length);
+		}
+		return partyRolesText;
+	};
+	
 	return (
 		<Grid container spacing={3}>
         	<Grid item xs={12}>
@@ -50,7 +79,7 @@ export default function OSCALCatalogGroupControlGuidance(props) {
 			                          {party.type === "organization" ? <GroupIcon /> : null}
 			                        </Avatar>
 			                    </ListItemAvatar>
-		        				<ListItemText primary={party.name} />
+		        				<ListItemText primary={party.name} secondary={getPartyRolesText(party)} />
 					        </ListItem>
 				         ))}
 		        	</List>
