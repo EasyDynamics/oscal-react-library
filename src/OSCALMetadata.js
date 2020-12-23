@@ -2,6 +2,13 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import List from '@material-ui/core/List';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
+import GroupIcon from '@material-ui/icons/Group';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -11,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
 	OSCALMetadataLabel: {
 		'text-align': 'right',
 		'color': '#0000008a'
+	},
+	OSCALMetadataParties: {
+		backgroundColor: theme.palette.background.paper
 	}
 	}));
 
@@ -19,13 +29,35 @@ export default function OSCALCatalogGroupControlGuidance(props) {
 	
 	return (
 		<Grid container spacing={3}>
-        	<Grid item xs={8}>
+        	<Grid item xs={12}>
 	        	<Typography variant="h6">
 		        	{props.metadata.title}
 		        </Typography>
         	</Grid>
+        	<Grid item xs={8}>
+        		<Paper className={classes.OSCALMetadataParties}>
+		        	<List
+		        		subheader={
+			    	        <ListSubheader component="div" id="oscal-metadata-parties">
+			    	          Parties
+			    	        </ListSubheader>
+			    	      }
+		        	>
+		        		{props.metadata.parties.map(party => (
+		        			<ListItem>
+			        			<ListItemAvatar>
+			                        <Avatar>
+			                          {party.type === "organization" ? <GroupIcon /> : null}
+			                        </Avatar>
+			                    </ListItemAvatar>
+		        				<ListItemText primary={party.name} />
+					        </ListItem>
+				         ))}
+		        	</List>
+		        </Paper>
+        	</Grid>
         	<Grid item xs={4}>
-        		<Paper variant="outlined" className={classes.OSCALMetadataAdditional}>
+        		<Paper className={classes.OSCALMetadataAdditional}>
         			<Grid container spacing={1}>
 	        			<Grid item xs={4}>
 				        	<Typography variant="body2" className={classes.OSCALMetadataLabel}>
@@ -57,9 +89,9 @@ export default function OSCALCatalogGroupControlGuidance(props) {
 					          	{props.metadata.['oscal-version']}
 					        </Typography>
 					     </Grid>
-					   </Grid>
-	          	</Paper>
-        	</Grid>
+					  </Grid>
+				 </Paper>
+			</Grid>
         </Grid>
 	);
 	

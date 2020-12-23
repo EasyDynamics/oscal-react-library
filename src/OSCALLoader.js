@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import OSCALCatalog from './OSCALCatalog.js';
+import OSCALSsp from './OSCALSsp.js';
 import Grid from '@material-ui/core/Grid';
 import Alert from '@material-ui/lab/Alert';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -15,20 +16,20 @@ const useStyles = makeStyles((theme) => ({
 	  }
 	}));
 
-export default function OSCALCatalogLoader() {
+export default function OSCALLoader(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [catalog, setCatalog] = useState([]);
-  const [catalogUrl, setCatalogUrl] = useState("https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json");
+  const [oscalData, setOscalData] = useState([]);
+  const [oscalUrl, setOscalUrl] = useState(props.oscalUrl);
   
   const classes = useStyles();
   
-  const loadCatalog = (newCatalogUrl) => {
-	  fetch(newCatalogUrl)
+  const loadOscalData = (newOscalUrl) => {
+	  fetch(newOscalUrl)
       .then(res => res.json())
       .then(
         (result) => {
-          setCatalog(result.catalog);
+          setOscalData(props.oscalModelType === "Catalog" ? result.catalog : result.['system-security-plan']);
           setIsLoaded(true);
           setError(null);
         },
@@ -43,29 +44,33 @@ export default function OSCALCatalogLoader() {
   }
   
   const handleChange = (event) => {
-	  setCatalogUrl(event.target.value);
+	  setOscalUrl(event.target.value);
   };
   
   const handleReloadClick = (event) => {
-	  loadCatalog(catalogUrl);
+	  loadOscalData(oscalUrl);
   };
 
   // Note: the empty deps array [] means
   // this useEffect will run once
   // similar to componentDidMount()
   useEffect(() => {
-    loadCatalog(catalogUrl);
+    loadOscalData(oscalUrl);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
 
   let result;
   
   if (error) {
-    result = <Alert severity="error">Yikes! Something went wrong loading the catalog. Sorry, we'll look into it. ({error.message})</Alert>;
+    result = <Alert severity="error">Yikes! Something went wrong loading the OSCAL data. Sorry, we'll look into it. ({error.message})</Alert>;
   } else if (!isLoaded) {
     result = <CircularProgress />;
   } else {
-	result = <OSCALCatalog catalog={catalog} />;  
+	if (props.oscalModelType === "Catalog") {
+		result = <OSCALCatalog catalog={oscalData} />
+	} else {
+		result = <OSCALSsp system-security-plan={oscalData} />
+	}
   }
 	return (
 		<React.Fragment>
@@ -73,9 +78,9 @@ export default function OSCALCatalogLoader() {
 			<Grid container spacing={3}>
 				<Grid item xs={10}>
 					<TextField
-			          id="oscal-catalog"
-			          label="OSCAL Catalog URL"
-			          defaultValue={catalogUrl}
+			          id="oscal-url"
+			          label={"OSCAL " + props.oscalModelType + " URL"}
+			          defaultValue={props.oscalUrl}
 			          helperText="(JSON Format)"
 			          variant="outlined"
 			          fullWidth
