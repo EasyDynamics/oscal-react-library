@@ -7,6 +7,8 @@ In this initial iteration the project is only able to browse basic elements of O
 
 The NIST 800-53 (rev 5) catalog is loaded by default.
 
+![OSCSAL Catalog Browser Screenshot](docs/resources/catalog-browser-screenshot.png)
+
 ## Running
 
 ```
