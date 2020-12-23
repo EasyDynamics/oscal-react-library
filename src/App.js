@@ -49,7 +49,8 @@ function App() {
 		            <MenuIcon />
 		          </IconButton>
 		    	<Typography variant="h6" className={classes.title}>
-		    		OSCAL Browser
+		    		<Route path="/catalog">OSCAL Catalog Browser</Route>
+		    		<Route path="/ssp">OSCAL SSP Browser</Route>
 			      </Typography>
 		    </Toolbar>
     	</AppBar>
