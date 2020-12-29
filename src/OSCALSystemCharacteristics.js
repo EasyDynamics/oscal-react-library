@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column'
   },
-  OSCALSystemSensitivityLevel: {
+  OSCALSystemCharacteristicsInfo: {
 	  'text-transform': 'capitalize',
 	  '& .MuiTextField-root': {
 	      margin: theme.spacing(1)
@@ -50,51 +50,93 @@ export default function OSCALSystemCharacteristics(props) {
 			        		System Characteristics
 				        </Typography>
 		        	</Grid>
-		    		<Grid item xs={4}>
+		    		<Grid item xs={7} className={classes.OSCALSystemCharacteristicsInfo}>
 			        	<Typography variant="h6">
 			        		{props.systemCharacteristics.['system-name']}
 				        </Typography>
-				        <Tooltip title={props.systemCharacteristics.status.remarks}>
-				        	<Chip label={props.systemCharacteristics.status.state} className={classes.OSCALSystemCharacteristicsStatus}/>
-				        </Tooltip>
 		        	</Grid>
-		        	<Grid item xs={2} className={classes.OSCALSystemSensitivityLevel}>
+		        	<Grid item xs={3} className={classes.OSCALSystemCharacteristicsInfo}>
+			        	<TableContainer>
+				            <Table size="small">
+				              <TableBody>
+				                {props.systemCharacteristics.annotations.map((annotation) => (
+				                  <TableRow key={annotation.name}>
+				                    <TableCell component="th" scope="row">
+				                      {annotation.name}
+				                    </TableCell>
+				                    <TableCell align="right">{annotation.value}</TableCell>
+				                  </TableRow>
+				                ))}
+				              </TableBody>
+				            </Table>
+				          </TableContainer>
+				    </Grid>
+		        	<Grid item xs={2} className={classes.OSCALSystemCharacteristicsInfo}>
+			        	<Tooltip title={props.systemCharacteristics.status.remarks}>
+				        	<TextField
+				                disabled
+				                id="system-characteristics-status"
+				                label="status"
+				                defaultValue={props.systemCharacteristics.status.state}
+				                variant="outlined"
+				                margin="dense"
+				                fullWidth
+				              />
+			            </Tooltip>
+	                </Grid>
+	                <Grid item xs={4} className={classes.OSCALSystemCharacteristicsInfo}>
+		                <TextField
+			                disabled
+			                id="authorization-boundary"
+			                label="authorization-boundary-description"
+			                defaultValue={props.systemCharacteristics.['authorization-boundary'].description}
+			                variant="outlined"
+			                margin="dense"
+			                fullWidth
+			                multiline
+			              />
+	                </Grid>
+		        	<Grid item xs={2} className={classes.OSCALSystemCharacteristicsInfo}>
 		        		<TextField
 			                disabled
 			                id="security-sensitivity-level"
 			                label="sensitivity-level"
 			                defaultValue={props.systemCharacteristics.['security-sensitivity-level']}
 			                variant="outlined"
+			                margin="dense"
 			                fullWidth
 			              />
 	                </Grid>
-		        	<Grid item xs={2} className={classes.OSCALSystemSensitivityLevel}>
+		        	<Grid item xs={2} className={classes.OSCALSystemCharacteristicsInfo}>
 			            <TextField
 			                disabled
 			                id="security-objective-confidentiality"
 			                label="confidentiality"
 			                defaultValue={props.systemCharacteristics.['security-impact-level'].['security-objective-confidentiality']}
 			                variant="outlined"
+			                margin="dense"
 			                fullWidth
 			              />
 	                </Grid>
-		        	<Grid item xs={2} className={classes.OSCALSystemSensitivityLevel}>
+		        	<Grid item xs={2} className={classes.OSCALSystemCharacteristicsInfo}>
 			              <TextField
 			                disabled
 			                id="security-objective-integrity"
 			                label="integrity"
 			                defaultValue={props.systemCharacteristics.['security-impact-level'].['security-objective-integrity']}
 			                variant="outlined"
+			                margin="dense"
 			                fullWidth
 			              />
 	                </Grid>
-		        	<Grid item xs={2} className={classes.OSCALSystemSensitivityLevel}>
+		        	<Grid item xs={2} className={classes.OSCALSystemCharacteristicsInfo}>
 			              <TextField
 			                disabled
 			                id="security-objective-availability"
 			                label="availability"
 			                defaultValue={props.systemCharacteristics.['security-impact-level'].['security-objective-availability']}
 			                variant="outlined"
+			                margin="dense"
 			                fullWidth
 			              />
 		        	</Grid>
