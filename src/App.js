@@ -10,7 +10,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import OSCALLoader from './OSCALLoader.js';
@@ -67,6 +67,9 @@ function App() {
     	<Container component="main">
     	  <Switch>
     	  	{/* TODO - This doesn't load properly */}
+    	  	<Route exact path="/">
+    	  		<Redirect to="/catalog" />
+	        </Route>
     		<Route path="/catalog">
 	    		<OSCALLoader 
 	    			oscalModelType="Catalog"
