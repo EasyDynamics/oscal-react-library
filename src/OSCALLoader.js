@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
 	  }
 	}));
 
+const defaultOscalCatalogUrl = "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json";
+const defaultOscalSspUrl = "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/ssp/json/ssp-example.json";
+
 export default function OSCALLoader(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -101,5 +104,23 @@ export default function OSCALLoader(props) {
 		</form>
 	    {result}
 	  	</React.Fragment>
+	);
+}
+
+export function OSCALCatalogLoader(props) {
+	return (
+		<OSCALLoader 
+			oscalModelType="Catalog"
+			oscalUrl={defaultOscalCatalogUrl}
+		/>
+	);
+}
+
+export function OSCALSSPLoader(props) {
+	return (
+		<OSCALLoader 
+			oscalModelType="SSP"
+			oscalUrl={defaultOscalSspUrl}
+		/>
 	);
 }
