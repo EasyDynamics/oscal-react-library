@@ -13,7 +13,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { Route, Switch, Redirect } from "react-router-dom";
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
-import OSCALLoader from './OSCALLoader.js';
+import { OSCALCatalogLoader, OSCALSSPLoader } from './OSCALLoader.js';
 
 const useStyles = makeStyles((theme) => ({
 	  title: {
@@ -26,9 +26,6 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
-  
-  const defaultOscalCatalogUrl = "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json";
-  const defaultOscalSspUrl = "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/ssp/json/ssp-example.json";
   
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -71,16 +68,10 @@ function App() {
     	  		<Redirect to="/catalog" />
 	        </Route>
     		<Route path="/catalog">
-	    		<OSCALLoader 
-	    			oscalModelType="Catalog"
-	    			oscalUrl={defaultOscalCatalogUrl}
-	    		/>
+	    		<OSCALCatalogLoader />
 	    	</Route>
     		<Route exact path="/system-security-plan">
-	    		<OSCALLoader 
-	    			oscalModelType="SSP"
-	    			oscalUrl={defaultOscalSspUrl}
-	    		/>
+	    		<OSCALSSPLoader />
 	    	</Route>
 	      </Switch>
         </Container>
