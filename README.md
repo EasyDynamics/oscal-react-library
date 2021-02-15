@@ -1,17 +1,17 @@
-# Easy Dynamics OSCAL Browser
+# Easy Dynamics OSCAL Viewer
 
 A React-based UI for browsing OSCAL data.
 
 ## Features
 In this initial iteration the project is only able to browse basic elements of OSCAL catalog and system security plan definitions.
 
-The NIST 800-53 (rev 5) catalog is loaded by default in the catalog browser:
+The NIST 800-53 (rev 5) catalog is loaded by default in the catalog viewer:
 
-![OSCSAL Catalog Browser Screenshot](docs/resources/catalog-browser-screenshot.png)
+![OSCSAL Catalog Viewer Screenshot](docs/resources/catalog-viewer-screenshot.png)
 
-The ssp-example from the OSCAL Github repo is loaded by default in the SSP browser:
+The ssp-example from the OSCAL Github repo is loaded by default in the SSP viewer:
 
-![OSCSAL SSP Browser Screenshot](docs/resources/ssp-browser-screenshot.png)
+![OSCSAL SSP Viewer Screenshot](docs/resources/ssp-viewer-screenshot.png)
 
 ## Running
 

@@ -46,8 +46,8 @@ function App() {
 		            <MenuIcon />
 		          </IconButton>
 		    	<Typography variant="h6" className={classes.title}>
-		    		<Route path="/catalog">OSCAL Catalog Browser</Route>
-		    		<Route path="/system-security-plan">OSCAL System Security Plan Browser</Route>
+		    		<Route path="/catalog">OSCAL Catalog Viewer</Route>
+		    		<Route path="/system-security-plan">OSCAL System Security Plan Viewer</Route>
 			      </Typography>
 		    </Toolbar>
     	</AppBar>
@@ -58,8 +58,8 @@ function App() {
 	        open={Boolean(anchorEl)}
 	        onClose={handleAppNavClose}
 	      >
-	        <MenuItem onClick={handleAppNavClose}><Link component={RouterLink} to="/catalog">Catalog Browser</Link></MenuItem>
-	        <MenuItem onClick={handleAppNavClose}><Link component={RouterLink} to="/system-security-plan">System Security Plan Browser</Link></MenuItem>
+	        <MenuItem onClick={handleAppNavClose}><Link component={RouterLink} to="/catalog">Catalog Viewer</Link></MenuItem>
+	        <MenuItem onClick={handleAppNavClose}><Link component={RouterLink} to="/system-security-plan">System Security Plan Viewer</Link></MenuItem>
 	    </Menu>
     	<Container component="main">
     	  <Switch>
