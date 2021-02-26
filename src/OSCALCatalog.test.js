@@ -3,10 +3,13 @@ import App from '../src/App';
 import OSCALCatalog from './OSCALCatalog';
 import OSCALMetadata from './OSCALMetadata';
 import OSCALCatalogGroupControlPart from './OSCALCatalogGroupControlPart';
-import {shallow} from 'enzyme';
+import {mount, shallow} from 'enzyme';
 import OSCALCatalogGroup from './OSCALCatalogGroup';
 import OSCALCatalogGroupControl from './OSCALCatalogGroupControl';
 import OSCALCatalogGroupControlGuidance from './OSCALCatalogGroupControlGuidance';
+import classes from '*.module.css';
+import { render ,screen } from '@testing-library/react';
+import { List } from '@material-ui/core';
 
 
 it("OSCALCatalog displays catalog name", ()=>{
@@ -21,11 +24,15 @@ it("OSCALCatalog displays metadata", ()=>{
     expect(wrap.contains(metadata)).toBeTruthy
 })
 
-it("OSCALCatalog displays parties", ()=>{
-    const wrap = shallow(<App />);
-    const party = <OSCALCatalogGroupControlPart />
-    expect(wrap.contains(party)).toBeTruthy
-})
+it('OSCALCatalog displays parties', () => {
+    const wrapper = shallow(
+      <App>
+        <div className="OSCALMetadataParties" />
+      </App>
+    );
+    expect(wrapper.contains(<div className="OSCALMetadataParties" />)).toBeTruthy;
+  });
+
 
 it("OSCALCatalog displays control groups", ()=>{
     const wrap = shallow(<App />);
