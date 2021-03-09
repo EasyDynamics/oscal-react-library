@@ -100,7 +100,7 @@ export default function OSCALCatalogGroupControlGuidance(props) {
 					        </Typography>
 					     </Grid>
         				<Grid item xs={8}>
-				        	<Typography variant="body2">
+				        	<Typography variant="body2" data-testid="oscal-metadata-version">
 					          	{props.metadata.version}
 					        </Typography>
 					     </Grid>
