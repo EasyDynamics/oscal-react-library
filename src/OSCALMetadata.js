@@ -65,7 +65,7 @@ export default function OSCALCatalogGroupControlGuidance(props) {
 	return (
 		<Grid container spacing={3}>
         	<Grid item xs={12}>
-	        	<Typography variant="h6" data-testid="oscal-metadata-title">
+	        	<Typography variant="h6">
 		        	{props.metadata.title}
 		        </Typography>
         	</Grid>
@@ -100,7 +100,7 @@ export default function OSCALCatalogGroupControlGuidance(props) {
 					        </Typography>
 					     </Grid>
         				<Grid item xs={8}>
-				        	<Typography variant="body2" data-testid="oscal-metadata-version">
+				        	<Typography variant="body2">
 					          	{props.metadata.version}
 					        </Typography>
 					     </Grid>
