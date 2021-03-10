@@ -47,7 +47,7 @@ export default function OSCALCatalogGroupControl(props) {
 	const classes = useStyles(props);
 	
 	return (
-		<Card className={`${classes.OSCALCatalogGroupControl} ${classes.OSCALCatalogGroupControlStatus} ${classes.OSCALCatalogGroupControlChildLevel}`} data-testid="oscal-control-group">
+		<Card className={`${classes.OSCALCatalogGroupControl} ${classes.OSCALCatalogGroupControlStatus} ${classes.OSCALCatalogGroupControlChildLevel}`}>
 			<CardContent>
 		        <Typography variant="h6" component="h2" className={classes.OSCALCatalogGroupControlChildLevelTitle}>
 		        	<span className={classes.OSCALCatalogGroupControlId}>{props.control.id}</span> {props.control.title}
