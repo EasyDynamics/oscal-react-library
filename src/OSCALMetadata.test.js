@@ -9,7 +9,7 @@ test('OSCALCatalog displays title', () => {
     render(<OSCALMetadata metadata={testMetadata} />); 
 
     const result = screen.getByText('NIST Special Publication 800-53 Revision 5');
-    expect(result).toHaveTextContent('NIST Special Publication 800-53 Revision 5');
+    expect(result).toBeVisible();
   })
 
   test('OSCALCatalog displays version', () => {
@@ -18,5 +18,5 @@ test('OSCALCatalog displays title', () => {
     render(<OSCALMetadata metadata = {testMetadata} />);
   
     const result = screen.getByText("Revision 5");
-    expect(result).toHaveTextContent('Revision 5');
+    expect(result).toBeVisible();
   })
