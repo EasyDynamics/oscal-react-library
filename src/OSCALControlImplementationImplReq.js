@@ -30,13 +30,19 @@ const useStyles = makeStyles((theme) => ({
 		flexGrow: 1,
 		backgroundColor: theme.palette.background.paper,
 		display: 'flex',
-		height: 400,
+		height: 440,
 	  },
 	tabs: {
-		borderRight: `1px solid ${theme.palette.divider}`
+		borderRight: `1px solid ${theme.palette.divider}`,
+		width: 340,
+		minWidth: 340
 	},
 	tabButton: {
-		width: 1000
+		width: 340,
+		maxWidth: 340
+	},
+	tabPanelScrollable: {
+		overflow: 'scroll'
 	}
 }));
 
@@ -97,11 +103,11 @@ export default function OSCALControlImplementationImplReq(props) {
 						className={classes.tabs}
 					>
 						{Object.entries(props.components).map(([key, component], index) => (
-							<Tab label={component.title} {...a11yProps(index)} />
+							<Tab label={component.title} {...a11yProps(index)} className={classes.tabButton} />
 						))}
 					</Tabs>
 					{Object.entries(props.components).map(([key, component], index) => (
-						<TabPanel value={value} index={index}>
+						<TabPanel value={value} index={index} className={classes.tabPanelScrollable}>
 							<OSCALCatalogGroupControl control={control} childLevel={0} implReqStatements={props.implementedRequirement.statements} componentId={key} />
 						</TabPanel>
 					))}
