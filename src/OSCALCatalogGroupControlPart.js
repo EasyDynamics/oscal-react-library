@@ -1,6 +1,9 @@
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import OSCALCatalogGroupControlGuidance from './OSCALCatalogGroupControlGuidance.js';
+import Link from '@material-ui/core/Link';
+import Tooltip from '@material-ui/core/Tooltip';
+
 
 const useStyles = makeStyles((theme) => ({
 	  OSCALCatalogGroupControlPart: {
@@ -89,7 +92,7 @@ function ReplacedProseWithParameterLabel(props) {
 function ReplacedProseWithByComponentParameterValue(props) {
 	if (!props.prose) {return;}
 	const statementByComponent = getStatementByComponent(props.implReqStatements, props.statementId, props.componentId);
-	if (!statementByComponent || !statementByComponent.['parameter-settings']) {
+	if (!statementByComponent) {
 		return <ReplacedProseWithParameterLabel label={props.label} prose={props.prose} 
 			parameters={props.parameters} className={props.unimplementedStatementClassName} />;
 	}
@@ -106,11 +109,16 @@ function ReplacedProseWithByComponentParameterValue(props) {
 		// TODO parse select parameters
 		return '<span class="' + props.componentParameterSettingClassname + '" >' + foundParameterSetting.values.toString() + '</span>';
 	}
-	let replacedProse = props.prose.replace(/\{\{ (.*) \}\}/, getParameterValue);
+	const replacedProse = props.prose.replace(/\{\{ (.*) \}\}/, getParameterValue);
+	const description = statementByComponent.description;
 	// TODO dangerouslySetInnerHTML is not safe, there are other alternatives
 	return (
 		<Typography>
-			<div dangerouslySetInnerHTML={{ __html: (props.label + ' ' + replacedProse) }} />
+			<Tooltip title={
+				<Typography variant="body2">{description}</Typography>
+			}><Link>{props.label}</Link></Tooltip>
+			{'\u00A0'}
+			<span dangerouslySetInnerHTML={{ __html: (replacedProse) }} />
 		</Typography>
 	);
 }
