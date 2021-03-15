@@ -38,9 +38,9 @@ export default function OSCALCatalogGroup(props) {
 		        {open ? <ExpandLess /> : <ExpandMore />}
 			</ListItem>
 			<Collapse key={props.group.id + "-collapse"} in={open} timeout="auto" unmountOnExit>
-				<List className={classes.OSCALCatalogGroupControlList}>
+				<List className={classes.OSCALCatalogGroupControlList} key={props.group.id + "-list"} >
 	        	{props.group.controls.map(control => (
-			          <OSCALCatalogGroupControl control={control} childLevel={0} />
+			          <OSCALCatalogGroupControl control={control} childLevel={0} key={"control-" + control.id} />
 		            ))}
 	        	</List>
 		     </Collapse>
