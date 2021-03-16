@@ -126,7 +126,7 @@ function ReplacedProseWithByComponentParameterValue(props) {
 export default function OSCALCatalogGroupControlPart(props) {
 	const classes = useStyles();
 	
-	// Don't display assesment if we're displaying a control implementation
+	// Don't display assessment if we're displaying a control implementation
 	if (props.implReqStatements && (props.part.name === 'objective' || props.part.name === 'assessment')) {
 		return null;
 	}
