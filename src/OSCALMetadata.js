@@ -65,7 +65,7 @@ export default function OSCALCatalogGroupControlGuidance(props) {
 	return (
 		<Grid container spacing={3}>
         	<Grid item xs={12}>
-	        	<Typography variant="h6" data-testid="oscal-metadata-title">
+	        	<Typography variant="h6">
 		        	{props.metadata.title}
 		        </Typography>
         	</Grid>
@@ -79,7 +79,7 @@ export default function OSCALCatalogGroupControlGuidance(props) {
 			    	      }
 		        	>
 		        		{props.metadata.parties.map(party => (
-		        			<ListItem key={party.name}>
+		        			<ListItem key={party.uuid}>
 			        			<ListItemAvatar>
 			                        <Avatar>
 			                          {party.type === "organization" ? <GroupIcon /> : null}
