@@ -1,5 +1,5 @@
 import React from 'react';
-import { render ,screen} from '@testing-library/react';
+import { render ,screen } from '@testing-library/react';
 import OSCALMetadata from './OSCALMetadata';
 
 
@@ -12,7 +12,7 @@ test('OSCALCatalog displays title', () => {
     expect(result).toBeVisible();
   })
 
-  test('OSCALCatalog displays version', () => {
+test('OSCALCatalog displays version', () => {
     const testMetadata = {title: "test title", parties: [], version: "Revision 5"};
     
     render(<OSCALMetadata metadata = {testMetadata} />);
