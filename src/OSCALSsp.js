@@ -20,6 +20,11 @@ export default function OSCALSsp(props) {
 	const classes = useStyles();
 
 	const ssp = props.['system-security-plan'];
+
+	let sspParties;
+	if (ssp.metadata) {
+		sspParties = ssp.metadata.parties;
+	}
 	
 	useEffect(() => {
 		OSCALSspResolveProfile(ssp, props.parentUrl,
@@ -54,7 +59,7 @@ export default function OSCALSsp(props) {
 	        />
 	        <OSCALSystemImplementation 
 	        	systemImplementation={ssp.['system-implementation']}
-	            parties={ssp.metadata.parties}
+	            parties={sspParties}
 	        />
 			{controlImpl}
 	    </div>

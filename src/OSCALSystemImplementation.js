@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function OSCALSystemImplementation(props) {
 	const classes = useStyles();
+	if (!props.systemImplementation) { return null; }
 	
 	const getPartyName = (partyUuid) => {
 		if (!props.parties) { return null; }
