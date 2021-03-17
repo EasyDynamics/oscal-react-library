@@ -47,7 +47,7 @@ function getStatementByComponent(implReqStatements, statementId, componentId) {
 	let foundStatement;
 	for (const [key, statement] of Object.entries(implReqStatements)) {
 		// TODO Remove underscore replacement when OSCAL example content is fixed
-		if (key === statementId| key === statementId.replace('_', '')) {
+		if (key === statementId || key === statementId.replace('_', '')) {
 			foundStatement = statement;
 		}
 	}
@@ -65,16 +65,21 @@ function getStatementByComponent(implReqStatements, statementId, componentId) {
  * TODO - This is probably 800-53 specific?
  */
 function ReplacedProseWithParameterLabel(props) {
-	if (!props.prose || !props.parameters) {return;}
-	function getParameterLabel(parameterId) {
-		// trim
-		parameterId = parameterId.substring(3, parameterId.length-3);
-		const parameter = props.parameters.find(parameter => parameter.id === parameterId);
-		if (!parameter) {return;}
-		// TODO parse select parameters
-		return '< ' + parameter.label + ' >';
+	if (!props.prose) { return null; }
+	let replacedProse;
+	if (!props.parameters) {
+		replacedProse = props.prose;
+	} else {
+		function getParameterLabel(parameterId) {
+			// trim
+			parameterId = parameterId.substring(3, parameterId.length-3);
+			const parameter = props.parameters.find(parameter => parameter.id === parameterId);
+			if (!parameter) {return;}
+			// TODO parse select parameters
+			return '< ' + parameter.label + ' >';
+		}
+		replacedProse = props.prose.replace(/\{\{ (.*) \}\}/, getParameterLabel);
 	}
-	const replacedProse = props.prose.replace(/\{\{ (.*) \}\}/, getParameterLabel);
 	return (
 		<Typography className={props.className}>
 			{props.label} {replacedProse}
@@ -126,7 +131,7 @@ function ReplacedProseWithByComponentParameterValue(props) {
 export default function OSCALCatalogGroupControlPart(props) {
 	const classes = useStyles();
 	
-	// Don't display assesment if we're displaying a control implementation
+	// Don't display assessment if we're displaying a control implementation
 	if (props.implReqStatements && (props.part.name === 'objective' || props.part.name === 'assessment')) {
 		return null;
 	}
