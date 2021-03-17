@@ -8,4 +8,4 @@ test("OSCALCatalog displays control groups", ()=>{
     render(<OSCALCatalogGroup group = {testGroup}/>);
     const result = screen.getByText("Access Control");
     expect(result).toBeVisible();
-  })
+  });
