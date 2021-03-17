@@ -71,15 +71,15 @@ export default function OSCALCatalogGroupControlGuidance(props) {
         	</Grid>
         	<Grid item xs={8}>
         		<Paper className={classes.OSCALMetadataParties}>
-		        	<List key={props.metadata.title + "-list"}
+		        	<List key={props.metadata.title + "-parties-list"}
 		        		subheader={
-			    	        <ListSubheader className={classes.OSCALMetadataPartiesHeader} component="div" id="oscal-metadata-parties" key={props.metadata.title + "-header"}>
+			    	        <ListSubheader className={classes.OSCALMetadataPartiesHeader} component="div" id="oscal-metadata-parties" key={props.metadata.title + "-parties-header"}>
 			    	          Parties
 			    	        </ListSubheader>
 			    	      }
 		        	>
 		        		{props.metadata.parties.map(party => (
-		        			<ListItem key={party.uuid}>
+		        			<ListItem key={party.uuid + "-parties-listItem"}>
 			        			<ListItemAvatar>
 			                        <Avatar>
 			                          {party.type === "organization" ? <GroupIcon /> : null}
