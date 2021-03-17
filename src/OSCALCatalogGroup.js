@@ -34,7 +34,7 @@ export default function OSCALCatalogGroup(props) {
 		          	<FolderIcon />
 		          </Avatar>
 		        </ListItemAvatar>
-				<ListItemText primary={props.group.title}/>
+				<ListItemText primary={props.group.title} />
 		        {open ? <ExpandLess /> : <ExpandMore />}
 			</ListItem>
 			<Collapse in={open} timeout="auto" unmountOnExit>

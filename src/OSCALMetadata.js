@@ -85,7 +85,7 @@ export default function OSCALCatalogGroupControlGuidance(props) {
 			                          {party.type === "organization" ? <GroupIcon /> : null}
 			                        </Avatar>
 			                    </ListItemAvatar>
-		        				<ListItemText primary={party.name} secondary={getPartyRolesText(party)}/>
+		        				<ListItemText primary={party.name} secondary={getPartyRolesText(party)} />
 					        </ListItem>
 				         ))}
 		        	</List>
