@@ -3,10 +3,15 @@ import { render, screen } from '@testing-library/react';
 import { OSCALSSPLoader } from './OSCALLoader.js';
 import OSCALSsp from './OSCALSsp.js';
 import { systemCharacteristicsTestData, testOSCALSystemCharacteristics } from './OSCALSystemCharacteristics.test.js';
+import { systemImplementationTestData, partiesTestData, testOSCALSystemImplementation } from './OSCALSystemImplementation.test.js';
 
 const sspTestData = {
     "uuid": "66c2a1c8-5830-48bd-8fdd-55a1c3a52888",
-    "system-characteristics": systemCharacteristicsTestData
+    "metadata": {
+        "parties": partiesTestData
+    },
+    "system-characteristics": systemCharacteristicsTestData,
+    "system-implementation": systemImplementationTestData
 }
 
 test('OSCALSsp loads', () => {
@@ -18,3 +23,5 @@ function sspRenderer() {
 }
 
 testOSCALSystemCharacteristics('OSCALSsp', sspRenderer);
+
+testOSCALSystemImplementation('OSCALSsp', sspRenderer);
