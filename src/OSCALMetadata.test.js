@@ -10,10 +10,9 @@ test('OSCALCatalog displays title', () => {
     expect(result).toBeVisible();
   })
 
-  test('OSCALCatalog displays parties', () => {
+test('OSCALCatalog displays parties', () => {
     const testMetadata = {title: "test title", parties: [{name: "Joint Task Force"}], version: "test version"};
     render(<OSCALMetadata metadata = {testMetadata} />);
     const result = screen.getByText("Joint Task Force");
     expect(result).toBeVisible();
   })
-  
