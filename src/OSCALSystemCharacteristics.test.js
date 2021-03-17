@@ -1,5 +1,5 @@
 import React from 'react';
-import { render ,screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import OSCALSystemCharacteristics from './OSCALSystemCharacteristics.js';
 
 export const systemCharacteristicsTestData = {
