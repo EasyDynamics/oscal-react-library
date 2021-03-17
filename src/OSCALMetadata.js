@@ -79,7 +79,7 @@ export default function OSCALCatalogGroupControlGuidance(props) {
 			    	      }
 		        	>
 		        		{props.metadata.parties.map(party => (
-		        			<ListItem>
+		        			<ListItem key={party.uuid + "-parties-listItem"}>
 			        			<ListItemAvatar>
 			                        <Avatar>
 			                          {party.type === "organization" ? <GroupIcon /> : null}
