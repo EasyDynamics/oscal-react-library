@@ -50,7 +50,7 @@ export default function OSCALCatalogGroupControlGuidance(props) {
 		        aria-describedby="scroll-dialog-description"
 		      >
 				<DialogTitle id="scroll-dialog-title">Guidance</DialogTitle>
-				<DialogContent dividers="true">
+				<DialogContent dividers={true}>
 		          <DialogContentText
 		            id="scroll-dialog-description"
 		            ref={descriptionElementRef}
