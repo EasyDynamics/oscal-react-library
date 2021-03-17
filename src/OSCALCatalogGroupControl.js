@@ -53,7 +53,7 @@ export default function OSCALCatalogGroupControl(props) {
 		        	<span className={classes.OSCALCatalogGroupControlId}>{props.control.id}</span> {props.control.title}
 		        </Typography>
 		        {props.control.parts && props.control.parts.map(part => (
-		          <OSCALCatalogGroupControlPart part={part} parameters={props.control.params} />
+		          <OSCALCatalogGroupControlPart part={part} parameters={props.control.params} implReqStatements={props.implReqStatements} componentId={props.componentId}/>
 	            ))}
 				{props.control.controls && props.control.controls.map(control => (
 		          <OSCALCatalogGroupControl control={control} parameters={control.params} childLevel={props.childLevel+1}/>

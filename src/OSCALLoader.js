@@ -72,7 +72,7 @@ export default function OSCALLoader(props) {
 	if (props.oscalModelType === "Catalog") {
 		result = <OSCALCatalog catalog={oscalData} />
 	} else {
-		result = <OSCALSsp system-security-plan={oscalData} />
+		result = <OSCALSsp system-security-plan={oscalData} parentUrl={oscalUrl} />
 	}
   }
 	return (
