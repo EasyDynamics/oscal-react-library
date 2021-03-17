@@ -25,7 +25,7 @@ export const systemCharacteristicsTestData = {
                 ]
               }
             ],
-            "description": "Example information type",
+            "description": "Example information type.",
             "confidentiality-impact": {
               "base": "fips-199-moderate"
             },
