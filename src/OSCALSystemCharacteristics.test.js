@@ -4,7 +4,7 @@ import OSCALSystemCharacteristics from './OSCALSystemCharacteristics.js';
 
 export const systemCharacteristicsTestData = {
       "system-name": "Example System Name",
-      "description": "This is an example of a system .",
+      "description": "This is an example of a system.",
       "system-ids": [
         {
           "id": "system-id",
