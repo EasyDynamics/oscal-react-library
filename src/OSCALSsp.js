@@ -13,7 +13,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function OSCALSsp(props) {
 	const classes = useStyles();
-	
+	let sspParties;
+	if (props.['system-security-plan'].metadata) {
+		sspParties = props.['system-security-plan'].metadata.parties;
+	}
 	  return (
 	    <div className={classes.paper}>
 	        <OSCALMetadata metadata={props.['system-security-plan'].metadata} />
@@ -22,7 +25,7 @@ export default function OSCALSsp(props) {
 	        />
 	        <OSCALSystemImplementation 
 	        	systemImplementation={props.['system-security-plan'].['system-implementation']}
-	            parties={props.['system-security-plan'].metadata.parties}
+	            parties={sspParties}
 	        />
 	    </div>
 	  );
