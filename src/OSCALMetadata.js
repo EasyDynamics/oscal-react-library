@@ -71,9 +71,9 @@ export default function OSCALCatalogGroupControlGuidance(props) {
         	</Grid>
         	<Grid item xs={8}>
         		<Paper className={classes.OSCALMetadataParties}>
-		        	<List key={props.metadata.title + "-parties-list"}
+		        	<List
 		        		subheader={
-			    	        <ListSubheader className={classes.OSCALMetadataPartiesHeader} component="div" id="oscal-metadata-parties" key={props.metadata.title + "-parties-header"}>
+			    	        <ListSubheader className={classes.OSCALMetadataPartiesHeader} component="div" id="oscal-metadata-parties">
 			    	          Parties
 			    	        </ListSubheader>
 			    	      }
