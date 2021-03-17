@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event'
 import OSCALControlImplementation from './OSCALControlImplementation.js';
 
 const controlImplData = {
@@ -15,9 +16,9 @@ const controlImplData = {
                             "description": "Component 1 description of implementing control 1",
                             "parameter-settings": {
                                 "control-1_prm_1": {
-                                "values": [
-                                    "control 1 / component 1 / parameter 1 value"
-                                ]
+                                    "values": [
+                                        "control 1 / component 1 / parameter 1 value"
+                                    ]
                                 }
                             }
                         }
@@ -46,7 +47,7 @@ const controlsData = [
             {
                 "id": "control-1_smt",
                 "name": "statement",
-                "prose": "Some group:",
+                "prose": "Some organizational group:",
                 "parts": [
                     {
                         "id": "control-1_smt.a",
@@ -92,4 +93,16 @@ test('OSCALControlImplementationImplReq displays component parameters in control
 			/>);
     const result = getByTextIncludingChildern('Does something with control 1 / component 1 / parameter 1 value');
     expect(result).toBeVisible();
+})
+
+test('OSCALControlImplementationImplReq displays component implementation description', async () => {
+    render(<OSCALControlImplementation 
+			controlImplementation={controlImplData}
+			components={componentsData}
+			controls={controlsData}
+			/>);
+    userEvent.hover(screen.getByRole('link', { name: 'a.' }));
+    expect(
+        await screen.findByText('Component 1 description of implementing control 1')
+    ).toBeInTheDocument();
 })

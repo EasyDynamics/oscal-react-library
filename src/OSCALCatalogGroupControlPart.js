@@ -121,7 +121,7 @@ function ReplacedProseWithByComponentParameterValue(props) {
 		<Typography>
 			<Tooltip title={
 				<Typography variant="body2">{description}</Typography>
-			}><Link>{props.label}</Link></Tooltip>
+			}><Link href={''}>{props.label}</Link></Tooltip>
 			{'\u00A0'}
 			<span dangerouslySetInnerHTML={{ __html: (replacedProse) }} />
 		</Typography>
