@@ -2,15 +2,7 @@ import React from 'react';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event'
 import OSCALSystemImplementation from './OSCALSystemImplementation.js';
-
-// TODO move to common metadata test data when available
-export const partiesTestData = [
-  {
-    "uuid": "party-1",
-    "type": "organization",
-    "name": "Some group of people"
-  }
-]
+import { metadataTestData } from './OSCALMetadata.test.js';
 
 export const systemImplementationTestData = {
   "remarks": "Example system implementation remarks.",
@@ -80,7 +72,7 @@ export const systemImplementationTestData = {
 function systemImplementationRenderer() {
     render(<OSCALSystemImplementation 
       systemImplementation={systemImplementationTestData}
-      parties={partiesTestData}
+      parties={metadataTestData.parties}
     />);
 }
 
