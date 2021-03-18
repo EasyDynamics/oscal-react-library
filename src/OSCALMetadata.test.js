@@ -12,14 +12,14 @@ test('OSCALCatalog displays title', () => {
 
   test('OSCALCatalog displays version', () => {
     const testMetadata = {title: "test title", parties: [], version: "Revision 5"};
-    render(<OSCALMetadata metadata = {testMetadata} />);
+    render(<OSCALMetadata metadata={testMetadata} />);
     const result = screen.getByText("Revision 5");
     expect(result).toBeVisible();
   });
 
 test('OSCALCatalog displays parties', () => {
     const testMetadata = {title: "test title", parties: [{name: "Joint Task Force"}], version: "test version"};
-    render(<OSCALMetadata metadata = {testMetadata} />);
+    render(<OSCALMetadata metadata={testMetadata} />);
     const result = screen.getByText("Joint Task Force");
     expect(result).toBeVisible();
   });
