@@ -27,20 +27,20 @@ export default function OSCALCatalogGroup(props) {
 	  };
 	
 	return (
-			<React.Fragment key={props.group.id + "-fragment"}>
+			<React.Fragment>
 			<ListItem key={props.group.id} button onClick={handleClick}>
 				<ListItemAvatar key={props.group.id + "-avatar"}>
 		          <Avatar variant="rounded">
 		          	<FolderIcon />
 		          </Avatar>
 		        </ListItemAvatar>
-				<ListItemText key={props.group.id + "-text"} primary={props.group.title} />
+				<ListItemText primary={props.group.title} />
 		        {open ? <ExpandLess /> : <ExpandMore />}
 			</ListItem>
-			<Collapse key={props.group.id + "-collapse"} in={open} timeout="auto" unmountOnExit>
-				<List className={classes.OSCALCatalogGroupControlList}>
+			<Collapse in={open} timeout="auto" unmountOnExit>
+				<List className={classes.OSCALCatalogGroupControlList} >
 	        	{props.group.controls.map(control => (
-			          <OSCALCatalogGroupControl control={control} childLevel={0} />
+			          <OSCALCatalogGroupControl control={control} childLevel={0} key={"control-" + control.id} />
 		            ))}
 	        	</List>
 		     </Collapse>
