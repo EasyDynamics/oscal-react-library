@@ -163,7 +163,7 @@ export default function OSCALCatalogGroupControlPart(props) {
 		  <div className={className}>
 			{replacedProse}
 	        {props.part.parts && props.part.parts.map(part => (
-	          <OSCALCatalogGroupControlPart part={part} parameters={props.parameters} implReqStatements={props.implReqStatements} componentId={props.componentId}/>
+	          <OSCALCatalogGroupControlPart part={part} parameters={props.parameters} implReqStatements={props.implReqStatements} componentId={props.componentId} key={part.id} />
             ))}
 	      </div>
 	  );

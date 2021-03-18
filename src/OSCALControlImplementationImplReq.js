@@ -103,11 +103,11 @@ export default function OSCALControlImplementationImplReq(props) {
 						className={classes.tabs}
 					>
 						{Object.entries(props.components).map(([key, component], index) => (
-							<Tab label={component.title} {...a11yProps(index)} className={classes.tabButton} />
+							<Tab label={component.title} {...a11yProps(index)} className={classes.tabButton} key={key} />
 						))}
 					</Tabs>
 					{Object.entries(props.components).map(([key, component], index) => (
-						<TabPanel value={value} index={index} className={classes.tabPanelScrollable}>
+						<TabPanel value={value} index={index} className={classes.tabPanelScrollable} key={key}>
 							<OSCALCatalogGroupControl control={control} childLevel={0} implReqStatements={props.implementedRequirement.statements} componentId={key} />
 						</TabPanel>
 					))}

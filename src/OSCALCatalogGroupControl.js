@@ -52,11 +52,12 @@ export default function OSCALCatalogGroupControl(props) {
 		        <Typography variant="h6" component="h2" className={classes.OSCALCatalogGroupControlChildLevelTitle}>
 		        	<span className={classes.OSCALCatalogGroupControlId}>{props.control.id}</span> {props.control.title}
 		        </Typography>
-		        {props.control.parts && props.control.parts.map(part => (
-		          <OSCALCatalogGroupControlPart part={part} parameters={props.control.params} implReqStatements={props.implReqStatements} componentId={props.componentId}/>
+		        {props.control.parts && props.control.parts.map((part, index) => (
+		          <OSCALCatalogGroupControlPart part={part} parameters={props.control.params} 
+				  	implReqStatements={props.implReqStatements} componentId={props.componentId} key={'part-' + index} />
 	            ))}
 				{props.control.controls && props.control.controls.map(control => (
-		          <OSCALCatalogGroupControl control={control} parameters={control.params} childLevel={props.childLevel+1}/>
+		          <OSCALCatalogGroupControl control={control} parameters={control.params} childLevel={props.childLevel+1} key={control.id} />
 	            ))}
 	        </CardContent>
 	     </Card>

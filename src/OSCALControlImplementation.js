@@ -46,7 +46,7 @@ export default function OSCALControlImplementation(props) {
 						<List className={classes.OSCALControlImplementationImplReqList}>
 							{props.controlImplementation.['implemented-requirements'].map(implementedRequirement => (
 							<OSCALControlImplementationImplReq implementedRequirement={implementedRequirement} 
-								components={props.components} controls={props.controls} childLevel={0} />
+								components={props.components} controls={props.controls} childLevel={0} key={implementedRequirement.uuid} />
 							))}
 						</List>
 		        	</Grid>
