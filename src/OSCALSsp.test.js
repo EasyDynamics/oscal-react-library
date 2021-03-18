@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { OSCALSSPLoader } from './OSCALLoader.js';
 import OSCALSsp from './OSCALSsp.js';
 import { systemCharacteristicsTestData, testOSCALSystemCharacteristics } from './OSCALSystemCharacteristics.test.js';
