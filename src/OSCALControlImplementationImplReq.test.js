@@ -6,6 +6,7 @@ import OSCALControlImplementation from './OSCALControlImplementation.js';
 const controlImplData = {
     "implemented-requirements": [
         {
+            "uuid": "implemented-requirements-1",
             "control-id": "control-1",
             "statements": {
                 "control-1_smt": {
