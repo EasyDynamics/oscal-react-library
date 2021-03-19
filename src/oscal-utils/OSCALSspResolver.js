@@ -24,7 +24,7 @@ function ResolveProfileImport(ssp, profileImport, backMatter, profileUrl, onSucc
 			if (!profileImportUrl.startsWith('http')) {
 				profileImportUrl = profileUrl + '/../' + profileImportUrl;
 			}
-			// Fix issue with OSCAL profile data
+			// TODO this is incorrect in the profile (https://github.com/usnistgov/oscal-content/issues/59, https://easydynamics.atlassian.net/browse/EGRC-266)
 			if (foundResource.rlinks[0].['media-type'].endsWith('json') && profileImportUrl.endsWith('.xml')) {
 				profileImportUrl = profileImportUrl.replace('.xml', '.json');
 			}
@@ -60,7 +60,8 @@ function ResolveProfileImport(ssp, profileImport, backMatter, profileUrl, onSucc
 export default function OSCALSspResolveProfile(ssp, parentUrl, onSuccess, onError) {
 	if (!ssp.['import-profile']) { return; }
 	let profileUrl = ssp.['import-profile'].href;
-	// TODO - this is incorrect in the ssp-example.json data and also should be improved for other use cases
+	// TODO - this is incorrect in the ssp-example.json data (https://github.com/usnistgov/oscal-content/issues/60, https://easydynamics.atlassian.net/browse/EGRC-266)
+	// TODO - this should be improved for other use cases
 	if (!profileUrl.startsWith('http')) {
 		profileUrl = parentUrl + '/../../' + profileUrl;
 	}

@@ -46,7 +46,7 @@ function getPartLabel(props) {
 function getStatementByComponent(implReqStatements, statementId, componentId) {
 	let foundStatement;
 	for (const [key, statement] of Object.entries(implReqStatements)) {
-		// TODO Remove underscore replacement when OSCAL example content is fixed
+		// TODO Remove underscore replacement when OSCAL example content is fixed (https://github.com/usnistgov/oscal-content/issues/58, https://easydynamics.atlassian.net/browse/EGRC-266)
 		if (key === statementId || key === statementId.replace('_', '')) {
 			foundStatement = statement;
 		}
