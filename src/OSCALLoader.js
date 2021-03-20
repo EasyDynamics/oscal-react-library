@@ -32,7 +32,7 @@ export default function OSCALLoader(props) {
       .then(res => res.json())
       .then(
         (result) => {
-          setOscalData(props.oscalModelType === "Catalog" ? result.catalog : result.['system-security-plan']);
+          setOscalData(result);
           setIsLoaded(true);
           setError(null);
         },
@@ -69,11 +69,7 @@ export default function OSCALLoader(props) {
   } else if (!isLoaded) {
     result = <CircularProgress />;
   } else {
-	if (props.oscalModelType === "Catalog") {
-		result = <OSCALCatalog catalog={oscalData} />
-	} else {
-		result = <OSCALSsp system-security-plan={oscalData} parentUrl={oscalUrl} />
-	}
+	result = props.renderer(oscalData, oscalUrl);
   }
 	return (
 		<React.Fragment>
@@ -108,19 +104,27 @@ export default function OSCALLoader(props) {
 }
 
 export function OSCALCatalogLoader(props) {
+	const renderer = (oscalData, oscalUrl) => {
+		return (<OSCALCatalog catalog={oscalData.catalog} />);
+	}
 	return (
 		<OSCALLoader 
 			oscalModelType="Catalog"
 			oscalUrl={defaultOscalCatalogUrl}
+			renderer={renderer}
 		/>
 	);
 }
 
 export function OSCALSSPLoader(props) {
+	const renderer = (oscalData, oscalUrl) => {
+		return (<OSCALSsp system-security-plan={oscalData.['system-security-plan']} parentUrl={oscalUrl} />);
+	}
 	return (
 		<OSCALLoader 
 			oscalModelType="SSP"
 			oscalUrl={defaultOscalSspUrl}
+			renderer={renderer}
 		/>
 	);
 }
