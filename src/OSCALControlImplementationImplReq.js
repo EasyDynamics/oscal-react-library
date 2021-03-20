@@ -6,7 +6,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
-import OSCALCatalogGroupControl from './OSCALCatalogGroupControl.js';
+import OSCALControl from './OSCALControl.js';
 
 const useStyles = makeStyles((theme) => ({
 	OSCALImplReq: {
@@ -108,7 +108,7 @@ export default function OSCALControlImplementationImplReq(props) {
 					</Tabs>
 					{Object.entries(props.components).map(([key, component], index) => (
 						<TabPanel value={value} index={index} className={classes.tabPanelScrollable} key={key}>
-							<OSCALCatalogGroupControl control={control} childLevel={0} implReqStatements={props.implementedRequirement.statements} componentId={key} />
+							<OSCALControl control={control} childLevel={0} implReqStatements={props.implementedRequirement.statements} componentId={key} />
 						</TabPanel>
 					))}
 				</div>

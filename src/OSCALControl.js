@@ -3,28 +3,28 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import OSCALCatalogGroupControlPart from './OSCALCatalogGroupControlPart.js';
+import OSCALControlPart from './OSCALControlPart.js';
 
 const useStyles = makeStyles((theme) => ({
-	  OSCALCatalogGroupControl: {
+	  OSCALControl: {
 		  'margin': '1em 0 1em 0'
 	  },
-	  OSCALCatalogGroupControlId: {
+	  OSCALControlId: {
 		  'text-transform': 'uppercase'
 	  },
-	  OSCALCatalogGroupControlChildLevel: props => (props.childLevel > 0 ?
+	  OSCALControlChildLevel: props => (props.childLevel > 0 ?
 			  {
 		  		'margin': '1em 1.5em 1em 1.5em',
 		  	    'background-color': '#fffcf0'
 			  } : ''
 	  ),
-	  OSCALCatalogGroupControlChildLevelTitle: props => (props.childLevel > 0 ?
+	  OSCALControlChildLevelTitle: props => (props.childLevel > 0 ?
 			  {
 		  		'font-size': '1.1rem'
 			  } : ''
 	  ),
 	 // TODO - This is probably 800-53 specific?
-	  OSCALCatalogGroupControlStatus: props => getControlStatusCss(props)
+	  OSCALControlStatus: props => getControlStatusCss(props)
 	  }));
 
 // TODO - This is probably 800-53 specific?
@@ -42,22 +42,22 @@ function getControlStatusCss(props) {
 	return '';
 }
 
-export default function OSCALCatalogGroupControl(props) {
+export default function OSCALControl(props) {
 
 	const classes = useStyles(props);
 	
 	return (
-		<Card className={`${classes.OSCALCatalogGroupControl} ${classes.OSCALCatalogGroupControlStatus} ${classes.OSCALCatalogGroupControlChildLevel}`}>
+		<Card className={`${classes.OSCALControl} ${classes.OSCALControlStatus} ${classes.OSCALControlChildLevel}`}>
 			<CardContent>
-		        <Typography variant="h6" component="h2" className={classes.OSCALCatalogGroupControlChildLevelTitle}>
-		        	<span className={classes.OSCALCatalogGroupControlId}>{props.control.id}</span> {props.control.title}
+		        <Typography variant="h6" component="h2" className={classes.OSCALControlChildLevelTitle}>
+		        	<span className={classes.OSCALControlId}>{props.control.id}</span> {props.control.title}
 		        </Typography>
 		        {props.control.parts && props.control.parts.map((part, index) => (
-		          <OSCALCatalogGroupControlPart part={part} parameters={props.control.params} 
+		          <OSCALControlPart part={part} parameters={props.control.params} 
 				  	implReqStatements={props.implReqStatements} componentId={props.componentId} key={'part-' + index} />
 	            ))}
 				{props.control.controls && props.control.controls.map(control => (
-		          <OSCALCatalogGroupControl control={control} parameters={control.params} childLevel={props.childLevel+1} key={control.id} />
+		          <OSCALControl control={control} parameters={control.params} childLevel={props.childLevel+1} key={control.id} />
 	            ))}
 	        </CardContent>
 	     </Card>
