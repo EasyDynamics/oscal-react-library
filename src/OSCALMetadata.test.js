@@ -1,25 +1,42 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import OSCALMetadata from './OSCALMetadata';
 
+export const metadataTestData = {
+  "title": "Test Title",
+  "parties": [
+    {
+      "uuid": "party-1",
+      "type": "organization",
+      "name": "Some group of people"
+    }
+  ],
+  "version": "Revision 5"
+}
 
-test('OSCALCatalog displays title', () => {
-    const testMetadata = {title: "NIST Special Publication 800-53 Revision 5", parties:[]};
-    render(<OSCALMetadata metadata={testMetadata} />); 
-    const result = screen.getByText("NIST Special Publication 800-53 Revision 5");
+function metadataRenderer() {
+  render(<OSCALMetadata metadata={metadataTestData} />);
+}
+
+export function testOSCALMetadata(parentElementName, renderer) {
+  test(parentElementName + ' displays title', () => {
+    renderer();
+    const result = screen.getByRole('heading', { name: 'Test Title' })
     expect(result).toBeVisible();
   });
 
-  test('OSCALCatalog displays version', () => {
-    const testMetadata = {title: "test title", parties: [], version: "Revision 5"};
-    render(<OSCALMetadata metadata={testMetadata} />);
-    const result = screen.getByText("Revision 5");
+  test(parentElementName + ' displays version', () => {
+    renderer();
+    const result = screen.getByText('Revision 5');
     expect(result).toBeVisible();
   });
 
-test('OSCALCatalog displays parties', () => {
-    const testMetadata = {title: "test title", parties: [{name: "Joint Task Force"}], version: "test version"};
-    render(<OSCALMetadata metadata={testMetadata} />);
-    const result = screen.getByText("Joint Task Force");
+  test(parentElementName + ' displays parties', () => {
+    renderer();
+    const partiesElement = screen.getByText('Parties').closest('ul');
+    const result = within(partiesElement).getByText('Some group of people');
     expect(result).toBeVisible();
   });
+}
+
+testOSCALMetadata('OSCALMetadata', metadataRenderer);

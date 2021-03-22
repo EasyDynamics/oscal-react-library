@@ -163,7 +163,7 @@ export default function OSCALSystemCharacteristics(props) {
 				                    <TableCell>
 				                    	{informationType.categorizations.map((categorization) => (
 				                    		categorization.['information-type-ids'].map((infoId) => (
-			                    				<Chip label={infoId} component="a" href={categorization.system} clickable variant="outlined" />
+			                    				<Chip label={infoId} component="a" href={categorization.system} clickable variant="outlined" key={infoId}/>
 				                    		))
 				                    	))}
 				                    </TableCell>

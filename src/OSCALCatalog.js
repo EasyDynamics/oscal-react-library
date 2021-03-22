@@ -26,7 +26,7 @@ export default function OSCALCatalog(props) {
 	        	}
 	        >
 		      {props.catalog.groups.map(group => (
-		          <OSCALCatalogGroup group={group} />
+		          <OSCALCatalogGroup group={group} key={group.id} />
 	            ))}
 		    </List>
 	    </div>
