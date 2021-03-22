@@ -8,11 +8,11 @@ import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import FolderIcon from '@material-ui/icons/Folder';
-import OSCALCatalogGroupControl from './OSCALCatalogGroupControl.js';
+import OSCALControl from './OSCALControl.js';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
-	  OSCALCatalogGroupControlList: {
+	  OSCALControlList: {
 		  'padding-left': '2em',
 		  'padding-right': '2em'
 	  }
@@ -38,9 +38,9 @@ export default function OSCALCatalogGroup(props) {
 		        {open ? <ExpandLess /> : <ExpandMore />}
 			</ListItem>
 			<Collapse in={open} timeout="auto" unmountOnExit>
-				<List className={classes.OSCALCatalogGroupControlList} >
+				<List className={classes.OSCALControlList} >
 	        	{props.group.controls.map(control => (
-			          <OSCALCatalogGroupControl control={control} childLevel={0} key={"control-" + control.id} />
+			          <OSCALControl control={control} childLevel={0} key={"control-" + control.id} />
 		            ))}
 	        	</List>
 		     </Collapse>

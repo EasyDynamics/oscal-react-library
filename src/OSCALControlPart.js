@@ -1,15 +1,15 @@
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import OSCALCatalogGroupControlGuidance from './OSCALCatalogGroupControlGuidance.js';
+import OSCALControlGuidance from './OSCALControlGuidance.js';
 import Link from '@material-ui/core/Link';
 import Tooltip from '@material-ui/core/Tooltip';
 
 
 const useStyles = makeStyles((theme) => ({
-	  OSCALCatalogGroupControlPart: {
+	  OSCALControlPart: {
 		  'padding-left': '2em'
 	  },
-	  OSCALCatalogGroupControlStatement: {
+	  OSCALControlStatement: {
 		  'padding-left': '0em'
 	  },
 	  OSCALStatement: {},
@@ -128,7 +128,7 @@ function ReplacedProseWithByComponentParameterValue(props) {
 	);
 }
 
-export default function OSCALCatalogGroupControlPart(props) {
+export default function OSCALControlPart(props) {
 	const classes = useStyles();
 	
 	// Don't display assessment if we're displaying a control implementation
@@ -137,7 +137,7 @@ export default function OSCALCatalogGroupControlPart(props) {
 	}
 
 	if (props.part.name === 'guidance') {
-		return <OSCALCatalogGroupControlGuidance prose={props.part.prose} />;
+		return <OSCALControlGuidance prose={props.part.prose} />;
 	}
 
 	const isStatement = props.part.name === 'statement';
@@ -155,15 +155,15 @@ export default function OSCALCatalogGroupControlPart(props) {
 
 	let className;
 	if (isStatement) {
-		className = classes.OSCALCatalogGroupControlStatement;
+		className = classes.OSCALControlStatement;
 	} else {
-		className = classes.OSCALCatalogGroupControlPart;
+		className = classes.OSCALControlPart;
 	}
 	return (
 		  <div className={className}>
 			{replacedProse}
 	        {props.part.parts && props.part.parts.map(part => (
-	          <OSCALCatalogGroupControlPart part={part} parameters={props.parameters} implReqStatements={props.implReqStatements} componentId={props.componentId} key={part.id} />
+	          <OSCALControlPart part={part} parameters={props.parameters} implReqStatements={props.implReqStatements} componentId={props.componentId} key={part.id} />
             ))}
 	      </div>
 	  );

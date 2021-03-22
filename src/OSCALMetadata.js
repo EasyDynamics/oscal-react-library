@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 	}
 	}));
 
-export default function OSCALCatalogGroupControlGuidance(props) {
+export default function OSCALControlGuidance(props) {
 	const classes = useStyles();
 	if (!props.metadata) { return null; }
 
