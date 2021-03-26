@@ -5,10 +5,14 @@ phases:
     runtime-versions:
       nodejs: 12
     commands:
+      - echo Installing npm packages
       - npm install
   build:
     commands:
+      - echo Building
       - npm run build
+      - echo Testing
+      - npm test
 
 artifacts:
   base-directory: ./build
