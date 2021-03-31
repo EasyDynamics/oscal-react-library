@@ -131,4 +131,6 @@ export function testOSCALSystemImplementation(parentElementName, renderer) {
     });
 }
 
-testOSCALSystemImplementation('OSCALSystemImplementation', systemImplementationRenderer);
+if (!require.main) {
+  testOSCALSystemImplementation('OSCALSystemImplementation', systemImplementationRenderer);
+}
