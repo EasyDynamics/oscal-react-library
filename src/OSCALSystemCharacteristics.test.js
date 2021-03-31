@@ -106,5 +106,6 @@ export function testOSCALSystemCharacteristics(parentElementName, renderer) {
         expect(result).toHaveValue('other');
     });
 }
-
-testOSCALSystemCharacteristics('OSCALSystemCharacteristics', systemCharacteristicsRenderer);
+if (!require.main || require.main.id.endsWith("OSCALSystemCharacteristics.test.js")) {
+  testOSCALSystemCharacteristics('OSCALSystemCharacteristics', systemCharacteristicsRenderer);
+}
