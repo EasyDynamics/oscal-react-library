@@ -39,6 +39,6 @@ export function testOSCALMetadata(parentElementName, renderer) {
   });
 }
 
-if (!require.main || require.main.id.endsWith("OSCALMetadata.test.js")) {
+if (!require.main) {
   testOSCALMetadata('OSCALMetadata', metadataRenderer);
 }

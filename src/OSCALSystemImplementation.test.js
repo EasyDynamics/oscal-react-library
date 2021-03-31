@@ -131,6 +131,6 @@ export function testOSCALSystemImplementation(parentElementName, renderer) {
     });
 }
 
-if (!require.main || require.main.id.endsWith("OSCALSystemImplementation.test.js")) {
+if (!require.main) {
   testOSCALSystemImplementation('OSCALSystemImplementation', systemImplementationRenderer);
 }
