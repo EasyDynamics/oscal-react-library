@@ -22,5 +22,3 @@ npm install
 npm start
 ```
 
-## Testing
-update readme
