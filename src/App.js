@@ -50,8 +50,6 @@ function App() {
 		    		<Route path="/system-security-plan">OSCAL System Security Plan Viewer</Route>
 			      </Typography>
 		    </Toolbar>
-    	</AppBar>
-    	<Menu
 	        id="app-nav-menu"
 	        anchorEl={anchorEl}
 	        keepMounted
