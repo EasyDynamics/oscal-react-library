@@ -53,6 +53,7 @@ export default function OSCALSsp(props) {
 
 	  return (
 	    <div className={classes.paper}>
+			
 	        <OSCALMetadata metadata={ssp.metadata} />
 	        <OSCALSystemCharacteristics 
 	        	systemCharacteristics={ssp.['system-characteristics']}

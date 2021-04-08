@@ -133,7 +133,7 @@ export function OSCALSSPLoader(props) {
 
 export function OSCALComponentLoader(props) {
 	const renderer = (oscalData, oscalUrl) => {
-		return (<OSCALComponentDefinition component-definition={oscalData.['component-definition']} parentUrl={oscalUrl} />);
+		return (<OSCALComponentDefinition componentDefinition={oscalData.['component-definition']} parentUrl={oscalUrl} />);
 	}
 	return (
 		<OSCALLoader 
