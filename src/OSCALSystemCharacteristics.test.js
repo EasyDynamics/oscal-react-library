@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import OSCALSystemCharacteristics from "./OSCALSystemCharacteristics.js";
+import OSCALSystemCharacteristics from "./OSCALSystemCharacteristics";
 
 export const systemCharacteristicsTestData = {
   "system-name": "Example System Name",

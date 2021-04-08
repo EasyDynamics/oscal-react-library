@@ -6,8 +6,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import ReplayIcon from "@material-ui/icons/Replay";
-import OSCALSsp from "./OSCALSsp.js";
-import OSCALCatalog from "./OSCALCatalog.js";
+import OSCALSsp from "./OSCALSsp";
+import OSCALCatalog from "./OSCALCatalog";
 
 const useStyles = makeStyles((theme) => ({
   catalogForm: {

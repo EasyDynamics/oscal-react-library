@@ -1,8 +1,8 @@
 import React from "react";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import OSCALSystemImplementation from "./OSCALSystemImplementation.js";
-import { metadataTestData } from "./OSCALMetadata.test.js";
+import OSCALSystemImplementation from "./OSCALSystemImplementation";
+import { metadataTestData } from "./OSCALMetadata.test";
 
 export const systemImplementationTestData = {
   remarks: "Example system implementation remarks.",

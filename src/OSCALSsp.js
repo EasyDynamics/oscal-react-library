@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import OSCALMetadata from "./OSCALMetadata.js";
-import OSCALSystemCharacteristics from "./OSCALSystemCharacteristics.js";
-import OSCALSystemImplementation from "./OSCALSystemImplementation.js";
-import OSCALControlImplementation from "./OSCALControlImplementation.js";
-import OSCALSspResolveProfile from "./oscal-utils/OSCALSspResolver.js";
+import OSCALMetadata from "./OSCALMetadata";
+import OSCALSystemCharacteristics from "./OSCALSystemCharacteristics";
+import OSCALSystemImplementation from "./OSCALSystemImplementation";
+import OSCALControlImplementation from "./OSCALControlImplementation";
+import OSCALSspResolveProfile from "./oscal-utils/OSCALSspResolver";
 
 const useStyles = makeStyles((theme) => ({
   paper: {

@@ -9,7 +9,7 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import FolderIcon from "@material-ui/icons/Folder";
 import { makeStyles } from "@material-ui/core/styles";
-import OSCALControl from "./OSCALControl.js";
+import OSCALControl from "./OSCALControl";
 
 const useStyles = makeStyles((theme) => ({
   OSCALControlList: {

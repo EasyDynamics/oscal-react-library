@@ -2,8 +2,8 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
-import OSCALMetadata from "./OSCALMetadata.js";
-import OSCALCatalogGroup from "./OSCALCatalogGroup.js";
+import OSCALMetadata from "./OSCALMetadata";
+import OSCALCatalogGroup from "./OSCALCatalogGroup";
 
 const useStyles = makeStyles((theme) => ({
   paper: {

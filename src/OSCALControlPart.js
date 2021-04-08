@@ -3,7 +3,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Link from "@material-ui/core/Link";
 import Tooltip from "@material-ui/core/Tooltip";
-import OSCALControlGuidance from "./OSCALControlGuidance.js";
+import OSCALControlGuidance from "./OSCALControlGuidance";
 
 const useStyles = makeStyles((theme) => ({
   OSCALControlPart: {
