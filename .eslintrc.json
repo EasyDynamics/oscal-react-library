@@ -21,12 +21,8 @@
         "prettier"
     ],
     "rules": {
-        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-        "prettier/prettier": "error",
-        "react/state-in-constructor": "off",
-        "react/prop-types": [0],
-        "react/destructuring-assignment": [0]
-
+      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+      
         
     },
     "overrides": [
