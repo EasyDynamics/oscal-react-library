@@ -13,7 +13,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { Route, Switch, Redirect, Link as RouterLink } from "react-router-dom";
 
 import Link from "@material-ui/core/Link";
-import { OSCALCatalogLoader, OSCALSSPLoader } from "./OSCALLoader.js";
+import { OSCALCatalogLoader, OSCALSSPLoader } from "./OSCALLoader";
 
 const useStyles = makeStyles((theme) => ({
   title: {
