@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import OSCALControlImplementation from "./OSCALControlImplementation.js";
+import OSCALControlImplementation from "./OSCALControlImplementation";
 
 const controlImplData = {
   "implemented-requirements": [
