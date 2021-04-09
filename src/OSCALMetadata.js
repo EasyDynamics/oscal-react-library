@@ -41,6 +41,8 @@ export default function OSCALControlGuidance(props) {
       return null;
     }
     let role;
+    // TODO find out how to change this to an array to satisfy linter
+/* eslint-disable */
     for (role of props.metadata.roles) {
       if (role.id === roleId) {
         return role.title;
@@ -48,7 +50,7 @@ export default function OSCALControlGuidance(props) {
     }
     return null;
   };
-
+/* eslint-enable */
   const getPartyRolesText = (party) => {
     if (!props.metadata["responsible-parties"]) {
       return null;
@@ -56,6 +58,9 @@ export default function OSCALControlGuidance(props) {
     let partyRolesText = "";
     const delimiter = ", ";
     let responsibleParty;
+
+    // TODO for..in loops iterate over the entire prototype chain, which is virtually never what you want. Use Object.{keys,values,entries}, and iterate over the resulting array 
+    /* eslint-disable */
     for (responsibleParty in props.metadata["responsible-parties"]) {
       const responsiblePartyUuids =
         props.metadata["responsible-parties"][responsibleParty]["party-uuids"];

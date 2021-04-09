@@ -42,6 +42,8 @@ export default function OSCALSystemImplementation(props) {
       return null;
     }
     let party;
+    // TODO iterators/generators require regenerator-runtime, which is too heavyweight for this guide to allow them. Separately, loops should be avoided in favor of array iterations  no-restricted-syntax
+    /* eslint-disable */
     for (party of props.parties) {
       if (party.uuid === partyUuid) {
         return party.name;
@@ -49,6 +51,7 @@ export default function OSCALSystemImplementation(props) {
     }
     return null;
   };
+   /* eslint-enable */
 
   return (
     <div className={classes.paper}>

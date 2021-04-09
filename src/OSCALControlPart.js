@@ -36,7 +36,7 @@ function getPartLabel(props) {
       return property.value;
     }
   }
-}/* eslint-enable */
+} /* eslint-enable */
 
 /**
  * Gets the 'by-component' object for the give componentId within the given
@@ -64,14 +64,13 @@ function getStatementByComponent(implReqStatements, statementId, componentId) {
       return byComponent;
     }
   }
-}/* eslint-enable */
+} /* eslint-enable */ /* eslint-disable */
 
 /**
  * Replaces the parameter placeholders in the given prose with the given label
  *
  * TODO - This is probably 800-53 specific?
- *//* eslint-disable */
-function ReplacedProseWithParameterLabel(props) {
+ */ function ReplacedProseWithParameterLabel(props) {
   if (!props.prose) {
     return null;
   }
@@ -98,7 +97,7 @@ function ReplacedProseWithParameterLabel(props) {
       {props.label} {replacedProse}
     </Typography>
   );
-}
+} /* eslint-disable */
 /* eslint-enable */
 
 /**
@@ -107,7 +106,8 @@ function ReplacedProseWithParameterLabel(props) {
  * from the given implReqStatements
  *
  * TODO - This is probably 800-53 specific?
- *//* eslint-disable */
+ */
+/* eslint-disable */
 function ReplacedProseWithByComponentParameterValue(props) {
   if (!props.prose) {
     return;
@@ -161,7 +161,7 @@ function ReplacedProseWithByComponentParameterValue(props) {
       <span dangerouslySetInnerHTML={{ __html: replacedProse }} />
     </Typography>
   );
-}/* eslint-enable */
+} /* eslint-enable */
 
 export default function OSCALControlPart(props) {
   const classes = useStyles();
