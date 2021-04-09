@@ -69,7 +69,7 @@ export default function OSCALLoader(props) {
   if (error) {
     result = (
       <Alert severity="error">
-        Yikes! Something went wrong loading the OSCAL data. Sorry, we'll look
+        Yikes! Something went wrong loading the OSCAL data. Sorry, we&apos;ll look
         into it. ({error.message})
       </Alert>
     );
