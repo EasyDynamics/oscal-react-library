@@ -2,9 +2,8 @@ import React from "react";
 import { Router } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import App from "./App";
-// eslint-disable-next-line
 import { createMemoryHistory } from "history";
+import App from "./App";
 
 test("renders menu navigation", () => {
   const history = createMemoryHistory();
