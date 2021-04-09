@@ -1,35 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import OSCALCatalog from './OSCALCatalog.js';
-import OSCALSsp from './OSCALSsp.js';
-import Grid from '@material-ui/core/Grid';
-import Alert from '@material-ui/lab/Alert';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import ReplayIcon from '@material-ui/icons/Replay';
+import React, { useState, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+import Alert from "@material-ui/lab/Alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import ReplayIcon from "@material-ui/icons/Replay";
+import OSCALSsp from "./OSCALSsp";
+import OSCALCatalog from "./OSCALCatalog";
 
 const useStyles = makeStyles((theme) => ({
-	  catalogForm: {
-	    marginTop: theme.spacing(4),
-	    marginBottom: theme.spacing(4),
-	  }
-	}));
+  catalogForm: {
+    marginTop: theme.spacing(4),
+    marginBottom: theme.spacing(4),
+  },
+}));
 
-const defaultOscalCatalogUrl = "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json";
-const defaultOscalSspUrl = "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/ssp/json/ssp-example.json";
+const defaultOscalCatalogUrl =
+  "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json";
+const defaultOscalSspUrl =
+  "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/ssp/json/ssp-example.json";
 
 export default function OSCALLoader(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [oscalData, setOscalData] = useState([]);
   const [oscalUrl, setOscalUrl] = useState(props.oscalUrl);
-  
+
   const classes = useStyles();
-  
+
   const loadOscalData = (newOscalUrl) => {
-	  fetch(newOscalUrl)
-      .then(res => res.json())
+    fetch(newOscalUrl)
+      .then((res) => res.json())
       .then(
         (result) => {
           setOscalData(result);
@@ -43,15 +45,15 @@ export default function OSCALLoader(props) {
           setError(error);
           setIsLoaded(true);
         }
-      )
-  }
-  
-  const handleChange = (event) => {
-	  setOscalUrl(event.target.value);
+      );
   };
-  
+
+  const handleChange = (event) => {
+    setOscalUrl(event.target.value);
+  };
+
   const handleReloadClick = (event) => {
-	  loadOscalData(oscalUrl);
+    loadOscalData(oscalUrl);
   };
 
   // Note: the empty deps array [] means
@@ -59,72 +61,87 @@ export default function OSCALLoader(props) {
   // similar to componentDidMount()
   useEffect(() => {
     loadOscalData(oscalUrl);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+    // eslint-disable-next-line
+  }, []);
 
   let result;
-  
+
   if (error) {
-    result = <Alert severity="error">Yikes! Something went wrong loading the OSCAL data. Sorry, we'll look into it. ({error.message})</Alert>;
+    result = (
+      <Alert severity="error">
+        Yikes! Something went wrong loading the OSCAL data. Sorry, we&apos;ll
+        look into it. ({error.message})
+      </Alert>
+    );
   } else if (!isLoaded) {
     result = <CircularProgress />;
   } else {
-	result = props.renderer(oscalData, oscalUrl);
+    result = props.renderer(oscalData, oscalUrl);
   }
-	return (
-		<React.Fragment>
-		<form className={classes.catalogForm} noValidate autoComplete="off" onSubmit={e => { e.preventDefault(); }}>
-			<Grid container spacing={3}>
-				<Grid item xs={10}>
-					<TextField
-			          id="oscal-url"
-			          label={"OSCAL " + props.oscalModelType + " URL"}
-			          defaultValue={props.oscalUrl}
-			          helperText="(JSON Format)"
-			          variant="outlined"
-			          fullWidth
-			          onChange={handleChange}
-			        />
-			     </Grid>
-				 <Grid item xs={2}>
-					<Button
-				        variant="contained"
-				        color="primary"
-				        endIcon={<ReplayIcon>send</ReplayIcon>}
-					    onClick={handleReloadClick}
-				      >
-					  Reload
-					</Button>
-				  </Grid>
-			</Grid>
-		</form>
-	    {result}
-	  	</React.Fragment>
-	);
+  return (
+    <>
+      <form
+        className={classes.catalogForm}
+        noValidate
+        autoComplete="off"
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+      >
+        <Grid container spacing={3}>
+          <Grid item xs={10}>
+            <TextField
+              id="oscal-url"
+              label={`OSCAL ${props.oscalModelType} URL`}
+              defaultValue={props.oscalUrl}
+              helperText="(JSON Format)"
+              variant="outlined"
+              fullWidth
+              onChange={handleChange}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <Button
+              variant="contained"
+              color="primary"
+              endIcon={<ReplayIcon>send</ReplayIcon>}
+              onClick={handleReloadClick}
+            >
+              Reload
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
+      {result}
+    </>
+  );
 }
 
 export function OSCALCatalogLoader(props) {
-	const renderer = (oscalData, oscalUrl) => {
-		return (<OSCALCatalog catalog={oscalData.catalog} />);
-	}
-	return (
-		<OSCALLoader 
-			oscalModelType="Catalog"
-			oscalUrl={defaultOscalCatalogUrl}
-			renderer={renderer}
-		/>
-	);
+  const renderer = (oscalData, oscalUrl) => (
+    <OSCALCatalog catalog={oscalData.catalog} />
+  );
+  return (
+    <OSCALLoader
+      oscalModelType="Catalog"
+      oscalUrl={defaultOscalCatalogUrl}
+      renderer={renderer}
+    />
+  );
 }
 
 export function OSCALSSPLoader(props) {
-	const renderer = (oscalData, oscalUrl) => {
-		return (<OSCALSsp system-security-plan={oscalData.['system-security-plan']} parentUrl={oscalUrl} />);
-	}
-	return (
-		<OSCALLoader 
-			oscalModelType="SSP"
-			oscalUrl={defaultOscalSspUrl}
-			renderer={renderer}
-		/>
-	);
+  const renderer = (oscalData, oscalUrl) => (
+    <OSCALSsp
+      system-security-plan={oscalData["system-security-plan"]}
+      parentUrl={oscalUrl}
+    />
+  );
+  return (
+    <OSCALLoader
+      oscalModelType="SSP"
+      oscalUrl={defaultOscalSspUrl}
+      renderer={renderer}
+    />
+  );
 }
