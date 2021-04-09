@@ -5,6 +5,26 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import OSCALControlPart from "./OSCALControlPart";
 
+// TODO - This is probably 800-53 specific?
+// Disable linting until completed
+/* eslint-disable */
+function getControlStatusCss(props) {
+  if (!props.control.props) {
+    return;
+  }
+  let property;
+  for (property of props.control.props) {
+    if (property.name === "status") {
+      return {
+        "text-decoration": "line-through",
+        color: "#d4d4d4",
+      };
+    }
+  }
+  return "";
+}
+/* eslint-enable */
+
 const useStyles = makeStyles((theme) => ({
   OSCALControl: {
     margin: "1em 0 1em 0",
@@ -28,23 +48,6 @@ const useStyles = makeStyles((theme) => ({
   // TODO - This is probably 800-53 specific?
   OSCALControlStatus: (props) => getControlStatusCss(props),
 }));
-
-// TODO - This is probably 800-53 specific?
-function getControlStatusCss(props) {
-  if (!props.control.props) {
-    return;
-  }
-  let property;
-  for (property of props.control.props) {
-    if (property.name === "status") {
-      return {
-        "text-decoration": "line-through",
-        color: "#d4d4d4",
-      };
-    }
-  }
-  return "";
-}
 
 export default function OSCALControl(props) {
   const classes = useStyles(props);

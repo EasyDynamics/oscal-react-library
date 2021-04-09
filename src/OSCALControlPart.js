@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // TODO - This is probably 800-53 specific?
+/* eslint-disable */
 function getPartLabel(props) {
   if (!props) {
     return;
@@ -35,7 +36,7 @@ function getPartLabel(props) {
       return property.value;
     }
   }
-}
+}/* eslint-enable */
 
 /**
  * Gets the 'by-component' object for the give componentId within the given
@@ -44,6 +45,7 @@ function getPartLabel(props) {
  * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/implementation-layer/ssp/xml-schema/#global_by-component_h2}
  * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/implementation-layer/ssp/xml-schema/#global_implemented-requirement}
  */
+/* eslint-disable */
 function getStatementByComponent(implReqStatements, statementId, componentId) {
   let foundStatement;
   for (const [key, statement] of Object.entries(implReqStatements)) {
@@ -62,13 +64,13 @@ function getStatementByComponent(implReqStatements, statementId, componentId) {
       return byComponent;
     }
   }
-}
+}/* eslint-enable */
 
 /**
  * Replaces the parameter placeholders in the given prose with the given label
  *
  * TODO - This is probably 800-53 specific?
- */
+ *//* eslint-disable */
 function ReplacedProseWithParameterLabel(props) {
   if (!props.prose) {
     return null;
@@ -97,6 +99,7 @@ function ReplacedProseWithParameterLabel(props) {
     </Typography>
   );
 }
+/* eslint-enable */
 
 /**
  * Replaces the parameter placeholders in the given prose with the values
@@ -104,7 +107,7 @@ function ReplacedProseWithParameterLabel(props) {
  * from the given implReqStatements
  *
  * TODO - This is probably 800-53 specific?
- */
+ *//* eslint-disable */
 function ReplacedProseWithByComponentParameterValue(props) {
   if (!props.prose) {
     return;
@@ -158,7 +161,7 @@ function ReplacedProseWithByComponentParameterValue(props) {
       <span dangerouslySetInnerHTML={{ __html: replacedProse }} />
     </Typography>
   );
-}
+}/* eslint-enable */
 
 export default function OSCALControlPart(props) {
   const classes = useStyles();
