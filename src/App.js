@@ -44,12 +44,12 @@ function App() {
     	 	<Toolbar>
 	    	 	<IconButton edge="start" className={classes.menuButton} onClick={handleAppNavOpen} color="inherit" aria-label="menu">
 		            <MenuIcon />
-		          </IconButton>
+				</IconButton>
 		    	<Typography variant="h6" className={classes.title}>
 		    		<Route path="/catalog">OSCAL Catalog Viewer</Route>
 		    		<Route path="/system-security-plan">OSCAL System Security Plan Viewer</Route>
 					<Route path="/component-definition">OSCAL Component Viewer</Route>
-			      </Typography>
+				</Typography>
 		    </Toolbar>
     	</AppBar>
     	<Menu
@@ -58,7 +58,7 @@ function App() {
 	        keepMounted
 	        open={Boolean(anchorEl)}
 	        onClose={handleAppNavClose}
-	      >
+		>
 	        <MenuItem onClick={handleAppNavClose}><Link component={RouterLink} to="/catalog">Catalog Viewer</Link></MenuItem>
 	        <MenuItem onClick={handleAppNavClose}><Link component={RouterLink} to="/system-security-plan">System Security Plan Viewer</Link></MenuItem>
 			<MenuItem onClick={handleAppNavClose}><Link component={RouterLink} to="/component-definition">Component Viewer</Link></MenuItem>
