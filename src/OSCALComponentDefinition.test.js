@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event'
 import { OSCALComponentLoader } from './OSCALLoader.js';
 import OSCALMetadata from './OSCALMetadata.js';
 import OSCALComponentDefinition from './OSCALComponentDefinition.js';
@@ -7,7 +8,7 @@ import { metadataTestData, testOSCALMetadata } from './OSCALMetadata.test.js';
 import { testOSCALSystemImplementation } from './OSCALSystemImplementation.test.js';
 import { componentResponsibleRolesTestData, testOSCALComponentResponsibleRoles } from './OSCALComponentResponsibleRoles.test.js';
 
-const componentDefinitionTestData = {
+export const componentDefinitionTestData = {
     "uuid": "aabcfa61-c6eb-4979-851f-35b461f6a0ef",
     "metadata": metadataTestData,
     "components": {
@@ -28,9 +29,25 @@ function componentDefinitionRenderer() {
     render(<OSCALComponentDefinition componentDefinition={componentDefinitionTestData} />);
 }
 
+export function testOSCALComponentDefinition(parentElementName, renderer) {
+    test(parentElementName + ' shows component title', () => {
+        renderer();
+        const result = screen.getByText('Example Component');
+        expect(result).toBeVisible();
+      });
+  
+    test(parentElementName + ' shows component description', async () => {
+        renderer();
+        userEvent.hover(screen.getByText('Example Component'));
+        expect(
+            await screen.findByText('An example component.')
+        ).toBeInTheDocument();
+      });
+}
+
 testOSCALMetadata('OSCALComponentDefinition', componentDefinitionRenderer);
 
-//testOSCALSystemImplementation('OSCAlComponentDefinition', componentDefinitionRenderer);
+testOSCALComponentDefinition('OSCAlComponentDefinition', componentDefinitionRenderer);
 
 testOSCALComponentResponsibleRoles('OSCALComponentDefinition', componentDefinitionRenderer)
 

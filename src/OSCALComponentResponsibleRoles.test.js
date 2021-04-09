@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, within } from '@testing-library/react';
 import OSCALComponentResponsibleRoles from './OSCALComponentResponsibleRoles.js';
 import { componentDefinitionTestData } from './OSCALComponentDefinition.test.js';
+import { metadataTestData } from './OSCALMetadata.test.js';
 
 export const componentResponsibleRolesTestData = {
     "provider": {
@@ -13,7 +14,7 @@ export const componentResponsibleRolesTestData = {
 
 function componentResponsibleRolesRenderer() {
     render(<OSCALComponentResponsibleRoles 
-        component={componentResponsibleRolesTestData} parties={componentDefinitionTestData.metadata.parties}
+        component={componentDefinitionTestData.components} parties={metadataTestData.parties}
     />);
 }
 
