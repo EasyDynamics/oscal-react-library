@@ -25,7 +25,8 @@
       "react/prop-types": [0],
       "react/destructuring-assignment": [0],
       "react/jsx-wrap-multilines": "off",
-      "react/jsx-one-expression-per-line": "off"
+      "react/jsx-one-expression-per-line": "off",
+      "no-unused-vars": "off"
       
     },
     "overrides": [
