@@ -38,7 +38,7 @@ export default function OSCALSsp(props) {
         setIsLoaded(true);
       }
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, []);
 
   let controlImpl;
