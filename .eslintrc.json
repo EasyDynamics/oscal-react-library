@@ -24,9 +24,10 @@
       "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
       "react/prop-types": [0],
       "react/destructuring-assignment": [0],
-      "react/jsx-wrap-multilines": "off",
-      "react/jsx-one-expression-per-line": "off",
-      "no-unused-vars": "off"
+     
+      "no-unused-vars": "off",
+      "no-shadow": "off",
+      "react/jsx-props-no-spreading": "off"
       
     },
     "overrides": [
