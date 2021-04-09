@@ -32,22 +32,22 @@ export default function OSCALComponentResponsibleRoles(props) {
     }
         return (
             <TableContainer>
-				    <Table size="small">
-					    <TableBody>
-						    {props.component.['responsible-roles'] && Object.entries(props.component.['responsible-roles']).map(([key, role], index) => (
-							    <TableRow key={key}>
-								    <TableCell className={classes.OSCALComponentResponsibleRolesSubDataHeader} component="th" scope="row">
-								        {key}
-								    </TableCell>
-								    <TableCell align="right">
-								        {role.['party-uuids'] && role.['party-uuids'].map((partyUuid) => (
-								            getPartyName(partyUuid)	
-								        ))}
-								    </TableCell>
-							    </TableRow>
-						    ))}
-					    </TableBody>
-				    </Table>
+				<Table size="small">
+					<TableBody>
+						{props.component.['responsible-roles'] && Object.entries(props.component.['responsible-roles']).map(([key, role], index) => (
+							<TableRow key={key}>
+								<TableCell className={classes.OSCALComponentResponsibleRolesSubDataHeader} component="th" scope="row">
+									{key}
+								</TableCell>
+								<TableCell align="right">
+									{role.['party-uuids'] && role.['party-uuids'].map((partyUuid) => (
+										getPartyName(partyUuid)	
+									))}
+								</TableCell>
+							</TableRow>
+						))}
+					</TableBody>
+				</Table>
 			</TableContainer>
         )
     }
