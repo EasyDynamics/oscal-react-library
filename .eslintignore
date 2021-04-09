@@ -1,0 +1,4 @@
+## uncomment this to disable linting 
+## src/**/*.js
+src/serviceWorker.ts
+public/*
