@@ -13,7 +13,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { Route, Switch, Redirect } from "react-router-dom";
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
-import { OSCALCatalogLoader, OSCALSSPLoader } from './OSCALLoader.js';
+import { OSCALCatalogLoader, OSCALSSPLoader, OSCALComponentLoader } from './OSCALLoader.js';
 
 const useStyles = makeStyles((theme) => ({
 	  title: {
@@ -44,11 +44,12 @@ function App() {
     	 	<Toolbar>
 	    	 	<IconButton edge="start" className={classes.menuButton} onClick={handleAppNavOpen} color="inherit" aria-label="menu">
 		            <MenuIcon />
-		          </IconButton>
+				</IconButton>
 		    	<Typography variant="h6" className={classes.title}>
 		    		<Route path="/catalog">OSCAL Catalog Viewer</Route>
 		    		<Route path="/system-security-plan">OSCAL System Security Plan Viewer</Route>
-			      </Typography>
+					<Route path="/component-definition">OSCAL Component Viewer</Route>
+				</Typography>
 		    </Toolbar>
     	</AppBar>
     	<Menu
@@ -57,9 +58,10 @@ function App() {
 	        keepMounted
 	        open={Boolean(anchorEl)}
 	        onClose={handleAppNavClose}
-	      >
+		>
 	        <MenuItem onClick={handleAppNavClose}><Link component={RouterLink} to="/catalog">Catalog Viewer</Link></MenuItem>
 	        <MenuItem onClick={handleAppNavClose}><Link component={RouterLink} to="/system-security-plan">System Security Plan Viewer</Link></MenuItem>
+			<MenuItem onClick={handleAppNavClose}><Link component={RouterLink} to="/component-definition">Component Viewer</Link></MenuItem>
 	    </Menu>
     	<Container component="main">
     	  <Switch>
@@ -72,6 +74,9 @@ function App() {
 	    	</Route>
     		<Route exact path="/system-security-plan">
 	    		<OSCALSSPLoader />
+	    	</Route>
+			<Route exact path="/component-definition">
+	    		<OSCALComponentLoader />
 	    	</Route>
 	      </Switch>
         </Container>

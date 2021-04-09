@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import OSCALCatalog from './OSCALCatalog.js';
 import OSCALSsp from './OSCALSsp.js';
+import OSCALComponentDefinition from './OSCALComponentDefinition.js';
 import Grid from '@material-ui/core/Grid';
 import Alert from '@material-ui/lab/Alert';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -18,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
 
 const defaultOscalCatalogUrl = "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json";
 const defaultOscalSspUrl = "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/ssp/json/ssp-example.json";
+const defaultOSCALComponentUrl = "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/component-definition/json/example-component.json";
 
 export default function OSCALLoader(props) {
   const [error, setError] = useState(null);
@@ -124,6 +126,19 @@ export function OSCALSSPLoader(props) {
 		<OSCALLoader 
 			oscalModelType="SSP"
 			oscalUrl={defaultOscalSspUrl}
+			renderer={renderer}
+		/>
+	);
+}
+
+export function OSCALComponentLoader(props) {
+	const renderer = (oscalData, oscalUrl) => {
+		return (<OSCALComponentDefinition componentDefinition={oscalData.['component-definition']} parentUrl={oscalUrl} />);
+	}
+	return (
+		<OSCALLoader 
+			oscalModelType="Component"
+			oscalUrl={defaultOSCALComponentUrl}
 			renderer={renderer}
 		/>
 	);
