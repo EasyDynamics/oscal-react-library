@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 				                    </TableCell>
 				                    <TableCell>{component.type}</TableCell>
 				                    <TableCell>
-					                    <OSCALComponentResponsibleRoles component={component} parties={props.componentDefinition.metadata.parties} />
+					                    <OSCALComponentResponsibleRoles responsibleRoles={component.['responsible-roles']} parties={props.componentDefinition.metadata.parties} />
 				                    </TableCell>
 				                  </TableRow>
 				                ))}

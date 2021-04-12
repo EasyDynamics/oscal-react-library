@@ -90,7 +90,7 @@ export default function OSCALSystemImplementation(props) {
 								          </TableContainer>
 				                    </TableCell>
 				                    <TableCell>
-					                    <OSCALComponentResponsibleRoles component={component} parties={props.parties} />
+					                    <OSCALComponentResponsibleRoles responsibleRoles={component.['responsible-roles']} parties={props.parties} />
 				                    </TableCell>
 				                  </TableRow>
 				                ))}

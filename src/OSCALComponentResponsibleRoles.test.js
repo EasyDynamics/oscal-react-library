@@ -1,10 +1,9 @@
 import React from 'react';
 import { render, screen, within } from '@testing-library/react';
 import OSCALComponentResponsibleRoles from './OSCALComponentResponsibleRoles.js';
-import { componentDefinitionTestData } from './OSCALComponentDefinition.test.js';
 import { metadataTestData } from './OSCALMetadata.test.js';
 
-export const componentResponsibleRolesTestData = {
+export const responsibleRolesTestData = {
     "provider": {
         "party-uuids": [
           "party-1"
@@ -14,15 +13,14 @@ export const componentResponsibleRolesTestData = {
 
 function componentResponsibleRolesRenderer() {
     render(<OSCALComponentResponsibleRoles 
-        component={componentDefinitionTestData.components} parties={metadataTestData.parties}
+        responsibleRoles={responsibleRolesTestData} parties={metadataTestData.parties}
     />);
 }
 
 export function testOSCALComponentResponsibleRoles(parentElementName, renderer) {
     test(parentElementName + ' shows component roles', () => {
         renderer();
-        const component = screen.getByText('Example Component').closest("tr");
-        const roleTypeResult = within(component).getByText('provider');
+        const roleTypeResult = screen.getByText('provider');
         expect(roleTypeResult).toBeVisible();
     
         const rolePartyResult = within(roleTypeResult.closest("tr")).getByText('Some group of people');
@@ -30,6 +28,6 @@ export function testOSCALComponentResponsibleRoles(parentElementName, renderer) 
       });
 }
 
-if (!require.main) {
+if (!require.main){
     testOSCALComponentResponsibleRoles('OSCALComponentResponsibleRoles', componentResponsibleRolesRenderer);
 }

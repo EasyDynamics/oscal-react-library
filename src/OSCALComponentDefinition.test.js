@@ -2,11 +2,9 @@ import React from 'react';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event'
 import { OSCALComponentLoader } from './OSCALLoader.js';
-import OSCALMetadata from './OSCALMetadata.js';
 import OSCALComponentDefinition from './OSCALComponentDefinition.js';
 import { metadataTestData, testOSCALMetadata } from './OSCALMetadata.test.js';
-import { testOSCALSystemImplementation } from './OSCALSystemImplementation.test.js';
-import { componentResponsibleRolesTestData, testOSCALComponentResponsibleRoles } from './OSCALComponentResponsibleRoles.test.js';
+import { responsibleRolesTestData, testOSCALComponentResponsibleRoles } from './OSCALComponentResponsibleRoles.test.js';
 
 export const componentDefinitionTestData = {
     "uuid": "aabcfa61-c6eb-4979-851f-35b461f6a0ef",
@@ -16,17 +14,19 @@ export const componentDefinitionTestData = {
             "type": "Example Type",
             "title": "Example Component",
             "description": "An example component.",
-            "responsible-roles": componentResponsibleRolesTestData
+            "responsible-roles": responsibleRolesTestData
         }
     }
 }
 
-test('OSCALComponentDefinition loads', () => {
-    render(<OSCALComponentLoader />);
-});
+if (!require.main) {
+    test('OSCALComponentDefinition loads', () => {
+        render(<OSCALComponentLoader />);
+    });
+}
 
 function componentDefinitionRenderer() {
-    render(<OSCALComponentDefinition componentDefinition={componentDefinitionTestData} />);
+    render(<OSCALComponentDefinition componentDefinition={componentDefinitionTestData} parties={metadataTestData.parties} />);
 }
 
 export function testOSCALComponentDefinition(parentElementName, renderer) {
@@ -49,8 +49,4 @@ testOSCALMetadata('OSCALComponentDefinition', componentDefinitionRenderer);
 
 testOSCALComponentDefinition('OSCAlComponentDefinition', componentDefinitionRenderer);
 
-testOSCALComponentResponsibleRoles('OSCALComponentDefinition', componentDefinitionRenderer)
-
-//testOSCALComponentDefinitionMetadata('OSCALComponentDefinition', componentDefinitionMetadataRenderer);
-
-//testOSCALComponentDefinitionComponents('OSCALComponentDefinition', componentDefinitionComponentsRenderer);
+testOSCALComponentResponsibleRoles('OSCALComponentDefinition', componentDefinitionRenderer);
