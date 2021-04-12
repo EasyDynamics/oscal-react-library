@@ -3,7 +3,7 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event'
 import OSCALSystemImplementation from './OSCALSystemImplementation.js';
 import { metadataTestData } from './OSCALMetadata.test.js';
-import { responsibleRolesTestData, testOSCALComponentResponsibleRoles } from './OSCALComponentResponsibleRoles.test.js';
+import { responsibleRolesTestData, testOSCALResponsibleRoles } from './OSCALResponsibleRoles.test.js';
 
 export const systemImplementationTestData = {
   "remarks": "Example system implementation remarks.",
@@ -121,5 +121,5 @@ if (!require.main) {
 }
 
 if (!require.main) {
-  testOSCALComponentResponsibleRoles('OSCALSystemImplementation', systemImplementationRenderer);
+  testOSCALResponsibleRoles('OSCALSystemImplementation', systemImplementationRenderer);
 }

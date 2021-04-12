@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { OSCALComponentLoader } from './OSCALLoader.js';
 import OSCALComponentDefinition from './OSCALComponentDefinition.js';
 import { metadataTestData, testOSCALMetadata } from './OSCALMetadata.test.js';
-import { responsibleRolesTestData, testOSCALComponentResponsibleRoles } from './OSCALComponentResponsibleRoles.test.js';
+import { responsibleRolesTestData, testOSCALResponsibleRoles } from './OSCALResponsibleRoles.test.js';
 
 export const componentDefinitionTestData = {
     "uuid": "aabcfa61-c6eb-4979-851f-35b461f6a0ef",
@@ -49,4 +49,4 @@ testOSCALMetadata('OSCALComponentDefinition', componentDefinitionRenderer);
 
 testOSCALComponentDefinition('OSCAlComponentDefinition', componentDefinitionRenderer);
 
-testOSCALComponentResponsibleRoles('OSCALComponentDefinition', componentDefinitionRenderer);
+testOSCALResponsibleRoles('OSCALComponentDefinition', componentDefinitionRenderer);

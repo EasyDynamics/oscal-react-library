@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, within } from '@testing-library/react';
-import OSCALComponentResponsibleRoles from './OSCALComponentResponsibleRoles.js';
+import OSCALResponsibleRoles from './OSCALResponsibleRoles.js';
 import { metadataTestData } from './OSCALMetadata.test.js';
 
 export const responsibleRolesTestData = {
@@ -11,13 +11,13 @@ export const responsibleRolesTestData = {
     }
 }
 
-function componentResponsibleRolesRenderer() {
-    render(<OSCALComponentResponsibleRoles 
+function responsibleRolesRenderer() {
+    render(<OSCALResponsibleRoles 
         responsibleRoles={responsibleRolesTestData} parties={metadataTestData.parties}
     />);
 }
 
-export function testOSCALComponentResponsibleRoles(parentElementName, renderer) {
+export function testOSCALResponsibleRoles(parentElementName, renderer) {
     test(parentElementName + ' shows component roles', () => {
         renderer();
         const roleTypeResult = screen.getByText('provider');
@@ -29,5 +29,5 @@ export function testOSCALComponentResponsibleRoles(parentElementName, renderer) 
 }
 
 if (!require.main){
-    testOSCALComponentResponsibleRoles('OSCALComponentResponsibleRoles', componentResponsibleRolesRenderer);
+    testOSCALResponsibleRoles('OSCALResponsibleRoles', responsibleRolesRenderer);
 }
