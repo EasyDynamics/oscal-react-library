@@ -19,11 +19,9 @@ export const componentDefinitionTestData = {
     }
 }
 
-if (!require.main) {
-    test('OSCALComponentDefinition loads', () => {
-        render(<OSCALComponentLoader />);
-    });
-}
+test('OSCALComponentDefinition loads', () => {
+    render(<OSCALComponentLoader />);
+});
 
 function componentDefinitionRenderer() {
     render(<OSCALComponentDefinition componentDefinition={componentDefinitionTestData} parties={metadataTestData.parties} />);
