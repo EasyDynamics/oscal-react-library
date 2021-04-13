@@ -15,20 +15,20 @@ import OSCALResponsibleRoles from './OSCALResponsibleRoles';
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(2),
-    display: 'flex',
-    flexDirection: 'column'
+    display: "flex",
+    flexDirection: "column",
   },
   OSCALSystemImplementationSubDataHeader: {
-	  'text-transform': 'capitalize',
-	  'white-space': 'nowrap'
+    "text-transform": "capitalize",
+    "white-space": "nowrap",
   },
   // TODO - This is hacky
   OSCALSystemImplementationHeader: {
-	  '& .MuiTypography-root': {
-		  'font-size': '0.875rem',
-		  color: '#0000008a'
-	  }
-  }
+    "& .MuiTypography-root": {
+      "font-size": "0.875rem",
+      color: "#0000008a",
+    },
+  },
 }));
 
 export default function OSCALSystemImplementation(props) {

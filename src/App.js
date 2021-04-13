@@ -16,17 +16,17 @@ import Link from '@material-ui/core/Link';
 import { OSCALCatalogLoader, OSCALSSPLoader, OSCALComponentLoader } from './OSCALLoader.js';
 
 const useStyles = makeStyles((theme) => ({
-	  title: {
-	    flexGrow: 1,
-	  },
-	  menuButton: {
-	    marginRight: theme.spacing(2),
-	  },
-	}));
+  title: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+}));
 
 function App() {
   const classes = useStyles();
-  
+
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleAppNavOpen = (event) => {
@@ -36,7 +36,7 @@ function App() {
   const handleAppNavClose = () => {
     setAnchorEl(null);
   };
-  
+
   return (
     <div className="App">
     	<CssBaseline />
