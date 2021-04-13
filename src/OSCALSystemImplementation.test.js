@@ -114,12 +114,10 @@ export function testOSCALSystemImplementation(parentElementName, renderer) {
       const propValueResult = within(component).getByText('1.1');
       expect(propValueResult).toBeVisible();
     });
+
+    testOSCALResponsibleRoles(parentElementName, systemImplementationRenderer);
 }
 
 if (!require.main) {
   testOSCALSystemImplementation('OSCALSystemImplementation', systemImplementationRenderer);
-}
-
-if (!require.main) {
-  testOSCALResponsibleRoles('OSCALSystemImplementation', systemImplementationRenderer);
 }
