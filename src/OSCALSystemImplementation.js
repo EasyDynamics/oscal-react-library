@@ -11,7 +11,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Tooltip from "@material-ui/core/Tooltip";
-import OSCALComponentResponsibleRoles from "./OSCALComponentResponsibleRoles";
+import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -112,7 +112,7 @@ export default function OSCALSystemImplementation(props) {
                             </TableContainer>
                           </TableCell>
                           <TableCell>
-                            <OSCALComponentResponsibleRoles component={component} parties={props.parties} />
+                            <OSCALResponsibleRoles responsibleRoles={component.['responsible-roles']} parties={props.parties} />
                           </TableCell>
                         </TableRow>
                       )
