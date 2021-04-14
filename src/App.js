@@ -76,21 +76,21 @@ function App() {
 			</MenuItem>
 	    </Menu>
     	<Container component="main">
-    	  <Switch>
-    	  	{/* TODO - This doesn't load properly */}
-    	  	<Route exact path="/">
-    	  		<Redirect to="/catalog" />
-	        </Route>
-    		<Route path="/catalog">
-	    		<OSCALCatalogLoader />
-	    	</Route>
-    		<Route exact path="/system-security-plan">
-	    		<OSCALSSPLoader />
-	    	</Route>
-			<Route exact path="/component-definition">
-	    		<OSCALComponentLoader />
-	    	</Route>
-	      </Switch>
+    	  	<Switch>
+    	  		{/* TODO - This doesn't load properly */}
+    	  		<Route exact path="/">
+    	  			<Redirect to="/catalog" />
+	        	</Route>
+    			<Route path="/catalog">
+	    			<OSCALCatalogLoader />
+	    		</Route>
+    			<Route exact path="/system-security-plan">
+	    			<OSCALSSPLoader />
+	    		</Route>
+				<Route exact path="/component-definition">
+	    			<OSCALComponentLoader />
+	    		</Route>
+	      	</Switch>
         </Container>
     </div>
   );
