@@ -1,19 +1,19 @@
-import './App.css';
-import { makeStyles } from '@material-ui/core/styles';
-import React, { useState } from 'react';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import "./App.css";
+import { makeStyles } from "@material-ui/core/styles";
+import React, { useState } from "react";
+import Typography from "@material-ui/core/Typography";
+import Container from "@material-ui/core/Container";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import CssBaseline from "@material-ui/core/CssBaseline";
 import { Route, Switch, Redirect } from "react-router-dom";
-import { Link as RouterLink } from 'react-router-dom';
-import Link from '@material-ui/core/Link';
-import { OSCALCatalogLoader, OSCALSSPLoader, OSCALComponentLoader } from './OSCALLoader.js';
+import { Link as RouterLink } from "react-router-dom";
+import Link from "@material-ui/core/Link";
+import { OSCALCatalogLoader, OSCALSSPLoader, OSCALComponentLoader } from "./OSCALLoader.js";
 
 const useStyles = makeStyles((theme) => ({
 	  title: {
@@ -59,9 +59,21 @@ function App() {
 	        open={Boolean(anchorEl)}
 	        onClose={handleAppNavClose}
 		>
-	        <MenuItem onClick={handleAppNavClose}><Link component={RouterLink} to="/catalog">Catalog Viewer</Link></MenuItem>
-	        <MenuItem onClick={handleAppNavClose}><Link component={RouterLink} to="/system-security-plan">System Security Plan Viewer</Link></MenuItem>
-			<MenuItem onClick={handleAppNavClose}><Link component={RouterLink} to="/component-definition">Component Viewer</Link></MenuItem>
+	        <MenuItem onClick={handleAppNavClose}>
+				<Link component={RouterLink} to="/catalog">
+					Catalog Viewer
+				</Link>
+			</MenuItem>
+	        <MenuItem onClick={handleAppNavClose}>
+				<Link component={RouterLink} to="/system-security-plan">
+					System Security Plan Viewer
+				</Link>
+			</MenuItem>
+			<MenuItem onClick={handleAppNavClose}>
+				<Link component={RouterLink} to="/component-definition">
+					Component Viewer
+				</Link>
+			</MenuItem>
 	    </Menu>
     	<Container component="main">
     	  <Switch>
