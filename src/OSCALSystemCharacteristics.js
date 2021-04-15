@@ -70,18 +70,14 @@ export default function OSCALSystemCharacteristics(props) {
               <TableContainer>
                 <Table size="small">
                   <TableBody>
-                    {props.systemCharacteristics.annotations.map(
-                      (annotation) => (
-                        <TableRow key={annotation.name}>
-                          <TableCell component="th" scope="row">
-                            {annotation.name}
-                          </TableCell>
-                          <TableCell align="right">
-                            {annotation.value}
-                          </TableCell>
-                        </TableRow>
-                      )
-                    )}
+                    {props.systemCharacteristics.props.map((annotation) => (
+                      <TableRow key={annotation.name}>
+                        <TableCell component="th" scope="row">
+                          {annotation.name}
+                        </TableCell>
+                        <TableCell align="right">{annotation.value}</TableCell>
+                      </TableRow>
+                    ))}
                   </TableBody>
                 </Table>
               </TableContainer>
