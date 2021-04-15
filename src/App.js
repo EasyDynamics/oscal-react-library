@@ -56,8 +56,9 @@ function App() {
             <Route path="/system-security-plan">
               OSCAL System Security Plan Viewer
             </Route>
-			<Route path="/component-definition">
-			  OSCAL Component Viewer</Route>
+			      <Route path="/component-definition">
+			        OSCAL Component Viewer
+            </Route>
           </Typography>
         </Toolbar>
       </AppBar>
@@ -96,9 +97,9 @@ function App() {
           <Route exact path="/system-security-plan">
             <OSCALSSPLoader />
           </Route>
-		  <Route exact path="/component-definition">
-	    	<OSCALComponentLoader />
-		  </Route>
+		      <Route exact path="/component-definition">
+	    	    <OSCALComponentLoader />
+		      </Route>
         </Switch>
       </Container>
     </div>
