@@ -13,7 +13,11 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { Route, Switch, Redirect, Link as RouterLink } from "react-router-dom";
 
 import Link from "@material-ui/core/Link";
-import { OSCALCatalogLoader, OSCALSSPLoader } from "./OSCALLoader";
+import {
+  OSCALCatalogLoader,
+  OSCALSSPLoader,
+  OSCALComponentLoader,
+} from "./OSCALLoader";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -56,6 +60,7 @@ function App() {
             <Route path="/system-security-plan">
               OSCAL System Security Plan Viewer
             </Route>
+            <Route path="/component-definition">OSCAL Component Viewer</Route>
           </Typography>
         </Toolbar>
       </AppBar>
@@ -76,6 +81,11 @@ function App() {
             System Security Plan Viewer
           </Link>
         </MenuItem>
+        <MenuItem onClick={handleAppNavClose}>
+          <Link component={RouterLink} to="/component-definition">
+            Component Viewer
+          </Link>
+        </MenuItem>
       </Menu>
       <Container component="main">
         <Switch>
@@ -88,6 +98,9 @@ function App() {
           </Route>
           <Route exact path="/system-security-plan">
             <OSCALSSPLoader />
+          </Route>
+          <Route exact path="/component-definition">
+            <OSCALComponentLoader />
           </Route>
         </Switch>
       </Container>

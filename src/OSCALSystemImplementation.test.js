@@ -3,6 +3,10 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import OSCALSystemImplementation from "./OSCALSystemImplementation";
 import { metadataTestData } from "./OSCALMetadata.test";
+import {
+  responsibleRolesTestData,
+  testOSCALResponsibleRoles,
+} from "./OSCALResponsibleRoles.test";
 
 export const systemImplementationTestData = {
   remarks: "Example system implementation remarks.",
@@ -32,11 +36,7 @@ export const systemImplementationTestData = {
           value: "1.1",
         },
       ],
-      "responsible-roles": {
-        provider: {
-          "party-uuids": ["party-1"],
-        },
-      },
+      "responsible-roles": responsibleRolesTestData,
     },
   },
   "inventory-items": [
@@ -116,17 +116,7 @@ export function testOSCALSystemImplementation(parentElementName, renderer) {
     expect(propValueResult).toBeVisible();
   });
 
-  test(`${parentElementName} shows component roles`, () => {
-    renderer();
-    const component = screen.getByText("Example Component").closest("tr");
-    const roleTypeResult = within(component).getByText("provider");
-    expect(roleTypeResult).toBeVisible();
-
-    const rolePartyResult = within(roleTypeResult.closest("tr")).getByText(
-      "Some group of people"
-    );
-    expect(rolePartyResult).toBeVisible();
-  });
+  testOSCALResponsibleRoles(parentElementName, systemImplementationRenderer);
 }
 
 if (!require.main) {

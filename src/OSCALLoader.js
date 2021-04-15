@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import ReplayIcon from "@material-ui/icons/Replay";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
+import OSCALComponentDefinition from "./OSCALComponentDefinition";
 
 const useStyles = makeStyles((theme) => ({
   catalogForm: {
@@ -20,6 +21,8 @@ const defaultOscalCatalogUrl =
   "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json";
 const defaultOscalSspUrl =
   "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/ssp/json/ssp-example.json";
+const defaultOSCALComponentUrl =
+  "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/component-definition/json/example-component.json";
 
 export default function OSCALLoader(props) {
   const [error, setError] = useState(null);
@@ -141,6 +144,22 @@ export function OSCALSSPLoader(props) {
     <OSCALLoader
       oscalModelType="SSP"
       oscalUrl={defaultOscalSspUrl}
+      renderer={renderer}
+    />
+  );
+}
+
+export function OSCALComponentLoader(props) {
+  const renderer = (oscalData, oscalUrl) => (
+    <OSCALComponentDefinition
+      componentDefinition={oscalData["component-definition"]}
+      parentUrl={oscalUrl}
+    />
+  );
+  return (
+    <OSCALLoader
+      oscalModelType="Component"
+      oscalUrl={defaultOSCALComponentUrl}
       renderer={renderer}
     />
   );
