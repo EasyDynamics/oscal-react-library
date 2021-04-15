@@ -3,7 +3,10 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import OSCALSystemImplementation from "./OSCALSystemImplementation";
 import { metadataTestData } from "./OSCALMetadata.test";
-import { responsibleRolesTestData, testOSCALResponsibleRoles } from "./OSCALResponsibleRoles.test.js";
+import {
+  responsibleRolesTestData,
+  testOSCALResponsibleRoles,
+} from "./OSCALResponsibleRoles.test";
 
 export const systemImplementationTestData = {
   remarks: "Example system implementation remarks.",
@@ -33,7 +36,7 @@ export const systemImplementationTestData = {
           value: "1.1",
         },
       ],
-      "responsible-roles": responsibleRolesTestData
+      "responsible-roles": responsibleRolesTestData,
     },
   },
   "inventory-items": [

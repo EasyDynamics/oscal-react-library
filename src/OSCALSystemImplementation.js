@@ -37,8 +37,8 @@ export default function OSCALSystemImplementation(props) {
   if (!props.systemImplementation) {
     return null;
   }
- 
-   /* eslint-enable */
+
+  /* eslint-enable */
 
   return (
     <div className={classes.paper}>
@@ -112,7 +112,10 @@ export default function OSCALSystemImplementation(props) {
                             </TableContainer>
                           </TableCell>
                           <TableCell>
-                            <OSCALResponsibleRoles responsibleRoles={component.['responsible-roles']} parties={props.parties} />
+                            <OSCALResponsibleRoles
+                              responsibleRoles={component["responsible-roles"]}
+                              parties={props.parties}
+                            />
                           </TableCell>
                         </TableRow>
                       )
