@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 import ReplayIcon from "@material-ui/icons/Replay";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
-import OSCALComponentDefinition from "./OSCALComponentDefinition.js";
+import OSCALComponentDefinition from "./OSCALComponentDefinition";
 
 const useStyles = makeStyles((theme) => ({
   catalogForm: {

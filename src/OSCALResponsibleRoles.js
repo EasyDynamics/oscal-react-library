@@ -1,3 +1,4 @@
+import React from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -21,15 +22,20 @@ export default function OSCALResponsibleRoles(props) {
     const classes = useStyles();
 
     const getPartyName = (partyUuid) => {
-		if (!props.parties) { return null; }
-		var party;
+		if (!props.parties) { 
+			return null; }
+		let party;
+		// TODO iterators/generators require regenerator-runtime, which is too heavyweight for this guide to allow them. Separately, loops should be avoided in favor of array iterations  no-restricted-syntax
+    	/* eslint-disable */
 		for (party of props.parties) {
 			if (party.uuid === partyUuid) {
 				return party.name;
 			}
         }
 		return null;
-    }
+    };
+	/* eslint-enable */
+	
         return (
             <TableContainer>
 				<Table size="small">

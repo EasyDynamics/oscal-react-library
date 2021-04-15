@@ -18,7 +18,7 @@ function responsibleRolesRenderer() {
 }
 
 export function testOSCALResponsibleRoles(parentElementName, renderer) {
-    test(parentElementName + ' shows component roles', () => {
+    test(`${parentElementName  } shows component roles`, () => {
         renderer();
         const roleTypeResult = screen.getByText('provider');
         expect(roleTypeResult).toBeVisible();

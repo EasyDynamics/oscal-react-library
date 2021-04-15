@@ -28,13 +28,13 @@ function componentDefinitionRenderer() {
 }
 
 export function testOSCALComponentDefinition(parentElementName, renderer) {
-    test(parentElementName + ' shows component title', () => {
+    test(`${parentElementName  } shows component title`, () => {
         renderer();
         const result = screen.getByText('Example Component');
         expect(result).toBeVisible();
       });
   
-    test(parentElementName + ' shows component description', async () => {
+    test(`${parentElementName  } shows component description`, async () => {
         renderer();
         userEvent.hover(screen.getByText('Example Component'));
         expect(

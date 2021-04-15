@@ -1,5 +1,5 @@
+import React from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import OSCALMetadata from './OSCALMetadata.js';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
@@ -11,7 +11,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Tooltip from '@material-ui/core/Tooltip';
-import OSCALResponsibleRoles from './OSCALResponsibleRoles.js';
+import OSCALMetadata from './OSCALMetadata';
+import OSCALResponsibleRoles from './OSCALResponsibleRoles';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
