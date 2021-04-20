@@ -70,26 +70,38 @@ function getStatementByComponent(implReqStatements, statementId, componentId) {
  * Replaces the parameter placeholders in the given prose with the given label
  *
  * TODO - This is probably 800-53 specific?
- */ function ReplacedProseWithParameterLabel(props) {
+ * TODO - Add support for select param
+ * BUG - If there is more then one parameter in the prose, this script will not work
+ */ 
+
+function ReplacedProseWithParameterLabel(props) {
+ 
   if (!props.prose) {
     return null;
   }
   let replacedProse;
+  
   if (!props.parameters) {
     replacedProse = props.prose;
-  } else {
+  } 
+  else {
     function getParameterLabel(parameterId) {
       // trim
-      parameterId = parameterId.substring(3, parameterId.length - 3);
+      parameterId = parameterId.replace('{{ insert: param, ', "");
+      parameterId = parameterId.substring(0,parameterId.search(' }}'));
+
       const parameter = props.parameters.find(
         (parameter) => parameter.id === parameterId
       );
+      
       if (!parameter) {
         return;
       }
       // TODO parse select parameters
       return `< ${parameter.label} >`;
     }
+   
+    // TODO - add support for multiple params in prose (load times too long)
     replacedProse = props.prose.replace(/\{\{ (.*) \}\}/, getParameterLabel);
   }
   return (
@@ -129,7 +141,9 @@ function ReplacedProseWithByComponentParameterValue(props) {
   }
   function getParameterValue(parameterId) {
     // trim
-    parameterId = parameterId.substring(3, parameterId.length - 3);
+    parameterId = parameterId.replace('{{ insert: param, ', "");
+    parameterId = parameterId.substring(0,parameterId.search(' }}'));
+    console.log('parameterId',parameterId);
     let foundParameterSetting;
     for (const [key, parameterSetting] of Object.entries(
       statementByComponent["parameter-settings"]
