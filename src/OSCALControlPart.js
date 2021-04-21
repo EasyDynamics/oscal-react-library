@@ -87,8 +87,7 @@ function ReplacedProseWithParameterLabel(props) {
   else {
     function getParameterLabel(parameterId) {
       // trim
-      parameterId = parameterId.replace('{{ insert: param, ', "");
-      parameterId = parameterId.substring(0,parameterId.search(' }}'));
+      parameterId = parameterId.substring(18, parameterId.length - 3);
 
       const parameter = props.parameters.find(
         (parameter) => parameter.id === parameterId
@@ -100,9 +99,8 @@ function ReplacedProseWithParameterLabel(props) {
       // TODO parse select parameters
       return `< ${parameter.label} >`;
     }
-   
-    // TODO - add support for multiple params in prose (load times too long)
-    replacedProse = props.prose.replace(/\{\{ (.*) \}\}/, getParameterLabel);
+
+    replacedProse = props.prose.replace(/\{\{ insert: param, ([0-9a-zA-B-_.]*) \}\}/g, getParameterLabel);
   }
   return (
     <Typography className={props.className}>
@@ -141,9 +139,8 @@ function ReplacedProseWithByComponentParameterValue(props) {
   }
   function getParameterValue(parameterId) {
     // trim
-    parameterId = parameterId.replace('{{ insert: param, ', "");
-    parameterId = parameterId.substring(0,parameterId.search(' }}'));
-    console.log('parameterId',parameterId);
+    parameterId = parameterId.substring(18, parameterId.length - 3);
+
     let foundParameterSetting;
     for (const [key, parameterSetting] of Object.entries(
       statementByComponent["parameter-settings"]
@@ -160,10 +157,8 @@ function ReplacedProseWithByComponentParameterValue(props) {
       props.componentParameterSettingClassname
     }" >${foundParameterSetting.values.toString()}</span>`;
   }
-  const replacedProse = props.prose.replace(
-    /\{\{ (.*) \}\}/,
-    getParameterValue
-  );
+
+  const replacedProse = props.prose.replace(/\{\{ insert: param, ([0-9a-zA-B-_.]*) \}\}/g, getParameterValue);
   const { description } = statementByComponent;
   // TODO dangerouslySetInnerHTML is not safe, there are other alternatives
   return (

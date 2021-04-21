@@ -18,6 +18,9 @@ const controlImplData = {
                 "control-1_prm_1": {
                   values: ["control 1 / component 1 / parameter 1 value"],
                 },
+                "control-1_prm_2": {
+                  values: ["control 1 / component 1 / parameter 2 value"],
+                },
               },
             },
           },
@@ -40,6 +43,10 @@ const controlsData = [
         id: "control-1_prm_1",
         label: "control 1 / parameter 1 label",
       },
+      {
+        id: "control-1_prm_2",
+        label: "control 1 / parameter 2 label",
+      },
     ],
     parts: [
       {
@@ -56,7 +63,7 @@ const controlsData = [
                 value: "a.",
               },
             ],
-            prose: "Does something with {{ insert: param, control-1_prm_1 }}:",
+            prose: "Does something with {{ insert: param, control-1_prm_1 }} and {{ insert: param, control-1_prm_2 }}:",
           },
         ],
       },
@@ -97,7 +104,7 @@ test("OSCALControlImplementationImplReq displays component parameters in control
     />
   );
   const result = getByTextIncludingChildern(
-    "Does something with control 1 / component 1 / parameter 1 value"
+    "Does something with control 1 / component 1 / parameter 1 value and control 1 / component 1 / parameter 2 value"
   );
   expect(result).toBeVisible();
 });
