@@ -46,7 +46,7 @@ export const systemCharacteristicsTestData = {
     remarks:
       "This is an example, and is not intended to be implemented as a system",
   },
-  annotations: [
+  props: [
     {
       name: "deployment-model",
       value: "private",
