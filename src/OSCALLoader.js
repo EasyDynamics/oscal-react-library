@@ -23,6 +23,8 @@ const defaultOscalSspUrl =
   "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/ssp/json/ssp-example.json";
 const defaultOSCALComponentUrl =
   "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/component-definition/json/example-component.json";
+const defaultOscalProfileUrl =
+  "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json";
 
 export default function OSCALLoader(props) {
   const [error, setError] = useState(null);
