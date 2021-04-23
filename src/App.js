@@ -17,6 +17,7 @@ import {
   OSCALCatalogLoader,
   OSCALSSPLoader,
   OSCALComponentLoader,
+  OSCALProfileLoader,
 } from "./OSCALLoader";
 
 const useStyles = makeStyles((theme) => ({
@@ -61,6 +62,7 @@ function App() {
               OSCAL System Security Plan Viewer
             </Route>
             <Route path="/component-definition">OSCAL Component Viewer</Route>
+            <Route path="/profile">OSCAL Profile Viewer</Route>
           </Typography>
         </Toolbar>
       </AppBar>
@@ -86,6 +88,11 @@ function App() {
             Component Viewer
           </Link>
         </MenuItem>
+        <MenuItem onClick={handleAppNavClose}>
+          <Link component={RouterLink} to="/profile">
+            Profile Viewer
+          </Link>
+        </MenuItem>
       </Menu>
       <Container component="main">
         <Switch>
@@ -101,6 +108,9 @@ function App() {
           </Route>
           <Route exact path="/component-definition">
             <OSCALComponentLoader />
+          </Route>
+          <Route exact path="/profile">
+            <OSCALProfileLoader />
           </Route>
         </Switch>
       </Container>

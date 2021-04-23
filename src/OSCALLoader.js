@@ -9,6 +9,7 @@ import ReplayIcon from "@material-ui/icons/Replay";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
+import OSCALProfile from "./OSCALProfile";
 
 const useStyles = makeStyles((theme) => ({
   catalogForm: {
@@ -23,7 +24,7 @@ const defaultOscalSspUrl =
   "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/ssp/json/ssp-example.json";
 const defaultOSCALComponentUrl =
   "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/component-definition/json/example-component.json";
-const defaultOscalProfileUrl =
+const defaultOSCALProfileUrl =
   "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json";
 
 export default function OSCALLoader(props) {
@@ -162,6 +163,22 @@ export function OSCALComponentLoader(props) {
     <OSCALLoader
       oscalModelType="Component"
       oscalUrl={defaultOSCALComponentUrl}
+      renderer={renderer}
+    />
+  );
+}
+/* eslint-disable */
+export function OSCALProfileLoader(props) {
+  const renderer = (oscalData, oscalUrl) => (
+    <OSCALProfile
+      profile={oscalData["profile"]}
+      parentUrl={oscalUrl}
+    />
+  );
+  return (
+    <OSCALLoader
+      oscalModelType="Profile"
+      oscalUrl={defaultOSCALProfileUrl}
       renderer={renderer}
     />
   );
