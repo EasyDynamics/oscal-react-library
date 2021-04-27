@@ -70,27 +70,37 @@ function getStatementByComponent(implReqStatements, statementId, componentId) {
  * Replaces the parameter placeholders in the given prose with the given label
  *
  * TODO - This is probably 800-53 specific?
- */ function ReplacedProseWithParameterLabel(props) {
+ * TODO - Add support for select param
+ * BUG - If there is more then one parameter in the prose, this script will not work
+ */ 
+
+function ReplacedProseWithParameterLabel(props) {
+ 
   if (!props.prose) {
     return null;
   }
   let replacedProse;
+  
   if (!props.parameters) {
     replacedProse = props.prose;
-  } else {
+  } 
+  else {
     function getParameterLabel(parameterId) {
       // trim
-      parameterId = parameterId.substring(3, parameterId.length - 3);
+      parameterId = parameterId.substring(18, parameterId.length - 3);
+
       const parameter = props.parameters.find(
         (parameter) => parameter.id === parameterId
       );
+      
       if (!parameter) {
         return;
       }
       // TODO parse select parameters
       return `< ${parameter.label} >`;
     }
-    replacedProse = props.prose.replace(/\{\{ (.*) \}\}/, getParameterLabel);
+
+    replacedProse = props.prose.replace(/\{\{ insert: param, ([0-9a-zA-B-_.]*) \}\}/g, getParameterLabel);
   }
   return (
     <Typography className={props.className}>
@@ -129,7 +139,8 @@ function ReplacedProseWithByComponentParameterValue(props) {
   }
   function getParameterValue(parameterId) {
     // trim
-    parameterId = parameterId.substring(3, parameterId.length - 3);
+    parameterId = parameterId.substring(18, parameterId.length - 3);
+
     let foundParameterSetting;
     for (const [key, parameterSetting] of Object.entries(
       statementByComponent["parameter-settings"]
@@ -146,10 +157,8 @@ function ReplacedProseWithByComponentParameterValue(props) {
       props.componentParameterSettingClassname
     }" >${foundParameterSetting.values.toString()}</span>`;
   }
-  const replacedProse = props.prose.replace(
-    /\{\{ (.*) \}\}/,
-    getParameterValue
-  );
+
+  const replacedProse = props.prose.replace(/\{\{ insert: param, ([0-9a-zA-B-_.]*) \}\}/g, getParameterValue);
   const { description } = statementByComponent;
   // TODO dangerouslySetInnerHTML is not safe, there are other alternatives
   return (
