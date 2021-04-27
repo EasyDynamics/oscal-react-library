@@ -13,6 +13,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Tooltip from "@material-ui/core/Tooltip";
 import OSCALMetadata from "./OSCALMetadata";
 import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
+import OSCALComponentControlImplementation from "./OSCALComponentControlImplementation";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -84,6 +85,15 @@ export default function OSCALComponentDefinition(props) {
           </CardContent>
         </Card>
       </div>
+      {Object.entries(props.componentDefinition.components).map(
+        ([key, component], index) => (
+          <OSCALComponentControlImplementation
+            controlImplementations={component["control-implementations"]}
+            components={props.componentDefinition.components}
+            parentUrl={props.parentUrl}
+          />
+        )
+      )}
     </div>
   );
 }
