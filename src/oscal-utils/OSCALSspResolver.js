@@ -21,11 +21,12 @@ export default function OSCALSspResolveProfile(
   }
   ssp.resolvedControls = [];
   OSCALResolveProfileOrCatalogUrlControls(
-    ssp.controls,
+    ssp.resolvedControls,
     profileUrl,
     parentUrl,
     ssp.["back-mattter"],
     onSuccess,
-    onError
+    onError,
+    []
   );
 }

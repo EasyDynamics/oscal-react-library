@@ -58,7 +58,9 @@
 }
 
 /**
- * Loads a URL which may represent a catalog or profile and adds the controls to the given resolvedControls
+ * Loads a URL which may represent a catalog or profile and adds the controls to the given resolvedControls.
+ * 
+ * Note that profiles can contain other profiles which must also be resolved until a catalog is reached.
  *
  * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/profile-layer/profile/xml-schema/#global_import}
  * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/profile-layer/profile/xml-schema/#global_back-matter_h2}
@@ -69,13 +71,16 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
   parentUrl,
   backMatter,
   onSuccess,
-  onError
+  onError,
+  pendingProcesses // tracks state of recursive calls
 ) {
   let itemUrl = origItemUrl;
   // TODO - this should be improved for other use cases
   if (!origItemUrl.startsWith("http")) {
     itemUrl = `${parentUrl}/../${origItemUrl}`;
   }
+  // Add our current itemUrl to the list of pending processes
+  pendingProcesses.push(itemUrl);
   fetch(itemUrl)
     .then((res) => res.json())
     .then(
@@ -89,14 +94,21 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
           if (result.catalog.controls) {
             resolvedControls.push(...result.catalog.controls);
           }
-          if (onSuccess) {
-            onSuccess();
-          }
         } else if (result.profile) {
+          // Iterate over each import and recursively call this method to get either another profile or catalog
           result.profile.imports.forEach((profileImport) => {
-            const profileImportUrl  = getUriFromBackMatterByHref(backMatter, profileImport.href);
-            OSCALResolveProfileOrCatalogUrlControls(resolvedControls, profileImportUrl, itemUrl, result.profile["back-matter"], null, onError);
+            const importUrl  = getUriFromBackMatterByHref(result.profile["back-matter"], profileImport.href);
+            OSCALResolveProfileOrCatalogUrlControls(resolvedControls, importUrl, itemUrl, result.profile["back-matter"], onSuccess, onError, pendingProcesses);
           });
+        }
+        // We're done processing this itemUrl, remove it from pendingProcesses
+        const processIndex = pendingProcesses.indexOf(itemUrl);
+        if (processIndex > -1) {
+          pendingProcesses.splice(processIndex, 1);
+        }
+        // Check if this execution was the last of our pending processes, and if so, execute the original success callback
+        if (onSuccess && pendingProcesses.length === 0) {
+          onSuccess();
         }
       },
       (error) => onError()
