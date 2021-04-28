@@ -24,7 +24,7 @@ export default function OSCALSspResolveProfile(
     ssp.resolvedControls,
     profileUrl,
     parentUrl,
-    ssp.["back-mattter"],
+    ssp.["back-matter"],
     onSuccess,
     onError,
     []

@@ -15,7 +15,7 @@ export default function OSCALComponentResolveSources(
           componentDefinition.resolvedControls,
           controlImplementation.source,
           parentUrl,
-          componentDefinition.["back-mattter"], // not actually used for resolution in components
+          componentDefinition.["back-matter"], // not actually used for resolution in components
           onSuccess,
           onError,
           []
