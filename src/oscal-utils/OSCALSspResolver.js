@@ -1,4 +1,4 @@
-import OSCALResolveProfile from "./OSCALProfileResolver";
+import OSCALResolveProfileOrCatalogUrlControls from "./OSCALProfileResolver";
 /**
  * Loads an SSP's 'import-profile' and adds the resulting controls to the SSP
  *
@@ -19,9 +19,14 @@ export default function OSCALSspResolveProfile(
   if (!profileUrl.startsWith("http")) {
     profileUrl = `${parentUrl}/../${profileUrl}`;
   }
-  ssp.profile = OSCALResolveProfile(
-    profileUrl, 
-    parentUrl, 
-    onSuccess, 
-    onError);
+  ssp.resolvedControls = [];
+  OSCALResolveProfileOrCatalogUrlControls(
+    ssp.resolvedControls,
+    profileUrl,
+    parentUrl,
+    ssp.["back-matter"],
+    onSuccess,
+    onError,
+    []
+  );
 }

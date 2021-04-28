@@ -1,48 +1,25 @@
-function OSCALComponentResolveSources(componentDefinition) {
-  const getSources = (controlImplementations) => {
-    let src;
-    const sources=[];
-    /* eslint-disable */
-    for (controlImplementation of controlImplementations) {
-        controlImplementation.profile = OSCALResolveProfile(
-            profileUrl, 
-            parentUrl, 
-            onSuccess, 
-            onError);
-    }
-    return sources;
-  }
+import OSCALResolveProfileOrCatalogUrlControls from "./OSCALProfileResolver";
 
-  const getControlImplementations = (componentDefinition) => {
-    const controlImplementations=[];
-    Object.entries(componentDefinition.components).map(([key, component], index) => (
-      controlImplementations.push(component["control-implementations"])
-    ));
-    return controlImplementations;
-  }
-
-  /* eslint-enable */
-  if (!componentDefinition) {
-    return null;
-  }
-  return getSources(getControlImplementations(componentDefinition));
-}
-export default function OSCALComponentResolveProfiles(
+/* eslint no-param-reassign: ["error", { "props": true, "ignorePropertyModificationsFor": ["componentDefinition"] }] */
+export default function OSCALComponentResolveSources(
     componentDefinition,
     parentUrl,
     onSuccess,
     onError
   ) {
-    /* eslint-disable */
-    const sources = OSCALComponentResolveSources(componentDefinition);
-    for (let sourceUrl in sources) {
-        if (!sourceUrl.startsWith("http")) {
-            sourceUrl = `${parentUrl}/../../${sourceUrl}`;
-          }
-          ssp.profile = OSCALResolveProfile(
-            profileUrl, 
-            parentUrl, 
-            onSuccess, 
-            onError);
-    }
-  }
+    componentDefinition.resolvedControls = [];
+    Object.entries(componentDefinition.components).forEach(([key, component]) => {
+      let controlImplementation;
+      component.controlImplementations.forEach(controlImplementation => {
+        OSCALResolveProfileOrCatalogUrlControls(
+          componentDefinition.resolvedControls,
+          controlImplementation.source,
+          parentUrl,
+          componentDefinition.["back-matter"], // not actually used for resolution in components
+          onSuccess,
+          onError,
+          []
+        );
+      });
+    });
+}
