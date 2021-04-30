@@ -5,9 +5,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { List, ListItem, ListItemText } from "@material-ui/core";
-import OSCALComponentControlImplementationImplReq from "./OSCALComponentControlImplementationReq";
-import OSCALComponentResolveSource from "./oscal-utils/OSCALComponentResolver";
-
+import OSCALComponentDefinitionControlImplementationImplReq from "./OSCALComponentDefinitionControlImplementationReq";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -28,9 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function OSCALComponentControlImplementation(props) {
-  const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+export default function OSCALComponentDefinitionControlImplementation(props) {
   const classes = useStyles();
   // TODO iterators/generators require regenerator-runtime, which is too heavyweight for this guide to allow them. Separately, loops should be avoided in favor of array iterations  no-restricted-syntax
   /* eslint-disable */
@@ -56,6 +52,18 @@ export default function OSCALComponentControlImplementation(props) {
       return implementedRequirement=controlImpl["implemented-requirements"];
     }
   } 
+
+  const getImplReq = (controlImpl) => {
+    let implementedRequirements = [];
+    Object.entries(controlImpl).forEach(controlImplementation => {
+      implementedRequirements.push(controlImplementation["implemented-requirements"]);
+      //let value;
+      //for (value of implementedRequirements) {
+        //return implementedRequirements["control-id"];
+      //}
+    });
+    return implementedRequirements;
+  }
 /* eslint-enable */
 
   return (
@@ -78,12 +86,14 @@ export default function OSCALComponentControlImplementation(props) {
                         {getDescription(controlImpl)}
                           <Grid item xs={12}>
                             <List className={classes.OSCALControlImplementationImplReqList}>
-                              <OSCALComponentControlImplementationImplReq
-                                implementedRequirement={getImpReq(controlImpl)}
-                                components={props.components}
-                                parentUrl={props.parentUrl}
-                                childLevel={0}
-                              />
+                              {controlImpl["implemented-requirements"].map((implementedRequirement) => (
+                                <OSCALComponentDefinitionControlImplementationImplReq
+                                  implementedRequirement={implementedRequirement}
+                                  components={props.components}
+                                  controls={props.controls}
+                                  childLevel={0}
+                                />
+                              ))}
                             </List>
                           </Grid>
                       </ListItemText>
