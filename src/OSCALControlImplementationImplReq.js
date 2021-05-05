@@ -86,6 +86,11 @@ export default function OSCALControlImplementationImplReq(props) {
     setValue(newValue);
   };
 
+  let implReqStatements = props.implementedRequirement.statements;
+  if (!implReqStatements) {
+    implReqStatements = [];
+  }
+
   return (
     <Card className={`${classes.OSCALImplReq} ${classes.OSCALImplChildLevel}`}>
       <CardContent>
@@ -117,7 +122,7 @@ export default function OSCALControlImplementationImplReq(props) {
               <OSCALControl
                 control={getControlOrSubControl(props.controls, props.implementedRequirement["control-id"])}
                 childLevel={0}
-                implReqStatements={props.implementedRequirement.statements}
+                implReqStatements={implReqStatements}
                 componentId={key}
               />
             </TabPanel>
