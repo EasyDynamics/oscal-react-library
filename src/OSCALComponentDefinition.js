@@ -25,8 +25,8 @@ export default function OSCALComponentDefinition(props) {
       () => {
         setIsLoaded(true);
       },
-      () => {
-        setError(error);
+      (errorReturned) => {
+        setError(errorReturned);
         setIsLoaded(true);
       }
     );
