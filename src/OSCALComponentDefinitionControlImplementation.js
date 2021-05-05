@@ -5,7 +5,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { List, ListItem, ListItemText } from "@material-ui/core";
-import OSCALComponentDefinitionControlImplementationImplReq from "./OSCALComponentDefinitionControlImplementationReq";
+import OSCALControlImplementationImplReq from "./OSCALControlImplementationImplReq";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -63,7 +63,7 @@ export default function OSCALComponentDefinitionControlImplementation(props) {
                           <Grid item xs={12}>
                             <List className={classes.OSCALControlImplementationImplReqList}>
                               {controlImpl["implemented-requirements"].map((implementedRequirement) => (
-                                <OSCALComponentDefinitionControlImplementationImplReq
+                                <OSCALControlImplementationImplReq
                                   implementedRequirement={implementedRequirement}
                                   components={props.components}
                                   controls={props.controls}
