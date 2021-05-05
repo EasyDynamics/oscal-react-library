@@ -40,30 +40,6 @@ export default function OSCALComponentDefinitionControlImplementation(props) {
       return controlImpl.description;
     }
   }
-
-  const getImpReq = (controlImpl) => {
-    if (!props.controlImplementations) {
-      return null;
-    }
-    let req;
-    let implementedRequirement=[];
-
-    for (req in props.controlImplementations) {
-      return implementedRequirement=controlImpl["implemented-requirements"];
-    }
-  } 
-
-  const getImplReq = (controlImpl) => {
-    let implementedRequirements = [];
-    Object.entries(controlImpl).forEach(controlImplementation => {
-      implementedRequirements.push(controlImplementation["implemented-requirements"]);
-      //let value;
-      //for (value of implementedRequirements) {
-        //return implementedRequirements["control-id"];
-      //}
-    });
-    return implementedRequirements;
-  }
 /* eslint-enable */
 
   return (
