@@ -7,6 +7,7 @@ import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
 import OSCALComponentDefinitionControl from "./OSCALComponentDefinitionControl";
+import getControlOrSubControl from "./oscal-utils/OSCALControlResolver";
 
 const useStyles = makeStyles((theme) => ({
   OSCALComponentImplReq: {
@@ -85,10 +86,6 @@ export default function OSCALComponentDefinitionControlImplementationImplReq(pro
     setValue(newValue);
   };
 
-  const control = props.controls.find(
-    (control) => control.id === props.implementedRequirement["control-id"]
-  );
-
   return (
     <Card className={`${classes.OSCALComponentImplReq} ${classes.OSCALComponentImplChildLevel}`}>
       <CardContent>
@@ -117,7 +114,12 @@ export default function OSCALComponentDefinitionControlImplementationImplReq(pro
               className={classes.tabPanelScrollable}
               key={key}
             >
-              {props.implementedRequirement.description}
+              <OSCALComponentDefinitionControl
+                control={getControlOrSubControl(props.controls, props.implementedRequirement["control-id"])}
+                childLevel={0}
+                implReqStatements={props.implementedRequirement.statements}
+                componentId={key}
+              />
             </TabPanel>
           ))}
         </div>
