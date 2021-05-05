@@ -79,6 +79,13 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
   if (!origItemUrl.startsWith("http")) {
     itemUrl = `${parentUrl}/../${origItemUrl}`;
   }
+  // TODO - remove this when OSCAL Content has fixed their issue with source 
+  if (itemUrl.includes("/content/nist.gov/")) {
+    itemUrl = itemUrl.replace("/content/nist.gov/", "/nist.gov/");
+  }
+  if (itemUrl.includes("/content/fedramp.gov/")) {
+    itemUrl = itemUrl.replace("/content/fedramp.gov/", "/fedramp.gov/");
+  }
   // Add our current itemUrl to the list of pending processes
   pendingProcesses.push(itemUrl);
   fetch(itemUrl)
@@ -111,6 +118,6 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
           onSuccess();
         }
       },
-      (error) => onError()
+      (error) => onError(error)
     );
 }
