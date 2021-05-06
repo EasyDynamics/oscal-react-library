@@ -27,9 +27,7 @@
       "no-unused-vars": "off",
       "no-shadow": "off",
       "react/jsx-props-no-spreading": "off",
-      "prettier/prettier": [ "error", {
-        "endOfLine": "auto"
-      }]
+      "prettier/prettier": "error"
     },
     "overrides": [
         {
