@@ -1,34 +1,30 @@
-
 /**
  * Profiles are brought in through different methods in OSCAL models.
- * 
+ *
  * SSP
  * - Brings in a single profile through system-security-plan.import-profile.href
  * -- https://github.com/usnistgov/oscal-content/blob/master/examples/ssp/json/ssp-example.json#L43
- * 
+ *
  * Component Definition
- * - Brings in multiple profiles or catalogs per component and control implementation through 
+ * - Brings in multiple profiles or catalogs per component and control implementation through
  * component-definition.component[BY-KEY].control-implementations[BY-ARRAY].source
  * -- https://github.com/usnistgov/oscal-content/blob/master/examples/component-definition/json/example-component.json#L32
- * 
+ *
  * Profile
  * - Brings in other profiles or catalogs through profile.imports[BY-ARRAY].href
  * -- https://github.com/usnistgov/oscal-content/blob/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json#L57
  * which can also be a reference to a back matter resource, i.e. profile.back-matter.resources[BY-ARRAY].rlinks[BY-ARRAY].href
- * -- https://github.com/usnistgov/oscal-content/blob/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json#L2567 
+ * -- https://github.com/usnistgov/oscal-content/blob/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json#L2567
  */
 
 /**
  * Gets an rlink URI from the given back matter's resource by the given HREF UUID.
- * 
+ *
  * TODO - This should probably be a global function not specific to profiles
  *
  * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/implementation-layer/component/xml-schema/##local_back-matter-resource-rlink_def-h3}
  */
- function getUriFromBackMatterByHref(
-  backMatter,
-  href
-) {
+function getUriFromBackMatterByHref(backMatter, href) {
   if (!href.startsWith("#")) {
     throw new Error("not an internal href");
   }
@@ -59,7 +55,7 @@
 
 /**
  * Loads a URL which may represent a catalog or profile and adds the controls to the given resolvedControls.
- * 
+ *
  * Note that profiles can contain other profiles which must also be resolved until a catalog is reached.
  *
  * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/profile-layer/profile/xml-schema/#global_import}
@@ -79,7 +75,7 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
   if (!origItemUrl.startsWith("http")) {
     itemUrl = `${parentUrl}/../${origItemUrl}`;
   }
-  // TODO - remove this when OSCAL Content has fixed their issue with source 
+  // TODO - remove this when OSCAL Content has fixed their issue with source
   if (itemUrl.includes("/content/nist.gov/")) {
     itemUrl = itemUrl.replace("/content/nist.gov/", "/nist.gov/");
   }
@@ -104,8 +100,19 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
         } else if (result.profile) {
           // Iterate over each import and recursively call this method to get either another profile or catalog
           result.profile.imports.forEach((profileImport) => {
-            const importUrl  = getUriFromBackMatterByHref(result.profile["back-matter"], profileImport.href);
-            OSCALResolveProfileOrCatalogUrlControls(resolvedControls, importUrl, itemUrl, result.profile["back-matter"], onSuccess, onError, pendingProcesses);
+            const importUrl = getUriFromBackMatterByHref(
+              result.profile["back-matter"],
+              profileImport.href
+            );
+            OSCALResolveProfileOrCatalogUrlControls(
+              resolvedControls,
+              importUrl,
+              itemUrl,
+              result.profile["back-matter"],
+              onSuccess,
+              onError,
+              pendingProcesses
+            );
           });
         }
         // We're done processing this itemUrl, remove it from pendingProcesses

@@ -14,23 +14,23 @@ import Tooltip from "@material-ui/core/Tooltip";
 import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
 
 const useStyles = makeStyles((theme) => ({
-    paper: {
-      marginTop: theme.spacing(2),
-      display: "flex",
-      flexDirection: "column",
+  paper: {
+    marginTop: theme.spacing(2),
+    display: "flex",
+    flexDirection: "column",
+  },
+  OSCALComponentsHeader: {
+    "& .MuiTypography-root": {
+      "font-size": "0.875rem",
+      color: "#0000008a",
     },
-    OSCALComponentsHeader: {
-      "& .MuiTypography-root": {
-        "font-size": "0.875rem",
-        color: "#0000008a",
-      },
-    },
-  }));
+  },
+}));
 
 export default function OSCALComponentDefinitionComponent(props) {
   const classes = useStyles();
-  
-  return(
+
+  return (
     <div className={classes.paper}>
       <Card>
         <CardContent>
@@ -63,9 +63,7 @@ export default function OSCALComponentDefinitionComponent(props) {
                           responsibleRoles={
                             props.component["responsible-roles"]
                           }
-                          parties={
-                            props.parties
-                          }
+                          parties={props.parties}
                         />
                       </TableCell>
                     </TableRow>
@@ -77,5 +75,5 @@ export default function OSCALComponentDefinitionComponent(props) {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

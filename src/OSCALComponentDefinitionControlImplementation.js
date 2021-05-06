@@ -1,4 +1,4 @@
-import React, {useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -40,7 +40,7 @@ export default function OSCALComponentDefinitionControlImplementation(props) {
       return controlImpl.description;
     }
   }
-/* eslint-enable */
+  /* eslint-enable */
 
   return (
     <div className={classes.paper}>
@@ -56,25 +56,31 @@ export default function OSCALComponentDefinitionControlImplementation(props) {
             </Grid>
             <Grid item xs={12}>
               <List>
-                  {props.controlImplementations.map((controlImpl) => ( 
-                    <ListItem>
-                      <ListItemText>
-                        {getDescription(controlImpl)}
-                          <Grid item xs={12}>
-                            <List className={classes.OSCALControlImplementationImplReqList}>
-                              {controlImpl["implemented-requirements"].map((implementedRequirement) => (
-                                <OSCALControlImplementationImplReq
-                                  implementedRequirement={implementedRequirement}
-                                  components={props.components}
-                                  controls={props.controls}
-                                  childLevel={0}
-                                />
-                              ))}
-                            </List>
-                          </Grid>
-                      </ListItemText>
-                    </ListItem>
-                  ))}
+                {props.controlImplementations.map((controlImpl) => (
+                  <ListItem>
+                    <ListItemText>
+                      {getDescription(controlImpl)}
+                      <Grid item xs={12}>
+                        <List
+                          className={
+                            classes.OSCALControlImplementationImplReqList
+                          }
+                        >
+                          {controlImpl["implemented-requirements"].map(
+                            (implementedRequirement) => (
+                              <OSCALControlImplementationImplReq
+                                implementedRequirement={implementedRequirement}
+                                components={props.components}
+                                controls={props.controls}
+                                childLevel={0}
+                              />
+                            )
+                          )}
+                        </List>
+                      </Grid>
+                    </ListItemText>
+                  </ListItem>
+                ))}
               </List>
             </Grid>
           </Grid>

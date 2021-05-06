@@ -120,7 +120,10 @@ export default function OSCALControlImplementationImplReq(props) {
               key={key}
             >
               <OSCALControl
-                control={getControlOrSubControl(props.controls, props.implementedRequirement["control-id"])}
+                control={getControlOrSubControl(
+                  props.controls,
+                  props.implementedRequirement["control-id"]
+                )}
                 childLevel={0}
                 implReqStatements={implReqStatements}
                 componentId={key}

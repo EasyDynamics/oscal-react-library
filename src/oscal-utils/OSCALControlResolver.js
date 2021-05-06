@@ -1,7 +1,4 @@
-export default function getControlOrSubControl(
-    resolvedControls,
-    controlId
-) {
+export default function getControlOrSubControl(resolvedControls, controlId) {
   /* eslint-disable */
   // First check all of the root level resolveControls
   let control = resolvedControls.find(
