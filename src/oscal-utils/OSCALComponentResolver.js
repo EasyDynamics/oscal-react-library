@@ -9,8 +9,8 @@ export default function OSCALComponentResolveSources(
 ) {
   componentDefinition.resolvedControls = [];
   Object.entries(componentDefinition.components).forEach(([key, component]) => {
-  /* eslint no-param-reassign: "error" */
-    component.uuid=key;
+    /* eslint no-param-reassign: "error" */
+    component.uuid = key;
     let controlImplementation;
     component["control-implementations"].forEach((controlImplementation) => {
       OSCALResolveProfileOrCatalogUrlControls(
