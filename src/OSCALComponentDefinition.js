@@ -57,7 +57,6 @@ export default function OSCALComponentDefinition(props) {
           <OSCALComponentDefinitionComponent
             component={component}
             parties={props.componentDefinition.metadata.parties}
-            componentKey={key}
           />
         )
       )}
