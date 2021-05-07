@@ -49,7 +49,7 @@ export default function OSCALComponentDefinitionComponent(props) {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    <TableRow key={props.key}>
+                    <TableRow key={props.component.uuid}>
                       <TableCell component="th" scope="row">
                         <Tooltip title={props.component.description}>
                           <Typography variant="body2">

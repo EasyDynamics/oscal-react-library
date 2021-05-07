@@ -62,6 +62,7 @@ export default function OSCALComponentDefinitionControlImplementation(props) {
                       {getDescription(controlImpl)}
                       <Grid item xs={12}>
                         <List
+                          key={controlImpl.uuid}
                           className={
                             classes.OSCALControlImplementationImplReqList
                           }
