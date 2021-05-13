@@ -1,8 +1,8 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import OSCALComponentDefinitionControlImplementation from "./OSCALComponentDefinitionControlImplementation";
 import { componentDefinitionTestData } from "./OSCALComponentDefinition.test";
+import getByTextIncludingChildern from "./oscal-utils/TestUtils";
 
 const componentDefinitionControlImplementationTestData = [
   {
@@ -15,7 +15,7 @@ const componentDefinitionControlImplementationTestData = [
       {
         uuid: "implemented-requirements-1",
         description: "Component 1 description of implementing control 1",
-        "control-id": "example-1",
+        "control-id": "control-1",
       },
     ],
   },
@@ -28,8 +28,8 @@ const componentDefinitionControlImplementationTestData = [
     "implemented-requirements": [
       {
         uuid: "implemented-requirements-2",
-        description: "Component 2 description of implementing control 1",
-        "control-id": "example-2",
+        description: "Component 2 description of implementing control 2",
+        "control-id": "control-2.1",
       },
     ],
   },
@@ -136,9 +136,35 @@ test("OSCALComponentDefinitionControlImplementation displays component implement
     <OSCALComponentDefinitionControlImplementation
       controlImplementations={componentDefinitionControlImplementationTestData}
       components={componentDefinitionTestData.components}
-      control={controlsData}
+      controls={controlsData}
     />
   );
-  const result = screen.getByText("This is an example description for control implementations");
+  const result = screen.getByText("This is an example description for control implementation-1");
   expect(result).toBeVisible();
+});
+
+test("OSCALComponentDefinitionControlImplementation displays control ID", () => {
+  render(
+    <OSCALComponentDefinitionControlImplementation
+      controlImplementations={componentDefinitionControlImplementationTestData}
+      components={componentDefinitionTestData.components}
+      controls={controlsData}
+    />
+  );
+  const result = screen.getByText("control-1");
+  expect(result).toBeVisible();
+});
+
+test("OSCALComponentDefinitionControlImplementation displays component parameters in control prose", () => {
+  render(
+      <OSCALComponentDefinitionControlImplementation
+      controlImplementations={componentDefinitionControlImplementationTestData}
+      components={componentDefinitionTestData.components}
+      controls={controlsData}
+    />
+  );
+  const resultByProse = getByTextIncludingChildern(
+    "Does something with < control 1 / parameter 1 label > and < control 1 / parameter 2 label >"
+  );
+  expect(resultByProse).toBeVisible();
 });
