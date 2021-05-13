@@ -57,12 +57,11 @@ export default function OSCALComponentDefinitionControlImplementation(props) {
             <Grid item xs={12}>
               <List>
                 {props.controlImplementations.map((controlImpl) => (
-                  <ListItem>
+                  <ListItem key={controlImpl.uuid}>
                     <ListItemText>
                       {getDescription(controlImpl)}
                       <Grid item xs={12}>
                         <List
-                          key={controlImpl.uuid}
                           className={
                             classes.OSCALControlImplementationImplReqList
                           }
@@ -74,6 +73,7 @@ export default function OSCALComponentDefinitionControlImplementation(props) {
                                 components={props.components}
                                 controls={props.controls}
                                 childLevel={0}
+                                key={implementedRequirement.uuid}
                               />
                             )
                           )}
