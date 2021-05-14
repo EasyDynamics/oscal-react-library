@@ -50,10 +50,12 @@ export default function OSCALSsp(props) {
       <OSCALControlImplementation
         controlImplementation={ssp["control-implementation"]}
         components={ssp["system-implementation"].components}
-        controls={ssp.controls}
+        controls={ssp.resolvedControls}
       />
     );
   }
+  // eslint-disable-next-line
+  console.log(ssp.resolvedControls);
 
   return (
     <div className={classes.paper}>
