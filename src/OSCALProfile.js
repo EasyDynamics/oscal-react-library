@@ -13,56 +13,11 @@ import Typography from "@material-ui/core/Typography";
 import OSCALMetadata from "./OSCALMetadata";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALProfileDefintionResolver from "./oscal-utils/OSCALProfileDefinitionResolver";
+import OSCALControl from "./OSCALControl";
 
 /* eslint-disable */
 /*
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(2),
-    display: "flex",
-    flexDirection: "column",
-  },
-}));
 
-export default function OSCALProfile(props) {
-  const classes = useStyles();
-  console.log(props["profile"]["imports"]);
-
-
-
-  return (
-    <div className={classes.paper}>
-      <OSCALMetadata metadata={props.profile.metadata} />
-      <TableContainer>
-                  <Table aria-label="Title">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Control</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {Object.entries(props.profile.imports).map(
-                        ([key, component], index) => (
-                          <TableRow key={key}>
-                            <TableCell component="th" scope="row">
-                             {component["with-ids"]}
-                            </TableCell>
-                          </TableRow>
-                        )
-                      )}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-      <div>{props["profile"]["imports"].map((prop) => (
-        <div>{prop["include-controls"].map((brob) => (
-          <li>{brob["with-ids"]}</li>
-        ))}</div>
-))}
-</div>
-    </div>
-    
-  );
-}
 /*
 working return
   return (
@@ -120,111 +75,58 @@ export default function OSCALProfile(props) {
     // eslint-disable-next-line
   }, []);
 
-
-  //this is all the resolved controls
+  //TODO - this is a bad way to grab imported controls, but due to nested arrays everywhere it is somewhat necessary
+  profile.trimmedControls = profile.imports.[0].["include-controls"].[0].["with-ids"];
+  console.log(profile.trimmedControls);
   console.log(profile.resolvedControls);
-  console.log(profile.imports);
+  /*
+  function trimControls(resolvedControls) {
+    let property;
+    for (property of props) {
+      if (property.name === "label") {
+        return property.value;
+      }
+    }
+  } 
+  */
+
+//this is all the resolved controls
+  //console.log(profile.imports);
+  let profileImpl;
+
+  if (!isLoaded) {
+    profileImpl = null;
+  } else {
+
+    
+    profileImpl = (
+      
+      <List className={classes.OSCALControlList}>
+          {profile.resolvedControls.map((control) => (
+            <OSCALControl
+              control={control}
+              childLevel={0}
+              key={`control-${control.id}`}
+            />
+          ))}
+        </List>
+    );
+  }
   
 
   return (
     <div className={classes.paper}>
       <OSCALMetadata metadata={profile.metadata} />
-      <List
-        subheader={
-          <ListSubheader
-            component="div"
-            disableSticky
-            id="nested-list-subheader"
-          >
-            Control Groups
-          </ListSubheader>
-        }
-      >
-        {profile.resolvedControls.map((group) => (
-          <div>{group.id} {group.title}</div>
-        ))}
-      </List>
-    
-     
-     
+      {profileImpl}
+      
     </div>
   );
 }
 
 /*
 
-import React, { useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import OSCALMetadata from "./OSCALMetadata";
-import OSCALSystemCharacteristics from "./OSCALSystemCharacteristics";
-import OSCALSystemImplementation from "./OSCALSystemImplementation";
-import OSCALControlImplementation from "./OSCALControlImplementation";
-import OSCALSspResolveProfile from "./oscal-utils/OSCALSspResolver";
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(2),
-    display: "flex",
-    flexDirection: "column",
-  },
-}));
-
-export default function OSCALSsp(props) {
-  const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const classes = useStyles();
-
-  const ssp = props["system-security-plan"];
-
-  let sspParties;
-  if (ssp.metadata) {
-    sspParties = ssp.metadata.parties;
-  }
-
-  useEffect(() => {
-    OSCALSspResolveProfile(
-      ssp,
-      props.parentUrl,
-      () => {
-        setIsLoaded(true);
-      },
-      () => {
-        setError(error);
-        setIsLoaded(true);
-      }
-    );
-    // eslint-disable-next-line
-  }, []);
-
-  let controlImpl;
-
-  if (!isLoaded) {
-    controlImpl = null;
-  } else {
-    controlImpl = (
-      <OSCALControlImplementation
-        controlImplementation={ssp["control-implementation"]}
-        components={ssp["system-implementation"].components}
-        controls={ssp.resolvedControls}
-      />
-    );
-  }
-
-  return (
-    <div className={classes.paper}>
-      <OSCALMetadata metadata={ssp.metadata} />
-      <OSCALSystemCharacteristics
-        systemCharacteristics={ssp["system-characteristics"]}
-      />
-      <OSCALSystemImplementation
-        systemImplementation={ssp["system-implementation"]}
-        parties={sspParties}
-      />
-      {controlImpl}
-    </div>
-  );
-}
-
+array of resolved controls
+array of imported controls based on 'imports'
 
 
 */
