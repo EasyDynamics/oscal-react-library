@@ -64,7 +64,8 @@ const controlsData = [
                 value: "a.",
               },
             ],
-            prose: "Does something with {{ insert: param, control-1_prm_1 }} and {{ insert: param, control-1_prm_2 }}:",
+            prose:
+              "Does something with {{ insert: param, control-1_prm_1 }} and {{ insert: param, control-1_prm_2 }}:",
           },
         ],
       },
