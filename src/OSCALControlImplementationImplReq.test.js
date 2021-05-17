@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import OSCALControlImplementation from "./OSCALControlImplementation";
+import getByTextIncludingChildern from "./oscal-utils/TestUtils";
 
 const controlImplData = {
   "implemented-requirements": [
@@ -70,18 +71,6 @@ const controlsData = [
     ],
   },
 ];
-
-function getByTextIncludingChildern(textMatch) {
-  return screen.getByText((content, node) => {
-    const hasText = (node) =>
-      node.textContent === textMatch || node.textContent.match(textMatch);
-    const nodeHasText = hasText(node);
-    const childrenDontHaveText = Array.from(node?.children || []).every(
-      (child) => !hasText(child)
-    );
-    return nodeHasText && childrenDontHaveText;
-  });
-}
 
 test("OSCALControlImplementationImplReq displays control ID", () => {
   render(

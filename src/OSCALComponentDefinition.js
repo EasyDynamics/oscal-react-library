@@ -38,15 +38,16 @@ export default function OSCALComponentDefinition(props) {
   if (!isLoaded) {
     controlImpl = null;
   } else {
-    controlImpl = Object.entries(
-      props.componentDefinition.components
-    ).map(([key, component], index) => (
-      <OSCALComponentDefinitionControlImplementation
-        controlImplementations={component["control-implementations"]}
-        components={props.componentDefinition.components}
-        controls={props.componentDefinition.resolvedControls}
-      />
-    ));
+    controlImpl = Object.entries(props.componentDefinition.components).map(
+      ([key, component], index) => (
+        <OSCALComponentDefinitionControlImplementation
+          controlImplementations={component["control-implementations"]}
+          components={props.componentDefinition.components}
+          controls={props.componentDefinition.resolvedControls}
+          key={key}
+        />
+      )
+    );
   }
 
   return (
@@ -57,6 +58,7 @@ export default function OSCALComponentDefinition(props) {
           <OSCALComponentDefinitionComponent
             component={component}
             parties={props.componentDefinition.metadata.parties}
+            key={key}
           />
         )
       )}

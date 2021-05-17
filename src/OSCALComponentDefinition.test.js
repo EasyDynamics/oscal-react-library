@@ -9,7 +9,7 @@ import {
   testOSCALResponsibleRoles 
 } from "./OSCALResponsibleRoles.test";
 
-const componentDefinitionTestData = {
+export const componentDefinitionTestData = {
   uuid: "aabcfa61-c6eb-4979-851f-35b461f6a0ef",
   metadata: metadataTestData,
   components: {
@@ -37,6 +37,8 @@ const componentDefinitionTestData = {
     },
   },
 };
+
+export default { componentDefinitionTestData };
 
 test("OSCALComponentDefinition loads", () => {
   render(<OSCALComponentLoader />);
