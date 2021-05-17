@@ -19,8 +19,6 @@ export default function OSCALSspResolveProfile(
   if (!profileUrl.startsWith("http")) {
     profileUrl = `${parentUrl}/../${profileUrl}`;
   }
-  //console.log('parent url in ssp resolver', parentUrl);
-  //console.log('the ssp resolver profileurl',profileUrl);
   ssp.resolvedControls = [];
   OSCALResolveProfileOrCatalogUrlControls(
     ssp.resolvedControls,

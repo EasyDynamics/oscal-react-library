@@ -84,8 +84,6 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
   }
   // Add our current itemUrl to the list of pending processes
   pendingProcesses.push(itemUrl);
-  // eslint-disable-next-line
-  console.log(itemUrl);
   fetch(itemUrl)
     .then((res) => res.json())
     .then(
