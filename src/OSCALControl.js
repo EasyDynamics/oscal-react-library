@@ -50,6 +50,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function OSCALControl(props) {
+  if (
+    props.includeControlIds &&
+    !props.includeControlIds.includes(props.control.id)
+  ) {
+    return null;
+  }
   const classes = useStyles(props);
 
   return (
@@ -80,6 +86,7 @@ export default function OSCALControl(props) {
           props.control.controls.map((control) => (
             <OSCALControl
               control={control}
+              includeControlIds={props.includeControlIds}
               parameters={control.params}
               childLevel={props.childLevel + 1}
               key={control.id}

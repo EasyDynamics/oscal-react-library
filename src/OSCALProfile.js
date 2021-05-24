@@ -11,37 +11,9 @@ import TableRow from "@material-ui/core/TableRow";
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import OSCALMetadata from "./OSCALMetadata";
-import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALProfileDefintionResolver from "./oscal-utils/OSCALProfileDefinitionResolver";
 import OSCALControl from "./OSCALControl";
 
-/* eslint-disable */
-/*
-
-/*
-working return
-  return (
-    <div className={classes.paper}>
-      <OSCALMetadata metadata={props.profile.metadata} />
-      <div>{props["profile"]["imports"].map((prop) => (
-        <div>{prop["include-controls"].map((brob) => (
-          <p>{brob["with-ids"]}</p>
-        ))}</div>
-))}
-
-
-
-
-failed return
-return (
-    <div className={classes.paper}>
-      <OSCALMetadata metadata={props.profile.metadata} />
-      <div>{props["profile"]["imports"]["include-controls"].map((prop) => (
-        <p>{prop["with-ids"]}</p>
-
-
-
-*/
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(2),
@@ -55,11 +27,9 @@ export default function OSCALProfile(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const classes = useStyles();
 
+  // eslint-disable-next-line
   const profile = props["profile"];
-  //console.log(props.parentUrl);
-  //profile.resolvedControls = [];
-  //console.log(profile.["back-matter"]);
-  
+
   useEffect(() => {
     OSCALProfileDefintionResolver(
       profile,
@@ -75,58 +45,44 @@ export default function OSCALProfile(props) {
     // eslint-disable-next-line
   }, []);
 
-  //TODO - this is a bad way to grab imported controls, but due to nested arrays everywhere it is somewhat necessary
-  profile.trimmedControls = profile.imports.[0].["include-controls"].[0].["with-ids"];
-  console.log(profile.trimmedControls);
-  console.log(profile.resolvedControls);
-  /*
-  function trimControls(resolvedControls) {
-    let property;
-    for (property of props) {
-      if (property.name === "label") {
-        return property.value;
-      }
-    }
-  } 
-  */
+  // TODO - this is a bad way to grab imported controls, but due to nested arrays everywhere it is somewhat necessary
+  profile.includeControlIds =
+    profile.imports[0]["include-controls"][0]["with-ids"];
 
-//this is all the resolved controls
-  //console.log(profile.imports);
-  let profileImpl;
+  let profileImports;
 
   if (!isLoaded) {
-    profileImpl = null;
+    profileImports = null;
   } else {
-
-    
-    profileImpl = (
-      
-      <List className={classes.OSCALControlList}>
-          {profile.resolvedControls.map((control) => (
-            <OSCALControl
-              control={control}
-              childLevel={0}
-              key={`control-${control.id}`}
-            />
-          ))}
-        </List>
+    profileImports = (
+      <List
+        className={classes.OSCALControlList}
+        subheader={
+          <ListSubheader
+            className={classes.OSCALMetadataPartiesHeader}
+            component="div"
+            id="oscal-profile-importedControls"
+          >
+            Imported Controls
+          </ListSubheader>
+        }
+      >
+        {props.profile.resolvedControls.map((control) => (
+          <OSCALControl
+            control={control}
+            includeControlIds={props.profile.includeControlIds}
+            childLevel={0}
+            key={`control-${control.id}`}
+          />
+        ))}
+      </List>
     );
   }
-  
 
   return (
     <div className={classes.paper}>
       <OSCALMetadata metadata={profile.metadata} />
-      {profileImpl}
-      
+      {profileImports}
     </div>
   );
 }
-
-/*
-
-array of resolved controls
-array of imported controls based on 'imports'
-
-
-*/
