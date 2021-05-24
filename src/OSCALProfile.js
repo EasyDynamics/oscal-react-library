@@ -13,6 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import OSCALMetadata from "./OSCALMetadata";
 import OSCALProfileDefintionResolver from "./oscal-utils/OSCALProfileDefinitionResolver";
 import OSCALControl from "./OSCALControl";
+import OSCALBackMatter from "./OSCALBackMatter";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -83,6 +84,7 @@ export default function OSCALProfile(props) {
     <div className={classes.paper}>
       <OSCALMetadata metadata={profile.metadata} />
       {profileImports}
+      <OSCALBackMatter backMatter={props.profile["back-matter"]} />
     </div>
   );
 }
