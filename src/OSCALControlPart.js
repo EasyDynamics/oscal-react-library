@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Link from "@material-ui/core/Link";
 import Tooltip from "@material-ui/core/Tooltip";
 import OSCALControlGuidance from "./OSCALControlGuidance";
+import OSCALControlModifications from "./OSCALControlModifications";
 
 const useStyles = makeStyles((theme) => ({
   OSCALControlPart: {
@@ -185,6 +186,17 @@ export default function OSCALControlPart(props) {
 
   if (props.part.name === "guidance") {
     return <OSCALControlGuidance prose={props.part.prose} />;
+  }
+
+  if (props.modifications) {
+    // eslint-disable-next-line
+    Object.entries(props.modifications.alters).forEach(([key, modification]) => {
+        // eslint-disable-next-line
+      if (modification["control-id"] === props.control.id) {
+          return <OSCALControlModifications />;
+        }
+      }
+    );
   }
 
   const isStatement = props.part.name === "statement";

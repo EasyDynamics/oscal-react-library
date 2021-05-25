@@ -78,6 +78,8 @@ export default function OSCALControl(props) {
               parameters={props.control.params}
               implReqStatements={props.implReqStatements}
               componentId={props.componentId}
+              modifications={props.modifications}
+              control={props.control}
               // eslint-disable-next-line
               key={`part-${index}`}
             />
@@ -87,6 +89,7 @@ export default function OSCALControl(props) {
             <OSCALControl
               control={control}
               includeControlIds={props.includeControlIds}
+              modifications={props.modifications}
               parameters={control.params}
               childLevel={props.childLevel + 1}
               key={control.id}
