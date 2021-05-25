@@ -46,9 +46,13 @@ export default function OSCALControlModifications(props) {
       >
         <DialogTitle id="scroll-dialog-title">Modifications</DialogTitle>
         <DialogContent dividers>
-          <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
-            Modification Content
-          </DialogContentText>
+          {Object.entries(
+            props.adds.map((add) => (
+              <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
+                {add.position}
+              </DialogContentText>
+            ))
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

@@ -188,15 +188,16 @@ export default function OSCALControlPart(props) {
     return <OSCALControlGuidance prose={props.part.prose} />;
   }
 
+  let modificationDisplay;
   if (props.modifications) {
-    // eslint-disable-next-line
-    Object.entries(props.modifications.alters).forEach(([key, modification]) => {
-        // eslint-disable-next-line
-      if (modification["control-id"] === props.control.id) {
-          return <OSCALControlModifications />;
-        }
-      }
+    const modification = props.modifications.alters.find(
+      (element) => element["control-id"] === props.control.id
     );
+    if (modification) {
+      modificationDisplay = (
+        <OSCALControlModifications adds={modification.adds} />
+      );
+    }
   }
 
   const isStatement = props.part.name === "statement";
@@ -237,6 +238,7 @@ export default function OSCALControlPart(props) {
   return (
     <div className={className}>
       {replacedProse}
+      {modificationDisplay}
       {props.part.parts &&
         props.part.parts.map((part) => (
           <OSCALControlPart

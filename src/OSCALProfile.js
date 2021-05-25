@@ -72,6 +72,7 @@ export default function OSCALProfile(props) {
           <OSCALControl
             control={control}
             includeControlIds={props.profile.includeControlIds}
+            modifications={props.profile.modify}
             childLevel={0}
             key={`control-${control.id}`}
           />
