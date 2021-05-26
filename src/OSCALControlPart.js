@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Link from "@material-ui/core/Link";
 import Tooltip from "@material-ui/core/Tooltip";
 import OSCALControlGuidance from "./OSCALControlGuidance";
-import OSCALControlModifications from "./OSCALControlModifications";
+import OSCALControlModification from "./OSCALControlModification";
 
 const useStyles = makeStyles((theme) => ({
   OSCALControlPart: {
@@ -195,7 +195,7 @@ export default function OSCALControlPart(props) {
     );
     if (modification) {
       modificationDisplay = (
-        <OSCALControlModifications adds={modification.adds} />
+        <OSCALControlModification adds={modification.adds} />
       );
     }
   }
@@ -237,8 +237,8 @@ export default function OSCALControlPart(props) {
   }
   return (
     <div className={className}>
-      {replacedProse}
       {modificationDisplay}
+      {replacedProse}
       {props.part.parts &&
         props.part.parts.map((part) => (
           <OSCALControlPart
