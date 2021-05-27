@@ -85,7 +85,7 @@ export default function OSCALProfile(props) {
     <div className={classes.paper}>
       <OSCALMetadata metadata={profile.metadata} />
       {profileImports}
-      <OSCALBackMatter backMatter={props.profile["back-matter"]} />
+      <OSCALBackMatter backMatter={profile["back-matter"]} />
     </div>
   );
 }
