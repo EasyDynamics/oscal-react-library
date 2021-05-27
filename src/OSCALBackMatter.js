@@ -2,14 +2,9 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import Chip from "@material-ui/core/Chip";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme) => ({
@@ -36,6 +31,27 @@ const useStyles = makeStyles((theme) => ({
 export default function OSCALBackMatter(props) {
   const classes = useStyles(props);
 
+  const rev4URL =
+    "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_catalog.json";
+  const rev5URL =
+    "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json";
+  const getHRef = (hRef, mediaType) => {
+    let newHRef;
+    if (!hRef.endsWith("http")) {
+      if (!hRef.endsWith("json") && mediaType.endsWith("json")) {
+        newHRef = hRef.replace("xml", "json");
+      }
+      if (newHRef.includes("rev4")) {
+        newHRef = rev4URL;
+      }
+      if (newHRef.includes("rev5")) {
+        newHRef = rev5URL;
+      }
+      return newHRef;
+    }
+    return hRef;
+  };
+
   return (
     <Card>
       <CardContent>
@@ -48,15 +64,20 @@ export default function OSCALBackMatter(props) {
           </Grid>
         </Grid>
         <Grid>
-          <Typography>
-            <Link
-              href="https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/xml/NIST_SP-800-53_rev4_catalog.json"
-              component="button"
-              variant="body2"
-            >
-              {props.backMatter.resources[0].rlinks[0]["media-type"]}
-            </Link>
-          </Typography>
+          {props.backMatter.resources.map((resource) => (
+            <Typography>
+              {resource.description}:
+              {resource.rlinks.map((rlink) => (
+                <Chip
+                  label={rlink["media-type"]}
+                  component="a"
+                  href={getHRef(rlink.href, rlink["media-type"])}
+                  clickable
+                  variant="default"
+                />
+              ))}
+            </Typography>
+          ))}
         </Grid>
       </CardContent>
     </Card>
