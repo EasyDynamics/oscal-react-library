@@ -5,7 +5,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Chip from "@material-ui/core/Chip";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
-import Typography from "@material-ui/core/Typography";
+import { Tooltip, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -52,6 +52,43 @@ export default function OSCALBackMatter(props) {
     return hRef;
   };
 
+  // eslint-disable-next-line
+  const backMatterDisplay = (resource) => {
+    if (!resource.title) {
+      return (
+        <Tooltip title={resource.description}>
+          <Typography color="error">
+            {resource.rlinks.map((rlink) => (
+              <Chip
+                label="Title"
+                component="a"
+                href={getHRef(rlink.href, rlink["media-type"])}
+                clickable
+              />
+            ))}
+          </Typography>
+        </Tooltip>
+      );
+    }
+    if (resource.title) {
+      return (
+        <Tooltip title={resource.description}>
+          <Typography>
+            {resource.rlinks.map((rlink) => (
+              <Chip
+                label={resource.title}
+                component="a"
+                href={getHRef(rlink.href, rlink["media-type"])}
+                clickable
+                variant="default"
+              />
+            ))}
+          </Typography>
+        </Tooltip>
+      );
+    }
+  };
+
   return (
     <Card>
       <CardContent>
@@ -64,20 +101,9 @@ export default function OSCALBackMatter(props) {
           </Grid>
         </Grid>
         <Grid>
-          {props.backMatter.resources.map((resource) => (
-            <Typography>
-              {resource.description}:
-              {resource.rlinks.map((rlink) => (
-                <Chip
-                  label={rlink["media-type"]}
-                  component="a"
-                  href={getHRef(rlink.href, rlink["media-type"])}
-                  clickable
-                  variant="default"
-                />
-              ))}
-            </Typography>
-          ))}
+          {props.backMatter.resources.map((resource) =>
+            backMatterDisplay(resource)
+          )}
         </Grid>
       </CardContent>
     </Card>
