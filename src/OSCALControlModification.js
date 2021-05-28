@@ -1,12 +1,13 @@
 import React from "react";
-import IconButton from "@material-ui/core/IconButton";
+import Badge from "@material-ui/core/Badge";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+import IconButton from "@material-ui/core/IconButton";
+import LayersIcon from "@material-ui/icons/Layers";
 import { makeStyles } from "@material-ui/core/styles";
 import { Tooltip, Typography } from "@material-ui/core";
 
@@ -30,17 +31,38 @@ export default function OSCALControlModification(props) {
     setOpen(false);
   };
 
+  const getModLength = (adds, removes) => {
+    let addsLength = 0;
+    let removesLength = 0;
+    if (adds) {
+      addsLength = adds.length;
+    }
+    if (removes) {
+      removesLength = removes.length;
+    }
+    return addsLength + removesLength;
+  };
+
   return (
     <>
       <Tooltip title="Modification">
-        <IconButton
-          variant="outlined"
-          size="small"
-          className={classes.OSCALControlModificationsButton}
-          onClick={handleClick}
+        <Badge
+          color="secondary"
+          badgeContent={getModLength(
+            props.modification.adds,
+            props.modification.removes
+          )}
+          overlap="circle"
         >
-          <InfoOutlinedIcon />
-        </IconButton>
+          <IconButton
+            variant="outlined"
+            size="small"
+            className={classes.OSCALControlModificationsButton}
+            onClick={handleClick}
+          >
+            <LayersIcon />
+          </IconButton>
+        </Badge>
       </Tooltip>
       <Dialog
         open={open}
@@ -51,7 +73,7 @@ export default function OSCALControlModification(props) {
       >
         <DialogTitle id="scroll-dialog-title">Modification</DialogTitle>
         <DialogContent dividers>
-          {props.adds.map((add) => (
+          {props.modification.adds.map((add) => (
             <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
               {add.position}
               {add.props.map((prop) => (
