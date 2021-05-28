@@ -43,10 +43,67 @@ export default function OSCALControlModification(props) {
     return addsLength + removesLength;
   };
 
+  let addsDisplay;
+  let removesDisplay;
+  if (props.modification.adds) {
+    addsDisplay = (
+      <DialogContent dividers>
+        {props.modification.adds.map((add) => (
+          <DialogContentText
+            color="textprimary"
+            id="scroll-dialog-description"
+            tabIndex={-1}
+            variant="h6"
+          >
+            Adds:
+            {add.props.map((prop) => (
+              <Typography
+                color="textsecondary"
+                paragraph="true"
+                variant="body1"
+              >
+                Name:{prop.name}, Value:{prop.value}
+              </Typography>
+            ))}
+          </DialogContentText>
+        ))}
+      </DialogContent>
+    );
+  }
+  if (props.modification.removes) {
+    removesDisplay = (
+      <DialogContent dividers>
+        {props.modification.removes.map((remove) => (
+          <DialogContentText
+            color="textprimary"
+            id="scroll-dialog-description"
+            tabIndex={-1}
+            variant="h6"
+          >
+            Removes:
+            {remove.props.map((prop) => (
+              <Typography
+                color="textsecondary"
+                paragraph="true"
+                variant="body1"
+              >
+                Name:{prop.name}, Value:{prop.value}
+              </Typography>
+            ))}
+          </DialogContentText>
+        ))}
+      </DialogContent>
+    );
+  }
+
   return (
     <>
       <Tooltip title="Modification">
         <Badge
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
           color="secondary"
           badgeContent={getModLength(
             props.modification.adds,
@@ -72,18 +129,8 @@ export default function OSCALControlModification(props) {
         aria-describedby="scroll-dialog-description"
       >
         <DialogTitle id="scroll-dialog-title">Modification</DialogTitle>
-        <DialogContent dividers>
-          {props.modification.adds.map((add) => (
-            <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
-              {add.position}
-              {add.props.map((prop) => (
-                <Typography>
-                  Name:{prop.name}, Value:{prop.value}
-                </Typography>
-              ))}
-            </DialogContentText>
-          ))}
-        </DialogContent>
+        {addsDisplay}
+        {removesDisplay}
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Close
