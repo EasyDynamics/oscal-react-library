@@ -34,47 +34,36 @@ export default function OSCALBackMatter(props) {
 
   // eslint-disable-next-line
   const backMatterDisplay = (resource) => {
+    let title;
+    let color;
     if (!resource.title) {
-      return (
-        <Tooltip title={resource.description}>
-          <Typography color="error">
-            {resource.rlinks.map((rlink) => (
-              <Chip
-                label="Title"
-                component="a"
-                href={getUriFromBackMatterByHref(
-                  props.backMatter,
-                  props.href,
-                  props.parentUrl
-                )}
-                clickable
-              />
-            ))}
-          </Typography>
-        </Tooltip>
-      );
+      title = "No Title";
+      color = "secondary";
     }
     if (resource.title) {
-      return (
-        <Tooltip title={resource.description}>
-          <Typography>
-            {resource.rlinks.map((rlink) => (
-              <Chip
-                label={resource.title}
-                component="a"
-                href={getUriFromBackMatterByHref(
-                  props.backMatter,
-                  props.href,
-                  props.parentUrl
-                )}
-                clickable
-                variant="default"
-              />
-            ))}
-          </Typography>
-        </Tooltip>
-      );
+      title = resource.title;
+      color = "default";
     }
+    return (
+      <Tooltip title={resource.description}>
+        <Typography>
+          {resource.rlinks.map((rlink) => (
+            <Chip
+              label={title}
+              color={color}
+              component="a"
+              href={getUriFromBackMatterByHref(
+                props.backMatter,
+                props.href,
+                props.parentUrl
+              )}
+              variant="outlined"
+              clickable
+            />
+          ))}
+        </Typography>
+      </Tooltip>
+    );
   };
 
   return (
