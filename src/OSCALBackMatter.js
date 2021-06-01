@@ -32,27 +32,6 @@ const useStyles = makeStyles((theme) => ({
 export default function OSCALBackMatter(props) {
   const classes = useStyles(props);
 
-  const rev4URL =
-    "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_catalog.json";
-  const rev5URL =
-    "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json";
-  const getHRef = (hRef, mediaType) => {
-    let newHRef;
-    if (!hRef.endsWith("http")) {
-      if (!hRef.endsWith("json") && mediaType.endsWith("json")) {
-        newHRef = hRef.replace("xml", "json");
-      }
-      if (newHRef.includes("rev4")) {
-        newHRef = rev4URL;
-      }
-      if (newHRef.includes("rev5")) {
-        newHRef = rev5URL;
-      }
-      return newHRef;
-    }
-    return hRef;
-  };
-
   // eslint-disable-next-line
   const backMatterDisplay = (resource) => {
     if (!resource.title) {
