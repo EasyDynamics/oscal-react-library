@@ -54,8 +54,6 @@ export default function OSCALSsp(props) {
       />
     );
   }
-  // eslint-disable-next-line
-  console.log(ssp.resolvedControls);
 
   return (
     <div className={classes.paper}>
