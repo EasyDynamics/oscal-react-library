@@ -1,4 +1,4 @@
-import getUriFromBackMatterByHref from "./OSCALGetBackMatterUri";
+import getUriFromBackMatterByHref from "./OSCALBackMatterUtils";
 
 /**
  * Profiles are brought in through different methods in OSCAL models.

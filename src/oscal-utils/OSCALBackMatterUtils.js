@@ -17,8 +17,6 @@ function getAbsoluteUrl(foundResource, parentUrl) {
 /**
  * Gets an rlink URI from the given back matter's resource by the given HREF UUID.
  *
- * TODO - This should probably be a global function not specific to profiles
- *
  * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/implementation-layer/component/xml-schema/##local_back-matter-resource-rlink_def-h3}
  */
 
