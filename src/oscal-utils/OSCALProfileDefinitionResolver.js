@@ -10,24 +10,25 @@ export default function OSCALProfileDefintionResolver(
   onSuccess,
   onError
 ) {
-  //if it has no imports, return nothing
-  
+  // if it has no imports, return nothing
+  // eslint-disable-next-line
   if (!profile["imports"]) {
     return;
   }
 
-  //pull out catalog
-  
+  // pull out catalog
+
   // TODO - pull the rev4 catalog out, currently it will not be displayed properly unless it is the rev5 catalog
-  let catalogUrl = "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json";
-  //let catalogUrl = "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_catalog.json";
-  
+  const catalogUrl =
+    "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json";
+  // let catalogUrl = "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_catalog.json";
+  // eslint-disable-next-line
   profile.resolvedControls = [];
   OSCALResolveProfileOrCatalogUrlControls(
     profile.resolvedControls,
     catalogUrl,
     parentUrl,
-    profile.["back-matter"],
+    profile["back-matter"],
     onSuccess,
     onError,
     []
