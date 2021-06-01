@@ -63,7 +63,11 @@ export default function OSCALBackMatter(props) {
               <Chip
                 label="Title"
                 component="a"
-                href={getUriFromBackMatterByHref(props.backMatter, props.href)}
+                href={getUriFromBackMatterByHref(
+                  props.backMatter,
+                  props.href,
+                  props.parentUrl
+                )}
                 clickable
               />
             ))}
@@ -79,7 +83,11 @@ export default function OSCALBackMatter(props) {
               <Chip
                 label={resource.title}
                 component="a"
-                href={getUriFromBackMatterByHref(props.backMatter, props.href)}
+                href={getUriFromBackMatterByHref(
+                  props.backMatter,
+                  props.href,
+                  props.parentUrl
+                )}
                 clickable
                 variant="default"
               />

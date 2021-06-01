@@ -1,13 +1,17 @@
-function getAbsoluteUrl(foundResource) {
-  let profileImportUrl = foundResource.rlinks[0].href;
+function getAbsoluteUrl(foundResource, parentUrl) {
+  let absoluteUrl = foundResource.rlinks[0].href;
+  // TODO - this should be improved for other use cases
+  if (!absoluteUrl.startsWith("http")) {
+    absoluteUrl = `${parentUrl}/../${absoluteUrl}`;
+  }
   // TODO this is incorrect in the profile (https://github.com/usnistgov/oscal-content/issues/59, https://easydynamics.atlassian.net/browse/EGRC-266)
   if (
     foundResource.rlinks[0]["media-type"].endsWith("json") &&
-    profileImportUrl.endsWith(".xml")
+    absoluteUrl.endsWith(".xml")
   ) {
-    profileImportUrl = profileImportUrl.replace(".xml", ".json");
+    absoluteUrl = absoluteUrl.replace(".xml", ".json");
   }
-  return profileImportUrl;
+  return absoluteUrl;
 }
 
 /**
@@ -18,15 +22,19 @@ function getAbsoluteUrl(foundResource) {
  * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/implementation-layer/component/xml-schema/##local_back-matter-resource-rlink_def-h3}
  */
 
-export default function getUriFromBackMatterByHref(backMatter, href) {
+export default function getUriFromBackMatterByHref(
+  backMatter,
+  href,
+  parentUrl
+) {
   if (!href.startsWith("#")) {
     throw new Error("not an internal href");
   }
   // Dig into back-matter to look for absolute href
-  const profileImportUuid = href.substring(1);
+  const importUuid = href.substring(1);
   let foundResource = null;
   backMatter.resources.some((resource) => {
-    if (resource.uuid === profileImportUuid) {
+    if (resource.uuid === importUuid) {
       foundResource = resource;
       return true;
     }
@@ -35,5 +43,5 @@ export default function getUriFromBackMatterByHref(backMatter, href) {
   if (!foundResource) {
     throw new Error("resource not found for href");
   }
-  return getAbsoluteUrl(foundResource);
+  return getAbsoluteUrl(foundResource, parentUrl);
 }
