@@ -6,6 +6,7 @@ import Chip from "@material-ui/core/Chip";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import { Tooltip, Typography } from "@material-ui/core";
+import getUriFromBackMatterByHref from "./oscal-utils/OSCALGetBackMatterUri";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -78,7 +79,7 @@ export default function OSCALBackMatter(props) {
               <Chip
                 label={resource.title}
                 component="a"
-                href={getHRef(rlink.href, rlink["media-type"])}
+                href={getUriFromBackMatterByHref(props.backMatter, rlink.href)}
                 clickable
                 variant="default"
               />
