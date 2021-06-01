@@ -25,6 +25,20 @@ const profileTestData = {
   ],
   resolvedControls: controlsData,
   trimmedControls: ["control-1", "control-1.1", "control-2", "control-2.1"],
+  "back-matter": {
+    resources: [
+      {
+        uuid: "dc380596-027f-423b-83f2-82757554ee27",
+        description: "This is an example description for Back Matter",
+        rlinks: [
+          {
+            href: "NIST_SP-800-53_rev4_catalog.xml",
+            "media-type": "application/oscal.catalog+json"
+          }
+        ],
+      },
+    ],
+  },
 };
 
 test("OSCALProfile loads", () => {
