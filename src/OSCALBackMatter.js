@@ -6,7 +6,7 @@ import Chip from "@material-ui/core/Chip";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import { Tooltip, Typography } from "@material-ui/core";
-import getUriFromBackMatterByHref from "./oscal-utils/OSCALBackMatterUtils";
+import { getAbsoluteUrl } from "./oscal-utils/OSCALBackMatterUtils";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -52,11 +52,7 @@ export default function OSCALBackMatter(props) {
               label={title}
               color={color}
               component="a"
-              href={getUriFromBackMatterByHref(
-                props.backMatter,
-                props.href,
-                props.parentUrl
-              )}
+              href={getAbsoluteUrl(rlink, props.parentUrl)}
               variant="outlined"
               clickable
             />
