@@ -45,10 +45,11 @@ export default function OSCALControlModification(props) {
 
   let addsDisplay;
   let removesDisplay;
-  if (props.modification.adds) {
+  if (props.alter.adds) {
     addsDisplay = (
       <DialogContent dividers>
-        {props.modification.adds.map((add) => (
+        {props.alter.adds.map((add) => (
+          // TODO - consider making this into a table
           <DialogContentText
             color="textprimary"
             id="scroll-dialog-description"
@@ -70,10 +71,12 @@ export default function OSCALControlModification(props) {
       </DialogContent>
     );
   }
-  if (props.modification.removes) {
+  // TODO - address removes in the future
+  if (props.alter.removes) {
     removesDisplay = (
       <DialogContent dividers>
-        {props.modification.removes.map((remove) => (
+        {props.alter.removes.map((remove) => (
+          // TODO - consider making this into a table
           <DialogContentText
             color="textprimary"
             id="scroll-dialog-description"
@@ -82,12 +85,14 @@ export default function OSCALControlModification(props) {
           >
             Removes:
             {remove.props.map((prop) => (
+              // TODO - May need a method to pull id-ref, name-ref, or content that is decided to be displayed
+              // Removes does not have props
               <Typography
                 color="textsecondary"
                 paragraph="true"
                 variant="body1"
               >
-                Name:{prop.name}, Value:{prop.value}
+                Some Content Here
               </Typography>
             ))}
           </DialogContentText>
@@ -105,10 +110,7 @@ export default function OSCALControlModification(props) {
             horizontal: "right",
           }}
           color="secondary"
-          badgeContent={getModLength(
-            props.modification.adds,
-            props.modification.removes
-          )}
+          badgeContent={getModLength(props.alter.adds, props.alter.removes)}
           overlap="circle"
         >
           <IconButton

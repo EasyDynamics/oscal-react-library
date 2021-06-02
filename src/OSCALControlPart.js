@@ -190,13 +190,11 @@ export default function OSCALControlPart(props) {
 
   let modificationDisplay;
   if (props.modifications) {
-    const modification = props.modifications.alters.find(
+    const alter = props.modifications.alters.find(
       (element) => element["control-id"] === props.control.id
     );
-    if (modification) {
-      modificationDisplay = (
-        <OSCALControlModification adds={modification.adds} />
-      );
+    if (alter) {
+      modificationDisplay = <OSCALControlModification alter={alter} />;
     }
   }
 
