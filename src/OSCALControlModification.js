@@ -102,7 +102,7 @@ export default function OSCALControlModification(props) {
   }
 
   return (
-    <>
+    <div>
       <Tooltip title="Modification">
         <Badge
           anchorOrigin={{
@@ -139,6 +139,6 @@ export default function OSCALControlModification(props) {
           </Button>
         </DialogActions>
       </Dialog>
-    </>
+    </div>
   );
 }
