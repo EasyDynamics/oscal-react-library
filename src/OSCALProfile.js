@@ -87,7 +87,6 @@ export default function OSCALProfile(props) {
       {profileImports}
       <OSCALBackMatter
         backMatter={profile["back-matter"]}
-        href={profile.imports[0].href}
         parentUrl={props.parentUrl}
       />
     </div>
