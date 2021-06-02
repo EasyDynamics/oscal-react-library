@@ -24,7 +24,6 @@ const profileTestData = {
     },
   ],
   resolvedControls: controlsData,
-  trimmedControls: ["control-1", "control-1.1", "control-2", "control-2.1"],
   "back-matter": {
     resources: [
       {
