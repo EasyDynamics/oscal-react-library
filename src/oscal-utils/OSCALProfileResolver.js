@@ -94,3 +94,31 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
       (error) => onError(error)
     );
 }
+
+export function OSCALResolveProfile(profile, parentUrl, onSuccess, onError) {
+  // eslint-disable-next-line
+  if (!profile["imports"]) {
+    return;
+  }
+  /* eslint no-param-reassign: "error" */
+  profile.resolvedControls = [];
+  let importUrl;
+  // iterate through all of the profile imports
+  // for each import call OSCALResolveProfileOrCatalogUrlControls
+  profile.imports.forEach((imp) => {
+    importUrl = getUriFromBackMatterByHref(
+      profile["back-matter"],
+      imp.href,
+      parentUrl
+    );
+    OSCALResolveProfileOrCatalogUrlControls(
+      profile.resolvedControls,
+      importUrl,
+      parentUrl,
+      profile["back-matter"],
+      onSuccess,
+      onError,
+      []
+    );
+  });
+}
