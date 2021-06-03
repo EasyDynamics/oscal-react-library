@@ -3,9 +3,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import OSCALMetadata from "./OSCALMetadata";
-import OSCALProfileDefintionResolver from "./oscal-utils/OSCALProfileDefinitionResolver";
 import OSCALControl from "./OSCALControl";
 import OSCALBackMatter from "./OSCALBackMatter";
+import { OSCALResolveProfile } from "./oscal-utils/OSCALProfileResolver";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -24,7 +24,7 @@ export default function OSCALProfile(props) {
   const profile = props["profile"];
 
   useEffect(() => {
-    OSCALProfileDefintionResolver(
+    OSCALResolveProfile(
       profile,
       props.parentUrl,
       () => {
