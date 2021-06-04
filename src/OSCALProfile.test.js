@@ -44,6 +44,12 @@ test("OSCALProfile loads", () => {
   render(<OSCALProfileLoader />);
 });
 
+test("OSCALProfile displays Imported Controls Header", () => {
+  render(<OSCALProfile profile={profileTestData} />);
+  const result = screen.getByText("Imported Controls");
+  expect(result).toBeVisible();
+});
+
 function profileRenderer() {
   render(<OSCALProfile profile={profileTestData} />);
 }
