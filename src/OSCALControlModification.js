@@ -103,7 +103,7 @@ export default function OSCALControlModification(props) {
 
   return (
     <div>
-      <Tooltip title="Modification">
+      <Tooltip title="Modifications">
         <Badge
           anchorOrigin={{
             vertical: "top",
@@ -130,7 +130,7 @@ export default function OSCALControlModification(props) {
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
       >
-        <DialogTitle id="scroll-dialog-title">Modification</DialogTitle>
+        <DialogTitle id="scroll-dialog-title">Modifications</DialogTitle>
         {addsDisplay}
         {removesDisplay}
         <DialogActions>
