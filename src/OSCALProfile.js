@@ -57,6 +57,7 @@ export default function OSCALProfile(props) {
             className={classes.OSCALMetadataPartiesHeader}
             component="div"
             id="oscal-profile-importedControls"
+            disableSticky
           >
             Imported Controls
           </ListSubheader>
