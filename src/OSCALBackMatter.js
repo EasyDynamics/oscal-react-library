@@ -67,7 +67,7 @@ export default function OSCALBackMatter(props) {
     return (
       <CardContent>
         <Grid>
-          <Tooltip title={resource.description}>
+          <Tooltip title={resource.description} placement="bottom-start">
             <Typography color={color} variant="subtitle1">
               {title}
             </Typography>
