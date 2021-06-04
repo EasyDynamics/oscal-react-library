@@ -32,33 +32,63 @@ const useStyles = makeStyles((theme) => ({
 export default function OSCALBackMatter(props) {
   const classes = useStyles(props);
 
+  const getMediaType = (rlink) => {
+    let mediaType;
+    if (!rlink["media-type"]) {
+      mediaType = "No Media Type";
+    } else {
+      mediaType = rlink["media-type"];
+    }
+    return mediaType;
+  };
+
+  const getColor = (rlink) => {
+    let color;
+    if (!rlink["media-type"]) {
+      color = "secondary";
+    } else {
+      color = "default";
+    }
+    return color;
+  };
+
   // eslint-disable-next-line
   const backMatterDisplay = (resource) => {
     let title;
     let color;
     if (!resource.title) {
       title = "No Title";
-      color = "secondary";
+      color = "error";
     }
     if (resource.title) {
       title = resource.title;
-      color = "default";
+      color = "initial";
     }
     return (
-      <Tooltip title={resource.description}>
-        <Typography>
-          {resource.rlinks.map((rlink) => (
-            <Chip
-              label={title}
-              color={color}
-              component="a"
-              href={getAbsoluteUrl(rlink, props.parentUrl)}
-              variant="outlined"
-              clickable
-            />
-          ))}
-        </Typography>
-      </Tooltip>
+      <CardContent>
+        <Grid>
+          <Tooltip title={resource.description}>
+            <Typography color={color} variant="subtitle1">
+              {title}
+            </Typography>
+          </Tooltip>
+        </Grid>
+        <Grid>
+          <Typography>
+            {resource.rlinks.map((rlink) => (
+              <Chip
+                key={resource.uuid}
+                label={getMediaType(rlink)}
+                color={getColor(rlink)}
+                component="a"
+                href={getAbsoluteUrl(rlink, props.parentUrl)}
+                variant="outlined"
+                clickable
+              />
+            ))}
+          </Typography>
+        </Grid>
+      </CardContent>
     );
   };
 
