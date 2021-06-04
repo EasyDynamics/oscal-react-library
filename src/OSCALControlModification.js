@@ -71,7 +71,6 @@ export default function OSCALControlModification(props) {
       </DialogContent>
     );
   }
-  // TODO - address removes in the future
   if (props.alter.removes) {
     removesDisplay = (
       <DialogContent dividers>
@@ -84,17 +83,10 @@ export default function OSCALControlModification(props) {
             variant="h6"
           >
             Removes:
-            {remove.props.map((prop) => (
-              // TODO - May need a method to pull id-ref, name-ref, or content that is decided to be displayed
-              // Removes does not have props
-              <Typography
-                color="textsecondary"
-                paragraph="true"
-                variant="body1"
-              >
-                Some Content Here
-              </Typography>
-            ))}
+            <Typography color="textsecondary" paragraph="true" variant="body1">
+              id-ref: {remove["id-ref"]}
+              name-ref: {remove["name-ref"]}
+            </Typography>
           </DialogContentText>
         ))}
       </DialogContent>
