@@ -14,8 +14,6 @@ import { Tooltip, Typography } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   OSCALControlModificationsButton: {
     color: "#002867",
-    "margin-top": "1em",
-    "margin-bottom": "0.5em",
   },
 }));
 
