@@ -59,6 +59,7 @@ export default function OSCALLoader(props) {
   };
 
   const handleReloadClick = (event) => {
+    setIsLoaded(false);
     loadOscalData(oscalUrl);
   };
 
