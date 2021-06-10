@@ -1,13 +1,19 @@
 export function getAbsoluteUrl(rlink, parentUrl) {
   let absoluteUrl = rlink.href;
+
   // TODO - this should be improved for other use cases
   if (!absoluteUrl.startsWith("http")) {
     absoluteUrl = `${parentUrl}/../${absoluteUrl}`;
   }
   // TODO this is incorrect in the profile (https://github.com/usnistgov/oscal-content/issues/59, https://easydynamics.atlassian.net/browse/EGRC-266)
-  if (rlink["media-type"].endsWith("json") && absoluteUrl.endsWith(".xml")) {
+  if (
+    rlink["media-type"] &&
+    rlink["media-type"].endsWith("json") &&
+    absoluteUrl.endsWith(".xml")
+  ) {
     absoluteUrl = absoluteUrl.replace(".xml", ".json");
   }
+
   return absoluteUrl;
 }
 
