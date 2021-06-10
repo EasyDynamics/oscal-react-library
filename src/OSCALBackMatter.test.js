@@ -37,6 +37,12 @@ export function testOSCALBackMatter(parentElementName, renderer) {
       await screen.findByText("This is a test description for resource")
     ).toBeInTheDocument();
   });
+
+  test(`${parentElementName} displays media-type`, async () => {
+    renderer();
+    const result = screen.getByText("application/oscal.catalog+json");
+    expect(result).toBeVisible();
+  });
 }
 
 if (!require.main) {
