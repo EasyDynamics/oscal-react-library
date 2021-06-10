@@ -190,22 +190,13 @@ export default function OSCALControlPart(props) {
 
   let modificationDisplay;
   if (props.modifications) {
-    // Finds the control-id within alters and matches it with a resolved control
-    const alter = props.modifications.alters.find(
-      (element) => element["control-id"] === props.control.id
+    modificationDisplay = (
+      <OSCALControlModification
+        modifications={props.modifications}
+        controlPartId={props.part.id}
+        control={props.control}
+      />
     );
-    // Use alter and find the id-ref that matches the control part id
-    let idRef;
-    if (alter) {
-      alter.adds.forEach((add) => {
-        if (add["id-ref"]) {
-          idRef = add.find((add) => add["id-ref"] === props.part.id);
-        }
-      });
-    }
-    if (alter || idRef) {
-      modificationDisplay = <OSCALControlModification alter={alter} />;
-    }
   }
 
   const isStatement = props.part.name === "statement";
