@@ -73,19 +73,17 @@ function getStatementByComponent(implReqStatements, statementId, componentId) {
  * TODO - This is probably 800-53 specific?
  * TODO - Add support for select param
  * BUG - If there is more then one parameter in the prose, this script will not work
- */ 
+ */
 
 function ReplacedProseWithParameterLabel(props) {
- 
   if (!props.prose) {
     return null;
   }
   let replacedProse;
-  
+
   if (!props.parameters) {
     replacedProse = props.prose;
-  } 
-  else {
+  } else {
     function getParameterLabel(parameterId) {
       // trim
       parameterId = parameterId.substring(18, parameterId.length - 3);
@@ -93,7 +91,7 @@ function ReplacedProseWithParameterLabel(props) {
       const parameter = props.parameters.find(
         (parameter) => parameter.id === parameterId
       );
-      
+
       if (!parameter) {
         return;
       }
@@ -101,7 +99,10 @@ function ReplacedProseWithParameterLabel(props) {
       return `< ${parameter.label} >`;
     }
 
-    replacedProse = props.prose.replace(/\{\{ insert: param, ([0-9a-zA-B-_.]*) \}\}/g, getParameterLabel);
+    replacedProse = props.prose.replace(
+      /\{\{ insert: param, ([0-9a-zA-B-_.]*) \}\}/g,
+      getParameterLabel
+    );
   }
   return (
     <Typography className={props.className}>
@@ -159,7 +160,10 @@ function ReplacedProseWithByComponentParameterValue(props) {
     }" >${foundParameterSetting.values.toString()}</span>`;
   }
 
-  const replacedProse = props.prose.replace(/\{\{ insert: param, ([0-9a-zA-B-_.]*) \}\}/g, getParameterValue);
+  const replacedProse = props.prose.replace(
+    /\{\{ insert: param, ([0-9a-zA-B-_.]*) \}\}/g,
+    getParameterValue
+  );
   const { description } = statementByComponent;
   // TODO dangerouslySetInnerHTML is not safe, there are other alternatives
   return (
@@ -186,26 +190,6 @@ export default function OSCALControlPart(props) {
 
   if (props.part.name === "guidance") {
     return <OSCALControlGuidance prose={props.part.prose} />;
-  }
-
-  let modificationDisplay;
-  if (props.modifications) {
-    // Finds the control-id within alters and matches it with a resolved control
-    const alter = props.modifications.alters.find(
-      (element) => element["control-id"] === props.control.id
-    );
-    // Use alter and find the id-ref that matches the control part id
-    let idRef;
-    if (alter) {
-      alter.adds.forEach((add) => {
-        if (add["id-ref"]) {
-          idRef = add.find((add) => add["id-ref"] === props.part.id);
-        }
-      });
-    }
-    if (alter || idRef) {
-      modificationDisplay = <OSCALControlModification alter={alter} />;
-    }
   }
 
   const isStatement = props.part.name === "statement";
@@ -245,7 +229,6 @@ export default function OSCALControlPart(props) {
   }
   return (
     <div className={className}>
-      {modificationDisplay}
       {replacedProse}
       {props.part.parts &&
         props.part.parts.map((part) => (

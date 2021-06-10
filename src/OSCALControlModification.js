@@ -92,12 +92,12 @@ export default function OSCALControlModification(props) {
   }
 
   return (
-    <div>
+    <>
       <Tooltip title="Modifications">
         <Badge
           anchorOrigin={{
             vertical: "top",
-            horizontal: "right",
+            horizontal: "left",
           }}
           color="secondary"
           badgeContent={getModLength(props.alter.adds, props.alter.removes)}
@@ -129,6 +129,6 @@ export default function OSCALControlModification(props) {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 }
