@@ -7,6 +7,7 @@ const backMatterTestData = {
   resources: [
     {
       uuid: "dc380596-027f-423b-83f2-82757554ee27",
+      title: "Resource Test Title",
       description: "This is a test description for resource",
       rlinks: [
         {
@@ -25,13 +26,13 @@ function backMatterRenderer() {
 export function testOSCALBackMatter(parentElementName, renderer) {
   test(`${parentElementName} displays title`, () => {
     renderer();
-    const result = screen.getByText("No Title");
+    const result = screen.getByText("Resource Test Title");
     expect(result).toBeVisible();
   });
 
   test(`${parentElementName} displays resource description`, async () => {
     renderer();
-    userEvent.hover(screen.getByText("No Title"));
+    userEvent.hover(screen.getByText("Resource Test Title"));
     expect(
       await screen.findByText("This is a test description for resource")
     ).toBeInTheDocument();
