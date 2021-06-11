@@ -11,7 +11,7 @@ const backMatterTestData = {
       description: "This is a test description for resource",
       rlinks: [
         {
-          href: "NIST_SP-800-53_rev4_catalog.xml",
+          href: "NIST_SP-800-53_rev4_catalog.json",
           "media-type": "application/oscal.catalog+json"
         }
       ],
