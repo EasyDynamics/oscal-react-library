@@ -65,7 +65,7 @@ export default function OSCALControlModification(props) {
       // if it matches, push the "add" to the array
       alter.adds.forEach((add) => {
         if (add["id-ref"]) {
-          addObject = add.find((add) => add["id-ref"] === props.partId);
+          addObject = add.find((add) => add["id-ref"] === props.controlPartId);
           addRemoveControlPart.push(...addObject);
         }
       });
@@ -101,7 +101,7 @@ export default function OSCALControlModification(props) {
       alter.removes.forEach((remove) => {
         if (remove["id-ref"]) {
           removeObject = remove.find(
-            (remove) => remove["id-ref"] === props.partId
+            (remove) => remove["id-ref"] === props.controlPartId
           );
           addRemoveControlPart.push(...removeObject);
         }
@@ -137,7 +137,7 @@ export default function OSCALControlModification(props) {
   if (props.partId) {
     addRemoveControlPart.forEach((addRemove) => {
       controlPartObject = addRemove.find(
-        (addRemove) => addRemove["id-ref"] === props.partId
+        (addRemove) => addRemove["id-ref"] === props.controlPartId
       );
     });
   }
