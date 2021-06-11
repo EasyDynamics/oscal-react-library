@@ -192,8 +192,6 @@ export default function OSCALControlPart(props) {
     return <OSCALControlGuidance prose={props.part.prose} />;
   }
 
-<<<<<<< HEAD
-=======
   let modificationDisplay;
   if (props.modifications) {
     modificationDisplay = (
@@ -205,7 +203,6 @@ export default function OSCALControlPart(props) {
     );
   }
 
->>>>>>> da4fad4228c428a383ffe41a2646702572479acf
   const isStatement = props.part.name === "statement";
   const label = getPartLabel(props.part.props);
 

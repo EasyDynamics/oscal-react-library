@@ -145,7 +145,7 @@ export default function OSCALControlModification(props) {
   // Display if alter or controlPartObject is true
   if (alter || controlPartObject) {
     modificationsDisplay = (
-      <div>
+      <>
         <Tooltip title="Modifications">
           <Badge
             anchorOrigin={{
@@ -182,54 +182,11 @@ export default function OSCALControlModification(props) {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </>
     );
   } else {
     modificationsDisplay = null;
   }
 
-<<<<<<< HEAD
-  return (
-    <>
-      <Tooltip title="Modifications">
-        <Badge
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "left",
-          }}
-          color="secondary"
-          badgeContent={getModLength(props.alter.adds, props.alter.removes)}
-          overlap="circle"
-        >
-          <IconButton
-            variant="outlined"
-            size="small"
-            className={classes.OSCALControlModificationsButton}
-            onClick={handleClick}
-          >
-            <LayersIcon />
-          </IconButton>
-        </Badge>
-      </Tooltip>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        scroll="paper"
-        aria-labelledby="scroll-dialog-title"
-        aria-describedby="scroll-dialog-description"
-      >
-        <DialogTitle id="scroll-dialog-title">Modifications</DialogTitle>
-        {addsDisplay}
-        {removesDisplay}
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
-  );
-=======
-  return <div>{modificationsDisplay}</div>;
->>>>>>> da4fad4228c428a383ffe41a2646702572479acf
+  return <>{modificationsDisplay}</>;
 }
