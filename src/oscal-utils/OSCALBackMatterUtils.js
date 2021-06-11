@@ -10,7 +10,7 @@ export function getAbsoluteUrl(rlink, parentUrl, fixJsonUrls) {
   // We don't want to alter resources being displayed by the OSCALBackMatter component so check fixJsonUrls
   if (fixJsonUrls && absoluteUrl.endsWith(".xml")) {
     // Replacing all instances of xml with json in the path *should* get us the correct json URL
-    absoluteUrl = absoluteUrl.replaceAll("xml", "json");
+    absoluteUrl = absoluteUrl.replace(/xml/g, "json");
   }
 
   return absoluteUrl;
