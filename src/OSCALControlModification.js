@@ -43,9 +43,15 @@ export default function OSCALControlModification(props) {
   };
 
   // Finds the control-id within alters and matches it with a resolved control
-  const alter = props.modifications.alters.find(
-    (element) => element["control-id"] === props.control.id
-  );
+  let alter;
+  if (props.modifications && props.modifications.alters) {
+    alter = props.modifications.alters.find(
+      (element) => element["control-id"] === props.control.id
+    );
+  }
+  if (!alter) {
+    return null;
+  }
 
   let modificationsDisplay;
   let addObject;
