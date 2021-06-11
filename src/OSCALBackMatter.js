@@ -8,6 +8,10 @@ import Link from "@material-ui/core/Link";
 import { Tooltip, Typography } from "@material-ui/core";
 import { getAbsoluteUrl } from "./oscal-utils/OSCALBackMatterUtils";
 
+// TODO: Temporary fix for missing media type (https://github.com/GSA/fedramp-automation/issues/103)
+// Uses file extension instead
+const getURLMediaType = (url) => url.split(".").pop();
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(2),
@@ -35,7 +39,7 @@ export default function OSCALBackMatter(props) {
   const getMediaType = (rlink) => {
     let mediaType;
     if (!rlink["media-type"]) {
-      mediaType = "No Media Type";
+      mediaType = getURLMediaType(getAbsoluteUrl(rlink, props.parentUrl));
     } else {
       mediaType = rlink["media-type"];
     }
