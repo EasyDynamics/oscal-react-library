@@ -18,6 +18,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function OSCALControlModification(props) {
+  if (!props.modifications || !props.modifications.alters) {
+    return null;
+  }
+
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
@@ -43,21 +47,15 @@ export default function OSCALControlModification(props) {
   };
 
   // Finds the control-id within alters and matches it with a resolved control
-  let alter;
-  if (props.modifications && props.modifications.alters) {
-    alter = props.modifications.alters.find(
-      (element) => element["control-id"] === props.control.id
-    );
-  }
-  if (!alter) {
-    return null;
-  }
+  const alter = props.modifications.alters.find(
+    (element) => element["control-id"] === props.control.id
+  );
 
   let modificationsDisplay;
   let addObject;
   let removeObject;
   // eslint-disable-next-line
-  props.modifications.addRemoveControlPart = [];
+  const addRemoveControlPart = [];
   let addsDisplay;
   let removesDisplay;
 
@@ -68,7 +66,7 @@ export default function OSCALControlModification(props) {
       alter.adds.forEach((add) => {
         if (add["id-ref"]) {
           addObject = add.find((add) => add["id-ref"] === props.partId);
-          props.modifications.addRemoveControlPart.push(...addObject);
+          addRemoveControlPart.push(...addObject);
         }
       });
       addsDisplay = (
@@ -105,7 +103,7 @@ export default function OSCALControlModification(props) {
           removeObject = remove.find(
             (remove) => remove["id-ref"] === props.partId
           );
-          props.modifications.addRemoveControlPart.push(...removeObject);
+          addRemoveControlPart.push(...removeObject);
         }
       });
       removesDisplay = (
@@ -137,7 +135,7 @@ export default function OSCALControlModification(props) {
   // For each addRemoveControlPart find the add or remove that matches the part id
   let controlPartObject;
   if (props.partId) {
-    props.modifications.addRemoveControlPart.forEach((addRemove) => {
+    addRemoveControlPart.forEach((addRemove) => {
       controlPartObject = addRemove.find(
         (addRemove) => addRemove["id-ref"] === props.partId
       );
