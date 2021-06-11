@@ -136,11 +136,13 @@ export default function OSCALControlModification(props) {
 
   // For each addRemoveControlPart find the add or remove that matches the part id
   let controlPartObject;
-  props.modifications.addRemoveControlPart.forEach((addRemove) => {
-    controlPartObject = addRemove.find(
-      (addRemove) => addRemove["id-ref"] === props.partId
-    );
-  });
+  if (props.partId) {
+    props.modifications.addRemoveControlPart.forEach((addRemove) => {
+      controlPartObject = addRemove.find(
+        (addRemove) => addRemove["id-ref"] === props.partId
+      );
+    });
+  }
 
   // Display if alter or controlPartObject is true
   if (alter || controlPartObject) {
