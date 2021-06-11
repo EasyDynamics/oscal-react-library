@@ -178,8 +178,6 @@ function ReplacedProseWithByComponentParameterValue(props) {
 } /* eslint-enable */
 
 export default function OSCALControlPart(props) {
-  const classes = useStyles();
-
   // Don't display assessment if we're displaying a control implementation
   if (
     (props.implReqStatements || props.modifications) &&
@@ -188,10 +186,26 @@ export default function OSCALControlPart(props) {
     return null;
   }
 
+  const classes = useStyles();
+
   if (props.part.name === "guidance") {
     return <OSCALControlGuidance prose={props.part.prose} />;
   }
 
+<<<<<<< HEAD
+=======
+  let modificationDisplay;
+  if (props.modifications) {
+    modificationDisplay = (
+      <OSCALControlModification
+        modifications={props.modifications}
+        controlPartId={props.part.id}
+        control={props.control}
+      />
+    );
+  }
+
+>>>>>>> da4fad4228c428a383ffe41a2646702572479acf
   const isStatement = props.part.name === "statement";
   const label = getPartLabel(props.part.props);
 

@@ -27,11 +27,6 @@ const useStyles = makeStyles((theme) => ({
       color: "#0000008a",
     },
   },
-  OSCALBackMatterTooltip: {
-    "& .MuiTooltip-tooltip": {
-      "font-size": "1rem",
-    },
-  },
 }));
 
 export default function OSCALBackMatter(props) {
@@ -72,11 +67,7 @@ export default function OSCALBackMatter(props) {
     return (
       <CardContent>
         <Grid>
-          <Tooltip
-            className={classes.OSCALBackMatterTooltip}
-            title={resource.description}
-            placement="bottom-start"
-          >
+          <Tooltip title={resource.description} placement="bottom-start">
             <Typography color={color} variant="subtitle1">
               {title}
             </Typography>
