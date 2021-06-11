@@ -59,13 +59,12 @@ export default function OSCALControl(props) {
   }
   const classes = useStyles(props);
 
-  const topPart = props.control.parts[0];
   let modificationDisplay;
   if (props.modifications) {
     modificationDisplay = (
       <OSCALControlModification
         modifications={props.modifications}
-        controlPartId={topPart.id}
+        controlPartId={props.control.parts[0].id}
         control={props.control}
       />
     );
