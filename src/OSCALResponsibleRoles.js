@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function OSCALResponsibleRoles(props) {
-  console.log(props);
   const classes = useStyles();
 
   const getPartyName = (partyUuid) => {
