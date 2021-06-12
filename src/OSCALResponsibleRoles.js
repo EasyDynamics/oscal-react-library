@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function OSCALResponsibleRoles(props) {
+  console.log(props);
   const classes = useStyles();
 
   const getPartyName = (partyUuid) => {
@@ -49,7 +50,7 @@ export default function OSCALResponsibleRoles(props) {
                   component="th"
                   scope="row"
                 >
-                  {key}
+                  {role["role-id"]}
                 </TableCell>
                 <TableCell align="right">
                   {role["party-uuids"] &&
