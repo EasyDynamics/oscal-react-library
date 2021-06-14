@@ -49,6 +49,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+/**
+ * Sets up elements of the tab panel.
+ *
+ * @param {*} props
+ * @returns The corresponding tab panel
+ */
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -65,12 +71,19 @@ function TabPanel(props) {
   );
 }
 
+// Set required properties for Tab panel
 TabPanel.propTypes = {
   children: PropTypes.node.isRequired,
   index: PropTypes.node.isRequired,
   value: PropTypes.node.isRequired,
 };
 
+/**
+ * Makes a component dynamic and fit it's associated tab.
+ *
+ * @param {*} index The given index of a component
+ * @returns A components dynamic attributes
+ */
 function a11yProps(index) {
   return {
     id: `vertical-tab-${index}`,
@@ -78,19 +91,29 @@ function a11yProps(index) {
   };
 }
 
+/**
+ * Creates the internal elements of Control Implementation.
+ *
+ * @param {*} props
+ * @returns The corresponding Control Implemenation Request
+ */
 export default function OSCALControlImplementationImplReq(props) {
   const classes = useStyles(props);
   const [value, setValue] = React.useState(0);
 
+  // Updates panel based on tab state change
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  // Error check implementedRequirement statements. In the case that none
+  // are provided, create an empty list.
   let implReqStatements = props.implementedRequirement.statements;
   if (!implReqStatements) {
     implReqStatements = [];
   }
-
+  // Setup UI of Control Implemention with verticle tabs and a tab panel to
+  // display control implementation, which are both wrapped in a card
   return (
     <Card className={`${classes.OSCALImplReq} ${classes.OSCALImplChildLevel}`}>
       <CardContent>
@@ -103,7 +126,7 @@ export default function OSCALControlImplementationImplReq(props) {
             aria-label="Vertical tabs example"
             className={classes.tabs}
           >
-            {props.components.map((component, index) => (
+            {Object.values(props.components).map((component, index) => (
               <Tab
                 label={component.title}
                 {...a11yProps(index)}
@@ -111,7 +134,7 @@ export default function OSCALControlImplementationImplReq(props) {
               />
             ))}
           </Tabs>
-          {props.components.map((component, index) => (
+          {Object.values(props.components).map((component, index) => (
             <TabPanel
               value={value}
               index={index}

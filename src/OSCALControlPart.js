@@ -44,6 +44,11 @@ function getPartLabel(props) {
  *
  * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/implementation-layer/ssp/xml-schema/#global_by-component_h2}
  * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/implementation-layer/ssp/xml-schema/#global_implemented-requirement}
+ *
+ * @param {*} implReqStatements
+ * @param {*} statementId
+ * @param {*} componentId
+ * @returns Returns the by-component object when a statement is found
  */
 /* eslint-disable */
 function getStatementByComponent(implReqStatements, statementId, componentId) {
@@ -138,10 +143,11 @@ function ReplacedProseWithByComponentParameterValue(props) {
       />
     );
   }
+  // Finds a parameter setting in a component statement
   function getParameterValue(parameterId) {
-    // trim
+    // Trims the parameterId to a string containing purley the id,
+    // removing the extra formating
     parameterId = parameterId.substring(18, parameterId.length - 3);
-
     let foundParameterSetting;
     for (const parameterSetting of
       statementByComponent["set-parameters"]
