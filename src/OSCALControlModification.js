@@ -18,37 +18,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /**
- * Create a typography html object for Add/Remove DialogContent
+ * Create a typography html object for addsOrRemovesLabel
  *
- * @param {*} element add or remove object to map into html
- * @param {*} funcText html text to display
+ * @param {*} addsOrRemovesElements add or remove object to map into html
+ * @param {*} addsOrRemovesLabel html text to display
  * @returns html object
  */
-const getTypography = (elements, funcText) => {
+const getAlterAddsOrRemovesDisplay = (
+  addsOrRemovesElements,
+  addsOrRemovesLabel
+) => {
   const typographies = [];
-  if (elements) {
-    elements.forEach((element) => {
-      if (element.props) {
-        element.props.forEach((item) => {
-          typographies.push(
-            <Typography color="textsecondary" paragraph="true" variant="body1">
-              Name:{item.name}, Value:{item.value}
-            </Typography>
-          );
-        });
-      } else if (element.parts) {
-        element.parts.forEach((item) => {
-          typographies.push(
-            <Typography color="textsecondary" paragraph="true" variant="body1">
-              Name:{item.name}, Value:{item.value}
-            </Typography>
-          );
-        });
-      }
-    });
-  }
-
-  return (
+  const result = (
     // TODO - consider making this into a table
     <DialogContentText
       color="textprimary"
@@ -56,17 +37,33 @@ const getTypography = (elements, funcText) => {
       tabIndex={-1}
       variant="h6"
     >
-      {funcText}
+      {addsOrRemovesLabel}
       {typographies}
     </DialogContentText>
   );
+
+  if (!addsOrRemovesElements) {
+    return result;
+  }
+
+  typographies.push(
+    ...addsOrRemovesElements
+      .flatMap((element) => [
+        ...(element.props ?? []),
+        ...(element.parts ?? []),
+      ])
+      .map((item) => (
+        <Typography color="textsecondary" paragraph="true" variant="body1">
+          Name:{item.name}, Value:{item.value}
+        </Typography>
+      ))
+  );
+
+  return result;
 };
 
 /**
- * TODO: Add/Remove ids do not exactly equal controlId's
- * checkID attempts to match relevant add/remove object ids
- * with the controlID. This only applies to FedRAMP profiles such
- * as: https://raw.githubusercontent.com/GSA/fedramp-automation/master/baselines/rev4/json/FedRAMP_rev4_MODERATE-baseline_profile.json
+ * Check if an element has a valid id.
  *
  * @param {*} controlId Control ID to match
  * @param {*} element Add/Remove element to check id of
@@ -74,21 +71,22 @@ const getTypography = (elements, funcText) => {
  * @returns true if element matches controlID
  */
 const checkID = (controlId, element, field) => {
-  let equal = false;
-
   // TODO: Differences in how NIST and FedRAMP implement adds makes
   // this check needed. See if we can clean this up at some point.
   // Assumes the difference is that NIST does not have a "control-id" field
-  if (!element[field]) return true;
+  if (!element[field]) {
+    return true;
+  }
 
   // Throw out invalid id's
-  if (element[field].includes("obj")) return false;
+  if (element[field].includes("obj")) {
+    return false;
+  }
 
-  // Check if id matches
-  if (element[field].includes(controlId)) equal = true;
-  else if (element[field] === controlId.split("_")[0]) equal = true;
-
-  return equal;
+  return (
+    element[field].includes(controlId) ||
+    element[field] === controlId.split("_")[0]
+  );
 };
 
 /**
@@ -100,23 +98,17 @@ const checkID = (controlId, element, field) => {
  * @returns an HTML element
  */
 const getModifcations = (controlId, modList, modText) => {
-  let modLength = 0;
-  const controlParts = [];
-
   // Add everything with ids that match controlPartId
-  modList.forEach((element) => {
-    if (checkID(controlId, element, "by-id")) {
-      modLength += 1;
-      controlParts.push(element);
-    }
-  });
+  const controlParts = modList.filter((element) =>
+    checkID(controlId, element, "by-id")
+  );
 
   // return display & mod length
   return [
     <DialogContent dividers>
-      {getTypography(controlParts, modText)}
+      {getAlterAddsOrRemovesDisplay(controlParts, modText)}
     </DialogContent>,
-    modLength,
+    controlParts.length,
   ];
 };
 
@@ -142,9 +134,6 @@ export default function OSCALControlModification(props) {
   );
 
   let modificationsDisplay;
-  // eslint-disable-next-line
-  const addControlPart = [];
-  const removeControlPart = [];
   let addsDisplay = null;
   let removesDisplay = null;
   let len;

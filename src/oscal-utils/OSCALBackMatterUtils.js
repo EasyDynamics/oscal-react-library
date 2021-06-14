@@ -1,16 +1,20 @@
-export function getAbsoluteUrl(rlink, parentUrl, fixJsonUrls) {
+export function fixJsonUrls(absoluteUrl) {
+  // TODO this is incorrect in the profile (https://github.com/usnistgov/oscal-content/issues/59, https://easydynamics.atlassian.net/browse/EGRC-266)
+  // TODO this workaround must be improved in https://easydynamics.atlassian.net/browse/EGRC-296
+  // We don't want to alter resources being displayed by the OSCALBackMatter component so check fixJsonUrls
+  if (!absoluteUrl.endsWith(".xml")) {
+    return absoluteUrl;
+  }
+  // Replacing all instances of xml with json in the path *should* get us the correct json URL
+  return absoluteUrl.replace(/xml/g, "json");
+}
+
+export function getAbsoluteUrl(rlink, parentUrl) {
   let absoluteUrl = rlink.href;
 
   // TODO - this should be improved for other use cases
   if (!absoluteUrl.startsWith("http")) {
     absoluteUrl = `${parentUrl}/../${absoluteUrl}`;
-  }
-  // TODO this is incorrect in the profile (https://github.com/usnistgov/oscal-content/issues/59, https://easydynamics.atlassian.net/browse/EGRC-266)
-  // TODO this workaround must be improved in https://easydynamics.atlassian.net/browse/EGRC-296
-  // We don't want to alter resources being displayed by the OSCALBackMatter component so check fixJsonUrls
-  if (fixJsonUrls && absoluteUrl.endsWith(".xml")) {
-    // Replacing all instances of xml with json in the path *should* get us the correct json URL
-    absoluteUrl = absoluteUrl.replace(/xml/g, "json");
   }
 
   return absoluteUrl;
@@ -43,5 +47,5 @@ export default function getUriFromBackMatterByHref(
   if (!foundResource) {
     throw new Error("resource not found for href");
   }
-  return getAbsoluteUrl(foundResource.rlinks[0], parentUrl, true);
+  return fixJsonUrls(getAbsoluteUrl(foundResource.rlinks[0], parentUrl));
 }
