@@ -48,19 +48,20 @@ function getPartLabel(props) {
 /* eslint-disable */
 function getStatementByComponent(implReqStatements, statementId, componentId) {
   let foundStatement;
-  for (const [key, statement] of Object.entries(implReqStatements)) {
+  
+  for (const statement of implReqStatements) {
     // TODO Remove underscore replacement when OSCAL example content is fixed (https://github.com/usnistgov/oscal-content/issues/58, https://easydynamics.atlassian.net/browse/EGRC-266)
-    if (key === statementId || key === statementId.replace("_", "")) {
+    if (statement["statement-id"] === statementId || statement["statement-id"] === statementId.replace("_", "")) {
       foundStatement = statement;
     }
   }
   if (!foundStatement || !foundStatement["by-components"]) {
     return;
   }
-  for (const [key, byComponent] of Object.entries(
+  for (const byComponent of 
     foundStatement["by-components"]
-  )) {
-    if (key === componentId) {
+  ) {
+    if (byComponent["component-uuid"] === componentId) {
       return byComponent;
     }
   }
@@ -142,10 +143,10 @@ function ReplacedProseWithByComponentParameterValue(props) {
     parameterId = parameterId.substring(18, parameterId.length - 3);
 
     let foundParameterSetting;
-    for (const [key, parameterSetting] of Object.entries(
-      statementByComponent["parameter-settings"]
-    )) {
-      if (key === parameterId) {
+    for (const parameterSetting of
+      statementByComponent["set-parameters"]
+    ) {
+      if (parameterSetting["param-id"] === parameterId) {
         foundParameterSetting = parameterSetting;
       }
     }

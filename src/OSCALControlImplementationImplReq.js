@@ -103,21 +103,19 @@ export default function OSCALControlImplementationImplReq(props) {
             aria-label="Vertical tabs example"
             className={classes.tabs}
           >
-            {Object.entries(props.components).map(([key, component], index) => (
+            {props.components.map((component, index) => (
               <Tab
                 label={component.title}
                 {...a11yProps(index)}
                 className={classes.tabButton}
-                key={key}
               />
             ))}
           </Tabs>
-          {Object.entries(props.components).map(([key, component], index) => (
+          {props.components.map((component, index) => (
             <TabPanel
               value={value}
               index={index}
               className={classes.tabPanelScrollable}
-              key={key}
             >
               <OSCALControl
                 control={getControlOrSubControl(
@@ -126,7 +124,7 @@ export default function OSCALControlImplementationImplReq(props) {
                 )}
                 childLevel={0}
                 implReqStatements={implReqStatements}
-                componentId={key}
+                componentId={component.uuid}
               />
             </TabPanel>
           ))}

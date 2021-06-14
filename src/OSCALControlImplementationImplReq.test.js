@@ -9,24 +9,25 @@ const controlImplData = {
     {
       uuid: "implemented-requirements-1",
       "control-id": "control-1",
-      statements: {
-        "control-1_smt": {},
-        "control-1_smt.a": {
-          "by-components": {
-            "component-1": {
+      statements: [
+        {
+          "statement-id": "statement-1",
+          uuid: "f3887a91-9ed3-425c-b305-21e4634a1c34",
+          "by-components": [
+            {
+              "component-uuid": "by-component-1",
+              uuid: "a74681b2-fbcb-46eb-90fd-0d55aa74ac7b",
               description: "Component 1 description of implementing control 1",
-              "parameter-settings": {
-                "control-1_prm_1": {
-                  values: ["control 1 / component 1 / parameter 1 value"],
+              "set-parameters": [
+                {
+                  "param-id": "param-1",
+                  values: ["control 1 / component 1 / parameter 1 value"]
                 },
-                "control-1_prm_2": {
-                  values: ["control 1 / component 1 / parameter 2 value"],
-                },
-              },
+              ]
             },
-          },
+          ]
         },
-      },
+      ]
     },
   ],
 };
