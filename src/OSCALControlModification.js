@@ -24,21 +24,30 @@ const useStyles = makeStyles((theme) => ({
  * @param {*} funcText html text to display
  * @returns html object
  */
-const getTypography = (element, funcText) => {
-  let typograhy;
-  if (element.props) {
-    typograhy = element.props.map((prop) => (
-      <Typography color="textsecondary" paragraph="true" variant="body1">
-        Name:{prop.name}, Value:{prop.value}
-      </Typography>
-    ));
-  } else if (element.parts) {
-    typograhy = element.parts.map((prop) => (
-      <Typography color="textsecondary" paragraph="true" variant="body1">
-        Name:{prop.name}, Value:{prop.value}
-      </Typography>
-    ));
+const getTypography = (elements, funcText) => {
+  const typographies = [];
+  if (elements) {
+    elements.forEach((element) => {
+      if (element.props) {
+        element.props.forEach((item) => {
+          typographies.push(
+            <Typography color="textsecondary" paragraph="true" variant="body1">
+              Name:{item.name}, Value:{item.value}
+            </Typography>
+          );
+        });
+      } else if (element.parts) {
+        element.parts.forEach((item) => {
+          typographies.push(
+            <Typography color="textsecondary" paragraph="true" variant="body1">
+              Name:{item.name}, Value:{item.value}
+            </Typography>
+          );
+        });
+      }
+    });
   }
+
   return (
     // TODO - consider making this into a table
     <DialogContentText
@@ -48,7 +57,7 @@ const getTypography = (element, funcText) => {
       variant="h6"
     >
       {funcText}
-      {typograhy}
+      {typographies}
     </DialogContentText>
   );
 };
@@ -105,7 +114,7 @@ const getModifcations = (controlId, modList, modText) => {
   // return display & mod length
   return [
     <DialogContent dividers>
-      {controlParts.map((element) => getTypography(element, modText))}
+      {getTypography(controlParts, modText)}
     </DialogContent>,
     modLength,
   ];
