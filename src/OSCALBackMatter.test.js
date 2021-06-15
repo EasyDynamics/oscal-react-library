@@ -11,19 +11,30 @@ const backMatterTestData = {
       description: "This is a test description for resource",
       rlinks: [
         {
+          href: "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_catalog.json",
+          "media-type": "application/oscal.catalog+json",
+        },
+      ],
+    },
+    {
+      uuid: "dc380596-027f-423b-83f2-82757554ee28",
+      title: "Resource Test Title 2",
+      description: "This is a test description for resource 2",
+      rlinks: [
+        {
           href: "NIST_SP-800-53_rev4_catalog.json",
-          "media-type": "application/oscal.catalog+json"
-        }
+          "media-type": "application/oscal.catalog+json2",
+        },
       ],
     },
   ],
-}
+};
 
 function backMatterRenderer() {
   render(<OSCALBackMatter backMatter={backMatterTestData} />);
 }
 
-export function testOSCALBackMatter(parentElementName, renderer) {
+export default function testOSCALBackMatter(parentElementName, renderer) {
   test(`${parentElementName} displays title`, () => {
     renderer();
     const result = screen.getByText("Resource Test Title");
