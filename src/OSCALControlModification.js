@@ -28,8 +28,19 @@ const getAlterAddsOrRemovesDisplay = (
   addsOrRemovesElements,
   addsOrRemovesLabel
 ) => {
-  const typographies = [];
-  const result = (
+  if (!addsOrRemovesElements?.length) {
+    return null;
+  }
+
+  const typographies = addsOrRemovesElements
+    .flatMap((element) => [...(element.props ?? []), ...(element.parts ?? [])])
+    .map((item) => (
+      <Typography color="textsecondary" paragraph="true" variant="body1">
+        Name:{item.name}, Value:{item.value}
+      </Typography>
+    ));
+
+  return (
     // TODO - consider making this into a table
     <DialogContentText
       color="textprimary"
@@ -41,25 +52,6 @@ const getAlterAddsOrRemovesDisplay = (
       {typographies}
     </DialogContentText>
   );
-
-  if (!addsOrRemovesElements) {
-    return result;
-  }
-
-  typographies.push(
-    ...addsOrRemovesElements
-      .flatMap((element) => [
-        ...(element.props ?? []),
-        ...(element.parts ?? []),
-      ])
-      .map((item) => (
-        <Typography color="textsecondary" paragraph="true" variant="body1">
-          Name:{item.name}, Value:{item.value}
-        </Typography>
-      ))
-  );
-
-  return result;
 };
 
 /**
@@ -84,8 +76,7 @@ const checkID = (controlId, element, field) => {
   }
 
   return (
-    element[field].includes(controlId) ||
-    element[field] === controlId.split("_")[0]
+    element[field].concat("_smt") === controlId || element[field] === controlId
   );
 };
 
@@ -162,7 +153,7 @@ export default function OSCALControlModification(props) {
   }
 
   // Display if altered is true
-  if (alter) {
+  if (modLength) {
     modificationsDisplay = (
       <div>
         <Tooltip title="Modifications">

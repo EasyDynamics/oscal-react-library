@@ -234,6 +234,7 @@ export default function OSCALControlPart(props) {
   } else {
     className = classes.OSCALControlPart;
   }
+
   return (
     <div className={className}>
       {modificationDisplay}
@@ -242,10 +243,12 @@ export default function OSCALControlPart(props) {
         props.part.parts.map((part) => (
           <OSCALControlPart
             part={part}
+            control={props.control}
             parameters={props.parameters}
             implReqStatements={props.implReqStatements}
             componentId={props.componentId}
             key={part.id}
+            modifications={props.modifications}
           />
         ))}
     </div>
