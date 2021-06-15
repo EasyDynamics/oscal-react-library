@@ -54,6 +54,12 @@ export default function testOSCALBackMatter(parentElementName, renderer) {
     const result = screen.getByText("application/oscal.catalog+json");
     expect(result).toBeVisible();
   });
+
+  test(`${parentElementName} loads absolute href`, async () => {
+    renderer();
+    const button = screen.getByRole("button", { name: "application/oscal.catalog+json"});
+    expect(button.getAttribute("href")).toEqual("https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_catalog.json");
+  });
 }
 
 if (!require.main) {
