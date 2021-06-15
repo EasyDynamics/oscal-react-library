@@ -27,10 +27,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /**
- * Creates the control implementation. This function sets up the
- * header and outer grid elements and calls OSCALControlImplementationReqList.
+ * Creates the control implementation by setting up the header and outer grid elements
+ * and calls OSCALControlImplementationReqList.
  *
- * @param {*} props
+ * @param {object} props SSP properties
  * @returns The corresponding Control Implementation
  */
 export default function OSCALControlImplementation(props) {

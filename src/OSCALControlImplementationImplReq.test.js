@@ -22,23 +22,19 @@ const controlImplTestData = {
               "set-parameters": [
                 {
                   "param-id": "control-1_prm_1",
-                  values: [
-                    "control 1 / component 1 / parameter 1 value"
-                  ],
+                  values: ["control 1 / component 1 / parameter 1 value"],
                 },
                 {
                   "param-id": "control-1_prm_2",
-                  values: [
-                    "control 1 / component 1 / parameter 2 value"
-                  ]
+                  values: ["control 1 / component 1 / parameter 2 value"],
                 },
-              ]
+              ],
             },
-          ]
+          ],
         },
-      ]
-    }
-  ]
+      ],
+    },
+  ],
 };
 const componentsTestData = [
   {
@@ -53,12 +49,12 @@ const controlsTestData = [
     params: [
       {
         id: "control-1_prm_1",
-        label: "control 1 / parameter 1 label"
+        label: "control 1 / parameter 1 label",
       },
       {
         id: "control-1_prm_2",
-        label: "control 1 / parameter 2 label"
-      }
+        label: "control 1 / parameter 2 label",
+      },
     ],
     parts: [
       {
@@ -72,14 +68,15 @@ const controlsTestData = [
             props: [
               {
                 name: "label",
-                value: "a."
-              }
+                value: "a.",
+              },
             ],
-            prose: "Does something with {{ insert: param, control-1_prm_1 }} and {{ insert: param, control-1_prm_2 }}"
+            prose:
+              "Does something with {{ insert: param, control-1_prm_1 }} and {{ insert: param, control-1_prm_2 }}",
           },
-        ]
+        ],
       },
-    ]
+    ],
   },
 ];
 
@@ -117,7 +114,7 @@ test("OSCALControlImplementationImplReq displays component implementation descri
       controls={controlsTestData}
     />
   );
-  
+
   userEvent.hover(screen.getByRole("link", { name: "a." }));
   expect(
     await screen.findByText("Component 1 description of implementing control 1")

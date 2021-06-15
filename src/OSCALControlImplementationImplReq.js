@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 /**
  * Sets up elements of the tab panel.
  *
- * @param {*} props
+ * @param {object} props SSP properties
  * @returns The corresponding tab panel
  */
 function TabPanel(props) {
@@ -81,8 +81,8 @@ TabPanel.propTypes = {
 /**
  * Makes a component dynamic and fit it's associated tab.
  *
- * @param {*} index The given index of a component
- * @returns A components dynamic attributes
+ * @param {number} index The given index of a component
+ * @returns A component's dynamic attributes
  */
 function a11yProps(index) {
   return {
@@ -94,13 +94,12 @@ function a11yProps(index) {
 /**
  * Creates the internal elements of Control Implementation.
  *
- * @param {*} props
- * @returns The corresponding Control Implemenation Request
+ * @param {object} props SSP properties
+ * @returns The corresponding Control Implementation Request
  */
 export default function OSCALControlImplementationImplReq(props) {
   const classes = useStyles(props);
   const [value, setValue] = React.useState(0);
-
   // Updates panel based on tab state change
   const handleChange = (event, newValue) => {
     setValue(newValue);

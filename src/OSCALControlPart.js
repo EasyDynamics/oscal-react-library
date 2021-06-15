@@ -45,32 +45,29 @@ function getPartLabel(props) {
  * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/implementation-layer/ssp/xml-schema/#global_by-component_h2}
  * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/implementation-layer/ssp/xml-schema/#global_implemented-requirement}
  *
- * @param {*} implReqStatements
- * @param {*} statementId
- * @param {*} componentId
+ * @param {object} implReqStatements Implementation Request Statements
+ * @param {string} statementId Id of a statement
+ * @param {string} componentId Id of a component
  * @returns Returns the by-component object when a statement is found
  */
-/* eslint-disable */
 function getStatementByComponent(implReqStatements, statementId, componentId) {
-  let foundStatement;
-  
-  for (const statement of implReqStatements) {
-    // TODO Remove underscore replacement when OSCAL example content is fixed (https://github.com/usnistgov/oscal-content/issues/58, https://easydynamics.atlassian.net/browse/EGRC-266)
-    if (statement["statement-id"] === statementId || statement["statement-id"] === statementId.replace("_", "")) {
-      foundStatement = statement;
-    }
-  }
+  // TODO Remove underscore replacement when OSCAL example content is fixed (https://github.com/usnistgov/oscal-content/issues/58, https://easydynamics.atlassian.net/browse/EGRC-266)
+  // Locate matching statement to statementId
+  const foundStatement = implReqStatements.find(
+    (statement) =>
+      statement["statement-id"] === statementId ||
+      statement["statement-id"] === statementId.replace("_", "")
+  );
+  // Error checking: Exit function when statement or it's by-components are not found
   if (!foundStatement || !foundStatement["by-components"]) {
-    return;
+    return null;
   }
-  for (const byComponent of 
-    foundStatement["by-components"]
-  ) {
-    if (byComponent["component-uuid"] === componentId) {
-      return byComponent;
-    }
-  }
-} /* eslint-enable */ /* eslint-disable */
+
+  // Locate matching byComponent to componentId
+  return foundStatement["by-components"].find(
+    (byComponent) => byComponent["component-uuid"] === componentId
+  );
+} /* eslint-disable */
 
 /**
  * Replaces the parameter placeholders in the given prose with the given label
@@ -145,27 +142,31 @@ function ReplacedProseWithByComponentParameterValue(props) {
   }
   // Finds a parameter setting in a component statement
   function getParameterValue(parameterId) {
-    // Trims the parameterId to a string containing purley the id,
-    // removing the extra formating
+    // Trims parameterId to only contain the id from the structure of a properly formatted parameter
+    // placeholder. This removes the first 18 characters: "{{ insert: param, " and the last 3
+    // characters from the end of the string: " }}".
     parameterId = parameterId.substring(18, parameterId.length - 3);
-    let foundParameterSetting;
-    for (const parameterSetting of
-      statementByComponent["set-parameters"]
-    ) {
-      if (parameterSetting["param-id"] === parameterId) {
-        foundParameterSetting = parameterSetting;
-      }
-    }
+
+    // Locate matching parameter to parameterId
+    const foundParameterSetting = statementByComponent["set-parameters"].find(
+      (parameterSetting) => parameterSetting["param-id"] === parameterId
+    );
+
+    // Error checking: Exit function when parameter setting or it's values are not found
     if (!foundParameterSetting || !foundParameterSetting.values) {
       return;
     }
+
     // TODO parse select parameters
     return `<span class="${
       props.componentParameterSettingClassname
     }" >${foundParameterSetting.values.toString()}</span>`;
   }
 
-  const replacedProse = props.prose.replace(/\{\{ insert: param, ([0-9a-zA-B-_.]*) \}\}/g, getParameterValue);
+  const replacedProse = props.prose.replace(
+    /\{\{ insert: param, ([0-9a-zA-B-_.]*) \}\}/g,
+    getParameterValue
+  );
   const { description } = statementByComponent;
   // TODO dangerouslySetInnerHTML is not safe, there are other alternatives
   return (
