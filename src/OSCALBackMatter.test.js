@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import OSCALBackMatter from "./OSCALBackMatter";
 
-const backMatterTestData = {
+export const backMatterTestData = {
   resources: [
     {
       uuid: "dc380596-027f-423b-83f2-82757554ee27",
@@ -37,7 +37,7 @@ function backMatterRenderer() {
 }
 
 export default function testOSCALBackMatter(parentElementName, renderer) {
-  test(`${parentElementName} displays title`, () => {
+  test(`${parentElementName} displays resource title`, () => {
     renderer();
     const result = screen.getByText("Resource Test Title");
     expect(result).toBeVisible();
@@ -61,6 +61,12 @@ export default function testOSCALBackMatter(parentElementName, renderer) {
     renderer();
     const button = screen.getByRole("button", { name: "application/oscal.catalog+json"});
     expect(button.getAttribute("href")).toEqual("https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_catalog.json");
+  });
+
+  test(`${parentElementName} loads relative href`, async () => {
+    renderer();
+    const button = screen.getByRole("button", { name: "application/oscal.catalog+json2"});
+    expect(button.getAttribute("href")).toEqual("https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json/../NIST_SP-800-53_rev4_catalog.json");
   });
 }
 
