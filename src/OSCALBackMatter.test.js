@@ -30,8 +30,10 @@ const backMatterTestData = {
   ],
 };
 
+const parentUrlTestData = "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json";
+
 function backMatterRenderer() {
-  render(<OSCALBackMatter backMatter={backMatterTestData} />);
+  render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
 }
 
 export default function testOSCALBackMatter(parentElementName, renderer) {
