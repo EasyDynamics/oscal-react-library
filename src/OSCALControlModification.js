@@ -11,6 +11,12 @@ import LayersIcon from "@material-ui/icons/Layers";
 import { makeStyles } from "@material-ui/core/styles";
 import { Tooltip, Typography } from "@material-ui/core";
 
+// Recursively get all props from a list of parts or props
+const allProps = (element) => [
+  ...(element?.props ?? []),
+  ...(element?.parts?.flatMap(allProps) ?? []),
+];
+
 const useStyles = makeStyles((theme) => ({
   OSCALControlModificationsButton: {
     color: "#002867",
@@ -21,24 +27,34 @@ const useStyles = makeStyles((theme) => ({
  * Create a typography html object for addsOrRemovesLabel
  *
  * @param {*} addsOrRemovesElements add or remove object to map into html
- * @param {*} addsOrRemovesLabel html text to display
+ * @param {*} addsOrRemoves boolean variable, true if adding
  * @returns html object
  */
-const getAlterAddsOrRemovesDisplay = (
-  addsOrRemovesElements,
-  addsOrRemovesLabel
-) => {
+const getAlterAddsOrRemovesDisplay = (addsOrRemovesElements, addsOrRemoves) => {
   if (!addsOrRemovesElements?.length) {
     return null;
   }
 
-  const typographies = addsOrRemovesElements
-    .flatMap((element) => [...(element.props ?? []), ...(element.parts ?? [])])
-    .map((item) => (
+  let addsOrRemovesLabel;
+  let typographies;
+
+  if (!addsOrRemoves) {
+    // Removing
+    addsOrRemovesLabel = "Removes:";
+    typographies = addsOrRemovesElements.map((item) => (
       <Typography color="textsecondary" paragraph="true" variant="body1">
-        Name:{item.name}, Value:{item.value}
+        Name: {item.name}
       </Typography>
     ));
+  } else if (addsOrRemoves) {
+    // Adding
+    addsOrRemovesLabel = "Adds:";
+    typographies = addsOrRemovesElements.flatMap(allProps).map((item) => (
+      <Typography color="textsecondary" paragraph="true" variant="body1">
+        Name: {item.name}, Value: {item.value}
+      </Typography>
+    ));
+  }
 
   return (
     // TODO - consider making this into a table
@@ -129,7 +145,7 @@ export default function OSCALControlModification(props) {
       [addsDisplay, len] = getModifications(
         props.controlPartId,
         alter.adds,
-        "Adds:"
+        true
       );
       modLength += len;
     }
@@ -139,7 +155,7 @@ export default function OSCALControlModification(props) {
       [removesDisplay, len] = getModifications(
         props.controlPartId,
         alter.removes,
-        "Removes:"
+        false
       );
       modLength += len;
     }
