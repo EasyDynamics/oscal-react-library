@@ -57,12 +57,12 @@ const getAlterAddsOrRemovesDisplay = (
 /**
  * Check if an element has a valid id.
  *
- * @param {*} controlId Control ID to match
+ * @param {*} controlPartId Control part ID to match
  * @param {*} element Add/Remove element to check id of
  * @param {*} field Field of Add/Remove element to check
  * @returns true if element matches controlID
  */
-const checkID = (controlId, element, field) => {
+const isRelevantId = (controlPartId, element, field) => {
   // TODO: Differences in how NIST and FedRAMP implement adds makes
   // this check needed. See if we can clean this up at some point.
   // Assumes the difference is that NIST does not have a "control-id" field
@@ -70,28 +70,21 @@ const checkID = (controlId, element, field) => {
     return true;
   }
 
-  // Throw out invalid id's
-  if (element[field].includes("obj")) {
-    return false;
-  }
-
-  return (
-    element[field].concat("_smt") === controlId || element[field] === controlId
-  );
+  return element[field] === controlPartId;
 };
 
 /**
  * Get the modifications from the adds/removes list.
  *
- * @param {*} controlId Control Id to check compare element id's with
+ * @param {*} controlPartId Control part Id to check compare element id's with
  * @param {*} modList List of modifications
  * @param {*} modText String to display type of modification
  * @returns an HTML element
  */
-const getModifcations = (controlId, modList, modText) => {
+const getModifications = (controlPartId, modList, modText) => {
   // Add everything with ids that match controlPartId
   const controlParts = modList.filter((element) =>
-    checkID(controlId, element, "by-id")
+    isRelevantId(controlPartId, element, "by-id")
   );
 
   // return display & mod length
@@ -121,7 +114,7 @@ export default function OSCALControlModification(props) {
 
   // Finds the control-id within alters and matches it with a resolved control
   const alter = props.modifications.alters.find(
-    (element) => element["control-id"] === props.control.id
+    (element) => element["control-id"] === props.controlId
   );
 
   let modificationsDisplay;
@@ -133,7 +126,7 @@ export default function OSCALControlModification(props) {
   if (alter) {
     // Get all add modifications
     if (alter.adds) {
-      [addsDisplay, len] = getModifcations(
+      [addsDisplay, len] = getModifications(
         props.controlPartId,
         alter.adds,
         "Adds:"
@@ -143,7 +136,7 @@ export default function OSCALControlModification(props) {
 
     // Get all remove modifications
     if (alter.removes) {
-      [removesDisplay, len] = getModifcations(
+      [removesDisplay, len] = getModifications(
         props.controlPartId,
         alter.removes,
         "Removes:"
