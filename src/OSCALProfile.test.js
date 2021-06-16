@@ -4,6 +4,8 @@ import { OSCALProfileLoader } from "./OSCALLoader";
 import OSCALProfile from "./OSCALProfile";
 import { metadataTestData, testOSCALMetadata } from "./OSCALMetadata.test";
 import { controlsData } from "./OSCALComponentDefinitionControlImplementation.test";
+import { backMatterTestData } from "./OSCALBackMatter.test";
+import testOSCALBackMatter from "./OSCALBackMatter.test";
 
 const profileTestData = {
   uuid: "3afae418-b105-47ba-b51d-653a1a6b9267",
@@ -13,39 +15,25 @@ const profileTestData = {
       href: "#dc380596-027f-423b-83f2-82757554ee27",
       "include-controls": [
         {
-          "with-ids": [
-              "control-1",
-              "control-1.1",
-              "control-2",
-              "control-2.1"
-          ],
+          "with-ids": ["control-1", "control-1.1", "control-2", "control-2.1"],
         },
       ],
     },
   ],
   resolvedControls: controlsData,
-  "back-matter": {
-    resources: [
-      {
-        uuid: "dc380596-027f-423b-83f2-82757554ee27",
-        description: "This is an example description for Back Matter",
-        rlinks: [
-          {
-            href: "NIST_SP-800-53_rev4_catalog.xml",
-            "media-type": "application/oscal.catalog+json"
-          }
-        ],
-      },
-    ],
-  },
+  "back-matter": backMatterTestData,
 };
+
+const profileParentUrlTestData = "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json";
 
 test("OSCALProfile loads", () => {
   render(<OSCALProfileLoader />);
 });
 
 function profileRenderer() {
-  render(<OSCALProfile profile={profileTestData} />);
+  render(<OSCALProfile profile={profileTestData} parentUrl={profileParentUrlTestData} />);
 }
 
 testOSCALMetadata("OSCALProfile", profileRenderer);
+
+testOSCALBackMatter("OSCALProfile", profileRenderer);
