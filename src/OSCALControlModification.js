@@ -11,12 +11,6 @@ import LayersIcon from "@material-ui/icons/Layers";
 import { makeStyles } from "@material-ui/core/styles";
 import { Tooltip, Typography } from "@material-ui/core";
 
-// Recursively get all props from a list of parts or props
-const allProps = (element) => [
-  ...(element?.props ?? []),
-  ...(element?.parts?.flatMap(allProps) ?? []),
-];
-
 const useStyles = makeStyles((theme) => ({
   OSCALControlModificationsButton: {
     color: "#002867",
@@ -26,35 +20,24 @@ const useStyles = makeStyles((theme) => ({
 /**
  * Create a typography html object for addsOrRemovesLabel
  *
- * @param {*} addsOrRemovesElements add or remove object to map into html
- * @param {*} addsOrRemoves boolean variable, true if adding
+ * @param {Object} addsElements add or remove object to map into html
+ * @param {String} addsLabel boolean variable, true if adding
  * @returns html object
  */
-const getAlterAddsOrRemovesDisplay = (addsOrRemovesElements, addsOrRemoves) => {
-  if (!addsOrRemovesElements?.length) {
+const getAlterAddsOrRemovesDisplay = (addsElements, addsLabel) => {
+  if (!addsElements?.length) {
     return null;
   }
 
-  let addsOrRemovesLabel;
-  let typographies;
-
-  if (!addsOrRemoves) {
-    // Removing
-    addsOrRemovesLabel = "Removes:";
-    typographies = addsOrRemovesElements.map((item) => (
-      <Typography color="textsecondary" paragraph="true" variant="body1">
-        Name: {item.name}
-      </Typography>
-    ));
-  } else if (addsOrRemoves) {
-    // Adding
-    addsOrRemovesLabel = "Adds:";
-    typographies = addsOrRemovesElements.flatMap(allProps).map((item) => (
+  // Adding
+  // Ignore parts for now
+  const typographies = addsElements
+    .flatMap((element) => element.props ?? [])
+    .map((item) => (
       <Typography color="textsecondary" paragraph="true" variant="body1">
         Name: {item.name}, Value: {item.value}
       </Typography>
     ));
-  }
 
   return (
     // TODO - consider making this into a table
@@ -64,7 +47,7 @@ const getAlterAddsOrRemovesDisplay = (addsOrRemovesElements, addsOrRemoves) => {
       tabIndex={-1}
       variant="h6"
     >
-      {addsOrRemovesLabel}
+      {addsLabel}
       {typographies}
     </DialogContentText>
   );
@@ -73,28 +56,23 @@ const getAlterAddsOrRemovesDisplay = (addsOrRemovesElements, addsOrRemoves) => {
 /**
  * Check if an element has a valid id.
  *
- * @param {*} controlPartId Control part ID to match
- * @param {*} element Add/Remove element to check id of
- * @param {*} field Field of Add/Remove element to check
+ * @param {String} controlPartId Control part ID to match
+ * @param {Object} element Add/Remove element to check id of
+ * @param {String} field Field of Add/Remove element to check
  * @returns true if element matches controlID
  */
-const isRelevantId = (controlPartId, element, field) => {
+const isRelevantId = (controlPartId, element, field) =>
   // TODO: Differences in how NIST and FedRAMP implement adds makes
   // this check needed. See if we can clean this up at some point.
   // Assumes the difference is that NIST does not have a "control-id" field
-  if (!element[field]) {
-    return true;
-  }
-
-  return element[field] === controlPartId;
-};
+  !element[field] || element[field] === controlPartId;
 
 /**
  * Get the modifications from the adds/removes list.
  *
- * @param {*} controlPartId Control part Id to check compare element id's with
- * @param {*} modList List of modifications
- * @param {*} modText String to display type of modification
+ * @param {String} controlPartId Control part Id to check compare element id's with
+ * @param {object} modList List of modifications
+ * @param {String} modText String to display type of modification
  * @returns an HTML element
  */
 const getModifications = (controlPartId, modList, modText) => {
@@ -135,7 +113,7 @@ export default function OSCALControlModification(props) {
 
   let modificationsDisplay;
   let addsDisplay = null;
-  let removesDisplay = null;
+  const removesDisplay = null;
   let len;
   let modLength = 0;
 
@@ -145,20 +123,15 @@ export default function OSCALControlModification(props) {
       [addsDisplay, len] = getModifications(
         props.controlPartId,
         alter.adds,
-        true
+        "Adds "
       );
       modLength += len;
     }
 
     // Get all remove modifications
-    if (alter.removes) {
-      [removesDisplay, len] = getModifications(
-        props.controlPartId,
-        alter.removes,
-        false
-      );
-      modLength += len;
-    }
+    // if (alter.removes) {
+    // DO NOTHING FOR NOW
+    // }
   }
 
   // Display if altered is true
