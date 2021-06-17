@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ComponentTooltip = withStyles((theme) => ({
+const StyledTooltip = withStyles((theme) => ({
   tooltip: {
     fontSize: "1em",
   },
@@ -177,9 +177,9 @@ function ReplacedProseWithByComponentParameterValue(props) {
   // TODO dangerouslySetInnerHTML is not safe, there are other alternatives
   return (
     <Typography>
-      <ComponentTooltip title={description}>
+      <StyledTooltip title={description}>
         <Link href="">{props.label}</Link>
-      </ComponentTooltip>
+      </StyledTooltip>
       {"\u00A0"}
       <span dangerouslySetInnerHTML={{ __html: replacedProse }} />
     </Typography>

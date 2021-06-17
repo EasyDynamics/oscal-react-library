@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ComponentTooltip = withStyles((theme) => ({
+const StyledTooltip = withStyles((theme) => ({
   tooltip: {
     fontSize: "1em",
   },
@@ -57,11 +57,11 @@ export default function OSCALComponentDefinitionComponent(props) {
                   <TableBody>
                     <TableRow key={props.component.uuid}>
                       <TableCell component="th" scope="row">
-                        <ComponentTooltip title={props.component.description}>
+                        <StyledTooltip title={props.component.description}>
                           <Typography variant="body2">
                             {props.component.title}
                           </Typography>
-                        </ComponentTooltip>
+                        </StyledTooltip>
                       </TableCell>
                       <TableCell>{props.component.type}</TableCell>
                       <TableCell>

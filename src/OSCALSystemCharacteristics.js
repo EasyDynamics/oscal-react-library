@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ComponentTooltip = withStyles((theme) => ({
+const StyledTooltip = withStyles((theme) => ({
   tooltip: {
     fontSize: "1em",
   },
@@ -93,9 +93,7 @@ export default function OSCALSystemCharacteristics(props) {
               xs={2}
               className={classes.OSCALSystemCharacteristicsInfo}
             >
-              <ComponentTooltip
-                title={props.systemCharacteristics.status.remarks}
-              >
+              <StyledTooltip title={props.systemCharacteristics.status.remarks}>
                 <TextField
                   disabled
                   id="system-characteristics-status"
@@ -105,7 +103,7 @@ export default function OSCALSystemCharacteristics(props) {
                   margin="dense"
                   fullWidth
                 />
-              </ComponentTooltip>
+              </StyledTooltip>
             </Grid>
             <Grid
               item
@@ -218,11 +216,11 @@ export default function OSCALSystemCharacteristics(props) {
                     ].map((informationType) => (
                       <TableRow key={informationType.uuid}>
                         <TableCell component="th" scope="row">
-                          <ComponentTooltip title={informationType.description}>
+                          <StyledTooltip title={informationType.description}>
                             <Typography variant="body2">
                               {informationType.title}
                             </Typography>
-                          </ComponentTooltip>
+                          </StyledTooltip>
                         </TableCell>
                         <TableCell>
                           {informationType.categorizations.map(
