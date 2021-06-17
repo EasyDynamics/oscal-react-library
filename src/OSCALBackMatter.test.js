@@ -57,13 +57,13 @@ export default function testOSCALBackMatter(parentElementName, renderer) {
     expect(result).toBeVisible();
   });
 
-  test(`${parentElementName} loads absolute href`, async () => {
+  test(`${parentElementName} renders absolute href`, async () => {
     renderer();
     const button = screen.getByRole("button", { name: "application/oscal.catalog+json"});
     expect(button.getAttribute("href")).toEqual("https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_catalog.json");
   });
 
-  test(`${parentElementName} loads relative href`, async () => {
+  test(`${parentElementName} renders relative href`, async () => {
     renderer();
     const button = screen.getByRole("button", { name: "application/oscal.catalog+json2"});
     expect(button.getAttribute("href")).toEqual("https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json/../NIST_SP-800-53_rev4_catalog.json");
