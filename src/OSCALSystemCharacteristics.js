@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
@@ -37,6 +37,12 @@ const useStyles = makeStyles((theme) => ({
     "text-transform": "capitalize",
   },
 }));
+
+const ComponentTooltip = withStyles((theme) => ({
+  tooltip: {
+    fontSize: "1em",
+  },
+}))(Tooltip);
 
 export default function OSCALSystemCharacteristics(props) {
   const classes = useStyles();
@@ -87,7 +93,9 @@ export default function OSCALSystemCharacteristics(props) {
               xs={2}
               className={classes.OSCALSystemCharacteristicsInfo}
             >
-              <Tooltip title={props.systemCharacteristics.status.remarks}>
+              <ComponentTooltip
+                title={props.systemCharacteristics.status.remarks}
+              >
                 <TextField
                   disabled
                   id="system-characteristics-status"
@@ -97,7 +105,7 @@ export default function OSCALSystemCharacteristics(props) {
                   margin="dense"
                   fullWidth
                 />
-              </Tooltip>
+              </ComponentTooltip>
             </Grid>
             <Grid
               item
@@ -210,11 +218,11 @@ export default function OSCALSystemCharacteristics(props) {
                     ].map((informationType) => (
                       <TableRow key={informationType.uuid}>
                         <TableCell component="th" scope="row">
-                          <Tooltip title={informationType.description}>
+                          <ComponentTooltip title={informationType.description}>
                             <Typography variant="body2">
                               {informationType.title}
                             </Typography>
-                          </Tooltip>
+                          </ComponentTooltip>
                         </TableCell>
                         <TableCell>
                           {informationType.categorizations.map(

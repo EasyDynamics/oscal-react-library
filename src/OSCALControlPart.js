@@ -1,6 +1,6 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Link from "@material-ui/core/Link";
 import Tooltip from "@material-ui/core/Tooltip";
 import OSCALControlGuidance from "./OSCALControlGuidance";
@@ -23,6 +23,12 @@ const useStyles = makeStyles((theme) => ({
     "border-radius": "5px",
   },
 }));
+
+const ComponentTooltip = withStyles((theme) => ({
+  tooltip: {
+    fontSize: "1em",
+  },
+}))(Tooltip);
 
 // TODO - This is probably 800-53 specific?
 /* eslint-disable */
@@ -171,9 +177,9 @@ function ReplacedProseWithByComponentParameterValue(props) {
   // TODO dangerouslySetInnerHTML is not safe, there are other alternatives
   return (
     <Typography>
-      <Tooltip title={<Typography variant="body2">{description}</Typography>}>
+      <ComponentTooltip title={description}>
         <Link href="">{props.label}</Link>
-      </Tooltip>
+      </ComponentTooltip>
       {"\u00A0"}
       <span dangerouslySetInnerHTML={{ __html: replacedProse }} />
     </Typography>

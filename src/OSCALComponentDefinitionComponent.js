@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
@@ -27,6 +27,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const ComponentTooltip = withStyles((theme) => ({
+  tooltip: {
+    fontSize: "1em",
+  },
+}))(Tooltip);
+
 export default function OSCALComponentDefinitionComponent(props) {
   const classes = useStyles();
 
@@ -51,11 +57,11 @@ export default function OSCALComponentDefinitionComponent(props) {
                   <TableBody>
                     <TableRow key={props.component.uuid}>
                       <TableCell component="th" scope="row">
-                        <Tooltip title={props.component.description}>
+                        <ComponentTooltip title={props.component.description}>
                           <Typography variant="body2">
                             {props.component.title}
                           </Typography>
-                        </Tooltip>
+                        </ComponentTooltip>
                       </TableCell>
                       <TableCell>{props.component.type}</TableCell>
                       <TableCell>
