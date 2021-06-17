@@ -188,5 +188,5 @@ export default function OSCALControlModification(props) {
     modificationsDisplay = null;
   }
 
-  return <>{modificationsDisplay}</>;
+  return modificationsDisplay;
 }

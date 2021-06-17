@@ -64,7 +64,7 @@ export default function OSCALControl(props) {
     modificationDisplay = (
       <OSCALControlModification
         modifications={props.modifications}
-        controlPartId={props.control.parts[0].id}
+        controlPartId={props.control.id}
         control={props.control}
       />
     );
@@ -91,7 +91,7 @@ export default function OSCALControl(props) {
               implReqStatements={props.implReqStatements}
               componentId={props.componentId}
               control={props.control}
-              modifications={index !== 0 && props.modifications}
+              modifications={props.modifications}
               // eslint-disable-next-line
               key={`part-${index}`}
             />

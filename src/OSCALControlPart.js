@@ -106,7 +106,7 @@ function ReplacedProseWithParameterLabel(props) {
   }
   return (
     <Typography className={props.className}>
-      {props.label} {replacedProse}
+      {props.label} {replacedProse} {props.modificationDisplay}
     </Typography>
   );
 } /* eslint-disable */
@@ -136,6 +136,7 @@ function ReplacedProseWithByComponentParameterValue(props) {
         prose={props.prose}
         parameters={props.parameters}
         className={props.unimplementedStatementClassName}
+        modificationDisplay={props.modificationDisplay}
       />
     );
   }
@@ -173,6 +174,7 @@ function ReplacedProseWithByComponentParameterValue(props) {
       </Tooltip>
       {"\u00A0"}
       <span dangerouslySetInnerHTML={{ __html: replacedProse }} />
+      {props.modificationDisplay}
     </Typography>
   );
 } /* eslint-enable */
@@ -220,6 +222,7 @@ export default function OSCALControlPart(props) {
         componentParameterSettingClassname={
           classes.OSCALComponentParameterSetting
         }
+        modificationDisplay={modificationDisplay}
       />
     );
   } else {
@@ -228,6 +231,7 @@ export default function OSCALControlPart(props) {
         label={label}
         prose={props.part.prose}
         parameters={props.parameters}
+        modificationDisplay={modificationDisplay}
       />
     );
   }
