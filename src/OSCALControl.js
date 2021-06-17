@@ -65,7 +65,7 @@ export default function OSCALControl(props) {
       <OSCALControlModification
         modifications={props.modifications}
         controlPartId={props.control.id}
-        control={props.control}
+        controlId={props.control.id}
       />
     );
   }

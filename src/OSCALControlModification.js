@@ -61,11 +61,11 @@ const getAlterAddsOrRemovesDisplay = (addsElements, addsLabel) => {
  * @param {String} field Field of Add/Remove element to check
  * @returns true if element matches controlID
  */
-const isRelevantId = (controlPartId, element, field) =>
+const isRelevantId = (controlPartId, element, field, isTopLevel) =>
   // TODO: Differences in how NIST and FedRAMP implement adds makes
   // this check needed. See if we can clean this up at some point.
   // Assumes the difference is that NIST does not have a "control-id" field
-  !element[field] || element[field] === controlPartId;
+  (!element[field] && isTopLevel) || element[field] === controlPartId;
 
 /**
  * Get the modifications from the adds/removes list.
@@ -75,10 +75,10 @@ const isRelevantId = (controlPartId, element, field) =>
  * @param {String} modText String to display type of modification
  * @returns an HTML element
  */
-const getModifications = (controlPartId, modList, modText) => {
+const getModifications = (controlPartId, isTopLevel, modList, modText) => {
   // Add everything with ids that match controlPartId
   const controlParts = modList.filter((element) =>
-    isRelevantId(controlPartId, element, "by-id")
+    isRelevantId(controlPartId, element, "by-id", isTopLevel)
   );
 
   // return display & mod length
@@ -122,6 +122,7 @@ export default function OSCALControlModification(props) {
     if (alter.adds) {
       [addsDisplay, len] = getModifications(
         props.controlPartId,
+        props.controlPartId === props.controlId,
         alter.adds,
         "Adds "
       );
@@ -137,7 +138,7 @@ export default function OSCALControlModification(props) {
   // Display if altered is true
   if (modLength) {
     modificationsDisplay = (
-      <>
+      <span>
         <Tooltip title="Modifications">
           <Badge
             anchorOrigin={{
@@ -174,7 +175,7 @@ export default function OSCALControlModification(props) {
             </Button>
           </DialogActions>
         </Dialog>
-      </>
+      </span>
     );
   } else {
     modificationsDisplay = null;
