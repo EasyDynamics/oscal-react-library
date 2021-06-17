@@ -57,28 +57,31 @@ const getAlterAddsOrRemovesDisplay = (addsElements, addsLabel) => {
  * Check if an element has a valid id.
  *
  * @param {String} controlPartId Control part ID to match
+ * @param {String} controlId ID of the control, used to check if this is a top-level modification
  * @param {Object} element Add/Remove element to check id of
  * @param {String} field Field of Add/Remove element to check
- * @returns true if element matches controlID
+ * @returns true if element matches controlPartID, OR if this should render a top-level modification
  */
-const isRelevantId = (controlPartId, element, field, isTopLevel) =>
+const isRelevantId = (controlPartId, controlId, element, field) =>
   // TODO: Differences in how NIST and FedRAMP implement adds makes
   // this check needed. See if we can clean this up at some point.
-  // Assumes the difference is that NIST does not have a "control-id" field
-  (!element[field] && isTopLevel) || element[field] === controlPartId;
+  // Assumes the difference is that NIST does not have a "by-id" field
+  (!element[field] && controlPartId === controlId) ||
+  element[field] === controlPartId;
 
 /**
  * Get the modifications from the adds/removes list.
  *
  * @param {String} controlPartId Control part Id to check compare element id's with
+ * @param {String} controlId ID of the control
  * @param {object} modList List of modifications
  * @param {String} modText String to display type of modification
  * @returns an HTML element
  */
-const getModifications = (controlPartId, isTopLevel, modList, modText) => {
+const getModifications = (controlPartId, controlId, modList, modText) => {
   // Add everything with ids that match controlPartId
   const controlParts = modList.filter((element) =>
-    isRelevantId(controlPartId, element, "by-id", isTopLevel)
+    isRelevantId(controlPartId, controlId, element, "by-id")
   );
 
   // return display & mod length
@@ -106,6 +109,9 @@ export default function OSCALControlModification(props) {
     setOpen(false);
   };
 
+  // If this was called at the top-level of the control, the id is the same as control id
+  const partId = props.controlPartId ? props.controlPartId : props.controlId;
+
   // Finds the control-id within alters and matches it with a resolved control
   const alter = props.modifications.alters.find(
     (element) => element["control-id"] === props.controlId
@@ -121,8 +127,8 @@ export default function OSCALControlModification(props) {
     // Get all add modifications
     if (alter.adds) {
       [addsDisplay, len] = getModifications(
-        props.controlPartId,
-        props.controlPartId === props.controlId,
+        partId,
+        props.controlId,
         alter.adds,
         "Adds "
       );

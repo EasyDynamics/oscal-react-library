@@ -64,7 +64,6 @@ export default function OSCALControl(props) {
     modificationDisplay = (
       <OSCALControlModification
         modifications={props.modifications}
-        controlPartId={props.control.id}
         controlId={props.control.id}
       />
     );
