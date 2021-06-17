@@ -115,7 +115,11 @@ test("OSCALControlImplementationImplReq displays component implementation descri
     />
   );
 
-  userEvent.hover(screen.getByRole("link", { name: "a." }));
+  userEvent.hover(
+    screen.getByRole("link", {
+      name: "Component 1 description of implementing control 1",
+    })
+  );
   expect(
     await screen.findByText("Component 1 description of implementing control 1")
   ).toBeInTheDocument();
