@@ -17,6 +17,79 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+/**
+ * Create a typography html object for addsOrRemovesLabel
+ *
+ * @param {Object} addsElements add or remove object to map into html
+ * @param {String} addsLabel boolean variable, true if adding
+ * @returns html object
+ */
+const getAlterAddsOrRemovesDisplay = (addsElements, addsLabel) => {
+  if (!addsElements?.length) {
+    return null;
+  }
+
+  // Adding
+  // Ignore parts for now
+  const typographies = addsElements
+    .flatMap((element) => element.props ?? [])
+    .map((item) => (
+      <Typography color="textsecondary" paragraph="true" variant="body1">
+        Name: {item.name}, Value: {item.value}
+      </Typography>
+    ));
+
+  return (
+    // TODO - consider making this into a table
+    <DialogContentText
+      color="textprimary"
+      id="scroll-dialog-description"
+      tabIndex={-1}
+      variant="h6"
+    >
+      {addsLabel}
+      {typographies}
+    </DialogContentText>
+  );
+};
+
+/**
+ * Check if an element has a valid id.
+ *
+ * @param {String} controlPartId Control part ID to match
+ * @param {Object} element Add/Remove element to check id of
+ * @param {String} field Field of Add/Remove element to check
+ * @returns true if element matches controlID
+ */
+const isRelevantId = (controlPartId, element, field) =>
+  // TODO: Differences in how NIST and FedRAMP implement adds makes
+  // this check needed. See if we can clean this up at some point.
+  // Assumes the difference is that NIST does not have a "control-id" field
+  !element[field] || element[field] === controlPartId;
+
+/**
+ * Get the modifications from the adds/removes list.
+ *
+ * @param {String} controlPartId Control part Id to check compare element id's with
+ * @param {object} modList List of modifications
+ * @param {String} modText String to display type of modification
+ * @returns an HTML element
+ */
+const getModifications = (controlPartId, modList, modText) => {
+  // Add everything with ids that match controlPartId
+  const controlParts = modList.filter((element) =>
+    isRelevantId(controlPartId, element, "by-id")
+  );
+
+  // return display & mod length
+  return [
+    <DialogContent dividers>
+      {getAlterAddsOrRemovesDisplay(controlParts, modText)}
+    </DialogContent>,
+    controlParts.length,
+  ];
+};
+
 export default function OSCALControlModification(props) {
   if (!props.modifications || !props.modifications.alters) {
     return null;
@@ -33,117 +106,36 @@ export default function OSCALControlModification(props) {
     setOpen(false);
   };
 
-  // Check the number of adds and removes for a number to be displayed as the badge
-  const getModLength = (adds, removes) => {
-    let addsLength = 0;
-    let removesLength = 0;
-    if (adds) {
-      addsLength = adds.length;
-    }
-    if (removes) {
-      removesLength = removes.length;
-    }
-    return addsLength + removesLength;
-  };
-
   // Finds the control-id within alters and matches it with a resolved control
   const alter = props.modifications.alters.find(
-    (element) => element["control-id"] === props.control.id
+    (element) => element["control-id"] === props.controlId
   );
 
   let modificationsDisplay;
-  let addObject;
-  let removeObject;
-  // eslint-disable-next-line
-  const addRemoveControlPart = [];
-  let addsDisplay;
-  let removesDisplay;
+  let addsDisplay = null;
+  const removesDisplay = null;
+  let len;
+  let modLength = 0;
 
   if (alter) {
+    // Get all add modifications
     if (alter.adds) {
-      // iterate through each "add" and check if the id-ref matches props.partId
-      // if it matches, push the "add" to the array
-      alter.adds.forEach((add) => {
-        if (add["id-ref"]) {
-          addObject = add.find((add) => add["id-ref"] === props.controlPartId);
-          addRemoveControlPart.push(...addObject);
-        }
-      });
-      addsDisplay = (
-        <DialogContent dividers>
-          {alter.adds.map((add) => (
-            // TODO - consider making this into a table
-            <DialogContentText
-              color="textprimary"
-              id="scroll-dialog-description"
-              tabIndex={-1}
-              variant="h6"
-            >
-              Adds:
-              {add.props.map((prop) => (
-                <Typography
-                  color="textsecondary"
-                  paragraph="true"
-                  variant="body1"
-                >
-                  Name:{prop.name}, Value:{prop.value}
-                </Typography>
-              ))}
-            </DialogContentText>
-          ))}
-        </DialogContent>
+      [addsDisplay, len] = getModifications(
+        props.controlPartId,
+        alter.adds,
+        "Adds "
       );
+      modLength += len;
     }
 
-    if (alter.removes) {
-      // iterate through each "add" and check if the id-ref matches props.partId
-      // if it matches, push the "add" to the array
-      alter.removes.forEach((remove) => {
-        if (remove["id-ref"]) {
-          removeObject = remove.find(
-            (remove) => remove["id-ref"] === props.controlPartId
-          );
-          addRemoveControlPart.push(...removeObject);
-        }
-      });
-      removesDisplay = (
-        <DialogContent dividers>
-          {alter.removes.map((remove) => (
-            // TODO - consider making this into a table
-            <DialogContentText
-              color="textprimary"
-              id="scroll-dialog-description"
-              tabIndex={-1}
-              variant="h6"
-            >
-              Removes:
-              <Typography
-                color="textsecondary"
-                paragraph="true"
-                variant="body1"
-              >
-                id-ref: {remove["id-ref"]}
-                name-ref: {remove["name-ref"]}
-              </Typography>
-            </DialogContentText>
-          ))}
-        </DialogContent>
-      );
-    }
+    // Get all remove modifications
+    // if (alter.removes) {
+    // DO NOTHING FOR NOW
+    // }
   }
 
-  // For each addRemoveControlPart find the add or remove that matches the part id
-  let controlPartObject;
-  if (props.partId) {
-    addRemoveControlPart.forEach((addRemove) => {
-      controlPartObject = addRemove.find(
-        (addRemove) => addRemove["id-ref"] === props.controlPartId
-      );
-    });
-  }
-
-  // Display if alter or controlPartObject is true
-  if (alter || controlPartObject) {
+  // Display if altered is true
+  if (modLength) {
     modificationsDisplay = (
       <div>
         <Tooltip title="Modifications">
@@ -153,7 +145,7 @@ export default function OSCALControlModification(props) {
               horizontal: "right",
             }}
             color="secondary"
-            badgeContent={getModLength(alter.adds, alter.removes)}
+            badgeContent={modLength}
             overlap="circle"
           >
             <IconButton

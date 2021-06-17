@@ -189,12 +189,14 @@ export default function OSCALControlPart(props) {
   }
 
   let modificationDisplay;
+  // Passing all of the modifications works, but could be made
+  // more efficient later on.
   if (props.modifications) {
     modificationDisplay = (
       <OSCALControlModification
         modifications={props.modifications}
         controlPartId={props.part.id}
-        control={props.control}
+        controlId={props.controlId}
       />
     );
   }
@@ -234,6 +236,7 @@ export default function OSCALControlPart(props) {
   } else {
     className = classes.OSCALControlPart;
   }
+
   return (
     <div className={className}>
       {modificationDisplay}
@@ -242,10 +245,12 @@ export default function OSCALControlPart(props) {
         props.part.parts.map((part) => (
           <OSCALControlPart
             part={part}
+            controlId={props.controlId ?? props.control.id}
             parameters={props.parameters}
             implReqStatements={props.implReqStatements}
             componentId={props.componentId}
             key={part.id}
+            modifications={props.modifications}
           />
         ))}
     </div>
