@@ -4,25 +4,25 @@ import userEvent from "@testing-library/user-event";
 import OSCALBackMatter from "./OSCALBackMatter";
 
 export const backMatterTestData = {
-  resources: [
+  "resources": [
     {
-      uuid: "dc380596-027f-423b-83f2-82757554ee27",
-      title: "Resource Test Title",
-      description: "This is a test description for resource",
-      rlinks: [
+      "uuid": "dc380596-027f-423b-83f2-82757554ee27",
+      "title": "Resource Test Title",
+      "description": "This is a test description for resource",
+      "rlinks": [
         {
-          href: "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_catalog.json",
+          "href": "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_catalog.json",
           "media-type": "application/oscal.catalog+json",
         },
       ],
     },
     {
-      uuid: "dc380596-027f-423b-83f2-82757554ee28",
-      title: "Resource Test Title 2",
-      description: "This is a test description for resource 2",
-      rlinks: [
+      "uuid": "dc380596-027f-423b-83f2-82757554ee28",
+      "title": "Resource Test Title 2",
+      "description": "This is a test description for resource 2",
+      "rlinks": [
         {
-          href: "NIST_SP-800-53_rev4_catalog.json",
+          "href": "NIST_SP-800-53_rev4_catalog.json",
           "media-type": "application/oscal.catalog+json2",
         },
       ],
