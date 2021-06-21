@@ -29,8 +29,8 @@ const getAlterAddsOrRemovesDisplay = (addsElements, addsLabel) => {
     return null;
   }
 
-  // Adding
-  // Ignore parts for now
+  // Handle adds; however, the parts attribute is ignored for
+  // now due to parsing complications.
   const typographies = addsElements
     .flatMap((element) => element.props ?? [])
     .map((item) => (
