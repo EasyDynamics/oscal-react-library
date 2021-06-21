@@ -4,6 +4,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import OSCALControlPart from "./OSCALControlPart";
+import OSCALControlModification from "./OSCALControlModification";
 
 // TODO - This is probably 800-53 specific?
 // Disable linting until completed
@@ -58,6 +59,16 @@ export default function OSCALControl(props) {
   }
   const classes = useStyles(props);
 
+  let modificationDisplay;
+  if (props.modifications) {
+    modificationDisplay = (
+      <OSCALControlModification
+        modifications={props.modifications}
+        controlId={props.control.id}
+      />
+    );
+  }
+
   return (
     <Card
       className={`${classes.OSCALControl} ${classes.OSCALControlStatus} ${classes.OSCALControlChildLevel}`}
@@ -69,7 +80,7 @@ export default function OSCALControl(props) {
           className={classes.OSCALControlChildLevelTitle}
         >
           <span className={classes.OSCALControlId}>{props.control.id}</span>{" "}
-          {props.control.title}
+          {props.control.title} {modificationDisplay}
         </Typography>
         {props.control.parts &&
           props.control.parts.map((part, index) => (
@@ -78,8 +89,8 @@ export default function OSCALControl(props) {
               parameters={props.control.params}
               implReqStatements={props.implReqStatements}
               componentId={props.componentId}
-              modifications={props.modifications}
               control={props.control}
+              modifications={props.modifications}
               // eslint-disable-next-line
               key={`part-${index}`}
             />

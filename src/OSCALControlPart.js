@@ -73,19 +73,17 @@ function getStatementByComponent(implReqStatements, statementId, componentId) {
  * TODO - This is probably 800-53 specific?
  * TODO - Add support for select param
  * BUG - If there is more then one parameter in the prose, this script will not work
- */ 
+ */
 
 function ReplacedProseWithParameterLabel(props) {
- 
   if (!props.prose) {
     return null;
   }
   let replacedProse;
-  
+
   if (!props.parameters) {
     replacedProse = props.prose;
-  } 
-  else {
+  } else {
     function getParameterLabel(parameterId) {
       // trim
       parameterId = parameterId.substring(18, parameterId.length - 3);
@@ -93,7 +91,7 @@ function ReplacedProseWithParameterLabel(props) {
       const parameter = props.parameters.find(
         (parameter) => parameter.id === parameterId
       );
-      
+
       if (!parameter) {
         return;
       }
@@ -101,11 +99,14 @@ function ReplacedProseWithParameterLabel(props) {
       return `< ${parameter.label} >`;
     }
 
-    replacedProse = props.prose.replace(/\{\{ insert: param, ([0-9a-zA-B-_.]*) \}\}/g, getParameterLabel);
+    replacedProse = props.prose.replace(
+      /\{\{ insert: param, ([0-9a-zA-B-_.]*) \}\}/g,
+      getParameterLabel
+    );
   }
   return (
     <Typography className={props.className}>
-      {props.label} {replacedProse}
+      {props.label} {replacedProse} {props.modificationDisplay}
     </Typography>
   );
 } /* eslint-disable */
@@ -135,6 +136,7 @@ function ReplacedProseWithByComponentParameterValue(props) {
         prose={props.prose}
         parameters={props.parameters}
         className={props.unimplementedStatementClassName}
+        modificationDisplay={props.modificationDisplay}
       />
     );
   }
@@ -159,7 +161,10 @@ function ReplacedProseWithByComponentParameterValue(props) {
     }" >${foundParameterSetting.values.toString()}</span>`;
   }
 
-  const replacedProse = props.prose.replace(/\{\{ insert: param, ([0-9a-zA-B-_.]*) \}\}/g, getParameterValue);
+  const replacedProse = props.prose.replace(
+    /\{\{ insert: param, ([0-9a-zA-B-_.]*) \}\}/g,
+    getParameterValue
+  );
   const { description } = statementByComponent;
   // TODO dangerouslySetInnerHTML is not safe, there are other alternatives
   return (
@@ -169,6 +174,7 @@ function ReplacedProseWithByComponentParameterValue(props) {
       </Tooltip>
       {"\u00A0"}
       <span dangerouslySetInnerHTML={{ __html: replacedProse }} />
+      {props.modificationDisplay}
     </Typography>
   );
 } /* eslint-enable */
@@ -218,6 +224,7 @@ export default function OSCALControlPart(props) {
         componentParameterSettingClassname={
           classes.OSCALComponentParameterSetting
         }
+        modificationDisplay={modificationDisplay}
       />
     );
   } else {
@@ -226,6 +233,7 @@ export default function OSCALControlPart(props) {
         label={label}
         prose={props.part.prose}
         parameters={props.parameters}
+        modificationDisplay={modificationDisplay}
       />
     );
   }
@@ -239,7 +247,6 @@ export default function OSCALControlPart(props) {
 
   return (
     <div className={className}>
-      {modificationDisplay}
       {replacedProse}
       {props.part.parts &&
         props.part.parts.map((part) => (
