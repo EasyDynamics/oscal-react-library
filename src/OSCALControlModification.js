@@ -62,12 +62,14 @@ const getAlterAddsOrRemovesDisplay = (addsElements, addsLabel) => {
  * @param {String} field Field of Add/Remove element to check
  * @returns true if element matches controlPartID, OR if this should render a top-level modification
  */
-const isRelevantId = (controlPartId, controlId, element, field) =>
-  // TODO: Differences in how NIST and FedRAMP implement adds makes
-  // this check needed. See if we can clean this up at some point.
-  // Assumes the difference is that NIST does not have a "by-id" field
-  (!element[field] && controlPartId === controlId) ||
-  element[field] === controlPartId;
+const isRelevantId = (controlPartId, controlId, element, field) => {
+  if (!element[field]) {
+    // If by-id of this modification is undefined, check if it can be rendered at the top level
+    return controlPartId === controlId;
+  }
+  // otherwise check if by-id matches this control part's ID
+  return element[field] === controlPartId;
+};
 
 /**
  * Get the modifications from the adds/removes list.
@@ -80,6 +82,13 @@ const isRelevantId = (controlPartId, controlId, element, field) =>
  */
 const getModifications = (controlPartId, controlId, modList, modText) => {
   // Add everything with ids that match controlPartId
+
+  /* TODO: Differences in implementations of the OSCAL standard makes
+  /* this check needed; Certain implementations specify the control ID 
+  /* in the "by-id" field for top-level modifications, 
+  /* others leave "by-id" undefined. 
+  /* See if this can be cleaned up at some point if these differences are resolved.
+  */
   const controlParts = modList.filter((element) =>
     isRelevantId(controlPartId, controlId, element, "by-id")
   );
@@ -117,7 +126,6 @@ export default function OSCALControlModification(props) {
     (element) => element["control-id"] === props.controlId
   );
 
-  let modificationsDisplay;
   let addsDisplay = null;
   const removesDisplay = null;
   let len;
@@ -141,51 +149,46 @@ export default function OSCALControlModification(props) {
     // }
   }
 
-  // Display if altered is true
-  if (modLength) {
-    modificationsDisplay = (
-      <span>
-        <Tooltip title="Modifications">
-          <Badge
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            color="secondary"
-            badgeContent={modLength}
-            overlap="circle"
-          >
-            <IconButton
-              variant="outlined"
-              size="small"
-              className={classes.OSCALControlModificationsButton}
-              onClick={handleClick}
-            >
-              <LayersIcon />
-            </IconButton>
-          </Badge>
-        </Tooltip>
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          scroll="paper"
-          aria-labelledby="scroll-dialog-title"
-          aria-describedby="scroll-dialog-description"
+  // Display modifications if there are any
+  if (!modLength) return null;
+  return (
+    <span>
+      <Tooltip title="Modifications">
+        <Badge
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          color="secondary"
+          badgeContent={modLength}
+          overlap="circle"
         >
-          <DialogTitle id="scroll-dialog-title">Modifications</DialogTitle>
-          {addsDisplay}
-          {removesDisplay}
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </span>
-    );
-  } else {
-    modificationsDisplay = null;
-  }
-
-  return modificationsDisplay;
+          <IconButton
+            variant="outlined"
+            size="small"
+            className={classes.OSCALControlModificationsButton}
+            onClick={handleClick}
+          >
+            <LayersIcon />
+          </IconButton>
+        </Badge>
+      </Tooltip>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        scroll="paper"
+        aria-labelledby="scroll-dialog-title"
+        aria-describedby="scroll-dialog-description"
+      >
+        <DialogTitle id="scroll-dialog-title">Modifications</DialogTitle>
+        {addsDisplay}
+        {removesDisplay}
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </span>
+  );
 }
