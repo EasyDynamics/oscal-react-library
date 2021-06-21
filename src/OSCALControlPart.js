@@ -1,9 +1,9 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Link from "@material-ui/core/Link";
-import Tooltip from "@material-ui/core/Tooltip";
 import OSCALControlGuidance from "./OSCALControlGuidance";
+import StyledTooltip from "./OSCALStyledTooltip";
 
 const useStyles = makeStyles((theme) => ({
   OSCALControlPart: {
@@ -23,12 +23,6 @@ const useStyles = makeStyles((theme) => ({
     "border-radius": "5px",
   },
 }));
-
-const StyledTooltip = withStyles((theme) => ({
-  tooltip: {
-    fontSize: "1em",
-  },
-}))(Tooltip);
 
 // TODO - This is probably 800-53 specific?
 /* eslint-disable */
