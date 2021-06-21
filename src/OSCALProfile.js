@@ -35,14 +35,11 @@ export default function OSCALProfile(props) {
         setIsLoaded(true);
       }
     );
-    // eslint-disable-next-line
   }, []);
 
-  profile.imports.forEach((imp) => {
-    imp["include-controls"].forEach((includeControl) => {
-      profile.includeControlIds = includeControl["with-ids"];
-    });
-  });
+  const includeControlIds = profile.imports
+    .flatMap((imp) => imp["include-controls"])
+    .flatMap((includeControl) => includeControl["with-ids"]);
 
   let profileImports;
 
@@ -66,7 +63,7 @@ export default function OSCALProfile(props) {
         {props.profile.resolvedControls.map((control) => (
           <OSCALControl
             control={control}
-            includeControlIds={props.profile.includeControlIds}
+            includeControlIds={includeControlIds}
             modifications={props.profile.modify}
             childLevel={0}
             key={`control-${control.id}`}
