@@ -103,7 +103,12 @@ const getModifications = (controlPartId, controlId, modList, modText) => {
 };
 
 export default function OSCALControlModification(props) {
-  if (!props.modifications || !props.modifications.alters) {
+  // Finds the control-id within alters and matches it with a resolved control
+  const alter = props.modifications?.alters?.find(
+    (element) => element["control-id"] === props.controlId
+  );
+
+  if (!alter) {
     return null;
   }
 
@@ -120,11 +125,6 @@ export default function OSCALControlModification(props) {
 
   // If this was called at the top-level of the control, the id is the same as control id
   const partId = props.controlPartId ? props.controlPartId : props.controlId;
-
-  // Finds the control-id within alters and matches it with a resolved control
-  const alter = props.modifications.alters.find(
-    (element) => element["control-id"] === props.controlId
-  );
 
   let addsDisplay = null;
   const removesDisplay = null;
