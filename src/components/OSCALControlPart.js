@@ -18,17 +18,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // TODO - This is probably 800-53 specific?
-/* eslint-disable */
 function getPartLabel(props) {
-  if (!props) {
-    return;
-  }
-  let property;
-  for (property of props) {
-    if (property.name === "label") {
-      return property.value;
-    }
-  }
+  return props?.find((property) => property.name === "label")?.value;
 }
 
 export default function OSCALControlPart(props) {

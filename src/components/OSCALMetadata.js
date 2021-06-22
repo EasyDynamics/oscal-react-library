@@ -36,49 +36,19 @@ export default function OSCALControlGuidance(props) {
     return null;
   }
 
-  const getRoleLabel = (roleId) => {
-    if (!props.metadata.roles) {
-      return null;
-    }
-    let role;
-    // TODO find out how to change this to an array to satisfy linter
-    /* eslint-disable */
-    for (role of props.metadata.roles) {
-      if (role.id === roleId) {
-        return role.title;
-      }
-    }
-    return null;
-  };
-  
-  const getPartyRolesText = (party) => {
-    if (!props.metadata["responsible-parties"]) {
-      return null;
-    }
-    let partyRolesText = "";
-    const delimiter = ", ";
-    let responsibleParty;
+  const getRoleLabel = (roleId) =>
+    props.metadata.roles?.find((role) => role.id === roleId)?.title;
 
-    // TODO for..in loops iterate over the entire prototype chain, which is virtually never what you want. Use Object.{keys,values,entries}, and iterate over the resulting array
-    /* eslint-disable */
-    for (responsibleParty in props.metadata["responsible-parties"]) {
-      const responsiblePartyUuids =
-        props.metadata["responsible-parties"][responsibleParty]["party-uuids"];
-      if (responsiblePartyUuids && responsiblePartyUuids.includes(party.uuid)) {
-        const roleLabel = getRoleLabel(responsibleParty);
-        if (roleLabel) {
-          partyRolesText += roleLabel + delimiter;
-        }
-      }
-    }
-    if (partyRolesText.endsWith(delimiter)) {
-      partyRolesText = partyRolesText.substring(
-        0,
-        partyRolesText.length - delimiter.length
-      );
-    }
-    return partyRolesText;
-  };
+  const getPartyRolesText = (party) =>
+    props.metadata["responsible-parties"]
+      ?.filter((responsibleParty) =>
+        responsibleParty["party-uuids"]?.includes(party.uuid)
+      )
+      .map((item) => item["role-id"])
+      .map(getRoleLabel)
+      // Remove empty/falsey items from the list
+      .filter((item) => item)
+      .join(", ");
 
   return (
     <Grid container spacing={3}>

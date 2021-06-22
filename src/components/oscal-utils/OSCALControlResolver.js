@@ -1,33 +1,31 @@
 export default function getControlOrSubControl(resolvedControls, controlId) {
-  /* eslint-disable */
-  // First check all of the root level resolveControls
-  let control = resolvedControls.find(
-    (element) => element.id === controlId
-  );
-  if (control) {return control}
-  // Next, try the substring of the controlId before the period delimiter. For example, "ac-2" based on a control of "ac-2.3"
-  if (controlId.includes(".")) {
-    const parentControlId = controlId.substring(0, controlId.indexOf("."));
-  // Find parent control within root controls
-    const parentControl = resolvedControls.find(
-        (element) => element.id === parentControlId
-      );
-  // Check all of the parent control's subcontrols
-    if (parentControl) {
-        control = parentControl.controls.find(
-            (element) => element.id === controlId
-          );
-      if (control) {return control}
+  const findControlById = (controls, desiredId) =>
+    controls?.find((control) => control.id === desiredId);
+
+  // Try to find control at root level of the resolved controls
+  const control = findControlById(resolvedControls, controlId);
+  if (control) {
+    return control;
+  }
+
+  // If the control isn't at the root level, it may be a subcontrol of it's parent;
+  // so for example, "ac-2.3" may be a child of "ac-2"
+  const isSubControl = (testControlId) => testControlId.includes(".");
+  if (isSubControl(controlId)) {
+    const parentControlId = controlId.split(".")[0];
+    const parentControl = findControlById(resolvedControls, parentControlId);
+    const subControl = findControlById(parentControl?.controls, controlId);
+
+    if (subControl) {
+      return subControl;
     }
   }
-  // Lastly, dig through every root control and its subcontrols 
-  resolvedControls.forEach((parentControl) => {
-    control = parentControl.controls.find(
-        (element) => element.id === controlId
-    );
-    if (control) {return control}
-  });
-  return null;
+
+  // If the control isn't at root level or a subcontrol of it's parent,
+  // it should be able to be found by just searching all subcontrols.
+  return resolvedControls
+    .flatMap((parentControl) => parentControl.controls)
+    .find((subcontrol) => subcontrol?.id === controlId);
 }
 
 /**
@@ -42,7 +40,11 @@ export default function getControlOrSubControl(resolvedControls, controlId) {
  * @param {string} componentId Id of a component
  * @returns Returns the by-component object when a statement is found
  */
- export function getStatementByComponent(implReqStatements, statementId, componentId) {
+export function getStatementByComponent(
+  implReqStatements,
+  statementId,
+  componentId
+) {
   // TODO Remove underscore replacement when OSCAL example content is fixed (https://github.com/usnistgov/oscal-content/issues/58, https://easydynamics.atlassian.net/browse/EGRC-266)
   // Locate matching statement to statementId
   const foundStatement = implReqStatements.find(
