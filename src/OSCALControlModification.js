@@ -124,7 +124,7 @@ export default function OSCALControlModification(props) {
   };
 
   // If this was called at the top-level of the control, the id is the same as control id
-  const partId = props.controlPartId ?? props.controlId;
+  const controlPartId = props.controlPartId ?? props.controlId;
 
   let addsDisplay = null;
   const removesDisplay = null;
@@ -134,7 +134,7 @@ export default function OSCALControlModification(props) {
   // Get all add modifications
   if (alter.adds) {
     [addsDisplay, len] = getModifications(
-      partId,
+      controlPartId,
       props.controlId,
       alter.adds,
       "Adds "
