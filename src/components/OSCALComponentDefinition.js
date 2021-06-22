@@ -31,7 +31,6 @@ export default function OSCALComponentDefinition(props) {
         setIsLoaded(true);
       }
     );
-    // eslint-disable-next-line
   }, []);
 
   // Throw error to OSCALLoader

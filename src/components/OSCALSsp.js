@@ -39,7 +39,6 @@ export default function OSCALSsp(props) {
         setIsLoaded(true);
       }
     );
-    // eslint-disable-next-line
   }, []);
 
   let controlImpl;

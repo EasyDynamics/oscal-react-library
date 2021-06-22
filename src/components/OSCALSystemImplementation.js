@@ -38,8 +38,6 @@ export default function OSCALSystemImplementation(props) {
     return null;
   }
 
-  /* eslint-enable */
-
   return (
     <div className={classes.paper}>
       <Card>
