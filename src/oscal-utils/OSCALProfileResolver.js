@@ -56,7 +56,6 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
       (result) => {
         if (result.catalog) {
           // Dig through catalog controls and add to profile.controls
-          /* eslint-enable */
           result.catalog.groups.forEach((group) => {
             resolvedControls.push(...group.controls);
           });
