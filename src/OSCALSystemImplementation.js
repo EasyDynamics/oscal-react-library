@@ -10,8 +10,8 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Tooltip from "@material-ui/core/Tooltip";
 import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
+import StyledTooltip from "./OSCALStyledTooltip";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -76,11 +76,11 @@ export default function OSCALSystemImplementation(props) {
                       ([key, component], index) => (
                         <TableRow key={key}>
                           <TableCell component="th" scope="row">
-                            <Tooltip title={component.description}>
+                            <StyledTooltip title={component.description}>
                               <Typography variant="body2">
                                 {component.title}
                               </Typography>
-                            </Tooltip>
+                            </StyledTooltip>
                           </TableCell>
                           <TableCell>{component.type}</TableCell>
                           <TableCell>

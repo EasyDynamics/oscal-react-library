@@ -2,9 +2,9 @@ import React from "react";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Link from "@material-ui/core/Link";
-import Tooltip from "@material-ui/core/Tooltip";
 import OSCALControlGuidance from "./OSCALControlGuidance";
 import OSCALControlModification from "./OSCALControlModification";
+import StyledTooltip from "./OSCALStyledTooltip";
 
 const useStyles = makeStyles((theme) => ({
   OSCALControlPart: {
@@ -45,27 +45,30 @@ function getPartLabel(props) {
  *
  * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/implementation-layer/ssp/xml-schema/#global_by-component_h2}
  * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/implementation-layer/ssp/xml-schema/#global_implemented-requirement}
+ *
+ * @param {object} implReqStatements Implementation Request Statements
+ * @param {string} statementId Id of a statement
+ * @param {string} componentId Id of a component
+ * @returns Returns the by-component object when a statement is found
  */
-/* eslint-disable */
 function getStatementByComponent(implReqStatements, statementId, componentId) {
-  let foundStatement;
-  for (const [key, statement] of Object.entries(implReqStatements)) {
-    // TODO Remove underscore replacement when OSCAL example content is fixed (https://github.com/usnistgov/oscal-content/issues/58, https://easydynamics.atlassian.net/browse/EGRC-266)
-    if (key === statementId || key === statementId.replace("_", "")) {
-      foundStatement = statement;
-    }
-  }
+  // TODO Remove underscore replacement when OSCAL example content is fixed (https://github.com/usnistgov/oscal-content/issues/58, https://easydynamics.atlassian.net/browse/EGRC-266)
+  // Locate matching statement to statementId
+  const foundStatement = implReqStatements.find(
+    (statement) =>
+      statement["statement-id"] === statementId ||
+      statement["statement-id"] === statementId.replace("_", "")
+  );
+  // Error checking: Exit function when statement or it's by-components are not found
   if (!foundStatement || !foundStatement["by-components"]) {
-    return;
+    return null;
   }
-  for (const [key, byComponent] of Object.entries(
-    foundStatement["by-components"]
-  )) {
-    if (key === componentId) {
-      return byComponent;
-    }
-  }
-} /* eslint-enable */ /* eslint-disable */
+
+  // Locate matching byComponent to componentId
+  return foundStatement["by-components"].find(
+    (byComponent) => byComponent["component-uuid"] === componentId
+  );
+} /* eslint-disable */
 
 /**
  * Replaces the parameter placeholders in the given prose with the given label
@@ -140,21 +143,23 @@ function ReplacedProseWithByComponentParameterValue(props) {
       />
     );
   }
+  // Finds a parameter setting in a component statement
   function getParameterValue(parameterId) {
-    // trim
+    // Trims parameterId to only contain the id from the structure of a properly formatted parameter
+    // placeholder. This removes the first 18 characters: "{{ insert: param, " and the last 3
+    // characters from the end of the string: " }}".
     parameterId = parameterId.substring(18, parameterId.length - 3);
 
-    let foundParameterSetting;
-    for (const [key, parameterSetting] of Object.entries(
-      statementByComponent["parameter-settings"]
-    )) {
-      if (key === parameterId) {
-        foundParameterSetting = parameterSetting;
-      }
-    }
+    // Locate matching parameter to parameterId
+    const foundParameterSetting = statementByComponent["set-parameters"].find(
+      (parameterSetting) => parameterSetting["param-id"] === parameterId
+    );
+
+    // Error checking: Exit function when parameter setting or it's values are not found
     if (!foundParameterSetting || !foundParameterSetting.values) {
       return;
     }
+
     // TODO parse select parameters
     return `<span class="${
       props.componentParameterSettingClassname
@@ -169,9 +174,9 @@ function ReplacedProseWithByComponentParameterValue(props) {
   // TODO dangerouslySetInnerHTML is not safe, there are other alternatives
   return (
     <Typography>
-      <Tooltip title={<Typography variant="body2">{description}</Typography>}>
+      <StyledTooltip title={description}>
         <Link href="">{props.label}</Link>
-      </Tooltip>
+      </StyledTooltip>
       {"\u00A0"}
       <span dangerouslySetInnerHTML={{ __html: replacedProse }} />
       {props.modificationDisplay}

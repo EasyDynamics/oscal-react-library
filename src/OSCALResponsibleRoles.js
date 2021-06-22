@@ -49,7 +49,7 @@ export default function OSCALResponsibleRoles(props) {
                   component="th"
                   scope="row"
                 >
-                  {key}
+                  {role["role-id"]}
                 </TableCell>
                 <TableCell align="right">
                   {role["party-uuids"] &&
