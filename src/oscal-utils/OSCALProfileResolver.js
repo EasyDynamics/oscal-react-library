@@ -99,11 +99,12 @@ export function OSCALResolveProfile(profile, parentUrl, onSuccess, onError) {
   if (!profile.imports) {
     return;
   }
+
+  // profile does not have a resolvedControls field.
+  // profile.resolvedControls needs to be declared & initialized here.
   /* eslint no-param-reassign: "error" */
   profile.resolvedControls = [];
 
-  // iterate through all of the profile imports
-  // for each import call OSCALResolveProfileOrCatalogUrlControls
   profile.imports
     .map((imp) =>
       getUriFromBackMatterByHref(profile["back-matter"], imp.href, parentUrl)

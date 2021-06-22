@@ -124,28 +124,26 @@ export default function OSCALControlModification(props) {
   };
 
   // If this was called at the top-level of the control, the id is the same as control id
-  const partId = props.controlPartId ? props.controlPartId : props.controlId;
+  const partId = props.controlPartId ?? props.controlId;
 
   let addsDisplay = null;
   const removesDisplay = null;
   let len;
   let modLength = 0;
 
-  if (alter) {
-    // Get all add modifications
-    if (alter.adds) {
-      [addsDisplay, len] = getModifications(
-        partId,
-        props.controlId,
-        alter.adds,
-        "Adds "
-      );
-      modLength += len;
-    }
-
-    // TODO(EGRC-407): Implement remove modifications
-    // if (alter.removes) { }
+  // Get all add modifications
+  if (alter.adds) {
+    [addsDisplay, len] = getModifications(
+      partId,
+      props.controlId,
+      alter.adds,
+      "Adds "
+    );
+    modLength += len;
   }
+
+  // TODO(EGRC-407): Implement remove modifications
+  // if (alter.removes) { }
 
   // Display modifications if there are any
   if (!modLength) return null;

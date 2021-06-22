@@ -75,7 +75,6 @@ export default function OSCALLoader(props) {
   // similar to componentDidMount()
   useEffect(() => {
     loadOscalData(oscalUrl);
-    // eslint-disable-next-line
   }, []);
 
   let result;
@@ -173,13 +172,9 @@ export function OSCALComponentLoader(props) {
     />
   );
 }
-/* eslint-disable */
 export function OSCALProfileLoader(props) {
   const renderer = (oscalData, oscalUrl) => (
-    <OSCALProfile
-      profile={oscalData["profile"]}
-      parentUrl={oscalUrl}
-    />
+    <OSCALProfile profile={oscalData.profile} parentUrl={oscalUrl} />
   );
   return (
     <OSCALLoader
