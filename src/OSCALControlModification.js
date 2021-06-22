@@ -143,10 +143,8 @@ export default function OSCALControlModification(props) {
       modLength += len;
     }
 
-    // Get all remove modifications
-    // if (alter.removes) {
-    // DO NOTHING FOR NOW
-    // }
+    // TODO(EGRC-407): Implement remove modifications
+    // if (alter.removes) { }
   }
 
   // Display modifications if there are any
