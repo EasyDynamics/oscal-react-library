@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
  *
  * @param {Object} addsElements add or remove object to map into html
  * @param {String} addsLabel boolean variable, true if adding
+ * @param {String} controlPartId Control part ID to match
  * @returns html object
  */
 const getAlterAddsOrRemovesDisplay = (addsElements, addsLabel) => {
@@ -34,7 +35,12 @@ const getAlterAddsOrRemovesDisplay = (addsElements, addsLabel) => {
   const typographies = addsElements
     .flatMap((element) => element.props ?? [])
     .map((item) => (
-      <Typography color="textsecondary" paragraph="true" variant="body1">
+      <Typography
+        color="textsecondary"
+        paragraph="true"
+        variant="body1"
+        key={item.value}
+      >
         Name: {item.name}, Value: {item.value}
       </Typography>
     ));
@@ -96,7 +102,7 @@ const getModifications = (controlPartId, controlId, modList, modText) => {
   // return display & mod length
   return [
     <DialogContent dividers>
-      {getAlterAddsOrRemovesDisplay(controlParts, modText)}
+      {getAlterAddsOrRemovesDisplay(controlParts, modText, controlPartId)}
     </DialogContent>,
     controlParts.length,
   ];
