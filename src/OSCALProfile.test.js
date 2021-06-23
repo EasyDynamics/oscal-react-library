@@ -58,9 +58,9 @@ const profileTestData = {
 const profileParentUrlTestData =
   "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json";
 
-  test("OSCALProfile loads", () => {
-    render(<OSCALProfileLoader />);
-  });
+test("OSCALProfile loads", () => {
+  render(<OSCALProfileLoader />);
+});
 
 function profileRenderer() {
   render(
