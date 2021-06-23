@@ -36,38 +36,17 @@ const useStyles = makeStyles((theme) => ({
 export default function OSCALBackMatter(props) {
   const classes = useStyles(props);
 
-  const getMediaType = (rlink) => {
-    let mediaType;
-    if (!rlink["media-type"]) {
-      mediaType = getURLMediaType(getAbsoluteUrl(rlink, props.parentUrl));
-    } else {
-      mediaType = rlink["media-type"];
-    }
-    return mediaType;
-  };
+  const getMediaType = (rlink) =>
+    rlink["media-type"] ||
+    getURLMediaType(getAbsoluteUrl(rlink, props.parentUrl));
 
-  const getColor = (rlink) => {
-    let color;
-    if (!rlink["media-type"]) {
-      color = "secondary";
-    } else {
-      color = "default";
-    }
-    return color;
-  };
+  const getColor = (rlink) => (rlink["media-type"] ? "default" : "secondary");
 
   // eslint-disable-next-line
   const backMatterDisplay = (resource) => {
-    let title;
-    let color;
-    if (!resource.title) {
-      title = "No Title";
-      color = "error";
-    }
-    if (resource.title) {
-      title = resource.title;
-      color = "initial";
-    }
+    const title = resource.title || "No Title";
+    const color = resource.title ? "initial" : "error";
+
     return (
       <CardContent key={resource.uuid}>
         <Grid>

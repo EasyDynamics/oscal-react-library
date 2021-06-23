@@ -12,7 +12,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Tooltip from "@material-ui/core/Tooltip";
+import StyledTooltip from "./OSCALStyledTooltip";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -87,7 +87,7 @@ export default function OSCALSystemCharacteristics(props) {
               xs={2}
               className={classes.OSCALSystemCharacteristicsInfo}
             >
-              <Tooltip title={props.systemCharacteristics.status.remarks}>
+              <StyledTooltip title={props.systemCharacteristics.status.remarks}>
                 <TextField
                   disabled
                   id="system-characteristics-status"
@@ -97,7 +97,7 @@ export default function OSCALSystemCharacteristics(props) {
                   margin="dense"
                   fullWidth
                 />
-              </Tooltip>
+              </StyledTooltip>
             </Grid>
             <Grid
               item
@@ -210,11 +210,11 @@ export default function OSCALSystemCharacteristics(props) {
                     ].map((informationType) => (
                       <TableRow key={informationType.uuid}>
                         <TableCell component="th" scope="row">
-                          <Tooltip title={informationType.description}>
+                          <StyledTooltip title={informationType.description}>
                             <Typography variant="body2">
                               {informationType.title}
                             </Typography>
-                          </Tooltip>
+                          </StyledTooltip>
                         </TableCell>
                         <TableCell>
                           {informationType.categorizations.map(

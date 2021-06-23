@@ -20,12 +20,9 @@ export default function OSCALProfile(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const classes = useStyles();
 
-  // eslint-disable-next-line
-  const profile = props["profile"];
-
   useEffect(() => {
     OSCALResolveProfile(
-      profile,
+      props.profile,
       props.parentUrl,
       () => {
         setIsLoaded(true);
@@ -35,14 +32,11 @@ export default function OSCALProfile(props) {
         setIsLoaded(true);
       }
     );
-    // eslint-disable-next-line
   }, []);
 
-  profile.imports.forEach((imp) => {
-    imp["include-controls"].forEach((includeControl) => {
-      profile.includeControlIds = includeControl["with-ids"];
-    });
-  });
+  const includeControlIds = props.profile.imports
+    .flatMap((imp) => imp["include-controls"])
+    .flatMap((includeControl) => includeControl["with-ids"]);
 
   let profileImports;
 
@@ -66,7 +60,7 @@ export default function OSCALProfile(props) {
         {props.profile.resolvedControls.map((control) => (
           <OSCALControl
             control={control}
-            includeControlIds={props.profile.includeControlIds}
+            includeControlIds={includeControlIds}
             modifications={props.profile.modify}
             childLevel={0}
             key={`control-${control.id}`}
@@ -78,10 +72,10 @@ export default function OSCALProfile(props) {
 
   return (
     <div className={classes.paper}>
-      <OSCALMetadata metadata={profile.metadata} />
+      <OSCALMetadata metadata={props.profile.metadata} />
       {profileImports}
       <OSCALBackMatter
-        backMatter={profile["back-matter"]}
+        backMatter={props.profile["back-matter"]}
         parentUrl={props.parentUrl}
       />
     </div>

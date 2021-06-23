@@ -18,6 +18,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const onError = (error) => (
+  <Alert severity="error">
+    Yikes! Something went wrong loading the OSCAL data. Sorry, we&apos;ll look
+    into it. ({error.message})
+  </Alert>
+);
+
 const defaultOscalCatalogUrl =
   "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json";
 const defaultOscalSspUrl =
@@ -68,23 +75,18 @@ export default function OSCALLoader(props) {
   // similar to componentDidMount()
   useEffect(() => {
     loadOscalData(oscalUrl);
-    // eslint-disable-next-line
   }, []);
 
   let result;
 
   if (error) {
-    result = (
-      <Alert severity="error">
-        Yikes! Something went wrong loading the OSCAL data. Sorry, we&apos;ll
-        look into it. ({error.message})
-      </Alert>
-    );
+    result = onError(error);
   } else if (!isLoaded) {
     result = <CircularProgress />;
   } else {
     result = props.renderer(oscalData, oscalUrl);
   }
+
   return (
     <>
       <form
@@ -126,7 +128,7 @@ export default function OSCALLoader(props) {
 
 export function OSCALCatalogLoader(props) {
   const renderer = (oscalData, oscalUrl) => (
-    <OSCALCatalog catalog={oscalData.catalog} />
+    <OSCALCatalog catalog={oscalData.catalog} onError={onError} />
   );
   return (
     <OSCALLoader
@@ -142,6 +144,7 @@ export function OSCALSSPLoader(props) {
     <OSCALSsp
       system-security-plan={oscalData["system-security-plan"]}
       parentUrl={oscalUrl}
+      onError={onError}
     />
   );
   return (
@@ -158,6 +161,7 @@ export function OSCALComponentLoader(props) {
     <OSCALComponentDefinition
       componentDefinition={oscalData["component-definition"]}
       parentUrl={oscalUrl}
+      onError={onError}
     />
   );
   return (
@@ -168,13 +172,9 @@ export function OSCALComponentLoader(props) {
     />
   );
 }
-/* eslint-disable */
 export function OSCALProfileLoader(props) {
   const renderer = (oscalData, oscalUrl) => (
-    <OSCALProfile
-      profile={oscalData["profile"]}
-      parentUrl={oscalUrl}
-    />
+    <OSCALProfile profile={oscalData.profile} parentUrl={oscalUrl} />
   );
   return (
     <OSCALLoader
