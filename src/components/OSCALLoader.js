@@ -44,8 +44,8 @@ export default function OSCALLoader(props) {
         // Note: it's important to handle errors here
         // instead of a catch() block so that we don't swallow
         // exceptions from actual bugs in components.
-        (error) => {
-          setError(error);
+        (e) => {
+          setError(e);
           setIsLoaded(true);
         }
       );
@@ -55,7 +55,7 @@ export default function OSCALLoader(props) {
     setOscalUrl(event.target.value);
   };
 
-  const handleReloadClick = (event) => {
+  const handleReloadClick = () => {
     setIsLoaded(false);
     loadOscalData(oscalUrl);
   };
@@ -100,7 +100,7 @@ export default function OSCALLoader(props) {
   );
 }
 
-export function OSCALCatalogLoader(props) {
+export function OSCALCatalogLoader() {
   const renderer = (oscalData, oscalUrl) => (
     <OSCALCatalog
       catalog={oscalData.catalog}
@@ -118,7 +118,7 @@ export function OSCALCatalogLoader(props) {
   );
 }
 
-export function OSCALSSPLoader(props) {
+export function OSCALSSPLoader() {
   const renderer = (oscalData, oscalUrl) => (
     <OSCALSsp
       system-security-plan={oscalData["system-security-plan"]}
@@ -136,7 +136,7 @@ export function OSCALSSPLoader(props) {
   );
 }
 
-export function OSCALComponentLoader(props) {
+export function OSCALComponentLoader() {
   const renderer = (oscalData, oscalUrl) => (
     <OSCALComponentDefinition
       componentDefinition={oscalData["component-definition"]}
@@ -153,7 +153,7 @@ export function OSCALComponentLoader(props) {
     />
   );
 }
-export function OSCALProfileLoader(props) {
+export function OSCALProfileLoader() {
   const renderer = (oscalData, oscalUrl) => (
     <OSCALProfile profile={oscalData.profile} parentUrl={oscalUrl} />
   );

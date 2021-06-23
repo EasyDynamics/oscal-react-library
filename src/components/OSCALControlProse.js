@@ -23,7 +23,7 @@ const ParamValue = styled(withTheme(Typography))((props) => ({
   "border-radius": "5px",
 }));
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   OSCALStatementNotImplemented: {
     color: "silver",
   },
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
  */
 const getParameterLabel = (parameters, parameterId) => {
   const parameter = parameters.find(
-    (parameter) => parameter.id === parameterId
+    (foundParameter) => foundParameter.id === parameterId
   );
 
   if (!parameter) {

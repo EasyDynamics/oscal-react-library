@@ -7,7 +7,7 @@ import {
   OSCALReplacedProseWithParameterLabel,
 } from "./OSCALControlProse";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   OSCALControlPart: {
     "padding-left": "2em",
   },

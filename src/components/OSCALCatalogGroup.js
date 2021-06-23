@@ -11,7 +11,7 @@ import FolderIcon from "@material-ui/icons/Folder";
 import { makeStyles } from "@material-ui/core/styles";
 import OSCALControl from "./OSCALControl";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   OSCALControlList: {
     "padding-left": "2em",
     "padding-right": "2em",

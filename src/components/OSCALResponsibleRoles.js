@@ -29,7 +29,7 @@ export default function OSCALResponsibleRoles(props) {
       <Table size="small">
         <TableBody>
           {props.responsibleRoles &&
-            Object.entries(props.responsibleRoles).map(([key, role], index) => (
+            Object.entries(props.responsibleRoles).map(([key, role]) => (
               <TableRow key={key}>
                 <TableCell
                   className={classes.OSCALResponsibleRolesSubDataHeader}

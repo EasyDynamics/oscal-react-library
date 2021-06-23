@@ -17,7 +17,7 @@ function getControlStatusCss(props) {
   return "";
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   OSCALControl: {
     margin: "1em 0 1em 0",
   },
@@ -75,7 +75,7 @@ export default function OSCALControl(props) {
           {props.control.title} {modificationDisplay}
         </Typography>
         {props.control.parts &&
-          props.control.parts.map((part, index) => (
+          props.control.parts.map((part) => (
             <OSCALControlPart
               part={part}
               parameters={props.control.params}
