@@ -33,6 +33,11 @@ export default function OSCALComponentDefinition(props) {
     // eslint-disable-next-line
   }, []);
 
+  // Throw error to OSCALLoader
+  if (error) {
+    return props.onError(error);
+  }
+
   let controlImpl;
 
   if (!isLoaded) {

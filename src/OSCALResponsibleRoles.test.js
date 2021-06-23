@@ -3,11 +3,12 @@ import { render, screen, within } from "@testing-library/react";
 import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
 import { metadataTestData } from "./OSCALMetadata.test";
 
-export const responsibleRolesTestData = {
-  provider: {
+export const responsibleRolesTestData = [
+  {
     "party-uuids": ["party-1"],
+    "role-id": "provider",
   },
-};
+];
 
 function responsibleRolesRenderer() {
   render(
