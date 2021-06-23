@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { OSCALProfileLoader } from "./OSCALLoader";
 import OSCALProfile from "./OSCALProfile";
 import { metadataTestData, testOSCALMetadata } from "./OSCALMetadata.test";
@@ -58,9 +58,9 @@ const profileTestData = {
 const profileParentUrlTestData =
   "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json";
 
-test("OSCALProfile loads", () => {
-  render(<OSCALProfileLoader />);
-});
+  test("OSCALProfile loads", () => {
+    render(<OSCALProfileLoader />);
+  });
 
 function profileRenderer() {
   render(
@@ -74,10 +74,10 @@ function profileRenderer() {
 function testOSCALProfile(parentElementName, renderer) {
   test(`${parentElementName} displays control modifications`, async () => {
     renderer();
-    const modButton = screen.getByRole("button", {name: "Modifications"});
-    userEvent.click(modButton);
+    const modButton = await screen.findByRole("button", {name: "ac-1 modifications"}, {timeout: 10000});
+    fireEvent.click(modButton);
     expect(
-      await screen.getByText("Modifications")
+      await screen.findByText("Modifications")
     ).toBeVisible();
   });
 }

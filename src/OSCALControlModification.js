@@ -163,6 +163,7 @@ export default function OSCALControlModification(props) {
             variant="outlined"
             size="small"
             className={classes.OSCALControlModificationsButton}
+            aria-label={controlPartId + " modifications"}
             onClick={handleClick}
           >
             <LayersIcon />
