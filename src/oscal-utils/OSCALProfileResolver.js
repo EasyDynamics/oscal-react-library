@@ -56,7 +56,6 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
       (result) => {
         if (result.catalog) {
           // Dig through catalog controls and add to profile.controls
-          /* eslint-enable */
           result.catalog.groups.forEach((group) => {
             resolvedControls.push(...group.controls);
           });
@@ -96,29 +95,28 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
 }
 
 export function OSCALResolveProfile(profile, parentUrl, onSuccess, onError) {
-  // eslint-disable-next-line
-  if (!profile["imports"]) {
+  if (!profile.imports) {
     return;
   }
+
+  // profile does not have a resolvedControls field.
+  // profile.resolvedControls needs to be declared & initialized here.
   /* eslint no-param-reassign: "error" */
   profile.resolvedControls = [];
-  let importUrl;
-  // iterate through all of the profile imports
-  // for each import call OSCALResolveProfileOrCatalogUrlControls
-  profile.imports.forEach((imp) => {
-    importUrl = getUriFromBackMatterByHref(
-      profile["back-matter"],
-      imp.href,
-      parentUrl
-    );
-    OSCALResolveProfileOrCatalogUrlControls(
-      profile.resolvedControls,
-      importUrl,
-      parentUrl,
-      profile["back-matter"],
-      onSuccess,
-      onError,
-      []
-    );
-  });
+
+  profile.imports
+    .map((imp) =>
+      getUriFromBackMatterByHref(profile["back-matter"], imp.href, parentUrl)
+    )
+    .forEach((importUrl) => {
+      OSCALResolveProfileOrCatalogUrlControls(
+        profile.resolvedControls,
+        importUrl,
+        parentUrl,
+        profile["back-matter"],
+        onSuccess,
+        onError,
+        []
+      );
+    });
 }

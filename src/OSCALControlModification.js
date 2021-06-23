@@ -29,8 +29,8 @@ const getAlterAddsOrRemovesDisplay = (addsElements, addsLabel) => {
     return null;
   }
 
-  // Adding
-  // Ignore parts for now
+  // Handle adds; however, the parts attribute is ignored for
+  // now due to parsing complications.
   const typographies = addsElements
     .flatMap((element) => element.props ?? [])
     .map((item) => (
@@ -103,7 +103,12 @@ const getModifications = (controlPartId, controlId, modList, modText) => {
 };
 
 export default function OSCALControlModification(props) {
-  if (!props.modifications || !props.modifications.alters) {
+  // Finds the control-id within alters and matches it with a resolved control
+  const alter = props.modifications?.alters?.find(
+    (element) => element["control-id"] === props.controlId
+  );
+
+  if (!alter) {
     return null;
   }
 
@@ -119,35 +124,26 @@ export default function OSCALControlModification(props) {
   };
 
   // If this was called at the top-level of the control, the id is the same as control id
-  const partId = props.controlPartId ? props.controlPartId : props.controlId;
-
-  // Finds the control-id within alters and matches it with a resolved control
-  const alter = props.modifications.alters.find(
-    (element) => element["control-id"] === props.controlId
-  );
+  const controlPartId = props.controlPartId ?? props.controlId;
 
   let addsDisplay = null;
   const removesDisplay = null;
   let len;
   let modLength = 0;
 
-  if (alter) {
-    // Get all add modifications
-    if (alter.adds) {
-      [addsDisplay, len] = getModifications(
-        partId,
-        props.controlId,
-        alter.adds,
-        "Adds "
-      );
-      modLength += len;
-    }
-
-    // Get all remove modifications
-    // if (alter.removes) {
-    // DO NOTHING FOR NOW
-    // }
+  // Get all add modifications
+  if (alter.adds) {
+    [addsDisplay, len] = getModifications(
+      controlPartId,
+      props.controlId,
+      alter.adds,
+      "Adds "
+    );
+    modLength += len;
   }
+
+  // TODO(EGRC-407): Implement remove modifications
+  // if (alter.removes) { }
 
   // Display modifications if there are any
   if (!modLength) return null;

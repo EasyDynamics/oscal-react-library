@@ -35,14 +35,11 @@ export default function getUriFromBackMatterByHref(
   }
   // Dig into back-matter to look for absolute href
   const importUuid = href.substring(1);
-  let foundResource = null;
-  backMatter.resources.some((resource) => {
-    if (resource.uuid === importUuid) {
-      foundResource = resource;
-      return true;
-    }
-    return false;
-  });
+
+  const foundResource = backMatter.resources.find(
+    (resource) => resource.uuid === importUuid
+  );
+
   if (!foundResource) {
     throw new Error("resource not found for href");
   }
