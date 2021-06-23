@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import { OSCALProfileLoader } from "./OSCALLoader";
 import OSCALProfile from "./OSCALProfile";
 import { metadataTestData, testOSCALMetadata } from "./OSCALMetadata.test";
@@ -72,13 +72,23 @@ function profileRenderer() {
 }
 
 function testOSCALProfile(parentElementName, renderer) {
+  test(`${parentElementName} displays controls`, async () => {
+    act(() => {
+      renderer();
+    })
+    const result = await screen.findByText("ac-1", {timeout: 10000});
+    expect(result).toBeVisible();
+  });
+
   test(`${parentElementName} displays control modifications`, async () => {
     renderer();
-    const modButton = await screen.findByRole("button", {name: "ac-1 modifications"}, {timeout: 10000});
+    const modButton = await screen.findByRole(
+      "button",
+      { name: "ac-1 modifications" },
+      { timeout: 10000 }
+    );
     fireEvent.click(modButton);
-    expect(
-      await screen.findByText("Modifications")
-    ).toBeVisible();
+    expect(await screen.findByText("Modifications")).toBeVisible();
   });
 }
 
