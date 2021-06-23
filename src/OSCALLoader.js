@@ -29,7 +29,7 @@ const defaultOscalCatalogUrl =
 const defaultOscalSspUrl =
   "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/ssp/json/ssp-example.json";
 const defaultOSCALComponentUrl =
-  "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/component-definition/json/example-component.json";
+  "https://raw.githubusercontent.com/EasyDynamics/oscal-content/manual-fix-of-component-paths/examples/component-definition/json/example-component.json";
 
 export default function OSCALLoader(props) {
   const [error, setError] = useState(null);
