@@ -34,7 +34,7 @@ const getAlterAddsOrRemovesDisplay = (addsElements, addsLabel) => {
   const typographies = addsElements
     .flatMap((element) => element.props ?? [])
     .map((item) => (
-      <Typography color="textsecondary" paragraph="true" variant="body1">
+      <Typography color="textSecondary" paragraph="true" variant="body1">
         Name: {item.name}, Value: {item.value}
       </Typography>
     ));
@@ -42,7 +42,7 @@ const getAlterAddsOrRemovesDisplay = (addsElements, addsLabel) => {
   return (
     // TODO - consider making this into a table
     <DialogContentText
-      color="textprimary"
+      color="textPrimary"
       id="scroll-dialog-description"
       tabIndex={-1}
       variant="h6"
@@ -163,7 +163,7 @@ export default function OSCALControlModification(props) {
             variant="outlined"
             size="small"
             className={classes.OSCALControlModificationsButton}
-            aria-label={controlPartId + " modifications"}
+            aria-label={`${controlPartId} modifications`}
             onClick={handleClick}
           >
             <LayersIcon />
