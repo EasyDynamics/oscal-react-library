@@ -3,7 +3,6 @@ import { render, screen } from "@testing-library/react";
 import { OSCALProfileLoader } from "./OSCALLoader";
 import OSCALProfile from "./OSCALProfile";
 import { metadataTestData, testOSCALMetadata } from "./OSCALMetadata.test";
-import { controlsData } from "./OSCALComponentDefinitionControlImplementation.test";
 import testOSCALBackMatter, {
   backMatterTestData,
 } from "./OSCALBackMatter.test";
@@ -16,16 +15,15 @@ const profileTestData = {
       href: "#dc380596-027f-423b-83f2-82757554ee27",
       "include-controls": [
         {
-          "with-ids": ["control-1", "control-1.1", "control-2", "control-2.1"],
+          "with-ids": ["ac-1", "ac-2", "ac-2.1"],
         },
       ],
     },
   ],
-  resolvedControls: controlsData,
   "modify": {
     "alters": [
       {
-        "control-id": "control-1",
+        "control-id": "ac-1",
         "adds": [
           {
             "position": "starting",
@@ -39,7 +37,7 @@ const profileTestData = {
         ],
       },
       {
-        "control-id": "control-2",
+        "control-id": "ac-2",
         "adds": [
           {
             "position": "starting",
