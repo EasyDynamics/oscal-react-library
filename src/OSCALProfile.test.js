@@ -20,17 +20,17 @@ const profileTestData = {
       ],
     },
   ],
-  "modify": {
-    "alters": [
+  modify: {
+    alters: [
       {
         "control-id": "ac-1",
-        "adds": [
+        adds: [
           {
-            "position": "starting",
-            "props": [
+            position: "starting",
+            props: [
               {
-                "name": "priority",
-                "value": "P1"
+                name: "priority",
+                value: "P1",
               },
             ],
           },
@@ -38,13 +38,13 @@ const profileTestData = {
       },
       {
         "control-id": "ac-2",
-        "adds": [
+        adds: [
           {
-            "position": "starting",
-            "props": [
+            position: "starting",
+            props: [
               {
-                "name": "priority",
-                "value": "P1"
+                name: "priority",
+                value: "P1",
               },
             ],
           },
@@ -71,6 +71,19 @@ function profileRenderer() {
   );
 }
 
+function testOSCALProfile(parentElementName, renderer) {
+  test(`${parentElementName} displays control modifications`, async () => {
+    renderer();
+    const modButton = screen.getByRole("button", {name: "Modifications"});
+    userEvent.click(modButton);
+    expect(
+      await screen.getByText("Modifications")
+    ).toBeVisible();
+  });
+}
+
 testOSCALMetadata("OSCALProfile", profileRenderer);
+
+testOSCALProfile("OSCALProfile", profileRenderer);
 
 testOSCALBackMatter("OSCALProfile", profileRenderer);
