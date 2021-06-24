@@ -52,7 +52,7 @@ const getAlterAddsOrRemovesDisplay = (
   const labelTypograhy = <Typography variant="h6">{addsLabel}</Typography>;
 
   return (
-    <DialogContent>
+    <DialogContent dividers>
       {labelTypograhy}
       {typographies}
     </DialogContent>
