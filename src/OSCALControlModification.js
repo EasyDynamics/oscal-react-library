@@ -101,9 +101,7 @@ const getModifications = (controlPartId, controlId, modList, modText) => {
 
   // return display & mod length
   return [
-    <DialogContent dividers>
-      {getAlterAddsOrRemovesDisplay(controlParts, modText, controlPartId)}
-    </DialogContent>,
+    getAlterAddsOrRemovesDisplay(controlParts, modText, controlPartId),
     controlParts.length,
   ];
 };
