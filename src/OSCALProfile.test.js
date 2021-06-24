@@ -89,6 +89,7 @@ function testOSCALProfile(parentElementName, renderer) {
     );
     fireEvent.click(modButton);
     expect(await screen.findByText("Modifications")).toBeVisible();
+    expect(await screen.findByText("Adds")).toBeVisible();
   });
 }
 
