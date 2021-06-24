@@ -34,22 +34,18 @@ const getAlterAddsOrRemovesDisplay = (addsElements, addsLabel) => {
   const typographies = addsElements
     .flatMap((element) => element.props ?? [])
     .map((item) => (
-      <Typography color="textSecondary" paragraph="true" variant="body1">
+      <Typography color="textSecondary" variant="body1">
         Name: {item.name}, Value: {item.value}
       </Typography>
     ));
 
+  const labelTypograhy = <Typography variant="h6">{addsLabel}</Typography>;
+
   return (
-    // TODO - consider making this into a table
-    <DialogContentText
-      color="textPrimary"
-      id="scroll-dialog-description"
-      tabIndex={-1}
-      variant="h6"
-    >
-      {addsLabel}
+    <DialogContent dividers>
+      {labelTypograhy}
       {typographies}
-    </DialogContentText>
+    </DialogContent>
   );
 };
 
@@ -95,9 +91,7 @@ const getModifications = (controlPartId, controlId, modList, modText) => {
 
   // return display & mod length
   return [
-    <DialogContent dividers>
-      {getAlterAddsOrRemovesDisplay(controlParts, modText)}
-    </DialogContent>,
+    getAlterAddsOrRemovesDisplay(controlParts, modText),
     controlParts.length,
   ];
 };
