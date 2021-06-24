@@ -25,7 +25,11 @@ const useStyles = makeStyles((theme) => ({
  * @param {String} controlPartId Control part ID to match
  * @returns html object
  */
-const getAlterAddsOrRemovesDisplay = (addsElements, addsLabel) => {
+const getAlterAddsOrRemovesDisplay = (
+  addsElements,
+  addsLabel,
+  controlPartId
+) => {
   if (!addsElements?.length) {
     return null;
   }
@@ -39,7 +43,7 @@ const getAlterAddsOrRemovesDisplay = (addsElements, addsLabel) => {
         color="textsecondary"
         paragraph="true"
         variant="body1"
-        key={item.value}
+        key={controlPartId}
       >
         Name: {item.name}, Value: {item.value}
       </Typography>
