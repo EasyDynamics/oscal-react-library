@@ -5,7 +5,7 @@ import ListSubheader from "@material-ui/core/ListSubheader";
 import OSCALMetadata from "./OSCALMetadata";
 import OSCALControl from "./OSCALControl";
 import OSCALBackMatter from "./OSCALBackMatter";
-import { OSCALResolveProfile } from "./oscal-utils/OSCALProfileResolver";
+import { OSCALResolveProfile } from "../oscal-utils/OSCALProfileResolver";
 
 const useStyles = makeStyles((theme) => ({
   paper: {

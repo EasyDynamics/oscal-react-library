@@ -6,7 +6,7 @@ import Chip from "@material-ui/core/Chip";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import { Tooltip, Typography } from "@material-ui/core";
-import { getAbsoluteUrl } from "./oscal-utils/OSCALBackMatterUtils";
+import { getAbsoluteUrl } from "../oscal-utils/OSCALBackMatterUtils";
 
 // TODO: Temporary fix for missing media type (https://github.com/GSA/fedramp-automation/issues/103)
 // Uses file extension instead

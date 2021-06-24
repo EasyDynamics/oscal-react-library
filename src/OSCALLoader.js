@@ -6,10 +6,10 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import ReplayIcon from "@material-ui/icons/Replay";
-import OSCALSsp from "./OSCALSsp";
-import OSCALCatalog from "./OSCALCatalog";
-import OSCALComponentDefinition from "./OSCALComponentDefinition";
-import OSCALProfile from "./OSCALProfile";
+import OSCALSsp from "./components/OSCALSsp";
+import OSCALCatalog from "./components/OSCALCatalog";
+import OSCALComponentDefinition from "./components/OSCALComponentDefinition";
+import OSCALProfile from "./components/OSCALProfile";
 
 const useStyles = makeStyles((theme) => ({
   catalogForm: {

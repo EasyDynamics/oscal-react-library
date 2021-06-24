@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import OSCALControlImplementation from "./OSCALControlImplementation";
-import getByTextIncludingChildern from "./oscal-utils/TestUtils";
+import getByTextIncludingChildern from "../oscal-utils/TestUtils";
 
 const controlImplTestData = {
   description: "This is the control implementation for the system.",

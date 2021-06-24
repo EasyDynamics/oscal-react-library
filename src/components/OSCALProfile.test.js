@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent, act } from "@testing-library/react";
-import { OSCALProfileLoader } from "./OSCALLoader";
+import { OSCALProfileLoader } from "../OSCALLoader";
 import OSCALProfile from "./OSCALProfile";
 import { metadataTestData, testOSCALMetadata } from "./OSCALMetadata.test";
 import testOSCALBackMatter, {
@@ -75,8 +75,8 @@ function testOSCALProfile(parentElementName, renderer) {
   test(`${parentElementName} displays controls`, async () => {
     act(() => {
       renderer();
-    })
-    const result = await screen.findByText("ac-1", {timeout: 10000});
+    });
+    const result = await screen.findByText("ac-1", { timeout: 10000 });
     expect(result).toBeVisible();
   });
 

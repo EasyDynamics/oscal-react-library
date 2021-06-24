@@ -7,7 +7,7 @@ import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
 import OSCALControl from "./OSCALControl";
-import getControlOrSubControl from "./oscal-utils/OSCALControlResolver";
+import getControlOrSubControl from "../oscal-utils/OSCALControlResolver";
 
 const useStyles = makeStyles((theme) => ({
   OSCALImplReq: {
