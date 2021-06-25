@@ -113,6 +113,7 @@ export default function OSCALControlImplementationImplReq(props) {
   }
   // Setup UI of Control Implemention with verticle tabs and a tab panel to
   // display control implementation, which are both wrapped in a card
+
   return (
     <Card className={`${classes.OSCALImplReq} ${classes.OSCALImplChildLevel}`}>
       <CardContent>
@@ -130,6 +131,7 @@ export default function OSCALControlImplementationImplReq(props) {
                 label={component.title}
                 {...a11yProps(index)}
                 className={classes.tabButton}
+                key={component.uuid}
               />
             ))}
           </Tabs>
@@ -138,6 +140,7 @@ export default function OSCALControlImplementationImplReq(props) {
               value={value}
               index={index}
               className={classes.tabPanelScrollable}
+              key={component.uuid}
             >
               <OSCALControl
                 control={getControlOrSubControl(
