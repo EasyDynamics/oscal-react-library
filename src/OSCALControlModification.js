@@ -9,7 +9,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import IconButton from "@material-ui/core/IconButton";
 import LayersIcon from "@material-ui/icons/Layers";
 import { makeStyles } from "@material-ui/core/styles";
-import { Tooltip, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
+import StyledTooltip from "./OSCALStyledTooltip";
 
 const useStyles = makeStyles((theme) => ({
   OSCALControlModificationsButton: {
@@ -153,7 +154,7 @@ export default function OSCALControlModification(props) {
   if (!modLength) return null;
   return (
     <span>
-      <Tooltip title="Modifications">
+      <StyledTooltip title="Modifications">
         <Badge
           anchorOrigin={{
             vertical: "top",
@@ -173,7 +174,7 @@ export default function OSCALControlModification(props) {
             <LayersIcon />
           </IconButton>
         </Badge>
-      </Tooltip>
+      </StyledTooltip>
       <Dialog
         open={open}
         onClose={handleClose}
