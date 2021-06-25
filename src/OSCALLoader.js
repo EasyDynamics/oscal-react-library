@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Alert from "@material-ui/lab/Alert";
@@ -9,6 +9,7 @@ import ReplayIcon from "@material-ui/icons/Replay";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
+import OSCALProfile from "./OSCALProfile";
 
 const useStyles = makeStyles((theme) => ({
   catalogForm: {
@@ -30,12 +31,15 @@ const defaultOscalSspUrl =
   "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/ssp/json/ssp-example.json";
 const defaultOSCALComponentUrl =
   "https://raw.githubusercontent.com/EasyDynamics/oscal-content/manual-fix-of-component-paths/examples/component-definition/json/example-component.json";
+const defaultOSCALProfileUrl =
+  "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json";
 
 export default function OSCALLoader(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [oscalData, setOscalData] = useState([]);
   const [oscalUrl, setOscalUrl] = useState(props.oscalUrl);
+  const unmounted = useRef(false);
 
   const classes = useStyles();
 
@@ -44,9 +48,11 @@ export default function OSCALLoader(props) {
       .then((res) => res.json())
       .then(
         (result) => {
-          setOscalData(result);
-          setIsLoaded(true);
-          setError(null);
+          if (!unmounted.current) {
+            setOscalData(result);
+            setIsLoaded(true);
+            setError(null);
+          }
         },
         // Note: it's important to handle errors here
         // instead of a catch() block so that we don't swallow
@@ -72,7 +78,10 @@ export default function OSCALLoader(props) {
   // similar to componentDidMount()
   useEffect(() => {
     loadOscalData(oscalUrl);
-    // eslint-disable-next-line
+
+    return () => {
+      unmounted.current = true;
+    };
   }, []);
 
   let result;
@@ -166,6 +175,18 @@ export function OSCALComponentLoader(props) {
     <OSCALLoader
       oscalModelType="Component"
       oscalUrl={defaultOSCALComponentUrl}
+      renderer={renderer}
+    />
+  );
+}
+export function OSCALProfileLoader(props) {
+  const renderer = (oscalData, oscalUrl) => (
+    <OSCALProfile profile={oscalData.profile} parentUrl={oscalUrl} />
+  );
+  return (
+    <OSCALLoader
+      oscalModelType="Profile"
+      oscalUrl={defaultOSCALProfileUrl}
       renderer={renderer}
     />
   );

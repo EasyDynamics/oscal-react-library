@@ -1,3 +1,5 @@
+import getUriFromBackMatterByHref from "./OSCALBackMatterUtils";
+
 /**
  * Profiles are brought in through different methods in OSCAL models.
  *
@@ -16,42 +18,6 @@
  * which can also be a reference to a back matter resource, i.e. profile.back-matter.resources[BY-ARRAY].rlinks[BY-ARRAY].href
  * -- https://github.com/usnistgov/oscal-content/blob/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json#L2567
  */
-
-/**
- * Gets an rlink URI from the given back matter's resource by the given HREF UUID.
- *
- * TODO - This should probably be a global function not specific to profiles
- *
- * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/implementation-layer/component/xml-schema/##local_back-matter-resource-rlink_def-h3}
- */
-function getUriFromBackMatterByHref(backMatter, href) {
-  if (!href.startsWith("#")) {
-    throw new Error("not an internal href");
-  }
-  // Dig into back-matter to look for absolute href
-  const profileImportUuid = href.substring(1);
-  let foundResource = null;
-  backMatter.resources.some((resource) => {
-    if (resource.uuid === profileImportUuid) {
-      foundResource = resource;
-      return true;
-    }
-    return false;
-  });
-  if (!foundResource) {
-    throw new Error("resource not found for href");
-  }
-  // TODO - determine how to deal with multiple rlinks
-  let profileImportUrl = foundResource.rlinks[0].href;
-  // TODO this is incorrect in the profile (https://github.com/usnistgov/oscal-content/issues/59, https://easydynamics.atlassian.net/browse/EGRC-266)
-  if (
-    foundResource.rlinks[0]["media-type"].endsWith("json") &&
-    profileImportUrl.endsWith(".xml")
-  ) {
-    profileImportUrl = profileImportUrl.replace(".xml", ".json");
-  }
-  return profileImportUrl;
-}
 
 /**
  * Loads a URL which may represent a catalog or profile and adds the controls to the given resolvedControls.
@@ -90,7 +56,6 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
       (result) => {
         if (result.catalog) {
           // Dig through catalog controls and add to profile.controls
-          /* eslint-enable */
           result.catalog.groups.forEach((group) => {
             resolvedControls.push(...group.controls);
           });
@@ -127,4 +92,31 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
       },
       (error) => onError(error)
     );
+}
+
+export function OSCALResolveProfile(profile, parentUrl, onSuccess, onError) {
+  if (!profile.imports) {
+    return;
+  }
+
+  // profile does not have a resolvedControls field.
+  // profile.resolvedControls needs to be declared & initialized here.
+  /* eslint no-param-reassign: "error" */
+  profile.resolvedControls = [];
+
+  profile.imports
+    .map((imp) =>
+      getUriFromBackMatterByHref(profile["back-matter"], imp.href, parentUrl)
+    )
+    .forEach((importUrl) => {
+      OSCALResolveProfileOrCatalogUrlControls(
+        profile.resolvedControls,
+        importUrl,
+        parentUrl,
+        profile["back-matter"],
+        onSuccess,
+        onError,
+        []
+      );
+    });
 }

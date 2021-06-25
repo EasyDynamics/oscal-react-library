@@ -4,6 +4,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import OSCALControlPart from "./OSCALControlPart";
+import OSCALControlModification from "./OSCALControlModification";
 
 // TODO - This is probably 800-53 specific?
 // Disable linting until completed
@@ -50,7 +51,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function OSCALControl(props) {
+  if (
+    props.includeControlIds &&
+    !props.includeControlIds.includes(props.control.id)
+  ) {
+    return null;
+  }
   const classes = useStyles(props);
+
+  let modificationDisplay;
+  if (props.modifications) {
+    modificationDisplay = (
+      <OSCALControlModification
+        modifications={props.modifications}
+        controlId={props.control.id}
+      />
+    );
+  }
 
   return (
     <Card
@@ -63,7 +80,7 @@ export default function OSCALControl(props) {
           className={classes.OSCALControlChildLevelTitle}
         >
           <span className={classes.OSCALControlId}>{props.control.id}</span>{" "}
-          {props.control.title}
+          {props.control.title} {modificationDisplay}
         </Typography>
         {props.control.parts &&
           props.control.parts.map((part, index) => (
@@ -72,6 +89,8 @@ export default function OSCALControl(props) {
               parameters={props.control.params}
               implReqStatements={props.implReqStatements}
               componentId={props.componentId}
+              control={props.control}
+              modifications={props.modifications}
               // eslint-disable-next-line
               key={`part-${index}`}
             />
@@ -80,6 +99,8 @@ export default function OSCALControl(props) {
           props.control.controls.map((control) => (
             <OSCALControl
               control={control}
+              includeControlIds={props.includeControlIds}
+              modifications={props.modifications}
               parameters={control.params}
               childLevel={props.childLevel + 1}
               key={control.id}

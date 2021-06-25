@@ -3,6 +3,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Link from "@material-ui/core/Link";
 import OSCALControlGuidance from "./OSCALControlGuidance";
+import OSCALControlModification from "./OSCALControlModification";
 import StyledTooltip from "./OSCALStyledTooltip";
 
 const useStyles = makeStyles((theme) => ({
@@ -75,19 +76,17 @@ function getStatementByComponent(implReqStatements, statementId, componentId) {
  * TODO - This is probably 800-53 specific?
  * TODO - Add support for select param
  * BUG - If there is more then one parameter in the prose, this script will not work
- */ 
+ */
 
 function ReplacedProseWithParameterLabel(props) {
- 
   if (!props.prose) {
     return null;
   }
   let replacedProse;
-  
+
   if (!props.parameters) {
     replacedProse = props.prose;
-  } 
-  else {
+  } else {
     function getParameterLabel(parameterId) {
       // trim
       parameterId = parameterId.substring(18, parameterId.length - 3);
@@ -95,7 +94,7 @@ function ReplacedProseWithParameterLabel(props) {
       const parameter = props.parameters.find(
         (parameter) => parameter.id === parameterId
       );
-      
+
       if (!parameter) {
         return;
       }
@@ -103,11 +102,14 @@ function ReplacedProseWithParameterLabel(props) {
       return `< ${parameter.label} >`;
     }
 
-    replacedProse = props.prose.replace(/\{\{ insert: param, ([0-9a-zA-B-_.]*) \}\}/g, getParameterLabel);
+    replacedProse = props.prose.replace(
+      /\{\{ insert: param, ([0-9a-zA-B-_.]*) \}\}/g,
+      getParameterLabel
+    );
   }
   return (
     <Typography className={props.className}>
-      {props.label} {replacedProse}
+      {props.label} {replacedProse} {props.modificationDisplay}
     </Typography>
   );
 } /* eslint-disable */
@@ -137,6 +139,7 @@ function ReplacedProseWithByComponentParameterValue(props) {
         prose={props.prose}
         parameters={props.parameters}
         className={props.unimplementedStatementClassName}
+        modificationDisplay={props.modificationDisplay}
       />
     );
   }
@@ -176,23 +179,37 @@ function ReplacedProseWithByComponentParameterValue(props) {
       </StyledTooltip>
       {"\u00A0"}
       <span dangerouslySetInnerHTML={{ __html: replacedProse }} />
+      {props.modificationDisplay}
     </Typography>
   );
 } /* eslint-enable */
 
 export default function OSCALControlPart(props) {
-  const classes = useStyles();
-
   // Don't display assessment if we're displaying a control implementation
   if (
-    props.implReqStatements &&
+    (props.implReqStatements || props.modifications) &&
     (props.part.name === "objective" || props.part.name === "assessment")
   ) {
     return null;
   }
 
+  const classes = useStyles();
+
   if (props.part.name === "guidance") {
     return <OSCALControlGuidance prose={props.part.prose} />;
+  }
+
+  let modificationDisplay;
+  // Passing all of the modifications works, but could be made
+  // more efficient later on.
+  if (props.modifications) {
+    modificationDisplay = (
+      <OSCALControlModification
+        modifications={props.modifications}
+        controlPartId={props.part.id}
+        controlId={props.controlId}
+      />
+    );
   }
 
   const isStatement = props.part.name === "statement";
@@ -212,6 +229,7 @@ export default function OSCALControlPart(props) {
         componentParameterSettingClassname={
           classes.OSCALComponentParameterSetting
         }
+        modificationDisplay={modificationDisplay}
       />
     );
   } else {
@@ -220,6 +238,7 @@ export default function OSCALControlPart(props) {
         label={label}
         prose={props.part.prose}
         parameters={props.parameters}
+        modificationDisplay={modificationDisplay}
       />
     );
   }
@@ -230,6 +249,7 @@ export default function OSCALControlPart(props) {
   } else {
     className = classes.OSCALControlPart;
   }
+
   return (
     <div className={className}>
       {replacedProse}
@@ -237,10 +257,12 @@ export default function OSCALControlPart(props) {
         props.part.parts.map((part) => (
           <OSCALControlPart
             part={part}
+            controlId={props.controlId ?? props.control.id}
             parameters={props.parameters}
             implReqStatements={props.implReqStatements}
             componentId={props.componentId}
             key={part.id}
+            modifications={props.modifications}
           />
         ))}
     </div>
