@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Alert from "@material-ui/lab/Alert";
@@ -39,6 +39,7 @@ export default function OSCALLoader(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [oscalData, setOscalData] = useState([]);
   const [oscalUrl, setOscalUrl] = useState(props.oscalUrl);
+  const unmounted = useRef(false);
 
   const classes = useStyles();
 
@@ -47,9 +48,11 @@ export default function OSCALLoader(props) {
       .then((res) => res.json())
       .then(
         (result) => {
-          setOscalData(result);
-          setIsLoaded(true);
-          setError(null);
+          if (!unmounted.current) {
+            setOscalData(result);
+            setIsLoaded(true);
+            setError(null);
+          }
         },
         // Note: it's important to handle errors here
         // instead of a catch() block so that we don't swallow
@@ -75,6 +78,10 @@ export default function OSCALLoader(props) {
   // similar to componentDidMount()
   useEffect(() => {
     loadOscalData(oscalUrl);
+
+    return () => {
+      unmounted.current = true;
+    };
   }, []);
 
   let result;

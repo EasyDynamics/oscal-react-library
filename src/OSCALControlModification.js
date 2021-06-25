@@ -40,8 +40,8 @@ const getAlterAddsOrRemovesDisplay = (
     .flatMap((element) => element.props ?? [])
     .map((item) => (
       <Typography
-        color="textsecondary"
-        paragraph="true"
+        color="textSecondary"
+        paragraph
         variant="body1"
         key={controlPartId}
       >
@@ -49,17 +49,13 @@ const getAlterAddsOrRemovesDisplay = (
       </Typography>
     ));
 
+  const labelTypograhy = <Typography variant="h6">{addsLabel}</Typography>;
+
   return (
-    // TODO - consider making this into a table
-    <DialogContentText
-      color="textprimary"
-      id="scroll-dialog-description"
-      tabIndex={-1}
-      variant="h6"
-    >
-      {addsLabel}
+    <DialogContent dividers>
+      {labelTypograhy}
       {typographies}
-    </DialogContentText>
+    </DialogContent>
   );
 };
 
@@ -105,9 +101,7 @@ const getModifications = (controlPartId, controlId, modList, modText) => {
 
   // return display & mod length
   return [
-    <DialogContent dividers>
-      {getAlterAddsOrRemovesDisplay(controlParts, modText, controlPartId)}
-    </DialogContent>,
+    getAlterAddsOrRemovesDisplay(controlParts, modText, controlPartId),
     controlParts.length,
   ];
 };
@@ -173,6 +167,7 @@ export default function OSCALControlModification(props) {
             variant="outlined"
             size="small"
             className={classes.OSCALControlModificationsButton}
+            aria-label={`${controlPartId} modifications`}
             onClick={handleClick}
           >
             <LayersIcon />
