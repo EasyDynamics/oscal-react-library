@@ -41,7 +41,7 @@ const getParameterLabel = (parameters, parameterId) => {
   );
 
   if (!parameter) {
-    return {};
+    return null;
   }
   if (parameter.label) {
     return `< ${parameter.label} >`;
@@ -65,7 +65,7 @@ function getParameterValue(statementByComponent, parameterId) {
   );
 
   // Error checking: Exit function when parameter setting or it's values are not found
-  if (!foundParameterSetting || !foundParameterSetting.values) {
+  if (!foundParameterSetting?.values) {
     return null;
   }
 
@@ -85,7 +85,7 @@ function getConstraintsDisplay(modifications, parameterId) {
   const foundParameterSetting = modifications["set-parameters"].find(
     (parameterSetting) => parameterSetting["param-id"] === parameterId
   );
-  if (!foundParameterSetting || !foundParameterSetting.constraints) {
+  if (!foundParameterSetting?.constraints) {
     return "";
   }
   const constraintDescriptions = [];
@@ -102,7 +102,7 @@ function getConstraintsDisplay(modifications, parameterId) {
  * @returns the text segment component
  */
 const getTextSegment = (text, key) => {
-  if (!text || text.length === "") {
+  if (!text) {
     return null;
   }
   return (
@@ -143,7 +143,7 @@ const getParameterLabelSegment = (
 ) => {
   const parameterLabel = getParameterLabel(parameters, parameterId);
   const constraintsDisplay = getConstraintsDisplay(modifications, parameterId);
-  if (constraintsDisplay.length === 0) {
+  if (!constraintsDisplay) {
     return (
       <ParamLabel component="span" key={`param-label-key-${key}`}>
         {parameterLabel}
@@ -178,7 +178,7 @@ const getParameterValueSegment = (
 ) => {
   const parameterValue = getParameterValue(statementByComponent, parameterId);
   const constraintsDisplay = getConstraintsDisplay(modifications, parameterId);
-  if (constraintsDisplay.length === 0) {
+  if (!constraintsDisplay.length) {
     return (
       <ParamValue component="span" key={`param-value-key-${key}`}>
         {parameterValue}
