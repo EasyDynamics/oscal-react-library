@@ -1,5 +1,5 @@
 import React from "react";
-import { styled, withTheme } from "@material-ui/core/styles";
+import { styled, withTheme, makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import Badge from "@material-ui/core/Badge";
@@ -13,6 +13,7 @@ const ParamLabel = styled(withTheme(Typography))((props) => ({
   padding: "0.2em 0.5em",
   "border-radius": "5px",
   opacity: 0.5,
+  color: props.theme.palette.text.primary,
 }));
 
 const ParamValue = styled(withTheme(Typography))((props) => ({
@@ -20,6 +21,12 @@ const ParamValue = styled(withTheme(Typography))((props) => ({
   color: "white",
   padding: "0.2em 0.5em",
   "border-radius": "5px",
+}));
+
+const useStyles = makeStyles((theme) => ({
+  OSCALStatementNotImplemented: {
+    color: "silver",
+  },
 }));
 
 /**
@@ -59,7 +66,7 @@ function getParameterValue(statementByComponent, parameterId) {
 
   // Error checking: Exit function when parameter setting or it's values are not found
   if (!foundParameterSetting || !foundParameterSetting.values) {
-    return {};
+    return null;
   }
 
   // TODO parse select parameters
@@ -90,7 +97,7 @@ function getConstraintsDisplay(modifications, parameterId) {
  */
 const getTextSegment = (text) => {
   if (!text || text.length === "") {
-    return {};
+    return null;
   }
   return <Typography component="span">{text}</Typography>;
 };
@@ -198,7 +205,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
  */
 export function OSCALReplacedProseWithByComponentParameterValue(props) {
   if (!props.prose) {
-    return {};
+    return null;
   }
 
   const statementByComponent = getStatementByComponent(
@@ -207,12 +214,14 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     props.componentId
   );
   if (!statementByComponent) {
+    const classes = useStyles();
     return (
       <OSCALReplacedProseWithParameterLabel
         label={props.label}
         prose={props.prose}
         parameters={props.parameters}
         modificationDisplay={props.modificationDisplay}
+        className={classes.OSCALStatementNotImplemented}
       />
     );
   }

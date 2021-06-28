@@ -15,9 +15,6 @@ const useStyles = makeStyles((theme) => ({
     "padding-left": "0em",
   },
   OSCALStatement: {},
-  OSCALStatementNotImplemented: {
-    color: "silver",
-  },
 }));
 
 // TODO - This is probably 800-53 specific?
@@ -75,7 +72,6 @@ export default function OSCALControlPart(props) {
         implReqStatements={props.implReqStatements}
         statementId={props.part.id}
         componentId={props.componentId}
-        unimplementedStatementClassName={classes.OSCALStatementNotImplemented}
         modifications={props.modifications}
         modificationDisplay={modificationDisplay}
       />
