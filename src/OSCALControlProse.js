@@ -69,7 +69,6 @@ function getParameterValue(statementByComponent, parameterId) {
     return null;
   }
 
-  // TODO parse select parameters
   return foundParameterSetting.values.toString();
 }
 
@@ -200,10 +199,8 @@ const getParameterValueSegment = (
 
 /**
  * Replaces the parameter placeholders in the given prose with the given label
- *
- * TODO - This is probably 800-53 specific?
- * TODO - Add support for select param
- * BUG - If there is more then one parameter in the prose, this script will not work
+ * @param {Object} props
+ * @returns the parameter label component
  */
 export function OSCALReplacedProseWithParameterLabel(props) {
   if (!props.prose) {
@@ -245,8 +242,8 @@ export function OSCALReplacedProseWithParameterLabel(props) {
  * Replaces the parameter placeholders in the given prose with the values
  * from the 'by-component' within the given statementId that matches the given componentId
  * from the given implReqStatements
- *
- * TODO - This is probably 800-53 specific?
+ * @param {Object} props
+ * @returns the parameter value component
  */
 export function OSCALReplacedProseWithByComponentParameterValue(props) {
   if (!props.prose) {
