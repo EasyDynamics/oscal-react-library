@@ -97,7 +97,7 @@ const getTextSegment = (text) => {
 
 function SegmentTooltipWrapper(props) {
   return (
-    <StyledTooltip title={props.constraintsDisplay} placement="top-end">
+    <StyledTooltip title={props.constraintsDisplay} placement="top-end" arrow>
       <Badge color="secondary" variant="dot">
         {props.children}
       </Badge>
