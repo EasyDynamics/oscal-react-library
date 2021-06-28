@@ -1,26 +1,151 @@
 import React from "react";
+import { styled, withTheme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
+import Badge from "@material-ui/core/Badge";
 import StyledTooltip from "./OSCALStyledTooltip";
-import getStatementByComponent from "./oscal-utils/OSCALControlResolver";
+import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 
 const prosePlaceholderRegexpString = "{{ insert: param, ([0-9a-zA-B-_.]*) }}";
 
+const ParamLabel = styled(withTheme(Typography))((props) => ({
+  backgroundColor: props.theme.palette.warning.light,
+  padding: "0.2em 0.5em",
+  "border-radius": "5px",
+  opacity: 0.5,
+}));
+
+const ParamValue = styled(withTheme(Typography))((props) => ({
+  backgroundColor: props.theme.palette.info.light,
+  color: "white",
+  padding: "0.2em 0.5em",
+  "border-radius": "5px",
+}));
+
 /**
- * Gets the parameter ID from the given prosePlaceholder using regular expression
- * group matching
- * @param {String} prosePlaceholder
- * @returns the parameter ID
+ * Gets the label for the given parameter ID from the given parameters
+ * @param {Array} parameters
+ * @param {String} parameterId
+ * @returns the parameter label
  */
-function getParameterIdFromProsePlaceholder(prosePlaceholder) {
-  const matches = RegExp(prosePlaceholderRegexpString, "g").exec(
-    prosePlaceholder
+const getParameterLabel = (parameters, parameterId) => {
+  const parameter = parameters.find(
+    (parameter) => parameter.id === parameterId
   );
-  if (!matches || matches.length === 1) {
+
+  if (!parameter) {
     return {};
   }
-  return matches[1];
+  if (parameter.label) {
+    return `< ${parameter.label} >`;
+  }
+  if (parameter.select && parameter.select.choice) {
+    return `< ${parameter.select.choice.join(" | ")} >`;
+  }
+  return `< ${parameterId} >`;
+};
+
+/**
+ * Finds a parameter setting in a component statement
+ * @param {Object} statementByComponent
+ * @param {String} parameterId
+ * @returns the parameter label
+ */
+function getParameterValue(statementByComponent, parameterId) {
+  // Locate matching parameter to parameterId
+  const foundParameterSetting = statementByComponent["set-parameters"].find(
+    (parameterSetting) => parameterSetting["param-id"] === parameterId
+  );
+
+  // Error checking: Exit function when parameter setting or it's values are not found
+  if (!foundParameterSetting || !foundParameterSetting.values) {
+    return {};
+  }
+
+  // TODO parse select parameters
+  return foundParameterSetting.values.toString();
 }
+
+function getConstraintsDisplay(modifications, parameterId) {
+  if (!modifications || !modifications["set-parameters"] || !parameterId) {
+    return "";
+  }
+  const foundParameterSetting = modifications["set-parameters"].find(
+    (parameterSetting) => parameterSetting["param-id"] === parameterId
+  );
+  if (!foundParameterSetting || !foundParameterSetting.constraints) {
+    return "";
+  }
+  const constraintDescriptions = [];
+  foundParameterSetting.constraints.forEach((constraint) => {
+    constraintDescriptions.push(constraint.description);
+  });
+  return constraintDescriptions.join("\n");
+}
+
+/**
+ * Builds the display of a segment of non-placeholder text within prose
+ * @param {String} text
+ * @returns the text segment component
+ */
+const getTextSegment = (text) => {
+  if (!text || text.length === "") {
+    return {};
+  }
+  return <Typography component="span">{text}</Typography>;
+};
+
+function SegmentTooltipWrapper(props) {
+  return (
+    <StyledTooltip title={props.constraintsDisplay} placement="top-end">
+      <Badge color="secondary" variant="dot">
+        {props.children}
+      </Badge>
+    </StyledTooltip>
+  );
+}
+
+/**
+ * Builds the display of a segment of placeholder label text within prose
+ * @param {Array} parameters
+ * @param {String} parameterId
+ * @returns the parameter label segment component
+ */
+const getParameterLabelSegment = (parameters, parameterId, modifications) => {
+  const parameterLabel = getParameterLabel(parameters, parameterId);
+  const constraintsDisplay = getConstraintsDisplay(modifications, parameterId);
+  if (constraintsDisplay.length === 0) {
+    return <ParamLabel component="span">{parameterLabel}</ParamLabel>;
+  }
+  return (
+    <SegmentTooltipWrapper constraintsDisplay={constraintsDisplay}>
+      <ParamLabel component="span">{parameterLabel}</ParamLabel>
+    </SegmentTooltipWrapper>
+  );
+};
+
+/**
+ * Builds the display of a segment of placeholder value text within prose
+ * @param {Object} statementByComponent
+ * @param {String} parameterId
+ * @returns the parameter value segment component
+ */
+const getParameterValueSegment = (
+  statementByComponent,
+  parameterId,
+  modifications
+) => {
+  const parameterValue = getParameterValue(statementByComponent, parameterId);
+  const constraintsDisplay = getConstraintsDisplay(modifications, parameterId);
+  if (constraintsDisplay.length === 0) {
+    return <ParamValue component="span">{parameterValue}</ParamValue>;
+  }
+  return (
+    <SegmentTooltipWrapper constraintsDisplay={constraintsDisplay}>
+      <ParamValue component="span">{parameterValue}</ParamValue>
+    </SegmentTooltipWrapper>
+  );
+};
 
 /**
  * Replaces the parameter placeholders in the given prose with the given label
@@ -33,38 +158,33 @@ export function OSCALReplacedProseWithParameterLabel(props) {
   if (!props.prose) {
     return null;
   }
-  let replacedProse;
 
   if (!props.parameters) {
-    replacedProse = props.prose;
-  } else {
-    const getParameterLabel = (prosePlaceholder) => {
-      const parameterId = getParameterIdFromProsePlaceholder(prosePlaceholder);
-
-      const parameter = props.parameters.find(
-        (parameter) => parameter.id === parameterId
-      );
-
-      if (!parameter) {
-        return {};
-      }
-      if (parameter.label) {
-        return `< ${parameter.label} >`;
-      }
-      if (parameter.select && parameter.select.choice) {
-        return `< ${parameter.select.choice.join(" | ")} >`;
-      }
-      return `< ${prosePlaceholder} >`;
-    };
-
-    replacedProse = props.prose.replace(
-      RegExp(prosePlaceholderRegexpString, "g"),
-      getParameterLabel
+    return (
+      <Typography className={props.className}>
+        {props.label}
+        {props.prose}
+        {props.modificationDisplay}
+      </Typography>
     );
   }
+
   return (
     <Typography className={props.className}>
-      {props.label} {replacedProse} {props.modificationDisplay}
+      {props.label}
+      {props.prose
+        .split(RegExp(prosePlaceholderRegexpString, "g"))
+        .map((segment, index) => {
+          if (index % 2 === 0) {
+            return getTextSegment(segment);
+          }
+          return getParameterLabelSegment(
+            props.parameters,
+            segment,
+            props.modifications
+          );
+        })}
+      {props.modificationDisplay}
     </Typography>
   );
 }
@@ -80,6 +200,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   if (!props.prose) {
     return {};
   }
+
   const statementByComponent = getStatementByComponent(
     props.implReqStatements,
     props.statementId,
@@ -91,44 +212,29 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
         label={props.label}
         prose={props.prose}
         parameters={props.parameters}
-        className={props.unimplementedStatementClassName}
         modificationDisplay={props.modificationDisplay}
       />
     );
   }
-  // Finds a parameter setting in a component statement
-  function getParameterValue(prosePlaceholder) {
-    const parameterId = getParameterIdFromProsePlaceholder(prosePlaceholder);
 
-    // Locate matching parameter to parameterId
-    const foundParameterSetting = statementByComponent["set-parameters"].find(
-      (parameterSetting) => parameterSetting["param-id"] === parameterId
-    );
-
-    // Error checking: Exit function when parameter setting or it's values are not found
-    if (!foundParameterSetting || !foundParameterSetting.values) {
-      return {};
-    }
-
-    // TODO parse select parameters
-    return `<span class="${
-      props.componentParameterSettingClassname
-    }" >${foundParameterSetting.values.toString()}</span>`;
-  }
-
-  const replacedProse = props.prose.replace(
-    RegExp(prosePlaceholderRegexpString, "g"),
-    getParameterValue
-  );
   const { description } = statementByComponent;
-  // TODO dangerouslySetInnerHTML is not safe, there are other alternatives
   return (
     <Typography>
       <StyledTooltip title={description}>
         <Link href="#{props.label}">{props.label}</Link>
       </StyledTooltip>
-      {"\u00A0"}
-      <span dangerouslySetInnerHTML={{ __html: replacedProse }} />
+      {props.prose
+        .split(RegExp(prosePlaceholderRegexpString, "g"))
+        .map((segment, index) => {
+          if (index % 2 === 0) {
+            return getTextSegment(segment);
+          }
+          return getParameterValueSegment(
+            statementByComponent,
+            segment,
+            props.modifications
+          );
+        })}
       {props.modificationDisplay}
     </Typography>
   );

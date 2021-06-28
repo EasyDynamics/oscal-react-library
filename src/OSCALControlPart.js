@@ -18,12 +18,6 @@ const useStyles = makeStyles((theme) => ({
   OSCALStatementNotImplemented: {
     color: "silver",
   },
-  OSCALComponentParameterSetting: {
-    backgroundColor: `${theme.palette.info.light}`,
-    color: "white",
-    padding: "0.1em 0.5em",
-    "border-radius": "5px",
-  },
 }));
 
 // TODO - This is probably 800-53 specific?
@@ -82,9 +76,7 @@ export default function OSCALControlPart(props) {
         statementId={props.part.id}
         componentId={props.componentId}
         unimplementedStatementClassName={classes.OSCALStatementNotImplemented}
-        componentParameterSettingClassname={
-          classes.OSCALComponentParameterSetting
-        }
+        modifications={props.modifications}
         modificationDisplay={modificationDisplay}
       />
     );
@@ -94,6 +86,7 @@ export default function OSCALControlPart(props) {
         label={label}
         prose={props.part.prose}
         parameters={props.parameters}
+        modifications={props.modifications}
         modificationDisplay={modificationDisplay}
       />
     );

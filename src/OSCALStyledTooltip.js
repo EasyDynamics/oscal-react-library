@@ -16,7 +16,11 @@ const useStyles = makeStyles((theme) => ({
  */
 export default function StyledTooltip(props) {
   return (
-    <Tooltip classes={{ tooltip: useStyles().tooltip }} title={props.title}>
+    <Tooltip
+      classes={{ tooltip: useStyles().tooltip }}
+      title={props.title}
+      placement={props.placement}
+    >
       {props.children}
     </Tooltip>
   );
