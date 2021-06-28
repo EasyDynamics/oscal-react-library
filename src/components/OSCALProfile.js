@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
@@ -19,19 +19,28 @@ export default function OSCALProfile(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const classes = useStyles();
+  const unmounted = useRef(false);
 
   useEffect(() => {
     OSCALResolveProfile(
       props.profile,
       props.parentUrl,
       () => {
-        setIsLoaded(true);
+        if (!unmounted.current) {
+          setIsLoaded(true);
+        }
       },
       () => {
-        setError(error);
-        setIsLoaded(true);
+        if (!unmounted.current) {
+          setError(error);
+          setIsLoaded(true);
+        }
       }
     );
+
+    return () => {
+      unmounted.current = true;
+    };
   }, []);
 
   const includeControlIds = props.profile.imports
