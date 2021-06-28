@@ -73,6 +73,12 @@ function getParameterValue(statementByComponent, parameterId) {
   return foundParameterSetting.values.toString();
 }
 
+/**
+ * Builds the display of constraints for the given parameterId
+ * @param {Object} modifications
+ * @param {String} parameterId
+ * @returns the parameter label
+ */
 function getConstraintsDisplay(modifications, parameterId) {
   if (!modifications || !modifications["set-parameters"] || !parameterId) {
     return "";
@@ -93,15 +99,25 @@ function getConstraintsDisplay(modifications, parameterId) {
 /**
  * Builds the display of a segment of non-placeholder text within prose
  * @param {String} text
+ * @param {String} key
  * @returns the text segment component
  */
-const getTextSegment = (text) => {
+const getTextSegment = (text, key) => {
   if (!text || text.length === "") {
     return null;
   }
-  return <Typography component="span">{text}</Typography>;
+  return (
+    <Typography component="span" key={key}>
+      {text}
+    </Typography>
+  );
 };
 
+/**
+ * Wraps a placeholder display in a styled tooltip
+ * @param {Object} props
+ * @returns the wrapped placeholder display
+ */
 function SegmentTooltipWrapper(props) {
   return (
     <StyledTooltip title={props.constraintsDisplay} placement="top-end" arrow>
@@ -116,17 +132,33 @@ function SegmentTooltipWrapper(props) {
  * Builds the display of a segment of placeholder label text within prose
  * @param {Array} parameters
  * @param {String} parameterId
+ * @param {Object} modifications
+ * @param {String} key
  * @returns the parameter label segment component
  */
-const getParameterLabelSegment = (parameters, parameterId, modifications) => {
+const getParameterLabelSegment = (
+  parameters,
+  parameterId,
+  modifications,
+  key
+) => {
   const parameterLabel = getParameterLabel(parameters, parameterId);
   const constraintsDisplay = getConstraintsDisplay(modifications, parameterId);
   if (constraintsDisplay.length === 0) {
-    return <ParamLabel component="span">{parameterLabel}</ParamLabel>;
+    return (
+      <ParamLabel component="span" key={`param-label-key-${key}`}>
+        {parameterLabel}
+      </ParamLabel>
+    );
   }
   return (
-    <SegmentTooltipWrapper constraintsDisplay={constraintsDisplay}>
-      <ParamLabel component="span">{parameterLabel}</ParamLabel>
+    <SegmentTooltipWrapper
+      constraintsDisplay={constraintsDisplay}
+      key={`segment-wrapper-key-${key}`}
+    >
+      <ParamLabel component="span" key={`param-label-key-${key}`}>
+        {parameterLabel}
+      </ParamLabel>
     </SegmentTooltipWrapper>
   );
 };
@@ -135,21 +167,33 @@ const getParameterLabelSegment = (parameters, parameterId, modifications) => {
  * Builds the display of a segment of placeholder value text within prose
  * @param {Object} statementByComponent
  * @param {String} parameterId
+ * @param {Object} modifications
+ * @param {String} key
  * @returns the parameter value segment component
  */
 const getParameterValueSegment = (
   statementByComponent,
   parameterId,
-  modifications
+  modifications,
+  key
 ) => {
   const parameterValue = getParameterValue(statementByComponent, parameterId);
   const constraintsDisplay = getConstraintsDisplay(modifications, parameterId);
   if (constraintsDisplay.length === 0) {
-    return <ParamValue component="span">{parameterValue}</ParamValue>;
+    return (
+      <ParamValue component="span" key={`param-value-key-${key}`}>
+        {parameterValue}
+      </ParamValue>
+    );
   }
   return (
-    <SegmentTooltipWrapper constraintsDisplay={constraintsDisplay}>
-      <ParamValue component="span">{parameterValue}</ParamValue>
+    <SegmentTooltipWrapper
+      constraintsDisplay={constraintsDisplay}
+      key={`segment-wrapper-key-${key}`}
+    >
+      <ParamValue component="span" key={`param-value-key-${key}`}>
+        {parameterValue}
+      </ParamValue>
     </SegmentTooltipWrapper>
   );
 };
@@ -183,12 +227,13 @@ export function OSCALReplacedProseWithParameterLabel(props) {
         .split(RegExp(prosePlaceholderRegexpString, "g"))
         .map((segment, index) => {
           if (index % 2 === 0) {
-            return getTextSegment(segment);
+            return getTextSegment(segment, index.toString());
           }
           return getParameterLabelSegment(
             props.parameters,
             segment,
-            props.modifications
+            props.modifications,
+            index.toString()
           );
         })}
       {props.modificationDisplay}
@@ -236,12 +281,13 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
         .split(RegExp(prosePlaceholderRegexpString, "g"))
         .map((segment, index) => {
           if (index % 2 === 0) {
-            return getTextSegment(segment);
+            return getTextSegment(segment, index.toString());
           }
           return getParameterValueSegment(
             statementByComponent,
             segment,
-            props.modifications
+            props.modifications,
+            index.toString()
           );
         })}
       {props.modificationDisplay}
