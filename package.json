@@ -36,6 +36,7 @@
     "format": "prettier --write src/**/*.js",
     "deploy": "gh-pages -d oscal-react-library/build",
     "build-proj": "npm install && cd example && npm install && npm start",
+    "build-app": "cd example && npm install && npm start",
     "run-app": "cd example && npm start"
   },
   "eslintConfig": {
