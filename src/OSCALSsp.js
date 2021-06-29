@@ -5,6 +5,7 @@ import OSCALSystemCharacteristics from "./OSCALSystemCharacteristics";
 import OSCALSystemImplementation from "./OSCALSystemImplementation";
 import OSCALControlImplementation from "./OSCALControlImplementation";
 import OSCALSspResolveProfile from "./oscal-utils/OSCALSspResolver";
+import OSCALBackMatter from "./OSCALBackMatter";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -66,6 +67,10 @@ export default function OSCALSsp(props) {
         parties={sspParties}
       />
       {controlImpl}
+      <OSCALBackMatter
+        backMatter={ssp["back-matter"]}
+        parentUrl={props.parentUrl}
+      />
     </div>
   );
 }

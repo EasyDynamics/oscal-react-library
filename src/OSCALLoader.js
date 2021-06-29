@@ -135,7 +135,11 @@ export default function OSCALLoader(props) {
 
 export function OSCALCatalogLoader(props) {
   const renderer = (oscalData, oscalUrl) => (
-    <OSCALCatalog catalog={oscalData.catalog} onError={onError} />
+    <OSCALCatalog
+      catalog={oscalData.catalog}
+      parentUrl={oscalUrl}
+      onError={onError}
+    />
   );
   return (
     <OSCALLoader

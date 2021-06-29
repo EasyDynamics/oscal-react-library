@@ -4,6 +4,7 @@ import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import OSCALMetadata from "./OSCALMetadata";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
+import OSCALBackMatter from "./OSCALBackMatter";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -34,6 +35,10 @@ export default function OSCALCatalog(props) {
           <OSCALCatalogGroup group={group} key={group.id} />
         ))}
       </List>
+      <OSCALBackMatter
+        backMatter={props.catalog["back-matter"]}
+        parentUrl={props.parentUrl}
+      />
     </div>
   );
 }
