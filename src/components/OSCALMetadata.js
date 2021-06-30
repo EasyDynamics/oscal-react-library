@@ -41,7 +41,7 @@ export default function OSCALControlGuidance(props) {
 
   const getPartyRolesText = (party) =>
     props.metadata["responsible-parties"]
-      .filter((responsibleParty) =>
+      ?.filter((responsibleParty) =>
         responsibleParty["party-uuids"]?.includes(party.uuid)
       )
       .map((item) => item["role-id"])
