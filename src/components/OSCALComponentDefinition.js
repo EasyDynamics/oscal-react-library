@@ -4,6 +4,7 @@ import OSCALMetadata from "./OSCALMetadata";
 import OSCALComponentDefinitionControlImplementation from "./OSCALComponentDefinitionControlImplementation";
 import OSCALComponentResolveSources from "../oscal-utils/OSCALComponentResolver";
 import OSCALComponentDefinitionComponent from "./OSCALComponentDefinitionComponent";
+import OSCALBackMatter from "./OSCALBackMatter";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -68,6 +69,10 @@ export default function OSCALComponentDefinition(props) {
         )
       )}
       {controlImpl}
+      <OSCALBackMatter
+        backMatter={props.componentDefinition["back-matter"]}
+        parentUrl={props.parentUrl}
+      />
     </div>
   );
 }
