@@ -70,14 +70,15 @@ export default function OSCALSystemCharacteristics(props) {
               <TableContainer>
                 <Table size="small">
                   <TableBody>
-                    {props.systemCharacteristics.props.map((prop) => (
-                      <TableRow key={prop.name}>
-                        <TableCell component="th" scope="row">
-                          {prop.name}
-                        </TableCell>
-                        <TableCell align="right">{prop.value}</TableCell>
-                      </TableRow>
-                    ))}
+                    {props.systemCharacteristics.props &&
+                      props.systemCharacteristics.props.map((prop) => (
+                        <TableRow key={prop.name}>
+                          <TableCell component="th" scope="row">
+                            {prop.name}
+                          </TableCell>
+                          <TableCell align="right">{prop.value}</TableCell>
+                        </TableRow>
+                      ))}
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -217,21 +218,22 @@ export default function OSCALSystemCharacteristics(props) {
                           </StyledTooltip>
                         </TableCell>
                         <TableCell>
-                          {informationType.categorizations.map(
-                            (categorization) =>
-                              categorization["information-type-ids"].map(
-                                (infoId) => (
-                                  <Chip
-                                    label={infoId}
-                                    component="a"
-                                    href={categorization.system}
-                                    clickable
-                                    variant="outlined"
-                                    key={infoId}
-                                  />
+                          {informationType.categorizations &&
+                            informationType.categorizations.map(
+                              (categorization) =>
+                                categorization["information-type-ids"].map(
+                                  (infoId) => (
+                                    <Chip
+                                      label={infoId}
+                                      component="a"
+                                      href={categorization.system}
+                                      clickable
+                                      variant="outlined"
+                                      key={infoId}
+                                    />
+                                  )
                                 )
-                              )
-                          )}
+                            )}
                         </TableCell>
                         <TableCell>
                           {informationType["confidentiality-impact"] &&
