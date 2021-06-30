@@ -37,7 +37,7 @@ const useStyles = makeStyles(() => ({
  */
 const getParameterLabel = (parameters, parameterId) => {
   const parameter = parameters.find(
-    (foundParameter) => foundParameter.id === parameterId
+    (testParameter) => testParameter.id === parameterId
   );
 
   if (!parameter) {

@@ -37,11 +37,11 @@ export default function OSCALControlGuidance(props) {
   }
 
   const getRoleLabel = (roleId) =>
-    props.metadata.roles?.find((role) => role.id === roleId)?.title;
+    props.metadata.roles.find((role) => role.id === roleId)?.title;
 
   const getPartyRolesText = (party) =>
     props.metadata["responsible-parties"]
-      ?.filter((responsibleParty) =>
+      .filter((responsibleParty) =>
         responsibleParty["party-uuids"]?.includes(party.uuid)
       )
       .map((item) => item["role-id"])

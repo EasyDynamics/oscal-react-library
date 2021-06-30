@@ -18,9 +18,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 // TODO - This is probably 800-53 specific?
-function getPartLabel(props) {
-  return props?.find((property) => property.name === "label")?.value;
-}
+const getPartLabel = (props) =>
+  props?.find((property) => property.name === "label")?.value;
 
 export default function OSCALControlPart(props) {
   // Don't display assessment if we're displaying a control implementation

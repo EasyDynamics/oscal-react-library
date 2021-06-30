@@ -1,8 +1,8 @@
 import React from "react";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import { v4 as uuidv4 } from "uuid";
 import Typography from "@material-ui/core/Typography";
+import { v4 as uuidv4 } from "uuid";
 import { makeStyles } from "@material-ui/core/styles";
 import OSCALControlPart from "./OSCALControlPart";
 import OSCALControlModification from "./OSCALControlModification";
@@ -84,7 +84,7 @@ export default function OSCALControl(props) {
               componentId={props.componentId}
               control={props.control}
               modifications={props.modifications}
-              key={uuidv4(part)}
+              key={part.id || uuidv4()}
             />
           ))}
         {props.control.controls &&
