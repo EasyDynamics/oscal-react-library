@@ -25,6 +25,7 @@ jobs:
           # (/) rather than within the default directory (.github/linters)
           LINTER_RULES_PATH: /
           JAVASCRIPT_ES_CONFIG_FILE: .eslintrc.json
+          MARKDOWN_CONFIG_FILE: .markdownlint.yaml
           # A specific subset of linters are enabled
           VALIDATE_HTML: true
           VALIDATE_JAVASCRIPT_ES: true
