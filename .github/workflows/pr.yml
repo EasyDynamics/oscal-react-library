@@ -44,11 +44,10 @@ jobs:
           VALIDATE_JAVASCRIPT_ES: true
           VALIDATE_MARKDOWN: true
           VALIDATE_JSON: true
-          VALIDATE_JSCPD: true
           VALIDATE_YAML: true
           # Ideally, we should validate only changed files; we don't want to have a
           # PR fail because rules changed outside the PR itself.
-          VALIDATE_ALL_CODEBASE: true
+          VALIDATE_ALL_CODEBASE: false
           # The possum is fun but it does add a little noise to the workflow
           SUPPRESS_POSSUM: true
   build_and_test:
