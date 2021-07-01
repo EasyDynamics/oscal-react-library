@@ -1,19 +1,20 @@
 # Easy Dynamics OSCAL React Library
 
-A React Library providing components and an example application, OSCAL Viewer, for browsing OSCAL data.
+A React library providing components and an example application, OSCAL Viewer, for browsing [OSCAL](https://pages.nist.gov/OSCAL/) data.
 
 ## Setting Up
 
-### Intro
+### Introduction
 
-The library provides OSCAL community UI developers a flexible framework for using OSCAL React components outside the scope of the OSCAL Viewer and in their own applications. There are two main parts to local developoment: 1) the `src/` module which contains OSCAL components, loaders, and other library elements; and 2) the `example/` module which contains the OSCAL Viewer application. This project was created following the [create-react-library](https://github.com/transitive-bullshit/create-react-library) model.
+The library provides OSCAL UI developers a flexible framework for using OSCAL React components in their own applications.
 
-### Usage
-A component can be created and added to `src/components`. In order for the component to be used in an application, it must either be added as an export in `src/index.js` or referenced by a component already being exported (such as components being referenced by a loader in the current OSCAL Viewer). In the root folder of the project, run `npm start` to roll up all of the components into `dist/` making them accessible to the example application. NOTE: `npm install` has the same effect and will build all dependencies.
+Those components directly visualize granular elements of the OSCAL JSON format, allowing a developer to assemble them in the manner that best fits their application.
 
-### Running
+The [example](./example) folder shows how those components can be assembled to create an OSCAL Viewer application.
 
-In order to use the library components or test the library, the project components need to be rolled up and dependencies need to be installed initially with the command: `npm install`. From here the application can be built (See "OSCAL Viewer → Running") or components can be tested (See "Testing"). To automate local installation and immediately run the application, use the following command:
+### Building and Running Locally
+
+In order to use the library components or test the library locally, the project components need to be rolled up and dependencies need to be installed initially with the command: `npm install`. From here the application can be built (See "OSCAL Viewer → Running") or components can be tested (See "Testing"). To automate local installation and immediately run the application, use the following command:
 ```
 npm run build-proj
 ```
@@ -21,6 +22,9 @@ npm run build-proj
 ### Testing
 
 To run the test suite, ensure dependencies are installed and run `npm run test`. To also validate code is passing eslint linting requirements, run `npm run lint`.
+
+### Development
+A component can be created and added to `src/components`. In order for the component to be used in an application, it must either be added as an export in `src/index.js` or referenced by a component already being exported (such as components being referenced by a loader in the current OSCAL Viewer). In the root folder of the project, run `npm start` to roll up all of the components into `dist/` making them accessible to the example application. NOTE: `npm install` has the same effect and will build all dependencies.
 
 ## OSCAL Viewer (Example Application)
 
@@ -40,4 +44,4 @@ npm run run-app
 ```
 
 
-For more details about OSCAL Viewer, please refer to [OSCAL_VIEWER_README.md](/example/OSCAL_VIEWER_README.md).
+For more details about OSCAL Viewer, please refer to [OSCAL VIEWER README.md](/example/README.md).
