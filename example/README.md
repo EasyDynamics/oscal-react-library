@@ -7,7 +7,8 @@ TODO: Update details about OSCAL Viewer (EGRC-422)
 
 
 ## Features
-In this initial iteration, the project is only able to render basic elements of OSCAL catalogs, system security plans, component definitions, and profiles.
+In this initial iteration, the project is only able to render basic elements of OSCAL catalogs, system security plans,
+component definitions, and profiles.
 
 The NIST 800-53 (rev 5) catalog is loaded by default in the catalog viewer:
 
