@@ -1,0 +1,71 @@
+---
+name: Run PR checks
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  lint:
+    name: Lint the code base
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Lint Code Base
+        uses: github/super-linter@v4
+        env:
+          DEFAULT_BRANCH: develop
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Our linter configuration files will be specified relative to the root of the workspace
+          # (/) rather than within the default directory (.github/linters)
+          LINTER_RULES_PATH: /
+          JAVASCRIPT_ES_CONFIG_FILE: .eslintrc.json
+          # A specific subset of linters are enabled
+          VALIDATE_HTML: true
+          VALIDATE_JAVASCRIPT_ES: true
+          VALIDATE_JSON: true
+          VALIDATE_JSCPD: true
+          VALIDATE_YAML: true
+          # Ideally, we should validate only changed files; we don't want to have a
+          # PR fail because rules changed outside the PR itself.
+          VALIDATE_ALL_CODEBASE: false
+          # The possum is fun but it does add a little noise to the workflow
+          SUPPRESS_POSSUM: true
+  build_and_test:
+    strategy:
+      matrix:
+        node: [12, 14, 16]
+    name: Build and test (on NodeJS ${{ matrix.node }})
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Config NodeJS dependency caching
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: npm install
+      - name: Build application
+        run: npm run build
+      - name: Run tests
+        run: npm run test -- --ci --watchAll=false
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-output
+          path: build
