@@ -4,7 +4,7 @@ import OSCALMetadata from "./OSCALMetadata";
 import OSCALSystemCharacteristics from "./OSCALSystemCharacteristics";
 import OSCALSystemImplementation from "./OSCALSystemImplementation";
 import OSCALControlImplementation from "./OSCALControlImplementation";
-import OSCALSspResolveProfile from "../oscal-utils/OSCALSspResolver";
+import OSCALSspResolveProfile from "./oscal-utils/OSCALSspResolver";
 import OSCALBackMatter from "./OSCALBackMatter";
 
 const useStyles = makeStyles((theme) => ({

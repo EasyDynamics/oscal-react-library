@@ -8,7 +8,7 @@ import { Typography } from "@material-ui/core";
 import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
 import DescriptionIcon from "@material-ui/icons/Description";
 import StyledTooltip from "./OSCALStyledTooltip";
-import { getAbsoluteUrl } from "../oscal-utils/OSCALBackMatterUtils";
+import { getAbsoluteUrl } from "./oscal-utils/OSCALBackMatterUtils";
 
 // TODO: Temporary fix for missing media type (https://github.com/GSA/fedramp-automation/issues/103)
 // Uses file extension instead

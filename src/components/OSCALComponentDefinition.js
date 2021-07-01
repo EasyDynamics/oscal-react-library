@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import OSCALMetadata from "./OSCALMetadata";
 import OSCALComponentDefinitionControlImplementation from "./OSCALComponentDefinitionControlImplementation";
-import OSCALComponentResolveSources from "../oscal-utils/OSCALComponentResolver";
+import OSCALComponentResolveSources from "./oscal-utils/OSCALComponentResolver";
 import OSCALComponentDefinitionComponent from "./OSCALComponentDefinitionComponent";
 import OSCALBackMatter from "./OSCALBackMatter";
 

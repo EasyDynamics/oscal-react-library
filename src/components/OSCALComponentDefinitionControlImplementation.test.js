@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import OSCALComponentDefinitionControlImplementation from "./OSCALComponentDefinitionControlImplementation";
 import { componentDefinitionTestData } from "./OSCALComponentDefinition.test";
-import getByTextIncludingChildern from "../oscal-utils/TestUtils";
+import getByTextIncludingChildern from "./oscal-utils/TestUtils";
 
 const componentDefinitionControlImplementationTestData = [
   {

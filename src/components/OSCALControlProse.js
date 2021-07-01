@@ -4,7 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import Badge from "@material-ui/core/Badge";
 import StyledTooltip from "./OSCALStyledTooltip";
-import { getStatementByComponent } from "../oscal-utils/OSCALControlResolver";
+import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 
 const prosePlaceholderRegexpString = "{{ insert: param, ([0-9a-zA-B-_.]*) }}";
 
