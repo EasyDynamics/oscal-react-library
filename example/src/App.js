@@ -101,16 +101,16 @@ function App() {
             <Redirect to="/catalog" />
           </Route>
           <Route path="/catalog">
-            <OSCALCatalogLoader />
+            <OSCALCatalogLoader renderForm={true} />
           </Route>
           <Route exact path="/system-security-plan">
-            <OSCALSSPLoader />
+            <OSCALSSPLoader renderForm={true} />
           </Route>
           <Route exact path="/component-definition">
-            <OSCALComponentLoader />
+            <OSCALComponentLoader renderForm={true} />
           </Route>
           <Route exact path="/profile">
-            <OSCALProfileLoader />
+            <OSCALProfileLoader renderForm={true} />
           </Route>
         </Switch>
       </Container>
