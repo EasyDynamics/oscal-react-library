@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
   logoImage: {
     maxWidth: "150px",
+    "margin-right": "1em",
   },
   githubButton: {
     color: "white",
