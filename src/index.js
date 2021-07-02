@@ -3,7 +3,7 @@ import {
   OSCALSSPLoader,
   OSCALComponentLoader,
   OSCALProfileLoader,
-} from "./OSCALLoader";
+} from "./components/OSCALLoader";
 
 /**
  * Bundels loaders and referenced components into "dist/" when rollup is run.

@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import { OSCALSSPLoader } from "../OSCALLoader";
+import { OSCALSSPLoader } from "./OSCALLoader";
 import OSCALSsp from "./OSCALSsp";
 import {
   systemCharacteristicsTestData,

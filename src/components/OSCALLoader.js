@@ -1,22 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
 import Alert from "@material-ui/lab/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import ReplayIcon from "@material-ui/icons/Replay";
-import OSCALSsp from "./components/OSCALSsp";
-import OSCALCatalog from "./components/OSCALCatalog";
-import OSCALComponentDefinition from "./components/OSCALComponentDefinition";
-import OSCALProfile from "./components/OSCALProfile";
-
-const useStyles = makeStyles((theme) => ({
-  catalogForm: {
-    marginTop: theme.spacing(4),
-    marginBottom: theme.spacing(4),
-  },
-}));
+import OSCALSsp from "./OSCALSsp";
+import OSCALCatalog from "./OSCALCatalog";
+import OSCALComponentDefinition from "./OSCALComponentDefinition";
+import OSCALProfile from "./OSCALProfile";
+import OSCALLoaderForm from "./OSCALLoaderForm"
 
 const onError = (error) => (
   <Alert severity="error">
@@ -40,8 +30,6 @@ export default function OSCALLoader(props) {
   const [oscalData, setOscalData] = useState([]);
   const [oscalUrl, setOscalUrl] = useState(props.oscalUrl);
   const unmounted = useRef(false);
-
-  const classes = useStyles();
 
   const loadOscalData = (newOscalUrl) => {
     fetch(newOscalUrl)
@@ -84,8 +72,17 @@ export default function OSCALLoader(props) {
     };
   }, []);
 
-  let result;
+  let form;
+  if (props.renderForm) {
+    form = <OSCALLoaderForm
+      oscalModelType={props.oscalModelType}
+      oscalUrl={oscalUrl}
+      onUrlChange={handleChange}
+      onReloadClick={handleReloadClick}
+    />
+  }
 
+  let result;
   if (error) {
     result = onError(error);
   } else if (!isLoaded) {
@@ -96,38 +93,7 @@ export default function OSCALLoader(props) {
 
   return (
     <>
-      <form
-        className={classes.catalogForm}
-        noValidate
-        autoComplete="off"
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
-      >
-        <Grid container spacing={3}>
-          <Grid item xs={10}>
-            <TextField
-              id="oscal-url"
-              label={`OSCAL ${props.oscalModelType} URL`}
-              defaultValue={props.oscalUrl}
-              helperText="(JSON Format)"
-              variant="outlined"
-              fullWidth
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Button
-              variant="contained"
-              color="primary"
-              endIcon={<ReplayIcon>send</ReplayIcon>}
-              onClick={handleReloadClick}
-            >
-              Reload
-            </Button>
-          </Grid>
-        </Grid>
-      </form>
+      {form}
       {result}
     </>
   );
@@ -146,6 +112,7 @@ export function OSCALCatalogLoader(props) {
       oscalModelType="Catalog"
       oscalUrl={defaultOscalCatalogUrl}
       renderer={renderer}
+      renderForm={props.renderForm}
     />
   );
 }
@@ -163,6 +130,7 @@ export function OSCALSSPLoader(props) {
       oscalModelType="SSP"
       oscalUrl={defaultOscalSspUrl}
       renderer={renderer}
+      renderForm={props.renderForm}
     />
   );
 }
@@ -180,6 +148,7 @@ export function OSCALComponentLoader(props) {
       oscalModelType="Component"
       oscalUrl={defaultOSCALComponentUrl}
       renderer={renderer}
+      renderForm={props.renderForm}
     />
   );
 }
@@ -192,6 +161,7 @@ export function OSCALProfileLoader(props) {
       oscalModelType="Profile"
       oscalUrl={defaultOSCALProfileUrl}
       renderer={renderer}
+      renderForm={props.renderForm}
     />
   );
 }
