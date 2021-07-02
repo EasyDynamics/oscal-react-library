@@ -6,7 +6,7 @@ phases:
       nodejs: 12
     commands:
       - echo Installing npm packages
-      - npm ci
+      - npm install
   build:
     commands:
       - echo "Build library"
