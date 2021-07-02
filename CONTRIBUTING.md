@@ -49,6 +49,12 @@ feature requests or bug reports that need someone to pick them up with the
 that might be especially good for new contributors, we use the
 [`good first issue` label](/../../issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22).
 
+## Code of Conduct
+
+Our project has adopted the [Contributor Covenant](https://www.contributor-covenant.org/) for our
+[Code of Conduct](/CODE_OF_CONDUCT.md). All contributors, both organization members and external
+collaborators, will be held to the expectations of the code.
+
 ## License
 
 Review the [LICENSE](/LICENSE) file for information on the project's licensing.
