@@ -5,8 +5,12 @@ phases:
     runtime-versions:
       nodejs: 12
     commands:
-      - echo Installing npm packages
+      - echo "Installing library npm packages"
       - npm install
+      - echo "Installing sample app npm packages"
+      - cd example
+      - npm install
+      - cd ..
   build:
     commands:
       - echo "Build library"
