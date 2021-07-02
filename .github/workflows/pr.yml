@@ -12,10 +12,23 @@ jobs:
     name: Lint the code base
     runs-on: ubuntu-20.04
     steps:
-      - name: Checkout Code
+      - name: Config NodeJS dependency caching
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Checkout code
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Install dependencies
+        run: npm ci
       - name: Lint Code Base
         uses: github/super-linter@v4
         env:
@@ -25,11 +38,12 @@ jobs:
           # (/) rather than within the default directory (.github/linters)
           LINTER_RULES_PATH: /
           JAVASCRIPT_ES_CONFIG_FILE: .eslintrc.json
+          MARKDOWN_CONFIG_FILE: .markdownlint.yaml
           # A specific subset of linters are enabled
           VALIDATE_HTML: true
           VALIDATE_JAVASCRIPT_ES: true
+          VALIDATE_MARKDOWN: true
           VALIDATE_JSON: true
-          VALIDATE_JSCPD: true
           VALIDATE_YAML: true
           # Ideally, we should validate only changed files; we don't want to have a
           # PR fail because rules changed outside the PR itself.
@@ -59,7 +73,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Build application
         run: npm run build
       - name: Run tests
