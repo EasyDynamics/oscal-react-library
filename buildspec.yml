@@ -5,6 +5,8 @@ phases:
     runtime-versions:
       nodejs: 14
     commands:
+      - echo "Update NPM"
+      - npm install -g npm 
       - echo "Installing library npm packages"
       - npm install
       - echo "Installing sample app npm packages"
