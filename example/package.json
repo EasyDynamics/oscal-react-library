@@ -6,22 +6,21 @@
   "scripts": {
     "start": "node ../node_modules/react-scripts/bin/react-scripts.js start",
     "build": "node ../node_modules/react-scripts/bin/react-scripts.js build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "node ../node_modules/react-scripts/bin/react-scripts.js test",
+    "eject": "node ../node_modules/react-scripts/bin/react-scripts.js eject"
   },
   "dependencies": {
     "@testing-library/react": "^11.2.2",
     "oscal-react-library": "file:..",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
+    "history": "^5.0.0",
+    "react-router-dom": "file:../node_modules/react-router-dom",
     "react-scripts": "file:../node_modules/react-scripts",
-    "web-vitals": "^0.2.4",
-    "history": "^5.0.0"
+    "web-vitals": "^2.1.0"
   },
   "devDependencies": {
-    "@babel/plugin-syntax-object-rest-spread": "^7.8.3",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/user-event": "^12.8.3"
+    "@babel/plugin-syntax-object-rest-spread": "^7.8.3"
   },
   "eslintConfig": {
     "extends": "react-app"
