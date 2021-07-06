@@ -1,0 +1,52 @@
+# Default markdownlint.yaml:
+#     https://github.com/DavidAnson/markdownlint/blob/main/schema/.markdownlint.yaml
+# Rule explanation:
+#     https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+
+# Enable all rules by default
+default: true
+
+# Disable deprecated rules
+MD002: false
+MD006: false
+
+# Disable unwanted rules
+MD043: false
+
+# Rules for which we are overriding the default values
+
+MD003:
+  # ATX style headers are the "#" or "##" at the start of a line
+  style: "atx"
+
+MD013:
+  # 120 characters should be readable in the vast majority of terminals
+  line_length: 120
+  code_block_line_length: 120
+  stern: true
+
+MD035:
+  style: "---"
+
+MD044:
+  names:
+    # These names have the potential to occur with incorrect capitalization
+    # within documentation; we want to ensure that they are always capitalized
+    # correctly.
+    - "OSCAL"
+    - "NIST"
+    - "Easy Dynamics"
+  # In code, these names are allowed to occur with incorrect capitalization
+  code_blocks: false
+
+MD046:
+  # Using fenced (```) for code blocks more clearly delineates the code from
+  # the surrounding text. It is also easier to maintain and copy/paste
+  style: "fenced"
+
+MD048:
+  # While other characters may be able to be used to fence a code block, the
+  # being consistent across the entire repository make is preferable and it is
+  # unlikely that backticks will ever cause an issue compared to other allowed
+  # fences.
+  style: "backtick"
