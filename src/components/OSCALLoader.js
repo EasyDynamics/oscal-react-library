@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Alert from "@material-ui/lab/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
 import OSCALProfile from "./OSCALProfile";
-import OSCALLoaderForm from "./OSCALLoaderForm"
+import OSCALLoaderForm from "./OSCALLoaderForm";
 
 const onError = (error) => (
   <Alert severity="error">
@@ -74,12 +73,14 @@ export default function OSCALLoader(props) {
 
   let form;
   if (props.renderForm) {
-    form = <OSCALLoaderForm
-      oscalModelType={props.oscalModelType}
-      oscalUrl={oscalUrl}
-      onUrlChange={handleChange}
-      onReloadClick={handleReloadClick}
-    />
+    form = (
+      <OSCALLoaderForm
+        oscalModelType={props.oscalModelType}
+        oscalUrl={oscalUrl}
+        onUrlChange={handleChange}
+        onReloadClick={handleReloadClick}
+      />
+    );
   }
 
   let result;

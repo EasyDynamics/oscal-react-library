@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 export default function OSCALLoaderForm(props) {
   const classes = useStyles();
 
