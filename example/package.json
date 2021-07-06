@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@testing-library/react": "^11.2.2",
+    "@testing-library/jest-dom": "file:../node_modules/jest-dom",
     "oscal-react-library": "file:..",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
