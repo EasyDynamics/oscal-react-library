@@ -28,7 +28,9 @@ jobs:
         with:
           fetch-depth: 0
       - name: Install dependencies
-        run: npm ci
+        run:
+          npm install
+          cd example && npm install && cd ..
       - name: Lint Code Base
         uses: github/super-linter@v4
         env:
@@ -73,13 +75,24 @@ jobs:
         with:
           fetch-depth: 0
       - name: Install dependencies
-        run: npm ci
-      - name: Build application
+        run: npm install
+      - name: Install example app dependencies
+        run: |
+          cd example && npm install && cd ..
+      - name: Build library
         run: npm run build
       - name: Run tests
         run: npm run test -- --ci --watchAll=false
+      - name: Run example app tests
+        run:
+          cd example
+          npm run test -- --ci --watchAll=false
+          cd ..
+      - name: Build application
+        run:
+          npm run predeploy
       - name: Archive artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: build-output
-          path: build
+          name: oscal-viewer
+          path: example/build
