@@ -57,4 +57,4 @@ npm run run-example
 ```
 
 
-For more details about OSCAL Viewer, please refer to [OSCAL VIEWER README.md](/example/README.md).
+For more details about OSCAL Viewer, please refer to the [example (OSCAL Viewer) README.md](/example/README.md).

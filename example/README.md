@@ -1,14 +1,15 @@
 # Easy Dynamics OSCAL Viewer
 
-A React-based UI for browsing OSCAL data.
+The OSCAL Viewer sample application is a React-based UI used for browsing OSCAL data. It is provided both as an
+example of using OSCAL React components and as a tool to view the complex OSCAL data concepts in an easily
+comprehensive format.
 
-
-TODO: Update details about OSCAL Viewer (EGRC-422)
+An open sandbox environment of the project can be viewed at https://oscal-viewer.msd.easydynamics.com/catalog.
 
 
 ## Features
-In this initial iteration, the project is only able to render basic elements of OSCAL catalogs, system security plans,
-component definitions, and profiles.
+In this initial iteration, the project renders basic elements of OSCAL catalogs, system security plans, component
+definitions, and profiles.
 
 The NIST 800-53 (rev 5) catalog is loaded by default in the catalog viewer:
 
@@ -18,8 +19,13 @@ The ssp-example from the OSCAL Github repo is loaded by default in the SSP viewe
 
 ![OSCSAL SSP Viewer Screenshot](docs/resources/ssp-viewer-screenshot.png)
 
+An Easy Dynamics component definition is loaded by default in the component viewer:
 
-TODO: Add Component Viewer & Profile Viewer (EGRC-422)
+![OSCSAL Component Viewer Screenshot](docs/resources/component-viewer-screenshot.png)
+
+The NIST 800-53 (rev 4) profile is loaded by default in the profile viewer:
+
+![OSCSAL Profile Viewer Screenshot](docs/resources/profile-viewer-screenshot.png)
 
 
 ## Running
@@ -33,9 +39,12 @@ npm start
 
 ## Testing
 
-Within the `example/src` directory, run the following comands to run application tests and linter checks, respectively:
+Within the `example/src` directory, run the following commands to run application tests and linter checks, respectively:
 
 ```
 npm run test
 npm run lint
 ```
+
+For details on building the project and running it in the root project directory see "Development" and "OSCAL Viewer" → "Running" in the [OSCAL React Libraries README.md](../README.md).
+
