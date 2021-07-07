@@ -8,6 +8,7 @@ An open sandbox environment of the project can be viewed at
 [https://oscal-viewer.msd.easydynamics.com/catalog](https://oscal-viewer.msd.easydynamics.com/catalog).
 
 ## Features
+
 In this initial iteration, the project renders basic elements of OSCAL catalogs, system security plans, component
 definitions, and profiles.
 
@@ -31,17 +32,19 @@ The ssp-example from the OSCAL Github repo is loaded by default in the SSP viewe
 
 When in `example/`, the following commands can be issued:
 
-```
+```text
 npm install
 npm start
 ```
+
 ## Testing
 
 Within the `example/src` directory, run the following commands to run application tests and linter checks, respectively:
 
-```
+```text
 npm run test
 npm run lint
 ```
 
-For details on building the project and running it in the root project directory see "Development" and "OSCAL Viewer" → "Running" in the [OSCAL React Libraries README.md](../README.md).
+For details on building the project and running it in the root project directory see "Development" and "OSCAL Viewer"
+→ "Running" in the [OSCAL React Libraries README.md](../README.md).
