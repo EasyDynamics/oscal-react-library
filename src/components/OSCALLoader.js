@@ -100,7 +100,7 @@ export default function OSCALLoader(props) {
   );
 }
 
-export function OSCALCatalogLoader() {
+export function OSCALCatalogLoader(props) {
   const renderer = (oscalData, oscalUrl) => (
     <OSCALCatalog
       catalog={oscalData.catalog}
@@ -118,7 +118,7 @@ export function OSCALCatalogLoader() {
   );
 }
 
-export function OSCALSSPLoader() {
+export function OSCALSSPLoader(props) {
   const renderer = (oscalData, oscalUrl) => (
     <OSCALSsp
       system-security-plan={oscalData["system-security-plan"]}
@@ -136,7 +136,7 @@ export function OSCALSSPLoader() {
   );
 }
 
-export function OSCALComponentLoader() {
+export function OSCALComponentLoader(props) {
   const renderer = (oscalData, oscalUrl) => (
     <OSCALComponentDefinition
       componentDefinition={oscalData["component-definition"]}
@@ -153,7 +153,7 @@ export function OSCALComponentLoader() {
     />
   );
 }
-export function OSCALProfileLoader() {
+export function OSCALProfileLoader(props) {
   const renderer = (oscalData, oscalUrl) => (
     <OSCALProfile profile={oscalData.profile} parentUrl={oscalUrl} />
   );
