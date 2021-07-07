@@ -1,6 +1,6 @@
 # OSCAL React Library
 
-A library of React components and an [example application](/example) that provide
+A library of React components and an [example application](/example) that provides
 a direct view into NIST's Open Security Controls Assessment Language ([OSCAL](https://pages.nist.gov/OSCAL/)) data
 in JSON format.
 
