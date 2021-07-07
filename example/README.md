@@ -4,8 +4,8 @@ The OSCAL Viewer sample application is a React-based UI used for browsing OSCAL 
 example of using OSCAL React components and as a tool to view the complex OSCAL data concepts in an easily
 comprehensive format.
 
-An open sandbox environment of the project can be viewed at https://oscal-viewer.msd.easydynamics.com/catalog.
-
+An open sandbox environment of the project can be viewed at
+[https://oscal-viewer.msd.easydynamics.com/catalog](https://oscal-viewer.msd.easydynamics.com/catalog).
 
 ## Features
 In this initial iteration, the project renders basic elements of OSCAL catalogs, system security plans, component
@@ -27,7 +27,6 @@ The ssp-example from the OSCAL Github repo is loaded by default in the SSP viewe
 
 ![OSCSAL SSP Viewer Screenshot](docs/resources/ssp-viewer-screenshot.png)
 
-
 ## Running
 
 When in `example/`, the following commands can be issued:
@@ -36,7 +35,6 @@ When in `example/`, the following commands can be issued:
 npm install
 npm start
 ```
-
 ## Testing
 
 Within the `example/src` directory, run the following commands to run application tests and linter checks, respectively:
@@ -47,4 +45,3 @@ npm run lint
 ```
 
 For details on building the project and running it in the root project directory see "Development" and "OSCAL Viewer" → "Running" in the [OSCAL React Libraries README.md](../README.md).
-
