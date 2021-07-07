@@ -6,20 +6,23 @@
   "scripts": {
     "start": "node ../node_modules/react-scripts/bin/react-scripts.js start",
     "build": "node ../node_modules/react-scripts/bin/react-scripts.js build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "node ../node_modules/react-scripts/bin/react-scripts.js test",
+    "eject": "node ../node_modules/react-scripts/bin/react-scripts.js eject"
   },
   "dependencies": {
-    "@testing-library/react": "^11.2.2",
+    "@testing-library/jest-dom": "file:../node_modules/@testing-library/jest-dom",
+    "@testing-library/react": "file:../node_modules/@testing-library/react",
+    "@testing-library/user-event": "file:../node_modules/@testing-library/user-event",
     "oscal-react-library": "file:..",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
-    "react-scripts": "file:../node_modules/react-scripts"
+    "react-router-dom": "file:../node_modules/react-router-dom",
+    "react-scripts": "file:../node_modules/react-scripts",
+    "history": "file:../node_modules/history"
   },
   "devDependencies": {
     "@babel/plugin-syntax-object-rest-spread": "^7.8.3",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/user-event": "^12.8.3"
+    "web-vitals": "^2.1.0"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { OSCALComponentLoader } from "../OSCALLoader";
+import { OSCALComponentLoader } from "./OSCALLoader";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
 import { metadataTestData, testOSCALMetadata } from "./OSCALMetadata.test";
 import {
