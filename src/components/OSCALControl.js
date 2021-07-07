@@ -10,7 +10,7 @@ import OSCALControlModification from "./OSCALControlModification";
 // Disable linting until completed
 /* eslint-disable */
 function getControlStatusCss(props) {
-  if (!props.control.props) {
+  if (!props.control?.props) {
     return;
   }
   let property;
@@ -52,8 +52,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function OSCALControl(props) {
   if (
-    props.includeControlIds &&
-    !props.includeControlIds.includes(props.control.id)
+    !props.control ||
+    (props.includeControlIds &&
+      !props.includeControlIds.includes(props.control.id))
   ) {
     return null;
   }

@@ -60,6 +60,9 @@ const getParameterLabel = (parameters, parameterId) => {
  */
 function getParameterValue(statementByComponent, parameterId) {
   // Locate matching parameter to parameterId
+  if (!statementByComponent["set-parameters"]) {
+    return null;
+  }
   const foundParameterSetting = statementByComponent["set-parameters"].find(
     (parameterSetting) => parameterSetting["param-id"] === parameterId
   );

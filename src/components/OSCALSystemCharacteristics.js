@@ -70,7 +70,7 @@ export default function OSCALSystemCharacteristics(props) {
               <TableContainer>
                 <Table size="small">
                   <TableBody>
-                    {props.systemCharacteristics.props.map((prop) => (
+                    {props.systemCharacteristics.props?.map((prop) => (
                       <TableRow key={prop.name}>
                         <TableCell component="th" scope="row">
                           {prop.name}
@@ -217,7 +217,7 @@ export default function OSCALSystemCharacteristics(props) {
                           </StyledTooltip>
                         </TableCell>
                         <TableCell>
-                          {informationType.categorizations.map(
+                          {informationType.categorizations?.map(
                             (categorization) =>
                               categorization["information-type-ids"].map(
                                 (infoId) => (
