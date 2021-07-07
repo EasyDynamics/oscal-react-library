@@ -16,7 +16,7 @@ import { Route, Switch, Redirect, Link as RouterLink } from "react-router-dom";
 import Link from "@material-ui/core/Link";
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
-import logo from './images/logo-header.png';
+import logo from './images/logo-header.svg';
 
 import {
   OSCALCatalogLoader,
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     "font-style": "italic",
   },
   logoImage: {
-    maxWidth: "150px",
+    width: "150px",
     "margin-right": "1em",
   },
   githubButton: {
@@ -93,7 +93,7 @@ function App() {
                 Powered by 
               </Typography>
             <Button
-              href="https://easydynamics.com"
+              href="https://www.easydynamics.com"
               className={classes.githubButton}
               target="_blank"
             >

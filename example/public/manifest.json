@@ -13,8 +13,8 @@
       "sizes": "192x192"
     },
     {
-      "src": "logo-header.png",
-      "type": "image/png"
+      "src": "logo-header.svg",
+      "type": "image/svg+xml"
     }
   ],
   "start_url": ".",
