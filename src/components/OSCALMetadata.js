@@ -69,18 +69,18 @@ export default function OSCALControlGuidance(props) {
             }
           >
             {props.metadata.parties?.map((party) => (
-                <ListItem key={`${party.uuid}-parties-listItem`}>
-                  <ListItemAvatar>
-                    <Avatar>
-                      {party.type === "organization" ? <GroupIcon /> : null}
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={party.name}
-                    secondary={getPartyRolesText(party)}
-                  />
-                </ListItem>
-              ))}
+              <ListItem key={`${party.uuid}-parties-listItem`}>
+                <ListItemAvatar>
+                  <Avatar>
+                    {party.type === "organization" ? <GroupIcon /> : null}
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={party.name}
+                  secondary={getPartyRolesText(party)}
+                />
+              </ListItem>
+            ))}
           </List>
         </Paper>
       </Grid>
