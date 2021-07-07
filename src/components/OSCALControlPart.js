@@ -7,7 +7,7 @@ import {
   OSCALReplacedProseWithParameterLabel,
 } from "./OSCALControlProse";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   OSCALControlPart: {
     "padding-left": "2em",
   },
@@ -18,18 +18,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // TODO - This is probably 800-53 specific?
-/* eslint-disable */
-function getPartLabel(props) {
-  if (!props) {
-    return;
-  }
-  let property;
-  for (property of props) {
-    if (property.name === "label") {
-      return property.value;
-    }
-  }
-}
+const getPartLabel = (props) =>
+  props?.find((property) => property.name === "label")?.value;
 
 export default function OSCALControlPart(props) {
   // Don't display assessment if we're displaying a control implementation

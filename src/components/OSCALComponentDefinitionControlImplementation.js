@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -28,19 +28,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function OSCALComponentDefinitionControlImplementation(props) {
   const classes = useStyles();
-  // TODO iterators/generators require regenerator-runtime, which is too heavyweight for this guide to allow them. Separately, loops should be avoided in favor of array iterations  no-restricted-syntax
-  /* eslint-disable */
-  const getDescription = (controlImpl) => {
-    if (!props.controlImplementations) {
-      return null;
-    }
-    let value;
-
-    for (value of props.controlImplementations) {
-      return controlImpl.description;
-    }
-  }
-  /* eslint-enable */
 
   return (
     <div className={classes.paper}>
@@ -59,7 +46,7 @@ export default function OSCALComponentDefinitionControlImplementation(props) {
                 {props.controlImplementations.map((controlImpl) => (
                   <ListItem key={controlImpl.uuid}>
                     <ListItemText>
-                      {getDescription(controlImpl)}
+                      {controlImpl.description}
                       <Grid item xs={12}>
                         <List
                           className={

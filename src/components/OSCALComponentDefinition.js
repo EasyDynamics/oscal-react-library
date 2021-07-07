@@ -31,7 +31,6 @@ export default function OSCALComponentDefinition(props) {
         setIsLoaded(true);
       }
     );
-    // eslint-disable-next-line
   }, []);
 
   // Throw error to OSCALLoader
@@ -45,7 +44,7 @@ export default function OSCALComponentDefinition(props) {
     controlImpl = null;
   } else {
     controlImpl = Object.entries(props.componentDefinition.components).map(
-      ([key, component], index) => (
+      ([key, component]) => (
         <OSCALComponentDefinitionControlImplementation
           controlImplementations={component["control-implementations"]}
           components={props.componentDefinition.components}
@@ -60,7 +59,7 @@ export default function OSCALComponentDefinition(props) {
     <div className={classes.paper}>
       <OSCALMetadata metadata={props.componentDefinition.metadata} />
       {Object.entries(props.componentDefinition.components).map(
-        ([key, component], index) => (
+        ([key, component]) => (
           <OSCALComponentDefinitionComponent
             component={component}
             parties={props.componentDefinition.metadata.parties}

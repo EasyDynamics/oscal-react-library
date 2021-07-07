@@ -100,43 +100,40 @@ export default function OSCALBackMatter(props) {
     rlink["media-type"] ||
     getURLMediaType(getAbsoluteUrl(rlink, props.parentUrl));
 
-  // eslint-disable-next-line
-  const backMatterDisplay = (resource) => {
-    return (
-      <Grid item xs={3} key={resource.uuid}>
-        <Card>
-          <CardContent>
-            <Grid container spacing={0}>
-              <Grid item xs={10}>
-                <TitleDisplay resource={resource} />
-              </Grid>
-              <Grid item xs={2}>
-                <Grid container spacing={0} justify="flex-end">
-                  <DescriptionDisplay resource={resource} />
-                  <CitationDisplay resource={resource} />
-                </Grid>
+  const backMatterDisplay = (resource) => (
+    <Grid item xs={3} key={resource.uuid}>
+      <Card>
+        <CardContent>
+          <Grid container spacing={0}>
+            <Grid item xs={10}>
+              <TitleDisplay resource={resource} />
+            </Grid>
+            <Grid item xs={2}>
+              <Grid container spacing={0} justify="flex-end">
+                <DescriptionDisplay resource={resource} />
+                <CitationDisplay resource={resource} />
               </Grid>
             </Grid>
-            <Grid>
-              <Typography>
-                {resource.rlinks &&
-                  resource.rlinks.map((rlink) => (
-                    <Chip
-                      key={resource.uuid}
-                      label={getMediaType(rlink)}
-                      component="a"
-                      href={getAbsoluteUrl(rlink, props.parentUrl)}
-                      variant="outlined"
-                      clickable
-                    />
-                  ))}
-              </Typography>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Grid>
-    );
-  };
+          </Grid>
+          <Grid>
+            <Typography>
+              {resource.rlinks &&
+                resource.rlinks.map((rlink) => (
+                  <Chip
+                    key={resource.uuid}
+                    label={getMediaType(rlink)}
+                    component="a"
+                    href={getAbsoluteUrl(rlink, props.parentUrl)}
+                    variant="outlined"
+                    clickable
+                  />
+                ))}
+            </Typography>
+          </Grid>
+        </CardContent>
+      </Card>
+    </Grid>
+  );
 
   return (
     <Card>

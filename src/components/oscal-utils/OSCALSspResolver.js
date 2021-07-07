@@ -19,7 +19,9 @@ export default function OSCALSspResolveProfile(
   if (!profileUrl.startsWith("http")) {
     profileUrl = `${parentUrl}/../${profileUrl}`;
   }
-  // eslint-disable-next-line no-param-reassign
+
+  // Fixing linting error here would take significant change to codebase given how we use props.
+  /* eslint no-param-reassign: "error" */
   ssp.resolvedControls = [];
   OSCALResolveProfileOrCatalogUrlControls(
     ssp.resolvedControls,

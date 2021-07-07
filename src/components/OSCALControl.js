@@ -7,26 +7,17 @@ import OSCALControlPart from "./OSCALControlPart";
 import OSCALControlModification from "./OSCALControlModification";
 
 // TODO - This is probably 800-53 specific?
-// Disable linting until completed
-/* eslint-disable */
 function getControlStatusCss(props) {
-  if (!props.control?.props) {
-    return;
-  }
-  let property;
-  for (property of props.control.props) {
-    if (property.name === "status") {
-      return {
-        "text-decoration": "line-through",
-        color: "#d4d4d4",
-      };
-    }
+  if (props.control?.props?.find((property) => property.name === "status")) {
+    return {
+      "text-decoration": "line-through",
+      color: "#d4d4d4",
+    };
   }
   return "";
 }
-/* eslint-enable */
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   OSCALControl: {
     margin: "1em 0 1em 0",
   },
@@ -92,8 +83,7 @@ export default function OSCALControl(props) {
               componentId={props.componentId}
               control={props.control}
               modifications={props.modifications}
-              // eslint-disable-next-line
-              key={`part-${index}`}
+              key={part.id ?? `part-${index}`}
             />
           ))}
         {props.control.controls &&

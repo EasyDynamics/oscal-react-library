@@ -38,8 +38,6 @@ export default function OSCALSystemImplementation(props) {
     return null;
   }
 
-  /* eslint-enable */
-
   return (
     <div className={classes.paper}>
       <Card>
@@ -73,7 +71,7 @@ export default function OSCALSystemImplementation(props) {
                   </TableHead>
                   <TableBody>
                     {Object.entries(props.systemImplementation.components).map(
-                      ([key, component], index) => (
+                      ([key, component]) => (
                         <TableRow key={key}>
                           <TableCell component="th" scope="row">
                             <StyledTooltip title={component.description}>

@@ -32,7 +32,7 @@ const componentDefinitionControlImplementationTestData = [
     ],
   },
 ];
-/* eslint-disable */
+
 const controlsData = [
   {
     id: "control-1",
@@ -62,7 +62,8 @@ const controlsData = [
                 value: "a.",
               },
             ],
-            prose: "Does something with {{ insert: param, control-1_prm_1 }} and {{ insert: param, control-1_prm_2 }}:",
+            prose:
+              "Does something with {{ insert: param, control-1_prm_1 }} and {{ insert: param, control-1_prm_2 }}:",
           },
         ],
       },
@@ -70,7 +71,7 @@ const controlsData = [
     controls: [
       {
         id: "control-1.1",
-        title: "Control 1 Enhancement"
+        title: "Control 1 Enhancement",
       },
     ],
     props: [
@@ -108,7 +109,8 @@ const controlsData = [
                 value: "b.",
               },
             ],
-            prose: "Does something with {{ insert: param, control-2_prm_1 }} and {{ insert: param, control-2_prm_2 }}:",
+            prose:
+              "Does something with {{ insert: param, control-2_prm_1 }} and {{ insert: param, control-2_prm_2 }}:",
           },
         ],
       },
@@ -116,7 +118,7 @@ const controlsData = [
     controls: [
       {
         id: "control-2.1",
-        title: "Control 2 Enhancement"
+        title: "Control 2 Enhancement",
       },
     ],
     props: [
@@ -127,7 +129,6 @@ const controlsData = [
     ],
   },
 ];
-/* eslint-enable */
 
 test("OSCALComponentDefinitionControlImplementation displays component implementation description", () => {
   render(
