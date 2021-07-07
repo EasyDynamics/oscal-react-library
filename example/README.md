@@ -15,17 +15,17 @@ The NIST 800-53 (rev 5) catalog is loaded by default in the catalog viewer:
 
 ![OSCSAL Catalog Viewer Screenshot](docs/resources/catalog-viewer-screenshot.png)
 
-The ssp-example from the OSCAL Github repo is loaded by default in the SSP viewer:
+The NIST 800-53 (rev 4) profile is loaded by default in the profile viewer:
 
-![OSCSAL SSP Viewer Screenshot](docs/resources/ssp-viewer-screenshot.png)
+![OSCSAL Profile Viewer Screenshot](docs/resources/profile-viewer-screenshot.png)
 
 An Easy Dynamics component definition is loaded by default in the component viewer:
 
 ![OSCSAL Component Viewer Screenshot](docs/resources/component-viewer-screenshot.png)
 
-The NIST 800-53 (rev 4) profile is loaded by default in the profile viewer:
+The ssp-example from the OSCAL Github repo is loaded by default in the SSP viewer:
 
-![OSCSAL Profile Viewer Screenshot](docs/resources/profile-viewer-screenshot.png)
+![OSCSAL SSP Viewer Screenshot](docs/resources/ssp-viewer-screenshot.png)
 
 
 ## Running
