@@ -18,13 +18,10 @@
     "react-dom": "file:../node_modules/react-dom",
     "react-router-dom": "file:../node_modules/react-router-dom",
     "react-scripts": "file:../node_modules/react-scripts",
-    "web-vitals": "^2.1.0",
-    "history": "file:../node_modules/history",
-    "fsevents": "2.3.2"
+    "history": "file:../node_modules/history"
   },
   "devDependencies": {
-    "@babel/plugin-syntax-object-rest-spread": "^7.8.3",
-    "web-vitals": "^2.1.0"
+    "@babel/plugin-syntax-object-rest-spread": "^7.8.3"
   },
   "eslintConfig": {
     "extends": "react-app"
