@@ -4,9 +4,9 @@ import userEvent from "@testing-library/user-event";
 import { OSCALComponentLoader } from "./OSCALLoader";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
 import { metadataTestData, testOSCALMetadata } from "./OSCALMetadata.test";
-import { 
+import {
   responsibleRolesTestData,
-  testOSCALResponsibleRoles 
+  testOSCALResponsibleRoles,
 } from "./OSCALResponsibleRoles.test";
 
 export const componentDefinitionTestData = {
@@ -52,10 +52,7 @@ function componentDefinitionRenderer() {
   );
 }
 
-function testOSCALComponentDefinitionComponent(
-  parentElementName,
-  renderer
-){
+function testOSCALComponentDefinitionComponent(parentElementName, renderer) {
   test(`${parentElementName} shows component title`, () => {
     renderer();
     const result = screen.getByText("Example Component");
@@ -74,7 +71,7 @@ function testOSCALComponentDefinitionComponent(
 testOSCALMetadata("OSCALComponentDefinition", componentDefinitionRenderer);
 
 testOSCALComponentDefinitionComponent(
-  "OSCALComponentDefinition", 
+  "OSCALComponentDefinition",
   componentDefinitionRenderer
 );
 

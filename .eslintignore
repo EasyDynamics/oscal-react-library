@@ -3,3 +3,8 @@
 src/serviceWorker.ts
 src/oscal-utils/OSCALSspResolver.js
 public/*
+build/
+dist/
+node_modules/
+.snapshots/
+*.min.js

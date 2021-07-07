@@ -9,8 +9,7 @@ const componentDefinitionControlImplementationTestData = [
     uuid: "control-implementation-1",
     source:
       "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_catalog.json",
-    description:
-      "This is an example description for control implementation-1",
+    description: "This is an example description for control implementation-1",
     "implemented-requirements": [
       {
         uuid: "implemented-requirements-1",
@@ -23,8 +22,7 @@ const componentDefinitionControlImplementationTestData = [
     uuid: "control-implementation-2",
     source:
       "https://raw.githubusercontent.com/usnistgov/oscal-content/master/fedramp.gov/json/FedRAMP_HIGH-baseline_profile.json",
-    description:
-      "This is an example description for control implementation-2",
+    description: "This is an example description for control implementation-2",
     "implemented-requirements": [
       {
         uuid: "implemented-requirements-2",
@@ -139,7 +137,9 @@ test("OSCALComponentDefinitionControlImplementation displays component implement
       controls={controlsData}
     />
   );
-  const result = screen.getByText("This is an example description for control implementation-1");
+  const result = screen.getByText(
+    "This is an example description for control implementation-1"
+  );
   expect(result).toBeVisible();
 });
 
@@ -157,7 +157,7 @@ test("OSCALComponentDefinitionControlImplementation displays control ID", () => 
 
 test("OSCALComponentDefinitionControlImplementation displays component parameters in control prose", () => {
   render(
-      <OSCALComponentDefinitionControlImplementation
+    <OSCALComponentDefinitionControlImplementation
       controlImplementations={componentDefinitionControlImplementationTestData}
       components={componentDefinitionTestData.components}
       controls={controlsData}

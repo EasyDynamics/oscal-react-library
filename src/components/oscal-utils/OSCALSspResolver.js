@@ -19,12 +19,13 @@ export default function OSCALSspResolveProfile(
   if (!profileUrl.startsWith("http")) {
     profileUrl = `${parentUrl}/../${profileUrl}`;
   }
+  // eslint-disable-next-line no-param-reassign
   ssp.resolvedControls = [];
   OSCALResolveProfileOrCatalogUrlControls(
     ssp.resolvedControls,
     profileUrl,
     parentUrl,
-    ssp.["back-matter"],
+    ssp["back-matter"],
     onSuccess,
     onError,
     []

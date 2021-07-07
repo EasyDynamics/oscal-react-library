@@ -11,14 +11,14 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { Route, Switch, Redirect, Link as RouterLink } from "react-router-dom";
-
 import Link from "@material-ui/core/Link";
+
 import {
   OSCALCatalogLoader,
   OSCALSSPLoader,
   OSCALComponentLoader,
   OSCALProfileLoader,
-} from "./OSCALLoader";
+} from "oscal-react-library";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -101,16 +101,16 @@ function App() {
             <Redirect to="/catalog" />
           </Route>
           <Route path="/catalog">
-            <OSCALCatalogLoader />
+            <OSCALCatalogLoader renderForm={true} />
           </Route>
           <Route exact path="/system-security-plan">
-            <OSCALSSPLoader />
+            <OSCALSSPLoader renderForm={true} />
           </Route>
           <Route exact path="/component-definition">
-            <OSCALComponentLoader />
+            <OSCALComponentLoader renderForm={true} />
           </Route>
           <Route exact path="/profile">
-            <OSCALProfileLoader />
+            <OSCALProfileLoader renderForm={true} />
           </Route>
         </Switch>
       </Container>

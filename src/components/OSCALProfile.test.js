@@ -24,19 +24,19 @@ const profileTestData = {
     "set-parameters": [
       {
         "param-id": "ac-1_prm_2",
-        "constraints": [
+        constraints: [
           {
-            "description": "at least every 3 years"
-          }
-        ]
+            description: "at least every 3 years",
+          },
+        ],
       },
       {
         "param-id": "ac-1_prm_3",
-        "constraints": [
+        constraints: [
           {
-            "description": "at least annually"
-          }
-        ]
+            description: "at least annually",
+          },
+        ],
       },
     ],
     alters: [
@@ -93,8 +93,8 @@ function testOSCALProfile(parentElementName, renderer) {
   test(`${parentElementName} displays controls`, async () => {
     act(() => {
       renderer();
-    })
-    const result = await screen.findByText("ac-1", {timeout: 10000});
+    });
+    const result = await screen.findByText("ac-1", { timeout: 10000 });
     expect(result).toBeVisible();
   });
 
@@ -112,7 +112,10 @@ function testOSCALProfile(parentElementName, renderer) {
 
   test(`${parentElementName} displays parameter constraints`, async () => {
     renderer();
-    const result = await screen.findAllByText("< organization-defined frequency >", {timeout: 10000});
+    const result = await screen.findAllByText(
+      "< organization-defined frequency >",
+      { timeout: 10000 }
+    );
     fireEvent.mouseOver(result[0]);
     expect(await screen.findByText("at least every 3 years")).toBeVisible();
   });
