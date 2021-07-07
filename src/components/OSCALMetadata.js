@@ -98,8 +98,7 @@ export default function OSCALControlGuidance(props) {
               </ListSubheader>
             }
           >
-            {props.metadata.parties &&
-              props.metadata.parties.map((party) => (
+            {props.metadata.parties?.map((party) => (
                 <ListItem key={`${party.uuid}-parties-listItem`}>
                   <ListItemAvatar>
                     <Avatar>
