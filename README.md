@@ -1,7 +1,16 @@
-# Easy Dynamics OSCAL React Library
+# OSCAL React Library
 
-A React library providing components and an example application, OSCAL Viewer, for browsing
-[OSCAL](https://pages.nist.gov/OSCAL/) data.
+A library of React components and an [example application](/example) that provide
+a direct view into NIST's Open Security Controls Assessment Language ([OSCAL](https://pages.nist.gov/OSCAL/)) data
+in JSON format.
+
+These components enable React application developers to quickly compose pages that display granular elements of
+OSCAL data or entire catalogs, profiles, component definitions, and system security plans.
+
+![OSCSAL SSP Viewer Screenshot](example/docs/resources/ssp-viewer-screenshot.png)
+
+Take a tour with the [live demo](https://oscal-viewer.msd.easydynamics.com/) or learn more about 
+developing with the library below.
 
 ## Setting Up
 
