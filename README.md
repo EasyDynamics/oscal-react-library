@@ -22,7 +22,7 @@ dependencies need to be installed initially with the command: `npm install`. Fro
 (See "OSCAL Viewer → Running") or components can be tested (See "Testing"). To automate local installation and
 immediately run the application, use the following command:
 
-```
+```text
 npm run build-library-and-run-example
 ```
 
@@ -32,6 +32,7 @@ To run the test suite, ensure dependencies are installed and run `npm run test`.
 eslint linting requirements, run `npm run lint`.
 
 ### Development
+
 A component can be created and added to `src/components`. In order for the component to be used in an application,
 it must either be added as an export in `src/index.js` or referenced by a component already being exported (such as
 components being referenced by a loader in the current OSCAL Viewer). In the root folder of the project, run
@@ -43,18 +44,27 @@ components being referenced by a loader in the current OSCAL Viewer). In the roo
 The OSCAL Viewer example application allows developers to sample the various OSCAL concepts and view their features.
 
 ### Running
+
 Once root dependencies have been installed, the application dependencies can be built and OSCAL Viewer can be ran by
 issuing the following command:
 
-```
+```text
 npm run build-and-run-example
 ```
 
 After application dependencies are installed, use:
 
-```
+```text
 npm run run-example
 ```
 
+For more details about OSCAL Viewer, please refer to [OSCAL Viewer README.md](/example/README.md).
 
-For more details about OSCAL Viewer, please refer to [OSCAL VIEWER README.md](/example/README.md).
+## Contributing
+
+For the process of Contributing to the project, please review [CONTRIBUTING.md](/CONTRIBUTING.md)
+and adhere to the [Code of Conduct](/CODE_OF_CONDUCT.md).
+
+## Licensing
+
+For information on the project's license, please review the [LICENSE](/LICENSE) file.
