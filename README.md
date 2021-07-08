@@ -53,8 +53,8 @@ The OSCAL Viewer example application allows developers to sample the various OSC
 
 ### Running
 
-Once root dependencies have been installed, the application dependencies can be built and OSCAL Viewer can be ran by
-issuing the following command:
+Once root dependencies are installed, build application dependencies and run OSCAL Viewer with the following
+command:
 
 ```text
 npm run build-and-run-example
