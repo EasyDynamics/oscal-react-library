@@ -1,0 +1,37 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14
+    commands:
+      - echo "Update NPM"
+      - npm install -g npm 
+      - echo "Installing library npm packages"
+      - npm install
+      - echo "Installing sample app npm packages"
+      - cd example
+      - npm install
+      - cd ..
+  build:
+    commands:
+      - echo "Build library"
+      - npm run build
+      - echo "Testing library"
+      - npm run test -- --ci --watchAll=false
+      - echo "Testing sample application"
+      - cd example
+      - npm run test -- --ci --watchAll=false
+      - cd ..
+      - echo "Building sample application"
+      - npm run predeploy
+
+artifacts:
+  base-directory: ./example/build
+  files:
+    - '**/*'
+
+cache:
+  paths:
+    - './node_modules/**/*'
+    - './example/node_modules/**/*'
