@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// Returns a string with a locality-sensitive representation of this date
+const formatDate = (isoDate) => new Date(isoDate).toLocaleString();
+
 export default function OSCALControlGuidance(props) {
   const classes = useStyles();
   if (!props.metadata) {
@@ -108,7 +111,7 @@ export default function OSCALControlGuidance(props) {
             </Grid>
             <Grid item xs={8}>
               <Typography variant="body2">
-                {props.metadata["last-modified"]}
+                {formatDate(props.metadata["last-modified"])}
               </Typography>
             </Grid>
             <Grid item xs={4}>
