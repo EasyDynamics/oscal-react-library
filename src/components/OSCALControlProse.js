@@ -35,7 +35,7 @@ const useStyles = makeStyles(() => ({
  * @param {String} parameterId
  * @returns the parameter label
  */
-const getParameterLabel = (parameters, parameterId) => {
+function getParameterLabel(parameters, parameterId) {
   const parameter = parameters.find(
     (testParameter) => testParameter.id === parameterId
   );
@@ -50,7 +50,7 @@ const getParameterLabel = (parameters, parameterId) => {
     return `< ${parameter.select.choice.join(" | ")} >`;
   }
   return `< ${parameterId} >`;
-};
+}
 
 /**
  * Finds a parameter setting in a component statement
@@ -104,7 +104,7 @@ function getConstraintsDisplay(modifications, parameterId) {
  * @param {String} key
  * @returns the text segment component
  */
-const getTextSegment = (text, key) => {
+function getTextSegment(text, key) {
   if (!text) {
     return null;
   }
@@ -113,7 +113,7 @@ const getTextSegment = (text, key) => {
       {text}
     </Typography>
   );
-};
+}
 
 /**
  * Wraps a placeholder display in a styled tooltip
@@ -138,12 +138,7 @@ function SegmentTooltipWrapper(props) {
  * @param {String} key
  * @returns the parameter label segment component
  */
-const getParameterLabelSegment = (
-  parameters,
-  parameterId,
-  modifications,
-  key
-) => {
+function getParameterLabelSegment(parameters, parameterId, modifications, key) {
   const parameterLabel = getParameterLabel(parameters, parameterId);
   const constraintsDisplay = getConstraintsDisplay(modifications, parameterId);
   if (!constraintsDisplay) {
@@ -163,7 +158,7 @@ const getParameterLabelSegment = (
       </ParamLabel>
     </SegmentTooltipWrapper>
   );
-};
+}
 
 /**
  * Builds the display of a segment of placeholder value text within prose
@@ -173,12 +168,12 @@ const getParameterLabelSegment = (
  * @param {String} key
  * @returns the parameter value segment component
  */
-const getParameterValueSegment = (
+function getParameterValueSegment(
   statementByComponent,
   parameterId,
   modifications,
   key
-) => {
+) {
   const parameterValue = getParameterValue(statementByComponent, parameterId);
   const constraintsDisplay = getConstraintsDisplay(modifications, parameterId);
   if (!constraintsDisplay.length) {
@@ -198,7 +193,7 @@ const getParameterValueSegment = (
       </ParamValue>
     </SegmentTooltipWrapper>
   );
-};
+}
 
 /**
  * Replaces the parameter placeholders in the given prose with the given label
