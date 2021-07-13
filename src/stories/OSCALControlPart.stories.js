@@ -2,17 +2,17 @@ import React from "react";
 import OSCALControlPart from "../components/OSCALControlPart";
 
 export default {
-  title: "Control Part",
+  title: "Components/Control Part",
   component: OSCALControlPart,
 };
 
 const Template = (args) => <OSCALControlPart {...args} />;
 
+export const Default = Template.bind({});
+
 export const ParameterConstraints = Template.bind({});
 
 export const AddsModifications = Template.bind({});
-
-export const NoModifications = Template.bind({});
 
 const exampleControl = {
   id: "control-1",
@@ -107,7 +107,7 @@ AddsModifications.args = {
   componentId: "control-1_smt",
 };
 
-NoModifications.args = {
+Default.args = {
   control: exampleControl,
   part: exampleControl.parts[0],
   parameters: exampleControl.params,

@@ -2,15 +2,15 @@ import React from "react";
 import { OSCALReplacedProseWithParameterLabel } from "../components/OSCALControlProse";
 
 export default {
-  title: "Control Prose",
+  title: "Components/Replaced Prose with Parameter Label",
   component: OSCALReplacedProseWithParameterLabel,
 };
 
 const Template = (args) => <OSCALReplacedProseWithParameterLabel {...args} />;
 
-export const ParameterConstraints = Template.bind({});
+export const Default = Template.bind({});
 
-export const NoConstraints = Template.bind({});
+export const ParameterConstraints = Template.bind({});
 
 const exampleParams = [
   {
@@ -52,7 +52,7 @@ ParameterConstraints.args = {
   parameters: exampleParams,
 };
 
-NoConstraints.args = {
+Default.args = {
   label: "a.",
   prose:
     "Does something with {{ insert: param, control-1_prm_1 }} and {{ insert: param, control-1_prm_2 }}",

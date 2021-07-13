@@ -2,15 +2,15 @@ import React from "react";
 import OSCALControlImplementation from "../components/OSCALControlImplementation";
 
 export default {
-  title: "Control Implementation",
+  title: "Components/Control Implementation",
   component: OSCALControlImplementation,
 };
 
 const Template = (args) => <OSCALControlImplementation {...args} />;
 
-export const ImplementedStatements = Template.bind({});
+export const Default = Template.bind({});
 
-export const NoStatements = Template.bind({});
+export const ImplementedStatements = Template.bind({});
 
 const exampleImplStatements = {
   description: "This is the control implementation for the system.",
@@ -106,7 +106,7 @@ ImplementedStatements.args = {
   controlImplementation: exampleImplStatements,
 };
 
-NoStatements.args = {
+Default.args = {
   controls: exampleControls,
   components: exampleComponents,
   controlImplementation: exampleImplNoStatements,

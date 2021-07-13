@@ -2,15 +2,15 @@ import React from "react";
 import OSCALControl from "../components/OSCALControl";
 
 export default {
-  title: "Control Display",
+  title: "Components/Control Display",
   component: OSCALControl,
 };
 
 const Template = (args) => <OSCALControl {...args} />;
 
-export const AddsModifications = Template.bind({});
+export const Default = Template.bind({});
 
-export const NoAdds = Template.bind({});
+export const AddsModifications = Template.bind({});
 
 const exampleControl = {
   id: "control-1",
@@ -107,7 +107,7 @@ const exampleModificationsAdds = {
   ],
 };
 
-NoAdds.args = {
+Default.args = {
   control: exampleControl,
   modifications: exampleModificationsConstraints,
 };

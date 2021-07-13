@@ -2,14 +2,14 @@ import React from "react";
 import OSCALControlGuidance from "../components/OSCALControlGuidance";
 
 export default {
-  title: "Control Guidance",
+  title: "Components/Control Guidance",
   component: OSCALControlGuidance,
 };
 
 const Template = (args) => <OSCALControlGuidance {...args} />;
 
-export const Example = Template.bind({});
+export const Default = Template.bind({});
 
-Example.args = {
+Default.args = {
   prose: "This is some text about guidance.",
 };

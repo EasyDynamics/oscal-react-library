@@ -2,13 +2,13 @@ import React from "react";
 import OSCALControlModification from "../components/OSCALControlModification";
 
 export default {
-  title: "Control Modification",
+  title: "Components/Control Modification",
   component: OSCALControlModification,
 };
 
 const Template = (args) => <OSCALControlModification {...args} />;
 
-export const Example = Template.bind({});
+export const Default = Template.bind({});
 
 const exampleModifications = {
   alters: [
@@ -29,7 +29,7 @@ const exampleModifications = {
   ],
 };
 
-Example.args = {
+Default.args = {
   modifications: exampleModifications,
   controlId: "control-1",
 };
