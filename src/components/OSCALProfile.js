@@ -54,13 +54,19 @@ export default function OSCALProfile(props) {
     };
   }, []);
 
-  // Flatten controls and IDs into single array
+  // Flatten controls and IDs into single key, value structure
   const includeControlIds = props.profile.imports
     .flatMap((imp) => imp["include-controls"])
     .flatMap((includeControl) => includeControl["with-ids"]);
 
-  // Imports resolved controls when loaded. When loading, displays a basic skeleton placeholder
-  // of the content.
+  // Create arrays of modification alter & set-parameters attributes
+  const modificationAlters = Object.values(props.profile.modify.alters);
+  const modificationSetParameters = Object.values(
+    props.profile.modify["set-parameters"]
+  );
+
+  // Import resolved controls when loaded. When loading, display a basic skeleton placeholder
+  // resembling the content.
   const profileImports = (
     <List
       className={classes.OSCALControlList}
@@ -91,7 +97,8 @@ export default function OSCALProfile(props) {
             <OSCALControl
               control={control}
               includeControlIds={includeControlIds}
-              modifications={props.profile.modify}
+              modificationAlters={modificationAlters}
+              modificationSetParameters={modificationSetParameters}
               childLevel={0}
               key={`control-${control.id}`}
             />

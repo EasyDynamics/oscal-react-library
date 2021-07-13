@@ -25,11 +25,7 @@ const useStyles = makeStyles(() => ({
  * @param {String} controlPartId Control part ID to match
  * @returns html object
  */
-const getAlterAddsOrRemovesDisplay = (
-  addsElements,
-  addsLabel,
-  controlPartId
-) => {
+function getAlterAddsOrRemovesDisplay(addsElements, addsLabel, controlPartId) {
   if (!addsElements?.length) {
     return null;
   }
@@ -57,7 +53,7 @@ const getAlterAddsOrRemovesDisplay = (
       {typographies}
     </DialogContent>
   );
-};
+}
 
 /**
  * Check if an element has a valid id.
@@ -68,14 +64,14 @@ const getAlterAddsOrRemovesDisplay = (
  * @param {String} field Field of Add/Remove element to check
  * @returns true if element matches controlPartID, OR if this should render a top-level modification
  */
-const isRelevantId = (controlPartId, controlId, element, field) => {
+function isRelevantId(controlPartId, controlId, element, field) {
   if (!element[field]) {
     // If by-id of this modification is undefined, check if it can be rendered at the top level
     return controlPartId === controlId;
   }
   // otherwise check if by-id matches this control part's ID
   return element[field] === controlPartId;
-};
+}
 
 /**
  * Get the modifications from the adds/removes list.
@@ -86,7 +82,7 @@ const isRelevantId = (controlPartId, controlId, element, field) => {
  * @param {String} modText String to display type of modification
  * @returns an HTML element
  */
-const getModifications = (controlPartId, controlId, modList, modText) => {
+function getModifications(controlPartId, controlId, modList, modText) {
   // Add everything with ids that match controlPartId
 
   /* TODO: Differences in implementations of the OSCAL standard makes
@@ -104,11 +100,11 @@ const getModifications = (controlPartId, controlId, modList, modText) => {
     getAlterAddsOrRemovesDisplay(controlParts, modText, controlPartId),
     controlParts.length,
   ];
-};
+}
 
 export default function OSCALControlModification(props) {
   // Finds the control-id within alters and matches it with a resolved control
-  const alter = props.modifications?.alters?.find(
+  const alter = props.modificationAlters?.find(
     (element) => element["control-id"] === props.controlId
   );
 
