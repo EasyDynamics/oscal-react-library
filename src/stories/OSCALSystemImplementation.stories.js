@@ -13,6 +13,8 @@ export const Default = Template.bind({});
 
 export const SystemImplementationLastModified = Template.bind({});
 
+export const SystemImplementationWithoutCompProps = Template.bind({});
+
 const exampleSystemImplementation = {
   remarks: "Example system implementation remarks.",
   users: {
@@ -127,6 +129,55 @@ const exampleSystemImplementationLastModified = {
   ],
 };
 
+const exampleSystemImplementationWithoutCompProps = {
+  remarks: "Example system implementation remarks.",
+  users: {
+    "user-1": {
+      title: "User 1",
+      "role-ids": ["asset-administrator"],
+      annotations: [
+        {
+          name: "type",
+          value: "internal",
+        },
+      ],
+    },
+  },
+  components: {
+    "component-1": {
+      title: "Example Component",
+      description: "An example component.",
+      status: {
+        state: "operational",
+      },
+      type: "software",
+      "responsible-roles": responsibleRolesTestData,
+    },
+  },
+  "inventory-items": [
+    {
+      uuid: "inventory-item-1",
+      description: "An inventory item.",
+      props: [
+        {
+          name: "asset-id",
+          value: "asset-id-inventory-item",
+        },
+      ],
+      "responsible-parties": {
+        "asset-administrator": {
+          "party-uuids": ["party-1"],
+        },
+      },
+      "implemented-components": [
+        {
+          "component-uuid": "component-1",
+        },
+      ],
+    },
+  ],
+};
+
 const exampleParties = [
   {
     uuid: "party-1",
@@ -142,5 +193,10 @@ Default.args = {
 
 SystemImplementationLastModified.args = {
   systemImplementation: exampleSystemImplementationLastModified,
+  parties: exampleParties,
+};
+
+SystemImplementationWithoutCompProps.args = {
+  systemImplementation: exampleSystemImplementationWithoutCompProps,
   parties: exampleParties,
 };
