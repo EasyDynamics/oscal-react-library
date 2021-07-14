@@ -10,6 +10,8 @@ const Template = (args) => <OSCALMetadata {...args} />;
 
 export const Default = Template.bind({});
 
+export const MetadataRoles = Template.bind({});
+
 const exampleMetadata = {
   title: "Test Title",
   "last-modified": "7/12/2021",
@@ -24,6 +26,36 @@ const exampleMetadata = {
   ],
 };
 
+const exampleMetadataRoles = {
+  title: "Test Title",
+  "last-modified": "7/12/2021",
+  version: "Revision 5",
+  "oscal-version": "1.0.0",
+  roles: [
+    {
+      id: "creator",
+      title: "Document creator",
+    },
+  ],
+  parties: [
+    {
+      uuid: "party-1",
+      type: "organization",
+      name: "Some group of people",
+    },
+  ],
+  "responsible-parties": [
+    {
+      "role-id": "creator",
+      "party-uuids": ["party-1"],
+    },
+  ],
+};
+
 Default.args = {
   metadata: exampleMetadata,
+};
+
+MetadataRoles.args = {
+  metadata: exampleMetadataRoles,
 };
