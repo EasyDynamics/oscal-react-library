@@ -37,12 +37,15 @@ const modificationsTestData = {
 };
 
 function proseParamLabelsRenderer() {
+  const modificationSetParametersTestData = Object.values(
+    modificationsTestData["set-parameters"]
+  );
   render(
     <OSCALReplacedProseWithParameterLabel
       label={labelTestData}
       prose={proseTestData}
       parameters={parametersTestData}
-      modifications={modificationsTestData}
+      modificationSetParameters={modificationSetParametersTestData}
     />
   );
 }

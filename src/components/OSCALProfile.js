@@ -65,8 +65,32 @@ export default function OSCALProfile(props) {
     props.profile.modify["set-parameters"]
   );
 
-  // Import resolved controls when loaded. When loading, display a basic skeleton placeholder
-  // resembling the content.
+  /**
+   * Display a basic skeleton placeholder, resembling the control cards.
+   *
+   * @param {number} index
+   * @returns Provides a SkeletonBox
+   */
+  function renderSkeletonCard(index) {
+    return (
+      <CardContent key={`skeleton-card-${index}`}>
+        <span
+          style={{ marginTop: 5, display: "flex", gap: "1em" }}
+          key="controls load 0"
+        >
+          <Skeleton variant="text" width="25em" height="3em" />
+          <Skeleton variant="circle" width="3em" height="3em" />
+        </span>
+        <Skeleton variant="text" width="10em" height="2.5em" />
+        <Skeleton variant="rect" width="100%" height={115} />
+        <Skeleton variant="text" width="6.5em" height="3.5em" />
+      </CardContent>
+    );
+  }
+  // Determine number of skeleton cards to show
+  const skeletonCards = 3;
+
+  // Import resolved controls when loaded. When loading, display a basic skeleton placeholder.
   const profileImports = (
     <List
       className={classes.OSCALControlList}
@@ -82,17 +106,9 @@ export default function OSCALProfile(props) {
       }
     >
       {!isLoaded
-        ? [...Array(3)].map(() => (
-            <CardContent>
-              <span style={{ marginTop: 5, display: "flex", gap: "1em" }}>
-                <Skeleton variant="text" width="25em" height="3em" />
-                <Skeleton variant="circle" width="3em" height="3em" />
-              </span>
-              <Skeleton variant="text" width="10em" height="2.5em" />
-              <Skeleton variant="rect" width="100%" height={115} />
-              <Skeleton variant="text" width="6.5em" height="3.5em" />
-            </CardContent>
-          ))
+        ? [...Array(skeletonCards)].map((_val, index) =>
+            renderSkeletonCard(index)
+          )
         : props.profile.resolvedControls.map((control) => (
             <OSCALControl
               control={control}

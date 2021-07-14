@@ -24,8 +24,7 @@ const getPartLabel = (props) =>
 export default function OSCALControlPart(props) {
   // Don't display assessment if we're displaying a control implementation
   if (
-    (props.implReqStatements ||
-      (props.modificationSetParameters && props.modificationAlters)) &&
+    (props.implReqStatements || props.modificationSetParameters) &&
     (props.part.name === "objective" || props.part.name === "assessment")
   ) {
     return null;
