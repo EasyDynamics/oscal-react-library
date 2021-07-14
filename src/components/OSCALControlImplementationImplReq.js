@@ -111,9 +111,9 @@ export default function OSCALControlImplementationImplReq(props) {
   if (!implReqStatements) {
     implReqStatements = [];
   }
+
   // Setup UI of Control Implemention with verticle tabs and a tab panel to
   // display control implementation, which are both wrapped in a card
-
   return (
     <Card className={`${classes.OSCALImplReq} ${classes.OSCALImplChildLevel}`}>
       <CardContent>
@@ -150,6 +150,7 @@ export default function OSCALControlImplementationImplReq(props) {
                 childLevel={0}
                 implReqStatements={implReqStatements}
                 componentId={component.uuid}
+                modifications={props.modifications}
               />
             </TabPanel>
           ))}

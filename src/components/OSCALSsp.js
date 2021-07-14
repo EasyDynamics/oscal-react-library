@@ -6,6 +6,7 @@ import OSCALSystemImplementation from "./OSCALSystemImplementation";
 import OSCALControlImplementation from "./OSCALControlImplementation";
 import OSCALSspResolveProfile from "./oscal-utils/OSCALSspResolver";
 import OSCALBackMatter from "./OSCALBackMatter";
+import getProfileModifications from "./oscal-utils/OSCALProfileUtils";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -18,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
 export default function OSCALSsp(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [modifications, setModifications] = useState(props.modifications);
   const classes = useStyles();
 
   const ssp = props["system-security-plan"];
@@ -46,11 +48,20 @@ export default function OSCALSsp(props) {
   if (!isLoaded) {
     controlImpl = null;
   } else {
+    // Get modifications from imported profile
+    if (!modifications) {
+      getProfileModifications(
+        ssp["import-profile"].href,
+        props.parentUrl,
+        setModifications
+      );
+    }
     controlImpl = (
       <OSCALControlImplementation
         controlImplementation={ssp["control-implementation"]}
         components={ssp["system-implementation"].components}
         controls={ssp.resolvedControls}
+        modifications={modifications}
       />
     );
   }
