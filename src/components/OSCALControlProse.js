@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { styled, withTheme, makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
@@ -148,11 +148,10 @@ function getParameterLabelSegment(
   modificationSetParameters,
   key
 ) {
-  const parameterLabel = useCallback(
-    getParameterLabel(parameters, parameterId)
-  );
-  const constraintsDisplay = useCallback(
-    getConstraintsDisplay(modificationSetParameters, parameterId)
+  const parameterLabel = getParameterLabel(parameters, parameterId);
+  const constraintsDisplay = getConstraintsDisplay(
+    modificationSetParameters,
+    parameterId
   );
   if (!constraintsDisplay) {
     return (
@@ -187,11 +186,10 @@ function getParameterValueSegment(
   modificationSetParameters,
   key
 ) {
-  const parameterValue = useCallback(
-    getParameterValue(statementByComponent, parameterId)
-  );
-  const constraintsDisplay = useCallback(
-    getConstraintsDisplay(modificationSetParameters, parameterId)
+  const parameterValue = getParameterValue(statementByComponent, parameterId);
+  const constraintsDisplay = getConstraintsDisplay(
+    modificationSetParameters,
+    parameterId
   );
   if (!constraintsDisplay.length) {
     return (
@@ -239,7 +237,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
         .split(RegExp(prosePlaceholderRegexpString, "g"))
         .map((segment, index) => {
           if (index % 2 === 0) {
-            return useCallback(getTextSegment(segment, index.toString()));
+            return getTextSegment(segment, index.toString());
           }
           return getParameterLabelSegment(
             props.parameters,
@@ -293,7 +291,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
         .split(RegExp(prosePlaceholderRegexpString, "g"))
         .map((segment, index) => {
           if (index % 2 === 0) {
-            return useCallback(getTextSegment(segment, index.toString()));
+            return getTextSegment(segment, index.toString());
           }
           return getParameterValueSegment(
             statementByComponent,
