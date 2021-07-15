@@ -10,9 +10,18 @@ const Template = (args) => <OSCALMetadata {...args} />;
 
 export const Default = Template.bind({});
 
+export const MetadataParties = Template.bind({});
+
 export const MetadataRoles = Template.bind({});
 
 const exampleMetadata = {
+  title: "Test Title",
+  "last-modified": "7/12/2021",
+  version: "Revision 5",
+  "oscal-version": "1.0.0",
+};
+
+const exampleMetadataParties = {
   title: "Test Title",
   "last-modified": "7/12/2021",
   version: "Revision 5",
@@ -54,6 +63,10 @@ const exampleMetadataRoles = {
 
 Default.args = {
   metadata: exampleMetadata,
+};
+
+MetadataParties.args = {
+  metadata: exampleMetadataParties,
 };
 
 MetadataRoles.args = {

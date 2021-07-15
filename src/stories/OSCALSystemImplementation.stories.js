@@ -13,7 +13,7 @@ export const Default = Template.bind({});
 
 export const SystemImplementationLastModified = Template.bind({});
 
-export const SystemImplementationWithoutCompProps = Template.bind({});
+export const SystemImplementationVersion = Template.bind({});
 
 const exampleSystemImplementation = {
   remarks: "Example system implementation remarks.",
@@ -37,10 +37,59 @@ const exampleSystemImplementation = {
         state: "operational",
       },
       type: "software",
+      "responsible-roles": responsibleRolesTestData,
+    },
+  },
+  "inventory-items": [
+    {
+      uuid: "inventory-item-1",
+      description: "An inventory item.",
       props: [
         {
-          name: "version",
-          value: "1.1",
+          name: "asset-id",
+          value: "asset-id-inventory-item",
+        },
+      ],
+      "responsible-parties": {
+        "asset-administrator": {
+          "party-uuids": ["party-1"],
+        },
+      },
+      "implemented-components": [
+        {
+          "component-uuid": "component-1",
+        },
+      ],
+    },
+  ],
+};
+
+const exampleSystemImplementationLastModified = {
+  remarks: "Example system implementation remarks.",
+  users: {
+    "user-1": {
+      title: "User 1",
+      "role-ids": ["asset-administrator"],
+      annotations: [
+        {
+          name: "type",
+          value: "internal",
+        },
+      ],
+    },
+  },
+  components: {
+    "component-1": {
+      title: "Example Component",
+      description: "An example component.",
+      status: {
+        state: "operational",
+      },
+      type: "software",
+      props: [
+        {
+          name: "last-modified-date",
+          value: "20210712",
         },
       ],
       "responsible-roles": responsibleRolesTestData,
@@ -70,7 +119,7 @@ const exampleSystemImplementation = {
   ],
 };
 
-const exampleSystemImplementationLastModified = {
+const exampleSystemImplementationVersion = {
   remarks: "Example system implementation remarks.",
   users: {
     "user-1": {
@@ -129,55 +178,6 @@ const exampleSystemImplementationLastModified = {
   ],
 };
 
-const exampleSystemImplementationWithoutCompProps = {
-  remarks: "Example system implementation remarks.",
-  users: {
-    "user-1": {
-      title: "User 1",
-      "role-ids": ["asset-administrator"],
-      annotations: [
-        {
-          name: "type",
-          value: "internal",
-        },
-      ],
-    },
-  },
-  components: {
-    "component-1": {
-      title: "Example Component",
-      description: "An example component.",
-      status: {
-        state: "operational",
-      },
-      type: "software",
-      "responsible-roles": responsibleRolesTestData,
-    },
-  },
-  "inventory-items": [
-    {
-      uuid: "inventory-item-1",
-      description: "An inventory item.",
-      props: [
-        {
-          name: "asset-id",
-          value: "asset-id-inventory-item",
-        },
-      ],
-      "responsible-parties": {
-        "asset-administrator": {
-          "party-uuids": ["party-1"],
-        },
-      },
-      "implemented-components": [
-        {
-          "component-uuid": "component-1",
-        },
-      ],
-    },
-  ],
-};
-
 const exampleParties = [
   {
     uuid: "party-1",
@@ -196,7 +196,7 @@ SystemImplementationLastModified.args = {
   parties: exampleParties,
 };
 
-SystemImplementationWithoutCompProps.args = {
-  systemImplementation: exampleSystemImplementationWithoutCompProps,
+SystemImplementationVersion.args = {
+  systemImplementation: exampleSystemImplementationVersion,
   parties: exampleParties,
 };
