@@ -31,7 +31,7 @@ export default function OSCALProfile(props) {
   const classes = useStyles();
   const unmounted = useRef(false);
 
-  // Using oscal-utils resolves the profile, provides are error when failure
+  // Resolved profile using oscal-utils. Provides error when failure.
   useEffect(() => {
     OSCALResolveProfile(
       props.profile,
@@ -60,16 +60,22 @@ export default function OSCALProfile(props) {
     .flatMap((includeControl) => includeControl["with-ids"]);
 
   // Create arrays of modification alter & set-parameters attributes
-  const modificationAlters = Object.values(props.profile.modify.alters);
-  const modificationSetParameters = Object.values(
-    props.profile.modify["set-parameters"]
-  );
+  let modificationSetParameters = null;
+  let modificationAlters = null;
+  if (props.profile.modify.alters) {
+    modificationAlters = Object.values(props.profile.modify.alters);
+  }
+  if (props.profile.modify["set-parameters"]) {
+    modificationSetParameters = Object.values(
+      props.profile.modify["set-parameters"]
+    );
+  }
 
   /**
    * Display a basic skeleton placeholder, resembling the control cards.
    *
    * @param {number} index
-   * @returns Provides a SkeletonBox
+   * @returns Provides a skeleton card
    */
   function renderSkeletonCard(index) {
     return (

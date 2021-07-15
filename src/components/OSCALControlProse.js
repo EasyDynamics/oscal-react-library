@@ -90,7 +90,7 @@ function getConstraintsDisplay(modificationSetParameters, parameterId) {
   const foundParameterSetting = modificationSetParameters.find(
     (parameterSetting) => parameterSetting["param-id"] === parameterId
   );
-  // Error check constriants
+  // Error check constraints
   if (!foundParameterSetting?.constraints) {
     return "";
   }
