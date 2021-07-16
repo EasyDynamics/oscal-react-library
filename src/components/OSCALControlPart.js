@@ -24,7 +24,9 @@ const getPartLabel = (props) =>
 export default function OSCALControlPart(props) {
   // Don't display assessment if we're displaying a control implementation
   if (
-    (props.implReqStatements || props.modifications) &&
+    (props.implReqStatements ||
+      props.modificationSetParameters ||
+      props.modificationAlters) &&
     (props.part.name === "objective" || props.part.name === "assessment")
   ) {
     return null;
@@ -37,19 +39,16 @@ export default function OSCALControlPart(props) {
   }
 
   let modificationDisplay;
-  // Passing all of the modifications works, but could be made
-  // more efficient later on.
-  if (props.modifications) {
+  if (props.modificationAlters) {
     modificationDisplay = (
       <OSCALControlModification
-        modifications={props.modifications}
+        modificationAlters={props.modificationAlters}
         controlPartId={props.part.id}
         controlId={props.controlId}
       />
     );
   }
 
-  const isStatement = props.part.name === "statement";
   const label = getPartLabel(props.part.props);
 
   let replacedProse;
@@ -62,7 +61,7 @@ export default function OSCALControlPart(props) {
         implReqStatements={props.implReqStatements}
         statementId={props.part.id}
         componentId={props.componentId}
-        modifications={props.modifications}
+        modificationSetParameters={props.modificationSetParameters}
         modificationDisplay={modificationDisplay}
       />
     );
@@ -72,18 +71,17 @@ export default function OSCALControlPart(props) {
         label={label}
         prose={props.part.prose}
         parameters={props.parameters}
-        modifications={props.modifications}
+        modificationSetParameters={props.modificationSetParameters}
         modificationDisplay={modificationDisplay}
       />
     );
   }
 
-  let className;
-  if (isStatement) {
-    className = classes.OSCALControlStatement;
-  } else {
-    className = classes.OSCALControlPart;
-  }
+  // Set classname to control statement when part name is "statement"
+  const className =
+    props.part.name === "statement"
+      ? classes.OSCALControlStatement
+      : classes.OSCALControlPart;
 
   return (
     <div className={className}>
@@ -96,8 +94,9 @@ export default function OSCALControlPart(props) {
             parameters={props.parameters}
             implReqStatements={props.implReqStatements}
             componentId={props.componentId}
+            modificationAlters={props.modificationAlters}
+            modificationSetParameters={props.modificationSetParameters}
             key={part.id}
-            modifications={props.modifications}
           />
         ))}
     </div>
