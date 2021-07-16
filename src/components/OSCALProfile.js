@@ -18,6 +18,29 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /**
+ * Display a basic skeleton placeholder, resembling the control cards.
+ *
+ * @param {number} index
+ * @returns Provides a skeleton card
+ */
+function renderSkeletonCard(index) {
+  return (
+    <CardContent key={`skeleton-card-${index}`}>
+      <span
+        style={{ marginTop: 5, display: "flex", gap: "1em" }}
+        key="controls load 0"
+      >
+        <Skeleton variant="text" width="25em" height="3em" />
+        <Skeleton variant="circle" width="3em" height="3em" />
+      </span>
+      <Skeleton variant="text" width="10em" height="2.5em" />
+      <Skeleton variant="rect" width="100%" height={115} />
+      <Skeleton variant="text" width="6.5em" height="3.5em" />
+    </CardContent>
+  );
+}
+
+/**
  * Displays a given OSCAL Profile is an easily consumable format. According to NIST, a profile
  * represents the baseline of selected controls from one or more control catalogs.
  * For more information see: https://pages.nist.gov/OSCAL/concepts/layer/control/profile/
@@ -59,44 +82,8 @@ export default function OSCALProfile(props) {
     .flatMap((imp) => imp["include-controls"])
     .flatMap((includeControl) => includeControl["with-ids"]);
 
-  // Create arrays of modification alter & set-parameters attributes
-  let modificationSetParameters = null;
-  let modificationAlters = null;
-  if (props.profile.modify.alters) {
-    modificationAlters = Object.values(props.profile.modify.alters);
-  }
-  if (props.profile.modify["set-parameters"]) {
-    modificationSetParameters = Object.values(
-      props.profile.modify["set-parameters"]
-    );
-  }
-
-  /**
-   * Display a basic skeleton placeholder, resembling the control cards.
-   *
-   * @param {number} index
-   * @returns Provides a skeleton card
-   */
-  function renderSkeletonCard(index) {
-    return (
-      <CardContent key={`skeleton-card-${index}`}>
-        <span
-          style={{ marginTop: 5, display: "flex", gap: "1em" }}
-          key="controls load 0"
-        >
-          <Skeleton variant="text" width="25em" height="3em" />
-          <Skeleton variant="circle" width="3em" height="3em" />
-        </span>
-        <Skeleton variant="text" width="10em" height="2.5em" />
-        <Skeleton variant="rect" width="100%" height={115} />
-        <Skeleton variant="text" width="6.5em" height="3.5em" />
-      </CardContent>
-    );
-  }
-  // Determine number of skeleton cards to show
-  const skeletonCards = 3;
-
-  // Import resolved controls when loaded. When loading, display a basic skeleton placeholder.
+  // Import resolved controls when loaded. When loading, display a basic skeleton placeholder
+  // resembling the content.
   const profileImports = (
     <List
       className={classes.OSCALControlList}
@@ -112,15 +99,13 @@ export default function OSCALProfile(props) {
       }
     >
       {!isLoaded
-        ? [...Array(skeletonCards)].map((_val, index) =>
-            renderSkeletonCard(index)
-          )
+        ? [...Array(3)].map((_val, index) => renderSkeletonCard(index))
         : props.profile.resolvedControls.map((control) => (
             <OSCALControl
               control={control}
               includeControlIds={includeControlIds}
-              modificationAlters={modificationAlters}
-              modificationSetParameters={modificationSetParameters}
+              modificationAlters={props.profile.modify.alters}
+              modificationSetParameters={props.profile.modify["set-parameters"]}
               childLevel={0}
               key={`control-${control.id}`}
             />
