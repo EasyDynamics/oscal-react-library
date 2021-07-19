@@ -1,43 +1,26 @@
 import { Meta } from "@storybook/addon-docs";
 
-<Meta title="Getting Started/Docs" />
+<Meta title="Getting Started/Introduction" />
 
 # OSCAL React Library
 
-A library of React components and an example application that provides a direct view
+A library of React components that provides a direct view
 into NIST's Open Security Controls Assessment Language (OSCAL) data in JSON format.
-
-These components enable React application developers to quickly compose pages that
-display granular elements of OSCAL data or entire catalogs, profiles, component definitions,
-and system security plans.
 
 Follow this project and contribute on [GitHub.](https://github.com/EasyDynamics/oscal-react-library)
 
-# Control
+## Using Storybook
 
-[Control](?path=/story/control-display--adds-modifications) displays information about a control in the OSCAL standard.
-Displays the title, statements, parameters, and any modifications for the specified control.
+This page displays [stories](https://storybook.js.org/docs/react/get-started/whats-a-story) for each isolated
+React component in the library. The components can be viewed and tested in various usage examples.
+Each story will display the props passed in for a given example at the bottom of the page, where they
+can be edited to test out different configurations.
 
-### Required Props
+For more information on using Storybook, check out their official [documentation.](https://storybook.js.org/docs/react/get-started/introduction)
 
-- control
+## Building
 
-### Optional Props
+Run `npm install` to install dependencies for the library.
 
-- modifications
-
-# Control Part
-
-[Control Part](?path=/story/control-part--parameter-constraints) displays specific statements and prose
-pertaining to the specified control.
-
-### Required Props
-
-- control
-- part
-- componentId
-
-### Optional Props
-
-- parameters
-- modifications
+There is also an example OSCAL viewer to see the library in action; Check out the [live demo](https://oscal-viewer.msd.easydynamics.com/catalog)
+or build and run it locally with: `npm run build-library-and-run-example`.
