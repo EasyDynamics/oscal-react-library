@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - develop
-      - EGRC-471
+      - EGRC-275
 
 jobs:
   publish:
