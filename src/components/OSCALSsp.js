@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import OSCALMetadata from "./OSCALMetadata";
 import OSCALSystemCharacteristics from "./OSCALSystemCharacteristics";
@@ -21,6 +21,7 @@ export default function OSCALSsp(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [modifications, setModifications] = useState(props.modifications);
   const classes = useStyles();
+  const unmounted = useRef(false);
 
   const ssp = props["system-security-plan"];
 
@@ -34,13 +35,21 @@ export default function OSCALSsp(props) {
       ssp,
       props.parentUrl,
       () => {
-        setIsLoaded(true);
+        if (!unmounted.current) {
+          setIsLoaded(true);
+        }
       },
       () => {
-        setError(error);
-        setIsLoaded(true);
+        if (!unmounted.current) {
+          setError(error);
+          setIsLoaded(true);
+        }
       }
     );
+
+    return () => {
+      unmounted.current = true;
+    };
   }, []);
 
   let controlImpl;
