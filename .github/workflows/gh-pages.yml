@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - develop
+      # TODO: Remove this prior to merging into `develop`
       - EGRC-275
 
 jobs:
@@ -12,8 +13,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - name: Setup NodeJS
         uses: actions/setup-node@v2
         with:
@@ -33,4 +32,5 @@ jobs:
           branch: storybook-docs
           folder: storybook-static
           clean: true
+          single-commit: true
 
