@@ -33,4 +33,6 @@ jobs:
           folder: storybook-static
           clean: true
           single-commit: true
+          git-config-name: Easy Dynamics Automation
+          git-config-email: noreply@easydynamics.com
 
