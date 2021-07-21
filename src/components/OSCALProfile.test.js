@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { OSCALProfileLoader } from "./OSCALLoader";
 import OSCALProfile from "./OSCALProfile";
-import { testOSCALMetadata } from "./OSCALMetadata.test";
+import testOSCALMetadata from "./OSCALMetadata.test";
 import testOSCALBackMatter from "./OSCALBackMatter.test";
 import { parentUrlTestData } from "../test-data/Urls";
 import { profileTestData } from "../test-data/OtherData";

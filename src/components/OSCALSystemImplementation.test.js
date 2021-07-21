@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import OSCALSystemImplementation from "./OSCALSystemImplementation";
-import { testOSCALResponsibleRoles } from "./OSCALResponsibleRoles.test";
+import testOSCALResponsibleRoles from "./OSCALResponsibleRoles.test";
 import { metadataTestData } from "../test-data/OtherData";
 import { systemImplementationTestData } from "../test-data/SystemData";
 
@@ -15,7 +15,9 @@ function systemImplementationRenderer() {
   );
 }
 
-export default function testOSCALSystemImplementation(parentElementName, renderer) {
+export default function testOSCALSystemImplementation(
+  parentElementName,
+  renderer) {
   test(`${parentElementName} shows remarks`, () => {
     renderer();
     const result = screen.getByText("Example system implementation remarks.");

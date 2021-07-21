@@ -3,8 +3,8 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { OSCALComponentLoader } from "./OSCALLoader";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
-import { testOSCALMetadata } from "./OSCALMetadata.test";
-import { testOSCALResponsibleRoles } from "./OSCALResponsibleRoles.test";
+import testOSCALMetadata from "./OSCALMetadata.test";
+import testOSCALResponsibleRoles from "./OSCALResponsibleRoles.test";
 import { componentDefinitionTestData } from "../test-data/ComponentsData";
 
 test("OSCALComponentDefinition loads", () => {
