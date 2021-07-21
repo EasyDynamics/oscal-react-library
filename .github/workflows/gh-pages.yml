@@ -1,0 +1,38 @@
+name: Publish Storybook
+on:
+  push:
+    branches:
+      - develop
+      # TODO: Remove this prior to merging into `develop`
+      - EGRC-275
+
+jobs:
+  publish:
+    name: Publish Storybook to GitHub Pages
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          cache: "npm"
+      - name: Globally update npm
+        run: npm install -g npm@latest
+      - name: Install dependencies
+        run:
+          npm install
+      - name: Build Storybook
+        run:
+          npm run build-storybook
+      - name: Deploy to Pages
+        uses: JamesIves/github-pages-deploy-action@4.1.4 
+        with:
+          branch: storybook-docs
+          folder: storybook-static
+          clean: true
+          single-commit: true
+          git-config-name: Easy Dynamics Automation
+          git-config-email: noreply@easydynamics.com
+
