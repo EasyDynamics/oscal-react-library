@@ -15,7 +15,7 @@ function systemImplementationRenderer() {
   );
 }
 
-export function testOSCALSystemImplementation(parentElementName, renderer) {
+export default function testOSCALSystemImplementation(parentElementName, renderer) {
   test(`${parentElementName} shows remarks`, () => {
     renderer();
     const result = screen.getByText("Example system implementation remarks.");

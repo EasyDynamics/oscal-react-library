@@ -7,7 +7,7 @@ function metadataRenderer() {
   render(<OSCALMetadata metadata={metadataTestData} />);
 }
 
-export function testOSCALMetadata(parentElementName, renderer) {
+export default function testOSCALMetadata(parentElementName, renderer) {
   test(`${parentElementName} displays title`, () => {
     renderer();
     const result = screen.getByRole("heading", { name: "Test Title" });
