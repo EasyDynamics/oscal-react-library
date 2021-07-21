@@ -14,4 +14,5 @@ export const Default = Template.bind({});
 Default.args = {
   modifications: exampleModificationsAddsTwo,
   controlId: "control-1",
+  controlPartId: "control-1_smt.a",
 };

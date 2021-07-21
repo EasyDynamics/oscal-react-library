@@ -29,7 +29,7 @@ export const backMatterTestData = {
       description: "This is a test description for resource 2",
       rlinks: [
         {
-          href: href,
+          href,
           "media-type": "application/oscal.catalog+json2",
         },
       ],
