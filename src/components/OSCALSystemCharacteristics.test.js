@@ -13,8 +13,8 @@ function systemCharacteristicsRenderer() {
 
 export default function testOSCALSystemCharacteristics(
   parentElementName,
-  renderer)
-  {
+  renderer
+) {
   test(`${parentElementName} shows system name`, () => {
     renderer();
     const result = screen.getByRole("heading", { name: "Example System Name" });
