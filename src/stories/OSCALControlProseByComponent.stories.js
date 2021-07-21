@@ -2,6 +2,8 @@
 
 import React from "react";
 import { OSCALReplacedProseWithByComponentParameterValue } from "../components/OSCALControlProse";
+import { exampleImplReqStatements } from "../test-data/ComponentsData";
+import { exampleParams } from "../test-data/OtherData";
 
 export default {
   title: "Components/Replaced Prose with By-Component Parameter Value",
@@ -13,39 +15,6 @@ const Template = (args) => (
 );
 
 export const Default = Template.bind({});
-
-const exampleParams = [
-  {
-    id: "control-1_prm_1",
-    label: "control 1 label",
-  },
-  {
-    id: "control-1_prm_2",
-    label: "control 2 label",
-  },
-];
-
-const exampleByComponents = [
-  {
-    "set-parameters": [
-      {
-        "param-id": "control-1_prm_1",
-        values: ["param 1 value"],
-      },
-      {
-        "param-id": "control-1_prm_2",
-        values: ["param 2 value"],
-      },
-    ],
-  },
-];
-
-const exampleImplReqStatements = [
-  {
-    "statement-id": "a_smt",
-    "by-components": exampleByComponents,
-  },
-];
 
 Default.args = {
   label: "a.",

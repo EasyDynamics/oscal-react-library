@@ -2,66 +2,9 @@ import React from "react";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import OSCALSystemImplementation from "./OSCALSystemImplementation";
-import { metadataTestData } from "./OSCALMetadata.test";
-import {
-  responsibleRolesTestData,
-  testOSCALResponsibleRoles,
-} from "./OSCALResponsibleRoles.test";
-
-export const systemImplementationTestData = {
-  remarks: "Example system implementation remarks.",
-  users: {
-    "user-1": {
-      title: "User 1",
-      "role-ids": ["asset-administrator"],
-      annotations: [
-        {
-          name: "type",
-          value: "internal",
-        },
-      ],
-    },
-  },
-  components: {
-    "component-1": {
-      title: "Example Component",
-      description: "An example component.",
-      status: {
-        state: "operational",
-      },
-      type: "software",
-      props: [
-        {
-          name: "version",
-          value: "1.1",
-        },
-      ],
-      "responsible-roles": responsibleRolesTestData,
-    },
-  },
-  "inventory-items": [
-    {
-      uuid: "inventory-item-1",
-      description: "An inventory item.",
-      props: [
-        {
-          name: "asset-id",
-          value: "asset-id-inventory-item",
-        },
-      ],
-      "responsible-parties": {
-        "asset-administrator": {
-          "party-uuids": ["party-1"],
-        },
-      },
-      "implemented-components": [
-        {
-          "component-uuid": "component-1",
-        },
-      ],
-    },
-  ],
-};
+import { testOSCALResponsibleRoles } from "./OSCALResponsibleRoles.test";
+import { metadataTestData } from "../test-data/OtherData";
+import { systemImplementationTestData } from "../test-data/SystemData";
 
 function systemImplementationRenderer() {
   render(

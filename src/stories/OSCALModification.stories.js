@@ -1,5 +1,6 @@
 import React from "react";
 import OSCALControlModification from "../components/OSCALControlModification";
+import { exampleModificationsAddsTwo } from "../test-data/ModificationsData";
 
 export default {
   title: "Components/Control Modification",
@@ -10,26 +11,7 @@ const Template = (args) => <OSCALControlModification {...args} />;
 
 export const Default = Template.bind({});
 
-const exampleModifications = {
-  alters: [
-    {
-      "control-id": "control-1",
-      adds: [
-        {
-          position: "starting",
-          props: [
-            {
-              name: "Name",
-              value: "Value",
-            },
-          ],
-        },
-      ],
-    },
-  ],
-};
-
 Default.args = {
-  modifications: exampleModifications,
+  modifications: exampleModificationsAddsTwo,
   controlId: "control-1",
 };

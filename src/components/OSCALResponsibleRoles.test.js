@@ -1,14 +1,10 @@
 import React from "react";
 import { render, screen, within } from "@testing-library/react";
 import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
-import { metadataTestData } from "./OSCALMetadata.test";
-
-export const responsibleRolesTestData = [
-  {
-    "party-uuids": ["party-1"],
-    "role-id": "provider",
-  },
-];
+import {
+  metadataTestData,
+  responsibleRolesTestData,
+} from "../test-data/OtherData";
 
 function responsibleRolesRenderer() {
   render(

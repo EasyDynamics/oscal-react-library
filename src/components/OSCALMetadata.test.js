@@ -1,18 +1,7 @@
 import React from "react";
 import { render, screen, within } from "@testing-library/react";
 import OSCALMetadata from "./OSCALMetadata";
-
-export const metadataTestData = {
-  title: "Test Title",
-  parties: [
-    {
-      uuid: "party-1",
-      type: "organization",
-      name: "Some group of people",
-    },
-  ],
-  version: "Revision 5",
-};
+import { metadataTestData } from "../test-data/OtherData";
 
 function metadataRenderer() {
   render(<OSCALMetadata metadata={metadataTestData} />);
