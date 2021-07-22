@@ -52,6 +52,8 @@ const profileModifyTestData = {
   ],
 };
 
+const emptyProfileModifyTestData = {};
+
 function controlImplementationImplReqRenderer() {
   render(
     <OSCALControlImplementation
@@ -115,6 +117,7 @@ export default function testOSCALControlImplementationImplReq(
         controlImplementation={controlImplTestData}
         components={componentsTestData}
         controls={controlsTestData}
+        modifications={emptyProfileModifyTestData}
       />
     );
     expect(
