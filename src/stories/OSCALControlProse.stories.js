@@ -1,28 +1,51 @@
 import React from "react";
-import { OSCALReplacedProseWithParameterLabel } from "../components/OSCALControlProse";
+import {
+  OSCALReplacedProseWithByComponentParameterValue,
+  OSCALReplacedProseWithParameterLabel,
+} from "../components/OSCALControlProse";
 import { exampleModificationsConstraints } from "../test-data/ModificationsData";
 import { controlProseTestData, exampleParams } from "../test-data/OtherData";
+import { exampleImplReqStatements } from "../test-data/ComponentsData";
 
 export default {
-  title: "Components/Replaced Prose with Parameter Label",
+  title: "Components/Control Prose",
   component: OSCALReplacedProseWithParameterLabel,
 };
 
-const Template = (args) => <OSCALReplacedProseWithParameterLabel {...args} />;
+const TemplateParameterLabel = (args) => (
+  <OSCALReplacedProseWithParameterLabel {...args} />
+);
 
-export const Default = Template.bind({});
+const TemplateByComponent = (args) => (
+  <OSCALReplacedProseWithByComponentParameterValue {...args} />
+);
 
-export const ParameterConstraints = Template.bind({});
+export const ParametersReplacedWithLabels = TemplateParameterLabel.bind({});
 
-ParameterConstraints.args = {
+export const ByComp = TemplateByComponent.bind({});
+
+export const WithParameterConstraints = TemplateParameterLabel.bind({});
+
+WithParameterConstraints.args = {
   modifications: exampleModificationsConstraints,
   label: "a.",
   prose: controlProseTestData,
   parameters: exampleParams,
 };
 
-Default.args = {
+ParametersReplacedWithLabels.args = {
   label: "a.",
   prose: controlProseTestData,
   parameters: exampleParams,
 };
+
+ByComp.args = {
+  label: "a.",
+  prose:
+    "Does something with {{ insert: param, control-1_prm_1 }} and {{ insert: param, control-1_prm_2 }}",
+  parameters: exampleParams,
+  statementId: "a_smt",
+  implReqStatements: exampleImplReqStatements,
+};
+
+ByComp.storyName = "Parameters Replaced With By-Component Value";

@@ -18,6 +18,21 @@ export const exampleModificationsAddsTwo = {
   ],
 };
 
+export const exampleModificationsTopLevel = {
+  alters: [
+    {
+      "control-id": "control-1",
+      adds: [
+        {
+          "by-id": "control-1",
+          position: "starting",
+          props: exampleModificationsAddsTwo.alters[0].adds[0].props,
+        },
+      ],
+    },
+  ],
+};
+
 export const exampleModificationsConstraints = {
   "set-parameters": [
     {
