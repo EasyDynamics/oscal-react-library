@@ -35,7 +35,7 @@ const useStyles = makeStyles(() => ({
  * @param {String} parameterId
  * @returns the parameter label
  */
-const getParameterLabel = (parameters, parameterId) => {
+function getParameterLabel(parameters, parameterId) {
   const parameter = parameters.find(
     (testParameter) => testParameter.id === parameterId
   );
@@ -50,7 +50,7 @@ const getParameterLabel = (parameters, parameterId) => {
     return `< ${parameter.select.choice.join(" | ")} >`;
   }
   return `< ${parameterId} >`;
-};
+}
 
 /**
  * Finds a parameter setting in a component statement
@@ -77,20 +77,24 @@ function getParameterValue(statementByComponent, parameterId) {
 
 /**
  * Builds the display of constraints for the given parameterId
- * @param {Object} modifications
+ * @param {Object} modificationSetParameters
  * @param {String} parameterId
  * @returns the parameter label
  */
-function getConstraintsDisplay(modifications, parameterId) {
-  if (!modifications || !modifications["set-parameters"] || !parameterId) {
+function getConstraintsDisplay(modificationSetParameters, parameterId) {
+  // Error check parameters for null
+  if (!modificationSetParameters || !parameterId) {
     return "";
   }
-  const foundParameterSetting = modifications["set-parameters"].find(
+  // Search for matching parameter id
+  const foundParameterSetting = modificationSetParameters.find(
     (parameterSetting) => parameterSetting["param-id"] === parameterId
   );
+  // Error check constraints
   if (!foundParameterSetting?.constraints) {
     return "";
   }
+  // Provide list of constraints
   const constraintDescriptions = [];
   foundParameterSetting.constraints.forEach((constraint) => {
     constraintDescriptions.push(constraint.description);
@@ -104,7 +108,7 @@ function getConstraintsDisplay(modifications, parameterId) {
  * @param {String} key
  * @returns the text segment component
  */
-const getTextSegment = (text, key) => {
+function getTextSegment(text, key) {
   if (!text) {
     return null;
   }
@@ -113,7 +117,7 @@ const getTextSegment = (text, key) => {
       {text}
     </Typography>
   );
-};
+}
 
 /**
  * Wraps a placeholder display in a styled tooltip
@@ -134,18 +138,21 @@ function SegmentTooltipWrapper(props) {
  * Builds the display of a segment of placeholder label text within prose
  * @param {Array} parameters
  * @param {String} parameterId
- * @param {Object} modifications
+ * @param {Object} modificationSetParameters
  * @param {String} key
  * @returns the parameter label segment component
  */
-const getParameterLabelSegment = (
+function getParameterLabelSegment(
   parameters,
   parameterId,
-  modifications,
+  modificationSetParameters,
   key
-) => {
+) {
   const parameterLabel = getParameterLabel(parameters, parameterId);
-  const constraintsDisplay = getConstraintsDisplay(modifications, parameterId);
+  const constraintsDisplay = getConstraintsDisplay(
+    modificationSetParameters,
+    parameterId
+  );
   if (!constraintsDisplay) {
     return (
       <ParamLabel component="span" key={`param-label-key-${key}`}>
@@ -163,24 +170,27 @@ const getParameterLabelSegment = (
       </ParamLabel>
     </SegmentTooltipWrapper>
   );
-};
+}
 
 /**
  * Builds the display of a segment of placeholder value text within prose
  * @param {Object} statementByComponent
  * @param {String} parameterId
- * @param {Object} modifications
+ * @param {Object} modificationSetParameters
  * @param {String} key
  * @returns the parameter value segment component
  */
-const getParameterValueSegment = (
+function getParameterValueSegment(
   statementByComponent,
   parameterId,
-  modifications,
+  modificationSetParameters,
   key
-) => {
+) {
   const parameterValue = getParameterValue(statementByComponent, parameterId);
-  const constraintsDisplay = getConstraintsDisplay(modifications, parameterId);
+  const constraintsDisplay = getConstraintsDisplay(
+    modificationSetParameters,
+    parameterId
+  );
   if (!constraintsDisplay.length) {
     return (
       <ParamValue component="span" key={`param-value-key-${key}`}>
@@ -198,7 +208,7 @@ const getParameterValueSegment = (
       </ParamValue>
     </SegmentTooltipWrapper>
   );
-};
+}
 
 /**
  * Replaces the parameter placeholders in the given prose with the given label
@@ -232,7 +242,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
           return getParameterLabelSegment(
             props.parameters,
             segment,
-            props.modifications,
+            props.modificationSetParameters,
             index.toString()
           );
         })}
@@ -286,7 +296,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
           return getParameterValueSegment(
             statementByComponent,
             segment,
-            props.modifications,
+            props.modificationSetParameters,
             index.toString()
           );
         })}

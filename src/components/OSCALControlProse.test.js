@@ -7,6 +7,9 @@ import { controlProseTestData, exampleParams } from "../test-data/OtherData";
 const labelTestData = "label-1";
 
 function proseParamLabelsRenderer() {
+  const modificationSetParametersTestData = Object.values(
+    modificationsTestData["set-parameters"]
+  );
   render(
     <OSCALReplacedProseWithParameterLabel
       label={labelTestData}

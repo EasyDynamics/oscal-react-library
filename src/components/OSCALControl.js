@@ -52,10 +52,10 @@ export default function OSCALControl(props) {
   const classes = useStyles(props);
 
   let modificationDisplay;
-  if (props.modifications) {
+  if (props.modificationAlters) {
     modificationDisplay = (
       <OSCALControlModification
-        modifications={props.modifications}
+        modificationAlters={props.modificationAlters}
         controlId={props.control.id}
       />
     );
@@ -78,11 +78,12 @@ export default function OSCALControl(props) {
           props.control.parts.map((part, index) => (
             <OSCALControlPart
               part={part}
+              control={props.control}
               parameters={props.control.params}
               implReqStatements={props.implReqStatements}
               componentId={props.componentId}
-              control={props.control}
-              modifications={props.modifications}
+              modificationAlters={props.modificationAlters}
+              modificationSetParameters={props.modificationSetParameters}
               key={part.id ?? `part-${index}`}
             />
           ))}
@@ -90,9 +91,10 @@ export default function OSCALControl(props) {
           props.control.controls.map((control) => (
             <OSCALControl
               control={control}
-              includeControlIds={props.includeControlIds}
-              modifications={props.modifications}
               parameters={control.params}
+              includeControlIds={props.includeControlIds}
+              modificationAlters={props.modificationAlters}
+              modificationSetParameters={props.modificationSetParameters}
               childLevel={props.childLevel + 1}
               key={control.id}
             />
