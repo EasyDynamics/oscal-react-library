@@ -1,5 +1,9 @@
 import React from "react";
 import OSCALResponsibleRoles from "../components/OSCALResponsibleRoles";
+import {
+  exampleParties,
+  responsibleRolesTestData,
+} from "../test-data/OtherData";
 
 export default {
   title: "Components/Responsible Roles",
@@ -10,22 +14,7 @@ const Template = (args) => <OSCALResponsibleRoles {...args} />;
 
 export const Default = Template.bind({});
 
-const exampleResponsibleRoles = [
-  {
-    "party-uuids": ["party-1"],
-    "role-id": "provider",
-  },
-];
-
-const exampleParties = [
-  {
-    uuid: "party-1",
-    type: "organization",
-    name: "Some group of people",
-  },
-];
-
 Default.args = {
-  responsibleRoles: exampleResponsibleRoles,
+  responsibleRoles: responsibleRolesTestData,
   parties: exampleParties,
 };

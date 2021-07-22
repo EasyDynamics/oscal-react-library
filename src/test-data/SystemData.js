@@ -4,28 +4,80 @@ import {
   systemCharacteristicsInformationUrl,
 } from "./Urls";
 
-export const systemImplementationTestData = {
-  remarks: "Example system implementation remarks.",
-  users: {
-    "user-1": {
-      title: "User 1",
-      "role-ids": ["asset-administrator"],
-      annotations: [
-        {
-          name: "type",
-          value: "internal",
-        },
-      ],
+const title = "Example Component";
+const description = "An example component.";
+const status = {
+  state: "operational",
+};
+const type = "software";
+const inventoryItems = [
+  {
+    uuid: "inventory-item-1",
+    description: "An inventory item.",
+    props: [
+      {
+        name: "asset-id",
+        value: "asset-id-inventory-item",
+      },
+    ],
+    "responsible-parties": {
+      "asset-administrator": {
+        "party-uuids": ["party-1"],
+      },
     },
+    "implemented-components": [
+      {
+        "component-uuid": "component-1",
+      },
+    ],
   },
+];
+
+const remarks = "Example system implementation remarks.";
+
+const users = {
+  "user-1": {
+    title: "User 1",
+    "role-ids": ["asset-administrator"],
+    annotations: [
+      {
+        name: "type",
+        value: "internal",
+      },
+    ],
+  },
+};
+
+export const exampleSystemImplementationLastModified = {
+  remarks,
+  users,
   components: {
     "component-1": {
-      title: "Example Component",
-      description: "An example component.",
-      status: {
-        state: "operational",
-      },
-      type: "software",
+      title,
+      description,
+      status,
+      type,
+      props: [
+        {
+          name: "last-modified-date",
+          value: "20210712",
+        },
+      ],
+      "responsible-roles": responsibleRolesTestData,
+    },
+  },
+  "inventory-items": inventoryItems,
+};
+
+export const systemImplementationTestData = {
+  remarks,
+  users,
+  components: {
+    "component-1": {
+      title,
+      description,
+      status,
+      type,
       props: [
         {
           name: "version",
@@ -35,28 +87,47 @@ export const systemImplementationTestData = {
       "responsible-roles": responsibleRolesTestData,
     },
   },
-  "inventory-items": [
-    {
-      uuid: "inventory-item-1",
-      description: "An inventory item.",
+  "inventory-items": inventoryItems,
+};
+
+export const exampleSystemImplementation = {
+  remarks,
+  users,
+  components: {
+    "component-1": {
+      title,
+      description,
+      status,
+      type,
+      "responsible-roles": responsibleRolesTestData,
+    },
+  },
+  "inventory-items": inventoryItems,
+};
+
+export const exampleSystemImplementationVersion = {
+  remarks,
+  users,
+  components: {
+    "component-1": {
+      title,
+      description,
+      status,
+      type,
       props: [
         {
-          name: "asset-id",
-          value: "asset-id-inventory-item",
+          name: "version",
+          value: "1.1",
         },
-      ],
-      "responsible-parties": {
-        "asset-administrator": {
-          "party-uuids": ["party-1"],
-        },
-      },
-      "implemented-components": [
         {
-          "component-uuid": "component-1",
+          name: "last-modified-date",
+          value: "20210712",
         },
       ],
+      "responsible-roles": responsibleRolesTestData,
     },
-  ],
+  },
+  "inventory-items": inventoryItems,
 };
 
 export const systemCharacteristicsTestData = {

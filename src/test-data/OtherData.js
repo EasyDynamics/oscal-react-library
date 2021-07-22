@@ -12,6 +12,9 @@ const adds = [
   },
 ];
 
+export const controlProseTestData =
+  "Does something with {{ insert: param, control-1_prm_1 }} and {{ insert: param, control-1_prm_2 }}";
+
 export const exampleParams = [
   {
     id: "control-1_prm_1",

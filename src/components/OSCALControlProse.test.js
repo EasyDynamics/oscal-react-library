@@ -2,17 +2,15 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { OSCALReplacedProseWithParameterLabel } from "./OSCALControlProse";
 import { exampleModificationsConstraints } from "../test-data/ModificationsData";
-import { exampleParams } from "../test-data/OtherData";
+import { controlProseTestData, exampleParams } from "../test-data/OtherData";
 
 const labelTestData = "label-1";
-const proseTestData =
-  "Does something with {{ insert: param, control-1_prm_1 }} and {{ insert: param, control-1_prm_2 }}";
 
 function proseParamLabelsRenderer() {
   render(
     <OSCALReplacedProseWithParameterLabel
       label={labelTestData}
-      prose={proseTestData}
+      prose={controlProseTestData}
       parameters={exampleParams}
       modifications={exampleModificationsConstraints}
     />
