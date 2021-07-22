@@ -41,6 +41,21 @@ export const exampleBackMatter = {
   resources: [
     {
       uuid,
+      title,
+      rlinks: [
+        {
+          href,
+        },
+      ],
+    },
+  ],
+};
+
+export const exampleBackMatterWithoutTitle = {
+  resources: [
+    {
+      uuid,
+      citation,
       description,
       rlinks: [
         {
@@ -52,21 +67,7 @@ export const exampleBackMatter = {
   ],
 };
 
-export const exampleBackMatterTitle = {
-  resources: [
-    {
-      uuid,
-      title,
-      rlinks: [
-        {
-          href,
-        },
-      ],
-    },
-  ],
-};
-
-export const exampleBackMatterDescription = {
+export const exampleBackMatterWithDescription = {
   resources: [
     {
       uuid,
@@ -81,7 +82,7 @@ export const exampleBackMatterDescription = {
   ],
 };
 
-export const exampleBackMatterCitation = {
+export const exampleBackMatterWithCitation = {
   resources: [
     {
       uuid,
@@ -97,7 +98,7 @@ export const exampleBackMatterCitation = {
   ],
 };
 
-export const exampleBackMatterMediaType = {
+export const exampleBackMatterWithMediaType = {
   resources: [
     {
       uuid,

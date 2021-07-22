@@ -2,11 +2,10 @@ import React from "react";
 import OSCALBackMatter from "../components/OSCALBackMatter";
 import {
   exampleBackMatter,
-  exampleBackMatterCitation,
-  exampleBackMatterDescription,
-  exampleBackMatterDescription,
-  exampleBackMatterMediaType,
-  exampleBackMatterTitle,
+  exampleBackMatterWithCitation,
+  exampleBackMatterWithDescription,
+  exampleBackMatterWithMediaType,
+  exampleBackMatterWithoutTitle,
 } from "../test-data/BackMatterData";
 import { parentUrlTestData } from "../test-data/Urls";
 
@@ -19,35 +18,35 @@ const Template = (args) => <OSCALBackMatter {...args} />;
 
 export const Default = Template.bind({});
 
-export const BackMatterTitle = Template.bind({});
+export const BackMatterWithDescription = Template.bind({});
 
-export const BackMatterDescription = Template.bind({});
+export const BackMatterWithCitation = Template.bind({});
 
-export const BackMatterCitation = Template.bind({});
+export const BackMatterWithMediaType = Template.bind({});
 
-export const BackMatterMediaType = Template.bind({});
+export const BackMatterWithoutTitle = Template.bind({});
 
 Default.args = {
   backMatter: exampleBackMatter,
   parentUrl: parentUrlTestData,
 };
 
-BackMatterTitle.args = {
-  backMatter: exampleBackMatterTitle,
+BackMatterWithDescription.args = {
+  backMatter: exampleBackMatterWithDescription,
   parentUrl: parentUrlTestData,
 };
 
-BackMatterDescription.args = {
-  backMatter: exampleBackMatterDescription,
+BackMatterWithCitation.args = {
+  backMatter: exampleBackMatterWithCitation,
   parentUrl: parentUrlTestData,
 };
 
-BackMatterCitation.args = {
-  backMatter: exampleBackMatterCitation,
+BackMatterWithMediaType.args = {
+  backMatter: exampleBackMatterWithMediaType,
   parentUrl: parentUrlTestData,
 };
 
-BackMatterMediaType.args = {
-  backMatter: exampleBackMatterMediaType,
+BackMatterWithoutTitle.args = {
+  backMatter: exampleBackMatterWithoutTitle,
   parentUrl: parentUrlTestData,
 };

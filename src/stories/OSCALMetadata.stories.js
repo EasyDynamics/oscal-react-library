@@ -2,8 +2,7 @@ import React from "react";
 import OSCALMetadata from "../components/OSCALMetadata";
 import {
   exampleMetadata,
-  exampleMetadataParties,
-  exampleMetadataRoles,
+  exampleMetadataWithPartiesAndRoles,
 } from "../test-data/MetadataData";
 
 export default {
@@ -15,18 +14,12 @@ const Template = (args) => <OSCALMetadata {...args} />;
 
 export const Default = Template.bind({});
 
-export const MetadataParties = Template.bind({});
-
-export const MetadataRoles = Template.bind({});
+export const MetadataWithPartiesAndRoles = Template.bind({});
 
 Default.args = {
   metadata: exampleMetadata,
 };
 
-MetadataParties.args = {
-  metadata: exampleMetadataParties,
-};
-
-MetadataRoles.args = {
-  metadata: exampleMetadataRoles,
+MetadataWithPartiesAndRoles.args = {
+  metadata: exampleMetadataWithPartiesAndRoles,
 };

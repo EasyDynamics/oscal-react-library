@@ -12,15 +12,7 @@ export const exampleMetadata = {
   "oscal-version": oscalVersion,
 };
 
-export const exampleMetadataParties = {
-  title,
-  "last-modified": lastModified,
-  version,
-  "oscal-version": oscalVersion,
-  parties: exampleParties,
-};
-
-export const exampleMetadataRoles = {
+export const exampleMetadataWithPartiesAndRoles = {
   title,
   "last-modified": lastModified,
   version,
