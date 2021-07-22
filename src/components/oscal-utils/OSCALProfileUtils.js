@@ -13,25 +13,23 @@ export function fixProfileUrl(sourceUrl, parentUrl) {
 }
 
 /**
- * Gets the modifications from a profile at a given sourceURL.
+ * Fetches & sets the modifications from a profile at a given sourceURL.
  *
  * @param {string} sourceURL url to fetch profile from
  * @param {string} parentUrl parent url to fix sourceUrl
  * @param {function} setModifications set method for modifications
  */
-export default function getProfileModifications(
+export default async function fetchProfileModifications(
   sourceUrl,
   parentUrl,
   setModifications
 ) {
-  const getProfile = (profileUrl) =>
-    fetch(profileUrl)
-      .then((res) => res.json())
-      .then(
-        (result) => setModifications(result.profile.modify),
-        () => null
-      );
-
   const profileUrl = fixProfileUrl(sourceUrl, parentUrl);
-  getProfile(profileUrl);
+
+  fetch(profileUrl)
+    .then((res) => res.json())
+    .then(
+      (result) => setModifications(result.profile.modify),
+      () => null
+    );
 }

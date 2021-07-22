@@ -113,10 +113,8 @@ export default function OSCALControlImplementationImplReq(props) {
   }
 
   // Error check modifications
-  const modAlters = !props.modifications ? null : props.modifications.alters;
-  const modParams = !props.modifications
-    ? null
-    : props.modifications["set-parameters"];
+  const modAlters = props.modifications?.alters || null;
+  const modParams = props.modifications?.["set-parameters"] || null;
 
   // Setup UI of Control Implemention with verticle tabs and a tab panel to
   // display control implementation, which are both wrapped in a card

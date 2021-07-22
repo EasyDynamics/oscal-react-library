@@ -6,7 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { List, ListItem, ListItemText } from "@material-ui/core";
 import OSCALControlImplementationImplReq from "./OSCALControlImplementationImplReq";
-import getProfileModifications from "./oscal-utils/OSCALProfileUtils";
+import fetchProfileModifications from "./oscal-utils/OSCALProfileUtils";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -46,9 +46,10 @@ export default function OSCALComponentDefinitionControlImplementation(props) {
             <Grid item xs={12}>
               <List>
                 {props.controlImplementations.map((controlImpl) => {
-                  // Get modifications from source if it is profile
+                  // Fetch modifications from a source
+                  // Pass a set() function to set modifications
                   if (!modifications) {
-                    getProfileModifications(
+                    fetchProfileModifications(
                       controlImpl.source,
                       props.parentUrl,
                       setModifications

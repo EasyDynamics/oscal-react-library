@@ -6,7 +6,7 @@ import OSCALSystemImplementation from "./OSCALSystemImplementation";
 import OSCALControlImplementation from "./OSCALControlImplementation";
 import OSCALSspResolveProfile from "./oscal-utils/OSCALSspResolver";
 import OSCALBackMatter from "./OSCALBackMatter";
-import getProfileModifications from "./oscal-utils/OSCALProfileUtils";
+import fetchProfileModifications from "./oscal-utils/OSCALProfileUtils";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -57,9 +57,10 @@ export default function OSCALSsp(props) {
   if (!isLoaded) {
     controlImpl = null;
   } else {
-    // Get modifications from imported profile
+    // Fetch modifications from imported profile
+    // Pass a set() function to set modifications
     if (!modifications) {
-      getProfileModifications(
+      fetchProfileModifications(
         ssp["import-profile"].href,
         props.parentUrl,
         setModifications
