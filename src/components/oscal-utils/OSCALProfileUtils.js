@@ -27,7 +27,10 @@ export default function getProfileModifications(
   const getProfile = (profileUrl) =>
     fetch(profileUrl)
       .then((res) => res.json())
-      .then((result) => setModifications(result.profile.modify));
+      .then(
+        (result) => setModifications(result.profile.modify),
+        () => null
+      );
 
   const profileUrl = fixProfileUrl(sourceUrl, parentUrl);
   getProfile(profileUrl);
