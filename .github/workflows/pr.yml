@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run:
           npm install && cd example && npm install && cd ..
+      - name: Check any changes to the base
+        run:
+          git diff
       - name: Lint Code Base
         # super-linter@v4.4.0 moves to using eslint for JSON files which in
         # our configuration results in JSON parsing failures. Temporarily,
