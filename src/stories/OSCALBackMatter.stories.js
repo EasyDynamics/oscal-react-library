@@ -4,6 +4,7 @@ import {
   exampleBackMatter,
   exampleBackMatterCitation,
   exampleBackMatterDescription,
+  exampleBackMatterDescription,
   exampleBackMatterMediaType,
   exampleBackMatterTitle,
 } from "../test-data/BackMatterData";

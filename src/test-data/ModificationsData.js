@@ -1,3 +1,10 @@
+const props = [
+  {
+    name: "Name",
+    value: "Value",
+  },
+];
+
 export const exampleModificationsAddsTwo = {
   alters: [
     {
@@ -6,12 +13,7 @@ export const exampleModificationsAddsTwo = {
         {
           "by-id": "control-1_smt.a",
           position: "starting",
-          props: [
-            {
-              name: "Name",
-              value: "Value",
-            },
-          ],
+          props,
         },
       ],
     },
@@ -26,7 +28,7 @@ export const exampleModificationsTopLevel = {
         {
           "by-id": "control-1",
           position: "starting",
-          props: exampleModificationsAddsTwo.alters[0].adds[0].props,
+          props,
         },
       ],
     },
