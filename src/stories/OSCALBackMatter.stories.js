@@ -18,35 +18,35 @@ const Template = (args) => <OSCALBackMatter {...args} />;
 
 export const Default = Template.bind({});
 
-export const BackMatterWithDescription = Template.bind({});
+export const WithDescription = Template.bind({});
 
-export const BackMatterWithCitation = Template.bind({});
+export const WithCitation = Template.bind({});
 
-export const BackMatterWithMediaType = Template.bind({});
+export const WithMediaType = Template.bind({});
 
-export const BackMatterWithoutTitle = Template.bind({});
+export const WithoutTitle = Template.bind({});
 
 Default.args = {
   backMatter: exampleBackMatter,
   parentUrl: parentUrlTestData,
 };
 
-BackMatterWithDescription.args = {
+WithDescription.args = {
   backMatter: exampleBackMatterWithDescription,
   parentUrl: parentUrlTestData,
 };
 
-BackMatterWithCitation.args = {
+WithCitation.args = {
   backMatter: exampleBackMatterWithCitation,
   parentUrl: parentUrlTestData,
 };
 
-BackMatterWithMediaType.args = {
+WithMediaType.args = {
   backMatter: exampleBackMatterWithMediaType,
   parentUrl: parentUrlTestData,
 };
 
-BackMatterWithoutTitle.args = {
+WithoutTitle.args = {
   backMatter: exampleBackMatterWithoutTitle,
   parentUrl: parentUrlTestData,
 };

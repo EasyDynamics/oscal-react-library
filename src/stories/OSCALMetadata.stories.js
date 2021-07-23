@@ -14,12 +14,12 @@ const Template = (args) => <OSCALMetadata {...args} />;
 
 export const Default = Template.bind({});
 
-export const MetadataWithPartiesAndRoles = Template.bind({});
+export const WithPartiesAndRoles = Template.bind({});
 
 Default.args = {
   metadata: exampleMetadata,
 };
 
-MetadataWithPartiesAndRoles.args = {
+WithPartiesAndRoles.args = {
   metadata: exampleMetadataWithPartiesAndRoles,
 };

@@ -48,27 +48,6 @@ const users = {
   },
 };
 
-export const exampleSystemImplementationLastModified = {
-  remarks,
-  users,
-  components: {
-    "component-1": {
-      title,
-      description,
-      status,
-      type,
-      props: [
-        {
-          name: "last-modified-date",
-          value: "20210712",
-        },
-      ],
-      "responsible-roles": responsibleRolesTestData,
-    },
-  },
-  "inventory-items": inventoryItems,
-};
-
 export const systemImplementationTestData = {
   remarks,
   users,
@@ -91,21 +70,6 @@ export const systemImplementationTestData = {
 };
 
 export const exampleSystemImplementation = {
-  remarks,
-  users,
-  components: {
-    "component-1": {
-      title,
-      description,
-      status,
-      type,
-      "responsible-roles": responsibleRolesTestData,
-    },
-  },
-  "inventory-items": inventoryItems,
-};
-
-export const exampleSystemImplementationVersion = {
   remarks,
   users,
   components: {
