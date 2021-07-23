@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { OSCALReplacedProseWithParameterLabel } from "./OSCALControlProse";
 import { exampleModificationSetParameters } from "../test-data/ModificationsData";
-import { controlProseTestData, exampleParams } from "../test-data/OtherData";
+import { controlProseTestData, exampleParams } from "../test-data/CommonData";
 
 const labelTestData = "label-1";
 

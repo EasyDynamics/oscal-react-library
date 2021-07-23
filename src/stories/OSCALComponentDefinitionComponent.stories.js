@@ -1,7 +1,7 @@
 import React from "react";
 import OSCALComponentDefinitionComponent from "../components/OSCALComponentDefinitionComponent";
 import { exampleComponentDefinitionComponent } from "../test-data/ComponentsData";
-import { exampleParties } from "../test-data/OtherData";
+import { exampleParties } from "../test-data/CommonData";
 
 export default {
   title: "Components/Component Definition Component",

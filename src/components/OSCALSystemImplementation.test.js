@@ -3,7 +3,7 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import OSCALSystemImplementation from "./OSCALSystemImplementation";
 import testOSCALResponsibleRoles from "./OSCALResponsibleRoles.test";
-import { metadataTestData } from "../test-data/OtherData";
+import { metadataTestData } from "../test-data/CommonData";
 import { systemImplementationTestData } from "../test-data/SystemData";
 
 function systemImplementationRenderer() {

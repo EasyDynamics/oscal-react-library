@@ -1,4 +1,4 @@
-import { exampleParties } from "./OtherData";
+import { exampleParties } from "./CommonData";
 
 const title = "Test Title";
 const lastModified = "7/12/2021";

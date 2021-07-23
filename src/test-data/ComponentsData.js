@@ -1,4 +1,4 @@
-import { metadataTestData, responsibleRolesTestData } from "./OtherData";
+import { metadataTestData, responsibleRolesTestData } from "./CommonData";
 import { fedRampHighBaselineUrl, revFourCatalog } from "./Urls";
 
 export const exampleByComponents = [

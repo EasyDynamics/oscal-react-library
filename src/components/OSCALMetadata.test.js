@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, within } from "@testing-library/react";
 import OSCALMetadata from "./OSCALMetadata";
-import { metadataTestData } from "../test-data/OtherData";
+import { metadataTestData } from "../test-data/CommonData";
 
 function metadataRenderer() {
   render(<OSCALMetadata metadata={metadataTestData} />);

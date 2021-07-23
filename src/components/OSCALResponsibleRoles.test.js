@@ -4,7 +4,7 @@ import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
 import {
   metadataTestData,
   responsibleRolesTestData,
-} from "../test-data/OtherData";
+} from "../test-data/CommonData";
 
 function responsibleRolesRenderer() {
   render(

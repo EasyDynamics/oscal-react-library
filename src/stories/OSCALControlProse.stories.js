@@ -4,7 +4,7 @@ import {
   OSCALReplacedProseWithParameterLabel,
 } from "../components/OSCALControlProse";
 import { exampleModificationSetParameters } from "../test-data/ModificationsData";
-import { controlProseTestData, exampleParams } from "../test-data/OtherData";
+import { controlProseTestData, exampleParams } from "../test-data/CommonData";
 import { exampleImplReqStatements } from "../test-data/ComponentsData";
 
 export default {

@@ -1,4 +1,4 @@
-import { metadataTestData, responsibleRolesTestData } from "./OtherData";
+import { metadataTestData, responsibleRolesTestData } from "./CommonData";
 import {
   systemCharacteristicsDescriptionUrl,
   systemCharacteristicsInformationUrl,
