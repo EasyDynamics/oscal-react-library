@@ -16,11 +16,11 @@ const Template = (args) => <OSCALControlImplementation {...args} />;
 
 export const Default = Template.bind({});
 
-export const ImplementedStatements = Template.bind({});
+export const WithImplementedStatements = Template.bind({});
 
 const exampleControls = [exampleControl];
 
-ImplementedStatements.args = {
+WithImplementedStatements.args = {
   controls: exampleControls,
   components: exampleComponents,
   controlImplementation: controlImplTestData,

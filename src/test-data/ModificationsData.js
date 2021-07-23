@@ -1,7 +1,7 @@
 const props = [
   {
-    name: "Name",
-    value: "Value",
+    name: "Some prop name",
+    value: "Some prop value",
   },
 ];
 

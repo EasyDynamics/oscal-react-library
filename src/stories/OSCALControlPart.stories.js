@@ -15,11 +15,11 @@ const Template = (args) => <OSCALControlPart {...args} />;
 
 export const Default = Template.bind({});
 
-export const ParameterConstraints = Template.bind({});
+export const WithConstraints = Template.bind({});
 
-export const AddsModifications = Template.bind({});
+export const WithModifications = Template.bind({});
 
-ParameterConstraints.args = {
+WithConstraints.args = {
   control: exampleControl,
   part: exampleControl.parts[0],
   parameters: exampleControl.params,
@@ -27,7 +27,7 @@ ParameterConstraints.args = {
   componentId: "control-1_smt",
 };
 
-AddsModifications.args = {
+WithModifications.args = {
   control: exampleControl,
   part: exampleControl.parts[0],
   parameters: exampleControl.params,
