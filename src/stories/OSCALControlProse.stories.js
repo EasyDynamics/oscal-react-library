@@ -26,8 +26,12 @@ export const ByComp = TemplateByComponent.bind({});
 
 export const WithParameterConstraints = TemplateParameterLabel.bind({});
 
+const exampleModificationsSetParameters = Object.values(
+  exampleModificationsConstraints["set-parameters"]
+);
+
 WithParameterConstraints.args = {
-  modifications: exampleModificationsConstraints,
+  modificationSetParameters: exampleModificationsSetParameters,
   label: "a.",
   prose: controlProseTestData,
   parameters: exampleParams,

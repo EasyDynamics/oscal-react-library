@@ -8,14 +8,14 @@ const labelTestData = "label-1";
 
 function proseParamLabelsRenderer() {
   const modificationSetParametersTestData = Object.values(
-    modificationsTestData["set-parameters"]
+    exampleModificationsConstraints["set-parameters"]
   );
   render(
     <OSCALReplacedProseWithParameterLabel
       label={labelTestData}
       prose={controlProseTestData}
       parameters={exampleParams}
-      modifications={exampleModificationsConstraints}
+      modificationSetParameters={modificationSetParametersTestData}
     />
   );
 }
