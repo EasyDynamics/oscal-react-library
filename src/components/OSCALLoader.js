@@ -6,6 +6,12 @@ import OSCALCatalog from "./OSCALCatalog";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
 import OSCALProfile from "./OSCALProfile";
 import OSCALLoaderForm from "./OSCALLoaderForm";
+import {
+  defaultOscalCatalogUrl,
+  defaultOSCALComponentUrl,
+  defaultOSCALProfileUrl,
+  defaultOscalSspUrl,
+} from "../test-data/Urls";
 
 const onError = (error) => (
   <Alert severity="error">
@@ -13,15 +19,6 @@ const onError = (error) => (
     into it. ({error.message})
   </Alert>
 );
-
-const defaultOscalCatalogUrl =
-  "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json";
-const defaultOscalSspUrl =
-  "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/ssp/json/ssp-example.json";
-const defaultOSCALComponentUrl =
-  "https://raw.githubusercontent.com/EasyDynamics/oscal-content/manual-fix-of-component-paths/examples/component-definition/json/example-component.json";
-const defaultOSCALProfileUrl =
-  "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json";
 
 export default function OSCALLoader(props) {
   const [error, setError] = useState(null);
@@ -100,6 +97,11 @@ export default function OSCALLoader(props) {
   );
 }
 
+function urlToLoad(defaultUrl) {
+  const url = new URLSearchParams(window.location.search).get("url");
+  return url || defaultUrl;
+}
+
 export function OSCALCatalogLoader(props) {
   const renderer = (oscalData, oscalUrl) => (
     <OSCALCatalog
@@ -111,7 +113,7 @@ export function OSCALCatalogLoader(props) {
   return (
     <OSCALLoader
       oscalModelType="Catalog"
-      oscalUrl={defaultOscalCatalogUrl}
+      oscalUrl={urlToLoad(defaultOscalCatalogUrl)}
       renderer={renderer}
       renderForm={props.renderForm}
     />
@@ -129,7 +131,7 @@ export function OSCALSSPLoader(props) {
   return (
     <OSCALLoader
       oscalModelType="SSP"
-      oscalUrl={defaultOscalSspUrl}
+      oscalUrl={urlToLoad(defaultOscalSspUrl)}
       renderer={renderer}
       renderForm={props.renderForm}
     />
@@ -147,7 +149,7 @@ export function OSCALComponentLoader(props) {
   return (
     <OSCALLoader
       oscalModelType="Component"
-      oscalUrl={defaultOSCALComponentUrl}
+      oscalUrl={urlToLoad(defaultOSCALComponentUrl)}
       renderer={renderer}
       renderForm={props.renderForm}
     />
@@ -160,7 +162,7 @@ export function OSCALProfileLoader(props) {
   return (
     <OSCALLoader
       oscalModelType="Profile"
-      oscalUrl={defaultOSCALProfileUrl}
+      oscalUrl={urlToLoad(defaultOSCALProfileUrl)}
       renderer={renderer}
       renderForm={props.renderForm}
     />

@@ -159,3 +159,23 @@ export const exampleImplNoStatements = {
     },
   ],
 };
+
+export const externalCatalogTestData = {
+  id: "ac",
+  class: "family",
+  title: "External Access Control",
+  controls: [
+    {
+      id: "ac-1",
+      title: "Access Control Policy and Procedures",
+    },
+    {
+      id: "ac-2",
+      title: "Account Management",
+    },
+    {
+      id: "ac-3",
+      title: "Access Enforcement",
+    },
+  ],
+};

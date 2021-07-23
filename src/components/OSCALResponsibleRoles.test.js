@@ -28,6 +28,23 @@ export default function testOSCALResponsibleRoles(parentElementName, renderer) {
   });
 }
 
+export function testExternalOSCALResponsibleRoles(
+  parentElementName,
+  renderer,
+  externalUrl
+) {
+  test(`${parentElementName} shows component roles`, () => {
+    renderer(externalUrl);
+    const roleTypeResult = screen.getByText("supplier");
+    expect(roleTypeResult).toBeVisible();
+
+    const rolePartyResult = within(roleTypeResult.closest("tr")).getByText(
+      "Test Vendor External Component"
+    );
+    expect(rolePartyResult).toBeVisible();
+  });
+}
+
 if (!require.main) {
   testOSCALResponsibleRoles("OSCALResponsibleRoles", responsibleRolesRenderer);
 }

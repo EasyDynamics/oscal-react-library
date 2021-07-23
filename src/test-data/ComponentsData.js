@@ -58,7 +58,6 @@ export const componentDefinitionControlImplementationTestData = [
   },
 ];
 
-// maybe do one object for the uuid "control-implementation-1", a copy in the const above this one
 export const componentDefinitionTestData = {
   uuid: "aabcfa61-c6eb-4979-851f-35b461f6a0ef",
   metadata: metadataTestData,
@@ -85,6 +84,53 @@ export const componentDefinitionTestData = {
       ],
     },
   },
+};
+
+export const externalComponentDefinitionTestData = {
+  uuid: "8223d65f-57a9-4689-8f06-2a975ae2ad72",
+  metadata: {
+    title: "Test Component Definition",
+    version: "External Component Definition",
+    parties: [
+      {
+        uuid: "ee47836c-877c-4007-bbf3-c9d9bd805a9a",
+        name: "Test Vendor External Component",
+        type: "organization",
+      },
+    ],
+  },
+  components: [
+    {
+      uuid: "b036a6ac-6cff-4066-92bc-74ddfd9ad6fa",
+      type: "software",
+      title: "test component 1",
+      description:
+        "This is a software component that implements basic authentication mechanisms.",
+      "responsible-roles": [
+        {
+          "role-id": "supplier",
+          "party-uuids": ["ee47836c-877c-4007-bbf3-c9d9bd805a9a"],
+        },
+      ],
+      "control-implementations": [
+        {
+          uuid: "cfcdd674-8595-4f98-a9d1-3ac70825c49f",
+          source:
+            "../../../nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_catalog.json",
+          description:
+            "This is a partial implementation of the SP 800-53 rev4 catalog, focusing on the control enhancement AC-2 (3).",
+          "implemented-requirements": [
+            {
+              uuid: "d1016df0-9b5c-4839-86cd-f9c1d113077b",
+              description:
+                "Inactive accounts are automatically disabled based on the duration specified by the duration parameter. Disabled accounts are expected to be reviewed and removed when appropriate.",
+              "control-id": "ac-2.3",
+            },
+          ],
+        },
+      ],
+    },
+  ],
 };
 
 export const exampleComponentStories = [

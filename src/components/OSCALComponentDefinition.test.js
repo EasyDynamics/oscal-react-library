@@ -3,9 +3,17 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { OSCALComponentLoader } from "./OSCALLoader";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
-import testOSCALMetadata from "./OSCALMetadata.test";
-import testOSCALResponsibleRoles from "./OSCALResponsibleRoles.test";
-import { componentDefinitionTestData } from "../test-data/ComponentsData";
+import testOSCALMetadata, {
+  testExternalComponentOSCALMetadata,
+} from "./OSCALMetadata.test";
+import testOSCALResponsibleRoles, {
+  testExternalOSCALResponsibleRoles,
+} from "./OSCALResponsibleRoles.test";
+import {
+  componentDefinitionTestData,
+  externalComponentDefinitionTestData,
+} from "../test-data/ComponentsData";
+import { componentDefinitionUrl } from "../test-data/Urls";
 
 test("OSCALComponentDefinition loads", () => {
   render(<OSCALComponentLoader />);
@@ -15,6 +23,15 @@ function componentDefinitionRenderer() {
   render(
     <OSCALComponentDefinition
       componentDefinition={componentDefinitionTestData}
+    />
+  );
+}
+
+function externalUrlComponentDefinitionRenderer(externalUrl) {
+  render(
+    <OSCALComponentDefinition
+      componentDefinition={externalComponentDefinitionTestData}
+      parentUrl={externalUrl}
     />
   );
 }
@@ -35,14 +52,61 @@ function testOSCALComponentDefinitionComponent(parentElementName, renderer) {
   });
 }
 
-testOSCALMetadata("OSCALComponentDefinition", componentDefinitionRenderer);
+function testExternalOSCALComponentDefinitionComponent(
+  parentElementName,
+  renderer,
+  externalUrl
+) {
+  test(`${parentElementName} shows component title`, () => {
+    renderer(externalUrl);
+    const result = screen.getByText("test component 1");
+    expect(result).toBeVisible();
+  });
+  test(`${parentElementName} shows component description`, async () => {
+    renderer(externalUrl);
+    userEvent.hover(screen.getByText("test component 1"));
+    expect(
+      await screen.findByText(
+        "This is a software component that implements basic authentication mechanisms."
+      )
+    ).toBeInTheDocument();
+  });
+}
 
-testOSCALComponentDefinitionComponent(
-  "OSCALComponentDefinition",
-  componentDefinitionRenderer
-);
+function testUrlOSCALComponentDefinition(url) {
+  const externalUrl = url.searchParams.get("url");
+  if (!externalUrl) {
+    testOSCALMetadata("OSCALComponentDefinition", componentDefinitionRenderer);
 
-testOSCALResponsibleRoles(
-  "OSCALComponentDefinition",
-  componentDefinitionRenderer
-);
+    testOSCALComponentDefinitionComponent(
+      "OSCALComponentDefinition",
+      componentDefinitionRenderer
+    );
+
+    testOSCALResponsibleRoles(
+      "OSCALComponentDefinition",
+      componentDefinitionRenderer
+    );
+    return;
+  }
+  testExternalComponentOSCALMetadata(
+    "ExternalOSCALComponentDefinition",
+    externalUrlComponentDefinitionRenderer,
+    externalUrl
+  );
+  testExternalOSCALComponentDefinitionComponent(
+    "ExternalOSCALComponentDefinition",
+    externalUrlComponentDefinitionRenderer,
+    externalUrl
+  );
+  testExternalOSCALResponsibleRoles(
+    "ExternalOSCALComponentDefinition",
+    externalUrlComponentDefinitionRenderer,
+    externalUrl
+  );
+}
+
+const url = new URL("https://www.oscal-profile-test.com");
+testUrlOSCALComponentDefinition(url);
+url.searchParams.set("url", componentDefinitionUrl);
+testUrlOSCALComponentDefinition(url);
