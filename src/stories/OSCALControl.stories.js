@@ -2,8 +2,8 @@ import React from "react";
 import OSCALControl from "../components/OSCALControl";
 import { exampleControl } from "../test-data/ControlsData";
 import {
-  exampleModificationsTopLevel,
-  exampleModificationsConstraints,
+  exampleModificationSetParameters,
+  exampleModificationAltersTopLevel,
 } from "../test-data/ModificationsData";
 
 export default {
@@ -25,10 +25,10 @@ Default.args = {
 
 WithParameterConstraints.args = {
   control: exampleControl,
-  modifications: exampleModificationsConstraints,
+  modificationSetParameters: exampleModificationSetParameters,
 };
 
 WithModifications.args = {
   control: exampleControl,
-  modifications: exampleModificationsTopLevel,
+  modificationAlters: exampleModificationAltersTopLevel,
 };

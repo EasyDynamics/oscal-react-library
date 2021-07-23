@@ -2,8 +2,8 @@ import React from "react";
 import OSCALControlPart from "../components/OSCALControlPart";
 import { exampleControl } from "../test-data/ControlsData";
 import {
-  exampleModificationsAddsTwo,
-  exampleModificationsConstraints,
+  exampleModificationAlters,
+  exampleModificationSetParameters,
 } from "../test-data/ModificationsData";
 
 export default {
@@ -23,7 +23,7 @@ WithConstraints.args = {
   control: exampleControl,
   part: exampleControl.parts[0],
   parameters: exampleControl.params,
-  modifications: exampleModificationsConstraints,
+  modificationSetParameters: exampleModificationSetParameters,
   componentId: "control-1_smt",
 };
 
@@ -31,7 +31,7 @@ WithModifications.args = {
   control: exampleControl,
   part: exampleControl.parts[0],
   parameters: exampleControl.params,
-  modifications: exampleModificationsAddsTwo,
+  modificationAlters: exampleModificationAlters,
   componentId: "control-1_smt",
 };
 

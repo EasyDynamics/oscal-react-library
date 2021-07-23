@@ -3,7 +3,7 @@ import {
   OSCALReplacedProseWithByComponentParameterValue,
   OSCALReplacedProseWithParameterLabel,
 } from "../components/OSCALControlProse";
-import { exampleModificationsConstraints } from "../test-data/ModificationsData";
+import { exampleModificationSetParameters } from "../test-data/ModificationsData";
 import { controlProseTestData, exampleParams } from "../test-data/OtherData";
 import { exampleImplReqStatements } from "../test-data/ComponentsData";
 
@@ -26,12 +26,8 @@ export const ByComp = TemplateByComponent.bind({});
 
 export const WithParameterConstraints = TemplateParameterLabel.bind({});
 
-const exampleModificationsSetParameters = Object.values(
-  exampleModificationsConstraints["set-parameters"]
-);
-
 WithParameterConstraints.args = {
-  modificationSetParameters: exampleModificationsSetParameters,
+  modificationSetParameters: exampleModificationSetParameters,
   label: "a.",
   prose: controlProseTestData,
   parameters: exampleParams,
