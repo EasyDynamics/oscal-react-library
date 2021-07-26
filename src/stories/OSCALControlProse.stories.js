@@ -45,6 +45,7 @@ ByComp.args = {
     "Does something with {{ insert: param, control-1_prm_1 }} and {{ insert: param, control-1_prm_2 }}",
   parameters: exampleParams,
   statementId: "a_smt",
+  componentId: "component-1",
   implReqStatements: exampleImplReqStatements,
 };
 

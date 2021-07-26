@@ -3,6 +3,7 @@ import { fedRampHighBaselineUrl, revFourCatalog } from "./Urls";
 
 export const exampleByComponents = [
   {
+    "component-uuid": "component-1",
     "set-parameters": [
       {
         "param-id": "control-1_prm_1",
