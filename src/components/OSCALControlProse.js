@@ -284,7 +284,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   const { description } = statementByComponent;
   return (
     <Typography>
-      <StyledTooltip title={description}>
+      <StyledTooltip title={description ?? props.componentId}>
         <Link href="#{props.label}">{props.label}</Link>
       </StyledTooltip>
       {props.prose

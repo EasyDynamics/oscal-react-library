@@ -3,88 +3,16 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import OSCALControlImplementation from "./OSCALControlImplementation";
 import getByTextIncludingChildern from "./oscal-utils/TestUtils";
+import { controlImplTestData, exampleControl } from "../test-data/ControlsData";
+import { exampleComponents } from "../test-data/ComponentsData";
 
-const controlImplTestData = {
-  description: "This is the control implementation for the system.",
-  "implemented-requirements": [
-    {
-      uuid: "implemented-requirements-1",
-      "control-id": "control-1",
-      statements: [
-        {
-          "statement-id": "control-1_smt.a",
-          uuid: "f3887a91-9ed3-425c-b305-21e4634a1c34",
-          "by-components": [
-            {
-              "component-uuid": "component-1",
-              uuid: "a74681b2-fbcb-46eb-90fd-0d55aa74ac7b",
-              description: "Component 1 description of implementing control 1",
-              "set-parameters": [
-                {
-                  "param-id": "control-1_prm_1",
-                  values: ["control 1 / component 1 / parameter 1 value"],
-                },
-                {
-                  "param-id": "control-1_prm_2",
-                  values: ["control 1 / component 1 / parameter 2 value"],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-  ],
-};
-const componentsTestData = [
-  {
-    uuid: "component-1",
-    title: "Component 1 Title",
-  },
-];
-const controlsTestData = [
-  {
-    id: "control-1",
-    title: "Control 1 Title",
-    params: [
-      {
-        id: "control-1_prm_1",
-        label: "control 1 / parameter 1 label",
-      },
-      {
-        id: "control-1_prm_2",
-        label: "control 1 / parameter 2 label",
-      },
-    ],
-    parts: [
-      {
-        id: "control-1_smt",
-        name: "statement",
-        prose: "Some organizational group:",
-        parts: [
-          {
-            id: "control-1_smt.a",
-            name: "item",
-            props: [
-              {
-                name: "label",
-                value: "a.",
-              },
-            ],
-            prose:
-              "Does something with {{ insert: param, control-1_prm_1 }} and {{ insert: param, control-1_prm_2 }}",
-          },
-        ],
-      },
-    ],
-  },
-];
+const controlsTestData = [exampleControl];
 
 test("OSCALControlImplementationImplReq displays control ID", () => {
   render(
     <OSCALControlImplementation
       controlImplementation={controlImplTestData}
-      components={componentsTestData}
+      components={exampleComponents}
       controls={controlsTestData}
     />
   );
@@ -96,7 +24,7 @@ test("OSCALControlImplementationImplReq displays component parameters in control
   render(
     <OSCALControlImplementation
       controlImplementation={controlImplTestData}
-      components={componentsTestData}
+      components={exampleComponents}
       controls={controlsTestData}
     />
   );
@@ -110,7 +38,7 @@ test("OSCALControlImplementationImplReq displays component implementation descri
   render(
     <OSCALControlImplementation
       controlImplementation={controlImplTestData}
-      components={componentsTestData}
+      components={exampleComponents}
       controls={controlsTestData}
     />
   );
