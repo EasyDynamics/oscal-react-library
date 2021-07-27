@@ -61,14 +61,14 @@ export default function OSCALControl(props) {
     );
   }
 
-  // FedRAMP SSP - need to retrieve the set-parameters from the initial implementation request from each part
+  // When FedRAMP, retrieve the set-parameters from the initial implementation request statement
   let firstImplReqStatement = null;
   if (props.implReqStatements) {
     firstImplReqStatement =
       props.implReqStatements[Object.keys(props.implReqStatements)[0]];
   }
   let firstByComp = null;
-  if (firstImplReqStatement && firstImplReqStatement["by-components"]) {
+  if (firstImplReqStatement?.["by-components"]) {
     firstByComp =
       firstImplReqStatement["by-components"][
         Object.keys(firstImplReqStatement["by-components"])[0]
