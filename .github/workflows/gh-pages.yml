@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - develop
-      # TODO: Remove this prior to merging into `develop`
-      - EGRC-275
 
 jobs:
   publish:
@@ -21,13 +19,11 @@ jobs:
       - name: Globally update npm
         run: npm install -g npm@latest
       - name: Install dependencies
-        run:
-          npm install
+        run: npm install
       - name: Build Storybook
-        run:
-          npm run build-storybook
+        run: npm run build-storybook
       - name: Deploy to Pages
-        uses: JamesIves/github-pages-deploy-action@4.1.4 
+        uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
           branch: storybook-docs
           folder: storybook-static
@@ -35,4 +31,3 @@ jobs:
           single-commit: true
           git-config-name: Easy Dynamics Automation
           git-config-email: noreply@easydynamics.com
-
