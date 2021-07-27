@@ -5,7 +5,7 @@ import OSCALProfile from "./OSCALProfile";
 import testOSCALMetadata from "./OSCALMetadata.test";
 import testOSCALBackMatter from "./OSCALBackMatter.test";
 import { parentUrlTestData } from "../test-data/Urls";
-import { profileTestData } from "../test-data/ProfileData";
+import profileTestData from "../test-data/ProfileData";
 
 test("OSCALProfile loads", () => {
   render(<OSCALProfileLoader />);

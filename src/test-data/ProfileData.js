@@ -13,7 +13,7 @@ const adds = [
   },
 ];
 
-export const profileTestData = {
+export default {
   uuid: "3afae418-b105-47ba-b51d-653a1a6b9267",
   metadata: metadataTestData,
   imports: [
