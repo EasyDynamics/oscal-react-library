@@ -1,3 +1,17 @@
+export const controlProseTestData =
+  "Does something with {{ insert: param, control-1_prm_1 }} and {{ insert: param, control-1_prm_2 }}";
+
+export const exampleParams = [
+  {
+    id: "control-1_prm_1",
+    label: "control 1 label",
+  },
+  {
+    id: "control-1_prm_2",
+    label: "control 2 label",
+  },
+];
+
 export const exampleControl = {
   id: "control-1",
   title: "Control 1 Title",
