@@ -5,6 +5,7 @@ import OSCALControlImplementation from "./OSCALControlImplementation";
 import getByTextIncludingChildern from "./oscal-utils/TestUtils";
 import { controlImplTestData, exampleControl } from "../test-data/ControlsData";
 import { exampleComponents } from "../test-data/ComponentsData";
+import { profileModifyTestData } from "../test-data/ModificationsData";
 
 const controlsTestData = [exampleControl];
 
@@ -14,43 +15,6 @@ const componentsTestData = [
     title: "Component 1 Title",
   },
 ];
-
-const profileModifyTestData = {
-  "set-parameters": [
-    {
-      "param-id": "control-1_prm_1",
-      constraints: [
-        {
-          description: "at least every 3 years",
-        },
-      ],
-    },
-    {
-      "param-id": "control-1_prm_2",
-      constraints: [
-        {
-          description: "at least annually",
-        },
-      ],
-    },
-  ],
-  alters: [
-    {
-      "control-id": "control-1",
-      adds: [
-        {
-          position: "starting",
-          props: [
-            {
-              name: "priority",
-              value: "P1",
-            },
-          ],
-        },
-      ],
-    },
-  ],
-};
 
 const emptyProfileModifyTestData = {};
 

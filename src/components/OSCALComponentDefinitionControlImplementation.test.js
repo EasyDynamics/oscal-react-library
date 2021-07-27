@@ -7,43 +7,7 @@ import {
   componentDefinitionControlImplementationTestData,
   componentDefinitionTestData,
 } from "../test-data/ComponentsData";
-
-const profileModifyTestData = {
-  "set-parameters": [
-    {
-      "param-id": "control-1_prm_1",
-      constraints: [
-        {
-          description: "at least every 3 years",
-        },
-      ],
-    },
-    {
-      "param-id": "control-1_prm_2",
-      constraints: [
-        {
-          description: "at least annually",
-        },
-      ],
-    },
-  ],
-  alters: [
-    {
-      "control-id": "control-1",
-      adds: [
-        {
-          position: "starting",
-          props: [
-            {
-              name: "priority",
-              value: "P1",
-            },
-          ],
-        },
-      ],
-    },
-  ],
-};
+import { profileModifyTestData } from "../test-data/ModificationsData";
 
 test("OSCALComponentDefinitionControlImplementation displays component implementation description", () => {
   render(
