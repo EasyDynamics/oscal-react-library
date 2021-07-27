@@ -61,6 +61,21 @@ export default function OSCALControl(props) {
     );
   }
 
+  // FedRAMP SSP - need to retrieve the set-parameters from the initial implementation request from each part
+  let firstImplReqStatement = null;
+  if (props.implReqStatements) {
+    firstImplReqStatement =
+      props.implReqStatements[Object.keys(props.implReqStatements)[0]];
+  }
+  let firstByComp = null;
+  if (firstImplReqStatement && firstImplReqStatement["by-components"]) {
+    firstByComp =
+      firstImplReqStatement["by-components"][
+        Object.keys(firstImplReqStatement["by-components"])[0]
+      ];
+  }
+  const setParams = firstByComp?.["set-parameters"] || null;
+
   return (
     <Card
       className={`${classes.OSCALControl} ${classes.OSCALControlStatus} ${classes.OSCALControlChildLevel}`}
@@ -81,6 +96,7 @@ export default function OSCALControl(props) {
               control={props.control}
               parameters={props.control.params}
               implReqStatements={props.implReqStatements}
+              implReqSetParameters={setParams}
               componentId={props.componentId}
               modificationAlters={props.modificationAlters}
               modificationSetParameters={props.modificationSetParameters}
