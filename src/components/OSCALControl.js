@@ -65,20 +65,16 @@ export default function OSCALControl(props) {
   let topLevelImplReqStatement = null;
   if (props.implReqStatements) {
     // NOTE: The top level statement ends with "_smt"
-    props.implReqStatements.forEach((statement, index) => {
-      if (statement["statement-id"].endsWith("_smt")) {
-        topLevelImplReqStatement =
-          props.implReqStatements[Object.keys(props.implReqStatements)[index]];
-      }
-    });
+    topLevelImplReqStatement = props.implReqStatements.find((statement) =>
+      statement["statement-id"].endsWith("_smt")
+    );
   }
   // NOTE: The top-level by-component is the first element in the by-components array
   let topLevelByComp = null;
   if (topLevelImplReqStatement?.["by-components"]) {
-    topLevelByComp =
-      topLevelImplReqStatement["by-components"][
-        Object.keys(topLevelImplReqStatement["by-components"])[0]
-      ];
+    topLevelByComp = topLevelImplReqStatement["by-components"].find(
+      (byComp) => byComp["component-uuid"] === props.componentId
+    );
   }
   const setParams = topLevelByComp?.["set-parameters"] || null;
 
