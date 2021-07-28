@@ -61,20 +61,26 @@ export default function OSCALControl(props) {
     );
   }
 
-  // Retrieve the set-parameters when contained in the initial implemented requirement statement
-  let firstImplReqStatement = null;
+  // Retrieve the set-parameters when contained in the top-level implemented requirement statement
+  let topLevelImplReqStatement = null;
   if (props.implReqStatements) {
-    firstImplReqStatement =
-      props.implReqStatements[Object.keys(props.implReqStatements)[0]];
+    // NOTE: The top level statement ends with "_smt"
+    props.implReqStatements.forEach((statement, index) => {
+      if (statement["statement-id"].endsWith("_smt")) {
+        topLevelImplReqStatement =
+          props.implReqStatements[Object.keys(props.implReqStatements)[index]];
+      }
+    });
   }
-  let firstByComp = null;
-  if (firstImplReqStatement?.["by-components"]) {
-    firstByComp =
-      firstImplReqStatement["by-components"][
-        Object.keys(firstImplReqStatement["by-components"])[0]
+  // NOTE: The top-level by-component is the first element in the by-components array
+  let topLevelByComp = null;
+  if (topLevelImplReqStatement?.["by-components"]) {
+    topLevelByComp =
+      topLevelImplReqStatement["by-components"][
+        Object.keys(topLevelImplReqStatement["by-components"])[0]
       ];
   }
-  const setParams = firstByComp?.["set-parameters"] || null;
+  const setParams = topLevelByComp?.["set-parameters"] || null;
 
   return (
     <Card
