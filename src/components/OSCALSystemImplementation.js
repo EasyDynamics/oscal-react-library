@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   OSCALSystemImplementationSubDataHeader: {
     "text-transform": "capitalize",
     "white-space": "nowrap",
-    padding: "0.1em 0.1em",
+    padding: "0.75em 0.75em",
   },
   // TODO - This is hacky
   OSCALSystemImplementationHeader: {
@@ -32,10 +32,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   SmallTableCell: {
-    padding: "0.1em 0.1em",
+    "text-align": "right",
+    padding: "0.75em 0.75em",
   },
   ComponentTitleCell: {
-    align: "left",
+    "text-align": "left",
     minWidth: "20em",
   },
 }));
@@ -113,8 +114,7 @@ export default function OSCALSystemImplementation(props) {
                                           {property.name}
                                         </TableCell>
                                         <TableCell
-                                          className={classes.SmallTabelCell}
-                                          align="right"
+                                          className={classes.SmallTableCell}
                                         >
                                           {property.value}
                                         </TableCell>
