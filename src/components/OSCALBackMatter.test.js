@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import OSCALBackMatter from "./OSCALBackMatter";
 import {
   backMatterTestUrl,
-  defaultOSCALProfileUrl,
+  parentUrlTestData,
   rev4LowBaselineProfileJson,
   revFourCatalog,
 } from "../test-data/Urls";
@@ -14,7 +14,7 @@ function backMatterRenderer() {
   render(
     <OSCALBackMatter
       backMatter={backMatterTestData}
-      parentUrl={defaultOSCALProfileUrl}
+      parentUrl={parentUrlTestData}
     />
   );
 }

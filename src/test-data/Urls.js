@@ -5,18 +5,6 @@ export const backMatterTestUrl =
 export const componentDefinitionUrl =
   "https://raw.githubusercontent.com/EasyDynamics/oscal-content/5ef5b3709045ba3aab1473813c13436e886d6185/examples/component-definition/json/example-component.json";
 
-export const defaultOscalCatalogUrl =
-  "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json";
-
-export const defaultOSCALComponentUrl =
-  "https://raw.githubusercontent.com/EasyDynamics/oscal-content/manual-fix-of-component-paths/examples/component-definition/json/example-component.json";
-
-export const defaultOSCALProfileUrl =
-  "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json";
-
-export const defaultOscalSspUrl =
-  "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/ssp/json/ssp-example.json";
-
 export const fedRampHighBaselineUrl =
   "https://raw.githubusercontent.com/usnistgov/oscal-content/master/fedramp.gov/json/FedRAMP_HIGH-baseline_profile.json";
 

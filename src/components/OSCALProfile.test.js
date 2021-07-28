@@ -9,7 +9,7 @@ import testOSCALBackMatter, {
   testExternalProfileOSCALBackMatter,
 } from "./OSCALBackMatter.test";
 import {
-  defaultOSCALProfileUrl,
+  parentUrlTestData,
   rev4LowBaselineProfileJson,
 } from "../test-data/Urls";
 import {
@@ -25,7 +25,7 @@ function profileRenderer() {
   render(
     <OSCALProfile
       profile={profileTestData}
-      parentUrl={defaultOSCALProfileUrl}
+      parentUrl={parentUrlTestData}
     />
   );
 }
