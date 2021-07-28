@@ -97,7 +97,11 @@ export default function OSCALLoader(props) {
   );
 }
 
-function urlToLoad(defaultUrl) {
+/*This function checks whether there is a url parameter provided
+  in the browser (window) url. If so, this returns the url defined
+  in the url parameter, and the provided defaultUrl otherwise. The
+  returned url and its data is then loaded into the viewer.*/
+function loadDefaultOrExternalUrl(defaultUrl) {
   const url = new URLSearchParams(window.location.search).get("url");
   return url || defaultUrl;
 }
@@ -113,7 +117,7 @@ export function OSCALCatalogLoader(props) {
   return (
     <OSCALLoader
       oscalModelType="Catalog"
-      oscalUrl={urlToLoad(defaultOscalCatalogUrl)}
+      oscalUrl={loadDefaultOrExternalUrl(defaultOscalCatalogUrl)}
       renderer={renderer}
       renderForm={props.renderForm}
     />
@@ -131,7 +135,7 @@ export function OSCALSSPLoader(props) {
   return (
     <OSCALLoader
       oscalModelType="SSP"
-      oscalUrl={urlToLoad(defaultOscalSspUrl)}
+      oscalUrl={loadDefaultOrExternalUrl(defaultOscalSspUrl)}
       renderer={renderer}
       renderForm={props.renderForm}
     />
@@ -149,7 +153,7 @@ export function OSCALComponentLoader(props) {
   return (
     <OSCALLoader
       oscalModelType="Component"
-      oscalUrl={urlToLoad(defaultOSCALComponentUrl)}
+      oscalUrl={loadDefaultOrExternalUrl(defaultOSCALComponentUrl)}
       renderer={renderer}
       renderForm={props.renderForm}
     />
@@ -162,7 +166,7 @@ export function OSCALProfileLoader(props) {
   return (
     <OSCALLoader
       oscalModelType="Profile"
-      oscalUrl={urlToLoad(defaultOSCALProfileUrl)}
+      oscalUrl={loadDefaultOrExternalUrl(defaultOSCALProfileUrl)}
       renderer={renderer}
       renderForm={props.renderForm}
     />
