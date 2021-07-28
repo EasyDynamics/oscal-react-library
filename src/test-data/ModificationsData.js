@@ -51,38 +51,6 @@ export const exampleModificationAltersTopLevel = [
 ];
 
 export const profileModifyTestData = {
-  "set-parameters": [
-    {
-      "param-id": "control-1_prm_1",
-      constraints: [
-        {
-          description: "at least every 3 years",
-        },
-      ],
-    },
-    {
-      "param-id": "control-1_prm_2",
-      constraints: [
-        {
-          description: "at least annually",
-        },
-      ],
-    },
-  ],
-  alters: [
-    {
-      "control-id": "control-1",
-      adds: [
-        {
-          position: "starting",
-          props: [
-            {
-              name: "priority",
-              value: "P1",
-            },
-          ],
-        },
-      ],
-    },
-  ],
+  "set-parameters": exampleModificationSetParameters,
+  alters: exampleModificationAltersTopLevel,
 };
