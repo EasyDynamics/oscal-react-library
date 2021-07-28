@@ -34,6 +34,10 @@ const useStyles = makeStyles((theme) => ({
   SmallTableCell: {
     padding: "0.1em 0.1em",
   },
+  ComponentTitleCell: {
+    align: "left",
+    minWidth: "20em",
+  },
 }));
 
 export default function OSCALSystemImplementation(props) {
@@ -80,10 +84,7 @@ export default function OSCALSystemImplementation(props) {
                           <TableCell
                             component="th"
                             scope="row"
-                            align="left"
-                            style={{
-                              minWidth: "20em",
-                            }}
+                            className={classes.ComponentTitleCell}
                           >
                             <StyledTooltip title={component.description}>
                               <Typography variant="body2">

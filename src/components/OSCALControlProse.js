@@ -66,12 +66,12 @@ function getParameterValue(
 ) {
   // Locate matching parameter to parameterId
   let foundParameterSetting = null;
-  // If NIST, locate by by-component
+  // Locate set-parameters when found in the by-component
   if (statementByComponent?.["set-parameters"]) {
     foundParameterSetting = statementByComponent["set-parameters"].find(
       (parameterSetting) => parameterSetting["param-id"] === parameterId
     );
-    // If FedRAMP, locate by implementation request
+    // Locate set-parameters in the control's initial implemented requirement statement
   } else if (implReqSetParameters) {
     foundParameterSetting = implReqSetParameters.find(
       (parameterSetting) => parameterSetting["param-id"] === parameterId
@@ -287,7 +287,6 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     props.statementId,
     props.componentId
   );
-
   if (!statementByComponent) {
     const classes = useStyles();
     return (
@@ -302,7 +301,6 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   }
 
   const { description } = statementByComponent;
-
   return (
     <Typography>
       <StyledTooltip title={description}>

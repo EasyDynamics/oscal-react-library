@@ -61,7 +61,7 @@ export default function OSCALControl(props) {
     );
   }
 
-  // When FedRAMP, retrieve the set-parameters from the initial implementation request statement
+  // Retrieve the set-parameters when contained in the initial implemented requirement statement
   let firstImplReqStatement = null;
   if (props.implReqStatements) {
     firstImplReqStatement =
