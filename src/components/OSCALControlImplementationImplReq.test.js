@@ -4,17 +4,13 @@ import userEvent from "@testing-library/user-event";
 import OSCALControlImplementation from "./OSCALControlImplementation";
 import getByTextIncludingChildern from "./oscal-utils/TestUtils";
 import { controlImplTestData, exampleControl } from "../test-data/ControlsData";
-import { exampleComponents } from "../test-data/ComponentsData";
+import {
+  exampleComponents,
+  componentsTestData,
+} from "../test-data/ComponentsData";
 import { profileModifyTestData } from "../test-data/ModificationsData";
 
 const controlsTestData = [exampleControl];
-
-const componentsTestData = [
-  {
-    uuid: "component-1",
-    title: "Component 1 Title",
-  },
-];
 
 const emptyProfileModifyTestData = {};
 
