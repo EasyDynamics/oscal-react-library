@@ -49,3 +49,8 @@ export const exampleModificationAltersTopLevel = [
     ],
   },
 ];
+
+export const profileModifyTestData = {
+  "set-parameters": exampleModificationSetParameters,
+  alters: exampleModificationAltersTopLevel,
+};

@@ -60,6 +60,7 @@ export default function OSCALControlImplementation(props) {
                       controls={props.controls}
                       childLevel={0}
                       key={implementedRequirement.uuid}
+                      modifications={props.modifications}
                     />
                   )
                 )}
