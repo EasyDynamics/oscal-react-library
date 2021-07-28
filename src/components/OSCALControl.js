@@ -41,6 +41,32 @@ const useStyles = makeStyles(() => ({
   OSCALControlStatus: (props) => getControlStatusCss(props),
 }));
 
+/**
+ * Retrieve the set-parameters when contained in the top-level implemented requirement statement
+ *
+ * @param {Object} implReqStatements
+ * @param {String} componentId
+ * @returns An array of set-parameters
+ */
+function getImplReqSetParameters(implReqStatements, componentId) {
+  // Get the top-level implemented requirement statement
+  let topLevelImplReqStatement = null;
+  if (implReqStatements) {
+    // NOTE: The top level statement ends with "_smt"
+    topLevelImplReqStatement = implReqStatements.find((statement) =>
+      statement["statement-id"].endsWith("_smt")
+    );
+  }
+  // NOTE: The top-level by-component has a matching uuid to the componentId
+  let topLevelByComp = null;
+  if (topLevelImplReqStatement?.["by-components"]) {
+    topLevelByComp = topLevelImplReqStatement["by-components"].find(
+      (byComp) => byComp["component-uuid"] === componentId
+    );
+  }
+  return topLevelByComp?.["set-parameters"] || null;
+}
+
 export default function OSCALControl(props) {
   if (
     !props.control ||
@@ -61,22 +87,11 @@ export default function OSCALControl(props) {
     );
   }
 
-  // Retrieve the set-parameters when contained in the top-level implemented requirement statement
-  let topLevelImplReqStatement = null;
-  if (props.implReqStatements) {
-    // NOTE: The top level statement ends with "_smt"
-    topLevelImplReqStatement = props.implReqStatements.find((statement) =>
-      statement["statement-id"].endsWith("_smt")
-    );
-  }
-  // NOTE: The top-level by-component is the first element in the by-components array
-  let topLevelByComp = null;
-  if (topLevelImplReqStatement?.["by-components"]) {
-    topLevelByComp = topLevelImplReqStatement["by-components"].find(
-      (byComp) => byComp["component-uuid"] === props.componentId
-    );
-  }
-  const setParams = topLevelByComp?.["set-parameters"] || null;
+  // Retrieve implemented requirements set-parameters
+  const setParams = getImplReqSetParameters(
+    props.implReqStatements,
+    props.componentId
+  );
 
   return (
     <Card
