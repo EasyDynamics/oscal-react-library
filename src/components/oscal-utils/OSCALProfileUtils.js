@@ -29,7 +29,7 @@ export default async function fetchProfileModifications(
   fetch(profileUrl)
     .then((res) => res.json())
     .then(
-      (result) => setModifications(result.profile.modify),
+      (result) => setModifications(result?.profile?.modify),
       () => null
     );
 }
