@@ -56,8 +56,10 @@ export default function OSCALLoader(props) {
   };
 
   const handleReloadClick = () => {
-    setIsLoaded(false);
-    loadOscalData(oscalUrl);
+    if (isLoaded) {
+      setIsLoaded(false);
+      loadOscalData(oscalUrl);
+    }
   };
 
   // Note: the empty deps array [] means
