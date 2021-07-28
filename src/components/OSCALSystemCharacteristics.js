@@ -55,7 +55,7 @@ export default function OSCALSystemCharacteristics(props) {
             </Grid>
             <Grid
               item
-              xs={4}
+              xs={5}
               className={classes.OSCALSystemCharacteristicsInfo}
             >
               <Typography variant="h6">
@@ -64,7 +64,7 @@ export default function OSCALSystemCharacteristics(props) {
             </Grid>
             <Grid
               item
-              xs={6}
+              xs={5}
               className={classes.OSCALSystemCharacteristicsInfo}
             >
               <TableContainer>
