@@ -8,7 +8,11 @@ import OSCALControlModification from "./OSCALControlModification";
 
 // TODO - This is probably 800-53 specific?
 function getControlStatusCss(props) {
-  if (props.control?.props?.find((property) => property.name === "status")) {
+  if (
+    props.control?.props?.find(
+      (property) => property.name === "status" && property.value === "withdrawn"
+    )
+  ) {
     return {
       "text-decoration": "line-through",
       color: "#d4d4d4",
