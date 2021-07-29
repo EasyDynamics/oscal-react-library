@@ -43,6 +43,7 @@ export default function OSCALLoaderForm(props) {
               color="primary"
               endIcon={<ReplayIcon>send</ReplayIcon>}
               onClick={props.onReloadClick}
+              disabled={!props.contentLoaded}
             >
               Reload
             </Button>

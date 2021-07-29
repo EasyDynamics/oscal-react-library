@@ -37,12 +37,14 @@ export default function OSCALSsp(props) {
       () => {
         if (!unmounted.current) {
           setIsLoaded(true);
+          props.setContentLoaded(true);
         }
       },
       () => {
         if (!unmounted.current) {
           setError(error);
           setIsLoaded(true);
+          props.setContentLoaded(true);
         }
       }
     );

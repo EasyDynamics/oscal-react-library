@@ -28,6 +28,7 @@ export default function OSCALLoader(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [oscalData, setOscalData] = useState([]);
   const [oscalUrl, setOscalUrl] = useState(props.oscalUrl);
+  const [contentLoaded, setContentLoaded] = useState(false);
   const unmounted = useRef(false);
 
   const loadOscalData = (newOscalUrl) => {
@@ -58,6 +59,7 @@ export default function OSCALLoader(props) {
   const handleReloadClick = () => {
     if (isLoaded) {
       setIsLoaded(false);
+      setContentLoaded(false);
       loadOscalData(oscalUrl);
     }
   };
@@ -81,6 +83,7 @@ export default function OSCALLoader(props) {
         oscalUrl={oscalUrl}
         onUrlChange={handleChange}
         onReloadClick={handleReloadClick}
+        contentLoaded={contentLoaded}
       />
     );
   }
@@ -91,7 +94,7 @@ export default function OSCALLoader(props) {
   } else if (!isLoaded) {
     result = <CircularProgress />;
   } else {
-    result = props.renderer(oscalData, oscalUrl);
+    result = props.renderer(oscalData, oscalUrl, setContentLoaded);
   }
 
   return (
@@ -103,11 +106,12 @@ export default function OSCALLoader(props) {
 }
 
 export function OSCALCatalogLoader(props) {
-  const renderer = (oscalData, oscalUrl) => (
+  const renderer = (oscalData, oscalUrl, setContentLoaded) => (
     <OSCALCatalog
       catalog={oscalData.catalog}
       parentUrl={oscalUrl}
       onError={onError}
+      setContentLoaded={setContentLoaded}
     />
   );
   return (
@@ -121,11 +125,12 @@ export function OSCALCatalogLoader(props) {
 }
 
 export function OSCALSSPLoader(props) {
-  const renderer = (oscalData, oscalUrl) => (
+  const renderer = (oscalData, oscalUrl, setContentLoaded) => (
     <OSCALSsp
       system-security-plan={oscalData["system-security-plan"]}
       parentUrl={oscalUrl}
       onError={onError}
+      setContentLoaded={setContentLoaded}
     />
   );
   return (
@@ -139,11 +144,12 @@ export function OSCALSSPLoader(props) {
 }
 
 export function OSCALComponentLoader(props) {
-  const renderer = (oscalData, oscalUrl) => (
+  const renderer = (oscalData, oscalUrl, setContentLoaded) => (
     <OSCALComponentDefinition
       componentDefinition={oscalData["component-definition"]}
       parentUrl={oscalUrl}
       onError={onError}
+      setContentLoaded={setContentLoaded}
     />
   );
   return (
@@ -156,8 +162,12 @@ export function OSCALComponentLoader(props) {
   );
 }
 export function OSCALProfileLoader(props) {
-  const renderer = (oscalData, oscalUrl) => (
-    <OSCALProfile profile={oscalData.profile} parentUrl={oscalUrl} />
+  const renderer = (oscalData, oscalUrl, setContentLoaded) => (
+    <OSCALProfile
+      profile={oscalData.profile}
+      parentUrl={oscalUrl}
+      setContentLoaded={setContentLoaded}
+    />
   );
   return (
     <OSCALLoader
