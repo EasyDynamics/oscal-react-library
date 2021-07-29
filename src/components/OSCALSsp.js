@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import OSCALMetadata from "./OSCALMetadata";
 import OSCALSystemCharacteristics from "./OSCALSystemCharacteristics";
@@ -6,6 +6,7 @@ import OSCALSystemImplementation from "./OSCALSystemImplementation";
 import OSCALControlImplementation from "./OSCALControlImplementation";
 import OSCALSspResolveProfile from "./oscal-utils/OSCALSspResolver";
 import OSCALBackMatter from "./OSCALBackMatter";
+import fetchProfileModifications from "./oscal-utils/OSCALProfileUtils";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -18,7 +19,9 @@ const useStyles = makeStyles((theme) => ({
 export default function OSCALSsp(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [modifications, setModifications] = useState(props.modifications);
   const classes = useStyles();
+  const unmounted = useRef(false);
 
   const ssp = props["system-security-plan"];
 
@@ -32,13 +35,21 @@ export default function OSCALSsp(props) {
       ssp,
       props.parentUrl,
       () => {
-        setIsLoaded(true);
+        if (!unmounted.current) {
+          setIsLoaded(true);
+        }
       },
       () => {
-        setError(error);
-        setIsLoaded(true);
+        if (!unmounted.current) {
+          setError(error);
+          setIsLoaded(true);
+        }
       }
     );
+
+    return () => {
+      unmounted.current = true;
+    };
   }, []);
 
   let controlImpl;
@@ -46,11 +57,21 @@ export default function OSCALSsp(props) {
   if (!isLoaded) {
     controlImpl = null;
   } else {
+    // Fetch modifications from imported profile
+    // Pass a set() function to set modifications
+    if (!modifications) {
+      fetchProfileModifications(
+        ssp["import-profile"].href,
+        props.parentUrl,
+        setModifications
+      );
+    }
     controlImpl = (
       <OSCALControlImplementation
         controlImplementation={ssp["control-implementation"]}
         components={ssp["system-implementation"].components}
         controls={ssp.resolvedControls}
+        modifications={modifications}
       />
     );
   }

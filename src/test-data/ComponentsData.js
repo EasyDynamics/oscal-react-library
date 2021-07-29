@@ -103,6 +103,13 @@ export const exampleComponentStories = [
   },
 ];
 
+export const componentsTestData = [
+  {
+    uuid: "component-1",
+    title: "Component 1 Title",
+  },
+];
+
 export const exampleComponentDefinitionComponent = {
   uuid: "b036a6ac-6cff-4066-92bc-74ddfd9ad6fa",
   type: "software",
