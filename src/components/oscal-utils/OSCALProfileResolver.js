@@ -29,6 +29,7 @@ import getUriFromBackMatterByHref from "./OSCALBackMatterUtils";
  */
 export default function OSCALResolveProfileOrCatalogUrlControls(
   resolvedControls,
+  modifications,
   origItemUrl,
   parentUrl,
   backMatter,
@@ -64,6 +65,12 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
           }
         } else if (result.profile) {
           // Iterate over each import and recursively call this method to get either another profile or catalog
+
+          modifications["set-parameters"].push(
+            ...result.profile.modify["set-paramters"]
+          );
+          modifications.alters.push(...result.profile.modify.alters);
+
           result.profile.imports.forEach((profileImport) => {
             const importUrl = getUriFromBackMatterByHref(
               result.profile["back-matter"],
@@ -71,6 +78,7 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
             );
             OSCALResolveProfileOrCatalogUrlControls(
               resolvedControls,
+              modifications,
               importUrl,
               itemUrl,
               result.profile["back-matter"],
@@ -103,6 +111,10 @@ export function OSCALResolveProfile(profile, parentUrl, onSuccess, onError) {
   // profile.resolvedControls needs to be declared & initialized here.
   /* eslint no-param-reassign: "error" */
   profile.resolvedControls = [];
+  profile.modifications = {
+    "set-parameters": [],
+    alters: [],
+  };
 
   profile.imports
     .map((imp) =>
@@ -111,6 +123,7 @@ export function OSCALResolveProfile(profile, parentUrl, onSuccess, onError) {
     .forEach((importUrl) => {
       OSCALResolveProfileOrCatalogUrlControls(
         profile.resolvedControls,
+        profile.modifications,
         importUrl,
         parentUrl,
         profile["back-matter"],

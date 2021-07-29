@@ -12,8 +12,14 @@ export default function OSCALComponentResolveSources(
   Object.entries(componentDefinition.components).forEach(([key, component]) => {
     component.uuid = key;
     component["control-implementations"].forEach((controlImplementation) => {
+      controlImplementation.modifications = {
+        "set-parameters": [],
+        alters: [],
+      };
+
       OSCALResolveProfileOrCatalogUrlControls(
         componentDefinition.resolvedControls,
+        controlImplementation.modifications,
         controlImplementation.source,
         parentUrl,
         componentDefinition["back-matter"], // not actually used for resolution in components
