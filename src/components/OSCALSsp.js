@@ -30,21 +30,24 @@ export default function OSCALSsp(props) {
     sspParties = ssp.metadata.parties;
   }
 
+  const setLoadedStates = () => {
+    setIsLoaded(true);
+    if (props.setContentLoaded) props.setContentLoaded(true);
+  };
+
   useEffect(() => {
     OSCALSspResolveProfile(
       ssp,
       props.parentUrl,
       () => {
         if (!unmounted.current) {
-          setIsLoaded(true);
-          props.setContentLoaded(true);
+          setLoadedStates();
         }
       },
       () => {
         if (!unmounted.current) {
           setError(error);
-          setIsLoaded(true);
-          props.setContentLoaded(true);
+          setLoadedStates();
         }
       }
     );

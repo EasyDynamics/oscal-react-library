@@ -54,6 +54,11 @@ export default function OSCALProfile(props) {
   const classes = useStyles();
   const unmounted = useRef(false);
 
+  const setLoadedStates = () => {
+    setIsLoaded(true);
+    if (props.setContentLoaded) props.setContentLoaded(true);
+  };
+
   // Resolved profile using oscal-utils. Provides error when failure.
   useEffect(() => {
     OSCALResolveProfile(
@@ -61,15 +66,13 @@ export default function OSCALProfile(props) {
       props.parentUrl,
       () => {
         if (!unmounted.current) {
-          setIsLoaded(true);
-          props.setContentLoaded(true);
+          setLoadedStates();
         }
       },
       () => {
         if (!unmounted.current) {
           setError(error);
-          setIsLoaded(true);
-          props.setContentLoaded(true);
+          setLoadedStates();
         }
       }
     );

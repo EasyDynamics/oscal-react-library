@@ -19,18 +19,21 @@ export default function OSCALComponentDefinition(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const classes = useStyles();
 
+  const setLoadedStates = () => {
+    setIsLoaded(true);
+    if (props.setContentLoaded) props.setContentLoaded(true);
+  };
+
   useEffect(() => {
     OSCALComponentResolveSources(
       props.componentDefinition,
       props.parentUrl,
       () => {
-        setIsLoaded(true);
-        props.setContentLoaded(true);
+        setLoadedStates();
       },
       (errorReturned) => {
         setError(errorReturned);
-        setIsLoaded(true);
-        props.setContentLoaded(true);
+        setLoadedStates();
       }
     );
   }, []);
