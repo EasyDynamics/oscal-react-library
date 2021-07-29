@@ -5,7 +5,6 @@ import OSCALBackMatter from "./OSCALBackMatter";
 import {
   backMatterTestUrl,
   parentUrlTestData,
-  rev4LowBaselineProfileJson,
   revFourCatalog,
 } from "../test-data/Urls";
 import { backMatterTestData } from "../test-data/BackMatterData";
@@ -57,45 +56,6 @@ export default function testOSCALBackMatter(parentElementName, renderer) {
       name: "application/oscal.catalog+json2",
     });
     expect(button.getAttribute("href")).toEqual(backMatterTestUrl);
-  });
-}
-
-export function testExternalProfileOSCALBackMatter(
-  parentElementName,
-  renderer,
-  externalUrl
-) {
-  test(`${parentElementName} displays resource title`, () => {
-    renderer(externalUrl);
-    const result = screen.getByText("External Back Matter Resource");
-    expect(result).toBeVisible();
-  });
-
-  test(`${parentElementName} displays resource description`, async () => {
-    renderer(externalUrl);
-    const descriptionDisplay = screen.getByTitle(
-      "External Back Matter Resource-description"
-    );
-    userEvent.hover(descriptionDisplay);
-    expect(
-      await screen.findByText(
-        "NIST Special Publication 800-53 Revision 4: Security and Privacy Controls for Federal Information Systems and Organizations"
-      )
-    ).toBeInTheDocument();
-  });
-
-  test(`${parentElementName} displays media-type`, async () => {
-    renderer(externalUrl);
-    const result = screen.getByText("application/oscal.catalog+json");
-    expect(result).toBeVisible();
-  });
-
-  test(`${parentElementName} renders absolute href`, async () => {
-    renderer(externalUrl);
-    const button = screen.getByRole("button", {
-      name: "application/oscal.catalog+json",
-    });
-    expect(button.getAttribute("href")).toEqual(rev4LowBaselineProfileJson);
   });
 }
 

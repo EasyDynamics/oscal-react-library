@@ -1,5 +1,4 @@
 import { backMatterTestData } from "./BackMatterData";
-import { rev4LowBaselineProfileJson } from "./Urls";
 
 const adds = [
   {
@@ -10,20 +9,6 @@ const adds = [
         value: "P1",
       },
     ],
-  },
-];
-
-export const controlProseTestData =
-  "Does something with {{ insert: param, control-1_prm_1 }} and {{ insert: param, control-1_prm_2 }}";
-
-export const exampleParams = [
-  {
-    id: "control-1_prm_1",
-    label: "control 1 label",
-  },
-  {
-    id: "control-1_prm_2",
-    label: "control 2 label",
   },
 ];
 
@@ -85,73 +70,6 @@ export const profileTestData = {
     ],
   },
   "back-matter": backMatterTestData,
-};
-
-export const externalProfileTestData = {
-  uuid: "0e15a0fe-fa2a-40e9-847d-53e8c13e60f0",
-  metadata: {
-    title: "NIST Special Publication 800-53 Revision 4 LOW IMPACT BASELINE",
-    version: "2015-01-22",
-    parties: [
-      {
-        uuid: "96310e12-f661-41a7-bed9-842b6a931875",
-        type: "organization",
-        name: "Joint Task Force, Transformation Initiative",
-      },
-    ],
-  },
-  imports: [
-    {
-      href: "#31dbc4f2-c0e6-4e85-9cf4-b5d4843a32e8",
-      "include-controls": [
-        {
-          "with-ids": ["ca-1", "ca-2", "ca-3"],
-        },
-      ],
-    },
-  ],
-  modify: {
-    alters: [
-      {
-        "control-id": "ca-1",
-        adds,
-      },
-      {
-        "control-id": "ca-2",
-        adds: [
-          {
-            position: "starting",
-            props: [
-              {
-                name: "priority",
-                value: "P2",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        "control-id": "ca-3",
-        adds,
-      },
-    ],
-  },
-  "back-matter": {
-    resources: [
-      {
-        uuid: "31dbc4f2-c0e6-4e85-9cf4-b5d4843a32e8",
-        title: "External Back Matter Resource",
-        description:
-          "NIST Special Publication 800-53 Revision 4: Security and Privacy Controls for Federal Information Systems and Organizations",
-        rlinks: [
-          {
-            href: rev4LowBaselineProfileJson,
-            "media-type": "application/oscal.catalog+json",
-          },
-        ],
-      },
-    ],
-  },
 };
 
 export const responsibleRolesTestData = [

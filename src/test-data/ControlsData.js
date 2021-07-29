@@ -149,6 +149,9 @@ export const controlImplTestData = {
   ],
 };
 
+export const controlProseTestData =
+  "Does something with {{ insert: param, control-1_prm_1 }} and {{ insert: param, control-1_prm_2 }}";
+
 export const exampleImplNoStatements = {
   description: "This is the control implementation for the system.",
   "implemented-requirements": [
@@ -160,22 +163,13 @@ export const exampleImplNoStatements = {
   ],
 };
 
-export const externalCatalogTestData = {
-  id: "ac",
-  class: "family",
-  title: "External Access Control",
-  controls: [
-    {
-      id: "ac-1",
-      title: "Access Control Policy and Procedures",
-    },
-    {
-      id: "ac-2",
-      title: "Account Management",
-    },
-    {
-      id: "ac-3",
-      title: "Access Enforcement",
-    },
-  ],
-};
+export const exampleParams = [
+  {
+    id: "control-1_prm_1",
+    label: "control 1 label",
+  },
+  {
+    id: "control-1_prm_2",
+    label: "control 2 label",
+  },
+];

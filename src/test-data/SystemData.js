@@ -1,8 +1,4 @@
-import {
-  exampleParties,
-  metadataTestData,
-  responsibleRolesTestData,
-} from "./CommonData";
+import { metadataTestData, responsibleRolesTestData } from "./CommonData";
 import {
   systemCharacteristicsDescriptionUrl,
   systemCharacteristicsInformationUrl,
@@ -51,9 +47,6 @@ const users = {
     ],
   },
 };
-
-export const externalDescriptionSystemImplementation =
-  "An application within the IaaS, exposed to SaaS customers and their downstream customers. This Leveraged IaaS maintains aspects of the application.The LeveragingSaaS maintains aspects of their assigned portion of the application.The customers of the Leveraging SaaS maintain aspects of their sub-assigned portions of the application.";
 
 export const systemImplementationTestData = {
   remarks,
@@ -165,83 +158,4 @@ export const sspTestData = {
   metadata: metadataTestData,
   "system-characteristics": systemCharacteristicsTestData,
   "system-implementation": systemImplementationTestData,
-};
-
-const externalUrlSystemCharacteristicsTestData = {
-  "system-ids": [
-    {
-      id: "csp_iaas_system",
-    },
-  ],
-  "system-name": "Leveraged IaaS System",
-  description:
-    "An example of three customers leveraging an authorized SaaS, which is running on an authorized IaaS",
-  "security-sensitivity-level": "low",
-  "system-information": {
-    "information-types": [
-      {
-        title: "System and Network Monitoring",
-        description:
-          "This IaaS system handles information pertaining to audit events.",
-        categorizations: [
-          {
-            system: systemCharacteristicsInformationUrl,
-            "information-type-ids": ["C.3.5.8"],
-          },
-        ],
-        "confidentiality-impact": {
-          base: "fips-199-moderate",
-        },
-        "integrity-impact": {
-          base: "fips-199-moderate",
-        },
-        "availability-impact": {
-          base: "fips-199-moderate",
-        },
-      },
-    ],
-  },
-  "security-impact-level": {
-    "security-objective-confidentiality": "fips-199-low",
-    "security-objective-integrity": "fips-199-low",
-    "security-objective-availability": "fips-199-low",
-  },
-  status: {
-    state: "operational",
-    remarks: "Example remarks.",
-  },
-  "authorization-boundary": {
-    description:
-      "The hardware and software supporting the virtualized infrastructure supporting the IaaS.",
-  },
-};
-
-const externalUrlSystemImplementationTestData = {
-  users,
-  components: {
-    "component-1": {
-      description: externalDescriptionSystemImplementation,
-      type,
-      title: "Application",
-      props: [
-        {
-          name: "implementation-point",
-          value: "system",
-        },
-      ],
-      status,
-      "responsible-roles": responsibleRolesTestData,
-    },
-  },
-};
-
-export const sspTestDataExternal = {
-  uuid: "d197545f-353f-407b-9166-ebf959774c5a",
-  metadata: {
-    title: "CSP IaaS System Security Plan",
-    version: "0.1",
-    parties: exampleParties,
-  },
-  "system-characteristics": externalUrlSystemCharacteristicsTestData,
-  "system-implementation": externalUrlSystemImplementationTestData,
 };

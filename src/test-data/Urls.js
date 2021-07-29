@@ -25,3 +25,5 @@ export const systemCharacteristicsDescriptionUrl =
 
 export const systemCharacteristicsInformationUrl =
   "https://doi.org/10.6028/NIST.SP.800-60v2r1";
+
+export const urlParameterTestUrl = "https://www.easydynamics.com/";

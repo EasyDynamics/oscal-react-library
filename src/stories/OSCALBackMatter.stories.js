@@ -7,7 +7,7 @@ import {
   exampleBackMatterWithMediaType,
   exampleBackMatterWithoutTitle,
 } from "../test-data/BackMatterData";
-import { defaultOSCALProfileUrl } from "../test-data/Urls";
+import { parentUrlTestData } from "../test-data/Urls";
 
 export default {
   title: "Components/Back Matter",
@@ -28,25 +28,25 @@ export const WithoutTitle = Template.bind({});
 
 Default.args = {
   backMatter: exampleBackMatter,
-  parentUrl: defaultOSCALProfileUrl,
+  parentUrl: parentUrlTestData,
 };
 
 WithDescription.args = {
   backMatter: exampleBackMatterWithDescription,
-  parentUrl: defaultOSCALProfileUrl,
+  parentUrl: parentUrlTestData,
 };
 
 WithCitation.args = {
   backMatter: exampleBackMatterWithCitation,
-  parentUrl: defaultOSCALProfileUrl,
+  parentUrl: parentUrlTestData,
 };
 
 WithMediaType.args = {
   backMatter: exampleBackMatterWithMediaType,
-  parentUrl: defaultOSCALProfileUrl,
+  parentUrl: parentUrlTestData,
 };
 
 WithoutTitle.args = {
   backMatter: exampleBackMatterWithoutTitle,
-  parentUrl: defaultOSCALProfileUrl,
+  parentUrl: parentUrlTestData,
 };

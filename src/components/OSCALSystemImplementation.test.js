@@ -4,10 +4,7 @@ import userEvent from "@testing-library/user-event";
 import OSCALSystemImplementation from "./OSCALSystemImplementation";
 import testOSCALResponsibleRoles from "./OSCALResponsibleRoles.test";
 import { metadataTestData } from "../test-data/CommonData";
-import {
-  externalDescriptionSystemImplementation,
-  systemImplementationTestData,
-} from "../test-data/SystemData";
+import { systemImplementationTestData } from "../test-data/SystemData";
 
 function systemImplementationRenderer() {
   render(
@@ -66,49 +63,6 @@ export default function testOSCALSystemImplementation(
   });
 
   testOSCALResponsibleRoles(parentElementName, systemImplementationRenderer);
-}
-
-export function testExternalOSCALSystemImplementation(
-  parentElementName,
-  renderer,
-  externalURL
-) {
-  test(`${parentElementName} shows component title`, () => {
-    renderer(externalURL);
-    const result = screen.getByText("Application");
-    expect(result).toBeVisible();
-  });
-
-  test(`${parentElementName} shows component description`, async () => {
-    renderer(externalURL);
-    userEvent.hover(screen.getByText("Application"));
-    expect(
-      await screen.findByText(externalDescriptionSystemImplementation)
-    ).toBeInTheDocument();
-  });
-
-  test(`${parentElementName} shows component status`, () => {
-    renderer(externalURL);
-    const component = screen.getByText("Application").closest("tr");
-    const result = within(component).getByText("operational");
-    expect(result).toBeVisible();
-  });
-
-  test(`${parentElementName} shows component type`, () => {
-    renderer(externalURL);
-    const component = screen.getByText("Application").closest("tr");
-    const result = within(component).getByText("software");
-    expect(result).toBeVisible();
-  });
-
-  test(`${parentElementName} shows component version`, () => {
-    renderer(externalURL);
-    const component = screen.getByText("Application").closest("tr");
-    const propNameResult = within(component).getByText("implementation-point");
-    expect(propNameResult).toBeVisible();
-    const propValueResult = within(component).getByText("system");
-    expect(propValueResult).toBeVisible();
-  });
 }
 
 if (!require.main) {

@@ -103,10 +103,10 @@ export default function OSCALLoader(props) {
   );
 }
 
-function getRequestedUrl(){
-  /*Returns url parameter provided by the browser url, if
-    it exists. If the url parameter exists, we want to
-    override the default viewer url.*/
+export function getRequestedUrl() {
+  // Returns url parameter provided by the browser url, if
+  //  it exists. If the url parameter exists, we want to
+  //  override the default viewer url.
   return new URLSearchParams(window.location.search).get("url");
 }
 
