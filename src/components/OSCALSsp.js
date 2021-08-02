@@ -6,8 +6,10 @@ import OSCALSystemImplementation from "./OSCALSystemImplementation";
 import OSCALControlImplementation from "./OSCALControlImplementation";
 import OSCALSspResolveProfile from "./oscal-utils/OSCALSspResolver";
 import OSCALBackMatter from "./OSCALBackMatter";
-import fetchProfileModifications from "./oscal-utils/OSCALProfileUtils";
-import { setLoadedStates } from "./oscal-utils/OSCALProfileUtils";
+import {
+  setLoadedStates,
+  fetchProfileModifications,
+} from "./oscal-utils/OSCALProfileUtils";
 
 const useStyles = makeStyles((theme) => ({
   paper: {

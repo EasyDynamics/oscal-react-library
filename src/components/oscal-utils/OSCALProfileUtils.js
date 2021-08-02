@@ -19,7 +19,7 @@ export function fixProfileUrl(sourceUrl, parentUrl) {
  * @param {string} parentUrl parent url to fix sourceUrl
  * @param {function} setModifications set method for modifications
  */
-export default async function fetchProfileModifications(
+export async function fetchProfileModifications(
   sourceUrl,
   parentUrl,
   setModifications
