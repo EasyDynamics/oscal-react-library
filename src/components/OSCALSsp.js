@@ -7,6 +7,7 @@ import OSCALControlImplementation from "./OSCALControlImplementation";
 import OSCALSspResolveProfile from "./oscal-utils/OSCALSspResolver";
 import OSCALBackMatter from "./OSCALBackMatter";
 import fetchProfileModifications from "./oscal-utils/OSCALProfileUtils";
+import { setLoadedStates } from "./oscal-utils/OSCALProfileUtils";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -30,24 +31,19 @@ export default function OSCALSsp(props) {
     sspParties = ssp.metadata.parties;
   }
 
-  const setLoadedStates = () => {
-    setIsLoaded(true);
-    if (props.setContentLoaded) props.setContentLoaded(true);
-  };
-
   useEffect(() => {
     OSCALSspResolveProfile(
       ssp,
       props.parentUrl,
       () => {
         if (!unmounted.current) {
-          setLoadedStates();
+          setLoadedStates(setIsLoaded, props.setContentLoaded, true);
         }
       },
       () => {
         if (!unmounted.current) {
           setError(error);
-          setLoadedStates();
+          setLoadedStates(setIsLoaded, props.setContentLoaded, true);
         }
       }
     );

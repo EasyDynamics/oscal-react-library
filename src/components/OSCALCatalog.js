@@ -18,7 +18,9 @@ export default function OSCALCatalog(props) {
   const classes = useStyles();
 
   useEffect(() => {
-    if (props.setContentLoaded) props.setContentLoaded(true);
+    if (props.setContentLoaded) {
+      props.setContentLoaded(true);
+    }
   }, []);
 
   return (

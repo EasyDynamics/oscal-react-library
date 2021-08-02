@@ -8,6 +8,7 @@ import OSCALMetadata from "./OSCALMetadata";
 import OSCALControl from "./OSCALControl";
 import OSCALBackMatter from "./OSCALBackMatter";
 import { OSCALResolveProfile } from "./oscal-utils/OSCALProfileResolver";
+import { setLoadedStates } from "./oscal-utils/OSCALProfileUtils";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -54,11 +55,6 @@ export default function OSCALProfile(props) {
   const classes = useStyles();
   const unmounted = useRef(false);
 
-  const setLoadedStates = () => {
-    setIsLoaded(true);
-    if (props.setContentLoaded) props.setContentLoaded(true);
-  };
-
   // Resolved profile using oscal-utils. Provides error when failure.
   useEffect(() => {
     OSCALResolveProfile(
@@ -66,13 +62,13 @@ export default function OSCALProfile(props) {
       props.parentUrl,
       () => {
         if (!unmounted.current) {
-          setLoadedStates();
+          setLoadedStates(setIsLoaded, props.setContentLoaded, true);
         }
       },
       () => {
         if (!unmounted.current) {
           setError(error);
-          setLoadedStates();
+          setLoadedStates(setIsLoaded, props.setContentLoaded, true);
         }
       }
     );

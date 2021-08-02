@@ -33,3 +33,19 @@ export default async function fetchProfileModifications(
       () => null
     );
 }
+
+/**
+ * Wrapper for calling the two function arguments.
+ * Checks that setContentLoaded is defined before calling.
+ * This is used for setting state variables that track the loading of the page.
+ *
+ * @param {function} setIsLoaded set for isLoaded state variable
+ * @param {function} setContentLoaded set method for contentLoaded state variable
+ * @param {boolean} value passed into the functions
+ */
+export function setLoadedStates(setIsLoaded, setContentLoaded, value) {
+  setIsLoaded(value);
+  if (setContentLoaded) {
+    setContentLoaded(value);
+  }
+}
