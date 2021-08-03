@@ -116,6 +116,23 @@ function getConstraintsDisplay(modificationSetParameters, parameterId) {
 }
 
 /**
+ * Retrieve the set-parameters when contained in the top-level implemented requirement statement
+ *
+ * @param {Object} implReqStatements statements on how the control is implemented
+ * @param {String} componentId uuid of the component and desired by-component
+ * @returns An array of set-parameters
+ */
+function getImplReqSetParameters(implReqStatements, componentId) {
+  // Get the top-level implemented requirement statement
+  const topLevelByComp = implReqStatements
+    ?.find((statement) => statement["statement-id"].endsWith("_smt"))
+    ?.["by-components"]?.find(
+      (byComp) => byComp["component-uuid"] === componentId
+    );
+  return topLevelByComp?.["set-parameters"] || null;
+}
+
+/**
  * Builds the display of a segment of non-placeholder text within prose
  * @param {String} text
  * @param {String} key
@@ -323,21 +340,4 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
       {props.modificationDisplay}
     </Typography>
   );
-}
-
-/**
- * Retrieve the set-parameters when contained in the top-level implemented requirement statement
- *
- * @param {Object} implReqStatements statements on how the control is implemented
- * @param {String} componentId uuid of the component and desired by-component
- * @returns An array of set-parameters
- */
-function getImplReqSetParameters(implReqStatements, componentId) {
-  // Get the top-level implemented requirement statement
-  const topLevelByComp = implReqStatements
-    ?.find((statement) => statement["statement-id"].endsWith("_smt"))
-    ?.["by-components"]?.find(
-      (byComp) => byComp["component-uuid"] === componentId
-    );
-  return topLevelByComp?.["set-parameters"] || null;
 }
