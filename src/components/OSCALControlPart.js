@@ -59,7 +59,6 @@ export default function OSCALControlPart(props) {
         prose={props.part.prose}
         parameters={props.parameters}
         implReqStatements={props.implReqStatements}
-        implReqSetParameters={props.implReqSetParameters}
         statementId={props.part.id}
         componentId={props.componentId}
         modificationSetParameters={props.modificationSetParameters}
@@ -94,7 +93,6 @@ export default function OSCALControlPart(props) {
             controlId={props.controlId ?? props.control.id}
             parameters={props.parameters}
             implReqStatements={props.implReqStatements}
-            implReqSetParameters={props.implReqSetParameters}
             componentId={props.componentId}
             modificationAlters={props.modificationAlters}
             modificationSetParameters={props.modificationSetParameters}

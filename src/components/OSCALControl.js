@@ -5,7 +5,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import OSCALControlPart from "./OSCALControlPart";
 import OSCALControlModification from "./OSCALControlModification";
-import { getImplReqSetParameters } from "./OSCALControlProse";
 
 // TODO - This is probably 800-53 specific?
 function getControlStatusCss(props) {
@@ -62,12 +61,6 @@ export default function OSCALControl(props) {
     );
   }
 
-  // Retrieve implemented requirements set-parameters
-  const setParams = getImplReqSetParameters(
-    props.implReqStatements,
-    props.componentId
-  );
-
   return (
     <Card
       className={`${classes.OSCALControl} ${classes.OSCALControlStatus} ${classes.OSCALControlChildLevel}`}
@@ -88,7 +81,6 @@ export default function OSCALControl(props) {
               control={props.control}
               parameters={props.control.params}
               implReqStatements={props.implReqStatements}
-              implReqSetParameters={setParams}
               componentId={props.componentId}
               modificationAlters={props.modificationAlters}
               modificationSetParameters={props.modificationSetParameters}

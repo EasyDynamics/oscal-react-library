@@ -314,7 +314,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
           }
           return getParameterValueSegment(
             statementByComponent,
-            props.implReqSetParameters,
+            getImplReqSetParameters(props.implReqStatements, props.componentId),
             segment,
             props.modificationSetParameters,
             index.toString()
@@ -332,7 +332,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
  * @param {String} componentId uuid of the component and desired by-component
  * @returns An array of set-parameters
  */
-export function getImplReqSetParameters(implReqStatements, componentId) {
+function getImplReqSetParameters(implReqStatements, componentId) {
   // Get the top-level implemented requirement statement
   const topLevelByComp = implReqStatements
     ?.find((statement) => statement["statement-id"].endsWith("_smt"))
