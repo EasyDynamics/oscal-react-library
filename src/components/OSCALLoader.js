@@ -6,6 +6,7 @@ import OSCALCatalog from "./OSCALCatalog";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
 import OSCALProfile from "./OSCALProfile";
 import OSCALLoaderForm from "./OSCALLoaderForm";
+import { setLoadedStates } from "./oscal-utils/OSCALProfileUtils";
 
 const onError = (error) => (
   <Alert severity="error">
@@ -57,9 +58,10 @@ export default function OSCALLoader(props) {
   };
 
   const handleReloadClick = () => {
-    if (isLoaded) {
-      setIsLoaded(false);
-      setContentLoaded(false);
+    console.log(contentLoaded);
+    location.reload();
+    if (isLoaded && contentLoaded) {
+      setLoadedStates(setIsLoaded, setContentLoaded, false);
       loadOscalData(oscalUrl);
     }
   };
