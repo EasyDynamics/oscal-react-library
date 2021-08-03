@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import OSCALControlPart from "./OSCALControlPart";
 import OSCALControlModification from "./OSCALControlModification";
+import { getImplReqSetParameters } from "./OSCALControlProse";
 
 // TODO - This is probably 800-53 specific?
 function getControlStatusCss(props) {
@@ -40,23 +41,6 @@ const useStyles = makeStyles(() => ({
   // TODO - This is probably 800-53 specific?
   OSCALControlStatus: (props) => getControlStatusCss(props),
 }));
-
-/**
- * Retrieve the set-parameters when contained in the top-level implemented requirement statement
- *
- * @param {Object} implReqStatements statements on how the control is implemented
- * @param {String} componentId uuid of the component and desired by-component
- * @returns An array of set-parameters
- */
-function getImplReqSetParameters(implReqStatements, componentId) {
-  // Get the top-level implemented requirement statement
-  let topLevelByComp = implReqStatements
-    ?.find((statement) => statement["statement-id"].endsWith("_smt"))
-    ?.["by-components"]?.find(
-      (byComp) => byComp["component-uuid"] === componentId
-    );
-  return topLevelByComp?.["set-parameters"] || null;
-}
 
 export default function OSCALControl(props) {
   if (
