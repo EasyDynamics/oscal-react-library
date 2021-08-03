@@ -44,26 +44,17 @@ const useStyles = makeStyles(() => ({
 /**
  * Retrieve the set-parameters when contained in the top-level implemented requirement statement
  *
- * @param {Object} implReqStatements
- * @param {String} componentId
+ * @param {Object} implReqStatements statements on how the control is implemented
+ * @param {String} componentId uuid of the component and desired by-component
  * @returns An array of set-parameters
  */
 function getImplReqSetParameters(implReqStatements, componentId) {
   // Get the top-level implemented requirement statement
-  let topLevelImplReqStatement = null;
-  if (implReqStatements) {
-    // NOTE: The top level statement ends with "_smt"
-    topLevelImplReqStatement = implReqStatements.find((statement) =>
-      statement["statement-id"].endsWith("_smt")
-    );
-  }
-  // NOTE: The top-level by-component has a matching uuid to the componentId
-  let topLevelByComp = null;
-  if (topLevelImplReqStatement?.["by-components"]) {
-    topLevelByComp = topLevelImplReqStatement["by-components"].find(
+  let topLevelByComp = implReqStatements
+    ?.find((statement) => statement["statement-id"].endsWith("_smt"))
+    ?.["by-components"]?.find(
       (byComp) => byComp["component-uuid"] === componentId
     );
-  }
   return topLevelByComp?.["set-parameters"] || null;
 }
 
