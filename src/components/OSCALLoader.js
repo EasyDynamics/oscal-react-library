@@ -58,8 +58,6 @@ export default function OSCALLoader(props) {
   };
 
   const handleReloadClick = () => {
-    console.log(contentLoaded);
-    location.reload();
     if (isLoaded && contentLoaded) {
       setLoadedStates(setIsLoaded, setContentLoaded, false);
       loadOscalData(oscalUrl);
