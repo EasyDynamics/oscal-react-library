@@ -67,7 +67,7 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
           // Iterate over each import and recursively call this method to get either another profile or catalog
 
           modifications["set-parameters"].push(
-            ...result.profile.modify["set-paramters"]
+            ...result.profile.modify["set-parameters"]
           );
           modifications.alters.push(...result.profile.modify.alters);
 
