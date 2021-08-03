@@ -58,7 +58,6 @@ export const componentDefinitionControlImplementationTestData = [
   },
 ];
 
-// maybe do one object for the uuid "control-implementation-1", a copy in the const above this one
 export const componentDefinitionTestData = {
   uuid: "aabcfa61-c6eb-4979-851f-35b461f6a0ef",
   metadata: metadataTestData,
