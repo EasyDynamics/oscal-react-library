@@ -1,6 +1,9 @@
 import OSCALResolveProfileOrCatalogUrlControls from "./OSCALProfileResolver";
 
 function processesToRun(componentDefinition) {
+  if (!componentDefinition.components.forEach){ 
+    return 0;
+  }
   let count = 0;
   componentDefinition.components.forEach((component) => {
     count += component["control-implementations"]?.length ?? 0;
@@ -33,13 +36,13 @@ export default function OSCALComponentResolveSources(
         parentUrl,
         componentDefinition["back-matter"], // not actually used for resolution in components
         () => {
-          pendingProcesses--;
-          if (pendingProcesses == 0) {
+          pendingProcesses -= 1;
+          if (pendingProcesses === 0) {
             onSuccess();
           }
         },
         () => {
-          pendingProcesses--;
+          pendingProcesses -= 1;
           onError();
         },
         []
