@@ -64,21 +64,13 @@ function getParameterValue(
   implReqSetParameters,
   parameterId
 ) {
-  // Locate matching parameter to parameterId
-  let foundParameterSetting = null;
-  // Locate set-parameters when found in the by-component
-  if (statementByComponent?.["set-parameters"]) {
-    foundParameterSetting = statementByComponent["set-parameters"].find(
-      (parameterSetting) => parameterSetting["param-id"] === parameterId
-    );
-    // Locate set-parameters in the control's initial implemented requirement statement
-  } else if (implReqSetParameters) {
-    foundParameterSetting = implReqSetParameters.find(
-      (parameterSetting) => parameterSetting["param-id"] === parameterId
-    );
-  } else {
-    return null;
+  function parameterHasGivenId(parameterSetting) {
+    return parameterSetting["param-id"] === parameterId;
   }
+  // Locate set-parameters when found in the by-component
+  const setParameters = () =>
+    statementByComponent?.["set-parameters"] || implReqSetParameters;
+  const foundParameterSetting = setParameters()?.find(parameterHasGivenId);
 
   // Error checking: Exit function when parameter setting or it's values are not found
   if (!foundParameterSetting?.values) {
@@ -124,12 +116,13 @@ function getConstraintsDisplay(modificationSetParameters, parameterId) {
  */
 function getImplReqSetParameters(implReqStatements, componentId) {
   // Get the top-level implemented requirement statement
-  const topLevelByComp = implReqStatements
-    ?.find((statement) => statement["statement-id"].endsWith("_smt"))
-    ?.["by-components"]?.find(
-      (byComp) => byComp["component-uuid"] === componentId
-    );
-  return topLevelByComp?.["set-parameters"] || null;
+  return (
+    implReqStatements
+      ?.find((statement) => statement["statement-id"].endsWith("_smt"))
+      ?.["by-components"]?.find(
+        (byComp) => byComp["component-uuid"] === componentId
+      )?.["set-parameters"] || null
+  );
 }
 
 /**
