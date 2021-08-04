@@ -62,12 +62,14 @@ export default function OSCALProfile(props) {
       () => {
         if (!unmounted.current) {
           setIsLoaded(true);
+          props.onResolutionComplete();
         }
       },
       () => {
         if (!unmounted.current) {
           setError(error);
           setIsLoaded(true);
+          props.onResolutionComplete();
         }
       }
     );

@@ -29,6 +29,7 @@ const defaultOscalSspUrl =
 export default function OSCALLoader(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isResolutionComplete, setIsResolutionComplete] = useState(true);
   const [oscalData, setOscalData] = useState([]);
   const [oscalUrl, setOscalUrl] = useState(props.oscalUrl);
   const unmounted = useRef(false);
@@ -59,8 +60,16 @@ export default function OSCALLoader(props) {
   };
 
   const handleReloadClick = () => {
-    setIsLoaded(false);
-    loadOscalData(oscalUrl);
+    // Only reload if we're done loading
+    if (isLoaded && isResolutionComplete) {;
+      setIsLoaded(false);
+      setIsResolutionComplete(false);
+      loadOscalData(oscalUrl);
+    }
+  };
+
+  const onResolutionComplete = () => {
+    setIsResolutionComplete(true);
   };
 
   // Note: the empty deps array [] means
@@ -82,6 +91,7 @@ export default function OSCALLoader(props) {
         oscalUrl={oscalUrl}
         onUrlChange={handleChange}
         onReloadClick={handleReloadClick}
+        isResolutionComplete={isResolutionComplete}
       />
     );
   }
@@ -92,7 +102,7 @@ export default function OSCALLoader(props) {
   } else if (!isLoaded) {
     result = <CircularProgress />;
   } else {
-    result = props.renderer(oscalData, oscalUrl);
+    result = props.renderer(oscalData, oscalUrl, onResolutionComplete);
   }
 
   return (
@@ -114,11 +124,12 @@ export function getRequestedUrl() {
 }
 
 export function OSCALCatalogLoader(props) {
-  const renderer = (oscalData, oscalUrl) => (
+  const renderer = (oscalData, oscalUrl, onResolutionComplete) => (
     <OSCALCatalog
       catalog={oscalData.catalog}
       parentUrl={oscalUrl}
       onError={onError}
+      onResolutionComplete={onResolutionComplete}
     />
   );
   return (
@@ -132,11 +143,12 @@ export function OSCALCatalogLoader(props) {
 }
 
 export function OSCALSSPLoader(props) {
-  const renderer = (oscalData, oscalUrl) => (
+  const renderer = (oscalData, oscalUrl, onResolutionComplete) => (
     <OSCALSsp
       system-security-plan={oscalData["system-security-plan"]}
       parentUrl={oscalUrl}
       onError={onError}
+      onResolutionComplete={onResolutionComplete}
     />
   );
   return (
@@ -150,11 +162,12 @@ export function OSCALSSPLoader(props) {
 }
 
 export function OSCALComponentLoader(props) {
-  const renderer = (oscalData, oscalUrl) => (
+  const renderer = (oscalData, oscalUrl, onResolutionComplete) => (
     <OSCALComponentDefinition
       componentDefinition={oscalData["component-definition"]}
       parentUrl={oscalUrl}
       onError={onError}
+      onResolutionComplete={onResolutionComplete}
     />
   );
   return (
@@ -167,8 +180,12 @@ export function OSCALComponentLoader(props) {
   );
 }
 export function OSCALProfileLoader(props) {
-  const renderer = (oscalData, oscalUrl) => (
-    <OSCALProfile profile={oscalData.profile} parentUrl={oscalUrl} />
+  const renderer = (oscalData, oscalUrl, onResolutionComplete) => (
+    <OSCALProfile
+      profile={oscalData.profile}
+      parentUrl={oscalUrl}
+      onResolutionComplete={onResolutionComplete}
+    />
   );
   return (
     <OSCALLoader

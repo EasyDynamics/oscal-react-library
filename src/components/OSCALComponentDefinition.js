@@ -25,10 +25,12 @@ export default function OSCALComponentDefinition(props) {
       props.parentUrl,
       () => {
         setIsLoaded(true);
+        props.onResolutionComplete();
       },
       (errorReturned) => {
         setError(errorReturned);
         setIsLoaded(true);
+        props.onResolutionComplete();
       }
     );
   }, []);
