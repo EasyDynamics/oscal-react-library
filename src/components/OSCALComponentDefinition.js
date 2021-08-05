@@ -5,7 +5,6 @@ import OSCALComponentDefinitionControlImplementation from "./OSCALComponentDefin
 import OSCALComponentResolveSources from "./oscal-utils/OSCALComponentResolver";
 import OSCALComponentDefinitionComponent from "./OSCALComponentDefinitionComponent";
 import OSCALBackMatter from "./OSCALBackMatter";
-import { setLoadedStates } from "./oscal-utils/OSCALProfileUtils";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -25,11 +24,13 @@ export default function OSCALComponentDefinition(props) {
       props.componentDefinition,
       props.parentUrl,
       () => {
-        setLoadedStates(setIsLoaded, props.setContentLoaded, true);
+        setIsLoaded(true);
+        props.onResolutionComplete();
       },
       (errorReturned) => {
         setError(errorReturned);
-        setLoadedStates(setIsLoaded, props.setContentLoaded, true);
+        setIsLoaded(true);
+        props.onResolutionComplete();
       }
     );
   }, []);

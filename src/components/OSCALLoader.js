@@ -6,7 +6,6 @@ import OSCALCatalog from "./OSCALCatalog";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
 import OSCALProfile from "./OSCALProfile";
 import OSCALLoaderForm from "./OSCALLoaderForm";
-import { setLoadedStates } from "./oscal-utils/OSCALProfileUtils";
 
 const onError = (error) => (
   <Alert severity="error">
@@ -17,19 +16,22 @@ const onError = (error) => (
 
 const defaultOscalCatalogUrl =
   "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json";
-const defaultOscalSspUrl =
-  "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/ssp/json/ssp-example.json";
+
 const defaultOSCALComponentUrl =
   "https://raw.githubusercontent.com/EasyDynamics/oscal-content/manual-fix-of-component-paths/examples/component-definition/json/example-component.json";
+
 const defaultOSCALProfileUrl =
   "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json";
+
+const defaultOscalSspUrl =
+  "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/ssp/json/ssp-example.json";
 
 export default function OSCALLoader(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isResolutionComplete, setIsResolutionComplete] = useState(true);
   const [oscalData, setOscalData] = useState([]);
   const [oscalUrl, setOscalUrl] = useState(props.oscalUrl);
-  const [contentLoaded, setContentLoaded] = useState(false);
   const unmounted = useRef(false);
 
   const loadOscalData = (newOscalUrl) => {
@@ -58,10 +60,16 @@ export default function OSCALLoader(props) {
   };
 
   const handleReloadClick = () => {
-    if (isLoaded && contentLoaded) {
-      setLoadedStates(setIsLoaded, setContentLoaded, false);
+    // Only reload if we're done loading
+    if (isLoaded && isResolutionComplete) {
+      setIsLoaded(false);
+      setIsResolutionComplete(false);
       loadOscalData(oscalUrl);
     }
+  };
+
+  const onResolutionComplete = () => {
+    setIsResolutionComplete(true);
   };
 
   // Note: the empty deps array [] means
@@ -83,7 +91,7 @@ export default function OSCALLoader(props) {
         oscalUrl={oscalUrl}
         onUrlChange={handleChange}
         onReloadClick={handleReloadClick}
-        contentLoaded={contentLoaded}
+        isResolutionComplete={isResolutionComplete}
       />
     );
   }
@@ -94,7 +102,7 @@ export default function OSCALLoader(props) {
   } else if (!isLoaded) {
     result = <CircularProgress />;
   } else {
-    result = props.renderer(oscalData, oscalUrl, setContentLoaded);
+    result = props.renderer(oscalData, oscalUrl, onResolutionComplete);
   }
 
   return (
@@ -105,19 +113,29 @@ export default function OSCALLoader(props) {
   );
 }
 
+/**
+ * Returns url parameter provided by the browser url, if it exists. If the url
+ * parameter exists, we want to override the default viewer url.
+ *
+ * @returns The url parameter of the browser url, or null if it doesn't exist
+ */
+export function getRequestedUrl() {
+  return new URLSearchParams(window.location.search).get("url");
+}
+
 export function OSCALCatalogLoader(props) {
-  const renderer = (oscalData, oscalUrl, setContentLoaded) => (
+  const renderer = (oscalData, oscalUrl, onResolutionComplete) => (
     <OSCALCatalog
       catalog={oscalData.catalog}
       parentUrl={oscalUrl}
       onError={onError}
-      setContentLoaded={setContentLoaded}
+      onResolutionComplete={onResolutionComplete}
     />
   );
   return (
     <OSCALLoader
       oscalModelType="Catalog"
-      oscalUrl={defaultOscalCatalogUrl}
+      oscalUrl={getRequestedUrl() || defaultOscalCatalogUrl}
       renderer={renderer}
       renderForm={props.renderForm}
     />
@@ -125,18 +143,18 @@ export function OSCALCatalogLoader(props) {
 }
 
 export function OSCALSSPLoader(props) {
-  const renderer = (oscalData, oscalUrl, setContentLoaded) => (
+  const renderer = (oscalData, oscalUrl, onResolutionComplete) => (
     <OSCALSsp
       system-security-plan={oscalData["system-security-plan"]}
       parentUrl={oscalUrl}
       onError={onError}
-      setContentLoaded={setContentLoaded}
+      onResolutionComplete={onResolutionComplete}
     />
   );
   return (
     <OSCALLoader
       oscalModelType="SSP"
-      oscalUrl={defaultOscalSspUrl}
+      oscalUrl={getRequestedUrl() || defaultOscalSspUrl}
       renderer={renderer}
       renderForm={props.renderForm}
     />
@@ -144,35 +162,35 @@ export function OSCALSSPLoader(props) {
 }
 
 export function OSCALComponentLoader(props) {
-  const renderer = (oscalData, oscalUrl, setContentLoaded) => (
+  const renderer = (oscalData, oscalUrl, onResolutionComplete) => (
     <OSCALComponentDefinition
       componentDefinition={oscalData["component-definition"]}
       parentUrl={oscalUrl}
       onError={onError}
-      setContentLoaded={setContentLoaded}
+      onResolutionComplete={onResolutionComplete}
     />
   );
   return (
     <OSCALLoader
       oscalModelType="Component"
-      oscalUrl={defaultOSCALComponentUrl}
+      oscalUrl={getRequestedUrl() || defaultOSCALComponentUrl}
       renderer={renderer}
       renderForm={props.renderForm}
     />
   );
 }
 export function OSCALProfileLoader(props) {
-  const renderer = (oscalData, oscalUrl, setContentLoaded) => (
+  const renderer = (oscalData, oscalUrl, onResolutionComplete) => (
     <OSCALProfile
       profile={oscalData.profile}
       parentUrl={oscalUrl}
-      setContentLoaded={setContentLoaded}
+      onResolutionComplete={onResolutionComplete}
     />
   );
   return (
     <OSCALLoader
       oscalModelType="Profile"
-      oscalUrl={defaultOSCALProfileUrl}
+      oscalUrl={getRequestedUrl() || defaultOSCALProfileUrl}
       renderer={renderer}
       renderForm={props.renderForm}
     />
