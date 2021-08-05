@@ -68,9 +68,9 @@ function getParameterValue(
     return parameterSetting["param-id"] === parameterId;
   }
   // Locate set-parameters when found in the by-component
-  const setParameters = () =>
+  const setParameters =
     statementByComponent?.["set-parameters"] || implReqSetParameters;
-  const foundParameterSetting = setParameters()?.find(parameterHasGivenId);
+  const foundParameterSetting = setParameters?.find(parameterHasGivenId);
 
   // Error checking: Exit function when parameter setting or it's values are not found
   if (!foundParameterSetting?.values) {
