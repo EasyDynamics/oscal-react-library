@@ -30,7 +30,7 @@ export default function OSCALComponentResolveSources(
         componentDefinition["back-matter"], // not actually used for resolution in components
         () => {
           pendingProcesses -= 1;
-          if (pendingProcesses === 0) {
+          if (!pendingProcesses) {
             onSuccess();
           }
         },
