@@ -52,7 +52,7 @@ export default function OSCALControlPart(props) {
   const label = getPartLabel(props.part.props);
 
   let replacedProse;
-  if (props.implReqStatements && props.implReqStatements.length > 0) {
+  if (props.implReqStatements?.length > 0) {
     replacedProse = (
       <OSCALReplacedProseWithByComponentParameterValue
         label={label}
