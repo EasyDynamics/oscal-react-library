@@ -55,17 +55,22 @@ function getParameterLabel(parameters, parameterId) {
 /**
  * Finds a parameter setting in a component statement
  * @param {Object} statementByComponent
+ * @param {Object} implReqSetParameters
  * @param {String} parameterId
  * @returns the parameter label
  */
-function getParameterValue(statementByComponent, parameterId) {
-  // Locate matching parameter to parameterId
-  if (!statementByComponent["set-parameters"]) {
-    return null;
+function getParameterValue(
+  statementByComponent,
+  implReqSetParameters,
+  parameterId
+) {
+  function parameterHasGivenId(parameterSetting) {
+    return parameterSetting["param-id"] === parameterId;
   }
-  const foundParameterSetting = statementByComponent["set-parameters"].find(
-    (parameterSetting) => parameterSetting["param-id"] === parameterId
-  );
+  // Locate set-parameters when found in the by-component
+  const setParameters =
+    statementByComponent?.["set-parameters"] || implReqSetParameters;
+  const foundParameterSetting = setParameters?.find(parameterHasGivenId);
 
   // Error checking: Exit function when parameter setting or it's values are not found
   if (!foundParameterSetting?.values) {
@@ -100,6 +105,24 @@ function getConstraintsDisplay(modificationSetParameters, parameterId) {
     constraintDescriptions.push(constraint.description);
   });
   return constraintDescriptions.join("\n");
+}
+
+/**
+ * Retrieve the set-parameters when contained in the top-level implemented requirement statement
+ *
+ * @param {Object} implReqStatements statements on how the control is implemented
+ * @param {String} componentId uuid of the component and desired by-component
+ * @returns An array of set-parameters
+ */
+function getImplReqSetParameters(implReqStatements, componentId) {
+  // Get the top-level implemented requirement statement
+  return (
+    implReqStatements
+      ?.find((statement) => statement["statement-id"].endsWith("_smt"))
+      ?.["by-components"]?.find(
+        (byComp) => byComp["component-uuid"] === componentId
+      )?.["set-parameters"] || null
+  );
 }
 
 /**
@@ -175,6 +198,7 @@ function getParameterLabelSegment(
 /**
  * Builds the display of a segment of placeholder value text within prose
  * @param {Object} statementByComponent
+ * @param {Object} implReqSetParameters
  * @param {String} parameterId
  * @param {Object} modificationSetParameters
  * @param {String} key
@@ -182,11 +206,16 @@ function getParameterLabelSegment(
  */
 function getParameterValueSegment(
   statementByComponent,
+  implReqSetParameters,
   parameterId,
   modificationSetParameters,
   key
 ) {
-  const parameterValue = getParameterValue(statementByComponent, parameterId);
+  const parameterValue = getParameterValue(
+    statementByComponent,
+    implReqSetParameters,
+    parameterId
+  );
   const constraintsDisplay = getConstraintsDisplay(
     modificationSetParameters,
     parameterId
@@ -295,6 +324,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
           }
           return getParameterValueSegment(
             statementByComponent,
+            getImplReqSetParameters(props.implReqStatements, props.componentId),
             segment,
             props.modificationSetParameters,
             index.toString()
