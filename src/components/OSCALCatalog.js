@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
@@ -17,9 +17,7 @@ const useStyles = makeStyles((theme) => ({
 export default function OSCALCatalog(props) {
   const classes = useStyles();
 
-  useEffect(() => {
-    props.onResolutionComplete();
-  }, []);
+  props.onResolutionComplete();
 
   return (
     <div className={classes.paper}>

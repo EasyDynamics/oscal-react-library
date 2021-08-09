@@ -29,7 +29,7 @@ const defaultOscalSspUrl =
 export default function OSCALLoader(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isResolutionComplete, setIsResolutionComplete] = useState(true);
+  const [isResolutionComplete, setIsResolutionComplete] = useState(false);
   const [oscalData, setOscalData] = useState([]);
   const [oscalUrl, setOscalUrl] = useState(props.oscalUrl);
   const unmounted = useRef(false);
