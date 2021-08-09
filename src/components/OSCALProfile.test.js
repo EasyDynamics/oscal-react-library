@@ -13,7 +13,11 @@ test("OSCALProfile loads", () => {
 
 function profileRenderer() {
   render(
-    <OSCALProfile profile={profileTestData} parentUrl={parentUrlTestData} />
+    <OSCALProfile
+      profile={profileTestData}
+      parentUrl={parentUrlTestData}
+      onResolutionComplete={() => {}}
+    />
   );
 }
 

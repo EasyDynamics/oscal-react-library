@@ -6,7 +6,7 @@ import OSCALSystemImplementation from "./OSCALSystemImplementation";
 import OSCALControlImplementation from "./OSCALControlImplementation";
 import OSCALSspResolveProfile from "./oscal-utils/OSCALSspResolver";
 import OSCALBackMatter from "./OSCALBackMatter";
-import fetchProfileModifications from "./oscal-utils/OSCALProfileUtils";
+import { fetchProfileModifications } from "./oscal-utils/OSCALProfileUtils";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -37,12 +37,14 @@ export default function OSCALSsp(props) {
       () => {
         if (!unmounted.current) {
           setIsLoaded(true);
+          props.onResolutionComplete();
         }
       },
       () => {
         if (!unmounted.current) {
           setError(error);
           setIsLoaded(true);
+          props.onResolutionComplete();
         }
       }
     );

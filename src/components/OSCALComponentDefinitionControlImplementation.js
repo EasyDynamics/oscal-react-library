@@ -6,7 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { List, ListItem, ListItemText } from "@material-ui/core";
 import OSCALControlImplementationImplReq from "./OSCALControlImplementationImplReq";
-import fetchProfileModifications from "./oscal-utils/OSCALProfileUtils";
+import { fetchProfileModifications } from "./oscal-utils/OSCALProfileUtils";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
