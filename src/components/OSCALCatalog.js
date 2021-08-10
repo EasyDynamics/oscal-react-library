@@ -17,6 +17,8 @@ const useStyles = makeStyles((theme) => ({
 export default function OSCALCatalog(props) {
   const classes = useStyles();
 
+  props.onResolutionComplete();
+
   return (
     <div className={classes.paper}>
       <OSCALMetadata metadata={props.catalog.metadata} />
