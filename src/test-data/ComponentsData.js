@@ -61,8 +61,8 @@ export const componentDefinitionControlImplementationTestData = [
 export const componentDefinitionTestData = {
   uuid: "aabcfa61-c6eb-4979-851f-35b461f6a0ef",
   metadata: metadataTestData,
-  components: {
-    "component-1": {
+  components: [
+    {
       type: "Example Type",
       title: "Example Component",
       description: "An example component.",
@@ -83,7 +83,7 @@ export const componentDefinitionTestData = {
         },
       ],
     },
-  },
+  ],
 };
 
 export const exampleComponentStories = [

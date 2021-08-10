@@ -29,8 +29,14 @@ export default function OSCALSspResolveProfile(
   // Fixing linting error here would take significant change to codebase given how we use props.
   /* eslint no-param-reassign: "error" */
   ssp.resolvedControls = [];
+  ssp.modifications = {
+    "set-parameters": [],
+    alters: [],
+  };
+
   OSCALResolveProfileOrCatalogUrlControls(
     ssp.resolvedControls,
+    ssp.modifications,
     profileUrl,
     parentUrl,
     ssp["back-matter"],
