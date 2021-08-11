@@ -18,29 +18,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /**
- * Display a basic skeleton placeholder, resembling the control cards.
- *
- * @param {number} index
- * @returns Provides a skeleton card
- */
-function renderSkeletonCard(index) {
-  return (
-    <CardContent key={`skeleton-card-${index}`}>
-      <span
-        style={{ marginTop: 5, display: "flex", gap: "1em" }}
-        key="controls load 0"
-      >
-        <Skeleton variant="text" width="25em" height="3em" />
-        <Skeleton variant="circle" width="3em" height="3em" />
-      </span>
-      <Skeleton variant="text" width="10em" height="2.5em" />
-      <Skeleton variant="rect" width="100%" height={115} />
-      <Skeleton variant="text" width="6.5em" height="3.5em" />
-    </CardContent>
-  );
-}
-
-/**
  * Displays a given OSCAL Profile is an easily consumable format. According to NIST, a profile
  * represents the baseline of selected controls from one or more control catalogs.
  * For more information see: https://pages.nist.gov/OSCAL/concepts/layer/control/profile/
@@ -100,20 +77,39 @@ export default function OSCALProfile(props) {
         </ListSubheader>
       }
     >
-      {!isLoaded
-        ? [...Array(3)].map((_val, index) => renderSkeletonCard(index))
-        : props.profile.resolvedControls.map((control) => (
-            <OSCALControl
-              control={control}
-              includeControlIds={includeControlIds}
-              modificationAlters={props.profile.modify.alters}
-              modificationSetParameters={props.profile.modify["set-parameters"]}
-              childLevel={0}
-              key={`control-${control.id}`}
-            />
-          ))}
+      {isLoaded &&
+        props.profile.resolvedControls.map((control) => (
+          <OSCALControl
+            control={control}
+            includeControlIds={includeControlIds}
+            modificationAlters={props.profile.modify.alters}
+            modificationSetParameters={props.profile.modify["set-parameters"]}
+            childLevel={0}
+            key={`control-${control.id}`}
+          />
+        ))}
     </List>
   );
+
+  // Before the page has loaded, display a skeleton
+  if (!isLoaded) {
+    return (
+      <div className={classes.paper}>
+        <CardContent key="skeleton-card">
+          <span
+            style={{ marginTop: 5, display: "flex", gap: "1em" }}
+            key="controls load 0"
+          >
+            <Skeleton variant="text" width="25em" height="3em" />
+            <Skeleton variant="circle" width="3em" height="3em" />
+          </span>
+          <Skeleton variant="text" width="10em" height="2.5em" />
+          <Skeleton variant="rect" width="100%" height={115} />
+          <Skeleton variant="text" width="6.5em" height="3.5em" />
+        </CardContent>
+      </div>
+    );
+  }
 
   // Display Metadata and BackMatter components at bottom of Profile
   return (
