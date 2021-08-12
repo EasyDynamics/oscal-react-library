@@ -8,24 +8,20 @@ function metadataRenderer() {
 }
 
 export default function testOSCALMetadata(parentElementName, renderer) {
-  test(`${parentElementName} displays title`, async () => {
+  test(`${parentElementName} displays title`, () => {
     renderer();
-    const result = await screen.findByRole("heading", {
-      name: "Test Title",
-      timeout: 10000,
-    });
+    const result = screen.getByRole("heading", { name: "Test Title" });
     expect(result).toBeVisible();
   });
 
-  test(`${parentElementName} displays version`, async () => {
+  test(`${parentElementName} displays version`, () => {
     renderer();
-    const result = await screen.findByText("Revision 5", { timeout: 10000 });
+    const result = screen.getByText("Revision 5");
     expect(result).toBeVisible();
   });
 
-  test(`${parentElementName} displays parties`, async () => {
+  test(`${parentElementName} displays parties`, () => {
     renderer();
-    await screen.findByText("Parties", { timeout: 10000 });
     const partiesElement = screen.getByText("Parties").closest("ul");
     const result = within(partiesElement).getByText("Some group of people");
     expect(result).toBeVisible();

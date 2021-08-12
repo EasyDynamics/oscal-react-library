@@ -19,19 +19,16 @@ function backMatterRenderer() {
 }
 
 export default function testOSCALBackMatter(parentElementName, renderer) {
-  test(`${parentElementName} displays resource title`, async () => {
+  test(`${parentElementName} displays resource title`, () => {
     renderer();
-    const result = await screen.findByText("Resource Test Title", {
-      timeout: 10000,
-    });
+    const result = screen.getByText("Resource Test Title");
     expect(result).toBeVisible();
   });
 
   test(`${parentElementName} displays resource description`, async () => {
     renderer();
-    const descriptionDisplay = await screen.findByTitle(
-      "Resource Test Title-description",
-      { timeout: 10000 }
+    const descriptionDisplay = screen.getByTitle(
+      "Resource Test Title-description"
     );
     userEvent.hover(descriptionDisplay);
     expect(
@@ -41,26 +38,22 @@ export default function testOSCALBackMatter(parentElementName, renderer) {
 
   test(`${parentElementName} displays media-type`, async () => {
     renderer();
-    const result = await screen.findByText("application/oscal.catalog+json", {
-      timeout: 10000,
-    });
+    const result = screen.getByText("application/oscal.catalog+json");
     expect(result).toBeVisible();
   });
 
   test(`${parentElementName} renders absolute href`, async () => {
     renderer();
-    const button = await screen.findByRole("button", {
+    const button = screen.getByRole("button", {
       name: "application/oscal.catalog+json",
-      timeout: 10000,
     });
     expect(button.getAttribute("href")).toEqual(revFourCatalog);
   });
 
   test(`${parentElementName} renders relative href`, async () => {
     renderer();
-    const button = await screen.findByRole("button", {
+    const button = screen.getByRole("button", {
       name: "application/oscal.catalog+json2",
-      timeout: 10000,
     });
     expect(button.getAttribute("href")).toEqual(backMatterTestUrl);
   });
