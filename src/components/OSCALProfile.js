@@ -77,7 +77,7 @@ export default function OSCALProfile(props) {
         </ListSubheader>
       }
     >
-      {isLoaded &&
+      {isLoaded ? (
         props.profile.resolvedControls.map((control) => (
           <OSCALControl
             control={control}
@@ -87,14 +87,8 @@ export default function OSCALProfile(props) {
             childLevel={0}
             key={`control-${control.id}`}
           />
-        ))}
-    </List>
-  );
-
-  // Before the page has loaded, display a skeleton
-  if (!isLoaded) {
-    return (
-      <div className={classes.paper}>
+        ))
+      ) : (
         <CardContent key="skeleton-card">
           <span
             style={{ marginTop: 5, display: "flex", gap: "1em" }}
@@ -107,9 +101,9 @@ export default function OSCALProfile(props) {
           <Skeleton variant="rect" width="100%" height={115} />
           <Skeleton variant="text" width="6.5em" height="3.5em" />
         </CardContent>
-      </div>
-    );
-  }
+      )}
+    </List>
+  );
 
   // Display Metadata and BackMatter components at bottom of Profile
   return (
