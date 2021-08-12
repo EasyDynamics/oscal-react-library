@@ -89,18 +89,14 @@ export default function OSCALProfile(props) {
           />
         ))
       ) : (
-        <CardContent key="skeleton-card">
-          <span
-            style={{ marginTop: 5, display: "flex", gap: "1em" }}
-            key="controls load 0"
-          >
-            <Skeleton variant="text" width="25em" height="3em" />
-            <Skeleton variant="circle" width="3em" height="3em" />
-          </span>
-          <Skeleton variant="text" width="10em" height="2.5em" />
-          <Skeleton variant="rect" width="100%" height={115} />
-          <Skeleton variant="text" width="6.5em" height="3.5em" />
-        </CardContent>
+        <div>
+          <CardContent key="skeleton-card-0">
+            <Skeleton variant="rect" width="100%" height={115} />
+          </CardContent>
+          <CardContent key="skeleton-card-1">
+            <Skeleton variant="rect" width="100%" height={115} />
+          </CardContent>
+        </div>
       )}
     </List>
   );
