@@ -41,9 +41,8 @@ function testOSCALProfile(parentElementName, renderer) {
 
   test(`${parentElementName} displays control modifications`, async () => {
     renderer();
-    const modButton = await screen.findByRole(
-      "button",
-      { name: "ac-1 modifications" },
+    const modButton = await waitFor(
+      () => screen.getByRole("button", { name: "ac-1 modifications" }),
       { timeout: 5000 }
     );
     fireEvent.click(modButton);
@@ -53,8 +52,8 @@ function testOSCALProfile(parentElementName, renderer) {
 
   test(`${parentElementName} displays parameter constraints`, async () => {
     renderer();
-    const result = await screen.findAllByText(
-      "< organization-defined frequency >",
+    const result = await waitFor(
+      () => screen.getAllByText("< organization-defined frequency >"),
       { timeout: 5000 }
     );
     fireEvent.mouseOver(result[0]);
