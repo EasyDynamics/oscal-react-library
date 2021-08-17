@@ -42,7 +42,7 @@ export const exampleModificationAltersTopLevel = [
     "control-id": "control-1",
     adds: [
       {
-        "by-id": "control-1",
+        "by-id": "control-1_smt",
         position: "starting",
         props,
       },

@@ -58,12 +58,12 @@ export default function testOSCALControlImplementationImplReq(
     ).toBeInTheDocument();
   });
 
-  test(`${parentElementName} displays modifications`, async () => {
+  test(`${parentElementName} displays top level modifications`, async () => {
     renderer();
 
     const modButton = await screen.findByRole(
       "button",
-      { name: "control-1 modifications" },
+      { name: "control-1_smt modifications" },
       { timeout: 10000 }
     );
     fireEvent.click(modButton);
