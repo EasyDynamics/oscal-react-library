@@ -58,7 +58,7 @@ export default function testOSCALControlImplementationImplReq(
     ).toBeInTheDocument();
   });
 
-  test(`${parentElementName} displays component modifications`, async () => {
+  test(`${parentElementName} displays modifications`, async () => {
     renderer();
 
     const modButton = await screen.findByRole(
