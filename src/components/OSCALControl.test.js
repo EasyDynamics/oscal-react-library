@@ -13,7 +13,7 @@ test("OSCALCatalog displays controls", () => {
   expect(result).toBeVisible();
 });
 
-test("OSCALControl displays _smt modifications", async () => {
+test("OSCALControl displays statement modifications", async () => {
   render(
     <OSCALControlImplementation
       controlImplementation={controlImplTestData}
