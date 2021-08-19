@@ -1,5 +1,11 @@
 import React from "react";
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import {
+  render,
+  screen,
+  fireEvent,
+  act,
+  waitFor,
+} from "@testing-library/react";
 import { OSCALProfileLoader } from "./OSCALLoader";
 import OSCALProfile from "./OSCALProfile";
 import testOSCALMetadata from "./OSCALMetadata.test";
@@ -22,19 +28,22 @@ function profileRenderer() {
 }
 
 function testOSCALProfile(parentElementName, renderer) {
+  jest.setTimeout(6000);
   test(`${parentElementName} displays controls`, async () => {
     act(() => {
       renderer();
     });
-    const result = await screen.findByText("ac-1", { timeout: 10000 });
+    const result = await waitFor(() => screen.getByText("ac-1"), {
+      timeout: 5000,
+    });
     expect(result).toBeVisible();
   });
 
   test(`${parentElementName} displays parameter constraints`, async () => {
     renderer();
-    const result = await screen.findAllByText(
-      "< organization-defined frequency >",
-      { timeout: 10000 }
+    const result = await waitFor(
+      () => screen.getAllByText("< organization-defined frequency >"),
+      { timeout: 5000 }
     );
     fireEvent.mouseOver(result[0]);
     expect(await screen.findByText("at least every 3 years")).toBeVisible();
