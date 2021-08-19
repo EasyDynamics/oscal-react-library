@@ -30,18 +30,6 @@ function testOSCALProfile(parentElementName, renderer) {
     expect(result).toBeVisible();
   });
 
-  test(`${parentElementName} displays control modifications`, async () => {
-    renderer();
-    const modButton = await screen.findByRole(
-      "button",
-      { name: "ac-1 modifications" },
-      { timeout: 10000 }
-    );
-    fireEvent.click(modButton);
-    expect(await screen.findByText("Modifications")).toBeVisible();
-    expect(await screen.findByText("Adds")).toBeVisible();
-  });
-
   test(`${parentElementName} displays parameter constraints`, async () => {
     renderer();
     const result = await screen.findAllByText(

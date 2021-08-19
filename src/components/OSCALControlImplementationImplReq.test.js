@@ -58,19 +58,6 @@ export default function testOSCALControlImplementationImplReq(
     ).toBeInTheDocument();
   });
 
-  test(`${parentElementName} displays modifications`, async () => {
-    renderer();
-
-    const modButton = await screen.findByRole(
-      "button",
-      { name: "control-1 modifications" },
-      { timeout: 10000 }
-    );
-    fireEvent.click(modButton);
-    expect(await screen.findByText("Modifications")).toBeVisible();
-    expect(await screen.findByText("Adds")).toBeVisible();
-  });
-
   test(`${parentElementName} does not display control modifications`, async () => {
     render(
       <OSCALControlImplementation
