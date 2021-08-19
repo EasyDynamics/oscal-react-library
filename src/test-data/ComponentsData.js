@@ -63,6 +63,7 @@ export const componentDefinitionTestData = {
   metadata: metadataTestData,
   components: [
     {
+      uuid: "component-1",
       type: "Example Type",
       title: "Example Component",
       description: "An example component.",
