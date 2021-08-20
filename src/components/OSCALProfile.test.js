@@ -12,6 +12,7 @@ import testOSCALMetadata from "./OSCALMetadata.test";
 import testOSCALBackMatter from "./OSCALBackMatter.test";
 import { parentUrlTestData } from "../test-data/Urls";
 import profileTestData from "../test-data/ProfileData";
+import getUriFromBackMatterByHref from "./oscal-utils/OSCALBackMatterUtils";
 
 test("OSCALProfile loads", () => {
   render(<OSCALProfileLoader />);
@@ -60,6 +61,21 @@ function testOSCALProfile(parentElementName, renderer) {
     expect(await screen.findByText("at least every 3 years")).toBeVisible();
   });
 }
+
+function testProfileResolver() {
+  test("Profile imports all contain a valid catalog", () =>
+    profileTestData.imports.forEach((imp) =>
+      expect(
+        typeof getUriFromBackMatterByHref(
+          profileTestData["back-matter"],
+          imp.href,
+          parentUrlTestData
+        )
+      ).toBe("string")
+    ));
+}
+
+testProfileResolver();
 
 testOSCALMetadata("OSCALProfile", profileRenderer);
 
