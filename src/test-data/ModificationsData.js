@@ -50,7 +50,25 @@ export const exampleModificationAltersTopLevel = [
   },
 ];
 
+const exampleModificationAltersSmt = [
+  {
+    "control-id": "control-1",
+    adds: [
+      {
+        "by-id": "control-1_smt",
+        position: "starting",
+        props,
+      },
+    ],
+  },
+];
+
 export const profileModifyTestData = {
   "set-parameters": exampleModificationSetParameters,
   alters: exampleModificationAltersTopLevel,
+};
+
+export const profileModifySmtTestData = {
+  "set-parameters": exampleModificationSetParameters,
+  alters: exampleModificationAltersSmt,
 };

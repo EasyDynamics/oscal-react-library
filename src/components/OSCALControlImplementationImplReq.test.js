@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import OSCALControlImplementation from "./OSCALControlImplementation";
 import getByTextIncludingChildern from "./oscal-utils/TestUtils";
@@ -56,19 +56,6 @@ export default function testOSCALControlImplementationImplReq(
         "Component 1 description of implementing control 1"
       )
     ).toBeInTheDocument();
-  });
-
-  test(`${parentElementName} displays modifications`, async () => {
-    renderer();
-
-    const modButton = await screen.findByRole(
-      "button",
-      { name: "control-1 modifications" },
-      { timeout: 10000 }
-    );
-    fireEvent.click(modButton);
-    expect(await screen.findByText("Modifications")).toBeVisible();
-    expect(await screen.findByText("Adds")).toBeVisible();
   });
 
   test(`${parentElementName} does not display control modifications`, async () => {

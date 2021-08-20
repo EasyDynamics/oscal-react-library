@@ -83,6 +83,7 @@ export default function OSCALControl(props) {
             <OSCALControlPart
               part={part}
               control={props.control}
+              controlId={props.control.id}
               parameters={props.control.params}
               implReqStatements={props.implReqStatements}
               componentId={props.componentId}
