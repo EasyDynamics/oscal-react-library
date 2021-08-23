@@ -21,6 +21,10 @@ export const backMatterTestData = {
           href: revFourCatalog,
           "media-type": "application/oscal.catalog+json",
         },
+        {
+          href,
+          "media-type": "application/something.else",
+        },
       ],
     },
     {

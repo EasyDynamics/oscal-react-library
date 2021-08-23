@@ -36,12 +36,15 @@ export default function getUriFromBackMatterByHref(
   // Dig into back-matter to look for absolute href
   const importUuid = href.substring(1);
 
-  const foundResource = backMatter.resources.find(
-    (resource) => resource.uuid === importUuid
-  );
+  const foundLink = backMatter.resources
+    .find((resource) => resource.uuid === importUuid)
+    ?.rlinks.find(
+      (rlink) => rlink["media-type"] === "application/oscal.catalog+json"
+    );
 
-  if (!foundResource) {
+  if (!foundLink) {
     throw new Error("resource not found for href");
   }
-  return fixJsonUrls(getAbsoluteUrl(foundResource.rlinks[0], parentUrl));
+
+  return fixJsonUrls(getAbsoluteUrl(foundLink, parentUrl));
 }
