@@ -120,7 +120,7 @@ export default function OSCALBackMatter(props) {
               {resource.rlinks &&
                 resource.rlinks.map((rlink) => (
                   <Chip
-                    key={resource.uuid}
+                    key={rlink.href}
                     label={getMediaType(rlink)}
                     component="a"
                     href={getAbsoluteUrl(rlink, props.parentUrl)}
