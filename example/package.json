@@ -2,7 +2,10 @@
   "name": "oscal-viewer",
   "homepage": ".",
   "version": "0.1.0",
-  "private": true,
+  "repository": "git://github.com/EasyDynamics/oscal-react-library.git",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "scripts": {
     "start": "node ../node_modules/react-scripts/bin/react-scripts.js start",
     "build": "node ../node_modules/react-scripts/bin/react-scripts.js build",

@@ -1,0 +1,25 @@
+name: Publish to GitHub Packages
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  publish:
+    name: Publish OSCAL Viewer Build to GitHub Packages
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          registry-url: https://npm.pkg.github.com/
+      - name: Update Npm
+        run: npm install -g npm@latest
+      - name: Build and Publish
+        run:
+          cd example && npm ci && npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
