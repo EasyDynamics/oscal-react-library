@@ -8,6 +8,9 @@ jobs:
   publish:
     name: Publish OSCAL Viewer Build to GitHub Packages
     runs-on: ubuntu-20.04
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

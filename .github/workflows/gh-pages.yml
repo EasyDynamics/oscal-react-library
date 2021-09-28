@@ -8,9 +8,6 @@ jobs:
   publish:
     name: Publish Storybook to GitHub Pages
     runs-on: ubuntu-20.04
-    permissions:
-      contents: read
-      packages: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
