@@ -19,6 +19,7 @@ jobs:
         with:
           node-version: 14
           registry-url: https://npm.pkg.github.com/
+          cache: npm
       - name: Update Npm
         run: npm install -g npm@latest
       - name: Build and Publish
