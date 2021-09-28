@@ -22,7 +22,12 @@ jobs:
           cache: npm
       - name: Update Npm
         run: npm install -g npm@latest
-      - name: Build and Publish
+      - name: Build and Publish Library
+        run:
+          npm ci && npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Build and Publish OSCAL Viewer
         run:
           cd example && npm ci && npm publish
         env:
