@@ -30,7 +30,7 @@ jobs:
         # super-linter@v4.4.0 moves to using eslint for JSON files which in
         # our configuration results in JSON parsing failures. Temporarily,
         # pinning to @v4.3.0 (using jsonlint) allows validation to succeed
-        uses: github/super-linter@v4.3.0
+        uses: github/super-linter@v4.8.0
         env:
           DEFAULT_BRANCH: develop
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
