@@ -19,7 +19,7 @@ jobs:
       - name: Globally update npm
         run: npm install -g npm@latest
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Build Storybook
         run: npm run build-storybook
       - name: Deploy to Pages
