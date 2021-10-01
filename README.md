@@ -29,7 +29,7 @@ The [example](./example) folder shows how those components can be assembled to c
 ### Building and Running Locally
 
 In order to use the library components or test the library locally, the project components need to be rolled up and
-dependencies need to be installed initially with the command: `npm ci`. From here the application can be built
+dependencies need to be installed initially with the command: `npm install`. From here the application can be built
 (See "OSCAL Viewer → Running") or components can be tested (See "Testing"). To automate local installation and
 immediately run the application, use the following command:
 
