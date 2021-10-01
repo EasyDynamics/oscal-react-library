@@ -31,7 +31,7 @@
     "build": "microbundle-crl --no-compress --format modern,cjs --jsxFragment React.Fragment",
     "prepare": "run-s build",
     "test": "react-scripts test",
-    "predeploy": "cd example && npm install && npm run build",
+    "predeploy": "cd example && npm ci && npm run build",
     "eject": "react-scripts eject",
     "lint": "npx eslint src/**/*.js --fix",
     "format": "prettier --write src/**/*.js",

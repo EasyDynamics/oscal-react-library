@@ -8,10 +8,10 @@ phases:
       - echo "Update NPM"
       - npm install -g npm 
       - echo "Installing library npm packages"
-      - npm install
+      - npm ci
       - echo "Installing sample app npm packages"
       - cd example
-      - npm install
+      - npm ci
       - cd ..
   build:
     commands:
