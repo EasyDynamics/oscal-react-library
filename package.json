@@ -3,8 +3,13 @@
   "version": "0.1.0",
   "author": "EasyDynamics",
   "license": "MIT",
-  "repository": "EasyDynamics/oscal-react-library",
-  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EasyDynamics/oscal-react-library.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.js",
