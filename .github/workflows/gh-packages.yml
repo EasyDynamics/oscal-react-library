@@ -25,6 +25,8 @@ jobs:
           npm version patch
       - name: Push changes to the repository
         run: |
+          git add package.json
+          git add package-lock.json
           git add example/package.json
           git add example/package-lock.json
           git commit -m "RELEASE"
