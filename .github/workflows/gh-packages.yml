@@ -1,7 +1,7 @@
 name: Publish to GitHub Packages
 on:
   push:
-    branches: [develop]
+    branches: [EGRC-492-version]
     workflow_dispatch:
 
 jobs:
@@ -11,6 +11,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+    if: "startsWith(github.event.head_commit.message, '[RELEASE]')"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
