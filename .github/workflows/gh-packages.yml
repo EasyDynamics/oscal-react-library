@@ -5,16 +5,41 @@ on:
     workflow_dispatch:
 
 jobs:
+  update_version:
+    name: Update oscal-react-library and oscal-viewer version
+    permissions:
+      contents: write
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{secrets.GITHUB_TOKEN}}
+      - name: Update version of oscal-react-library packages
+        run: |
+          git config --global user.email "info@easydynamics.com"
+          git config --global user.name "${{ github.actor }}"
+          npm version patch
+      - name: Update version of oscal-viewer package
+        working-directory: ./example
+        run: |
+          npm version patch
+      - name: Push changes to the repository
+        run: |
+          git add example/package.json
+          git add example/package-lock.json
+          git commit -m "RELEASE"
+          git push
   publish:
     name: Publish OSCAL Viewer Build to GitHub Packages
     runs-on: ubuntu-20.04
     permissions:
       contents: read
       packages: write
-    if: "startsWith(github.event.head_commit.message, '[RELEASE]')"
+    if: ${{ success() }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Setup NodeJS
         uses: actions/setup-node@v2
         with:
