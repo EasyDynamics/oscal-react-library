@@ -1,9 +1,8 @@
 name: Publish to GitHub Packages
 on:
   push:
-    branches: [EGRC-492-version]
-    workflow_dispatch:
-
+    branches: [develop]
+    
 jobs:
   publish:
     name: Publish OSCAL Viewer Build to GitHub Packages
@@ -49,4 +48,4 @@ jobs:
           git add example/package.json
           git add example/package-lock.json
           git commit -m "OSCAL Viewer Release"
-          git push origin EGRC-492-version
+          git push origin develop
