@@ -5,17 +5,16 @@ on:
   workflow_dispatch:
 
 jobs:
-  update_version:
-    name: Update oscal-react-library and oscal-viewer version
+  publish:
+    name: Publish OSCAL Viewer Build to GitHub Packages
+    runs-on: ubuntu-20.04
     permissions:
       contents: write
       packages: write
-    runs-on: ubuntu-20.04
     if: ${{ !endsWith(github.event.head_commit.message, 'Release') }}
     steps:
-      - uses: actions/checkout@v2
-        with:
-          token: ${{secrets.GITHUB_TOKEN}}
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Update version of oscal-react-library packages
         run: |
           git config --global user.email "${{ github.event.pusher.email }}"
@@ -25,25 +24,6 @@ jobs:
         working-directory: ./example
         run: |
           npm version patch
-      - name: Push changes to the repository
-        run: |
-          git add package.json
-          git add package-lock.json
-          git add example/package.json
-          git add example/package-lock.json
-          git commit -m "OSCAL Viewer Release"
-          git push origin EGRC-492-version
-  publish:
-    name: Publish OSCAL Viewer Build to GitHub Packages
-    runs-on: ubuntu-20.04
-    permissions:
-      contents: read
-      packages: write
-    if: ${{ endsWith(github.event.head_commit.message, 'Release') }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Setup NodeJS
         uses: actions/setup-node@v2
         with:
@@ -62,3 +42,11 @@ jobs:
           cd example && npm ci && npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Push changes to the repository
+        run: |
+          git add package.json
+          git add package-lock.json
+          git add example/package.json
+          git add example/package-lock.json
+          git commit -m "OSCAL Viewer Release"
+          git push origin EGRC-492-version
