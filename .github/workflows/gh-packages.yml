@@ -2,7 +2,7 @@ name: Publish to GitHub Packages
 on:
   push:
     branches: [EGRC-492-version]
-    workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   update_version:
