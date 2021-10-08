@@ -9,7 +9,9 @@ jobs:
     name: Update oscal-react-library and oscal-viewer version
     permissions:
       contents: write
+      packages: write
     runs-on: ubuntu-20.04
+    if: ${{ !endsWith(github.event.head_commit.message, 'Release') }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -18,7 +20,7 @@ jobs:
         run: |
           git config --global user.email "${{ github.event.pusher.email }}"
           git config --global user.name "${{ github.event.pusher.name }}"
-          npm version patch
+          npm version patch -m "OSCAL React Library Release"
       - name: Update version of oscal-viewer package
         working-directory: ./example
         run: |
@@ -29,15 +31,15 @@ jobs:
           git add package-lock.json
           git add example/package.json
           git add example/package-lock.json
-          git commit -m "RELEASE"
-          git push
+          git commit -m "OSCAL Viewer Release"
+          git push origin EGRC-492-version
   publish:
     name: Publish OSCAL Viewer Build to GitHub Packages
     runs-on: ubuntu-20.04
     permissions:
       contents: read
       packages: write
-    if: ${{ success() }}
+    if: ${{ endsWith(github.event.head_commit.message, 'Release') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
