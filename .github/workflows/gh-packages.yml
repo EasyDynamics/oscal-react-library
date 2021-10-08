@@ -16,8 +16,8 @@ jobs:
           token: ${{secrets.GITHUB_TOKEN}}
       - name: Update version of oscal-react-library packages
         run: |
-          git config --global user.email "info@easydynamics.com"
-          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.event.pusher.email }}"
+          git config --global user.name "${{ github.event.pusher.name }}"
           npm version patch
       - name: Update version of oscal-viewer package
         working-directory: ./example
