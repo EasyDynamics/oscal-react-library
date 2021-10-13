@@ -11,7 +11,7 @@ jobs:
     permissions:
       contents: write
       packages: write
-    if: ${{ !endsWith(github.event.head_commit.message, 'Release') }}
+    if: ${{ !endsWith(github.event.head_commit.message, 'Package Version') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
