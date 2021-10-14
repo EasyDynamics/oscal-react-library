@@ -1,7 +1,7 @@
 name: Publish to GitHub Packages
 on:
   push:
-    branches: [develop]
+    branches: [EGRC-492-version]
   workflow_dispatch:
     
 jobs:
@@ -9,21 +9,16 @@ jobs:
     name: Publish OSCAL Viewer Build to GitHub Packages
     runs-on: ubuntu-20.04
     permissions:
-      contents: write
+      contents: read
       packages: write
-    if: ${{ !endsWith(github.event.head_commit.message, 'Package Version') }}
     steps:
+      - name: Delete previous package versions
+        uses: actions/delete-package-versions@v1
+        with:
+          package-name: oscal-react-library
+          num-old-versions-to-delete: 14
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Update version of oscal-react-library packages
-        run: |
-          git config --global user.email "info@easydynamics.com"
-          git config --global user.name "Easy Dynamics"
-          npm version patch -m "Increment Library Package Version"
-      - name: Update version of oscal-viewer package
-        working-directory: ./example
-        run: |
-          npm version patch
       - name: Setup NodeJS
         uses: actions/setup-node@v2
         with:
@@ -42,11 +37,3 @@ jobs:
           cd example && npm ci && npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - name: Push changes to the repository
-        run: |
-          git add package.json
-          git add package-lock.json
-          git add example/package.json
-          git add example/package-lock.json
-          git commit -m "Increment Viewer Package Version"
-          git push origin develop
