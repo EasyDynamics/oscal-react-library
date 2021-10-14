@@ -12,11 +12,14 @@ jobs:
       contents: read
       packages: write
     steps:
-      - name: Delete previous package versions
+      - name: Delete previous oscal-react-library version
+        uses: actions/delete-package-versions@v1
+        with:
+          package-name: oscal-react-library
+      - name: Delete previous oscal-viewer version
         uses: actions/delete-package-versions@v1
         with:
           package-name: oscal-viewer
-          num-old-versions-to-delete: 9
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Setup NodeJS
