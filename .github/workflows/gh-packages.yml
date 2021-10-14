@@ -15,8 +15,8 @@ jobs:
       - name: Delete previous package versions
         uses: actions/delete-package-versions@v1
         with:
-          package-name: oscal-react-library
-          num-old-versions-to-delete: 14
+          package-name: oscal-viewer
+          num-old-versions-to-delete: 9
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Setup NodeJS
