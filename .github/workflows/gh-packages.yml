@@ -37,6 +37,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Build and Publish OSCAL Viewer
         run:
-          cd example && npm ci && npm publish
+          cd example && npm ci && npm run build && npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
