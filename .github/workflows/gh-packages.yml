@@ -1,7 +1,7 @@
 name: Publish to GitHub Packages
 on:
   push:
-    branches: [develop]
+    branches: [EGRC-492-package]
   workflow_dispatch:
     
 jobs:
