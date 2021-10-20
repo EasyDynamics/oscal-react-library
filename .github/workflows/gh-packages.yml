@@ -16,10 +16,6 @@ jobs:
         uses: actions/delete-package-versions@v1
         with:
           package-name: oscal-react-library
-      - name: Delete previous oscal-viewer version
-        uses: actions/delete-package-versions@v1
-        with:
-          package-name: oscal-viewer
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Setup NodeJS
@@ -31,13 +27,12 @@ jobs:
       - name: Update Npm
         run: npm install -g npm@latest
       - name: Build and Publish Library
-        run:
-          npm ci && npm publish
+        run: |
+          npm ci
+          cd example
+          npm ci
+          npm run build
+          cd ..
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - name: Build and Publish OSCAL Viewer
-        run:
-          cd example && npm ci && npm run build && npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
