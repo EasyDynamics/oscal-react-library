@@ -98,6 +98,6 @@
   },
   "files": [
     "dist",
-    "build"
+    "example/build"
   ]
 }
