@@ -1,0 +1,43 @@
+name: Create a New Release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The version number of this release
+        required: true
+
+jobs:
+  release:
+    name: Create a New Release
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          registry-url: https://npm.pkg.github.com/
+          cache: npm
+
+      - name: Update Npm
+        run: npm install -g npm@latest
+
+      - name: Build OSCAL Viewer
+        working-directory: example
+        run: |
+          npm ci
+          npm run build
+
+      - name: Push to Main
+        run: //
+
+      - name: Push to Tag Branch
+        run: //
+
+      - name: Create a GitHub Release
+        run: //
+
+      - name: Upload the Production Build to the Release
+        run: 

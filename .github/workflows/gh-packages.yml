@@ -29,10 +29,6 @@ jobs:
       - name: Build and Publish Library
         run: |
           npm ci
-          cd example
-          npm ci
-          npm run build
-          cd ..
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
