@@ -1,6 +1,10 @@
 name: Create a New Release
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'The version number of this release'
+        required: true
 
 jobs:
   release:
@@ -20,14 +24,13 @@ jobs:
       - name: Update Npm
         run: npm install -g npm@latest
 
-      # Increment version to next major version.
+      # Set package to the specified version
       # Store version as an environment variable for later steps to use.
       - name: Set Version of this Release
         run: |
-          npm version major
+          npm version ${{ github.event.inputs.version }}
           cd example
-          npm version major
-          echo "PKG_VERSION=$(npm pkg get version | tr -d '"')" >> $GITHUB_ENV
+          npm version ${{ github.event.inputs.version }}
 
       - name: Build OSCAL Viewer
         working-directory: example
@@ -40,7 +43,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name:
-            ${{ env.PKG_VERSION }}
+            ${{ github.event.inputs.version }}
           files:
             example/viewer.zip
 
@@ -48,6 +51,6 @@ jobs:
       - name: Push to Main and Tag Branch
         run: |
           git add package.json package-lock.json example/package.json example/package-lock.json
-          git commit -m "Create Release Version ${{ env.PKG_VERSION }}"
+          git commit -m "Create Release Version ${{ github.event.inputs.version }}"
           git push origin main
-          git push -u origin tag-${{ env.PKG_VERSION }}
+          git push -u origin tag-${{ github.event.inputs.version }}
