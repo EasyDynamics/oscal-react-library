@@ -61,9 +61,15 @@ jobs:
             example/viewer.zip
 
       # Commit the new version and push changes to main, as well as a "tag-{version}" branch
-      - name: Push to Main and Tag Branch
+      # And push a new preminor version to develop.
+      # Should only run when triggered for a feature - for bug fixes
+      # this should be done manually since a merge might be needed.
+      - name: Push Changes
+        if: ${{ github.event.inputs.type }} == 'feature'
         run: |
-          git add package.json package-lock.json example/package.json example/package-lock.json
-          git commit -m "Create Release Version ${{ env.PKG_VERSION }}"
           git push origin main
           git push -u origin tag-${{ env.PKG_VERSION }}
+          npm version preminor
+          cd example
+          npm version preminor
+          git push origin develop
