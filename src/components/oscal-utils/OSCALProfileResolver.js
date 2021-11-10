@@ -27,17 +27,21 @@ import getUriFromBackMatterByHref from "./OSCALBackMatterUtils";
  * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/profile-layer/profile/xml-schema/#global_import}
  * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/profile-layer/profile/xml-schema/#global_back-matter_h2}
  */
-export default function OSCALResolveProfileOrCatalogUrlControls(
+export default async function OSCALResolveProfileOrCatalogUrlControls(
   resolvedControls,
   modifications,
   origItemUrl,
   parentUrl,
   backMatter,
+  inheritedProfilesAndCatalogs,
   onSuccess,
   onError,
   pendingProcesses // tracks state of recursive calls
 ) {
+  
   let itemUrl = origItemUrl;
+
+  
   // TODO - this should be improved for other use cases
   if (!origItemUrl.startsWith("http")) {
     itemUrl = `${parentUrl}/../${origItemUrl}`;
@@ -51,11 +55,14 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
   }
   // Add our current itemUrl to the list of pending processes
   pendingProcesses.push(itemUrl);
-  fetch(itemUrl)
+  let response = await fetch(itemUrl)
     .then((res) => res.json())
     .then(
       (result) => {
+        let inheritedOSCALObject = {};
         if (result.catalog) {
+          inheritedOSCALObject["title"] = result.catalog["metadata"]["title"];
+          inheritedOSCALObject["type"] = "catalog";
           // Dig through catalog controls and add to profile.controls
           result.catalog.groups.forEach((group) => {
             resolvedControls.push(...group.controls);
@@ -65,6 +72,9 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
           }
         } else if (result.profile) {
           // Iterate over each import and recursively call this method to get either another profile or catalog
+          inheritedOSCALObject["title"] = result.profile["metadata"]["title"];
+          inheritedOSCALObject["type"] = "profile";
+          inheritedOSCALObject["inherited"] = [];
 
           modifications["set-parameters"].push(
             ...result.profile.modify["set-parameters"]
@@ -82,6 +92,7 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
               importUrl,
               itemUrl,
               result.profile["back-matter"],
+              inheritedOSCALObject["inherited"],
               onSuccess,
               onError,
               pendingProcesses
@@ -97,16 +108,36 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
         if (onSuccess && pendingProcesses.length === 0) {
           onSuccess();
         }
+        return inheritedOSCALObject;
       },
       (error) => onError(error)
     );
+  if (response["type"].valueOf() == "catalog") {
+    inheritedProfilesAndCatalogs.push({
+      title: response["title"],
+      type: "catalog"
+    });
+  } else {
+    inheritedProfilesAndCatalogs.push({
+      title: response["title"],
+      type: "profile",
+      inherited: response["inherited"]
+    });
+  }
 }
 
-export function OSCALResolveProfile(profile, parentUrl, onSuccess, onError) {
+//Create a json object which represents the inheritance tree
+//Once the json object is created, do the tree view/item stuff
+export async function OSCALResolveProfile(profile, parentUrl, setProfilesCatalogsInherited, onSuccess, onError) {
   if (!profile.imports) {
     return;
   }
-
+  const title = profile["metadata"]["title"];
+  let inheritedProfilesAndCatalogs = {
+    title: title,
+    type: "profile",
+    inherited: [],
+  };
   // profile does not have a resolvedControls field.
   // profile.resolvedControls needs to be declared & initialized here.
   /* eslint no-param-reassign: "error" */
@@ -116,20 +147,30 @@ export function OSCALResolveProfile(profile, parentUrl, onSuccess, onError) {
     alters: [],
   };
 
-  profile.imports
-    .map((imp) =>
-      getUriFromBackMatterByHref(profile["back-matter"], imp.href, parentUrl)
-    )
-    .forEach((importUrl) => {
-      OSCALResolveProfileOrCatalogUrlControls(
-        profile.resolvedControls,
-        profile.modifications,
-        importUrl,
-        parentUrl,
-        profile["back-matter"],
-        onSuccess,
-        onError,
-        []
-      );
-    });
+  await Promise.all(profile.imports.map(async (imp) => {
+    await OSCALResolveProfileOrCatalogUrlControls(
+      profile.resolvedControls,
+      profile.modifications,
+      getUriFromBackMatterByHref(profile["back-matter"], imp.href, parentUrl),
+      parentUrl,
+      profile["back-matter"],
+      inheritedProfilesAndCatalogs["inherited"],
+      onSuccess,
+      onError,
+      []
+    );
+  }));
+
+  createIdsForInheritedProfilesCatalogs(inheritedProfilesAndCatalogs, [1]);
+  setProfilesCatalogsInherited(inheritedProfilesAndCatalogs);
+}
+
+function createIdsForInheritedProfilesCatalogs(tree, id) {
+  tree["id"] = id[0];
+  id[0]++;
+  if (tree["inherited"] != null && tree["inherited"].length > 0){
+    for (const child of tree["inherited"]) {
+      createIdsForInheritedProfilesCatalogs(child, id);
+    }
+  }
 }
