@@ -13,17 +13,21 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function OSCALProfileCatalogInheritance(props) {
-  const classes = useStyles();
+function renderTree(nodes, id) {
+  id[0] += 1;
 
-
-  const renderTree = (nodes) => (
-    <TreeItem nodeId={nodes["id"]} label={nodes["title"]}>
+  return (
+    <TreeItem nodeId={id[0]} label={nodes["title"]}>
       {Array.isArray(nodes["inherited"])
-        ? nodes["inherited"].map((node) => renderTree(node))
+        ? nodes["inherited"].map((node) => renderTree(node, id))
         : null}
     </TreeItem>
   );
+}
+
+export default function OSCALProfileCatalogInheritance(props) {
+  const classes = useStyles();
+  const id = [0];
 
   return(props.inheritedProfilesAndCatalogs ?
     <Grid item className={classes.inheritance}>
@@ -42,7 +46,7 @@ export default function OSCALProfileCatalogInheritance(props) {
             defaultCollapseIcon={<ExpandMoreIcon />}
             defaultExpandIcon={<ChevronRightIcon />}
           >
-            {renderTree(props.inheritedProfilesAndCatalogs)}
+            {renderTree(props.inheritedProfilesAndCatalogs, id)}
           </TreeView>
         </List>
       </Paper>
