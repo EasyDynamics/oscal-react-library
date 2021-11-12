@@ -14,8 +14,11 @@ jobs:
     name: Create a New Release
     runs-on: ubuntu-20.04
     steps:
+      # Check out develop branch
       - name: Checkout Code
         uses: actions/checkout@v2
+        with:
+          ref: develop
 
       - name: Setup NodeJS
         uses: actions/setup-node@v2
@@ -27,6 +30,7 @@ jobs:
       - name: Update Npm
         run: npm install -g npm@latest
 
+      # Increment the version to the next minor release
       - name: Set Version (Feature)
         if: ${{ github.event.inputs.type }} == 'feature'
         run: |
@@ -34,12 +38,15 @@ jobs:
           cd example
           npm version minor
 
+      # Increment the version to the next bug fix
+      # Push the new version to the develop branch
       - name: Set Version (Bug Fix)
         if: ${{ github.event.inputs.type }} == 'bug'
         run: |
           npm version patch
           cd example
           npm version patch
+          git push origin develop
 
       # Output the new package version to environment variable
       - name: Get Package Version
