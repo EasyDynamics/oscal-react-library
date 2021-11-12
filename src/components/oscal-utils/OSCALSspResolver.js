@@ -8,6 +8,7 @@ import { fixJsonUrls } from "./OSCALBackMatterUtils";
 export default function OSCALSspResolveProfile(
   ssp,
   parentUrl,
+  setProfilesCatalogsInherited,
   onSuccess,
   onError
 ) {
@@ -15,6 +16,11 @@ export default function OSCALSspResolveProfile(
     return;
   }
   let profileUrl = ssp["import-profile"].href;
+
+  const inheritedProfilesAndCatalogs = {
+    type: "ssp",
+    inherited: [],
+  };
 
   // Fix profile URL if not a json
   if (!profileUrl.endsWith(".json")) {
@@ -40,8 +46,11 @@ export default function OSCALSspResolveProfile(
     profileUrl,
     parentUrl,
     ssp["back-matter"],
+    inheritedProfilesAndCatalogs.inherited,
     onSuccess,
     onError,
     []
   );
+  
+  setProfilesCatalogsInherited(inheritedProfilesAndCatalogs);
 }

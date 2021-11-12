@@ -16,13 +16,17 @@ const useStyles = makeStyles((theme) => ({
 function renderTree(nodes, id) {
   id[0] += 1;
 
-  return (
-    <TreeItem nodeId={id[0]} label={nodes["title"]}>
-      {Array.isArray(nodes["inherited"])
-        ? nodes["inherited"].map((node) => renderTree(node, id))
-        : null}
-    </TreeItem>
-  );
+  if (nodes["inherited"] == null || nodes["inherited"] == undefined) {
+    return null;
+  }
+
+  let children = [];
+
+  nodes["inherited"].forEach((node) => {
+    children.push(<TreeItem nodeId={id[0]} label={node["title"]} children={renderTree(node,id)}></TreeItem>)
+  })
+
+  return children;
 }
 
 export default function OSCALProfileCatalogInheritance(props) {
@@ -45,8 +49,8 @@ export default function OSCALProfileCatalogInheritance(props) {
             aria-label="profile and catalog inheritance display"
             defaultCollapseIcon={<ExpandMoreIcon />}
             defaultExpandIcon={<ChevronRightIcon />}
+            children={renderTree(props.inheritedProfilesAndCatalogs, id)}
           >
-            {renderTree(props.inheritedProfilesAndCatalogs, id)}
           </TreeView>
         </List>
       </Paper>

@@ -6,6 +6,7 @@ import OSCALSystemImplementation from "./OSCALSystemImplementation";
 import OSCALControlImplementation from "./OSCALControlImplementation";
 import OSCALSspResolveProfile from "./oscal-utils/OSCALSspResolver";
 import OSCALBackMatter from "./OSCALBackMatter";
+import OSCALProfileCatalogInheritance from "./OSCALProfileCatalogInheritance";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -17,6 +18,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function OSCALSsp(props) {
   const [error, setError] = useState(null);
+  const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] =
+    useState({});
   const [isLoaded, setIsLoaded] = useState(false);
   const classes = useStyles();
   const unmounted = useRef(false);
@@ -32,6 +35,7 @@ export default function OSCALSsp(props) {
     OSCALSspResolveProfile(
       ssp,
       props.parentUrl,
+      setInheritedProfilesAndCatalogs,
       () => {
         if (!unmounted.current) {
           setIsLoaded(true);
@@ -70,6 +74,9 @@ export default function OSCALSsp(props) {
   return (
     <div className={classes.paper}>
       <OSCALMetadata metadata={ssp.metadata} />
+      <OSCALProfileCatalogInheritance
+        inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}
+      />
       <OSCALSystemCharacteristics
         systemCharacteristics={ssp["system-characteristics"]}
       />
