@@ -20,12 +20,18 @@ function renderTree(nodes, id) {
     return null;
   }
 
+  const generateLabel = (title, type) => {
+    return (
+      type == "profile" ? "Profile: " + title : "Catalog: " + title
+    );
+  }
+
   let children = [];
 
   nodes["inherited"].forEach((node) => {
-    children.push(<TreeItem nodeId={id[0]} label={node["title"]} children={renderTree(node,id)}></TreeItem>)
+    children.push(<TreeItem nodeId={id[0]} label={generateLabel(node["title"], node["type"])} children={renderTree(node,id)}></TreeItem>)
   })
-
+  
   return children;
 }
 
@@ -42,7 +48,7 @@ export default function OSCALProfileCatalogInheritance(props) {
                 component="div"
                 id="oscal-metadata-parties"
               >
-                Inherited Profiles and Catalogs
+                Profiles/Catalog Inheritance
               </ListSubheader>
             }>
           <TreeView
