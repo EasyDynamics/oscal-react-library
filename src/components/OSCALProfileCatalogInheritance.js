@@ -19,7 +19,7 @@ function renderTree(nodes, id) {
   }
 
   const generateLabel = (title, type) =>
-    type == "profile" ? `Profile: ${title}` : `Catalog: ${title}`;
+    type === "profile" ? `Profile: ${title}` : `Catalog: ${title}`;
 
   const children = [];
 
@@ -29,7 +29,6 @@ function renderTree(nodes, id) {
       <TreeItem
         nodeId={id[0]}
         label={generateLabel(node.title, node.type)}
-        children={}
         expandIcon={
           <IconButton aria-label={`expand-profiles-and-catalogs ${id[0] - 1}`}>
             <ChevronRightIcon />
