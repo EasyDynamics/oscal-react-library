@@ -35,8 +35,7 @@ function renderTree(nodes, id) {
           </IconButton>
         }
         collapseIcon={
-          <IconButton aria-label={`collapse-profiles-and-catalogs ${id[0]}`}
-          >
+          <IconButton aria-label={`collapse-profiles-and-catalogs ${id[0]}`}>
             <ExpandLessIcon />
           </IconButton>
         }
