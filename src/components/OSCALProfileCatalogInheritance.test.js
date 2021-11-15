@@ -1,9 +1,7 @@
 import React from "react";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import {
-  metadataTestData,
   profileCatalogInheritanceData,
-  responsibleRolesTestData,
 } from "../test-data/CommonData";
 import OSCALProfileCatalogInheritance from "./OSCALProfileCatalogInheritance";
 

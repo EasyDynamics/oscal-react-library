@@ -10,7 +10,7 @@ export const profileCatalogInheritanceData = {
   inherited: [
     {
       title: "Example Catalog",
-      type: "catalog"
+      type: "catalog",
     },
     {
       title: "Example Inherited Profile",
@@ -18,11 +18,11 @@ export const profileCatalogInheritanceData = {
       inherited: [
         {
           title: "Nested Inherited Catalog",
-          type: "catalog"
+          type: "catalog",
         },
-      ]
-    }
-  ]
+      ],
+    },
+  ],
 };
 
 export const metadataTestData = {
