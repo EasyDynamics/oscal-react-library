@@ -21,8 +21,8 @@ test("OSCALProfileCatalogInheritance displays top-level inherited objects", asyn
 });
 
 test("OSCALProfileCatalogInheritance displays nested inherited objects", async () => {
-  profileCatalogInheritanceRenderer();
   jest.setTimeout(10000);
+  profileCatalogInheritanceRenderer();
   const inheritanceButton = await screen.findByRole(
     "button",
     { name: "expand-profiles-and-catalogs 2" },
