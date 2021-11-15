@@ -6,6 +6,25 @@ export const exampleParties = [
   },
 ];
 
+export const profileCatalogInheritanceData = {
+  inherited: [
+    {
+      title: "Example Catalog",
+      type: "catalog"
+    },
+    {
+      title: "Example Inherited Profile",
+      type: "profile",
+      inherited: [
+        {
+          title: "Nested Inherited Catalog",
+          type: "catalog"
+        },
+      ]
+    }
+  ]
+};
+
 export const metadataTestData = {
   title: "Test Title",
   parties: exampleParties,
