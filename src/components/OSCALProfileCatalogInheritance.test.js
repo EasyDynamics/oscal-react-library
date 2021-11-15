@@ -21,7 +21,6 @@ test("OSCALProfileCatalogInheritance displays top-level inherited objects", asyn
 });
 
 test("OSCALProfileCatalogInheritance displays nested inherited objects", async () => {
-  jest.useFakeTimers('legacy');
   jest.useRealTimers();
   jest.setTimeout(10000);
   profileCatalogInheritanceRenderer();
