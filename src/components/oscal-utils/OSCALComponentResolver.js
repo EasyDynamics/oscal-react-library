@@ -11,10 +11,7 @@ export default async function OSCALComponentResolveSources(
   /* eslint no-param-reassign: "error" */
   componentDefinition.resolvedControls = [];
 
-  const { title } = componentDefinition.metadata;
   const inheritedProfilesAndCatalogs = {
-    title,
-    type: "component definition",
     inherited: [],
   };
 

@@ -123,10 +123,7 @@ export async function OSCALResolveProfile(
   if (!profile.imports) {
     return;
   }
-  const { title } = profile.metadata;
   const inheritedProfilesAndCatalogs = {
-    title,
-    type: "profile",
     inherited: [],
   };
   // profile does not have a resolvedControls field.

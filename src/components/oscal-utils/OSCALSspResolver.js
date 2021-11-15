@@ -18,7 +18,6 @@ export default function OSCALSspResolveProfile(
   let profileUrl = ssp["import-profile"].href;
 
   const inheritedProfilesAndCatalogs = {
-    type: "ssp",
     inherited: [],
   };
 
