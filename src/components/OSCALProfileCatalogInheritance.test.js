@@ -3,6 +3,8 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { profileCatalogInheritanceData } from "../test-data/CommonData";
 import OSCALProfileCatalogInheritance from "./OSCALProfileCatalogInheritance";
 
+jest.setTimeout(10000);
+
 function profileCatalogInheritanceRenderer() {
   render(
     <OSCALProfileCatalogInheritance
@@ -20,9 +22,9 @@ test("OSCALProfileCatalogInheritance displays top-level inherited objects", asyn
   expect(result).toBeVisible();
 });
 
+jest.setTimeout(10000);
+
 test("OSCALProfileCatalogInheritance displays nested inherited objects", async () => {
-  jest.useRealTimers();
-  jest.setTimeout(10000);
   profileCatalogInheritanceRenderer();
   const inheritanceButton = await screen.findByRole(
     "button",
