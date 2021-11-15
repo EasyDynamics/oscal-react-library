@@ -15,12 +15,14 @@ test("OSCALProfileCatalogInheritance displays top-level inherited objects", asyn
   profileCatalogInheritanceRenderer();
   const result = await waitFor(
     () => screen.getByText("Catalog: Example Catalog"),
-    { timeout: 5000 }
+    { timeout: 10000 }
   );
   expect(result).toBeVisible();
 });
 
 test("OSCALProfileCatalogInheritance displays nested inherited objects", async () => {
+  jest.useFakeTimers('legacy');
+  jest.useRealTimers();
   jest.setTimeout(10000);
   profileCatalogInheritanceRenderer();
   const inheritanceButton = await screen.findByRole(
