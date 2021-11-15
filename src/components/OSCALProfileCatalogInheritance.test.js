@@ -25,7 +25,7 @@ test("OSCALProfileCatalogInheritance displays nested inherited objects", async (
   const inheritanceButton = await screen.findByRole(
     "button",
     { name: "expand-profiles-and-catalogs 2" },
-    { timeout: 5000 }
+    { timeout: 10000 }
   );
   fireEvent.click(inheritanceButton);
   expect(
