@@ -1,9 +1,9 @@
 import React from 'react';
 import { makeStyles } from "@material-ui/core/styles";
 import { TreeView, TreeItem } from "@material-ui/lab";
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import { Grid, List, Paper } from '@material-ui/core';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import { Grid, IconButton, List, Paper } from '@material-ui/core';
 import ListSubheader from "@material-ui/core/ListSubheader";
 
 const useStyles = makeStyles((theme) => ({
@@ -14,9 +14,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function renderTree(nodes, id) {
-  id[0] += 1;
 
-  if (nodes["inherited"] == null || nodes["inherited"] == undefined) {
+  if (nodes["inherited"] == null) {
     return null;
   }
 
@@ -29,7 +28,18 @@ function renderTree(nodes, id) {
   let children = [];
 
   nodes["inherited"].forEach((node) => {
-    children.push(<TreeItem nodeId={id[0]} label={generateLabel(node["title"], node["type"])} children={renderTree(node,id)}></TreeItem>)
+    id[0] += 1;
+    children.push(<TreeItem
+      nodeId={id[0]} 
+      label={generateLabel(node["title"], node["type"])}
+      children={renderTree(node,id)}
+      expandIcon={<IconButton aria-label={"expand-profiles-and-catalogs " + (id[0] - 1)}>
+        <ChevronRightIcon/>
+      </IconButton>}
+      collapseIcon={<IconButton aria-label={"collapse-profiles-and-catalogs " + (id[0] - 1)}>
+        <ExpandLessIcon/>
+      </IconButton>}>
+    </TreeItem>)
   })
   
   return children;
@@ -53,13 +63,12 @@ export default function OSCALProfileCatalogInheritance(props) {
             }>
           <TreeView
             aria-label="profile and catalog inheritance display"
-            defaultCollapseIcon={<ExpandMoreIcon />}
-            defaultExpandIcon={<ChevronRightIcon />}
             children={renderTree(props.inheritedProfilesAndCatalogs, id)}
           >
           </TreeView>
         </List>
       </Paper>
-    </Grid> : null
+    </Grid>
+    : null
   );
 }
