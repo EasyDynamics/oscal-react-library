@@ -28,11 +28,12 @@ const useStyles = makeStyles((theme) => ({
  */
 export default function OSCALProfile(props) {
   const [error, setError] = useState(null);
-  const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] = useState({});
+  const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] =
+    useState({});
   const [isLoaded, setIsLoaded] = useState(false);
   const classes = useStyles();
   const unmounted = useRef(false);
-  
+
   // Resolved profile using oscal-utils. Provides error when failure.
   useEffect(() => {
     OSCALResolveProfile(
@@ -112,7 +113,9 @@ export default function OSCALProfile(props) {
   return (
     <div className={classes.paper}>
       <OSCALMetadata metadata={props.profile.metadata} />
-      <OSCALProfileCatalogInheritance inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs} />
+      <OSCALProfileCatalogInheritance
+        inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}
+      />
       {profileImports}
       <OSCALBackMatter
         backMatter={props.profile["back-matter"]}

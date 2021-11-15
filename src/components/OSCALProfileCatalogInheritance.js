@@ -68,9 +68,7 @@ export default function OSCALProfileCatalogInheritance(props) {
             </ListSubheader>
           }
         >
-          <TreeView
-            aria-label="profile and catalog inheritance display"
-          >
+          <TreeView aria-label="profile and catalog inheritance display">
             {renderTree(props.inheritedProfilesAndCatalogs, id)}
           </TreeView>
         </List>

@@ -50,6 +50,6 @@ export default function OSCALSspResolveProfile(
     onError,
     []
   );
-  
+
   setProfilesCatalogsInherited(inheritedProfilesAndCatalogs);
 }
