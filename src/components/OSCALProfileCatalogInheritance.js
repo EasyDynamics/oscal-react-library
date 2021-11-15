@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { TreeView, TreeItem } from "@material-ui/lab";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import { Grid, IconButton, List, Paper } from "@material-ui/core";
 import ListSubheader from "@material-ui/core/ListSubheader";
@@ -31,7 +31,7 @@ function renderTree(nodes, id) {
         label={generateLabel(node.title, node.type)}
         expandIcon={
           <IconButton aria-label={`expand-profiles-and-catalogs ${id[0] - 1}`}>
-            <ChevronRightIcon />
+            <ExpandMoreIcon />
           </IconButton>
         }
         collapseIcon={
