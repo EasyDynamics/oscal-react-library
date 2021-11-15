@@ -27,7 +27,7 @@ function renderTree(nodes, id) {
     id[0] += 1;
     children.push(
       <TreeItem
-        nodeId={id[0]}
+        nodeId={(id[0]).toString()}
         label={generateLabel(node.title, node.type)}
         expandIcon={
           <IconButton aria-label={`expand-profiles-and-catalogs ${id[0] - 1}`}>
