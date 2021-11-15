@@ -30,13 +30,13 @@ function renderTree(nodes, id) {
         nodeId={(id[0]).toString()}
         label={generateLabel(node.title, node.type)}
         expandIcon={
-          <IconButton aria-label={`expand-profiles-and-catalogs ${id[0] - 1}`}>
+          <IconButton aria-label={`expand-profiles-and-catalogs ${id[0]}`}>
             <ExpandMoreIcon />
           </IconButton>
         }
         collapseIcon={
           <IconButton
-            aria-label={`collapse-profiles-and-catalogs ${id[0] - 1}`}
+            aria-label={`collapse-profiles-and-catalogs ${id[0]}`}
           >
             <ExpandLessIcon />
           </IconButton>
