@@ -21,26 +21,31 @@ function renderTree(nodes, id) {
   const generateLabel = (title, type) =>
     type === "profile" ? `Profile: ${title}` : `Catalog: ${title}`;
 
+  const idReassign = id;
   const children = [];
 
   nodes.inherited.forEach((node) => {
-    id[0] += 1;
+    idReassign[0] += 1;
     children.push(
       <TreeItem
-        nodeId={id[0].toString()}
+        nodeId={idReassign[0].toString()}
         label={generateLabel(node.title, node.type)}
         expandIcon={
-          <IconButton aria-label={`expand-profiles-and-catalogs ${id[0]}`}>
+          <IconButton
+            aria-label={`expand-profiles-and-catalogs ${idReassign[0]}`}
+          >
             <ExpandMoreIcon />
           </IconButton>
         }
         collapseIcon={
-          <IconButton aria-label={`collapse-profiles-and-catalogs ${id[0]}`}>
+          <IconButton
+            aria-label={`collapse-profiles-and-catalogs ${idReassign[0]}`}
+          >
             <ExpandLessIcon />
           </IconButton>
         }
       >
-        {renderTree(node, id)}
+        {renderTree(node, idReassign)}
       </TreeItem>
     );
   });

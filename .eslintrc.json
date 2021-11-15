@@ -25,8 +25,7 @@
       "react/prop-types": [0],
       "react/destructuring-assignment": [0],
       "react/jsx-props-no-spreading": "off",
-      "prettier/prettier": "error",
-      "no-param-reassign": 0
+      "prettier/prettier": "error"
     },
     "overrides": [
         {
