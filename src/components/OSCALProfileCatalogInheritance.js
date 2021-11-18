@@ -1,10 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { TreeView, TreeItem } from "@material-ui/lab";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import { Grid, IconButton, List, Paper } from "@material-ui/core";
-import ListSubheader from "@material-ui/core/ListSubheader";
+import { TreeItem } from "@material-ui/lab";
+import OSCALProfileCatalogInheritanceTree from "./OSCALProfileCatalogInheritanceTree";
 
 const useStyles = makeStyles((theme) => ({
   inheritance: {
@@ -13,39 +10,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function renderTree(nodes, id) {
-  if (nodes.inherited == null) {
+function generateLabel(title, type) {
+  return type === "profile" ? `Profile: ${title}` : `Catalog: ${title}`;
+}
+
+function createTree(tree, ids) {
+  if (tree.inherited == null) {
     return null;
   }
 
-  const generateLabel = (title, type) =>
-    type === "profile" ? `Profile: ${title}` : `Catalog: ${title}`;
-
-  const idReassign = id;
   const children = [];
 
-  nodes.inherited.forEach((node) => {
-    idReassign[0] += 1;
+  tree.inherited.forEach((childProfileOrCatalog) => {
+    ids.push(`${childProfileOrCatalog.uuid} #${ids.length + 1}`);
     children.push(
       <TreeItem
-        nodeId={idReassign[0].toString()}
-        label={generateLabel(node.title, node.type)}
-        expandIcon={
-          <IconButton
-            aria-label={`expand-profiles-and-catalogs ${idReassign[0]}`}
-          >
-            <ExpandMoreIcon />
-          </IconButton>
-        }
-        collapseIcon={
-          <IconButton
-            aria-label={`collapse-profiles-and-catalogs ${idReassign[0]}`}
-          >
-            <ExpandLessIcon />
-          </IconButton>
-        }
+        nodeId={`${childProfileOrCatalog.uuid} #${ids.length}`}
+        key={`${childProfileOrCatalog.uuid} #${ids.length}`}
+        label={generateLabel(
+          childProfileOrCatalog.title,
+          childProfileOrCatalog.type
+        )}
       >
-        {renderTree(node, idReassign)}
+        {createTree(childProfileOrCatalog, ids)}
       </TreeItem>
     );
   });
@@ -55,27 +42,20 @@ function renderTree(nodes, id) {
 
 export default function OSCALProfileCatalogInheritance(props) {
   const classes = useStyles();
-  const id = [0];
+  const [validIds, setValidIds] = useState([false, []]);
+  const ids = [];
 
-  return props.inheritedProfilesAndCatalogs ? (
-    <Grid item className={classes.inheritance}>
-      <Paper>
-        <List
-          subheader={
-            <ListSubheader
-              className={classes.OSCALMetadataPartiesHeader}
-              component="div"
-              id="oscal-metadata-parties"
-            >
-              Profiles/Catalog Inheritance
-            </ListSubheader>
-          }
-        >
-          <TreeView aria-label="profile and catalog inheritance display">
-            {renderTree(props.inheritedProfilesAndCatalogs, id)}
-          </TreeView>
-        </List>
-      </Paper>
-    </Grid>
-  ) : null;
+  const children = createTree(props.inheritedProfilesAndCatalogs, ids);
+
+  if (ids.length > 0 && !validIds[0]) {
+    setValidIds([true, ids]);
+  }
+
+  return (
+    <OSCALProfileCatalogInheritanceTree
+      treeItems={children}
+      validIds={validIds[1]}
+      classes={classes}
+    />
+  );
 }

@@ -17,27 +17,28 @@ const useStyles = makeStyles((theme) => ({
 
 export default function OSCALComponentDefinition(props) {
   const [error, setError] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] =
     useState({});
-  const [isLoaded, setIsLoaded] = useState(false);
   const classes = useStyles();
+
   useEffect(() => {
-    OSCALComponentResolveSources(
-      props.componentDefinition,
-      props.parentUrl,
-      setInheritedProfilesAndCatalogs,
-      () => {
-        setIsLoaded(true);
-        props.onResolutionComplete();
-      },
-      (errorReturned) => {
-        setError(errorReturned);
-        setIsLoaded(true);
-        props.onResolutionComplete();
-      }
+    setInheritedProfilesAndCatalogs(
+      OSCALComponentResolveSources(
+        props.componentDefinition,
+        props.parentUrl,
+        () => {
+          setIsLoaded(true);
+          props.onResolutionComplete();
+        },
+        (errorReturned) => {
+          setError(errorReturned);
+          setIsLoaded(true);
+          props.onResolutionComplete();
+        }
+      )
     );
   }, []);
-
   // Throw error to OSCALLoader
   if (error) {
     return props.onError(error);

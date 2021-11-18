@@ -60,6 +60,7 @@ export default async function OSCALResolveProfileOrCatalogUrlControls(
         const inheritedOSCALObject = {};
         if (result.catalog) {
           inheritedOSCALObject.title = result.catalog.metadata.title;
+          inheritedOSCALObject.uuid = result.catalog.uuid;
           inheritedOSCALObject.type = "catalog";
           // Dig through catalog controls and add to profile.controls
           result.catalog.groups.forEach((group) => {
@@ -71,6 +72,7 @@ export default async function OSCALResolveProfileOrCatalogUrlControls(
         } else if (result.profile) {
           // Iterate over each import and recursively call this method to get either another profile or catalog
           inheritedOSCALObject.title = result.profile.metadata.title;
+          inheritedOSCALObject.uuid = result.profile.uuid;
           inheritedOSCALObject.type = "profile";
           inheritedOSCALObject.inherited = [];
 
