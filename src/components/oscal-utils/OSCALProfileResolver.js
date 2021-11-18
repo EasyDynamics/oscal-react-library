@@ -27,7 +27,7 @@ import getUriFromBackMatterByHref from "./OSCALBackMatterUtils";
  * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/profile-layer/profile/xml-schema/#global_import}
  * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/profile-layer/profile/xml-schema/#global_back-matter_h2}
  */
-export default async function OSCALResolveProfileOrCatalogUrlControls(
+export default function OSCALResolveProfileOrCatalogUrlControls(
   resolvedControls,
   modifications,
   origItemUrl,
@@ -53,7 +53,7 @@ export default async function OSCALResolveProfileOrCatalogUrlControls(
   }
   // Add our current itemUrl to the list of pending processes
   pendingProcesses.push(itemUrl);
-  await fetch(itemUrl)
+  fetch(itemUrl)
     .then((res) => res.json())
     .then(
       (result) => {
@@ -115,7 +115,7 @@ export default async function OSCALResolveProfileOrCatalogUrlControls(
     );
 }
 
-export async function OSCALResolveProfile(
+export function OSCALResolveProfile(
   profile,
   parentUrl,
   setProfilesCatalogsInherited,
@@ -137,21 +137,19 @@ export async function OSCALResolveProfile(
     alters: [],
   };
 
-  await Promise.all(
-    profile.imports.map(async (imp) => {
-      await OSCALResolveProfileOrCatalogUrlControls(
-        profile.resolvedControls,
-        profile.modifications,
-        getUriFromBackMatterByHref(profile["back-matter"], imp.href, parentUrl),
-        parentUrl,
-        profile["back-matter"],
-        inheritedProfilesAndCatalogs.inherited,
-        onSuccess,
-        onError,
-        []
-      );
-    })
-  );
+  profile.imports.forEach((imp) => {
+    OSCALResolveProfileOrCatalogUrlControls(
+      profile.resolvedControls,
+      profile.modifications,
+      getUriFromBackMatterByHref(profile["back-matter"], imp.href, parentUrl),
+      parentUrl,
+      profile["back-matter"],
+      inheritedProfilesAndCatalogs.inherited,
+      onSuccess,
+      onError,
+      []
+    );
+  });
 
   setProfilesCatalogsInherited(inheritedProfilesAndCatalogs);
 }
