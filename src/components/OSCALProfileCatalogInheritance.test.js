@@ -13,9 +13,26 @@ function profileCatalogInheritanceRenderer() {
 
 test("OSCALProfileCatalogInheritance displays top-level inherited objects", async () => {
   profileCatalogInheritanceRenderer();
-  const result = await waitFor(
+  const resultCatalog = await waitFor(
     () => screen.getByText("Catalog: Example Catalog"),
     { timeout: 5000 }
   );
-  expect(result).toBeVisible();
+  expect(resultCatalog).toBeVisible();
+
+  const resultProfile = await waitFor(
+    () => screen.getByText("Profile: Example Inherited Profile"),
+    { timeout: 5000 }
+  );
+
+  expect(resultProfile).toBeVisible();
+});
+
+test("OSCALProfileCatalogInheritance displays nested inherited objects", async () => {
+  profileCatalogInheritanceRenderer();
+  const nestedCatalog = await waitFor(
+    () => screen.getByText("Catalog: Nested Inherited Catalog"),
+    { timeout: 5000 }
+  );
+
+  expect(nestedCatalog).toBeVisible();
 });
