@@ -56,13 +56,11 @@ jobs:
 
       # Output the new package version to environment variable
       - name: Get Package Version
-        run: |
-          echo "PKG_VERSION=$(npm pkg get version | tr -d '"')" >> $GITHUB_ENV
-          echo ${{ env.PKG_VERSION }}
+        run: echo "PKG_VERSION=$(npm pkg get version | tr -d '"')" >> $GITHUB_ENV
 
       - name: Build OSCAL Viewer
-        working-directory: example
         run: |
+          cd example
           npm ci
           npm run build
           zip viewer.zip build
