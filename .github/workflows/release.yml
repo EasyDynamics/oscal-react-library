@@ -36,6 +36,8 @@ jobs:
       - name: Set Version (Feature)
         if: ${{ github.event.inputs.type  == 'feature' }}
         run: |
+          git config --global user.email "info@easydynamics.com"
+          git config --global user.name "${{ github.actor }}"
           npm version minor
           cd example
           npm version minor
@@ -45,6 +47,8 @@ jobs:
       - name: Set Version (Bug Fix)
         # if: ${{ github.event.inputs.type == 'bug' }}
         run: |
+          git config --global user.email "info@easydynamics.com"
+          git config --global user.name "${{ github.actor }}"
           npm version patch
           cd example
           npm version patch
@@ -52,7 +56,9 @@ jobs:
 
       # Output the new package version to environment variable
       - name: Get Package Version
-        run: echo "PKG_VERSION=$(npm pkg get version | tr -d '"')" >> $GITHUB_ENV
+        run: |
+          echo "PKG_VERSION=$(npm pkg get version | tr -d '"')" >> $GITHUB_ENV
+          echo ${{ env.PKG_VERSION }}
 
       - name: Build OSCAL Viewer
         working-directory: example
