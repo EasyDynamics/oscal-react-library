@@ -12,7 +12,7 @@ on:
 jobs:
   release:
     # Validate the input type before running
-    # if: ${{ github.event.inputs.type }} == 'feature' || ${{ github.event.inputs.type }} == 'bug'
+    # if: ${{ github.event.inputs.type == 'feature' || github.event.inputs.type == 'bug' }}
     name: Create a New Release
     runs-on: ubuntu-20.04
     steps:
@@ -34,7 +34,7 @@ jobs:
 
       # Increment the version to the next minor release
       - name: Set Version (Feature)
-        if: ${{ github.event.inputs.type }} == 'feature'
+        if: ${{ github.event.inputs.type  == 'feature' }}
         run: |
           npm version minor
           cd example
@@ -43,7 +43,7 @@ jobs:
       # Increment the version to the next bug fix
       # Push the new version to the develop branch
       - name: Set Version (Bug Fix)
-        # if: ${{ github.event.inputs.type }} == 'bug'
+        # if: ${{ github.event.inputs.type == 'bug' }}
         run: |
           npm version patch
           cd example
@@ -74,7 +74,7 @@ jobs:
       # Should only run when triggered for a feature - for bug fixes
       # this should be done manually since a merge might be needed.
       - name: Push Changes
-        if: ${{ github.event.inputs.type }} == 'feature'
+        if: ${{ github.event.inputs.type  == 'feature' }}
         run: |
           git push origin main
           git push -u origin tag-${{ env.PKG_VERSION }}
