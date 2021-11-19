@@ -3,6 +3,7 @@ import OSCALResolveProfileOrCatalogUrlControls from "./OSCALProfileResolver";
 export default function OSCALComponentResolveSources(
   componentDefinition,
   parentUrl,
+  setInheritedProfilesAndCatalogs,
   onSuccess,
   onError
 ) {
@@ -46,5 +47,5 @@ export default function OSCALComponentResolveSources(
       );
     });
   });
-  return inheritedProfilesAndCatalogs;
+  setInheritedProfilesAndCatalogs(inheritedProfilesAndCatalogs);
 }

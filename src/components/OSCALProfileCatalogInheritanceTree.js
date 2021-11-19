@@ -6,40 +6,37 @@ import { Grid, IconButton, List, Paper } from "@material-ui/core";
 import ListSubheader from "@material-ui/core/ListSubheader";
 
 export default function OSCALProfileCatalogInheritanceTree(props) {
-  const tree =
-    props.validIds.length > 0 ? (
-      <Grid item className={props.classes.inheritance}>
-        <Paper>
-          <List
-            subheader={
-              <ListSubheader
-                className={props.classes.OSCALMetadataPartiesHeader}
-                component="div"
-                id="oscal-metadata-parties"
-              >
-                Profiles/Catalog Inheritance
-              </ListSubheader>
-            }
-          >
-            <TreeView
-              defaultExpandIcon={
-                <IconButton>
-                  <ExpandMoreIcon />
-                </IconButton>
-              }
-              defaultCollapseIcon={
-                <IconButton>
-                  <ExpandLessIcon />
-                </IconButton>
-              }
-              defaultExpanded={props.validIds}
+  return props.validIds.length > 0 ? (
+    <Grid item className={props.classes.inheritance}>
+      <Paper>
+        <List
+          subheader={
+            <ListSubheader
+              className={props.classes.OSCALMetadataPartiesHeader}
+              component="div"
+              id="oscal-metadata-parties"
             >
-              {props.treeItems}
-            </TreeView>
-          </List>
-        </Paper>
-      </Grid>
-    ) : null;
-
-  return tree;
+              Profiles/Catalog Inheritance
+            </ListSubheader>
+          }
+        >
+          <TreeView
+            defaultExpandIcon={
+              <IconButton>
+                <ExpandMoreIcon />
+              </IconButton>
+            }
+            defaultCollapseIcon={
+              <IconButton>
+                <ExpandLessIcon />
+              </IconButton>
+            }
+            defaultExpanded={props.validIds}
+          >
+            {props.treeItems}
+          </TreeView>
+        </List>
+      </Paper>
+    </Grid>
+  ) : null;
 }

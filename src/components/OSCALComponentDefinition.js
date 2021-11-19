@@ -23,21 +23,20 @@ export default function OSCALComponentDefinition(props) {
   const classes = useStyles();
 
   useEffect(() => {
-    setInheritedProfilesAndCatalogs(
-      OSCALComponentResolveSources(
-        props.componentDefinition,
-        props.parentUrl,
-        () => {
-          setIsLoaded(true);
-          props.onResolutionComplete();
-        },
-        (errorReturned) => {
-          setError(errorReturned);
-          setIsLoaded(true);
-          props.onResolutionComplete();
-        }
-      )
-    );
+    OSCALComponentResolveSources(
+      props.componentDefinition,
+      props.parentUrl,
+      setInheritedProfilesAndCatalogs,
+      () => {
+        setIsLoaded(true);
+        props.onResolutionComplete();
+      },
+      (errorReturned) => {
+        setError(errorReturned);
+        setIsLoaded(true);
+        props.onResolutionComplete();
+      }
+    )
   }, []);
   // Throw error to OSCALLoader
   if (error) {
