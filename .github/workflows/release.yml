@@ -60,6 +60,7 @@ jobs:
 
       - name: Build OSCAL Viewer
         run: |
+          npm ci
           cd example
           npm ci
           npm run build
