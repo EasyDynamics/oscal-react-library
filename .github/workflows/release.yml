@@ -81,7 +81,6 @@ jobs:
       - name: Push Changes
         #if: ${{ github.event.inputs.type  == 'feature' }}
         run: |
-#git push origin main
           git push -u origin tag-${{ env.PKG_VERSION }}
           npm version preminor
           cd example
