@@ -64,7 +64,7 @@ jobs:
           cd example
           npm ci
           npm run build
-          zip viewer.zip build
+          zip viewer.zip build/*
 
       - name: Create a GitHub Release
         uses: softprops/action-gh-release@v1
@@ -79,9 +79,9 @@ jobs:
       # Should only run when triggered for a feature - for bug fixes
       # this should be done manually since a merge might be needed.
       - name: Push Changes
-        if: ${{ github.event.inputs.type  == 'feature' }}
+        #if: ${{ github.event.inputs.type  == 'feature' }}
         run: |
-          git push origin main
+#git push origin main
           git push -u origin tag-${{ env.PKG_VERSION }}
           npm version preminor
           cd example
