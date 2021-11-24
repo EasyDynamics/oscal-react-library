@@ -67,6 +67,7 @@ jobs:
           zip viewer.zip build/*
 
       - name: Create a GitHub Release
+        #if: ${{ github.event.inputs.type  == 'feature' }}
         uses: softprops/action-gh-release@v1
         with:
           tag_name:
@@ -81,7 +82,7 @@ jobs:
       - name: Push Changes
         #if: ${{ github.event.inputs.type  == 'feature' }}
         run: |
-          git push -u origin tag-${{ env.PKG_VERSION }}
+          git push origin develop:tag-${{ env.PKG_VERSION }}
           npm version preminor
           cd example
           npm version preminor
