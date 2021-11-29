@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { TreeItem } from "@material-ui/lab";
-import OSCALProfileCatalogInheritanceTree from "./OSCALProfileCatalogInheritanceTree";
+import { TreeItem, TreeView } from "@material-ui/lab";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
+import { Grid, IconButton, List, Paper } from "@material-ui/core";
+import ListSubheader from "@material-ui/core/ListSubheader";
 
 const useStyles = makeStyles((theme) => ({
   inheritance: {
@@ -51,11 +54,37 @@ export default function OSCALProfileCatalogInheritance(props) {
     setValidIds([true, ids]);
   }
 
-  return (
-    <OSCALProfileCatalogInheritanceTree
-      treeItems={children}
-      validIds={validIds[1]}
-      classes={classes}
-    />
-  );
+  return validIds[1].length > 0 ? (
+    <Grid item className={classes.inheritance}>
+      <Paper>
+        <List
+          subheader={
+            <ListSubheader
+              className={classes.OSCALMetadataPartiesHeader}
+              component="div"
+              id="oscal-metadata-parties"
+            >
+              Profiles/Catalog Inheritance
+            </ListSubheader>
+          }
+        >
+          <TreeView
+            defaultExpandIcon={
+              <IconButton>
+                <ExpandMoreIcon />
+              </IconButton>
+            }
+            defaultCollapseIcon={
+              <IconButton>
+                <ExpandLessIcon />
+              </IconButton>
+            }
+            defaultExpanded={validIds[1]}
+          >
+            {children}
+          </TreeView>
+        </List>
+      </Paper>
+    </Grid>
+  ) : null;
 }
