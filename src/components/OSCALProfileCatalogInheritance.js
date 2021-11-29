@@ -50,7 +50,7 @@ export default function OSCALProfileCatalogInheritance(props) {
 
   const children = createTree(props.inheritedProfilesAndCatalogs, ids);
 
-  if (ids.length > 0 && validIds.length == 0) {
+  if (ids.length > 0 && validIds.length === 0) {
     setValidIds(ids);
   }
 
