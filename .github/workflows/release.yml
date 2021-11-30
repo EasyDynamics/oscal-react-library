@@ -1,7 +1,5 @@
 name: Create a New Release
 on:
-  push:
-    branches: [EGRC-492-package]
   workflow_dispatch:
     inputs:
       type:
@@ -12,7 +10,7 @@ on:
 jobs:
   release:
     # Validate the input type before running
-    # if: ${{ github.event.inputs.type == 'feature' || github.event.inputs.type == 'bug' }}
+    if: ${{ github.event.inputs.type == 'feature' || github.event.inputs.type == 'bug' }}
     name: Create a New Release
     runs-on: ubuntu-20.04
     steps:
@@ -45,14 +43,14 @@ jobs:
       # Increment the version to the next bug fix
       # Push the new version to the develop branch
       - name: Set Version (Bug Fix)
-        # if: ${{ github.event.inputs.type == 'bug' }}
+        if: ${{ github.event.inputs.type == 'bug' }}
         run: |
           git config --global user.email "info@easydynamics.com"
           git config --global user.name "${{ github.actor }}"
           npm version patch
           cd example
           npm version patch
-        # git push origin develop
+          git push origin develop
 
       # Output the new package version to environment variable
       - name: Get Package Version
@@ -67,7 +65,6 @@ jobs:
           zip viewer.zip build/*
 
       - name: Create a GitHub Release
-        if: ${{ github.event.inputs.type  == 'feature' }}
         uses: softprops/action-gh-release@v1
         with:
           tag_name:
@@ -80,12 +77,13 @@ jobs:
       # Should only run when triggered for a feature - for bug fixes
       # this should be done manually since a merge might be needed.
       - name: Push Changes
-        #if: ${{ github.event.inputs.type  == 'feature' }}
+        if: ${{ github.event.inputs.type  == 'feature' }}
         run: |
+          git push origin develop:main
           git push origin develop:tag-${{ env.PKG_VERSION }}
           git add package.json package-lock.json example/package.json example/package-lock.json
           git commit -m "Build Viewer for Release ${{ env.PKG_VERSION }}"
           npm version preminor
           cd example
           npm version preminor
-          git push origin develop:test-${{ env.PKG_VERSION }}
+          git push origin develop
