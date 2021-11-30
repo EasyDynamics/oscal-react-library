@@ -72,7 +72,7 @@ jobs:
           files:
             example/viewer.zip
 
-      # Commit the new version and push changes to main, as well as a "tag-{version}" branch
+      # Commit the new version and push changes to main
       # And push a new preminor version to develop.
       # Should only run when triggered for a feature - for bug fixes
       # this should be done manually since a merge might be needed.
@@ -80,7 +80,6 @@ jobs:
         if: ${{ github.event.inputs.type  == 'feature' }}
         run: |
           git push origin develop:main
-          git push origin develop:tag-${{ env.PKG_VERSION }}
           git add package.json package-lock.json example/package.json example/package-lock.json
           git commit -m "Build Viewer for Release ${{ env.PKG_VERSION }}"
           npm version preminor
