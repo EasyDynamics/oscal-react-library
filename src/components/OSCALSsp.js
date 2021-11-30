@@ -35,10 +35,10 @@ export default function OSCALSsp(props) {
     OSCALSspResolveProfile(
       ssp,
       props.parentUrl,
-      setInheritedProfilesAndCatalogs,
-      () => {
+      (profilesCatalogsTree) => {
         if (!unmounted.current) {
           setIsLoaded(true);
+          setInheritedProfilesAndCatalogs(profilesCatalogsTree);
           props.onResolutionComplete();
         }
       },

@@ -26,9 +26,9 @@ export default function OSCALComponentDefinition(props) {
     OSCALComponentResolveSources(
       props.componentDefinition,
       props.parentUrl,
-      setInheritedProfilesAndCatalogs,
-      () => {
+      (profilesCatalogsTree) => {
         setIsLoaded(true);
+        setInheritedProfilesAndCatalogs(profilesCatalogsTree);
         props.onResolutionComplete();
       },
       (errorReturned) => {

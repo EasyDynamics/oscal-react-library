@@ -8,7 +8,6 @@ import { fixJsonUrls } from "./OSCALBackMatterUtils";
 export default function OSCALSspResolveProfile(
   ssp,
   parentUrl,
-  setProfilesCatalogsInherited,
   onSuccess,
   onError
 ) {
@@ -46,10 +45,10 @@ export default function OSCALSspResolveProfile(
     parentUrl,
     ssp["back-matter"],
     inheritedProfilesAndCatalogs.inherited,
-    onSuccess,
+    () => {
+      onSuccess(inheritedProfilesAndCatalogs);
+    },
     onError,
     []
   );
-
-  setProfilesCatalogsInherited(inheritedProfilesAndCatalogs);
 }

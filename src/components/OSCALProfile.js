@@ -39,10 +39,10 @@ export default function OSCALProfile(props) {
     OSCALResolveProfile(
       props.profile,
       props.parentUrl,
-      setInheritedProfilesAndCatalogs,
-      () => {
+      (profilesCatalogsTree) => {
         if (!unmounted.current) {
           setIsLoaded(true);
+          setInheritedProfilesAndCatalogs(profilesCatalogsTree);
           props.onResolutionComplete();
         }
       },

@@ -115,13 +115,7 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
     );
 }
 
-export function OSCALResolveProfile(
-  profile,
-  parentUrl,
-  setProfilesCatalogsInherited,
-  onSuccess,
-  onError
-) {
+export function OSCALResolveProfile(profile, parentUrl, onSuccess, onError) {
   if (!profile.imports) {
     return;
   }
@@ -145,11 +139,11 @@ export function OSCALResolveProfile(
       parentUrl,
       profile["back-matter"],
       inheritedProfilesAndCatalogs.inherited,
-      onSuccess,
+      () => {
+        onSuccess(inheritedProfilesAndCatalogs);
+      },
       onError,
       []
     );
   });
-
-  setProfilesCatalogsInherited(inheritedProfilesAndCatalogs);
 }
