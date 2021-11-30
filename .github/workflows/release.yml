@@ -67,7 +67,7 @@ jobs:
           zip viewer.zip build/*
 
       - name: Create a GitHub Release
-        #if: ${{ github.event.inputs.type  == 'feature' }}
+        if: ${{ github.event.inputs.type  == 'feature' }}
         uses: softprops/action-gh-release@v1
         with:
           tag_name:
@@ -83,7 +83,9 @@ jobs:
         #if: ${{ github.event.inputs.type  == 'feature' }}
         run: |
           git push origin develop:tag-${{ env.PKG_VERSION }}
+          git add package.json package-lock.json example/package.json example/package-lock.json
+          git commit -m "Build Viewer for Release ${{ env.PKG_VERSION }}"
           npm version preminor
           cd example
           npm version preminor
-          git push origin develop
+          git push origin develop:test-${{ env.PKG_VERSION }}
