@@ -45,16 +45,16 @@ function createTree(tree, ids) {
 
 export default function OSCALProfileCatalogInheritance(props) {
   const classes = useStyles();
-  const [validIds, setValidIds] = useState([]);
+  const [expandedIds, setExpandedIds] = useState([]);
   const ids = [];
 
   const children = createTree(props.inheritedProfilesAndCatalogs, ids);
 
-  if (ids.length > 0 && validIds.length === 0) {
-    setValidIds(ids);
+  if (ids.length > 0 && expandedIds.length === 0) {
+    setExpandedIds(ids);
   }
 
-  return validIds.length > 0 ? (
+  return expandedIds.length > 0 ? (
     <Grid item className={classes.inheritance}>
       <Paper>
         <List
@@ -79,7 +79,7 @@ export default function OSCALProfileCatalogInheritance(props) {
                 <ExpandLessIcon />
               </IconButton>
             }
-            defaultExpanded={validIds}
+            defaultExpanded={expandedIds}
           >
             {children}
           </TreeView>
