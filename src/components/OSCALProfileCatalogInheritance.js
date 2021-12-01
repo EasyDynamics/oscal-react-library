@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
   treeStyle: {
     marginLeft: theme.spacing(2),
-  }
+  },
 }));
 
 function generateLabel(title, type) {
