@@ -2,15 +2,15 @@ name: Create a New Release
 on:
   workflow_dispatch:
     inputs:
-      type:
+      release-type:
         description:
-          'The version type of this release. Must be either "feature" or "bug", representing a new feature release or a bug fix release, respectively,'
+          'The type of release; either a new feature (minor version) or bug fix (patch version)'
         required: true
+        type: choice
+        options: [feature, bug]
 
 jobs:
   release:
-    # Validate the input type before running
-    if: ${{ github.event.inputs.type == 'feature' || github.event.inputs.type == 'bug' }}
     name: Create a New Release
     runs-on: ubuntu-20.04
     steps:
@@ -30,12 +30,15 @@ jobs:
       - name: Update Npm
         run: npm install -g npm@latest
 
-      # Increment the version to the next minor release
-      - name: Set Version (Feature)
-        if: ${{ github.event.inputs.type  == 'feature' }}
+      - name: Set Up Git User Info
         run: |
           git config --global user.email "info@easydynamics.com"
           git config --global user.name "${{ github.actor }}"
+
+      # Increment the version to the next minor release
+      - name: Set Version (Feature)
+        if: ${{ github.event.inputs.release-type  == 'feature' }}
+        run: |
           npm version minor
           cd example
           npm version minor
@@ -43,10 +46,8 @@ jobs:
       # Increment the version to the next bug fix
       # Push the new version to the develop branch
       - name: Set Version (Bug Fix)
-        if: ${{ github.event.inputs.type == 'bug' }}
+        if: ${{ github.event.inputs.release-type == 'bug' }}
         run: |
-          git config --global user.email "info@easydynamics.com"
-          git config --global user.name "${{ github.actor }}"
           npm version patch
           cd example
           npm version patch
@@ -77,7 +78,7 @@ jobs:
       # Should only run when triggered for a feature - for bug fixes
       # this should be done manually since a merge might be needed.
       - name: Push Changes
-        if: ${{ github.event.inputs.type  == 'feature' }}
+        if: ${{ github.event.inputs.release-type  == 'feature' }}
         run: |
           git push origin develop:main
           git add package.json package-lock.json example/package.json example/package-lock.json
