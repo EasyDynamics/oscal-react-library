@@ -10,7 +10,12 @@ const useStyles = makeStyles((theme) => ({
   inheritance: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
+    position: "relative",
+    overflow: "auto",
   },
+  treeStyle: {
+    marginLeft: theme.spacing(2),
+  }
 }));
 
 function generateLabel(title, type) {
@@ -55,8 +60,8 @@ export default function OSCALProfileCatalogInheritance(props) {
   }
 
   return expandedIds.length > 0 ? (
-    <Grid item className={classes.inheritance}>
-      <Paper>
+    <Grid item>
+      <Paper className={classes.inheritance}>
         <List
           subheader={
             <ListSubheader
@@ -69,6 +74,7 @@ export default function OSCALProfileCatalogInheritance(props) {
           }
         >
           <TreeView
+            className={classes.treeStyle}
             defaultExpandIcon={
               <IconButton>
                 <ExpandMoreIcon />
