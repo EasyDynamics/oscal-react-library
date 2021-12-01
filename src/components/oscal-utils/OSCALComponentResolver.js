@@ -10,6 +10,10 @@ export default function OSCALComponentResolveSources(
   /* eslint no-param-reassign: "error" */
   componentDefinition.resolvedControls = [];
 
+  const inheritedProfilesAndCatalogs = {
+    inherited: [],
+  };
+
   let pendingProcesses = componentDefinition.components
     .map((component) => component["control-implementations"]?.length ?? 0)
     .reduce((acc, length) => acc + length, 0);
@@ -21,17 +25,17 @@ export default function OSCALComponentResolveSources(
         "set-parameters": [],
         alters: [],
       };
-
       OSCALResolveProfileOrCatalogUrlControls(
         componentDefinition.resolvedControls,
         controlImplementation.modifications,
         controlImplementation.source,
         parentUrl,
         componentDefinition["back-matter"], // not actually used for resolution in components
+        inheritedProfilesAndCatalogs.inherited,
         () => {
           pendingProcesses -= 1;
           if (!pendingProcesses) {
-            onSuccess();
+            onSuccess(inheritedProfilesAndCatalogs);
           }
         },
         () => {

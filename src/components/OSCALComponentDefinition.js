@@ -5,6 +5,7 @@ import OSCALComponentDefinitionControlImplementation from "./OSCALComponentDefin
 import OSCALComponentResolveSources from "./oscal-utils/OSCALComponentResolver";
 import OSCALComponentDefinitionComponent from "./OSCALComponentDefinitionComponent";
 import OSCALBackMatter from "./OSCALBackMatter";
+import OSCALProfileCatalogInheritance from "./OSCALProfileCatalogInheritance";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -17,14 +18,17 @@ const useStyles = makeStyles((theme) => ({
 export default function OSCALComponentDefinition(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] =
+    useState({});
   const classes = useStyles();
 
   useEffect(() => {
     OSCALComponentResolveSources(
       props.componentDefinition,
       props.parentUrl,
-      () => {
+      (profilesCatalogsTree) => {
         setIsLoaded(true);
+        setInheritedProfilesAndCatalogs(profilesCatalogsTree);
         props.onResolutionComplete();
       },
       (errorReturned) => {
@@ -34,7 +38,6 @@ export default function OSCALComponentDefinition(props) {
       }
     );
   }, []);
-
   // Throw error to OSCALLoader
   if (error) {
     return props.onError(error);
@@ -60,6 +63,9 @@ export default function OSCALComponentDefinition(props) {
   return (
     <div className={classes.paper}>
       <OSCALMetadata metadata={props.componentDefinition.metadata} />
+      <OSCALProfileCatalogInheritance
+        inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}
+      />
       {Object.entries(props.componentDefinition.components).map(
         ([key, component]) => (
           <OSCALComponentDefinitionComponent

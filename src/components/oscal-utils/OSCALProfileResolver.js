@@ -33,11 +33,13 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
   origItemUrl,
   parentUrl,
   backMatter,
+  inheritedProfilesAndCatalogs,
   onSuccess,
   onError,
   pendingProcesses // tracks state of recursive calls
 ) {
   let itemUrl = origItemUrl;
+
   // TODO - this should be improved for other use cases
   if (!origItemUrl.startsWith("http")) {
     itemUrl = `${parentUrl}/../${origItemUrl}`;
@@ -55,7 +57,11 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
     .then((res) => res.json())
     .then(
       (result) => {
+        const inheritedOSCALObject = {};
         if (result.catalog) {
+          inheritedOSCALObject.title = result.catalog.metadata.title;
+          inheritedOSCALObject.uuid = result.catalog.uuid;
+          inheritedOSCALObject.type = "catalog";
           // Dig through catalog controls and add to profile.controls
           result.catalog.groups.forEach((group) => {
             resolvedControls.push(...group.controls);
@@ -65,6 +71,10 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
           }
         } else if (result.profile) {
           // Iterate over each import and recursively call this method to get either another profile or catalog
+          inheritedOSCALObject.title = result.profile.metadata.title;
+          inheritedOSCALObject.uuid = result.profile.uuid;
+          inheritedOSCALObject.type = "profile";
+          inheritedOSCALObject.inherited = [];
 
           modifications["set-parameters"].push(
             ...result.profile.modify["set-parameters"]
@@ -82,12 +92,15 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
               importUrl,
               itemUrl,
               result.profile["back-matter"],
+              inheritedOSCALObject.inherited,
               onSuccess,
               onError,
               pendingProcesses
             );
           });
         }
+        inheritedProfilesAndCatalogs.push(inheritedOSCALObject);
+
         // We're done processing this itemUrl, remove it from pendingProcesses
         const processIndex = pendingProcesses.indexOf(itemUrl);
         if (processIndex > -1) {
@@ -106,7 +119,9 @@ export function OSCALResolveProfile(profile, parentUrl, onSuccess, onError) {
   if (!profile.imports) {
     return;
   }
-
+  const inheritedProfilesAndCatalogs = {
+    inherited: [],
+  };
   // profile does not have a resolvedControls field.
   // profile.resolvedControls needs to be declared & initialized here.
   /* eslint no-param-reassign: "error" */
@@ -116,20 +131,19 @@ export function OSCALResolveProfile(profile, parentUrl, onSuccess, onError) {
     alters: [],
   };
 
-  profile.imports
-    .map((imp) =>
-      getUriFromBackMatterByHref(profile["back-matter"], imp.href, parentUrl)
-    )
-    .forEach((importUrl) => {
-      OSCALResolveProfileOrCatalogUrlControls(
-        profile.resolvedControls,
-        profile.modifications,
-        importUrl,
-        parentUrl,
-        profile["back-matter"],
-        onSuccess,
-        onError,
-        []
-      );
-    });
+  profile.imports.forEach((imp) => {
+    OSCALResolveProfileOrCatalogUrlControls(
+      profile.resolvedControls,
+      profile.modifications,
+      getUriFromBackMatterByHref(profile["back-matter"], imp.href, parentUrl),
+      parentUrl,
+      profile["back-matter"],
+      inheritedProfilesAndCatalogs.inherited,
+      () => {
+        onSuccess(inheritedProfilesAndCatalogs);
+      },
+      onError,
+      []
+    );
+  });
 }
