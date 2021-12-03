@@ -53,7 +53,6 @@ jobs:
           npm version patch
           cd example
           npm version patch
-          git push origin develop
 
       # Output the new package version to environment variable
       - name: Get Package Version
