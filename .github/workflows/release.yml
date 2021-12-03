@@ -1,5 +1,7 @@
 name: Create a New Release
 on:
+  push:
+    branches: [EGRC-492-package]
   workflow_dispatch:
     inputs:
       release-type:
@@ -46,7 +48,7 @@ jobs:
       # Increment the version to the next bug fix
       # Push the new version to the develop branch
       - name: Set Version (Bug Fix)
-        if: ${{ github.event.inputs.release-type == 'bug' }}
+        #if: ${{ github.event.inputs.release-type == 'bug' }}
         run: |
           npm version patch
           cd example
