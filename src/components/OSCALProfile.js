@@ -112,7 +112,7 @@ export default function OSCALProfile(props) {
   // Display Metadata and BackMatter components at bottom of Profile
   return (
     <div className={classes.paper}>
-      <OSCALMetadata metadata={props.profile.metadata} />
+      <OSCALMetadata metadata={props.profile.metadata} edit={false} />
       <OSCALProfileCatalogInheritance
         inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}
       />

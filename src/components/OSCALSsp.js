@@ -73,7 +73,7 @@ export default function OSCALSsp(props) {
 
   return (
     <div className={classes.paper}>
-      <OSCALMetadata metadata={ssp.metadata} />
+      <OSCALMetadata metadata={ssp.metadata} edit={true} />
       <OSCALProfileCatalogInheritance
         inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}
       />

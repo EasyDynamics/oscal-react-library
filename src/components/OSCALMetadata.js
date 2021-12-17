@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
@@ -8,8 +8,12 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
+import CloseIcon from "@material-ui/icons/Close";
+import EditIcon from "@material-ui/icons/Edit";
 import GroupIcon from "@material-ui/icons/Group";
+import SaveIcon from "@material-ui/icons/Save";
 import { makeStyles } from "@material-ui/core/styles";
+import { IconButton, TextField } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   OSCALMetadataAdditional: {
@@ -35,6 +39,8 @@ const formatDate = (isoDate) => new Date(isoDate).toLocaleString();
 
 export default function OSCALControlGuidance(props) {
   const classes = useStyles();
+  const [edit, setEdit] = useState(false);
+
   if (!props.metadata) {
     return null;
   }
@@ -55,7 +61,7 @@ export default function OSCALControlGuidance(props) {
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12}>
+      <Grid item direction="row" xs={12}>
         <Typography variant="h6">{props.metadata.title}</Typography>
       </Grid>
       <Grid item xs={8}>
@@ -90,6 +96,31 @@ export default function OSCALControlGuidance(props) {
       <Grid item xs={4}>
         <Paper className={classes.OSCALMetadataAdditional}>
           <Grid container spacing={1}>
+            {
+              props.edit ?
+                <Grid container justify="flex-end" xs={12}>
+                  {
+                    edit ?
+                    (
+                      <>
+                        <IconButton onClick={() => { setEdit(!edit); } }>
+                            <CloseIcon fontSize="small"></CloseIcon>
+                        </IconButton>
+                        <IconButton>
+                            <SaveIcon fontSize="small"></SaveIcon>
+                        </IconButton>
+                      </>
+                    ) :
+                    (
+                      <IconButton onClick={()=>{setEdit(!edit)}}>
+                        <EditIcon fontSize="small"></EditIcon>
+                      </IconButton>
+                    )
+                  }
+                  
+                </Grid> :
+                null
+            }
             <Grid item xs={4}>
               <Typography
                 variant="body2"
@@ -99,7 +130,13 @@ export default function OSCALControlGuidance(props) {
               </Typography>
             </Grid>
             <Grid item xs={8}>
-              <Typography variant="body2">{props.metadata.version}</Typography>
+              {
+                edit ?
+                // label="Size" id="outlined-size-small" defaultValue="Small" size="small"
+                
+                <Typography variant="body2"><TextField variant="outlined" size="small" label={props.metadata.version}/></Typography> :
+                <Typography variant="body2">{props.metadata.version}</Typography>
+              }
             </Grid>
             <Grid item xs={4}>
               <Typography
