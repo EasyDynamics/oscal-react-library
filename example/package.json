@@ -23,11 +23,11 @@
     "react-dom": "file:../node_modules/react-dom",
     "react-router-dom": "file:../node_modules/react-router-dom",
     "react-scripts": "file:../node_modules/react-scripts",
-    "history": "file:../node_modules/history"
+    "history": "file:../node_modules/history",
+    "web-vitals": "^2.1.0"
   },
   "devDependencies": {
-    "@babel/plugin-syntax-object-rest-spread": "^7.8.3",
-    "web-vitals": "^2.1.0"
+    "@babel/plugin-syntax-object-rest-spread": "^7.8.3"
   },
   "eslintConfig": {
     "extends": "react-app"
