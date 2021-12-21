@@ -37,9 +37,49 @@ const useStyles = makeStyles((theme) => ({
 // Returns a string with a locality-sensitive representation of this date
 const formatDate = (isoDate) => new Date(isoDate).toLocaleString();
 
+function displayEditableTextField(editing, textFieldValue) {
+  return editing ? (
+    <Typography variant="body1">
+      <TextField
+        defaultValue={textFieldValue}
+        variant="outlined"
+        size="medium"
+      />
+    </Typography>
+  ) : (
+    <Typography variant="body1">{textFieldValue}</Typography>
+  );
+}
+
+function displayEditIcons(edit, setEdit) {
+  return edit ? (
+    <>
+      <IconButton
+        onClick={() => {
+          setEdit(!edit);
+        }}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+      <IconButton>
+        <SaveIcon fontSize="small" />
+      </IconButton>
+    </>
+  ) : (
+    <IconButton
+      onClick={() => {
+        setEdit(!edit);
+      }}
+    >
+      <EditIcon fontSize="small" />
+    </IconButton>
+  );
+}
+
 export default function OSCALControlGuidance(props) {
   const classes = useStyles();
-  const [edit, setEdit] = useState(false);
+  const [versionEdit, setVersionEdit] = useState(false);
+  const [titleEdit, setTitleEdit] = useState(false);
 
   if (!props.metadata) {
     return null;
@@ -61,8 +101,13 @@ export default function OSCALControlGuidance(props) {
 
   return (
     <Grid container spacing={3}>
-      <Grid item direction="row" xs={12}>
-        <Typography variant="h6">{props.metadata.title}</Typography>
+      <Grid container direction="row" alignItems="center">
+        <Grid item spacing={1}>
+          {displayEditableTextField(titleEdit, props.metadata.title)}
+        </Grid>
+        <Grid item spacing={1}>
+          {props.edit ? displayEditIcons(titleEdit, setTitleEdit) : null}
+        </Grid>
       </Grid>
       <Grid item xs={8}>
         <Paper className={classes.OSCALMetadataParties}>
@@ -96,31 +141,11 @@ export default function OSCALControlGuidance(props) {
       <Grid item xs={4}>
         <Paper className={classes.OSCALMetadataAdditional}>
           <Grid container spacing={1}>
-            {
-              props.edit ?
-                <Grid container justify="flex-end" xs={12}>
-                  {
-                    edit ?
-                    (
-                      <>
-                        <IconButton onClick={() => { setEdit(!edit); } }>
-                            <CloseIcon fontSize="small"></CloseIcon>
-                        </IconButton>
-                        <IconButton>
-                            <SaveIcon fontSize="small"></SaveIcon>
-                        </IconButton>
-                      </>
-                    ) :
-                    (
-                      <IconButton onClick={()=>{setEdit(!edit)}}>
-                        <EditIcon fontSize="small"></EditIcon>
-                      </IconButton>
-                    )
-                  }
-                  
-                </Grid> :
-                null
-            }
+            {props.edit ? (
+              <Grid container justify="flex-end" xs={12}>
+                {displayEditIcons(versionEdit, setVersionEdit)}
+              </Grid>
+            ) : null}
             <Grid item xs={4}>
               <Typography
                 variant="body2"
@@ -130,13 +155,7 @@ export default function OSCALControlGuidance(props) {
               </Typography>
             </Grid>
             <Grid item xs={8}>
-              {
-                edit ?
-                // label="Size" id="outlined-size-small" defaultValue="Small" size="small"
-                
-                <Typography variant="body2"><TextField variant="outlined" size="small" label={props.metadata.version}/></Typography> :
-                <Typography variant="body2">{props.metadata.version}</Typography>
-              }
+              {displayEditableTextField(versionEdit, props.metadata.version)}
             </Grid>
             <Grid item xs={4}>
               <Typography
