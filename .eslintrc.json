@@ -27,7 +27,8 @@
       "react/prop-types": [0],
       "react/destructuring-assignment": [0],
       "react/jsx-props-no-spreading": "off",
-      "prettier/prettier": "error"
+      "prettier/prettier": "error",
+      "import/no-extraneous-dependencies": ["error", {"packageDir": ["./", "./example"]}]
     },
     "overrides": [
         {
