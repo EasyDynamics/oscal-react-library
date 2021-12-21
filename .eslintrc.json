@@ -6,6 +6,7 @@
     "parser": "babel-eslint",
     "extends": [
         "plugin:react/recommended",
+        "plugin:json/recommended",
         "airbnb",
         "prettier"
     ],
@@ -18,7 +19,8 @@
     },
     "plugins": [
         "react",
-        "prettier"
+        "prettier",
+        "json"
     ],
     "rules": {
       "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
