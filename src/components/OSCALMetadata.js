@@ -39,50 +39,59 @@ const formatDate = (isoDate) => new Date(isoDate).toLocaleString();
 
 function saveModifiedMetadata(modifiedField, modifiableMetadata, newValue) {
   /* We must specify a method of PATCH so the backend service knows we are just
-  *  updating a value.
-  *
-  *  We also provide a body so we can specify what needs to be modified.
-  */
-  fetch (window.location.href, {
-    method: 'PATCH',
+   * updating a value.
+   *
+   * We also provide a body so we can specify what needs to be modified.
+   */
+  fetch(window.location.href, {
+    method: "PATCH",
     body: JSON.stringify({
-      "metadata" : {
-        modifiedField: newValue
-      }
-    })
+      metadata: {
+        modifiedField: newValue,
+      },
+    }),
   })
-  .then((res) => res.json())
-  .then(
-    (result) => {
-      /* If we reach this point, then the OSCAL file has successfully been modified
-      *  and we want those changes to be visible to the user.
-      */
-      modifiableMetadata['last-modified']['update'](result['last-modified']);
-      modifiableMetadata[modifiedField]['update'](newValue);
-    },
-    (error) => {
-      alert(`Could not update the ${modifiedField} metadata field with value: ${newValue}.`);
-    }
-  );
+    .then((res) => res.json())
+    .then(
+      (result) => {
+        /* If we reach this point, then the OSCAL file has successfully been modified
+         * and we want those changes to be visible to the user.
+         */
+        modifiableMetadata["last-modified"][1](
+          formatDate(result["last-modified"])
+        );
+        modifiableMetadata[modifiedField].value[1](newValue);
+      },
+      () => {
+        alert(
+          `Could not update the ${modifiedField} metadata field with value: ${newValue}.`
+        );
+      }
+    );
 }
 
-function displayEditableTextField(editing, textFieldValue, ref) {
-  return editing ? (
+function displayEditableTextField(modifiedField, modifiableMetadata) {
+  return modifiableMetadata[modifiedField].edit[0] ? (
     <Typography variant="body1">
       <TextField
         size="medium"
         variant="outlined"
-        inputRef={ref}
+        inputRef={modifiableMetadata[modifiedField].ref}
       >
-        {textFieldValue}
+        {modifiableMetadata[modifiedField].value[0]}
       </TextField>
     </Typography>
   ) : (
-    <Typography variant="body1">{textFieldValue}</Typography>
+    <Typography variant="body1">
+      {modifiableMetadata[modifiedField].value[0]}
+    </Typography>
   );
 }
 
-function displayEditIcons(edit, setEdit, modifiedField, modifiableMetadata) {
+function displayEditIcons(modifiedField, modifiableMetadata) {
+  const edit = modifiableMetadata[modifiedField].edit[0];
+  const setEdit = modifiableMetadata[modifiedField].edit[1];
+
   return edit ? (
     <>
       <IconButton
@@ -94,7 +103,7 @@ function displayEditIcons(edit, setEdit, modifiedField, modifiableMetadata) {
       </IconButton>
       <IconButton
         onClick={() => {
-          const newValue = modifiableMetadata[modifiedField]['ref'].current.value;
+          const newValue = modifiableMetadata[modifiedField].ref.current.value;
           saveModifiedMetadata(modifiedField, modifiableMetadata, newValue);
           setEdit(!edit);
         }}
@@ -115,24 +124,33 @@ function displayEditIcons(edit, setEdit, modifiedField, modifiableMetadata) {
 
 export default function OSCALControlGuidance(props) {
   const classes = useStyles();
-  const [lastModified, setLastModified] = useState(formatDate(props.metadata["last-modified"]));
-  const [version, setVersion] = useState(props.metadata.version);
-  const [title, setTitle] = useState(props.metadata.title);
-  const [versionEdit, setVersionEdit] = useState(false);
-  const [titleEdit, setTitleEdit] = useState(false);
 
+  /* A JSON formatted variable so only one variable needs to be passed around between
+   *  functions that deals with the modification of metadata fields.
+   *
+   *  For each top-level field, we have a value sub-field which is an array of two
+   *  elements, where the first element of the array is the actual value of the
+   *  top-level field and the second element of the array is a function that
+   *  modifies the value of the top-level field.
+   *
+   *  We have an "edit" sub-field for the top-level "version" and "title" fields. This
+   *  represents whether we are currently editing either of those fields.
+   *
+   *  We have the last modified top-level field because when other metadata fields are
+   *  updated, we want to update the last modified field.
+   */
   const modifiableMetadata = {
-    "last-modified": {
-      "update": setLastModified
+    "last-modified": useState(formatDate(props.metadata["last-modified"])),
+    version: {
+      ref: useRef("Version TextField Reference"),
+      edit: useState(false),
+      value: useState(props.metadata.version),
     },
-    "version": {
-      "ref": useRef('Version TextField Reference'),
-      "update": setVersion,
+    title: {
+      ref: useRef("Title TextField Reference"),
+      edit: useState(false),
+      value: useState(props.metadata.title),
     },
-    "title": {
-      "ref": useRef('Title TextFieldReference'),
-      "update": setTitle,
-    }
   };
 
   if (!props.metadata) {
@@ -157,10 +175,10 @@ export default function OSCALControlGuidance(props) {
     <Grid container spacing={3}>
       <Grid container direction="row" alignItems="center">
         <Grid item spacing={1}>
-          {displayEditableTextField(titleEdit, title, modifiableMetadata['title']['ref'])}
+          {displayEditableTextField("title", modifiableMetadata)}
         </Grid>
         <Grid item spacing={1}>
-          {props.edit ? displayEditIcons(titleEdit, setTitleEdit, "title", modifiableMetadata) : null}
+          {props.edit ? displayEditIcons("title", modifiableMetadata) : null}
         </Grid>
       </Grid>
       <Grid item xs={8}>
@@ -197,7 +215,7 @@ export default function OSCALControlGuidance(props) {
           <Grid container spacing={1}>
             {props.edit ? (
               <Grid container justify="flex-end" xs={12}>
-                {displayEditIcons(versionEdit, setVersionEdit, "version", modifiableMetadata)}
+                {displayEditIcons("version", modifiableMetadata)}
               </Grid>
             ) : null}
             <Grid item xs={4}>
@@ -209,7 +227,7 @@ export default function OSCALControlGuidance(props) {
               </Typography>
             </Grid>
             <Grid item xs={8}>
-              {displayEditableTextField(versionEdit, version, modifiableMetadata['version']['ref'])}
+              {displayEditableTextField("version", modifiableMetadata)}
             </Grid>
             <Grid item xs={4}>
               <Typography
@@ -221,7 +239,7 @@ export default function OSCALControlGuidance(props) {
             </Grid>
             <Grid item xs={8}>
               <Typography variant="body2">
-                {lastModified}
+                {modifiableMetadata["last-modified"][0]}
               </Typography>
             </Grid>
             <Grid item xs={4}>
