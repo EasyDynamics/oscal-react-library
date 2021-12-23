@@ -38,12 +38,20 @@ const useStyles = makeStyles((theme) => ({
 const formatDate = (isoDate) => new Date(isoDate).toLocaleString();
 
 function saveModifiedMetadata(modifiedField, modifiableMetadata, newValue) {
+  /* Since the browser url will be of the form
+   * http://localhost:8080/system-security-plans?url=http://localhost:8080/oscal/v1/ssps/{uuid}
+   * and we just want the URL defined in the url parameter of the browser url, we must find the
+   * location of the ? and increment that value by 5 to get the start of the desired url.
+   */
+  const startOfUrl = window.location.href.indexOf("?") + 5;
+  const url = window.location.href.substring(startOfUrl);
+
   /* We must specify a method of PATCH so the backend service knows we are just
    * updating a value.
    *
    * We also provide a body so we can specify what needs to be modified.
    */
-  fetch(window.location.href, {
+  fetch(url, {
     method: "PATCH",
     body: JSON.stringify({
       metadata: {
@@ -72,7 +80,7 @@ function saveModifiedMetadata(modifiedField, modifiableMetadata, newValue) {
 
 function displayEditableTextField(modifiedField, modifiableMetadata) {
   return modifiableMetadata[modifiedField].edit[0] ? (
-    <Typography variant="body1">
+    <Typography variant={modifiedField === "title" ? "h6" : "body2"}>
       <TextField
         size="medium"
         variant="outlined"
@@ -82,7 +90,7 @@ function displayEditableTextField(modifiedField, modifiableMetadata) {
       </TextField>
     </Typography>
   ) : (
-    <Typography variant="body1">
+    <Typography variant={modifiedField === "title" ? "h6" : "body2"}>
       {modifiableMetadata[modifiedField].value[0]}
     </Typography>
   );
@@ -141,6 +149,7 @@ export default function OSCALControlGuidance(props) {
    */
   const modifiableMetadata = {
     "last-modified": useState(formatDate(props.metadata["last-modified"])),
+    uuid: props.metadata.uuid,
     version: {
       ref: useRef("Version TextField Reference"),
       edit: useState(false),
@@ -174,10 +183,10 @@ export default function OSCALControlGuidance(props) {
   return (
     <Grid container spacing={3}>
       <Grid container direction="row" alignItems="center">
-        <Grid item spacing={1}>
+        <Grid item>
           {displayEditableTextField("title", modifiableMetadata)}
         </Grid>
-        <Grid item spacing={1}>
+        <Grid item>
           {props.edit ? displayEditIcons("title", modifiableMetadata) : null}
         </Grid>
       </Grid>
@@ -214,7 +223,7 @@ export default function OSCALControlGuidance(props) {
         <Paper className={classes.OSCALMetadataAdditional}>
           <Grid container spacing={1}>
             {props.edit ? (
-              <Grid container justify="flex-end" xs={12}>
+              <Grid container justify="flex-end">
                 {displayEditIcons("version", modifiableMetadata)}
               </Grid>
             ) : null}
