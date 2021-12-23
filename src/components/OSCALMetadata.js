@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
@@ -37,21 +37,52 @@ const useStyles = makeStyles((theme) => ({
 // Returns a string with a locality-sensitive representation of this date
 const formatDate = (isoDate) => new Date(isoDate).toLocaleString();
 
-function displayEditableTextField(editing, textFieldValue) {
+function saveModifiedMetadata(modifiedField, modifiableMetadata, newValue) {
+  /* We must specify a method of PATCH so the backend service knows we are just
+  *  updating a value.
+  *
+  *  We also provide a body so we can specify what needs to be modified.
+  */
+  fetch (window.location.href, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      "metadata" : {
+        modifiedField: newValue
+      }
+    })
+  })
+  .then((res) => res.json())
+  .then(
+    (result) => {
+      /* If we reach this point, then the OSCAL file has successfully been modified
+      *  and we want those changes to be visible to the user.
+      */
+      modifiableMetadata['last-modified']['update'](result['last-modified']);
+      modifiableMetadata[modifiedField]['update'](newValue);
+    },
+    (error) => {
+      alert(`Could not update the ${modifiedField} metadata field with value: ${newValue}.`);
+    }
+  );
+}
+
+function displayEditableTextField(editing, textFieldValue, ref) {
   return editing ? (
     <Typography variant="body1">
       <TextField
-        defaultValue={textFieldValue}
-        variant="outlined"
         size="medium"
-      />
+        variant="outlined"
+        inputRef={ref}
+      >
+        {textFieldValue}
+      </TextField>
     </Typography>
   ) : (
     <Typography variant="body1">{textFieldValue}</Typography>
   );
 }
 
-function displayEditIcons(edit, setEdit) {
+function displayEditIcons(edit, setEdit, modifiedField, modifiableMetadata) {
   return edit ? (
     <>
       <IconButton
@@ -61,7 +92,13 @@ function displayEditIcons(edit, setEdit) {
       >
         <CloseIcon fontSize="small" />
       </IconButton>
-      <IconButton>
+      <IconButton
+        onClick={() => {
+          const newValue = modifiableMetadata[modifiedField]['ref'].current.value;
+          saveModifiedMetadata(modifiedField, modifiableMetadata, newValue);
+          setEdit(!edit);
+        }}
+      >
         <SaveIcon fontSize="small" />
       </IconButton>
     </>
@@ -78,8 +115,25 @@ function displayEditIcons(edit, setEdit) {
 
 export default function OSCALControlGuidance(props) {
   const classes = useStyles();
+  const [lastModified, setLastModified] = useState(formatDate(props.metadata["last-modified"]));
+  const [version, setVersion] = useState(props.metadata.version);
+  const [title, setTitle] = useState(props.metadata.title);
   const [versionEdit, setVersionEdit] = useState(false);
   const [titleEdit, setTitleEdit] = useState(false);
+
+  const modifiableMetadata = {
+    "last-modified": {
+      "update": setLastModified
+    },
+    "version": {
+      "ref": useRef('Version TextField Reference'),
+      "update": setVersion,
+    },
+    "title": {
+      "ref": useRef('Title TextFieldReference'),
+      "update": setTitle,
+    }
+  };
 
   if (!props.metadata) {
     return null;
@@ -103,10 +157,10 @@ export default function OSCALControlGuidance(props) {
     <Grid container spacing={3}>
       <Grid container direction="row" alignItems="center">
         <Grid item spacing={1}>
-          {displayEditableTextField(titleEdit, props.metadata.title)}
+          {displayEditableTextField(titleEdit, title, modifiableMetadata['title']['ref'])}
         </Grid>
         <Grid item spacing={1}>
-          {props.edit ? displayEditIcons(titleEdit, setTitleEdit) : null}
+          {props.edit ? displayEditIcons(titleEdit, setTitleEdit, "title", modifiableMetadata) : null}
         </Grid>
       </Grid>
       <Grid item xs={8}>
@@ -143,7 +197,7 @@ export default function OSCALControlGuidance(props) {
           <Grid container spacing={1}>
             {props.edit ? (
               <Grid container justify="flex-end" xs={12}>
-                {displayEditIcons(versionEdit, setVersionEdit)}
+                {displayEditIcons(versionEdit, setVersionEdit, "version", modifiableMetadata)}
               </Grid>
             ) : null}
             <Grid item xs={4}>
@@ -155,7 +209,7 @@ export default function OSCALControlGuidance(props) {
               </Typography>
             </Grid>
             <Grid item xs={8}>
-              {displayEditableTextField(versionEdit, props.metadata.version)}
+              {displayEditableTextField(versionEdit, version, modifiableMetadata['version']['ref'])}
             </Grid>
             <Grid item xs={4}>
               <Typography
@@ -167,7 +221,7 @@ export default function OSCALControlGuidance(props) {
             </Grid>
             <Grid item xs={8}>
               <Typography variant="body2">
-                {formatDate(props.metadata["last-modified"])}
+                {lastModified}
               </Typography>
             </Grid>
             <Grid item xs={4}>
