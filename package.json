@@ -72,7 +72,7 @@
     "@babel/preset-react": "^7.14.5",
     "@storybook/addon-actions": "^6.3.3",
     "@storybook/addon-essentials": "^6.3.3",
-    "@storybook/addon-links": "^6.3.3",
+    "@storybook/addon-links": "^6.4.9",
     "@storybook/node-logger": "^6.3.3",
     "@storybook/preset-create-react-app": "^3.2.0",
     "@storybook/react": "^6.3.3",
