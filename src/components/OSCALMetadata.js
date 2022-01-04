@@ -8,12 +8,10 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
-import CloseIcon from "@material-ui/icons/Close";
-import EditIcon from "@material-ui/icons/Edit";
 import GroupIcon from "@material-ui/icons/Group";
-import SaveIcon from "@material-ui/icons/Save";
 import { makeStyles } from "@material-ui/core/styles";
-import { IconButton, TextField } from "@material-ui/core";
+import OSCALModificationIcons from "./OSCALModificationIcons";
+import OSCALEditableTextField from "./OSCALEditableTextField";
 
 const useStyles = makeStyles((theme) => ({
   OSCALMetadataAdditional: {
@@ -36,99 +34,6 @@ const useStyles = makeStyles((theme) => ({
 
 // Returns a string with a locality-sensitive representation of this date
 const formatDate = (isoDate) => new Date(isoDate).toLocaleString();
-
-function saveModifiedMetadata(modifiedField, modifiableMetadata, newValue) {
-  /* Since the browser url will be of the form
-   * http://localhost:8080/system-security-plans?url=http://localhost:8080/oscal/v1/ssps/{uuid}
-   * and we just want the URL defined in the url parameter of the browser url, we must find the
-   * location of the ? and increment that value by 5 to get the start of the desired url.
-   */
-  const startOfUrl = window.location.href.indexOf("?") + 5;
-  const url = window.location.href.substring(startOfUrl);
-
-  /* We must specify a method of PATCH so the backend service knows we are just
-   * updating a value.
-   *
-   * We also provide a body so we can specify what needs to be modified.
-   */
-  fetch(url, {
-    method: "PATCH",
-    body: JSON.stringify({
-      metadata: {
-        modifiedField: newValue,
-      },
-    }),
-  })
-    .then((res) => res.json())
-    .then(
-      (result) => {
-        /* If we reach this point, then the OSCAL file has successfully been modified
-         * and we want those changes to be visible to the user.
-         */
-        modifiableMetadata["last-modified"][1](
-          formatDate(result["last-modified"])
-        );
-        modifiableMetadata[modifiedField].value[1](newValue);
-      },
-      () => {
-        alert(
-          `Could not update the ${modifiedField} metadata field with value: ${newValue}.`
-        );
-      }
-    );
-}
-
-function displayEditableTextField(modifiedField, modifiableMetadata) {
-  return modifiableMetadata[modifiedField].edit[0] ? (
-    <Typography variant={modifiedField === "title" ? "h6" : "body2"}>
-      <TextField
-        size="medium"
-        variant="outlined"
-        inputRef={modifiableMetadata[modifiedField].ref}
-      >
-        {modifiableMetadata[modifiedField].value[0]}
-      </TextField>
-    </Typography>
-  ) : (
-    <Typography variant={modifiedField === "title" ? "h6" : "body2"}>
-      {modifiableMetadata[modifiedField].value[0]}
-    </Typography>
-  );
-}
-
-function displayEditIcons(modifiedField, modifiableMetadata) {
-  const edit = modifiableMetadata[modifiedField].edit[0];
-  const setEdit = modifiableMetadata[modifiedField].edit[1];
-
-  return edit ? (
-    <>
-      <IconButton
-        onClick={() => {
-          setEdit(!edit);
-        }}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-      <IconButton
-        onClick={() => {
-          const newValue = modifiableMetadata[modifiedField].ref.current.value;
-          saveModifiedMetadata(modifiedField, modifiableMetadata, newValue);
-          setEdit(!edit);
-        }}
-      >
-        <SaveIcon fontSize="small" />
-      </IconButton>
-    </>
-  ) : (
-    <IconButton
-      onClick={() => {
-        setEdit(!edit);
-      }}
-    >
-      <EditIcon fontSize="small" />
-    </IconButton>
-  );
-}
 
 export default function OSCALControlGuidance(props) {
   const classes = useStyles();
@@ -154,11 +59,13 @@ export default function OSCALControlGuidance(props) {
       ref: useRef("Version TextField Reference"),
       edit: useState(false),
       value: useState(props.metadata.version),
+      typographyVariant: "body2",
     },
     title: {
       ref: useRef("Title TextField Reference"),
       edit: useState(false),
       value: useState(props.metadata.title),
+      typographyVariant: "h6",
     },
   };
 
@@ -184,10 +91,13 @@ export default function OSCALControlGuidance(props) {
     <Grid container spacing={3}>
       <Grid container direction="row" alignItems="center">
         <Grid item>
-          {displayEditableTextField("title", modifiableMetadata)}
+          <OSCALEditableTextField editedField={modifiableMetadata.title} />
         </Grid>
         <Grid item>
-          {props.edit ? displayEditIcons("title", modifiableMetadata) : null}
+          <OSCALModificationIcons
+            canEdit={props.edit}
+            editedField={modifiableMetadata.title}
+          />
         </Grid>
       </Grid>
       <Grid item xs={8}>
@@ -222,11 +132,12 @@ export default function OSCALControlGuidance(props) {
       <Grid item xs={4}>
         <Paper className={classes.OSCALMetadataAdditional}>
           <Grid container spacing={1}>
-            {props.edit ? (
-              <Grid container justify="flex-end">
-                {displayEditIcons("version", modifiableMetadata)}
-              </Grid>
-            ) : null}
+            <Grid container justify="flex-end">
+              <OSCALModificationIcons
+                canEdit={props.edit}
+                editedField={modifiableMetadata.version}
+              />
+            </Grid>
             <Grid item xs={4}>
               <Typography
                 variant="body2"
@@ -236,7 +147,9 @@ export default function OSCALControlGuidance(props) {
               </Typography>
             </Grid>
             <Grid item xs={8}>
-              {displayEditableTextField("version", modifiableMetadata)}
+              <OSCALEditableTextField
+                editedField={modifiableMetadata.version}
+              />
             </Grid>
             <Grid item xs={4}>
               <Typography
