@@ -7,7 +7,9 @@ export default {
   component: OSCALProfileCatalogInheritance,
 };
 
-const Template = (args) => <OSCALProfileCatalogInheritance {...args} />;
+function Template(args) {
+  return <OSCALProfileCatalogInheritance {...args} />;
+}
 
 export const Default = Template.bind({});
 
