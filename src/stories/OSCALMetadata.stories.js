@@ -10,7 +10,9 @@ export default {
   component: OSCALMetadata,
 };
 
-const Template = (args) => <OSCALMetadata {...args} />;
+function Template(args) {
+  return <OSCALMetadata {...args} />;
+}
 
 export const Default = Template.bind({});
 

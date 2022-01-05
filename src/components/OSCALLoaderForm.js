@@ -16,40 +16,38 @@ export default function OSCALLoaderForm(props) {
   const classes = useStyles();
 
   return (
-    <>
-      <form
-        className={classes.catalogForm}
-        noValidate
-        autoComplete="off"
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
-      >
-        <Grid container spacing={3}>
-          <Grid item xs={10}>
-            <TextField
-              id="oscal-url"
-              label={`OSCAL ${props.oscalModelType} URL`}
-              defaultValue={props.oscalUrl}
-              helperText="(JSON Format)"
-              variant="outlined"
-              fullWidth
-              onChange={props.onUrlChange}
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Button
-              variant="contained"
-              color="primary"
-              endIcon={<ReplayIcon>send</ReplayIcon>}
-              onClick={props.onReloadClick}
-              disabled={!props.isResolutionComplete}
-            >
-              Reload
-            </Button>
-          </Grid>
+    <form
+      className={classes.catalogForm}
+      noValidate
+      autoComplete="off"
+      onSubmit={(e) => {
+        e.preventDefault();
+      }}
+    >
+      <Grid container spacing={3}>
+        <Grid item xs={10}>
+          <TextField
+            id="oscal-url"
+            label={`OSCAL ${props.oscalModelType} URL`}
+            defaultValue={props.oscalUrl}
+            helperText="(JSON Format)"
+            variant="outlined"
+            fullWidth
+            onChange={props.onUrlChange}
+          />
         </Grid>
-      </form>
-    </>
+        <Grid item xs={2}>
+          <Button
+            variant="contained"
+            color="primary"
+            endIcon={<ReplayIcon>send</ReplayIcon>}
+            onClick={props.onReloadClick}
+            disabled={!props.isResolutionComplete}
+          >
+            Reload
+          </Button>
+        </Grid>
+      </Grid>
+    </form>
   );
 }

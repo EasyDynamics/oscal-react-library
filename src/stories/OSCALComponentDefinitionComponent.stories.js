@@ -8,7 +8,9 @@ export default {
   component: OSCALComponentDefinitionComponent,
 };
 
-const Template = (args) => <OSCALComponentDefinitionComponent {...args} />;
+function Template(args) {
+  return <OSCALComponentDefinitionComponent {...args} />;
+}
 
 export const Default = Template.bind({});
 

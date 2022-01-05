@@ -12,13 +12,13 @@ export default {
   component: OSCALReplacedProseWithParameterLabel,
 };
 
-const TemplateParameterLabel = (args) => (
-  <OSCALReplacedProseWithParameterLabel {...args} />
-);
+function TemplateParameterLabel(args) {
+  return <OSCALReplacedProseWithParameterLabel {...args} />;
+}
 
-const TemplateByComponent = (args) => (
-  <OSCALReplacedProseWithByComponentParameterValue {...args} />
-);
+function TemplateByComponent(args) {
+  return <OSCALReplacedProseWithByComponentParameterValue {...args} />;
+}
 
 export const ParametersReplacedWithLabels = TemplateParameterLabel.bind({});
 
