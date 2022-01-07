@@ -3,19 +3,19 @@ import Typography from "@material-ui/core/Typography";
 import { TextField } from "@material-ui/core";
 
 export default function OSCALEditableTextField(props) {
-  return props.editedField.edit[0] ? (
-    <Typography variant={props.editedField.typographyVariant}>
+  return props.modifiableData.edit[0] ? (
+    <Typography variant={props.modifiableData.typographyVariant}>
       <TextField
         size={props.textFieldSize}
         variant={props.textFieldVariant}
-        inputRef={props.editedField.ref}
+        inputRef={props.modifiableData.ref}
       >
-        {props.editedField.value[0]}
+        {props.modifiableData.value}
       </TextField>
     </Typography>
   ) : (
-    <Typography variant={props.editedField.typographyVariant}>
-      {props.editedField.value[0]}
+    <Typography variant={props.modifiableData.typographyVariant}>
+      {props.modifiableData.value}
     </Typography>
   );
 }

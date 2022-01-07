@@ -5,18 +5,25 @@ import SaveIcon from "@material-ui/icons/Save";
 import { IconButton } from "@material-ui/core";
 
 function getIconButtons(props) {
-  return props.editedField.edit[0] ? (
+  return props.modifiableData.edit[0] ? (
     <>
       <IconButton
         onClick={() => {
-          props.editedField.edit[1](!props.editedField.edit[0]);
+          props.modifiableData.edit[1](!props.modifiableData.edit[0]);
         }}
       >
         <CloseIcon fontSize={props.iconFontSize} />
       </IconButton>
       <IconButton
         onClick={() => {
-          props.editedField.edit[1](!props.editedField.edit[0]);
+          props.modifiableData.edit[1](!props.modifiableData.edit[0]);
+          props.onSave(
+            props.data,
+            props.update,
+            props.editedField,
+            props.modifiableData.ref.current.value,
+            props.topLevelComponent
+          );
         }}
       >
         <SaveIcon fontSize={props.iconFontSize} />
@@ -25,7 +32,7 @@ function getIconButtons(props) {
   ) : (
     <IconButton
       onClick={() => {
-        props.editedField.edit[1](!props.editedField.edit[0]);
+        props.modifiableData.edit[1](!props.modifiableData.edit[0]);
       }}
     >
       <EditIcon fontSize={props.iconFontSize} />

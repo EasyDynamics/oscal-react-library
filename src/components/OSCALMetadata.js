@@ -54,17 +54,17 @@ export default function OSCALControlGuidance(props) {
    */
   const modifiableMetadata = {
     "last-modified": useState(formatDate(props.metadata["last-modified"])),
-    uuid: props.metadata.uuid,
+    uuid: props.uuid,
     version: {
       ref: useRef("Version TextField Reference"),
       edit: useState(false),
-      value: useState(props.metadata.version),
+      value: props.metadata.version,
       typographyVariant: "body2",
     },
     title: {
       ref: useRef("Title TextField Reference"),
       edit: useState(false),
-      value: useState(props.metadata.title),
+      value: props.metadata.title,
       typographyVariant: "h6",
     },
   };
@@ -91,12 +91,20 @@ export default function OSCALControlGuidance(props) {
     <Grid container spacing={3}>
       <Grid container direction="row" alignItems="center">
         <Grid item>
-          <OSCALEditableTextField editedField={modifiableMetadata.title} />
+          <OSCALEditableTextField modifiableData={modifiableMetadata.title} />
         </Grid>
         <Grid item>
           <OSCALModificationIcons
             canEdit={props.edit}
-            editedField={modifiableMetadata.title}
+            data={{
+              uuid: props.uuid,
+              metadata: props.metadata,
+            }}
+            editedField="title"
+            topLevelComponent="metadata"
+            modifiableData={modifiableMetadata.title}
+            onSave={props.onSave}
+            update={props.update}
           />
         </Grid>
       </Grid>
@@ -135,7 +143,15 @@ export default function OSCALControlGuidance(props) {
             <Grid container justify="flex-end">
               <OSCALModificationIcons
                 canEdit={props.edit}
-                editedField={modifiableMetadata.version}
+                data={{
+                  uuid: props.uuid,
+                  metadata: props.metadata,
+                }}
+                editedField="version"
+                modifiableData={modifiableMetadata.version}
+                onSave={props.onSave}
+                topLevelComponent="metadata"
+                update={props.update}
               />
             </Grid>
             <Grid item xs={4}>
@@ -148,7 +164,7 @@ export default function OSCALControlGuidance(props) {
             </Grid>
             <Grid item xs={8}>
               <OSCALEditableTextField
-                editedField={modifiableMetadata.version}
+                modifiableData={modifiableMetadata.version}
               />
             </Grid>
             <Grid item xs={4}>

@@ -16,19 +16,47 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function onSave(data, update, editedField, newValue, topLevelComponent) {
+  const portString =
+    window.location.port === "" ? "" : `:${window.location.port}`;
+  const url = `http://localhost${portString}/oscal/v1/ssps/${data.uuid}`;
+
+  const dataToSave = JSON.parse(JSON.stringify(data));
+  dataToSave[topLevelComponent][editedField] = newValue;
+
+  fetch(url, {
+    method: "PATCH",
+    body: JSON.stringify({
+      "system-security-plan": dataToSave,
+    }),
+  })
+    .then((res) => res.json())
+    .then(
+      (result) => {
+        update(result);
+      },
+      () => {
+        alert(
+          `Could not update the ${editedField} field with value: ${newValue}.`
+        );
+      }
+    );
+}
+
 export default function OSCALSsp(props) {
+  const classes = useStyles();
   const [error, setError] = useState(null);
   const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] =
     useState({});
   const [isLoaded, setIsLoaded] = useState(false);
-  const classes = useStyles();
   const unmounted = useRef(false);
 
   const ssp = props["system-security-plan"];
+  const [metadata, setMetadata] = useState(ssp.metadata);
 
   let sspParties;
-  if (ssp.metadata) {
-    sspParties = ssp.metadata.parties;
+  if (metadata) {
+    sspParties = metadata.parties;
   }
 
   useEffect(() => {
@@ -73,7 +101,13 @@ export default function OSCALSsp(props) {
 
   return (
     <div className={classes.paper}>
-      <OSCALMetadata metadata={ssp.metadata} edit />
+      <OSCALMetadata
+        metadata={metadata}
+        edit
+        onSave={onSave}
+        update={setMetadata}
+        uuid={ssp.uuid}
+      />
       <OSCALProfileCatalogInheritance
         inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}
       />
