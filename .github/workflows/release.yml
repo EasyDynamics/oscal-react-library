@@ -64,7 +64,7 @@ jobs:
           cd example
           npm ci
           npm run build
-          zip viewer.zip build/*
+          zip -r viewer.zip ./build/
 
       - name: Create a GitHub Release
         uses: softprops/action-gh-release@v1
