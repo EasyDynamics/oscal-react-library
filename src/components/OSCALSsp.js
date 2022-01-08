@@ -16,13 +16,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function onSave(data, update, editedField, newValue, topLevelComponent) {
+function updateData(data, editedField, newValue) {
+  if (editedField.length === 1) {
+    const editData = data;
+    editData[editedField] = newValue;
+    return;
+  }
+
+  updateData(data[editedField.shift()], editedField, newValue);
+}
+
+/**
+ *
+ * @param data data that will be passed into the body of the PATCH request, doesn't initially contain the updates
+ * @param update function that will update a state, forcing a re-rendering if the PATCH request is successful
+ * @param editedField path to the field that is being updated
+ * @param newValue updated value for the edited field
+ */
+function onSave(data, update, editedField, newValue) {
   const portString =
     window.location.port === "" ? "" : `:${window.location.port}`;
   const url = `http://localhost${portString}/oscal/v1/ssps/${data.uuid}`;
 
   const dataToSave = JSON.parse(JSON.stringify(data));
-  dataToSave[topLevelComponent][editedField] = newValue;
+  updateData(dataToSave, editedField, newValue);
 
   fetch(url, {
     method: "PATCH",
@@ -104,6 +121,7 @@ export default function OSCALSsp(props) {
       <OSCALMetadata
         metadata={metadata}
         edit
+        editedField={["metadata"]}
         onSave={onSave}
         update={setMetadata}
         uuid={ssp.uuid}

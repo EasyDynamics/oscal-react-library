@@ -21,8 +21,7 @@ function getIconButtons(props) {
             props.data,
             props.update,
             props.editedField,
-            props.modifiableData.ref.current.value,
-            props.topLevelComponent
+            props.modifiableData.ref.current.value
           );
         }}
       >

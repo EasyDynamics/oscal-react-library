@@ -65,6 +65,7 @@ export default function OSCALComponentDefinition(props) {
       <OSCALMetadata
         metadata={props.componentDefinition.metadata}
         edit={false}
+        editedField={["metadata"]}
       />
       <OSCALProfileCatalogInheritance
         inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}

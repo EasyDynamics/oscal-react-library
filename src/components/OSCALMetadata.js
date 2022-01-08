@@ -100,8 +100,7 @@ export default function OSCALControlGuidance(props) {
               uuid: props.uuid,
               metadata: props.metadata,
             }}
-            editedField="title"
-            topLevelComponent="metadata"
+            editedField={props.editedField.concat(["title"])}
             modifiableData={modifiableMetadata.title}
             onSave={props.onSave}
             update={props.update}
@@ -147,10 +146,9 @@ export default function OSCALControlGuidance(props) {
                   uuid: props.uuid,
                   metadata: props.metadata,
                 }}
-                editedField="version"
+                editedField={props.editedField.concat(["version"])}
                 modifiableData={modifiableMetadata.version}
                 onSave={props.onSave}
-                topLevelComponent="metadata"
                 update={props.update}
               />
             </Grid>
