@@ -31,3 +31,19 @@ export const exampleMetadataWithPartiesAndRoles = {
     },
   ],
 };
+
+export const testModifiableMetadata = {
+  "last-modified": ["01-01-2022", () => {}],
+  version: {
+    ref: "TextField reference metadata version",
+    edit: [false, () => {}],
+    value: version,
+    typographyVariant: "body2",
+  },
+  title: {
+    ref: "TextField reference metadata title",
+    edit: [false, () => {}],
+    value: title,
+    typographyVariant: "h6",
+  },
+};

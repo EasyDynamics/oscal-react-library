@@ -1,11 +1,15 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import { TextField } from "@material-ui/core";
+import { getElementLabel } from "./OSCALModificationIcons";
 
 export default function OSCALEditableTextField(props) {
   return props.modifiableData.edit[0] ? (
     <Typography variant={props.modifiableData.typographyVariant}>
       <TextField
+        inputProps={{
+          "data-testid": `textField-${getElementLabel(props.editedField)}`,
+        }}
         size={props.textFieldSize}
         variant={props.textFieldVariant}
         inputRef={props.modifiableData.ref}

@@ -4,10 +4,15 @@ import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
 import { IconButton } from "@material-ui/core";
 
+export function getElementLabel(editedField) {
+  return editedField.toString().replace(/,/g, "-");
+}
+
 function getIconButtons(props) {
   return props.modifiableData.edit[0] ? (
     <>
       <IconButton
+        aria-label={`cancel-${getElementLabel(props.editedField)}`}
         onClick={() => {
           props.modifiableData.edit[1](!props.modifiableData.edit[0]);
         }}
@@ -15,6 +20,7 @@ function getIconButtons(props) {
         <CloseIcon fontSize={props.iconFontSize} />
       </IconButton>
       <IconButton
+        aria-label={`save-${getElementLabel(props.editedField)}`}
         onClick={() => {
           props.modifiableData.edit[1](!props.modifiableData.edit[0]);
           props.onSave(
@@ -30,6 +36,7 @@ function getIconButtons(props) {
     </>
   ) : (
     <IconButton
+      aria-label={`edit-${getElementLabel(props.editedField)}`}
       onClick={() => {
         props.modifiableData.edit[1](!props.modifiableData.edit[0]);
       }}

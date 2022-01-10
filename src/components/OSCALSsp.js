@@ -70,8 +70,8 @@ export default function OSCALSsp(props) {
   const patchData = {
     "system-security-plan": {
       uuid: ssp.uuid,
-    }
-  }
+    },
+  };
 
   let sspParties;
   if (ssp.metadata) {
@@ -123,7 +123,7 @@ export default function OSCALSsp(props) {
       <OSCALMetadata
         metadata={ssp.metadata}
         edit
-        editedField={["system-security-plan","metadata"]}
+        editedField={["system-security-plan", "metadata"]}
         onSave={onSave}
         patchData={patchData}
         update={setSsp}
