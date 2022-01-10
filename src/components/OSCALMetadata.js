@@ -54,7 +54,6 @@ export default function OSCALControlGuidance(props) {
    */
   const modifiableMetadata = {
     "last-modified": useState(formatDate(props.metadata["last-modified"])),
-    uuid: props.uuid,
     version: {
       ref: useRef("Version TextField Reference"),
       edit: useState(false),
@@ -71,6 +70,16 @@ export default function OSCALControlGuidance(props) {
 
   if (!props.metadata) {
     return null;
+  }
+
+  let patchData;
+
+  if (props.edit) {
+    patchData = props.patchData;
+    patchData[props.editedField[0]].metadata = {
+      version: props.metadata.version,
+      title: props.metadata.title,
+    }
   }
 
   const getRoleLabel = (roleId) =>
@@ -96,11 +105,8 @@ export default function OSCALControlGuidance(props) {
         <Grid item>
           <OSCALModificationIcons
             canEdit={props.edit}
-            data={{
-              uuid: props.uuid,
-              metadata: props.metadata,
-            }}
-            editedField={props.editedField.concat(["title"])}
+            data={patchData}
+            editedField={props.edit? props.editedField.concat(["title"]) : null}
             modifiableData={modifiableMetadata.title}
             onSave={props.onSave}
             update={props.update}
@@ -142,11 +148,8 @@ export default function OSCALControlGuidance(props) {
             <Grid container justify="flex-end">
               <OSCALModificationIcons
                 canEdit={props.edit}
-                data={{
-                  uuid: props.uuid,
-                  metadata: props.metadata,
-                }}
-                editedField={props.editedField.concat(["version"])}
+                data={patchData}
+                editedField={props.edit ? props.editedField.concat(["version"]) : null}
                 modifiableData={modifiableMetadata.version}
                 onSave={props.onSave}
                 update={props.update}
