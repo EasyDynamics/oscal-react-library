@@ -10,7 +10,9 @@ export default {
   component: OSCALEditableTextField,
 };
 
-const Template = (args) => <OSCALEditableTextField {...args} />;
+function Template(args) {
+  return <OSCALEditableTextField {...args} />;
+}
 
 export const Default = Template.bind({});
 

@@ -6,7 +6,9 @@ export default {
   component: OSCALModificationIcons,
 };
 
-const Template = (args) => <OSCALModificationIcons {...args} />;
+function Template(args) {
+  return <OSCALModificationIcons {...args} />;
+}
 
 export const Default = Template.bind({});
 
