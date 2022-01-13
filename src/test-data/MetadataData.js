@@ -47,3 +47,15 @@ export const testModifiableMetadata = {
     typographyVariant: "h6",
   },
 };
+
+export const textFieldEditModeMetadata = {
+  title: {
+    ref: {
+      current: "TextField reference metadata title",
+      note: "Normally, would do React.useRef(value) for the ref property, this is just a placeholder.",
+    },
+    edit: [true, () => {}],
+    value: title,
+    typographyVariant: "h6",
+  },
+};

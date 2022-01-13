@@ -10,9 +10,9 @@ export default function OSCALEditableTextField(props) {
         inputProps={{
           "data-testid": `textField-${getElementLabel(props.editedField)}`,
         }}
+        inputRef={props.modifiableData.ref}
         size={props.textFieldSize}
         variant={props.textFieldVariant}
-        inputRef={props.modifiableData.ref}
       >
         {props.modifiableData.value}
       </TextField>
