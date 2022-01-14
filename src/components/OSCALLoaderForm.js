@@ -82,16 +82,22 @@ export default function OSCALLoaderForm(props) {
       }}
     >
       <Grid container spacing={3}>
-        <Grid item xs={10}></Grid>
-        <Grid item xs={2}>
-          <FormControlLabel
-            control={
-              <Switch checked={props.isRestMode} color="primary"
-                onChange={props.onChangeRestMode} name="isRestMode" />
-            }
-            label="REST Mode"
-          />
-        </Grid>
+        {process.env.REACT_APP_REST_BASE_URL ? (
+          <>
+          <Grid item xs={10}></Grid>
+          <Grid item xs={2}>
+            <FormControlLabel
+              control={
+                <Switch checked={props.isRestMode} color="primary"
+                  onChange={props.onChangeRestMode} name="isRestMode" />
+              }
+              label="REST Mode"
+            />
+          </Grid>
+          </>
+        ) : (
+          <></>
+        )}
         {!props.isRestMode ? (
           <>
             <Grid item xs={10}>
