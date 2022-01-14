@@ -6,6 +6,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from "@material-ui/core/Button";
 import ReplayIcon from "@material-ui/icons/Replay";
+import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
 const useStyles = makeStyles((theme) => ({
@@ -106,20 +107,22 @@ export default function OSCALLoaderForm(props) {
           </>
         ) : (
           <Grid item xs={12}>
-            <InputLabel id="oscal-object-select-label">Oscal {props.oscalObjectType.name}</InputLabel>
-            <Select
-              labelId="oscal-object-select-label"
-              id="oscal-object-simple-select"
-              label={`Oscal ${props.oscalObjectType.name}`}
-              onChange={props.onUuidChange}
-            >
-            {oscalObjects &&
-              oscalObjects.map((oscalObject, index) => (
-                <MenuItem value={oscalObject[props.oscalObjectType.jsonRootName].uuid}>
-                  {oscalObject[props.oscalObjectType.jsonRootName].metadata.title}
-                </MenuItem>
-            ))}
-            </Select>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel id="oscal-object-select-label">Select OSCAL {props.oscalObjectType.name}</InputLabel>
+              <Select
+                labelId="oscal-object-select-label"
+                id="oscal-object-simple-select"
+                label={`Select OSCAL ${props.oscalObjectType.name}`}
+                onChange={props.onUuidChange}
+              >
+              {oscalObjects &&
+                oscalObjects.map((oscalObject, index) => (
+                  <MenuItem value={oscalObject[props.oscalObjectType.jsonRootName].uuid}>
+                    {oscalObject[props.oscalObjectType.jsonRootName].metadata.title}
+                  </MenuItem>
+              ))}
+              </Select>
+            </FormControl>
           </Grid>
         )}
       </Grid>
