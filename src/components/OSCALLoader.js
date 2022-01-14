@@ -45,8 +45,9 @@ export default function OSCALLoader(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isResolutionComplete, setIsResolutionComplete] = useState(false);
+  const [isRestMode, setIsRestMode] = useState(process.env.REACT_APP_REST_BASE_URL);
   const [oscalData, setOscalData] = useState([]);
-  const [oscalUrl, setOscalUrl] = useState(props.oscalUrl);
+  const [oscalUrl, setOscalUrl] = useState(isRestMode ? null : props.oscalUrl);
   const unmounted = useRef(false);
 
   const loadOscalData = (newOscalUrl) => {
@@ -96,6 +97,20 @@ export default function OSCALLoader(props) {
     }
   };
 
+  const handleChangeRestMode = (event) => {
+    setIsRestMode(event.target.checked);
+    if (event.target.checked) {
+      setOscalUrl(null);
+      setIsLoaded(true);
+      setIsResolutionComplete(true);
+    } else {
+      setIsLoaded(false);
+      setIsResolutionComplete(false);
+      setOscalUrl(props.oscalObjectType.defaultUrl);
+      loadOscalData(props.oscalObjectType.defaultUrl);
+    }
+  };
+
   const onResolutionComplete = () => {
     setIsResolutionComplete(true);
   };
@@ -120,6 +135,8 @@ export default function OSCALLoader(props) {
         onUrlChange={handleUrlChange}
         onUuidChange={handleUuidChange}
         onReloadClick={handleReloadClick}
+        isRestMode={isRestMode}
+        onChangeRestMode={handleChangeRestMode}
         isResolutionComplete={isResolutionComplete}
       />
     );
@@ -154,10 +171,6 @@ export function getRequestedUrl() {
   return new URLSearchParams(window.location.search).get("url");
 }
 
-export function isRestMode() {
-  return process.env.REACT_APP_REST_BASE_URL;
-}
-
 export function OSCALCatalogLoader(props) {
   const oscalObjectType = oscalObjectTypes.catalog;
   const renderer = (oscalData, oscalUrl, onResolutionComplete) => (
@@ -171,7 +184,7 @@ export function OSCALCatalogLoader(props) {
   return (
     <OSCALLoader
       oscalObjectType={oscalObjectType}
-      oscalUrl={!isRestMode() && (getRequestedUrl() || oscalObjectType.defaultUrl)}
+      oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
       renderer={renderer}
       renderForm={props.renderForm}
     />
@@ -191,7 +204,7 @@ export function OSCALSSPLoader(props) {
   return (
     <OSCALLoader
       oscalObjectType={oscalObjectType}
-      oscalUrl={!isRestMode() && (getRequestedUrl() || oscalObjectType.defaultUrl)}
+      oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
       renderer={renderer}
       renderForm={props.renderForm}
     />
@@ -211,7 +224,7 @@ export function OSCALComponentLoader(props) {
   return (
     <OSCALLoader
       oscalObjectType={oscalObjectType}
-      oscalUrl={!isRestMode() && (getRequestedUrl() || oscalObjectType.defaultUrl)}
+      oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
       renderer={renderer}
       renderForm={props.renderForm}
     />
@@ -229,7 +242,7 @@ export function OSCALProfileLoader(props) {
   return (
     <OSCALLoader
       oscalObjectType={oscalObjectType}
-      oscalUrl={!isRestMode() && (getRequestedUrl() || oscalObjectType.defaultUrl)}
+      oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
       renderer={renderer}
       renderForm={props.renderForm}
     />

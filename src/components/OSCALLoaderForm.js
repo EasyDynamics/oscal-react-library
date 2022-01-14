@@ -8,6 +8,8 @@ import Button from "@material-ui/core/Button";
 import ReplayIcon from "@material-ui/icons/Replay";
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const useStyles = makeStyles((theme) => ({
   catalogForm: {
@@ -80,7 +82,17 @@ export default function OSCALLoaderForm(props) {
       }}
     >
       <Grid container spacing={3}>
-        {!process.env.REACT_APP_REST_BASE_URL ? (
+        <Grid item xs={10}></Grid>
+        <Grid item xs={2}>
+          <FormControlLabel
+            control={
+              <Switch checked={props.isRestMode} color="primary"
+                onChange={props.onChangeRestMode} name="isRestMode" />
+            }
+            label="REST Mode"
+          />
+        </Grid>
+        {!props.isRestMode ? (
           <>
             <Grid item xs={10}>
               <TextField
@@ -106,7 +118,7 @@ export default function OSCALLoaderForm(props) {
             </Grid>
           </>
         ) : (
-          <Grid item xs={12}>
+          <Grid item xs={10}>
             <FormControl fullWidth variant="outlined">
               <InputLabel id="oscal-object-select-label">Select OSCAL {props.oscalObjectType.name}</InputLabel>
               <Select
