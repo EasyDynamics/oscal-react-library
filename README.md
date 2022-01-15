@@ -74,9 +74,10 @@ For more details about OSCAL Viewer, please refer to the [example (OSCAL Viewer)
 ## Experimental REST Features
 
 To enabled experimental features that make REST calls defined in
-[oscal-rest](https://github.com/EasyDynamics/oscal-rest) to a backend service, add a `.env.local` file in
+[`oscal-rest`](https://github.com/EasyDynamics/oscal-rest) to a backend service, add a `.env.local` file in
 the root of the example project with a variable of `REACT_APP_REST_BASE_URL` pointing to the REST service, i.e.
-```
+
+```text
 REACT_APP_REST_BASE_URL=http://localhost:8080/oscal/v1
 ```
 
