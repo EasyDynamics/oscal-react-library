@@ -15,37 +15,43 @@ const onError = (error) => (
 );
 
 const oscalObjectTypes = {
-  "catalog": {
-    "name": "Catalog",
-    "defaultUrl": "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
-    "jsonRootName": "catalog",
-    "restPath": "catalogs"
+  catalog: {
+    name: "Catalog",
+    defaultUrl:
+      "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
+    jsonRootName: "catalog",
+    restPath: "catalogs",
   },
-  "component": {
-    "name": "Component",
-    "defaultUrl": "https://raw.githubusercontent.com/EasyDynamics/oscal-content/manual-fix-of-component-paths/examples/component-definition/json/example-component.json",
-    "jsonRootName": "component-definition",
-    "restPath": "component-definitions"
+  component: {
+    name: "Component",
+    defaultUrl:
+      "https://raw.githubusercontent.com/EasyDynamics/oscal-content/manual-fix-of-component-paths/examples/component-definition/json/example-component.json",
+    jsonRootName: "component-definition",
+    restPath: "component-definitions",
   },
-  "profile": {
-    "name": "Profile",
-    "defaultUrl": "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json",
-    "jsonRootName": "profile",
-    "restPath": "profiles"
+  profile: {
+    name: "Profile",
+    defaultUrl:
+      "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json",
+    jsonRootName: "profile",
+    restPath: "profiles",
   },
-  "ssp": {
-    "name": "SSP",
-    "defaultUrl": "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/ssp/json/ssp-example.json",
-    "jsonRootName": "system-security-plan",
-    "restPath": "ssps"
-  }
-}
+  ssp: {
+    name: "SSP",
+    defaultUrl:
+      "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/ssp/json/ssp-example.json",
+    jsonRootName: "system-security-plan",
+    restPath: "ssps",
+  },
+};
 
 export default function OSCALLoader(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isResolutionComplete, setIsResolutionComplete] = useState(false);
-  const [isRestMode, setIsRestMode] = useState(process.env.REACT_APP_REST_BASE_URL);
+  const [isRestMode, setIsRestMode] = useState(
+    process.env.REACT_APP_REST_BASE_URL
+  );
   const [oscalData, setOscalData] = useState([]);
   const [oscalUrl, setOscalUrl] = useState(isRestMode ? null : props.oscalUrl);
   const unmounted = useRef(false);
@@ -80,8 +86,7 @@ export default function OSCALLoader(props) {
   };
 
   const handleUuidChange = (event) => {
-    const newOscalUrl = process.env.REACT_APP_REST_BASE_URL + "/" +
-      props.oscalObjectType.restPath + "/" + event.target.value;
+    const newOscalUrl = `${process.env.REACT_APP_REST_BASE_URL}/${props.oscalObjectType.restPath}/${event.target.value}`;
     setOscalUrl(newOscalUrl);
     setIsLoaded(false);
     setIsResolutionComplete(false);
@@ -147,10 +152,8 @@ export default function OSCALLoader(props) {
     result = onError(error);
   } else if (!isLoaded) {
     result = <CircularProgress />;
-  } else {
-    if (oscalUrl) {
-      result = props.renderer(oscalData, oscalUrl, onResolutionComplete);
-    }
+  } else if (oscalUrl) {
+    result = props.renderer(oscalData, oscalUrl, onResolutionComplete);
   }
 
   return (
