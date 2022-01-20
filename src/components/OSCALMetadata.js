@@ -53,20 +53,33 @@ export default function OSCALMetadata(props) {
    *  updated, we want to update the last modified field.
    */
   const modifiableMetadata = {
-    "last-modified": useState(formatDate(props.metadata["last-modified"])),
     version: {
       ref: useRef("Version TextField Reference"),
-      edit: useState(false),
+      isInEditState: useState(false),
       value: props.metadata.version,
-      typographyVariant: "body2",
     },
     title: {
       ref: useRef("Title TextField Reference"),
-      edit: useState(false),
+      isInEditState: useState(false),
       value: props.metadata.title,
-      typographyVariant: "h6",
     },
   };
+
+  /* A JSON formatted variable containing information on how the OSCALEditableTextField
+  *   is displayed.
+  */
+  const textElement = {
+    version: {
+      typographyVariant: "body2",
+      textFieldSize: "small",
+      textFieldVariant: "outlined",
+    },
+    title: {
+      typographyVariant: "h6",
+      textFieldSize: "medium",
+      textFieldVariant: "outlined",
+    },
+  }
 
   if (!props.metadata) {
     return null;
@@ -74,7 +87,7 @@ export default function OSCALMetadata(props) {
 
   let patchData;
 
-  if (props.edit) {
+  if (props.isEditable) {
     patchData = props.patchData;
     patchData[props.editedField[0]].metadata = {
       version: props.metadata.version,
@@ -101,21 +114,22 @@ export default function OSCALMetadata(props) {
       <Grid container direction="row" alignItems="center">
         <Grid item>
           <OSCALEditableTextField
-            modifiableData={modifiableMetadata.title}
             editedField={
-              props.edit ? props.editedField.concat(["title"]) : null
+              props.isEditable ? props.editedField.concat(["title"]) : null
             }
+            modifiableData={modifiableMetadata.title}
+            textElement={textElement.title}
           />
         </Grid>
         <Grid item>
           <OSCALModificationIcons
-            canEdit={props.edit}
+            canEdit={props.isEditable}
             data={patchData}
             editedField={
-              props.edit ? props.editedField.concat(["title"]) : null
+              props.isEditable ? props.editedField.concat(["title"]) : null
             }
             modifiableData={modifiableMetadata.title}
-            onSave={props.onSave}
+            onSaveComplete={props.onSaveComplete}
             update={props.update}
           />
         </Grid>
@@ -154,13 +168,13 @@ export default function OSCALMetadata(props) {
           <Grid container spacing={1}>
             <Grid container justify="flex-end">
               <OSCALModificationIcons
-                canEdit={props.edit}
+                canEdit={props.isEditable}
                 data={patchData}
                 editedField={
-                  props.edit ? props.editedField.concat(["version"]) : null
+                  props.isEditable ? props.editedField.concat(["version"]) : null
                 }
                 modifiableData={modifiableMetadata.version}
-                onSave={props.onSave}
+                onSaveComplete={props.onSaveComplete}
                 update={props.update}
               />
             </Grid>
@@ -175,9 +189,10 @@ export default function OSCALMetadata(props) {
             <Grid item xs={8}>
               <OSCALEditableTextField
                 editedField={
-                  props.edit ? props.editedField.concat(["version"]) : null
+                  props.isEditable ? props.editedField.concat(["version"]) : null
                 }
                 modifiableData={modifiableMetadata.version}
+                textElement={textElement.version}
               />
             </Grid>
             <Grid item xs={4}>
@@ -190,7 +205,7 @@ export default function OSCALMetadata(props) {
             </Grid>
             <Grid item xs={8}>
               <Typography variant="body2">
-                {modifiableMetadata["last-modified"][0]}
+                {props.metadata["last-modified"]}
               </Typography>
             </Grid>
             <Grid item xs={4}>

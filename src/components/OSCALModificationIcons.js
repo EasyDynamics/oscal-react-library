@@ -9,12 +9,12 @@ export function getElementLabel(editedField) {
 }
 
 function getIconButtons(props) {
-  return props.modifiableData.edit[0] ? (
+  return props.modifiableData.isInEditState[0] ? (
     <>
       <IconButton
         aria-label={`cancel-${getElementLabel(props.editedField)}`}
         onClick={() => {
-          props.modifiableData.edit[1](!props.modifiableData.edit[0]);
+          props.modifiableData.isInEditState[1](!props.modifiableData.isInEditState[0]);
         }}
       >
         <CloseIcon fontSize={props.iconFontSize} />
@@ -22,8 +22,8 @@ function getIconButtons(props) {
       <IconButton
         aria-label={`save-${getElementLabel(props.editedField)}`}
         onClick={() => {
-          props.modifiableData.edit[1](!props.modifiableData.edit[0]);
-          props.onSave(
+          props.modifiableData.isInEditState[1](!props.modifiableData.isInEditState[0]);
+          props.onSaveComplete(
             props.data,
             props.update,
             props.editedField,
@@ -38,7 +38,7 @@ function getIconButtons(props) {
     <IconButton
       aria-label={`edit-${getElementLabel(props.editedField)}`}
       onClick={() => {
-        props.modifiableData.edit[1](!props.modifiableData.edit[0]);
+        props.modifiableData.isInEditState[1](!props.modifiableData.isInEditState[0]);
       }}
     >
       <EditIcon fontSize={props.iconFontSize} />

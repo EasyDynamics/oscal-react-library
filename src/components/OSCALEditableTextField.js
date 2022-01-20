@@ -4,28 +4,22 @@ import { TextField } from "@material-ui/core";
 import { getElementLabel } from "./OSCALModificationIcons";
 
 export default function OSCALEditableTextField(props) {
-  return props.modifiableData.edit[0] ? (
-    <Typography variant={props.modifiableData.typographyVariant}>
+  return props.modifiableData.isInEditState[0] ? (
+    <Typography variant={props.textElement.typographyVariant}>
       <TextField
         inputProps={{
           "data-testid": `textField-${getElementLabel(props.editedField)}`,
         }}
         inputRef={props.modifiableData.ref}
-        size={props.textFieldSize}
-        variant={props.textFieldVariant}
+        size={props.textElement.textFieldSize}
+        variant={props.textElement.textFieldVariant}
       >
         {props.modifiableData.value}
       </TextField>
     </Typography>
   ) : (
-    <Typography variant={props.modifiableData.typographyVariant}>
+    <Typography variant={props.textElement.typographyVariant}>
       {props.modifiableData.value}
     </Typography>
   );
 }
-
-// Default values for some of this OSCALEditableTextField's props
-OSCALEditableTextField.defaultProps = {
-  textFieldSize: "medium",
-  textFieldVariant: "outlined",
-};

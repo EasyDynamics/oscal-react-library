@@ -33,7 +33,7 @@ function updateData(data, editedField, newValue) {
  * @param editedField path to the field that is being updated
  * @param newValue updated value for the edited field
  */
-function onSave(data, update, editedField, newValue) {
+function onSaveComplete(data, update, editedField, newValue) {
   const portString =
     window.location.port === "" ? "" : `:${window.location.port}`;
   const url = `http://localhost${portString}/oscal/v1/ssps/${data["system-security-plan"].uuid}`;
@@ -122,9 +122,9 @@ export default function OSCALSsp(props) {
     <div className={classes.paper}>
       <OSCALMetadata
         metadata={ssp.metadata}
-        edit
+        isEditable
         editedField={["system-security-plan", "metadata"]}
-        onSave={onSave}
+        onSaveComplete={onSaveComplete}
         patchData={patchData}
         update={setSsp}
       />
