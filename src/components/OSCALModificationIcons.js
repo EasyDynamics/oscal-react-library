@@ -1,5 +1,5 @@
 import React from "react";
-import CloseIcon from "@material-ui/icons/Close";
+import CancelIcon from "@material-ui/icons/Cancel";
 import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
 import { IconButton } from "@material-ui/core";
@@ -11,14 +11,6 @@ export function getElementLabel(editedField) {
 function getIconButtons(props) {
   return props.isInEditState[0] ? (
     <>
-      <IconButton
-        aria-label={`cancel-${getElementLabel(props.editedField)}`}
-        onClick={() => {
-          props.isInEditState[1](!props.isInEditState[0]);
-        }}
-      >
-        <CloseIcon fontSize={props.iconFontSize} />
-      </IconButton>
       <IconButton
         aria-label={`save-${getElementLabel(props.editedField)}`}
         onClick={() => {
@@ -32,6 +24,14 @@ function getIconButtons(props) {
         }}
       >
         <SaveIcon fontSize={props.iconFontSize} />
+      </IconButton>
+      <IconButton
+        aria-label={`cancel-${getElementLabel(props.editedField)}`}
+        onClick={() => {
+          props.isInEditState[1](!props.isInEditState[0]);
+        }}
+      >
+        <CancelIcon fontSize={props.iconFontSize} />
       </IconButton>
     </>
   ) : (
