@@ -37,37 +37,14 @@ const formatDate = (isoDate) => new Date(isoDate).toLocaleString();
 
 export default function OSCALMetadata(props) {
   const classes = useStyles();
-
-  /* A JSON formatted variable so only one variable needs to be passed around between
-   *  functions that deals with the modification of metadata fields.
-   *
-   *  For each top-level field, we have a value sub-field which is an array of two
-   *  elements, where the first element of the array is the actual value of the
-   *  top-level field and the second element of the array is a function that
-   *  modifies the value of the top-level field.
-   *
-   *  We have an "edit" sub-field for the top-level "version" and "title" fields. This
-   *  represents whether we are currently editing either of those fields.
-   *
-   *  We have the last modified top-level field because when other metadata fields are
-   *  updated, we want to update the last modified field.
-   */
-  const modifiableMetadata = {
-    version: {
-      ref: useRef("Version TextField Reference"),
-      isInEditState: useState(false),
-      value: props.metadata.version,
-    },
-    title: {
-      ref: useRef("Title TextField Reference"),
-      isInEditState: useState(false),
-      value: props.metadata.title,
-    },
-  };
+  const versionIsInEditState = useState(false);
+  const titleIsInEditState = useState(false);
+  const versionReference = useRef("Version TextField Reference");
+  const titleReference = useRef("Title TextField Reference");
 
   /* A JSON formatted variable containing information on how the OSCALEditableTextField
-  *   is displayed.
-  */
+   *   is displayed.
+   */
   const textElement = {
     version: {
       typographyVariant: "body2",
@@ -79,7 +56,7 @@ export default function OSCALMetadata(props) {
       textFieldSize: "medium",
       textFieldVariant: "outlined",
     },
-  }
+  };
 
   if (!props.metadata) {
     return null;
@@ -117,8 +94,10 @@ export default function OSCALMetadata(props) {
             editedField={
               props.isEditable ? props.editedField.concat(["title"]) : null
             }
-            modifiableData={modifiableMetadata.title}
+            isInEditState={titleIsInEditState[0]}
+            reference={titleReference}
             textElement={textElement.title}
+            value={props.metadata.title}
           />
         </Grid>
         <Grid item>
@@ -128,8 +107,9 @@ export default function OSCALMetadata(props) {
             editedField={
               props.isEditable ? props.editedField.concat(["title"]) : null
             }
-            modifiableData={modifiableMetadata.title}
+            isInEditState={titleIsInEditState}
             onSaveComplete={props.onSaveComplete}
+            reference={titleReference}
             update={props.update}
           />
         </Grid>
@@ -171,9 +151,12 @@ export default function OSCALMetadata(props) {
                 canEdit={props.isEditable}
                 data={patchData}
                 editedField={
-                  props.isEditable ? props.editedField.concat(["version"]) : null
+                  props.isEditable
+                    ? props.editedField.concat(["version"])
+                    : null
                 }
-                modifiableData={modifiableMetadata.version}
+                isInEditState={versionIsInEditState}
+                reference={versionReference}
                 onSaveComplete={props.onSaveComplete}
                 update={props.update}
               />
@@ -189,10 +172,14 @@ export default function OSCALMetadata(props) {
             <Grid item xs={8}>
               <OSCALEditableTextField
                 editedField={
-                  props.isEditable ? props.editedField.concat(["version"]) : null
+                  props.isEditable
+                    ? props.editedField.concat(["version"])
+                    : null
                 }
-                modifiableData={modifiableMetadata.version}
+                isInEditState={versionIsInEditState[0]}
+                reference={versionReference}
                 textElement={textElement.version}
+                value={props.metadata.version}
               />
             </Grid>
             <Grid item xs={4}>
@@ -205,7 +192,7 @@ export default function OSCALMetadata(props) {
             </Grid>
             <Grid item xs={8}>
               <Typography variant="body2">
-                {props.metadata["last-modified"]}
+                {formatDate(props.metadata["last-modified"])}
               </Typography>
             </Grid>
             <Grid item xs={4}>
