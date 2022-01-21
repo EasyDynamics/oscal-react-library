@@ -59,7 +59,11 @@ export default function OSCALLoader(props) {
   const loadOscalData = (newOscalUrl) => {
     if (newOscalUrl) {
       fetch(newOscalUrl)
-        .then((res) => res.json())
+        .then(
+          (response) => {
+            if (!response.ok) throw new Error(response.status);
+            else return response.json()
+          })
         .then(
           (result) => {
             if (!unmounted.current) {
