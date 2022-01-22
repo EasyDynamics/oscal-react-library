@@ -19,6 +19,7 @@ const oscalObjectTypes = {
     name: "Catalog",
     defaultUrl:
       "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
+    defaultUuid: "613fca2d-704a-42e7-8e2b-b206fb92b456",
     jsonRootName: "catalog",
     restPath: "catalogs",
   },
@@ -26,6 +27,7 @@ const oscalObjectTypes = {
     name: "Component",
     defaultUrl:
       "https://raw.githubusercontent.com/EasyDynamics/oscal-content/manual-fix-of-component-paths/examples/component-definition/json/example-component.json",
+    defaultUuid: "8223d65f-57a9-4689-8f06-2a975ae2ad72",
     jsonRootName: "component-definition",
     restPath: "component-definitions",
   },
@@ -33,6 +35,7 @@ const oscalObjectTypes = {
     name: "Profile",
     defaultUrl:
       "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json",
+    defaultUuid: "8b3beca1-fcdc-43e0-aebb-ffc0a080c486",
     jsonRootName: "profile",
     restPath: "profiles",
   },
@@ -40,6 +43,7 @@ const oscalObjectTypes = {
     name: "SSP",
     defaultUrl:
       "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/ssp/json/ssp-example.json",
+    defaultUuid: "cff8385f-108e-40a5-8f7a-82f3dc0eaba8",
     jsonRootName: "system-security-plan",
     restPath: "ssps",
   },

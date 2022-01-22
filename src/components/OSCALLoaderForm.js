@@ -50,10 +50,10 @@ export default function OSCALLoaderForm(props) {
     if (!unmounted.current) {
       setOscalObjects([
         {
-          catalog: {
-            uuid: "613fca2d-704a-42e7-8e2b-b206fb92b456",
+          [props.oscalObjectType.jsonRootName]: {
+            uuid: props.oscalObjectType.defaultUuid,
             metadata: {
-              title: "Catalog 1234",
+              title: "Object 1234",
             },
           },
         },
