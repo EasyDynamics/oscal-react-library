@@ -150,6 +150,10 @@ export default function OSCALLoader(props) {
         isRestMode={isRestMode}
         onChangeRestMode={handleChangeRestMode}
         isResolutionComplete={isResolutionComplete}
+        onError={(e) => {
+          setError(e);
+          onError(e);
+        }}
       />
     );
   }

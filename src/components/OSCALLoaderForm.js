@@ -20,45 +20,27 @@ const useStyles = makeStyles((theme) => ({
 
 export default function OSCALLoaderForm(props) {
   const classes = useStyles();
-  // const [error, setError] = useState(null);
-  // const [isLoaded, setIsLoaded] = useState(false);
   const [oscalObjects, setOscalObjects] = useState([]);
   const unmounted = useRef(false);
 
   const findAllObjects = () => {
-    // fetch(process.env.REACT_APP_REST_BASE_URL + "/" +
-    //     props.oscalObjectType.restPath)
-    //   .then((res) => res.json())
-    //   .then(
-    //     (result) => {
-    //       if (!unmounted.current) {
-    //         setOscalObjects(result);
-    //         setIsLoaded(true);
-    //         setError(null);
-    //       }
-    //     },
-    //     // Note: it's important to handle errors here
-    //     // instead of a catch() block so that we don't swallow
-    //     // exceptions from actual bugs in components.
-    //     (e) => {
-    //       setError(e);
-    //       setIsLoaded(true);
-    //     }
-    //   );
-
-    // Set dummy data until backend REST call is implemented, real code above
-    if (!unmounted.current) {
-      setOscalObjects([
-        {
-          [props.oscalObjectType.jsonRootName]: {
-            uuid: props.oscalObjectType.defaultUuid,
-            metadata: {
-              title: "Object 1234",
-            },
-          },
+    fetch(
+      `${process.env.REACT_APP_REST_BASE_URL}/${props.oscalObjectType.restPath}`
+    )
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          if (!unmounted.current) {
+            setOscalObjects(result);
+          }
         },
-      ]);
-    }
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (e) => {
+          props.onError(e);
+        }
+      );
   };
 
   useEffect(() => {
