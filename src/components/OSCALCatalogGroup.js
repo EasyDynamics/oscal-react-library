@@ -26,23 +26,42 @@ export default function OSCALCatalogGroup(props) {
     setOpen(!open);
   };
 
-  return (
+  // Groups may not necessarily have an ID (it is not required per the spec);
+  // therefore, we need to be able to come up with a semi-constant ID. All
+  // groups will have a title. We can (poorly) hash that hopefully that will
+  // be good enough.
+  const groupKey = (group) => {
+    if (group.id) {
+      return group.id;
+    }
+    let hash = 7;
+    // eslint-disable-next-line no-restricted-syntax
+    for (const char of group.title) {
+      hash = 31 * hash + char.charCodeAt(0);
+    }
+    return hash;
+  };
+
+  const renderGroup = (group, level) => (
     <>
-      <ListItem key={props.group.id} button onClick={handleClick}>
-        <ListItemAvatar key={`${props.group.id}-avatar`}>
+      <ListItem key={groupKey(group)} button onClick={handleClick}>
+        <ListItemAvatar key={`${groupKey(group)}-avatar`}>
           <Avatar variant="rounded">
             <FolderIcon />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary={props.group.title} />
+        <ListItemText primary={group.title} />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List className={classes.OSCALControlList}>
-          {props.group.controls.map((control) => (
+          {group.groups?.map((innerGroup) =>
+            renderGroup(innerGroup, level + 1)
+          )}
+          {group.controls?.map((control) => (
             <OSCALControl
               control={control}
-              childLevel={0}
+              childLevel={level}
               key={`control-${control.id}`}
             />
           ))}
@@ -50,4 +69,6 @@ export default function OSCALCatalogGroup(props) {
       </Collapse>
     </>
   );
+
+  return renderGroup(props.group, 0);
 }
