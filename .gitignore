@@ -79,3 +79,4 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
+example/.env.local
