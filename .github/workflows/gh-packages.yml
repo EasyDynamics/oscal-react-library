@@ -1,3 +1,4 @@
+---
 name: Publish to GitHub Packages
 on:
   push:
