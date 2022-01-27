@@ -16,47 +16,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function updateData(data, editedField, newValue) {
-  if (editedField.length === 1) {
-    const editData = data;
-    editData[editedField] = newValue;
-    return;
-  }
-
-  updateData(data[editedField.shift()], editedField, newValue);
-}
-
-/**
- *
- * @param data data that will be passed into the body of the PATCH request, doesn't initially contain the updates
- * @param update function that will update a state, forcing a re-rendering if the PATCH request is successful
- * @param editedField path to the field that is being updated
- * @param newValue updated value for the edited field
- */
-function onSaveComplete(data, update, editedField, newValue) {
-  const portString =
-    window.location.port === "" ? "" : `:${window.location.port}`;
-  const url = `http://localhost${portString}/oscal/v1/ssps/${data["system-security-plan"].uuid}`;
-
-  updateData(data, editedField, newValue);
-
-  fetch(url, {
-    method: "PATCH",
-    body: JSON.stringify(data),
-  })
-    .then((res) => res.json())
-    .then(
-      (result) => {
-        update(result);
-      },
-      () => {
-        alert(
-          `Could not update the ${editedField} field with value: ${newValue}.`
-        );
-      }
-    );
-}
-
 export default function OSCALSsp(props) {
   const classes = useStyles();
   const [error, setError] = useState(null);
@@ -123,7 +82,7 @@ export default function OSCALSsp(props) {
         metadata={ssp.metadata}
         isEditable
         editedField={["system-security-plan", "metadata"]}
-        onSaveComplete={onSaveComplete}
+        onSaveComplete={props.onSaveComplete}
         patchData={patchData}
         update={setSsp}
       />
