@@ -8,6 +8,16 @@ test("OSCALModificationIcons loads", () => {
     <OSCALModificationIcons
       canEdit
       editedField={["version"]}
+      isInEditState={[false, () => {}]}
+      modifiableData={testModifiableMetadata.version}
+    />
+  );
+
+  render(
+    <OSCALModificationIcons
+      canEdit
+      editedField={["version"]}
+      isInEditState={[true, () => {}]}
       modifiableData={testModifiableMetadata.version}
     />
   );
