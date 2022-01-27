@@ -14,7 +14,9 @@ export default {
   component: OSCALBackMatter,
 };
 
-const Template = (args) => <OSCALBackMatter {...args} />;
+function Template(args) {
+  return <OSCALBackMatter {...args} />;
+}
 
 export const Default = Template.bind({});
 

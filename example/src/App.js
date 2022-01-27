@@ -1,5 +1,5 @@
 import "./App.css";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, createMuiTheme } from "@material-ui/core/styles";
 import React, { useState } from "react";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -8,37 +8,36 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import MenuIcon from "@material-ui/icons/Menu";
-import GitHubIcon from '@material-ui/icons/GitHub';
+import GitHubIcon from "@material-ui/icons/GitHub";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { Route, Switch, Redirect, Link as RouterLink } from "react-router-dom";
 import Link from "@material-ui/core/Link";
-import { createMuiTheme } from '@material-ui/core/styles';
-import { ThemeProvider } from '@material-ui/styles';
-import logo from './images/logo-header.svg';
 
+import { ThemeProvider } from "@material-ui/styles";
 import {
   OSCALCatalogLoader,
   OSCALSSPLoader,
   OSCALComponentLoader,
   OSCALProfileLoader,
-} from "oscal-react-library";
+} from "@EasyDynamics/oscal-react-library";
+import logo from "./images/logo-header.svg";
 
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#002867',
+      main: "#002867",
     },
-  }
+  },
 });
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((themeData) => ({
   title: {
     flexGrow: 1,
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginRight: themeData.spacing(2),
   },
   logoText: {
     color: "white",
@@ -50,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
   githubButton: {
     color: "white",
-  }
+  },
 }));
 
 function App() {
@@ -90,22 +89,26 @@ function App() {
               <Route path="/profile">OSCAL Profile Viewer</Route>
             </Typography>
             <Typography variant="body2" className={classes.logoText}>
-                Powered by 
-              </Typography>
+              Powered by
+            </Typography>
             <Button
               href="https://www.easydynamics.com"
               className={classes.githubButton}
               target="_blank"
             >
-              <img src={logo} alt="Easy Dynamics Logo" className={classes.logoImage} />
-              </Button>
+              <img
+                src={logo}
+                alt="Easy Dynamics Logo"
+                className={classes.logoImage}
+              />
+            </Button>
             <IconButton
               href="https://github.com/EasyDynamics/oscal-react-library"
               className={classes.githubButton}
               target="_blank"
               rel="noreferrer"
             >
-              <GitHubIcon color="white"/>
+              <GitHubIcon color="white" />
             </IconButton>
           </Toolbar>
         </AppBar>
@@ -144,16 +147,16 @@ function App() {
               <Redirect to="/catalog" />
             </Route>
             <Route path="/catalog">
-              <OSCALCatalogLoader renderForm={true} />
+              <OSCALCatalogLoader renderForm />
             </Route>
             <Route exact path="/system-security-plan">
-              <OSCALSSPLoader renderForm={true} />
+              <OSCALSSPLoader renderForm />
             </Route>
             <Route exact path="/component-definition">
-              <OSCALComponentLoader renderForm={true} />
+              <OSCALComponentLoader renderForm />
             </Route>
             <Route exact path="/profile">
-              <OSCALProfileLoader renderForm={true} />
+              <OSCALProfileLoader renderForm />
             </Route>
           </Switch>
         </Container>

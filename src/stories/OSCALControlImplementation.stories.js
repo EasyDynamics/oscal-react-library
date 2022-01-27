@@ -12,7 +12,9 @@ export default {
   component: OSCALControlImplementation,
 };
 
-const Template = (args) => <OSCALControlImplementation {...args} />;
+function Template(args) {
+  return <OSCALControlImplementation {...args} />;
+}
 
 export const Default = Template.bind({});
 

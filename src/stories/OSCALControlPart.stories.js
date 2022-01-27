@@ -11,7 +11,9 @@ export default {
   component: OSCALControlPart,
 };
 
-const Template = (args) => <OSCALControlPart {...args} />;
+function Template(args) {
+  return <OSCALControlPart {...args} />;
+}
 
 export const Default = Template.bind({});
 

@@ -6,7 +6,9 @@ export default {
   component: OSCALControlGuidance,
 };
 
-const Template = (args) => <OSCALControlGuidance {...args} />;
+function Template(args) {
+  return <OSCALControlGuidance {...args} />;
+}
 
 export const Default = Template.bind({});
 

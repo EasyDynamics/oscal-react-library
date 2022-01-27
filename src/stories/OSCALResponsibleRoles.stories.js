@@ -10,7 +10,9 @@ export default {
   component: OSCALResponsibleRoles,
 };
 
-const Template = (args) => <OSCALResponsibleRoles {...args} />;
+function Template(args) {
+  return <OSCALResponsibleRoles {...args} />;
+}
 
 export const Default = Template.bind({});
 

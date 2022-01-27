@@ -30,7 +30,7 @@ jobs:
         # super-linter@v4.4.0 moves to using eslint for JSON files which in
         # our configuration results in JSON parsing failures. Temporarily,
         # pinning to @v4.3.0 (using jsonlint) allows validation to succeed
-        uses: github/super-linter@v4.3.0
+        uses: github/super-linter@v4
         env:
           DEFAULT_BRANCH: develop
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -47,7 +47,7 @@ jobs:
           VALIDATE_YAML: true
           # Ideally, we should validate only changed files; we don't want to have a
           # PR fail because rules changed outside the PR itself.
-          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_ALL_CODEBASE: true
           # The possum is fun but it does add a little noise to the workflow
           SUPPRESS_POSSUM: true
   build_and_test:

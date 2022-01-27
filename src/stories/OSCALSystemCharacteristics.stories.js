@@ -7,7 +7,9 @@ export default {
   component: OSCALSystemCharacteristics,
 };
 
-const Template = (args) => <OSCALSystemCharacteristics {...args} />;
+function Template(args) {
+  return <OSCALSystemCharacteristics {...args} />;
+}
 
 export const Default = Template.bind({});
 
