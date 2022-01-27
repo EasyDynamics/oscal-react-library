@@ -30,6 +30,10 @@ const useStyles = makeStyles((theme) => ({
   OSCALMetadataPartiesHeader: {
     backgroundColor: theme.palette.background.paper,
   },
+
+  OSCALMetadataVersion: {
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 // Returns a string with a locality-sensitive representation of this date
@@ -145,8 +149,29 @@ export default function OSCALMetadata(props) {
       </Grid>
       <Grid item xs={4}>
         <Paper className={classes.OSCALMetadataAdditional}>
-          <Grid container spacing={1}>
-            <Grid container justify="flex-end">
+          <Grid container direction="row" alignItems="center">
+            <Grid item className={classes.OSCALMetadataVersion}>
+              <Typography
+                variant="body2"
+                className={classes.OSCALMetadataLabel}
+              >
+                Version:
+              </Typography>
+            </Grid>
+            <Grid item className={classes.OSCALMetadataVersion}>
+              <OSCALEditableTextField
+                editedField={
+                  props.isEditable
+                    ? props.editedField.concat(["version"])
+                    : null
+                }
+                isInEditState={versionIsInEditState[0]}
+                reference={versionReference}
+                textElement={textElement.version}
+                value={props.metadata.version}
+              />
+            </Grid>
+            <Grid item>
               <OSCALModificationIcons
                 canEdit={props.isEditable}
                 data={patchData}
@@ -161,28 +186,9 @@ export default function OSCALMetadata(props) {
                 update={props.update}
               />
             </Grid>
-            <Grid item xs={4}>
-              <Typography
-                variant="body2"
-                className={classes.OSCALMetadataLabel}
-              >
-                Version:
-              </Typography>
-            </Grid>
-            <Grid item xs={8}>
-              <OSCALEditableTextField
-                editedField={
-                  props.isEditable
-                    ? props.editedField.concat(["version"])
-                    : null
-                }
-                isInEditState={versionIsInEditState[0]}
-                reference={versionReference}
-                textElement={textElement.version}
-                value={props.metadata.version}
-              />
-            </Grid>
-            <Grid item xs={4}>
+          </Grid>
+          <Grid container spacing={1} direction="row" alignItems="center">
+            <Grid item className={classes.OSCALMetadataVersion}>
               <Typography
                 variant="body2"
                 className={classes.OSCALMetadataLabel}
@@ -190,12 +196,14 @@ export default function OSCALMetadata(props) {
                 Last Modified:
               </Typography>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item>
               <Typography variant="body2">
                 {formatDate(props.metadata["last-modified"])}
               </Typography>
             </Grid>
-            <Grid item xs={4}>
+          </Grid>
+          <Grid container spacing={1} direction="row" alignItems="center">
+            <Grid item className={classes.OSCALMetadataVersion}>
               <Typography
                 variant="body2"
                 className={classes.OSCALMetadataLabel}
@@ -203,7 +211,7 @@ export default function OSCALMetadata(props) {
                 OSCAL Version:
               </Typography>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item>
               <Typography variant="body2">
                 {props.metadata["oscal-version"]}
               </Typography>

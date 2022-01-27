@@ -38,12 +38,11 @@ function onSaveComplete(data, update, editedField, newValue) {
     window.location.port === "" ? "" : `:${window.location.port}`;
   const url = `http://localhost${portString}/oscal/v1/ssps/${data["system-security-plan"].uuid}`;
 
-  const dataToSave = JSON.parse(JSON.stringify(data));
-  updateData(dataToSave, editedField, newValue);
+  updateData(data, editedField, newValue);
 
   fetch(url, {
     method: "PATCH",
-    body: JSON.stringify(dataToSave),
+    body: JSON.stringify(data),
   })
     .then((res) => res.json())
     .then(

@@ -12,7 +12,7 @@ export default function OSCALEditableTextField(props) {
         }}
         inputRef={props.reference}
         size={props.textElement.textFieldSize}
-        value={props.value}
+        defaultValue={props.value}
         variant={props.textElement.textFieldVariant}
       />
     </Typography>
