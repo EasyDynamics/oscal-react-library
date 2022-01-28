@@ -34,8 +34,9 @@ jobs:
         env:
           DEFAULT_BRANCH: develop
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Our linter configuration files will be specified relative to the root of the workspace
-          # (/) rather than within the default directory (.github/linters)
+          # Our linter configuration files will be specified relative to the
+          # root of the workspace (/) rather than within the default directory
+          # (.github/linters)
           LINTER_RULES_PATH: /
           JAVASCRIPT_ES_CONFIG_FILE: .eslintrc.json
           MARKDOWN_CONFIG_FILE: .markdownlint.yaml
@@ -45,8 +46,8 @@ jobs:
           VALIDATE_MARKDOWN: true
           VALIDATE_JSON: true
           VALIDATE_YAML: true
-          # Ideally, we should validate only changed files; we don't want to have a
-          # PR fail because rules changed outside the PR itself.
+          # Ideally, we should validate only changed files; we don't want to
+          # have a PR fail because rules changed outside the PR itself.
           VALIDATE_ALL_CODEBASE: true
           # The possum is fun but it does add a little noise to the workflow
           SUPPRESS_POSSUM: true

@@ -1,3 +1,4 @@
+---
 name: Create a New Release
 on:
   push:
@@ -5,8 +6,9 @@ on:
   workflow_dispatch:
     inputs:
       release-type:
-        description:
-          'The type of release; either a new feature (minor version) or bug fix (patch version)'
+        description: >-
+          The type of release; either a new feature (minor version) or bug fix
+          (patch version)
         required: true
         type: choice
         options: [feature, bug]
@@ -56,7 +58,8 @@ jobs:
 
       # Output the new package version to environment variable
       - name: Get Package Version
-        run: echo "PKG_VERSION=$(npm pkg get version | tr -d '"')" >> $GITHUB_ENV
+        run: |
+          echo "PKG_VERSION=$(npm pkg get version | tr -d '"')" >> $GITHUB_ENV
 
       - name: Build OSCAL Viewer
         run: |
@@ -82,7 +85,7 @@ jobs:
         if: ${{ github.event.inputs.release-type  == 'feature' }}
         run: |
           git push origin develop:main
-          git add package.json package-lock.json example/package.json example/package-lock.json
+          git add ./{,example/}package{,-lock}.json
           git commit -m "Build Viewer for Release ${{ env.PKG_VERSION }}"
           npm version preminor
           cd example
