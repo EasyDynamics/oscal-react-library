@@ -27,7 +27,10 @@ export default function OSCALLoaderForm(props) {
     fetch(
       `${process.env.REACT_APP_REST_BASE_URL}/${props.oscalObjectType.restPath}`
     )
-      .then((res) => res.json())
+      .then((response) => {
+        if (!response.ok) throw new Error(response.status);
+        else return response.json();
+      })
       .then(
         (result) => {
           if (!unmounted.current) {
