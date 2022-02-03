@@ -41,7 +41,7 @@ function getParameterLabel(parameters, parameterId) {
   );
 
   if (!parameter) {
-    return null;
+    return `< ${parameterId} >`;
   }
   if (parameter.label) {
     return `< ${parameter.label} >`;

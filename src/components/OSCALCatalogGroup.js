@@ -55,9 +55,9 @@ export default function OSCALCatalogGroup(props) {
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List className={classes.OSCALControlList}>
-          {group.groups?.map((innerGroup) =>
-            renderGroup(innerGroup, level + 1)
-          )}
+          {group.groups?.map((innerGroup) => (
+            <OSCALCatalogGroup group={innerGroup} key={innerGroup.id} />
+          ))}
           {group.controls?.map((control) => (
             <OSCALControl
               control={control}
