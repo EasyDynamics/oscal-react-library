@@ -42,26 +42,26 @@ export default function OSCALCatalogGroup(props) {
     return hash;
   };
 
-  const renderGroup = (group, level) => (
+  return (
     <>
-      <ListItem key={groupKey(group)} button onClick={handleClick}>
-        <ListItemAvatar key={`${groupKey(group)}-avatar`}>
+      <ListItem key={groupKey(props.group)} button onClick={handleClick}>
+        <ListItemAvatar key={`${groupKey(props.group)}-avatar`}>
           <Avatar variant="rounded">
             <FolderIcon />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary={group.title} />
+        <ListItemText primary={props.group.title} />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List className={classes.OSCALControlList}>
-          {group.groups?.map((innerGroup) => (
+          {props.group.groups?.map((innerGroup) => (
             <OSCALCatalogGroup group={innerGroup} key={innerGroup.id} />
           ))}
-          {group.controls?.map((control) => (
+          {props.group.controls?.map((control) => (
             <OSCALControl
               control={control}
-              childLevel={level}
+              childLevel={0}
               key={`control-${control.id}`}
             />
           ))}
@@ -69,6 +69,4 @@ export default function OSCALCatalogGroup(props) {
       </Collapse>
     </>
   );
-
-  return renderGroup(props.group, 0);
 }
