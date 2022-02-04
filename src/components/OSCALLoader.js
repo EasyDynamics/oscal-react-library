@@ -49,47 +49,51 @@ const oscalObjectTypes = {
   },
 };
 
-function updateData(data, editedField, newValue) {
-  if (editedField.length === 1) {
+function populatePartialPatchData(data, editedFieldJsonPath, newValue) {
+  if (editedFieldJsonPath.length === 1) {
     const editData = data;
-    editData[editedField] = newValue;
+    editData[editedFieldJsonPath] = newValue;
     return;
   }
 
-  updateData(data[editedField.shift()], editedField, newValue);
+  populatePartialPatchData(
+    data[editedFieldJsonPath.shift()],
+    editedFieldJsonPath,
+    newValue
+  );
 }
 
 /**
  *
- * @param data data that will be passed into the body of the PATCH request, doesn't initially contain the updates
+ * @param partialPatchData data that will be passed into the body of the PATCH request, doesn't initially contain the updates
  * @param update function that will update a state, forcing a re-rendering if the PATCH request is successful
- * @param editedField path to the field that is being updated
+ * @param editedFieldJsonPath path to the field that is being updated
  * @param newValue updated value for the edited field
  */
-function onSaveComplete(
-  data,
-  update,
-  editedField,
+function restPatch(
+  partialPatchData,
+  onSuccessfulPatch,
+  editedFieldJsonPath,
   newValue,
   jsonRootName,
   restPath
 ) {
-  const url = `${process.env.REACT_APP_REST_BASE_URL}/${restPath}/${data[jsonRootName].uuid}`;
+  const url = `${process.env.REACT_APP_REST_BASE_URL}/${restPath}/${partialPatchData[jsonRootName].uuid}`;
 
-  updateData(data, editedField, newValue);
+  populatePartialPatchData(partialPatchData, editedFieldJsonPath, newValue);
 
   fetch(url, {
     method: "PATCH",
-    body: JSON.stringify(data),
+    body: JSON.stringify(partialPatchData),
   })
     .then((res) => res.json())
     .then(
       (result) => {
-        update(result);
+        onSuccessfulPatch(result);
       },
       () => {
         alert(
-          `Could not update the ${editedField} field with value: ${newValue}.`
+          `Could not update the ${editedFieldJsonPath} field with value: ${newValue}.`
         );
       }
     );
@@ -239,8 +243,8 @@ export function OSCALCatalogLoader(props) {
       parentUrl={oscalUrl}
       onError={onError}
       onResolutionComplete={onResolutionComplete}
-      onSaveComplete={(data, update, editedField, newValue) => {
-        onSaveComplete(
+      restPatch={(data, update, editedField, newValue) => {
+        restPatch(
           data,
           update,
           editedField,
@@ -269,8 +273,8 @@ export function OSCALSSPLoader(props) {
       parentUrl={oscalUrl}
       onError={onError}
       onResolutionComplete={onResolutionComplete}
-      onSaveComplete={(data, update, editedField, newValue) => {
-        onSaveComplete(
+      restPatch={(data, update, editedField, newValue) => {
+        restPatch(
           data,
           update,
           editedField,
@@ -299,8 +303,8 @@ export function OSCALComponentLoader(props) {
       parentUrl={oscalUrl}
       onError={onError}
       onResolutionComplete={onResolutionComplete}
-      onSaveComplete={(data, update, editedField, newValue) => {
-        onSaveComplete(
+      restPatch={(data, update, editedField, newValue) => {
+        restPatch(
           data,
           update,
           editedField,
@@ -327,8 +331,8 @@ export function OSCALProfileLoader(props) {
       profile={oscalData[oscalObjectType.jsonRootName]}
       parentUrl={oscalUrl}
       onResolutionComplete={onResolutionComplete}
-      onSaveComplete={(data, update, editedField, newValue) => {
-        onSaveComplete(
+      restPatch={(data, update, editedField, newValue) => {
+        restPatch(
           data,
           update,
           editedField,

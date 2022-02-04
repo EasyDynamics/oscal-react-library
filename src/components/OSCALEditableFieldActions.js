@@ -15,8 +15,8 @@ function getIconButtons(props) {
         aria-label={`save-${getElementLabel(props.editedField)}`}
         onClick={() => {
           props.isInEditState[1](!props.isInEditState[0]);
-          props.onSaveComplete(
-            props.data,
+          props.restPatch(
+            props.patchData,
             props.update,
             props.editedField,
             props.reference.current.value
@@ -46,11 +46,11 @@ function getIconButtons(props) {
   );
 }
 
-export default function OSCALModificationIcons(props) {
+export default function OSCALEditableFieldActions(props) {
   return props.canEdit ? getIconButtons(props) : null;
 }
 
-// Default values for some of this OSCALModificationIcon's props
-OSCALModificationIcons.defaultProps = {
+// Default values for some of this OSCALEditableFieldActions's props
+OSCALEditableFieldActions.defaultProps = {
   iconFontSize: "small",
 };

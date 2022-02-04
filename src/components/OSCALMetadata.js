@@ -10,7 +10,7 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import GroupIcon from "@material-ui/icons/Group";
 import { makeStyles } from "@material-ui/core/styles";
-import OSCALModificationIcons from "./OSCALModificationIcons";
+import OSCALEditableFieldActions from "./OSCALEditableFieldActions";
 import OSCALEditableTextField from "./OSCALEditableTextField";
 
 const useStyles = makeStyles((theme) => ({
@@ -66,16 +66,6 @@ export default function OSCALMetadata(props) {
     return null;
   }
 
-  let patchData;
-
-  if (props.isEditable) {
-    patchData = props.patchData;
-    patchData[props.editedField[0]].metadata = {
-      version: props.metadata.version,
-      title: props.metadata.title,
-    };
-  }
-
   const getRoleLabel = (roleId) =>
     props.metadata.roles.find((role) => role.id === roleId)?.title;
 
@@ -96,7 +86,9 @@ export default function OSCALMetadata(props) {
         <Grid item>
           <OSCALEditableTextField
             editedField={
-              props.isEditable ? props.editedField.concat(["title"]) : null
+              props.isEditable
+                ? props.editedField.concat(["metadata", "title"])
+                : null
             }
             isInEditState={titleIsInEditState[0]}
             reference={titleReference}
@@ -105,14 +97,23 @@ export default function OSCALMetadata(props) {
           />
         </Grid>
         <Grid item>
-          <OSCALModificationIcons
+          <OSCALEditableFieldActions
             canEdit={props.isEditable}
-            data={patchData}
+            patchData={{
+              [Object.keys(props.patchData).at(0)]: {
+                uuid: props.patchData[Object.keys(props.patchData).at(0)].uuid,
+                metadata: {
+                  title: props.metadata.title,
+                },
+              },
+            }}
             editedField={
-              props.isEditable ? props.editedField.concat(["title"]) : null
+              props.isEditable
+                ? [Object.keys(props.patchData).at(0), "metadata", "title"]
+                : null
             }
             isInEditState={titleIsInEditState}
-            onSaveComplete={props.onSaveComplete}
+            restPatch={props.restPatch}
             reference={titleReference}
             update={props.update}
           />
@@ -162,7 +163,11 @@ export default function OSCALMetadata(props) {
               <OSCALEditableTextField
                 editedField={
                   props.isEditable
-                    ? props.editedField.concat(["version"])
+                    ? [
+                        Object.keys(props.patchData).at(0),
+                        "metadata",
+                        "version",
+                      ]
                     : null
                 }
                 isInEditState={versionIsInEditState[0]}
@@ -172,17 +177,25 @@ export default function OSCALMetadata(props) {
               />
             </Grid>
             <Grid item>
-              <OSCALModificationIcons
+              <OSCALEditableFieldActions
                 canEdit={props.isEditable}
-                data={patchData}
+                patchData={{
+                  [Object.keys(props.patchData).at(0)]: {
+                    uuid: props.patchData[Object.keys(props.patchData).at(0)]
+                      .uuid,
+                    metadata: {
+                      version: props.metadata.version,
+                    },
+                  },
+                }}
                 editedField={
                   props.isEditable
-                    ? props.editedField.concat(["version"])
+                    ? props.editedField.concat(["metadata", "version"])
                     : null
                 }
                 isInEditState={versionIsInEditState}
                 reference={versionReference}
-                onSaveComplete={props.onSaveComplete}
+                restPatch={props.restPatch}
                 update={props.update}
               />
             </Grid>

@@ -1,11 +1,11 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import OSCALModificationIcons from "./OSCALModificationIcons";
+import OSCALEditableFieldActions from "./OSCALEditableFieldActions";
 import { testModifiableMetadata } from "../test-data/MetadataData";
 
-test("OSCALModificationIcons loads", () => {
+test("OSCALEditableFieldActions loads", () => {
   render(
-    <OSCALModificationIcons
+    <OSCALEditableFieldActions
       canEdit
       editedField={["version"]}
       isInEditState={[false, () => {}]}
@@ -14,7 +14,7 @@ test("OSCALModificationIcons loads", () => {
   );
 
   render(
-    <OSCALModificationIcons
+    <OSCALEditableFieldActions
       canEdit
       editedField={["version"]}
       isInEditState={[true, () => {}]}
@@ -23,7 +23,7 @@ test("OSCALModificationIcons loads", () => {
   );
 });
 
-export default function testOSCALModificationIcons(
+export default function testOSCALEditableFieldActions(
   parentElementName,
   renderer
 ) {

@@ -23,7 +23,7 @@ export default function OSCALCatalog(props) {
     <div className={classes.paper}>
       <OSCALMetadata
         metadata={props.catalog.metadata}
-        editedField={["metadata"]}
+        editedField={["catalog"]}
       />
       <List
         subheader={
