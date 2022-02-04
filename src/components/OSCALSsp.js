@@ -80,7 +80,7 @@ export default function OSCALSsp(props) {
     <div className={classes.paper}>
       <OSCALMetadata
         metadata={ssp.metadata}
-        isEditable
+        isEditable={props.isEditable}
         editedField={["system-security-plan"]}
         restPatch={props.restPatch}
         patchData={patchData}
