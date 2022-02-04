@@ -1,13 +1,13 @@
 import React from "react";
-import OSCALModificationIcons from "../components/OSCALModificationIcons";
+import OSCALEditableFieldActions from "../components/OSCALEditableFieldActions";
 
 export default {
   title: "Components/Modification Icons",
-  component: OSCALModificationIcons,
+  component: OSCALEditableFieldActions,
 };
 
 function Template(args) {
-  return <OSCALModificationIcons {...args} />;
+  return <OSCALEditableFieldActions {...args} />;
 }
 
 export const Default = Template.bind({});

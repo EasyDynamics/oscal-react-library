@@ -16,10 +16,14 @@ function sspRenderer() {
   render(<OSCALSsp system-security-plan={sspTestData} />);
 }
 
+function sspRendererRestMode() {
+  render(<OSCALSsp system-security-plan={sspTestData} isEditable />);
+}
+
 testOSCALSystemCharacteristics("OSCALSsp", sspRenderer);
 
 testOSCALSystemImplementation("OSCALSsp", sspRenderer);
 
 testOSCALMetadata("OSCALSsp", sspRenderer);
 
-testOSCALEditableFieldActions("OSCALSsp", sspRenderer);
+testOSCALEditableFieldActions("OSCALSsp", sspRendererRestMode);
