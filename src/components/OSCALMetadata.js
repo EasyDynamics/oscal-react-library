@@ -83,33 +83,37 @@ export default function OSCALMetadata(props) {
   return (
     <Grid container spacing={3}>
       <Grid container direction="row" alignItems="center">
-        <Grid item>
-          <OSCALEditableTextField
-            editedField={
-              props.isEditable
-                ? props.editedField.concat(["metadata", "title"])
-                : null
-            }
-            isInEditState={titleIsInEditState[0]}
-            reference={titleReference}
-            textElement={textElement.title}
-            value={props.metadata.title}
-          />
-        </Grid>
+        <OSCALEditableTextField
+          editedField={
+            props.isEditable
+              ? props.editedField.concat(["metadata", "title"])
+              : null
+          }
+          isInEditState={titleIsInEditState[0]}
+          reference={titleReference}
+          size={6}
+          textElement={textElement.title}
+          value={props.metadata.title}
+        />
         <Grid item>
           <OSCALEditableFieldActions
             canEdit={props.isEditable}
-            patchData={{
-              [Object.keys(props.patchData).at(0)]: {
-                uuid: props.patchData[Object.keys(props.patchData).at(0)].uuid,
-                metadata: {
-                  title: props.metadata.title,
-                },
-              },
-            }}
+            patchData={
+              props.isEditable
+                ? {
+                    [Object.keys(props.patchData)[0]]: {
+                      uuid: props.patchData[Object.keys(props.patchData)[0]]
+                        .uuid,
+                      metadata: {
+                        title: props.metadata.title,
+                      },
+                    },
+                  }
+                : null
+            }
             editedField={
               props.isEditable
-                ? [Object.keys(props.patchData).at(0), "metadata", "title"]
+                ? [Object.keys(props.patchData)[0], "metadata", "title"]
                 : null
             }
             isInEditState={titleIsInEditState}
@@ -159,35 +163,35 @@ export default function OSCALMetadata(props) {
                 Version:
               </Typography>
             </Grid>
-            <Grid item className={classes.OSCALMetadataVersion}>
-              <OSCALEditableTextField
-                editedField={
-                  props.isEditable
-                    ? [
-                        Object.keys(props.patchData).at(0),
-                        "metadata",
-                        "version",
-                      ]
-                    : null
-                }
-                isInEditState={versionIsInEditState[0]}
-                reference={versionReference}
-                textElement={textElement.version}
-                value={props.metadata.version}
-              />
-            </Grid>
+            <OSCALEditableTextField
+              className={classes.OSCALMetadataVersion}
+              editedField={
+                props.isEditable
+                  ? [Object.keys(props.patchData)[0], "metadata", "version"]
+                  : null
+              }
+              isInEditState={versionIsInEditState[0]}
+              reference={versionReference}
+              size={4}
+              textElement={textElement.version}
+              value={props.metadata.version}
+            />
             <Grid item>
               <OSCALEditableFieldActions
                 canEdit={props.isEditable}
-                patchData={{
-                  [Object.keys(props.patchData).at(0)]: {
-                    uuid: props.patchData[Object.keys(props.patchData).at(0)]
-                      .uuid,
-                    metadata: {
-                      version: props.metadata.version,
-                    },
-                  },
-                }}
+                patchData={
+                  props.isEditable
+                    ? {
+                        [Object.keys(props.patchData)[0]]: {
+                          uuid: props.patchData[Object.keys(props.patchData)[0]]
+                            .uuid,
+                          metadata: {
+                            version: props.metadata.version,
+                          },
+                        },
+                      }
+                    : null
+                }
                 editedField={
                   props.isEditable
                     ? props.editedField.concat(["metadata", "version"])
