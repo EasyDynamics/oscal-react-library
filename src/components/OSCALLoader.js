@@ -45,7 +45,7 @@ const oscalObjectTypes = {
       "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/ssp/json/ssp-example.json",
     defaultUuid: "cff8385f-108e-40a5-8f7a-82f3dc0eaba8",
     jsonRootName: "system-security-plan",
-    restPath: "ssps",
+    restPath: "system-security-plans",
   },
 };
 
