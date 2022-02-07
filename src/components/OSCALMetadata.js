@@ -86,7 +86,7 @@ export default function OSCALMetadata(props) {
         <OSCALEditableTextField
           editedField={
             props.isEditable
-              ? props.editedField.concat(["metadata", "title"])
+              ? [Object.keys(props.patchData)[0], "metadata", "title"]
               : null
           }
           isInEditState={titleIsInEditState[0]}
@@ -194,7 +194,7 @@ export default function OSCALMetadata(props) {
                 }
                 editedField={
                   props.isEditable
-                    ? props.editedField.concat(["metadata", "version"])
+                    ? [Object.keys(props.patchData)[0], "metadata", "version"]
                     : null
                 }
                 isInEditState={versionIsInEditState}
