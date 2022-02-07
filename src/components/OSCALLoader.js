@@ -66,7 +66,7 @@ function populatePartialPatchData(data, editedFieldJsonPath, newValue) {
 /**
  *
  * @param partialPatchData data that will be passed into the body of the PATCH request, doesn't initially contain the updates
- * @param update function that will update a state, forcing a re-rendering if the PATCH request is successful
+ * @param onSuccessfulPatch function that will update a state, forcing a re-rendering if the PATCH request is successful
  * @param editedFieldJsonPath path to the field that is being updated
  * @param newValue updated value for the edited field
  */

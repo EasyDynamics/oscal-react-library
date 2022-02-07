@@ -114,7 +114,6 @@ export default function OSCALProfile(props) {
     <div className={classes.paper}>
       <OSCALMetadata
         metadata={props.profile.metadata}
-        editedField={["profile"]}
       />
       <OSCALProfileCatalogInheritance
         inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}

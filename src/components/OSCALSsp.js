@@ -81,7 +81,6 @@ export default function OSCALSsp(props) {
       <OSCALMetadata
         metadata={ssp.metadata}
         isEditable={props.isEditable}
-        editedField={["system-security-plan"]}
         restPatch={props.restPatch}
         patchData={patchData}
         update={setSsp}
