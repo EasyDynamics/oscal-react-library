@@ -41,22 +41,6 @@ const formatDate = (isoDate) => new Date(isoDate).toLocaleString();
 export default function OSCALMetadata(props) {
   const classes = useStyles();
 
-  /* A JSON formatted variable containing information on how the OSCALEditableTextField
-   *   is displayed.
-   */
-  const textElement = {
-    version: {
-      typographyVariant: "body2",
-      textFieldSize: "small",
-      textFieldVariant: "outlined",
-    },
-    title: {
-      typographyVariant: "h6",
-      textFieldSize: "medium",
-      textFieldVariant: "outlined",
-    },
-  };
-
   if (!props.metadata) {
     return null;
   }
@@ -99,7 +83,8 @@ export default function OSCALMetadata(props) {
               : null
           }
           size={6}
-          textElement={textElement.title}
+          textFieldSize="medium"
+          typographyVariant="h6"
           update={props.update}
           value={props.metadata.title}
         />
@@ -167,7 +152,8 @@ export default function OSCALMetadata(props) {
                   : null
               }
               size={4}
-              textElement={textElement.version}
+              textFieldSize="small"
+              typographyVariant="body2"
               update={props.update}
               value={props.metadata.version}
             />

@@ -15,9 +15,9 @@ function inEditStateTextField(props, reference) {
             "data-testid": `textField-${getElementLabel(props.editedField)}`,
           }}
           inputRef={reference}
-          size={props.textElement.textFieldSize}
+          size={props.textFieldSize}
           defaultValue={props.value}
-          variant={props.textElement.textFieldVariant}
+          variant={props.textFieldVariant}
         />
       </Typography>
     </Grid>
@@ -48,9 +48,7 @@ function textFieldWithEditableActions(
   ) : (
     <>
       <Grid item className={props.className}>
-        <Typography variant={props.textElement.typographyVariant}>
-          {props.value}
-        </Typography>
+        <Typography variant={props.typographyVariant}>{props.value}</Typography>
       </Grid>
       <Grid item>
         <OSCALEditableFieldActions
@@ -72,9 +70,11 @@ export default function OSCALEditableTextField(props) {
     textFieldWithEditableActions(props, reference, inEditState, setInEditState)
   ) : (
     <Grid item className={props.className}>
-      <Typography variant={props.textElement.typographyVariant}>
-        {props.value}
-      </Typography>
+      <Typography variant={props.typographyVariant}>{props.value}</Typography>
     </Grid>
   );
 }
+
+OSCALEditableTextField.defaultProps = {
+  textFieldVariant: "outlined",
+};
