@@ -8,14 +8,14 @@ export function getElementLabel(editedField) {
   return editedField.toString().replace(/,/g, "-");
 }
 
-function getIconButtons(props) {
-  return props.isInEditState[0] ? (
+export default function OSCALEditableFieldActions(props) {
+  return props.inEditState ? (
     <>
       <IconButton
         aria-label={`save-${getElementLabel(props.editedField)}`}
         onClick={() => {
-          props.isInEditState[1](!props.isInEditState[0]);
-          props.restPatch(
+          props.setInEditState(!props.inEditState);
+          props.onFieldSave(
             props.patchData,
             props.update,
             props.editedField,
@@ -28,7 +28,7 @@ function getIconButtons(props) {
       <IconButton
         aria-label={`cancel-${getElementLabel(props.editedField)}`}
         onClick={() => {
-          props.isInEditState[1](!props.isInEditState[0]);
+          props.setInEditState(!props.inEditState);
         }}
       >
         <CancelIcon fontSize={props.iconFontSize} />
@@ -38,16 +38,12 @@ function getIconButtons(props) {
     <IconButton
       aria-label={`edit-${getElementLabel(props.editedField)}`}
       onClick={() => {
-        props.isInEditState[1](!props.isInEditState[0]);
+        props.setInEditState(!props.inEditState);
       }}
     >
       <EditIcon fontSize={props.iconFontSize} />
     </IconButton>
   );
-}
-
-export default function OSCALEditableFieldActions(props) {
-  return props.canEdit ? getIconButtons(props) : null;
 }
 
 // Default values for some of this OSCALEditableFieldActions's props

@@ -248,7 +248,7 @@ export function OSCALCatalogLoader(props) {
       parentUrl={oscalUrl}
       onError={onError}
       onResolutionComplete={onResolutionComplete}
-      restPatch={(data, update, editedField, newValue) => {
+      onFieldSave={(data, update, editedField, newValue) => {
         restPatch(
           data,
           update,
@@ -279,7 +279,7 @@ export function OSCALSSPLoader(props) {
       parentUrl={oscalUrl}
       onError={onError}
       onResolutionComplete={onResolutionComplete}
-      restPatch={(data, update, editedField, newValue) => {
+      onFieldSave={(data, update, editedField, newValue) => {
         restPatch(
           data,
           update,
@@ -309,7 +309,7 @@ export function OSCALComponentLoader(props) {
       parentUrl={oscalUrl}
       onError={onError}
       onResolutionComplete={onResolutionComplete}
-      restPatch={(data, update, editedField, newValue) => {
+      onFieldSave={(data, update, editedField, newValue) => {
         restPatch(
           data,
           update,
@@ -337,7 +337,7 @@ export function OSCALProfileLoader(props) {
       profile={oscalData[oscalObjectType.jsonRootName]}
       parentUrl={oscalUrl}
       onResolutionComplete={onResolutionComplete}
-      restPatch={(data, update, editedField, newValue) => {
+      onFieldSave={(data, update, editedField, newValue) => {
         restPatch(
           data,
           update,

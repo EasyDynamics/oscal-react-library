@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import Typography from "@material-ui/core/Typography";
 import { Grid, TextField } from "@material-ui/core";
-import { getElementLabel } from "./OSCALEditableFieldActions";
+import OSCALEditableFieldActions, {
+  getElementLabel,
+} from "./OSCALEditableFieldActions";
 
-function inEditStateTextField(props) {
+function inEditStateTextField(props, reference) {
   return (
     <Grid item xs={props.size} className={props.className}>
       <Typography>
@@ -12,7 +14,7 @@ function inEditStateTextField(props) {
           inputProps={{
             "data-testid": `textField-${getElementLabel(props.editedField)}`,
           }}
-          inputRef={props.reference}
+          inputRef={reference}
           size={props.textElement.textFieldSize}
           defaultValue={props.value}
           variant={props.textElement.textFieldVariant}
@@ -22,9 +24,52 @@ function inEditStateTextField(props) {
   );
 }
 
+function textFieldWithEditableActions(
+  props,
+  reference,
+  inEditState,
+  setInEditState
+) {
+  return inEditState ? (
+    <>
+      {inEditStateTextField(props, reference)}
+      <Grid item>
+        <OSCALEditableFieldActions
+          inEditState={inEditState}
+          editedField={props.editedField}
+          setInEditState={setInEditState}
+          onFieldSave={props.onFieldSave}
+          patchData={props.patchData}
+          reference={reference}
+          update={props.update}
+        />
+      </Grid>
+    </>
+  ) : (
+    <>
+      <Grid item className={props.className}>
+        <Typography variant={props.textElement.typographyVariant}>
+          {props.value}
+        </Typography>
+      </Grid>
+      <Grid item>
+        <OSCALEditableFieldActions
+          editedField={props.editedField}
+          inEditState={inEditState}
+          patchData={props.patchData}
+          setInEditState={setInEditState}
+        />
+      </Grid>
+    </>
+  );
+}
+
 export default function OSCALEditableTextField(props) {
-  return props.isInEditState ? (
-    inEditStateTextField(props)
+  const reference = useRef("reference to text field");
+  const [inEditState, setInEditState] = useState(false);
+
+  return props.canEdit ? (
+    textFieldWithEditableActions(props, reference, inEditState, setInEditState)
   ) : (
     <Grid item className={props.className}>
       <Typography variant={props.textElement.typographyVariant}>

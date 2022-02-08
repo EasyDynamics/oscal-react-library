@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
@@ -10,7 +10,6 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import GroupIcon from "@material-ui/icons/Group";
 import { makeStyles } from "@material-ui/core/styles";
-import OSCALEditableFieldActions from "./OSCALEditableFieldActions";
 import OSCALEditableTextField from "./OSCALEditableTextField";
 
 const useStyles = makeStyles((theme) => ({
@@ -41,10 +40,6 @@ const formatDate = (isoDate) => new Date(isoDate).toLocaleString();
 
 export default function OSCALMetadata(props) {
   const classes = useStyles();
-  const versionIsInEditState = useState(false);
-  const titleIsInEditState = useState(false);
-  const versionReference = useRef("Version TextField Reference");
-  const titleReference = useRef("Title TextField Reference");
 
   /* A JSON formatted variable containing information on how the OSCALEditableTextField
    *   is displayed.
@@ -84,44 +79,30 @@ export default function OSCALMetadata(props) {
     <Grid container spacing={3}>
       <Grid container direction="row" alignItems="center">
         <OSCALEditableTextField
+          canEdit={props.isEditable}
           editedField={
             props.isEditable
               ? [Object.keys(props.patchData)[0], "metadata", "title"]
               : null
           }
-          isInEditState={titleIsInEditState[0]}
-          reference={titleReference}
+          onFieldSave={props.onFieldSave}
+          patchData={
+            props.isEditable
+              ? {
+                  [Object.keys(props.patchData)[0]]: {
+                    uuid: props.patchData[Object.keys(props.patchData)[0]].uuid,
+                    metadata: {
+                      title: props.metadata.title,
+                    },
+                  },
+                }
+              : null
+          }
           size={6}
           textElement={textElement.title}
+          update={props.update}
           value={props.metadata.title}
         />
-        <Grid item>
-          <OSCALEditableFieldActions
-            canEdit={props.isEditable}
-            patchData={
-              props.isEditable
-                ? {
-                    [Object.keys(props.patchData)[0]]: {
-                      uuid: props.patchData[Object.keys(props.patchData)[0]]
-                        .uuid,
-                      metadata: {
-                        title: props.metadata.title,
-                      },
-                    },
-                  }
-                : null
-            }
-            editedField={
-              props.isEditable
-                ? [Object.keys(props.patchData)[0], "metadata", "title"]
-                : null
-            }
-            isInEditState={titleIsInEditState}
-            restPatch={props.restPatch}
-            reference={titleReference}
-            update={props.update}
-          />
-        </Grid>
       </Grid>
       <Grid item xs={8}>
         <Paper className={classes.OSCALMetadataParties}>
@@ -164,45 +145,32 @@ export default function OSCALMetadata(props) {
               </Typography>
             </Grid>
             <OSCALEditableTextField
+              canEdit={props.isEditable}
               className={classes.OSCALMetadataVersion}
               editedField={
                 props.isEditable
                   ? [Object.keys(props.patchData)[0], "metadata", "version"]
                   : null
               }
-              isInEditState={versionIsInEditState[0]}
-              reference={versionReference}
+              onFieldSave={props.onFieldSave}
+              patchData={
+                props.isEditable
+                  ? {
+                      [Object.keys(props.patchData)[0]]: {
+                        uuid: props.patchData[Object.keys(props.patchData)[0]]
+                          .uuid,
+                        metadata: {
+                          version: props.metadata.version,
+                        },
+                      },
+                    }
+                  : null
+              }
               size={4}
               textElement={textElement.version}
+              update={props.update}
               value={props.metadata.version}
             />
-            <Grid item>
-              <OSCALEditableFieldActions
-                canEdit={props.isEditable}
-                patchData={
-                  props.isEditable
-                    ? {
-                        [Object.keys(props.patchData)[0]]: {
-                          uuid: props.patchData[Object.keys(props.patchData)[0]]
-                            .uuid,
-                          metadata: {
-                            version: props.metadata.version,
-                          },
-                        },
-                      }
-                    : null
-                }
-                editedField={
-                  props.isEditable
-                    ? [Object.keys(props.patchData)[0], "metadata", "version"]
-                    : null
-                }
-                isInEditState={versionIsInEditState}
-                reference={versionReference}
-                restPatch={props.restPatch}
-                update={props.update}
-              />
-            </Grid>
           </Grid>
           <Grid container spacing={1} direction="row" alignItems="center">
             <Grid item className={classes.OSCALMetadataVersion}>
