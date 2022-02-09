@@ -77,7 +77,7 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
           inheritedOSCALObject.inherited = [];
 
           modifications["set-parameters"].push(
-            ...result.profile.modify["set-parameters"]
+            ...(result.profile.modify["set-parameters"] ?? [])
           );
           modifications.alters.push(...result.profile.modify.alters);
 
