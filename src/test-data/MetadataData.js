@@ -31,3 +31,31 @@ export const exampleMetadataWithPartiesAndRoles = {
     },
   ],
 };
+
+export const testModifiableMetadata = {
+  "last-modified": ["01-01-2022", () => {}],
+  version: {
+    ref: "TextField reference metadata version",
+    edit: [false, () => {}],
+    value: version,
+    typographyVariant: "body2",
+  },
+  title: {
+    ref: "TextField reference metadata title",
+    edit: [false, () => {}],
+    value: title,
+    typographyVariant: "h6",
+  },
+};
+
+export const textFieldEditModeMetadata = {
+  title: {
+    ref: {
+      current: "TextField reference metadata title",
+      note: "Normally, would do React.useRef(value) for the ref property, this is just a placeholder.",
+    },
+    edit: [true, () => {}],
+    value: title,
+    typographyVariant: "h6",
+  },
+};

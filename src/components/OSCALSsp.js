@@ -17,14 +17,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function OSCALSsp(props) {
+  const classes = useStyles();
   const [error, setError] = useState(null);
   const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] =
     useState({});
   const [isLoaded, setIsLoaded] = useState(false);
-  const classes = useStyles();
+  const [ssp, setSsp] = useState(props["system-security-plan"]);
   const unmounted = useRef(false);
 
-  const ssp = props["system-security-plan"];
+  const patchData = {
+    "system-security-plan": {
+      uuid: ssp.uuid,
+    },
+  };
 
   let sspParties;
   if (ssp.metadata) {
@@ -73,7 +78,13 @@ export default function OSCALSsp(props) {
 
   return (
     <div className={classes.paper}>
-      <OSCALMetadata metadata={ssp.metadata} />
+      <OSCALMetadata
+        metadata={ssp.metadata}
+        isEditable={props.isEditable}
+        onFieldSave={props.onFieldSave}
+        patchData={patchData}
+        update={setSsp}
+      />
       <OSCALProfileCatalogInheritance
         inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}
       />

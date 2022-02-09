@@ -49,6 +49,56 @@ const oscalObjectTypes = {
   },
 };
 
+function populatePartialPatchData(data, editedFieldJsonPath, newValue) {
+  if (editedFieldJsonPath.length === 1) {
+    const editData = data;
+    editData[editedFieldJsonPath] = newValue;
+    return;
+  }
+
+  populatePartialPatchData(
+    data[editedFieldJsonPath.shift()],
+    editedFieldJsonPath,
+    newValue
+  );
+}
+
+/**
+ *
+ * @param partialPatchData data that will be passed into the body of the PATCH request, doesn't initially contain the updates
+ * @param onSuccessfulPatch function that will update a state, forcing a re-rendering if the PATCH request is successful
+ * @param editedFieldJsonPath path to the field that is being updated
+ * @param newValue updated value for the edited field
+ */
+function restPatch(
+  partialPatchData,
+  onSuccessfulPatch,
+  editedFieldJsonPath,
+  newValue,
+  jsonRootName,
+  restPath
+) {
+  const url = `${process.env.REACT_APP_REST_BASE_URL}/${restPath}/${partialPatchData[jsonRootName].uuid}`;
+
+  populatePartialPatchData(partialPatchData, editedFieldJsonPath, newValue);
+
+  fetch(url, {
+    method: "PATCH",
+    body: JSON.stringify(partialPatchData),
+  })
+    .then((res) => res.json())
+    .then(
+      (result) => {
+        onSuccessfulPatch(result);
+      },
+      () => {
+        alert(
+          `Could not update the ${editedFieldJsonPath} field with value: ${newValue}.`
+        );
+      }
+    );
+}
+
 export default function OSCALLoader(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -164,7 +214,12 @@ export default function OSCALLoader(props) {
   } else if (!isLoaded) {
     result = <CircularProgress />;
   } else if (oscalUrl) {
-    result = props.renderer(oscalData, oscalUrl, onResolutionComplete);
+    result = props.renderer(
+      isRestMode,
+      oscalData,
+      oscalUrl,
+      onResolutionComplete
+    );
   }
 
   return (
@@ -187,12 +242,22 @@ export function getRequestedUrl() {
 
 export function OSCALCatalogLoader(props) {
   const oscalObjectType = oscalObjectTypes.catalog;
-  const renderer = (oscalData, oscalUrl, onResolutionComplete) => (
+  const renderer = (isRestMode, oscalData, oscalUrl, onResolutionComplete) => (
     <OSCALCatalog
       catalog={oscalData[oscalObjectType.jsonRootName]}
       parentUrl={oscalUrl}
       onError={onError}
       onResolutionComplete={onResolutionComplete}
+      onFieldSave={(data, update, editedField, newValue) => {
+        restPatch(
+          data,
+          update,
+          editedField,
+          newValue,
+          oscalObjectType.jsonRootName,
+          oscalObjectType.restPath
+        );
+      }}
     />
   );
   return (
@@ -207,12 +272,23 @@ export function OSCALCatalogLoader(props) {
 
 export function OSCALSSPLoader(props) {
   const oscalObjectType = oscalObjectTypes.ssp;
-  const renderer = (oscalData, oscalUrl, onResolutionComplete) => (
+  const renderer = (isRestMode, oscalData, oscalUrl, onResolutionComplete) => (
     <OSCALSsp
       system-security-plan={oscalData[oscalObjectType.jsonRootName]}
+      isEditable={isRestMode}
       parentUrl={oscalUrl}
       onError={onError}
       onResolutionComplete={onResolutionComplete}
+      onFieldSave={(data, update, editedField, newValue) => {
+        restPatch(
+          data,
+          update,
+          editedField,
+          newValue,
+          oscalObjectType.jsonRootName,
+          oscalObjectType.restPath
+        );
+      }}
     />
   );
   return (
@@ -227,12 +303,22 @@ export function OSCALSSPLoader(props) {
 
 export function OSCALComponentLoader(props) {
   const oscalObjectType = oscalObjectTypes.component;
-  const renderer = (oscalData, oscalUrl, onResolutionComplete) => (
+  const renderer = (isRestMode, oscalData, oscalUrl, onResolutionComplete) => (
     <OSCALComponentDefinition
       componentDefinition={oscalData[oscalObjectType.jsonRootName]}
       parentUrl={oscalUrl}
       onError={onError}
       onResolutionComplete={onResolutionComplete}
+      onFieldSave={(data, update, editedField, newValue) => {
+        restPatch(
+          data,
+          update,
+          editedField,
+          newValue,
+          oscalObjectType.jsonRootName,
+          oscalObjectType.restPath
+        );
+      }}
     />
   );
   return (
@@ -246,11 +332,21 @@ export function OSCALComponentLoader(props) {
 }
 export function OSCALProfileLoader(props) {
   const oscalObjectType = oscalObjectTypes.profile;
-  const renderer = (oscalData, oscalUrl, onResolutionComplete) => (
+  const renderer = (isRestMode, oscalData, oscalUrl, onResolutionComplete) => (
     <OSCALProfile
       profile={oscalData[oscalObjectType.jsonRootName]}
       parentUrl={oscalUrl}
       onResolutionComplete={onResolutionComplete}
+      onFieldSave={(data, update, editedField, newValue) => {
+        restPatch(
+          data,
+          update,
+          editedField,
+          newValue,
+          oscalObjectType.jsonRootName,
+          oscalObjectType.restPath
+        );
+      }}
     />
   );
   return (

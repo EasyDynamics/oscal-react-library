@@ -10,6 +10,7 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import GroupIcon from "@material-ui/icons/Group";
 import { makeStyles } from "@material-ui/core/styles";
+import OSCALEditableTextField from "./OSCALEditableTextField";
 
 const useStyles = makeStyles((theme) => ({
   OSCALMetadataAdditional: {
@@ -28,13 +29,18 @@ const useStyles = makeStyles((theme) => ({
   OSCALMetadataPartiesHeader: {
     backgroundColor: theme.palette.background.paper,
   },
+
+  OSCALMetadataVersion: {
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 // Returns a string with a locality-sensitive representation of this date
 const formatDate = (isoDate) => new Date(isoDate).toLocaleString();
 
-export default function OSCALControlGuidance(props) {
+export default function OSCALMetadata(props) {
   const classes = useStyles();
+
   if (!props.metadata) {
     return null;
   }
@@ -55,8 +61,33 @@ export default function OSCALControlGuidance(props) {
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <Typography variant="h6">{props.metadata.title}</Typography>
+      <Grid container direction="row" alignItems="center">
+        <OSCALEditableTextField
+          canEdit={props.isEditable}
+          editedField={
+            props.isEditable
+              ? [Object.keys(props.patchData)[0], "metadata", "title"]
+              : null
+          }
+          onFieldSave={props.onFieldSave}
+          patchData={
+            props.isEditable
+              ? {
+                  [Object.keys(props.patchData)[0]]: {
+                    uuid: props.patchData[Object.keys(props.patchData)[0]].uuid,
+                    metadata: {
+                      title: props.metadata.title,
+                    },
+                  },
+                }
+              : null
+          }
+          size={6}
+          textFieldSize="medium"
+          typographyVariant="h6"
+          update={props.update}
+          value={props.metadata.title}
+        />
       </Grid>
       <Grid item xs={8}>
         <Paper className={classes.OSCALMetadataParties}>
@@ -89,8 +120,8 @@ export default function OSCALControlGuidance(props) {
       </Grid>
       <Grid item xs={4}>
         <Paper className={classes.OSCALMetadataAdditional}>
-          <Grid container spacing={1}>
-            <Grid item xs={4}>
+          <Grid container direction="row" alignItems="center">
+            <Grid item className={classes.OSCALMetadataVersion}>
               <Typography
                 variant="body2"
                 className={classes.OSCALMetadataLabel}
@@ -98,10 +129,37 @@ export default function OSCALControlGuidance(props) {
                 Version:
               </Typography>
             </Grid>
-            <Grid item xs={8}>
-              <Typography variant="body2">{props.metadata.version}</Typography>
-            </Grid>
-            <Grid item xs={4}>
+            <OSCALEditableTextField
+              canEdit={props.isEditable}
+              className={classes.OSCALMetadataVersion}
+              editedField={
+                props.isEditable
+                  ? [Object.keys(props.patchData)[0], "metadata", "version"]
+                  : null
+              }
+              onFieldSave={props.onFieldSave}
+              patchData={
+                props.isEditable
+                  ? {
+                      [Object.keys(props.patchData)[0]]: {
+                        uuid: props.patchData[Object.keys(props.patchData)[0]]
+                          .uuid,
+                        metadata: {
+                          version: props.metadata.version,
+                        },
+                      },
+                    }
+                  : null
+              }
+              size={4}
+              textFieldSize="small"
+              typographyVariant="body2"
+              update={props.update}
+              value={props.metadata.version}
+            />
+          </Grid>
+          <Grid container spacing={1} direction="row" alignItems="center">
+            <Grid item className={classes.OSCALMetadataVersion}>
               <Typography
                 variant="body2"
                 className={classes.OSCALMetadataLabel}
@@ -109,12 +167,14 @@ export default function OSCALControlGuidance(props) {
                 Last Modified:
               </Typography>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item>
               <Typography variant="body2">
                 {formatDate(props.metadata["last-modified"])}
               </Typography>
             </Grid>
-            <Grid item xs={4}>
+          </Grid>
+          <Grid container spacing={1} direction="row" alignItems="center">
+            <Grid item className={classes.OSCALMetadataVersion}>
               <Typography
                 variant="body2"
                 className={classes.OSCALMetadataLabel}
@@ -122,7 +182,7 @@ export default function OSCALControlGuidance(props) {
                 OSCAL Version:
               </Typography>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item>
               <Typography variant="body2">
                 {props.metadata["oscal-version"]}
               </Typography>
