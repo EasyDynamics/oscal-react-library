@@ -47,7 +47,7 @@ export default function OSCALLoaderForm(props) {
   };
 
   useEffect(() => {
-    findAllObjects();
+    if (props.isRestMode) findAllObjects();
     return () => {
       unmounted.current = true;
     };
