@@ -68,17 +68,13 @@ function App() {
 
   if (process.env.REACT_APP_GOOGLE_ANALYTICS) {
     ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS);
-    // We disable this check since, while the hooks are called conditionally,
-    // it is safe to do so because this is not a condition that can change
-    // between renders. `process.env` becomes a static object.
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const location = useLocation();
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-      ReactGA.pageview(location.pathname + location.search);
-    }, [location]);
   }
-
+  const location = useLocation();
+  useEffect(() => {
+    if (process.env.REACT_APP_GOOGLE_ANALYTICS) {
+      ReactGA.pageview(location.pathname + location.search);
+    }
+  }, [location]);
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
