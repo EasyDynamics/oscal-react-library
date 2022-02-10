@@ -13,7 +13,13 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import ReactGA from "react-ga";
-import { Navigate, Route, Routes, Link as RouterLink, useLocation } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  Routes,
+  Link as RouterLink,
+  useLocation,
+} from "react-router-dom";
 import Link from "@material-ui/core/Link";
 
 import { ThemeProvider } from "@material-ui/styles";
