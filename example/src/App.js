@@ -1,6 +1,6 @@
 import "./App.css";
 import { makeStyles, createTheme } from "@material-ui/core/styles";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import AppBar from "@material-ui/core/AppBar";
@@ -12,7 +12,8 @@ import GitHubIcon from "@material-ui/icons/GitHub";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { Navigate, Route, Routes, Link as RouterLink } from "react-router-dom";
+import ReactGA from "react-ga";
+import { Navigate, Route, Routes, Link as RouterLink, useLocation } from "react-router-dom";
 import Link from "@material-ui/core/Link";
 
 import { ThemeProvider } from "@material-ui/styles";
@@ -64,6 +65,19 @@ function App() {
   const handleAppNavClose = () => {
     setAnchorEl(null);
   };
+
+  if (process.env.REACT_APP_GOOGLE_ANALYTICS) {
+    ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS);
+    // We disable this check since, while the hooks are called conditionally,
+    // it is safe to do so because this is not a condition that can change
+    // between renders. `process.env` becomes a static object.
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const location = useLocation();
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+      ReactGA.pageview(location.pathname + location.search);
+    }, [location]);
+  }
 
   return (
     <ThemeProvider theme={theme}>
