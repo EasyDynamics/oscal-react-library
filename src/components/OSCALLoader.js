@@ -99,6 +99,29 @@ function restPatch(
     );
 }
 
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { error: undefined };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    this.setState({ error });
+    console.error({ ...this.state, errorInfo });
+  }
+
+  render() {
+    if (this.state.error !== undefined) {
+      return onError(this.state.error);
+    }
+    return this.props.children;
+  }
+}
+
 export default function OSCALLoader(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -225,7 +248,7 @@ export default function OSCALLoader(props) {
   return (
     <>
       {form}
-      {result}
+      <ErrorBoundary>{result}</ErrorBoundary>
     </>
   );
 }
