@@ -109,7 +109,7 @@ export default function OSCALBackMatter(props) {
               <TitleDisplay resource={resource} />
             </Grid>
             <Grid item xs={2}>
-              <Grid container spacing={0} justify="flex-end">
+              <Grid container spacing={0} justifyContent="flex-end">
                 <DescriptionDisplay resource={resource} />
                 <CitationDisplay resource={resource} />
               </Grid>

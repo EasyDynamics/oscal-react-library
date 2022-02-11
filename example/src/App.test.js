@@ -8,7 +8,7 @@ import App from "./App";
 test("renders menu navigation", () => {
   const history = createMemoryHistory();
   render(
-    <Router history={history}>
+    <Router history={history} location={history.location}>
       <App />
     </Router>
   );

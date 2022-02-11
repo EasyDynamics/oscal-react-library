@@ -1,5 +1,5 @@
 import "./App.css";
-import { makeStyles, createMuiTheme } from "@material-ui/core/styles";
+import { makeStyles, createTheme } from "@material-ui/core/styles";
 import React, { useState } from "react";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -12,7 +12,7 @@ import GitHubIcon from "@material-ui/icons/GitHub";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { Route, Switch, Redirect, Link as RouterLink } from "react-router-dom";
+import { Navigate, Route, Routes, Link as RouterLink } from "react-router-dom";
 import Link from "@material-ui/core/Link";
 
 import { ThemeProvider } from "@material-ui/styles";
@@ -24,7 +24,7 @@ import {
 } from "@EasyDynamics/oscal-react-library";
 import logo from "./images/logo-header.svg";
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: {
       main: "#002867",
@@ -81,12 +81,24 @@ function App() {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" className={classes.title}>
-              <Route path="/catalog">OSCAL Catalog Viewer</Route>
-              <Route path="/system-security-plan">
-                OSCAL System Security Plan Viewer
-              </Route>
-              <Route path="/component-definition">OSCAL Component Viewer</Route>
-              <Route path="/profile">OSCAL Profile Viewer</Route>
+              <Routes>
+                <Route exact path="/catalog" element={"OSCAL Catalog Viewer"} />
+                <Route
+                  exact
+                  path="/system-security-plan"
+                  element={"OSCAL System Security Plan Viewer"}
+                ></Route>
+                <Route
+                  exact
+                  path="/component-definition"
+                  element={"OSCAL Component Viewer"}
+                />
+                <Route
+                  exact
+                  path="/profile"
+                  element={"OSCAL Profile Viewer"}
+                />
+              </Routes>
             </Typography>
             <Typography variant="body2" className={classes.logoText}>
               Powered by
@@ -141,24 +153,28 @@ function App() {
           </MenuItem>
         </Menu>
         <Container component="main">
-          <Switch>
-            {/* TODO - This doesn't load properly */}
-            <Route exact path="/">
-              <Redirect to="/catalog" />
-            </Route>
-            <Route path="/catalog">
-              <OSCALCatalogLoader renderForm />
-            </Route>
-            <Route exact path="/system-security-plan">
-              <OSCALSSPLoader renderForm />
-            </Route>
-            <Route exact path="/component-definition">
-              <OSCALComponentLoader renderForm />
-            </Route>
-            <Route exact path="/profile">
-              <OSCALProfileLoader renderForm />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route exact path="/" element={<Navigate replace to="/catalog" />} />
+            <Route
+              path="/catalog"
+              element={<OSCALCatalogLoader renderForm />}
+            />
+            <Route
+              exact
+              path="/system-security-plan"
+              element={<OSCALSSPLoader renderForm />}
+            />
+            <Route
+              exact
+              path="/component-definition"
+              element={<OSCALComponentLoader renderForm />}
+            />
+            <Route
+              exact
+              path="/profile"
+              element={<OSCALProfileLoader renderForm />}
+            />
+          </Routes>
         </Container>
       </div>
     </ThemeProvider>
