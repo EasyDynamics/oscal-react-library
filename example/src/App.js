@@ -82,22 +82,18 @@ function App() {
             </IconButton>
             <Typography variant="h6" className={classes.title}>
               <Routes>
-                <Route exact path="/catalog" element={"OSCAL Catalog Viewer"} />
+                <Route exact path="/catalog" element="OSCAL Catalog Viewer" />
                 <Route
                   exact
                   path="/system-security-plan"
-                  element={"OSCAL System Security Plan Viewer"}
-                ></Route>
+                  element="OSCAL System Security Plan Viewer"
+                />
                 <Route
                   exact
                   path="/component-definition"
-                  element={"OSCAL Component Viewer"}
+                  element="OSCAL Component Viewer"
                 />
-                <Route
-                  exact
-                  path="/profile"
-                  element={"OSCAL Profile Viewer"}
-                />
+                <Route exact path="/profile" element="OSCAL Profile Viewer" />
               </Routes>
             </Typography>
             <Typography variant="body2" className={classes.logoText}>
@@ -154,7 +150,11 @@ function App() {
         </Menu>
         <Container component="main">
           <Routes>
-            <Route exact path="/" element={<Navigate replace to="/catalog" />} />
+            <Route
+              exact
+              path="/"
+              element={<Navigate replace to="/catalog" />}
+            />
             <Route
               path="/catalog"
               element={<OSCALCatalogLoader renderForm />}
