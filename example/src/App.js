@@ -83,11 +83,11 @@ function App() {
             <Typography variant="h6" className={classes.title}>
               <Routes>
                 {/*
-                  * Because we immediately redirect users, `/` won't be visible for
-                  * long; however, having this entry means that we avoid a console
-                  * warning and at least presents something if the redirect or
-                  * rendering fails for any reason.
-                  */}
+                 * Because we immediately redirect users, `/` won't be visible for
+                 * long; however, having this entry means that we avoid a console
+                 * warning and at least presents something if the redirect or
+                 * rendering fails for any reason.
+                 */}
                 <Route exact path="/" element="OSCAL Viewer" />
                 <Route exact path="/catalog" element="OSCAL Catalog Viewer" />
                 <Route
@@ -160,7 +160,7 @@ function App() {
             <Route
               exact
               path="/"
-              element={<Navigate replace={true} to="/catalog" />}
+              element={<Navigate replace to="/catalog" />}
             />
             <Route
               path="/catalog"
