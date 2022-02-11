@@ -82,6 +82,13 @@ function App() {
             </IconButton>
             <Typography variant="h6" className={classes.title}>
               <Routes>
+                {/*
+                  * Because we immediately redirect users, `/` won't be visible for
+                  * long; however, having this entry means that we avoid a console
+                  * warning and at least presents something if the redirect or
+                  * rendering fails for any reason.
+                  */}
+                <Route exact path="/" element="OSCAL Viewer" />
                 <Route exact path="/catalog" element="OSCAL Catalog Viewer" />
                 <Route
                   exact
@@ -116,7 +123,7 @@ function App() {
               target="_blank"
               rel="noreferrer"
             >
-              <GitHubIcon color="white" />
+              <GitHubIcon htmlColor="white" />
             </IconButton>
           </Toolbar>
         </AppBar>
@@ -153,7 +160,7 @@ function App() {
             <Route
               exact
               path="/"
-              element={<Navigate replace to="/catalog" />}
+              element={<Navigate replace={true} to="/catalog" />}
             />
             <Route
               path="/catalog"
