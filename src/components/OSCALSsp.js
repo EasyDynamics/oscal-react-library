@@ -71,7 +71,11 @@ export default function OSCALSsp(props) {
         controlImplementation={ssp["control-implementation"]}
         components={ssp["system-implementation"].components}
         controls={ssp.resolvedControls}
+        isEditable={props.isEditable}
         modifications={ssp.modifications}
+        onFieldSave={props.onFieldSave}
+        patchData={patchData}
+        update={setSsp}
       />
     );
   }

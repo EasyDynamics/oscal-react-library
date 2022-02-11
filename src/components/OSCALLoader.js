@@ -56,11 +56,19 @@ function populatePartialPatchData(data, editedFieldJsonPath, newValue) {
     return;
   }
 
-  populatePartialPatchData(
-    data[editedFieldJsonPath.shift()],
-    editedFieldJsonPath,
-    newValue
-  );
+  if (!Number.isNaN(editedFieldJsonPath.at(0))) {
+    populatePartialPatchData(
+      data[Number(editedFieldJsonPath.shift())],
+      editedFieldJsonPath,
+      newValue
+    );
+  } else {
+    populatePartialPatchData(
+      data[editedFieldJsonPath.shift()],
+      editedFieldJsonPath,
+      newValue
+    );
+  }
 }
 
 /**
@@ -275,7 +283,7 @@ export function OSCALSSPLoader(props) {
   const renderer = (isRestMode, oscalData, oscalUrl, onResolutionComplete) => (
     <OSCALSsp
       system-security-plan={oscalData[oscalObjectType.jsonRootName]}
-      isEditable={isRestMode}
+      isEditable={!isRestMode}
       parentUrl={oscalUrl}
       onError={onError}
       onResolutionComplete={onResolutionComplete}

@@ -16,7 +16,7 @@ function inEditStateTextField(props, reference) {
           }}
           inputRef={reference}
           size={props.textFieldSize}
-          defaultValue={props.value}
+          defaultValue={props.defaultValue}
           variant={props.textFieldVariant}
         />
       </Typography>

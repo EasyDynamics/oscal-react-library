@@ -1,10 +1,13 @@
 import React from "react";
 import { styled, withTheme, makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import Badge from "@material-ui/core/Badge";
+import { v4 } from "uuid";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
+import OSCALEditableTextField from "./OSCALEditableTextField";
 
 const prosePlaceholderRegexpString = "{{ insert: param, ([0-9a-zA-B-_.]*) }}";
 
@@ -28,6 +31,50 @@ const useStyles = makeStyles(() => ({
     color: "silver",
   },
 }));
+
+function createPatchDataOnDefaultProseUpdate(
+  props,
+  rootOscalObjectName,
+  setParamId
+) {
+  return {
+    [rootOscalObjectName]: {
+      uuid: props.patchData[rootOscalObjectName].uuid,
+      "control-implementation": {
+        "implemented-requirements": [
+          {
+            uuid: props.patchData[rootOscalObjectName][
+              "control-implementation"
+            ]["implemented-requirements"][0].uuid,
+            "control-id":
+              props.patchData[rootOscalObjectName]["control-implementation"][
+                "implemented-requirements"
+              ][0]["control-id"],
+            statements: [
+              {
+                uuid: v4(),
+                "statement-id": props.statementId,
+                "by-components": [
+                  {
+                    uuid: v4(),
+                    "component-uuid": props.componentId,
+                    description: "User added a new control implementation",
+                    "set-parameters": [
+                      {
+                        "param-id": setParamId,
+                        values: [],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    },
+  };
+}
 
 /**
  * Gets the label for the given parameter ID from the given parameters
@@ -176,6 +223,7 @@ function getParameterLabelSegment(
     modificationSetParameters,
     parameterId
   );
+
   if (!constraintsDisplay) {
     return (
       <ParamLabel component="span" key={`param-label-key-${key}`}>
@@ -220,6 +268,7 @@ function getParameterValueSegment(
     modificationSetParameters,
     parameterId
   );
+
   if (!constraintsDisplay.length) {
     return (
       <ParamValue component="span" key={`param-value-key-${key}`}>
@@ -227,6 +276,7 @@ function getParameterValueSegment(
       </ParamValue>
     );
   }
+
   return (
     <SegmentTooltipWrapper
       constraintsDisplay={constraintsDisplay}
@@ -245,6 +295,22 @@ function getParameterValueSegment(
  * @returns the parameter label component
  */
 export function OSCALReplacedProseWithParameterLabel(props) {
+  const rootOscalObjectName = Object.keys(props.patchData)[0];
+
+  const editedFieldPath = [
+    rootOscalObjectName,
+    "control-implementation",
+    "implemented-requirements",
+    0,
+    "statements",
+    0,
+    "by-components",
+    0,
+    "set-parameters",
+    0,
+    "values",
+  ];
+
   if (!props.prose) {
     return null;
   }
@@ -259,23 +325,47 @@ export function OSCALReplacedProseWithParameterLabel(props) {
     );
   }
 
+  let labelWithProse = props.prose;
+  if (props.label) {
+    labelWithProse = props.label.concat(` ${props.prose}`);
+  }
+
   return (
     <Typography className={props.className}>
-      {props.label}
-      {props.prose
-        .split(RegExp(prosePlaceholderRegexpString, "g"))
-        .map((segment, index) => {
-          if (index % 2 === 0) {
-            return getTextSegment(segment, index.toString());
-          }
-          return getParameterLabelSegment(
-            props.parameters,
-            segment,
-            props.modificationSetParameters,
-            index.toString()
-          );
-        })}
-      {props.modificationDisplay}
+      <Grid container direction="row" alignItems="center">
+        {labelWithProse
+          .split(RegExp(prosePlaceholderRegexpString, "g"))
+          .map((segment, index) => {
+            if (index % 2 === 0) {
+              return getTextSegment(segment, index.toString());
+            }
+
+            return (
+              <OSCALEditableTextField
+                canEdit={props.isEditable}
+                defaultValue={getParameterLabel(props.parameters, segment)}
+                editedField={editedFieldPath}
+                onFieldSave={props.onFieldSave}
+                patchData={createPatchDataOnDefaultProseUpdate(
+                  props,
+                  rootOscalObjectName,
+                  segment
+                )}
+                size={5}
+                textFieldSize="small"
+                typographyVariant="body2"
+                update={props.update}
+                value={getParameterLabelSegment(
+                  props.parameters,
+                  segment,
+                  props.modificationSetParameters,
+                  index.toString()
+                )}
+              />
+            );
+          })}
+        {props.modificationDisplay}
+      </Grid>
     </Typography>
   );
 }
@@ -297,19 +387,27 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     props.statementId,
     props.componentId
   );
+
   if (!statementByComponent) {
     const classes = useStyles();
     return (
       <OSCALReplacedProseWithParameterLabel
+        componentId={props.componentId}
+        implReqStatements={props.implReqStatements}
+        isEditable={props.isEditable}
         label={props.label}
+        onFieldSave={props.onFieldSave}
         prose={props.prose}
         parameters={props.parameters}
+        patchData={props.patchData}
         modificationDisplay={props.modificationDisplay}
         className={classes.OSCALStatementNotImplemented}
+        statementId={props.statementId}
       />
     );
   }
 
+  // statementByComponent always seems to return null, so patch data is not updated here
   const { description } = statementByComponent;
   return (
     <Typography>

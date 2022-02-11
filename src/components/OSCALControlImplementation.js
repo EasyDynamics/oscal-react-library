@@ -56,11 +56,20 @@ export default function OSCALControlImplementation(props) {
                   (implementedRequirement) => (
                     <OSCALControlImplementationImplReq
                       implementedRequirement={implementedRequirement}
+                      childLevel={0}
                       components={props.components}
                       controls={props.controls}
-                      childLevel={0}
+                      isEditable={props.isEditable}
                       key={implementedRequirement.uuid}
                       modifications={props.modifications}
+                      onFieldSave={props.onFieldSave}
+                      patchData={{
+                        [Object.keys(props.patchData)[0]]: {
+                          uuid: props.patchData[Object.keys(props.patchData)[0]]
+                            .uuid,
+                        },
+                      }}
+                      update={props.update}
                     />
                   )
                 )}

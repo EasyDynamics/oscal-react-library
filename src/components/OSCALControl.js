@@ -82,26 +82,34 @@ export default function OSCALControl(props) {
           props.control.parts.map((part, index) => (
             <OSCALControlPart
               part={part}
+              componentId={props.componentId}
               control={props.control}
               controlId={props.control.id}
-              parameters={props.control.params}
               implReqStatements={props.implReqStatements}
-              componentId={props.componentId}
+              isEditable={props.isEditable}
+              key={part.id ?? `part-${index}`}
               modificationAlters={props.modificationAlters}
               modificationSetParameters={props.modificationSetParameters}
-              key={part.id ?? `part-${index}`}
+              onFieldSave={props.onFieldSave}
+              parameters={props.control.params}
+              patchData={props.patchData}
+              update={props.update}
             />
           ))}
         {props.control.controls &&
           props.control.controls.map((control) => (
             <OSCALControl
               control={control}
-              parameters={control.params}
+              childLevel={props.childLevel + 1}
               includeControlIds={props.includeControlIds}
+              isEditable={props.isEditable}
+              key={control.id}
               modificationAlters={props.modificationAlters}
               modificationSetParameters={props.modificationSetParameters}
-              childLevel={props.childLevel + 1}
-              key={control.id}
+              onFieldSave={props.onFieldSave}
+              parameters={control.params}
+              patchData={props.patchData}
+              update={props.update}
             />
           ))}
       </CardContent>
