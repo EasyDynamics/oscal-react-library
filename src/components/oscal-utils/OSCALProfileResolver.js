@@ -1,6 +1,6 @@
 import getUriFromBackMatterByHref from "./OSCALBackMatterUtils";
 
-const OSCAL_MEDIA_TYPE_PREFIX = "application/oscal.catalog+json";
+const OSCAL_MEDIA_TYPE_REGEX = /^application\/oscal.*\+json$/;
 /**
  * Profiles are brought in through different methods in OSCAL models.
  *
@@ -87,7 +87,7 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
               result.profile["back-matter"],
               profileImport.href,
               null,
-              OSCAL_MEDIA_TYPE_PREFIX
+              OSCAL_MEDIA_TYPE_REGEX
             );
             OSCALResolveProfileOrCatalogUrlControls(
               resolvedControls,
@@ -142,7 +142,7 @@ export function OSCALResolveProfile(profile, parentUrl, onSuccess, onError) {
         profile["back-matter"],
         imp.href,
         parentUrl,
-        OSCAL_MEDIA_TYPE_PREFIX
+        OSCAL_MEDIA_TYPE_REGEX
       ),
       parentUrl,
       profile["back-matter"],
