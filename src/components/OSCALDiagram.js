@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import getUriFromBackMatterByHref from "./oscal-utils/OSCALBackMatterUtils";
 import Typography from "@material-ui/core/Typography";
+import getUriFromBackMatterByHref from "./oscal-utils/OSCALBackMatterUtils";
 
 const useStyles = makeStyles(() => ({
   OSCALDiagramImg: {
