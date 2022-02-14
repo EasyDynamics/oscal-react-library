@@ -1,16 +1,14 @@
 import React from "react";
-import { Router } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createMemoryHistory } from "history";
 import App from "./App";
 
 test("renders menu navigation", () => {
-  const history = createMemoryHistory();
   render(
-    <Router history={history}>
+    <MemoryRouter>
       <App />
-    </Router>
+    </MemoryRouter>
   );
 
   userEvent.click(screen.getByRole("button", { name: /menu/i }));
