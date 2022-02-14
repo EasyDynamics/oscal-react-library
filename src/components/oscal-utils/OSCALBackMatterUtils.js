@@ -41,7 +41,7 @@ export default function getUriFromBackMatterByHref(
   backMatter,
   href,
   parentUrl,
-  mediaTypePrefix
+  mediaTypeRegex
 ) {
   const foundResource = getResourceFromBackMatterByHref(backMatter, href);
 
@@ -50,7 +50,7 @@ export default function getUriFromBackMatterByHref(
   }
 
   const foundLink = foundResource.rlinks.find((rlink) =>
-    rlink["media-type"].startsWith(mediaTypePrefix)
+    mediaTypeRegex.test(rlink["media-type"])
   );
 
   if (!foundLink) {
