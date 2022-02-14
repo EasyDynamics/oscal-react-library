@@ -26,7 +26,7 @@
     "@testing-library/react": "^12.1.2",
     "history": "^5.2.0",
     "prop-types": "^15.8.0",
-    "react": "^17.0.1",
+    "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.2.1",
     "react-scripts": "^5.0.0",
@@ -47,7 +47,8 @@
     "build-and-run-example": "cd example && npm install && npm start",
     "run-example": "cd example && npm start",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "react-scripts": "react-scripts"
   },
   "eslintConfig": {
     "extends": [
@@ -70,13 +71,15 @@
   "devDependencies": {
     "@babel/plugin-syntax-jsx": "^7.16.7",
     "@babel/preset-react": "^7.16.7",
-    "@storybook/addon-actions": "^6.4.18",
-    "@storybook/addon-docs": "^6.4.18",
-    "@storybook/addon-essentials": "^6.4.18",
-    "@storybook/addon-links": "^6.4.18",
-    "@storybook/node-logger": "^6.4.18",
+    "@storybook/addon-actions": "^6.4.19",
+    "@storybook/addon-docs": "^6.4.19",
+    "@storybook/addon-essentials": "^6.4.19",
+    "@storybook/addon-links": "^6.4.19",
+    "@storybook/builder-webpack5": "^6.4.19",
+    "@storybook/manager-webpack5": "^6.4.19",
+    "@storybook/node-logger": "^6.4.19",
     "@storybook/preset-create-react-app": "^4.0.1",
-    "@storybook/react": "^6.4.18",
+    "@storybook/react": "^6.4.19",
     "@testing-library/user-event": "^13.5.0",
     "babel-eslint": "^10.1.0",
     "cross-env": "^7.0.3",
@@ -93,7 +96,8 @@
     "gh-pages": "^3.2.3",
     "microbundle-crl": "^0.13.11",
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "webpack": "^5.68.0"
   },
   "files": [
     "dist"
