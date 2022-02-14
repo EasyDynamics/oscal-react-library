@@ -1,9 +1,12 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import getUriFromBackMatterByHref from "./oscal-utils/OSCALBackMatterUtils";
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles(() => ({
-  OSCALDiagram: {},
+  OSCALDiagramImg: {
+    maxWidth: "100%",
+  },
 }));
 
 export default function OSCALDiagram(props) {
@@ -23,10 +26,15 @@ export default function OSCALDiagram(props) {
   );
 
   return (
-    <img
-      src={diagramUri}
-      alt={props.diagram.caption}
-      className={classes.OSCALDiagram}
-    />
+    <>
+      <img
+        src={diagramUri}
+        alt={props.diagram.caption}
+        className={classes.OSCALDiagramImg}
+      />
+      <Typography variant="caption" display="block" align="center" gutterBottom>
+        {props.diagram.caption}
+      </Typography>
+    </>
   );
 }

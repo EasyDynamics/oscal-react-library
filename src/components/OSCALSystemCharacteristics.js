@@ -13,6 +13,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import StyledTooltip from "./OSCALStyledTooltip";
+import OSCALDiagram from "./OSCALDiagram";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -250,6 +251,28 @@ export default function OSCALSystemCharacteristics(props) {
                   </TableBody>
                 </Table>
               </TableContainer>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="subtitle1" gutterBottom component="div">
+                Authorization Boundary
+              </Typography>
+              <Typography variant="body2">
+                {props.systemCharacteristics["authorization-boundary"] &&
+                  props.systemCharacteristics["authorization-boundary"].description}
+              </Typography>
+              <Grid container spacing={2} justifyContent="center">
+              {props.systemCharacteristics["authorization-boundary"] &&
+                props.systemCharacteristics["authorization-boundary"]["diagrams"].map((diagram) => (
+                  <Grid item xs={6}>
+                    <OSCALDiagram
+                      diagram={diagram}
+                      backMatter={props.backMatter}
+                      parentUrl={props.parentUrl}
+                      mediaTypeRegex={/^image\//}
+                    />
+                  </Grid>
+              ))}
+              </Grid>
             </Grid>
           </Grid>
         </CardContent>
