@@ -20,27 +20,38 @@ export function getAbsoluteUrl(rlink, parentUrl) {
 }
 
 /**
- * Gets an rlink URI from the given back matter's resource by the given HREF UUID.
- *
- * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/implementation-layer/component/xml-schema/##local_back-matter-resource-rlink_def-h3}
+ * Gets a resource from the given back matter's resource by the given HREF UUID.
  */
-
-export default function getUriFromBackMatterByHref(
-  backMatter,
-  href,
-  parentUrl
-) {
+export function getResourceFromBackMatterByHref(backMatter, href) {
   if (!href.startsWith("#")) {
     throw new Error("not an internal href");
   }
   // Dig into back-matter to look for absolute href
   const importUuid = href.substring(1);
 
-  const foundLink = backMatter.resources
-    .find((resource) => resource.uuid === importUuid)
-    ?.rlinks.find(
-      (rlink) => rlink["media-type"] === "application/oscal.catalog+json"
-    );
+  return backMatter.resources.find((resource) => resource.uuid === importUuid);
+}
+
+/**
+ * Gets an rlink URI from the given back matter's resource by the given HREF UUID.
+ *
+ * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/implementation-layer/component/xml-schema/##local_back-matter-resource-rlink_def-h3}
+ */
+export default function getUriFromBackMatterByHref(
+  backMatter,
+  href,
+  parentUrl,
+  mediaTypePrefix
+) {
+  const foundResource = getResourceFromBackMatterByHref(backMatter, href);
+
+  if (!foundResource) {
+    throw new Error("resource not found for href");
+  }
+
+  const foundLink = foundResource.rlinks.find((rlink) =>
+    rlink["media-type"].startsWith(mediaTypePrefix)
+  );
 
   if (!foundLink) {
     throw new Error("resource not found for href");
