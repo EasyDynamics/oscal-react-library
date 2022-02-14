@@ -258,20 +258,23 @@ export default function OSCALSystemCharacteristics(props) {
               </Typography>
               <Typography variant="body2">
                 {props.systemCharacteristics["authorization-boundary"] &&
-                  props.systemCharacteristics["authorization-boundary"].description}
+                  props.systemCharacteristics["authorization-boundary"]
+                    .description}
               </Typography>
               <Grid container spacing={2} justifyContent="center">
-              {props.systemCharacteristics["authorization-boundary"] &&
-                props.systemCharacteristics["authorization-boundary"]["diagrams"].map((diagram) => (
-                  <Grid item xs={6}>
-                    <OSCALDiagram
-                      diagram={diagram}
-                      backMatter={props.backMatter}
-                      parentUrl={props.parentUrl}
-                      mediaTypeRegex={/^image\//}
-                    />
-                  </Grid>
-              ))}
+                {props.systemCharacteristics["authorization-boundary"] &&
+                  props.systemCharacteristics[
+                    "authorization-boundary"
+                  ].diagrams?.map((diagram) => (
+                    <Grid item xs={6}>
+                      <OSCALDiagram
+                        diagram={diagram}
+                        backMatter={props.backMatter}
+                        parentUrl={props.parentUrl}
+                        mediaTypeRegex={/^image\//}
+                      />
+                    </Grid>
+                  ))}
               </Grid>
             </Grid>
           </Grid>
