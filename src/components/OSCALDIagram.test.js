@@ -19,7 +19,7 @@ export default function testOSCALDiagram(parentElementName, renderer) {
     renderer();
     const result = screen.getByAltText("Authorization Boundary Diagram");
     expect(result).toBeVisible();
-    expect(result).toHaveAttribute("src", ".//.././resources/diagram.png");
+    expect(result).toHaveAttribute("src", ".//../diagram.png");
   });
 }
 
