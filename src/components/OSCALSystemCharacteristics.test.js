@@ -2,11 +2,13 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import OSCALSystemCharacteristics from "./OSCALSystemCharacteristics";
 import { systemCharacteristicsTestData } from "../test-data/SystemData";
+import { backMatterTestData } from "../test-data/BackMatterData";
 
 function systemCharacteristicsRenderer() {
   render(
     <OSCALSystemCharacteristics
       systemCharacteristics={systemCharacteristicsTestData}
+      backMatter={backMatterTestData}
     />
   );
 }

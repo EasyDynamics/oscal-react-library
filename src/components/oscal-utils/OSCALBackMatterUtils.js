@@ -29,7 +29,9 @@ export function getResourceFromBackMatterByHref(backMatter, href) {
   // Dig into back-matter to look for absolute href
   const importUuid = href.substring(1);
 
-  return backMatter.resources.find((resource) => resource.uuid === importUuid);
+  return backMatter?.resources?.find(
+    (resource) => resource.uuid === importUuid
+  );
 }
 
 /**

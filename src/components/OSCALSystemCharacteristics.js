@@ -266,7 +266,7 @@ export default function OSCALSystemCharacteristics(props) {
                   props.systemCharacteristics[
                     "authorization-boundary"
                   ].diagrams?.map((diagram) => (
-                    <Grid item xs={6}>
+                    <Grid item xs={6} key={diagram.uuid}>
                       <OSCALDiagram
                         diagram={diagram}
                         backMatter={props.backMatter}

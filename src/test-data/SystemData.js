@@ -3,6 +3,8 @@ import {
   systemCharacteristicsDescriptionUrl,
   systemCharacteristicsInformationUrl,
 } from "./Urls";
+import diagramData from "./DiagramData";
+import { backMatterTestData } from "./BackMatterData";
 
 const title = "Example Component";
 const description = "An example component.";
@@ -150,6 +152,7 @@ export const systemCharacteristicsTestData = {
   ],
   "authorization-boundary": {
     description: "The description of the authorization boundary would go here.",
+    diagrams: [diagramData],
   },
 };
 
@@ -158,4 +161,5 @@ export const sspTestData = {
   metadata: metadataTestData,
   "system-characteristics": systemCharacteristicsTestData,
   "system-implementation": systemImplementationTestData,
+  "back-matter": backMatterTestData,
 };
