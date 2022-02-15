@@ -4,8 +4,8 @@ import { backMatterTestData } from "../test-data/BackMatterData";
 import diagramTestData from "../test-data/DiagramData";
 
 export default {
-  // title: "Components/Diagram",
-  // component: OSCALDiagram,
+  title: "Components/Diagram",
+  component: OSCALDiagram,
 };
 
 function Template(args) {

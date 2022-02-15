@@ -1,4 +1,5 @@
 import { revFourCatalog } from "./Urls";
+import diagram from "./resources/diagram.png";
 
 const citation = {
   text: "This is an example citation",
@@ -44,7 +45,7 @@ export const backMatterTestData = {
       description: "This is a test diagram",
       rlinks: [
         {
-          href: "./resources/diagram.png",
+          href: diagram,
           "media-type": "image/png",
         },
       ],
