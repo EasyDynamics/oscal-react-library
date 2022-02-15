@@ -14,13 +14,14 @@ export default function OSCALEditableFieldActions(props) {
       <IconButton
         aria-label={`save-${getElementLabel(props.editedField)}`}
         onClick={() => {
-          props.setInEditState(!props.inEditState);
           props.onFieldSave(
+            props.appendToLastFieldInPath,
             props.patchData,
             props.update,
             props.editedField,
             props.reference.current.value
           );
+          props.setInEditState(!props.inEditState);
         }}
       >
         <SaveIcon fontSize={props.iconFontSize} />

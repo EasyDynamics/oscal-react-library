@@ -49,26 +49,51 @@ const oscalObjectTypes = {
   },
 };
 
-function populatePartialPatchData(data, editedFieldJsonPath, newValue) {
+function populatePartialPatchData(
+  appendToLastFieldInPath,
+  data,
+  editedFieldJsonPath,
+  newValue
+) {
   if (editedFieldJsonPath.length === 1) {
     const editData = data;
-    editData[editedFieldJsonPath] = newValue;
+
+    if (appendToLastFieldInPath) {
+      editData[editedFieldJsonPath].push(newValue);
+    } else {
+      editData[editedFieldJsonPath] = newValue;
+    }
+
     return;
   }
 
-  if (!Number.isNaN(editedFieldJsonPath.at(0))) {
+  if (Number.isInteger(editedFieldJsonPath.at(0))) {
     populatePartialPatchData(
+      appendToLastFieldInPath,
       data[Number(editedFieldJsonPath.shift())],
       editedFieldJsonPath,
       newValue
     );
   } else {
     populatePartialPatchData(
+      appendToLastFieldInPath,
       data[editedFieldJsonPath.shift()],
       editedFieldJsonPath,
       newValue
     );
   }
+}
+
+function jsonPathRegexReplace(matched) {
+  if (matched === ",0,") {
+    return "[0].";
+  }
+
+  if (matched === ",0") {
+    return "[0]";
+  }
+
+  return ".";
 }
 
 /**
@@ -79,6 +104,7 @@ function populatePartialPatchData(data, editedFieldJsonPath, newValue) {
  * @param newValue updated value for the edited field
  */
 function restPatch(
+  appendToLastFieldInPath,
   partialPatchData,
   onSuccessfulPatch,
   editedFieldJsonPath,
@@ -87,8 +113,14 @@ function restPatch(
   restPath
 ) {
   const url = `${process.env.REACT_APP_REST_BASE_URL}/${restPath}/${partialPatchData[jsonRootName].uuid}`;
+  const path = editedFieldJsonPath.toString();
 
-  populatePartialPatchData(partialPatchData, editedFieldJsonPath, newValue);
+  populatePartialPatchData(
+    appendToLastFieldInPath,
+    partialPatchData,
+    editedFieldJsonPath,
+    newValue
+  );
 
   fetch(url, {
     method: "PATCH",
@@ -101,7 +133,9 @@ function restPatch(
       },
       () => {
         alert(
-          `Could not update the ${editedFieldJsonPath} field with value: ${newValue}.`
+          `Could not update the ${path.replace(/,0,|,0|,/g, (matched) =>
+            jsonPathRegexReplace(matched)
+          )} field with value: ${newValue}.`
         );
       }
     );
@@ -256,8 +290,15 @@ export function OSCALCatalogLoader(props) {
       parentUrl={oscalUrl}
       onError={onError}
       onResolutionComplete={onResolutionComplete}
-      onFieldSave={(data, update, editedField, newValue) => {
+      onFieldSave={(
+        appendToLastFieldInPath,
+        data,
+        update,
+        editedField,
+        newValue
+      ) => {
         restPatch(
+          appendToLastFieldInPath,
           data,
           update,
           editedField,
@@ -287,8 +328,15 @@ export function OSCALSSPLoader(props) {
       parentUrl={oscalUrl}
       onError={onError}
       onResolutionComplete={onResolutionComplete}
-      onFieldSave={(data, update, editedField, newValue) => {
+      onFieldSave={(
+        appendToLastFieldInPath,
+        data,
+        update,
+        editedField,
+        newValue
+      ) => {
         restPatch(
+          appendToLastFieldInPath,
           data,
           update,
           editedField,
@@ -317,8 +365,15 @@ export function OSCALComponentLoader(props) {
       parentUrl={oscalUrl}
       onError={onError}
       onResolutionComplete={onResolutionComplete}
-      onFieldSave={(data, update, editedField, newValue) => {
+      onFieldSave={(
+        appendToLastFieldInPath,
+        data,
+        update,
+        editedField,
+        newValue
+      ) => {
         restPatch(
+          appendToLastFieldInPath,
           data,
           update,
           editedField,
@@ -345,8 +400,15 @@ export function OSCALProfileLoader(props) {
       profile={oscalData[oscalObjectType.jsonRootName]}
       parentUrl={oscalUrl}
       onResolutionComplete={onResolutionComplete}
-      onFieldSave={(data, update, editedField, newValue) => {
+      onFieldSave={(
+        appendToLastFieldInPath,
+        data,
+        update,
+        editedField,
+        newValue
+      ) => {
         restPatch(
+          appendToLastFieldInPath,
           data,
           update,
           editedField,

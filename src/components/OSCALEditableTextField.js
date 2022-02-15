@@ -5,12 +5,16 @@ import OSCALEditableFieldActions, {
   getElementLabel,
 } from "./OSCALEditableFieldActions";
 
-function inEditStateTextField(props, reference) {
-  return (
-    <Grid item xs={props.size} className={props.className}>
-      <Typography>
+function textFieldWithEditableActions(
+  props,
+  reference,
+  inEditState,
+  setInEditState
+) {
+  return inEditState ? (
+    <>
+      <Typography display="inline" variant={props.typographyVariant}>
         <TextField
-          fullWidth
           inputProps={{
             "data-testid": `textField-${getElementLabel(props.editedField)}`,
           }}
@@ -20,44 +24,28 @@ function inEditStateTextField(props, reference) {
           variant={props.textFieldVariant}
         />
       </Typography>
-    </Grid>
-  );
-}
-
-function textFieldWithEditableActions(
-  props,
-  reference,
-  inEditState,
-  setInEditState
-) {
-  return inEditState ? (
-    <>
-      {inEditStateTextField(props, reference)}
-      <Grid item>
-        <OSCALEditableFieldActions
-          inEditState={inEditState}
-          editedField={props.editedField}
-          setInEditState={setInEditState}
-          onFieldSave={props.onFieldSave}
-          patchData={props.patchData}
-          reference={reference}
-          update={props.update}
-        />
-      </Grid>
+      <OSCALEditableFieldActions
+        appendToLastFieldInPath={props.appendToLastFieldInPath}
+        inEditState={inEditState}
+        editedField={props.editedField}
+        setInEditState={setInEditState}
+        onFieldSave={props.onFieldSave}
+        patchData={props.patchData}
+        reference={reference}
+        update={props.update}
+      />
     </>
   ) : (
     <>
-      <Grid item className={props.className}>
-        <Typography variant={props.typographyVariant}>{props.value}</Typography>
-      </Grid>
-      <Grid item>
-        <OSCALEditableFieldActions
-          editedField={props.editedField}
-          inEditState={inEditState}
-          patchData={props.patchData}
-          setInEditState={setInEditState}
-        />
-      </Grid>
+      <Typography display="inline" variant={props.typographyVariant}>
+        {props.value}
+      </Typography>
+      <OSCALEditableFieldActions
+        editedField={props.editedField}
+        inEditState={inEditState}
+        patchData={props.patchData}
+        setInEditState={setInEditState}
+      />
     </>
   );
 }

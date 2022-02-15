@@ -342,6 +342,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
 
             return (
               <OSCALEditableTextField
+                appendToLastFieldInPath
                 canEdit={props.isEditable}
                 defaultValue={getParameterLabel(props.parameters, segment)}
                 editedField={editedFieldPath}
@@ -407,10 +408,51 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     );
   }
 
-  // statementByComponent always seems to return null, so patch data is not updated here
+  const rootOscalObjectName = Object.keys(props.patchData)[0];
+  const editedFieldPath = [
+    rootOscalObjectName,
+    "control-implementation",
+    "implemented-requirements",
+    0,
+    "statements",
+    0,
+    "by-components",
+    0,
+    "set-parameters",
+    0,
+    "values",
+    0,
+  ];
+
+  const partialPatchData = {
+    [rootOscalObjectName]: {
+      uuid: props.patchData[rootOscalObjectName].uuid,
+      "control-implementation": {
+        "implemented-requirements": [
+          {
+            uuid: props.patchData[rootOscalObjectName][
+              "control-implementation"
+            ]["implemented-requirements"][0].uuid,
+            "control-id":
+              props.patchData[rootOscalObjectName]["control-implementation"][
+                "implemented-requirements"
+              ][0]["control-id"],
+            statements: [
+              {
+                uuid: v4(),
+                "statement-id": props.statementId,
+                "by-components": [statementByComponent],
+              },
+            ],
+          },
+        ],
+      },
+    },
+  };
+
   const { description } = statementByComponent;
   return (
-    <Typography>
+    <Typography className={props.className}>
       <StyledTooltip title={description ?? props.componentId}>
         <Link href="#{props.label}">{props.label}</Link>
       </StyledTooltip>
@@ -420,12 +462,34 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
           if (index % 2 === 0) {
             return getTextSegment(segment, index.toString());
           }
-          return getParameterValueSegment(
-            statementByComponent,
-            getImplReqSetParameters(props.implReqStatements, props.componentId),
-            segment,
-            props.modificationSetParameters,
-            index.toString()
+          return (
+            <OSCALEditableTextField
+              canEdit={props.isEditable}
+              defaultValue={getParameterValue(
+                statementByComponent,
+                getImplReqSetParameters(
+                  props.implReqStatements,
+                  props.componentId
+                ),
+                segment
+              )}
+              editedField={editedFieldPath}
+              onFieldSave={props.onFieldSave}
+              patchData={partialPatchData}
+              textFieldSize="small"
+              typographyVariant="body2"
+              update={props.update}
+              value={getParameterValueSegment(
+                statementByComponent,
+                getImplReqSetParameters(
+                  props.implReqStatements,
+                  props.componentId
+                ),
+                segment,
+                props.modificationSetParameters,
+                index.toString()
+              )}
+            />
           );
         })}
       {props.modificationDisplay}
