@@ -73,8 +73,11 @@ function App() {
   };
 
   if (process.env.REACT_APP_GOOGLE_ANALYTICS) {
-    ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS);
+    ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS, {
+      testMode: process.env.NODE_ENV === "test",
+    });
   }
+
   const location = useLocation();
   useEffect(() => {
     if (process.env.REACT_APP_GOOGLE_ANALYTICS) {
