@@ -1,4 +1,5 @@
 import { revFourCatalog } from "./Urls";
+import diagram from "./resources/diagram.png";
 
 const citation = {
   text: "This is an example citation",
@@ -35,6 +36,17 @@ export const backMatterTestData = {
         {
           href,
           "media-type": "application/oscal.catalog+json2",
+        },
+      ],
+    },
+    {
+      uuid: "a2fc103a-9fe6-433d-a83b-44a33db1564b",
+      title: "Some Diagram",
+      description: "This is a test diagram",
+      rlinks: [
+        {
+          href: diagram,
+          "media-type": "image/png",
         },
       ],
     },

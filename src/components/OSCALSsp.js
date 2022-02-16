@@ -90,6 +90,8 @@ export default function OSCALSsp(props) {
       />
       <OSCALSystemCharacteristics
         systemCharacteristics={ssp["system-characteristics"]}
+        backMatter={ssp["back-matter"]}
+        parentUrl={props.parentUrl}
       />
       <OSCALSystemImplementation
         systemImplementation={ssp["system-implementation"]}
