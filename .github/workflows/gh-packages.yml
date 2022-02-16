@@ -4,7 +4,9 @@ on:
   push:
     branches: [develop]
   workflow_dispatch:
-    
+
+concurrency: package-push
+
 jobs:
   publish:
     name: Publish OSCAL Viewer Build to GitHub Packages

@@ -13,6 +13,8 @@ on:
         type: choice
         options: [feature, bug]
 
+concurrency: package-repo-release
+
 jobs:
   release:
     name: Create a New Release
