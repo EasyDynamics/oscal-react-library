@@ -71,6 +71,20 @@ npm run run-example
 
 For more details about OSCAL Viewer, please refer to the [example (OSCAL Viewer) README.md](/example/README.md).
 
+### Google Analytics
+
+The OSCAL Viewer example application includes an optional integration for Google Analytics. Google
+Analytics is enabled only when `REACT_APP_GOOGLE_ANALYTICS` is set to a Google Analytics Univeral
+Analytics identifier when `npm run build` is run. For example:
+
+```bash
+export REACT_APP_GOOGLE_ANALYTICS="UA-XXXXXXXX-X"`
+npm run build
+```
+
+will produce an application build with Google Analytics tracking enabled. The only way to toggle
+Google Analytics or change the tracking ID is to rebuild the application.
+
 ## Experimental REST Features
 
 To enabled experimental features that make REST calls defined in

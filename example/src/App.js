@@ -1,6 +1,6 @@
 import "./App.css";
 import { makeStyles, createTheme } from "@material-ui/core/styles";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import AppBar from "@material-ui/core/AppBar";
@@ -12,7 +12,14 @@ import GitHubIcon from "@material-ui/icons/GitHub";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { Navigate, Route, Routes, Link as RouterLink } from "react-router-dom";
+import ReactGA from "react-ga";
+import {
+  Navigate,
+  Route,
+  Routes,
+  Link as RouterLink,
+  useLocation,
+} from "react-router-dom";
 import Link from "@material-ui/core/Link";
 
 import { ThemeProvider } from "@material-ui/styles";
@@ -65,6 +72,15 @@ function App() {
     setAnchorEl(null);
   };
 
+  if (process.env.REACT_APP_GOOGLE_ANALYTICS) {
+    ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS);
+  }
+  const location = useLocation();
+  useEffect(() => {
+    if (process.env.REACT_APP_GOOGLE_ANALYTICS) {
+      ReactGA.pageview(location.pathname + location.search);
+    }
+  }, [location]);
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
