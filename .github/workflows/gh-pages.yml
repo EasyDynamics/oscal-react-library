@@ -5,6 +5,8 @@ on:
     branches:
       - develop
 
+concurrency: gh-pages
+
 jobs:
   publish:
     name: Publish Storybook to GitHub Pages
