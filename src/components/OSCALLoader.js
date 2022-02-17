@@ -359,6 +359,7 @@ export function OSCALComponentLoader(props) {
     />
   );
 }
+
 export function OSCALProfileLoader(props) {
   const oscalObjectType = oscalObjectTypes.profile;
   const renderer = (isRestMode, oscalData, oscalUrl, onResolutionComplete) => (

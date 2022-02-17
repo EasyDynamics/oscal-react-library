@@ -67,6 +67,11 @@ export default function OSCALControlPart(props) {
         patchData={props.patchData}
         prose={props.part.prose}
         statementId={props.part.id}
+        statementUuid={
+          props.implReqStatements.find(
+            (statement) => statement["statement-id"] === props.part.id
+          ).uuid
+        }
         update={props.update}
       />
     );
@@ -84,6 +89,11 @@ export default function OSCALControlPart(props) {
         patchData={props.patchData}
         prose={props.part.prose}
         statementId={props.statementId}
+        statementUuid={
+          props.implReqStatements.find(
+            (statement) => statement["statement-id"] === props.statementId
+          ).uuid
+        }
         update={props.update}
       />
     );
