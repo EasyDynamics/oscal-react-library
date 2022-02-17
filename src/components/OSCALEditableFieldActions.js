@@ -14,14 +14,30 @@ export default function OSCALEditableFieldActions(props) {
       <IconButton
         aria-label={`save-${getElementLabel(props.editedField)}`}
         onClick={() => {
-          props.onFieldSave(
-            props.appendToLastFieldInPath,
-            props.patchData,
-            props.update,
-            props.editedField,
-            props.reference.current.value
-          );
-          props.setInEditState(!props.inEditState);
+          if (props.onFieldSave.length === 4) {
+            props.onFieldSave(
+              props.appendToLastFieldInPath,
+              props.patchData,
+              props.editedField,
+              props.reference.current.value
+            );
+          } else {
+            props.onFieldSave(
+              props.appendToLastFieldInPath,
+              props.patchData,
+              props.update,
+              props.editedField,
+              props.reference.current.value
+            );
+          }
+
+          if (props.setInEditState) {
+            props.setInEditState(!props.inEditState);
+          }
+
+          if (props.onCancel) {
+            props.onCancel();
+          }
         }}
       >
         <SaveIcon fontSize={props.iconFontSize} />
@@ -29,7 +45,11 @@ export default function OSCALEditableFieldActions(props) {
       <IconButton
         aria-label={`cancel-${getElementLabel(props.editedField)}`}
         onClick={() => {
-          props.setInEditState(!props.inEditState);
+          if (props.onCancel) {
+            props.onCancel();
+          } else {
+            props.setInEditState(!props.inEditState);
+          }
         }}
       >
         <CancelIcon fontSize={props.iconFontSize} />

@@ -52,3 +52,38 @@ export default function OSCALSspResolveProfile(
     []
   );
 }
+
+export function populatePartialPatchData(
+  appendToLastFieldInPath,
+  data,
+  editedFieldJsonPath,
+  newValue
+) {
+  if (editedFieldJsonPath.length === 1) {
+    const editData = data;
+
+    if (appendToLastFieldInPath) {
+      editData[editedFieldJsonPath].push(newValue);
+    } else {
+      editData[editedFieldJsonPath] = newValue;
+    }
+
+    return;
+  }
+
+  if (Number.isInteger(editedFieldJsonPath.at(0))) {
+    populatePartialPatchData(
+      appendToLastFieldInPath,
+      data[Number(editedFieldJsonPath.shift())],
+      editedFieldJsonPath,
+      newValue
+    );
+  } else {
+    populatePartialPatchData(
+      appendToLastFieldInPath,
+      data[editedFieldJsonPath.shift()],
+      editedFieldJsonPath,
+      newValue
+    );
+  }
+}

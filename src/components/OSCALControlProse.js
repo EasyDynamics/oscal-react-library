@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { styled, withTheme, makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
+import Badge from "@material-ui/core/Badge";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
-import Badge from "@material-ui/core/Badge";
+import Typography from "@material-ui/core/Typography";
 import { v4 } from "uuid";
-import StyledTooltip from "./OSCALStyledTooltip";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
+import { populatePartialPatchData } from "./oscal-utils/OSCALSspResolver";
 import OSCALEditableTextField from "./OSCALEditableTextField";
+import OSCALModal from "./OSCALModal";
+import StyledTooltip from "./OSCALStyledTooltip";
 
 const prosePlaceholderRegexpString = "{{ insert: param, ([0-9a-zA-B-_.]*) }}";
 
@@ -31,50 +33,6 @@ const useStyles = makeStyles(() => ({
     color: "silver",
   },
 }));
-
-function createPatchDataOnDefaultProseUpdate(
-  props,
-  rootOscalObjectName,
-  setParamId
-) {
-  return {
-    [rootOscalObjectName]: {
-      uuid: props.patchData[rootOscalObjectName].uuid,
-      "control-implementation": {
-        "implemented-requirements": [
-          {
-            uuid: props.patchData[rootOscalObjectName][
-              "control-implementation"
-            ]["implemented-requirements"][0].uuid,
-            "control-id":
-              props.patchData[rootOscalObjectName]["control-implementation"][
-                "implemented-requirements"
-              ][0]["control-id"],
-            statements: [
-              {
-                uuid: v4(),
-                "statement-id": props.statementId,
-                "by-components": [
-                  {
-                    uuid: v4(),
-                    "component-uuid": props.componentId,
-                    description: "User added a new control implementation",
-                    "set-parameters": [
-                      {
-                        "param-id": setParamId,
-                        values: [],
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    },
-  };
-}
 
 /**
  * Gets the label for the given parameter ID from the given parameters
@@ -295,21 +253,8 @@ function getParameterValueSegment(
  * @returns the parameter label component
  */
 export function OSCALReplacedProseWithParameterLabel(props) {
+  const [oscalModalPatchData, setOscalModalPatchData] = useState(null);
   const rootOscalObjectName = Object.keys(props.patchData)[0];
-
-  const editedFieldPath = [
-    rootOscalObjectName,
-    "control-implementation",
-    "implemented-requirements",
-    0,
-    "statements",
-    0,
-    "by-components",
-    0,
-    "set-parameters",
-    0,
-    "values",
-  ];
 
   if (!props.prose) {
     return null;
@@ -331,43 +276,126 @@ export function OSCALReplacedProseWithParameterLabel(props) {
   }
 
   return (
-    <Typography className={props.className}>
-      <Grid container direction="row" alignItems="center">
-        {labelWithProse
-          .split(RegExp(prosePlaceholderRegexpString, "g"))
-          .map((segment, index) => {
-            if (index % 2 === 0) {
-              return getTextSegment(segment, index.toString());
-            }
+    <>
+      {oscalModalPatchData ? (
+        <OSCALModal
+          editedField={[
+            rootOscalObjectName,
+            "control-implementation",
+            "implemented-requirements",
+            0,
+            "statements",
+            0,
+            "by-components",
+            0,
+            "description",
+          ]}
+          patchData={oscalModalPatchData}
+          onCancel={() => {
+            setOscalModalPatchData(null);
+          }}
+          onFieldSave={props.onFieldSave}
+          open
+          title="Enter a description for the control implementation:"
+          update={props.update}
+          value="Description of control implementation"
+        />
+      ) : null}
+      <Typography className={props.className}>
+        <Grid container direction="row" alignItems="center">
+          {labelWithProse
+            .split(RegExp(prosePlaceholderRegexpString, "g"))
+            .map((segment, index) => {
+              if (index % 2 === 0) {
+                return getTextSegment(segment, index.toString());
+              }
 
-            return (
-              <OSCALEditableTextField
-                appendToLastFieldInPath
-                canEdit={props.isEditable}
-                defaultValue={getParameterLabel(props.parameters, segment)}
-                editedField={editedFieldPath}
-                onFieldSave={props.onFieldSave}
-                patchData={createPatchDataOnDefaultProseUpdate(
-                  props,
-                  rootOscalObjectName,
-                  segment
-                )}
-                size={5}
-                textFieldSize="small"
-                typographyVariant="body2"
-                update={props.update}
-                value={getParameterLabelSegment(
-                  props.parameters,
-                  segment,
-                  props.modificationSetParameters,
-                  index.toString()
-                )}
-              />
-            );
-          })}
-        {props.modificationDisplay}
-      </Grid>
-    </Typography>
+              return (
+                <OSCALEditableTextField
+                  appendToLastFieldInPath
+                  canEdit={props.isEditable}
+                  defaultValue={getParameterLabel(props.parameters, segment)}
+                  editedField={[
+                    rootOscalObjectName,
+                    "control-implementation",
+                    "implemented-requirements",
+                    0,
+                    "statements",
+                    0,
+                    "by-components",
+                    0,
+                    "set-parameters",
+                    0,
+                    "values",
+                  ]}
+                  onFieldSave={(
+                    appendToLastFieldInPath,
+                    partialPatchData,
+                    editedFieldJsonPath,
+                    newValue
+                  ) => {
+                    populatePartialPatchData(
+                      appendToLastFieldInPath,
+                      partialPatchData,
+                      editedFieldJsonPath,
+                      newValue
+                    );
+                    setOscalModalPatchData(partialPatchData);
+                  }}
+                  patchData={{
+                    [rootOscalObjectName]: {
+                      uuid: props.patchData[rootOscalObjectName].uuid,
+                      "control-implementation": {
+                        "implemented-requirements": [
+                          {
+                            uuid: props.patchData[rootOscalObjectName][
+                              "control-implementation"
+                            ]["implemented-requirements"][0].uuid,
+                            "control-id":
+                              props.patchData[rootOscalObjectName][
+                                "control-implementation"
+                              ]["implemented-requirements"][0]["control-id"],
+                            statements: [
+                              {
+                                uuid: v4(),
+                                "statement-id": props.statementId,
+                                "by-components": [
+                                  {
+                                    uuid: v4(),
+                                    "component-uuid": props.componentId,
+                                    description:
+                                      "User added a new control implementation",
+                                    "set-parameters": [
+                                      {
+                                        "param-id": segment,
+                                        values: [],
+                                      },
+                                    ],
+                                  },
+                                ],
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                    },
+                  }}
+                  textFieldSize="small"
+                  typographyVariant="body2"
+                  update={props.update}
+                  value={getParameterLabelSegment(
+                    props.parameters,
+                    segment,
+                    props.modificationSetParameters,
+                    index.toString()
+                  )}
+                />
+              );
+            })}
+          {props.modificationDisplay}
+        </Grid>
+      </Typography>
+    </>
   );
 }
 

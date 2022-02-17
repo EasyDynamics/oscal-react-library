@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Alert from "@material-ui/lab/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { populatePartialPatchData } from "./oscal-utils/OSCALSspResolver";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
@@ -48,41 +49,6 @@ const oscalObjectTypes = {
     restPath: "system-security-plans",
   },
 };
-
-function populatePartialPatchData(
-  appendToLastFieldInPath,
-  data,
-  editedFieldJsonPath,
-  newValue
-) {
-  if (editedFieldJsonPath.length === 1) {
-    const editData = data;
-
-    if (appendToLastFieldInPath) {
-      editData[editedFieldJsonPath].push(newValue);
-    } else {
-      editData[editedFieldJsonPath] = newValue;
-    }
-
-    return;
-  }
-
-  if (Number.isInteger(editedFieldJsonPath.at(0))) {
-    populatePartialPatchData(
-      appendToLastFieldInPath,
-      data[Number(editedFieldJsonPath.shift())],
-      editedFieldJsonPath,
-      newValue
-    );
-  } else {
-    populatePartialPatchData(
-      appendToLastFieldInPath,
-      data[editedFieldJsonPath.shift()],
-      editedFieldJsonPath,
-      newValue
-    );
-  }
-}
 
 function jsonPathRegexReplace(matched) {
   if (matched === ",0,") {
