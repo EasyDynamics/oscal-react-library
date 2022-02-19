@@ -195,16 +195,19 @@ export default function OSCALLoader(props) {
   };
 
   const handleEditorSave = (jsonString) => {
+    console.debug("handleEditorSave triggered.");
     const requestOptions = {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: jsonString,
     };
-    const promise = new Promise((resolve) => {
+    console.debug(`PUT ${oscalUrl}`);
+    const promise = new Promise((resolve, reject) => {
       resolve("done");
     });
     promise.then(() => setOscalData(jsonString));
-    fetch(oscalUrl, requestOptions);
+    // fetch(oscalUrl, requestOptions)
+    //   .then(response => console.debug(""))
   };
 
   const onResolutionComplete = () => {

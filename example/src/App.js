@@ -1,5 +1,4 @@
 import "./App.css";
-import "@EasyDynamics/oscal-react-library/dist/index.css"
 import { makeStyles, createTheme } from "@material-ui/core/styles";
 import React, { useEffect, useState } from "react";
 import Typography from "@material-ui/core/Typography";
