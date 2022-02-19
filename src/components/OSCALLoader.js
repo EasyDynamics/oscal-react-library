@@ -219,8 +219,8 @@ export default function OSCALLoader(props) {
   } else if (oscalUrl) {
     result = (
       <Split className="split"
-        sizes={isRestMode ? [25, 75] : []}
-        minSize={0}>
+        sizes={isRestMode ? [50, 50] : []}
+        minSize={500}>
         <div className="pane">
           {
             isRestMode && <OSCALJsonEditor value={oscalData} />
