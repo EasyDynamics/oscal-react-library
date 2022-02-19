@@ -7,6 +7,7 @@ import OSCALComponentDefinition from "./OSCALComponentDefinition";
 import OSCALProfile from "./OSCALProfile";
 import OSCALLoaderForm from "./OSCALLoaderForm";
 import Split from "react-split";
+import OSCALJsonEditor from "./OSCALJsonEditor";
 import "./OSCALLoader.css";
 
 const onError = (error) => (
@@ -218,17 +219,22 @@ export default function OSCALLoader(props) {
   } else if (oscalUrl) {
     result = (
       <Split className="split"
-        sizes={isRestMode ? [25, 75] : []}>
-        {
-          isRestMode && <div>Hello World!</div>
-        }
-        {
-          props.renderer(
-            isRestMode,
-            oscalData,
-            oscalUrl,
-            onResolutionComplete)
-        }
+        sizes={isRestMode ? [25, 75] : []}
+        minSize={0}>
+        <div className="pane">
+          {
+            isRestMode && <OSCALJsonEditor value={oscalData} />
+          }
+        </div>
+        <div className="pane">
+          {
+            props.renderer(
+              isRestMode,
+              oscalData,
+              oscalUrl,
+              onResolutionComplete)
+          }
+        </div>
       </Split>
     );
   }

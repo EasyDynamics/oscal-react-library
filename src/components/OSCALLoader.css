@@ -3,6 +3,11 @@
   flex-direction: row;
 }
 
+.split, .pane {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
 .gutter {
   background-color: #eee;
   background-repeat: no-repeat;
