@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import Alert from "@material-ui/lab/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Split from "react-split";
+import { makeStyles } from "@material-ui/core/styles";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
 import OSCALProfile from "./OSCALProfile";
 import OSCALLoaderForm from "./OSCALLoaderForm";
-import Split from "react-split";
 import OSCALJsonEditor from "./OSCALJsonEditor";
-import "./OSCALLoader.css";
 
 const onError = (error) => (
   <Alert severity="error">
@@ -51,6 +51,23 @@ const oscalObjectTypes = {
     restPath: "system-security-plans",
   },
 };
+
+const useStyles = makeStyles({
+  split: {
+    display: "flex",
+    flexDirection: " row",
+    "& > .gutter": {
+      backgroundColor: "#eee",
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "50%",
+      "&.gutter-horizontal": {
+        backgroundImage:
+          "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==')",
+        cursor: "col-resize",
+      },
+    },
+  },
+});
 
 function populatePartialPatchData(data, editedFieldJsonPath, newValue) {
   if (editedFieldJsonPath.length === 1) {
@@ -103,6 +120,7 @@ function restPatch(
 }
 
 export default function OSCALLoader(props) {
+  const classes = useStyles();
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isResolutionComplete, setIsResolutionComplete] = useState(false);
@@ -176,6 +194,19 @@ export default function OSCALLoader(props) {
     }
   };
 
+  const handleEditorSave = (jsonString) => {
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: jsonString,
+    };
+    const promise = new Promise((resolve) => {
+      resolve("done");
+    });
+    promise.then(() => setOscalData(jsonString));
+    fetch(oscalUrl, requestOptions);
+  };
+
   const onResolutionComplete = () => {
     setIsResolutionComplete(true);
   };
@@ -218,22 +249,23 @@ export default function OSCALLoader(props) {
     result = <CircularProgress />;
   } else if (oscalUrl) {
     result = (
-      <Split className="split"
+      <Split
+        className={classes.split}
+        minSize={500}
         sizes={isRestMode ? [50, 50] : []}
-        minSize={500}>
-        <div className="pane">
-          {
-            isRestMode && <OSCALJsonEditor value={oscalData} />
-          }
+      >
+        <div>
+          {isRestMode && (
+            <OSCALJsonEditor value={oscalData} onSave={handleEditorSave} />
+          )}
         </div>
-        <div className="pane">
-          {
-            props.renderer(
-              isRestMode,
-              oscalData,
-              oscalUrl,
-              onResolutionComplete)
-          }
+        <div>
+          {props.renderer(
+            isRestMode,
+            oscalData,
+            oscalUrl,
+            onResolutionComplete
+          )}
         </div>
       </Split>
     );
