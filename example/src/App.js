@@ -175,7 +175,7 @@ function App() {
             </Link>
           </MenuItem>
         </Menu>
-        <Container component="main">
+        <Container maxWidth="xl" component="main">
           <Routes>
             <Route
               exact
