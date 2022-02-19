@@ -35,7 +35,7 @@
     "web-vitals": "^2.1.2"
   },
   "scripts": {
-    "start": "microbundle-crl watch --no-compress --format modern,cjs --css-modules false --jsxFragment React.Fragment",
+    "start": "microbundle-crl watch --no-compress --format modern,cjs --jsxFragment React.Fragment",
     "build": "microbundle-crl --no-compress --format modern,cjs --jsxFragment React.Fragment",
     "prepare": "run-s build",
     "test": "react-scripts test",
