@@ -6,6 +6,8 @@ import OSCALCatalog from "./OSCALCatalog";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
 import OSCALProfile from "./OSCALProfile";
 import OSCALLoaderForm from "./OSCALLoaderForm";
+import Split from "react-split";
+import "./OSCALLoader.css";
 
 const onError = (error) => (
   <Alert severity="error">
@@ -214,11 +216,20 @@ export default function OSCALLoader(props) {
   } else if (!isLoaded) {
     result = <CircularProgress />;
   } else if (oscalUrl) {
-    result = props.renderer(
-      isRestMode,
-      oscalData,
-      oscalUrl,
-      onResolutionComplete
+    result = (
+      <Split className="split"
+        sizes={isRestMode ? [25, 75] : []}>
+        {
+          isRestMode && <div>Hello World!</div>
+        }
+        {
+          props.renderer(
+            isRestMode,
+            oscalData,
+            oscalUrl,
+            onResolutionComplete)
+        }
+      </Split>
     );
   }
 
