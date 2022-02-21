@@ -30,6 +30,7 @@ import {
   OSCALProfileLoader,
 } from "@EasyDynamics/oscal-react-library";
 import logo from "./images/logo-header.svg";
+import reportWebVitals from "./reportWebVitals";
 
 const theme = createTheme({
   palette: {
@@ -82,6 +83,15 @@ function App() {
   useEffect(() => {
     if (process.env.REACT_APP_GOOGLE_ANALYTICS) {
       ReactGA.pageview(location.pathname + location.search);
+      reportWebVitals(({ id, name, value }) =>
+        ReactGA.event({
+          action: name,
+          category: "Web Vitals",
+          label: id,
+          nonInteraction: true,
+          value: Math.round(name === "CLS" ? value * 1000 : value),
+        })
+      );
     }
   }, [location]);
   return (
