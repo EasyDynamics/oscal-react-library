@@ -56,7 +56,7 @@ export default function OSCALSystemCharacteristics(props) {
             </Grid>
             <Grid
               item
-              xs={5}
+              xs={6}
               className={classes.OSCALSystemCharacteristicsInfo}
             >
               <Typography variant="h6">
@@ -65,7 +65,7 @@ export default function OSCALSystemCharacteristics(props) {
             </Grid>
             <Grid
               item
-              xs={5}
+              xs={6}
               className={classes.OSCALSystemCharacteristicsInfo}
             >
               <TableContainer>
@@ -99,25 +99,6 @@ export default function OSCALSystemCharacteristics(props) {
                   fullWidth
                 />
               </StyledTooltip>
-            </Grid>
-            <Grid
-              item
-              xs={4}
-              className={classes.OSCALSystemCharacteristicsInfo}
-            >
-              <TextField
-                disabled
-                id="authorization-boundary"
-                label="authorization-boundary-description"
-                defaultValue={
-                  props.systemCharacteristics["authorization-boundary"]
-                    .description
-                }
-                variant="outlined"
-                margin="dense"
-                fullWidth
-                multiline
-              />
             </Grid>
             <Grid
               item
