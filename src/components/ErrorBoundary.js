@@ -25,7 +25,7 @@ class ErrorBoundary extends React.Component {
     if (this.state.error !== undefined) {
       return this.errorFormatter(this.state.error);
     }
-    return this.props.children;
+    return this.props.children || null;
   }
 }
 export default ErrorBoundary;
