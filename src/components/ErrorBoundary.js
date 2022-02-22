@@ -1,7 +1,7 @@
 import React from "react";
 import Alert from "@material-ui/lab/Alert";
 
-export function defaultFormatter(error) {
+function defaultFormatter(error) {
   return (
     <Alert severity="error">
       Yikes! Something went wrong loading the OSCAL data. Sorry, we&apos;ll look
@@ -10,7 +10,7 @@ export function defaultFormatter(error) {
   );
 }
 
-export class ErrorBoundary extends React.Component {
+class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
     this.errorFormatter = props.errorFormatter ?? defaultFormatter;
@@ -28,3 +28,4 @@ export class ErrorBoundary extends React.Component {
     return this.props.children;
   }
 }
+export default ErrorBoundary;
