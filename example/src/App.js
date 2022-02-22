@@ -20,7 +20,6 @@ import {
   Link as RouterLink,
   useLocation,
 } from "react-router-dom";
-import Link from "@material-ui/core/Link";
 
 import { ThemeProvider } from "@material-ui/styles";
 import {
@@ -153,25 +152,33 @@ function App() {
           open={Boolean(anchorEl)}
           onClose={handleAppNavClose}
         >
-          <MenuItem onClick={handleAppNavClose}>
-            <Link component={RouterLink} to="/catalog">
-              Catalog Viewer
-            </Link>
+          <MenuItem
+            onClick={handleAppNavClose}
+            component={RouterLink}
+            to="/catalog"
+          >
+            Catalog Viewer
           </MenuItem>
-          <MenuItem onClick={handleAppNavClose}>
-            <Link component={RouterLink} to="/system-security-plan">
-              System Security Plan Viewer
-            </Link>
+          <MenuItem
+            onClick={handleAppNavClose}
+            component={RouterLink}
+            to="/system-security-plan"
+          >
+            System Security Plan Viewer
           </MenuItem>
-          <MenuItem onClick={handleAppNavClose}>
-            <Link component={RouterLink} to="/component-definition">
-              Component Viewer
-            </Link>
+          <MenuItem
+            onClick={handleAppNavClose}
+            component={RouterLink}
+            to="/component-definition"
+          >
+            Component Viewer
           </MenuItem>
-          <MenuItem onClick={handleAppNavClose}>
-            <Link component={RouterLink} to="/profile">
-              Profile Viewer
-            </Link>
+          <MenuItem
+            onClick={handleAppNavClose}
+            component={RouterLink}
+            to="/profile"
+          >
+            Profile Viewer
           </MenuItem>
         </Menu>
         <Container component="main">
