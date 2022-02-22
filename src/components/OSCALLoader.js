@@ -1,18 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import Alert from "@material-ui/lab/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import ErrorBoundary from "./ErrorBoundary";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
 import OSCALProfile from "./OSCALProfile";
 import OSCALLoaderForm from "./OSCALLoaderForm";
-
-const onError = (error) => (
-  <Alert severity="error">
-    Yikes! Something went wrong loading the OSCAL data. Sorry, we&apos;ll look
-    into it. ({error.message})
-  </Alert>
-);
 
 const oscalObjectTypes = {
   catalog: {
@@ -100,7 +93,6 @@ function restPatch(
 }
 
 export default function OSCALLoader(props) {
-  const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isResolutionComplete, setIsResolutionComplete] = useState(false);
   const [isRestMode, setIsRestMode] = useState(
@@ -117,22 +109,12 @@ export default function OSCALLoader(props) {
           if (!response.ok) throw new Error(response.status);
           else return response.json();
         })
-        .then(
-          (result) => {
-            if (!unmounted.current) {
-              setOscalData(result);
-              setIsLoaded(true);
-              setError(null);
-            }
-          },
-          // Note: it's important to handle errors here
-          // instead of a catch() block so that we don't swallow
-          // exceptions from actual bugs in components.
-          (e) => {
-            setError(e);
+        .then((result) => {
+          if (!unmounted.current) {
+            setOscalData(result);
             setIsLoaded(true);
           }
-        );
+        });
     } else {
       setIsLoaded(true);
     }
@@ -200,18 +182,12 @@ export default function OSCALLoader(props) {
         isRestMode={isRestMode}
         onChangeRestMode={handleChangeRestMode}
         isResolutionComplete={isResolutionComplete}
-        onError={(e) => {
-          setError(e);
-          onError(e);
-        }}
       />
     );
   }
 
   let result;
-  if (error) {
-    result = onError(error);
-  } else if (!isLoaded) {
+  if (!isLoaded) {
     result = <CircularProgress />;
   } else if (oscalUrl) {
     result = props.renderer(
@@ -225,7 +201,7 @@ export default function OSCALLoader(props) {
   return (
     <>
       {form}
-      {result}
+      <ErrorBoundary>{result}</ErrorBoundary>
     </>
   );
 }
@@ -246,7 +222,6 @@ export function OSCALCatalogLoader(props) {
     <OSCALCatalog
       catalog={oscalData[oscalObjectType.jsonRootName]}
       parentUrl={oscalUrl}
-      onError={onError}
       onResolutionComplete={onResolutionComplete}
       onFieldSave={(data, update, editedField, newValue) => {
         restPatch(
@@ -277,7 +252,6 @@ export function OSCALSSPLoader(props) {
       system-security-plan={oscalData[oscalObjectType.jsonRootName]}
       isEditable={isRestMode}
       parentUrl={oscalUrl}
-      onError={onError}
       onResolutionComplete={onResolutionComplete}
       onFieldSave={(data, update, editedField, newValue) => {
         restPatch(
@@ -307,7 +281,6 @@ export function OSCALComponentLoader(props) {
     <OSCALComponentDefinition
       componentDefinition={oscalData[oscalObjectType.jsonRootName]}
       parentUrl={oscalUrl}
-      onError={onError}
       onResolutionComplete={onResolutionComplete}
       onFieldSave={(data, update, editedField, newValue) => {
         restPatch(
