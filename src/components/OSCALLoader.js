@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { ErrorBoundary } from "./ErrorBoundary";
+import ErrorBoundary from "./ErrorBoundary";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
