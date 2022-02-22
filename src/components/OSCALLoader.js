@@ -1,18 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import Alert from "@material-ui/lab/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { ErrorBoundary } from "./ErrorBoundary";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
 import OSCALProfile from "./OSCALProfile";
 import OSCALLoaderForm from "./OSCALLoaderForm";
-
-const onError = (error) => (
-  <Alert severity="error">
-    Yikes! Something went wrong loading the OSCAL data. Sorry, we&apos;ll look
-    into it. ({error.message})
-  </Alert>
-);
 
 const oscalObjectTypes = {
   catalog: {
@@ -97,29 +90,6 @@ function restPatch(
         );
       }
     );
-}
-
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { error: undefined };
-  }
-
-  static getDerivedStateFromError(error) {
-    return { error };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    this.setState({ error });
-    console.error({ ...this.state, errorInfo });
-  }
-
-  render() {
-    if (this.state.error !== undefined) {
-      return onError(this.state.error);
-    }
-    return this.props.children;
-  }
 }
 
 export default function OSCALLoader(props) {
