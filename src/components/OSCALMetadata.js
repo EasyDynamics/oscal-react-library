@@ -85,7 +85,6 @@ export default function OSCALMetadata(props) {
           size={6}
           textFieldSize="medium"
           typographyVariant="h6"
-          update={props.update}
           value={props.metadata.title}
         />
       </Grid>
@@ -154,7 +153,6 @@ export default function OSCALMetadata(props) {
               size={4}
               textFieldSize="small"
               typographyVariant="body2"
-              update={props.update}
               value={props.metadata.version}
             />
           </Grid>
