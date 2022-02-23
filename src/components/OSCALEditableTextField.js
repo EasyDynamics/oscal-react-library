@@ -33,6 +33,7 @@ function textFieldWithEditableActions(
           </Grid>
           <Grid item>
             <OSCALEditableFieldActions
+              appendToLastFieldInPath={props.appendToLastFieldInPath}
               inEditState={inEditState}
               editedField={props.editedField}
               setInEditState={setInEditState}
@@ -40,6 +41,8 @@ function textFieldWithEditableActions(
               onFieldSave={props.onFieldSave}
               patchData={props.patchData}
               reference={reference}
+              restMethod={props.restMethod}
+              restUrlPath={props.restUrlPath}
               update={props.update}
             />
           </Grid>
@@ -69,6 +72,8 @@ function textFieldWithEditableActions(
           onFieldSave={props.onFieldSave}
           patchData={props.patchData}
           reference={reference}
+          restMethod={props.restMethod}
+          restUrlPath={props.restUrlPath}
           update={props.update}
         />
       </>

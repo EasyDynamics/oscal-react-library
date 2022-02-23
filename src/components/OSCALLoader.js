@@ -75,21 +75,31 @@ function restPatch(
   onSuccessfulPatch,
   editedFieldJsonPath,
   newValue,
+  restMethod,
+  restUrlPath,
   jsonRootName,
   restPath
 ) {
-  const url = `${process.env.REACT_APP_REST_BASE_URL}/${restPath}/${partialPatchData[jsonRootName].uuid}`;
+  let url;
+  if (restUrlPath === "") {
+    url = `${process.env.REACT_APP_REST_BASE_URL}/${restPath}/${partialPatchData[jsonRootName].uuid}`;
+  } else {
+    url = `${process.env.REACT_APP_REST_BASE_URL}/${restUrlPath}`;
+  }
+
   const path = editedFieldJsonPath.toString();
 
-  populatePartialPatchData(
-    appendToLastFieldInPath,
-    partialPatchData,
-    editedFieldJsonPath,
-    newValue
-  );
+  if (newValue) {
+    populatePartialPatchData(
+      partialPatchData,
+      editedFieldJsonPath,
+      newValue,
+      appendToLastFieldInPath
+    );
+  }
 
   fetch(url, {
-    method: "PATCH",
+    method: restMethod,
     body: JSON.stringify(partialPatchData),
   })
     .then((res) => res.json())
@@ -101,7 +111,7 @@ function restPatch(
         alert(
           `Could not update the ${path.replace(/,0,|,0|,/g, (matched) =>
             jsonPathRegexReplace(matched)
-          )} field with value: ${newValue}.`
+          )} field${newValue ? ` with value: ${newValue}.` : "."}`
         );
       }
     );
@@ -261,7 +271,9 @@ export function OSCALCatalogLoader(props) {
         data,
         update,
         editedField,
-        newValue
+        newValue,
+        restMethod,
+        restUrlPath
       ) => {
         restPatch(
           appendToLastFieldInPath,
@@ -269,6 +281,8 @@ export function OSCALCatalogLoader(props) {
           update,
           editedField,
           newValue,
+          restMethod,
+          restUrlPath,
           oscalObjectType.jsonRootName,
           oscalObjectType.restPath
         );
@@ -299,7 +313,9 @@ export function OSCALSSPLoader(props) {
         data,
         update,
         editedField,
-        newValue
+        newValue,
+        restMethod,
+        restUrlPath
       ) => {
         restPatch(
           appendToLastFieldInPath,
@@ -307,6 +323,8 @@ export function OSCALSSPLoader(props) {
           update,
           editedField,
           newValue,
+          restMethod,
+          restUrlPath,
           oscalObjectType.jsonRootName,
           oscalObjectType.restPath
         );
@@ -336,7 +354,9 @@ export function OSCALComponentLoader(props) {
         data,
         update,
         editedField,
-        newValue
+        newValue,
+        restMethod,
+        restUrlPath
       ) => {
         restPatch(
           appendToLastFieldInPath,
@@ -344,6 +364,8 @@ export function OSCALComponentLoader(props) {
           update,
           editedField,
           newValue,
+          restMethod,
+          restUrlPath,
           oscalObjectType.jsonRootName,
           oscalObjectType.restPath
         );
@@ -372,7 +394,9 @@ export function OSCALProfileLoader(props) {
         data,
         update,
         editedField,
-        newValue
+        newValue,
+        restMethod,
+        restUrlPath
       ) => {
         restPatch(
           appendToLastFieldInPath,
@@ -380,6 +404,8 @@ export function OSCALProfileLoader(props) {
           update,
           editedField,
           newValue,
+          restMethod,
+          restUrlPath,
           oscalObjectType.jsonRootName,
           oscalObjectType.restPath
         );

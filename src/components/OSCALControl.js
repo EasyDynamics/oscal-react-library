@@ -85,6 +85,7 @@ export default function OSCALControl(props) {
               componentId={props.componentId}
               control={props.control}
               controlId={props.control.id}
+              implementedRequirement={props.implementedRequirement}
               implReqStatements={props.implReqStatements}
               isEditable={props.isEditable}
               key={part.id ?? `part-${index}`}
@@ -101,6 +102,7 @@ export default function OSCALControl(props) {
             <OSCALControl
               control={control}
               childLevel={props.childLevel + 1}
+              implementedRequirement={props.implementedRequirement}
               includeControlIds={props.includeControlIds}
               isEditable={props.isEditable}
               key={control.id}

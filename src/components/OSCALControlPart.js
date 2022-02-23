@@ -57,6 +57,8 @@ export default function OSCALControlPart(props) {
     replacedProse = (
       <OSCALReplacedProseWithByComponentParameterValue
         componentId={props.componentId}
+        controlId={props.controlId}
+        implementedRequirement={props.implementedRequirement}
         implReqStatements={props.implReqStatements}
         isEditable={props.isEditable}
         label={label}
@@ -79,6 +81,7 @@ export default function OSCALControlPart(props) {
     replacedProse = (
       <OSCALReplacedProseWithParameterLabel
         componentId={props.componentId}
+        implementedRequirement={props.implementedRequirement}
         implReqStatements={props.implReqStatements}
         isEditable={props.isEditable}
         label={label}
@@ -114,6 +117,7 @@ export default function OSCALControlPart(props) {
             part={part}
             componentId={props.componentId}
             controlId={props.controlId ?? props.control.id}
+            implementedRequirement={props.implementedRequirement}
             implReqStatements={props.implReqStatements}
             isEditable={props.isEditable}
             key={part.id}

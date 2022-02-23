@@ -153,26 +153,14 @@ export default function OSCALControlImplementationImplReq(props) {
                   props.implementedRequirement["control-id"]
                 )}
                 childLevel={0}
+                implementedRequirement={props.implementedRequirement}
                 implReqStatements={implReqStatements}
                 componentId={component.uuid}
                 isEditable={props.isEditable}
                 modificationAlters={modAlters}
                 modificationSetParameters={modParams}
                 onFieldSave={props.onFieldSave}
-                patchData={{
-                  [Object.keys(props.patchData)[0]]: {
-                    uuid: props.patchData[Object.keys(props.patchData)[0]].uuid,
-                    "control-implementation": {
-                      "implemented-requirements": [
-                        {
-                          uuid: props.implementedRequirement.uuid,
-                          "control-id":
-                            props.implementedRequirement["control-id"],
-                        },
-                      ],
-                    },
-                  },
-                }}
+                patchData={props.patchData}
                 update={props.update}
               />
             </TabPanel>

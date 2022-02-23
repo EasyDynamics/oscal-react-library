@@ -54,15 +54,17 @@ export default function OSCALSspResolveProfile(
 }
 
 export function populatePartialPatchData(
-  appendToLastFieldInPath,
   data,
   editedFieldJsonPath,
-  newValue
+  newValue = null,
+  appendToLastFieldInPath = false
 ) {
   if (editedFieldJsonPath.length === 1) {
     const editData = data;
 
-    if (appendToLastFieldInPath) {
+    if (typeof editedFieldJsonPath.at(0) === "function") {
+      editedFieldJsonPath.at(0)(data);
+    } else if (appendToLastFieldInPath) {
       editData[editedFieldJsonPath].push(newValue);
     } else {
       editData[editedFieldJsonPath] = newValue;
@@ -73,17 +75,24 @@ export function populatePartialPatchData(
 
   if (Number.isInteger(editedFieldJsonPath.at(0))) {
     populatePartialPatchData(
-      appendToLastFieldInPath,
       data[Number(editedFieldJsonPath.shift())],
       editedFieldJsonPath,
-      newValue
+      newValue,
+      appendToLastFieldInPath
+    );
+  } else if (typeof editedFieldJsonPath.at(0) === "function") {
+    populatePartialPatchData(
+      editedFieldJsonPath.shift()(data),
+      editedFieldJsonPath,
+      newValue,
+      appendToLastFieldInPath
     );
   } else {
     populatePartialPatchData(
-      appendToLastFieldInPath,
       data[editedFieldJsonPath.shift()],
       editedFieldJsonPath,
-      newValue
+      newValue,
+      appendToLastFieldInPath
     );
   }
 }

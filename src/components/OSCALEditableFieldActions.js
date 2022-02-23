@@ -12,23 +12,24 @@ export default function OSCALEditableFieldActions(props) {
   return props.inEditState ? (
     <>
       <IconButton
-        aria-label={`save-${getElementLabel(props.editedField)}`}
+        aria-label={
+          props.editedField
+            ? `save-${getElementLabel(props.editedField)}`
+            : `save-${props.editedFieldPath}`
+        }
         onClick={() => {
-          if (props.onFieldSave.length === 4) {
-            props.onFieldSave(
-              props.appendToLastFieldInPath,
-              props.patchData,
-              props.editedField,
-              props.reference.current.value
-            );
-          } else {
+          if (props.onFieldSave.length === 7) {
             props.onFieldSave(
               props.appendToLastFieldInPath,
               props.patchData,
               props.update,
               props.editedField,
-              props.reference.current.value
+              props.reference.current.value,
+              props.restMethod,
+              props.restUrlPath
             );
+          } else {
+            props.onFieldSave();
           }
 
           if (props.setInEditState) {
@@ -43,7 +44,11 @@ export default function OSCALEditableFieldActions(props) {
         <SaveIcon fontSize={props.iconFontSize} />
       </IconButton>
       <IconButton
-        aria-label={`cancel-${getElementLabel(props.editedField)}`}
+        aria-label={
+          props.editedField
+            ? `cancel-${getElementLabel(props.editedField)}`
+            : `cancel-${props.editedFieldPath}`
+        }
         onClick={() => {
           if (props.onCancel) {
             props.onCancel();
@@ -57,7 +62,11 @@ export default function OSCALEditableFieldActions(props) {
     </>
   ) : (
     <IconButton
-      aria-label={`edit-${getElementLabel(props.editedField)}`}
+      aria-label={
+        props.editedField
+          ? `edit-${getElementLabel(props.editedField)}`
+          : `edit-${props.editedFieldPath}`
+      }
       onClick={() => {
         props.setInEditState(!props.inEditState);
       }}
