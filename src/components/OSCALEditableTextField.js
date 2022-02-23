@@ -41,7 +41,6 @@ function textFieldWithEditableActions(
           onFieldSave={props.onFieldSave}
           patchData={props.patchData}
           reference={reference}
-          update={props.update}
         />
       </Grid>
     </>
