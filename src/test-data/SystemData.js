@@ -159,3 +159,9 @@ export const sspTestData = {
   "system-characteristics": systemCharacteristicsTestData,
   "system-implementation": systemImplementationTestData,
 };
+
+export const sspPatchData = {
+  "system-security-plan": {
+    uuid: "12345678-9012-3456-7890-123456789012",
+  },
+};

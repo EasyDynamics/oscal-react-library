@@ -6,6 +6,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import { Grid, IconButton } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import cloneDeep from "lodash/cloneDeep";
+import { v4 } from "uuid";
 import { populatePartialPatchData } from "./oscal-utils/OSCALSspResolver";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 import StyledTooltip from "./OSCALStyledTooltip";
@@ -253,6 +254,11 @@ function getParameterValueSegment(
  * @returns the parameter label component
  */
 export function OSCALReplacedProseWithParameterLabel(props) {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const rootOscalObjectName = props.patchData
+    ? Object.keys(props.patchData)[0]
+    : null;
+
   if (!props.prose) {
     return null;
   }
@@ -271,6 +277,15 @@ export function OSCALReplacedProseWithParameterLabel(props) {
   if (props.label) {
     labelWithProse = props.label.concat(` ${props.prose}`);
   }
+
+  const partialPatchData = cloneDeep(props.implementedRequirement);
+  const statement =
+    partialPatchData?.statements?.find(
+      (element) => element["statement-id"] === props.statementId
+    ) || null;
+  const paramId = props.prose.split(
+    RegExp(prosePlaceholderRegexpString, "g")
+  )[1];
 
   return (
     <Typography className={props.className}>
@@ -293,6 +308,74 @@ export function OSCALReplacedProseWithParameterLabel(props) {
           );
         })}
       {props.modificationDisplay}
+      {props.label && props.isEditable ? (
+        <IconButton
+          onClick={(event) => {
+            setAnchorEl(event.currentTarget);
+          }}
+        >
+          <EditIcon fontSize="small" />
+        </IconButton>
+      ) : null}
+      {props.isEditable ? (
+        <Grid container>
+          <OSCALPopover
+            anchorEl={anchorEl}
+            setAnchorEl={setAnchorEl}
+            controlId={props.controlId}
+            onCancel={() => {
+              setAnchorEl(null);
+            }}
+            onFieldSave={(descriptionReference, implementationReference) => {
+              const newByComponent = {
+                "component-uuid": props.componentId,
+                uuid: v4(),
+                description: descriptionReference.current.value,
+              };
+
+              statement["by-components"].push(newByComponent);
+
+              const editedField = [
+                "statements",
+                `statement-id[${props.statementId}]`,
+                "by-components",
+                `component-uuid[${props.componentId}]`,
+              ];
+
+              if (paramId) {
+                newByComponent["set-parameters"] = [
+                  {
+                    "param-id": paramId,
+                    values: [implementationReference.current.value],
+                  },
+                ];
+
+                editedField.push(
+                  "set-parameters",
+                  `param-id[${paramId}]`,
+                  "values"
+                );
+              } else {
+                editedField.push("description");
+              }
+
+              props.onFieldSave(
+                false,
+                partialPatchData,
+                props.update,
+                editedField,
+                null,
+                "PUT",
+                `${rootOscalObjectName}/${props.patchData[rootOscalObjectName].uuid}/control-implementation/implemented-requirements/${props.implementedRequirement.uuid}`
+              );
+            }}
+            statementByComponent={statement}
+            statementId={props.statementId}
+            update={props.update}
+            updatingLabelPlaceholder={paramId}
+          />
+        </Grid>
+      ) : null}
     </Typography>
   );
 }
@@ -400,7 +483,9 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   if (!statementByComponent) {
     return (
       <OSCALReplacedProseWithParameterLabel
+        controlId={props.controlId}
         componentId={props.componentId}
+        implementedRequirement={props.implementedRequirement}
         implReqStatements={props.implReqStatements}
         isEditable={props.isEditable}
         label={props.label}
@@ -445,37 +530,41 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
             </Typography>
           );
         })}
-      <IconButton
-        onClick={(event) => {
-          setAnchorEl(event.currentTarget);
-        }}
-      >
-        <EditIcon fontSize="small" />
-      </IconButton>
       {props.modificationDisplay}
-      <Grid container>
-        <OSCALPopover
-          anchorEl={anchorEl}
-          setAnchorEl={setAnchorEl}
-          controlId={props.controlId}
-          onCancel={() => {
-            setAnchorEl(null);
-          }}
-          onFieldSave={(descriptionReference, implementationReference) => {
-            onFieldSaveByComponentParameterValue(
-              props,
-              "PUT",
-              `${rootOscalObjectName}/${props.patchData[rootOscalObjectName].uuid}/control-implementation/implemented-requirements/${props.implementedRequirement.uuid}`,
-              statementByComponent,
-              descriptionReference,
-              implementationReference
-            );
-          }}
-          statementByComponent={statementByComponent}
-          statementId={props.statementId}
-          update={props.update}
-        />
-      </Grid>
+      {props.isEditable ? (
+        <>
+          <IconButton
+            onClick={(event) => {
+              setAnchorEl(event.currentTarget);
+            }}
+          >
+            <EditIcon fontSize="small" />
+          </IconButton>
+          <Grid container>
+            <OSCALPopover
+              anchorEl={anchorEl}
+              setAnchorEl={setAnchorEl}
+              controlId={props.controlId}
+              onCancel={() => {
+                setAnchorEl(null);
+              }}
+              onFieldSave={(descriptionReference, implementationReference) => {
+                onFieldSaveByComponentParameterValue(
+                  props,
+                  "PUT",
+                  `${rootOscalObjectName}/${props.patchData[rootOscalObjectName].uuid}/control-implementation/implemented-requirements/${props.implementedRequirement.uuid}`,
+                  statementByComponent,
+                  descriptionReference,
+                  implementationReference
+                );
+              }}
+              statementByComponent={statementByComponent}
+              statementId={props.statementId}
+              update={props.update}
+            />
+          </Grid>
+        </>
+      ) : null}
     </Typography>
   );
 }

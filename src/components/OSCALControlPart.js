@@ -70,9 +70,9 @@ export default function OSCALControlPart(props) {
         prose={props.part.prose}
         statementId={props.part.id}
         statementUuid={
-          props.implReqStatements.find(
+          props.implReqStatements?.find(
             (statement) => statement["statement-id"] === props.part.id
-          ).uuid
+          )?.uuid || null
         }
         update={props.update}
       />
@@ -80,6 +80,7 @@ export default function OSCALControlPart(props) {
   } else {
     replacedProse = (
       <OSCALReplacedProseWithParameterLabel
+        controlId={props.controlId}
         componentId={props.componentId}
         implementedRequirement={props.implementedRequirement}
         implReqStatements={props.implReqStatements}
@@ -93,9 +94,9 @@ export default function OSCALControlPart(props) {
         prose={props.part.prose}
         statementId={props.statementId}
         statementUuid={
-          props.implReqStatements.find(
+          props.implReqStatements?.find(
             (statement) => statement["statement-id"] === props.statementId
-          ).uuid
+          )?.uuid || null
         }
         update={props.update}
       />

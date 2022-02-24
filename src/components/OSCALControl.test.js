@@ -8,6 +8,7 @@ import { exampleComponents } from "../test-data/ComponentsData";
 import { profileModifySmtTestData } from "../test-data/ModificationsData";
 import profileTestData from "../test-data/ProfileData";
 import { parentUrlTestData } from "../test-data/Urls";
+import { sspPatchData } from "../test-data/SystemData";
 
 async function testIfModificationsDisplayed(modificationName) {
   const modButton = await screen.findByRole(
@@ -34,6 +35,7 @@ test("OSCALControl displays statement modifications", async () => {
       components={exampleComponents}
       controls={[exampleControl]}
       modifications={profileModifySmtTestData}
+      patchData={sspPatchData}
     />
   );
   await testIfModificationsDisplayed("control-1_smt modifications");

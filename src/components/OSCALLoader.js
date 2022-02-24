@@ -304,7 +304,7 @@ export function OSCALSSPLoader(props) {
   const renderer = (isRestMode, oscalData, oscalUrl, onResolutionComplete) => (
     <OSCALSsp
       system-security-plan={oscalData[oscalObjectType.jsonRootName]}
-      isEditable={!isRestMode}
+      isEditable={isRestMode}
       parentUrl={oscalUrl}
       onError={onError}
       onResolutionComplete={onResolutionComplete}
