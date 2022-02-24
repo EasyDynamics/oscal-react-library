@@ -5,6 +5,8 @@ on:
     branches:
       - develop
 
+concurrency: gh-pages
+
 jobs:
   publish:
     name: Publish Storybook to GitHub Pages
@@ -24,7 +26,7 @@ jobs:
       - name: Build Storybook
         run: npm run build-storybook
       - name: Deploy to Pages
-        uses: JamesIves/github-pages-deploy-action@v4.2.3
+        uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:
           branch: storybook-docs
           folder: storybook-static

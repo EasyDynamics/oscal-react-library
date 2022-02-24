@@ -1,6 +1,6 @@
 import "./App.css";
-import { makeStyles, createMuiTheme } from "@material-ui/core/styles";
-import React, { useState } from "react";
+import { makeStyles, createTheme } from "@material-ui/core/styles";
+import React, { useEffect, useState } from "react";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import AppBar from "@material-ui/core/AppBar";
@@ -12,8 +12,14 @@ import GitHubIcon from "@material-ui/icons/GitHub";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { Route, Switch, Redirect, Link as RouterLink } from "react-router-dom";
-import Link from "@material-ui/core/Link";
+import ReactGA from "react-ga";
+import {
+  Navigate,
+  Route,
+  Routes,
+  Link as RouterLink,
+  useLocation,
+} from "react-router-dom";
 
 import { ThemeProvider } from "@material-ui/styles";
 import {
@@ -24,7 +30,7 @@ import {
 } from "@EasyDynamics/oscal-react-library";
 import logo from "./images/logo-header.svg";
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: {
       main: "#002867",
@@ -65,6 +71,18 @@ function App() {
     setAnchorEl(null);
   };
 
+  if (process.env.REACT_APP_GOOGLE_ANALYTICS) {
+    ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS, {
+      testMode: process.env.NODE_ENV === "test",
+    });
+  }
+
+  const location = useLocation();
+  useEffect(() => {
+    if (process.env.REACT_APP_GOOGLE_ANALYTICS) {
+      ReactGA.pageview(location.pathname + location.search);
+    }
+  }, [location]);
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
@@ -81,12 +99,27 @@ function App() {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" className={classes.title}>
-              <Route path="/catalog">OSCAL Catalog Viewer</Route>
-              <Route path="/system-security-plan">
-                OSCAL System Security Plan Viewer
-              </Route>
-              <Route path="/component-definition">OSCAL Component Viewer</Route>
-              <Route path="/profile">OSCAL Profile Viewer</Route>
+              <Routes>
+                {/*
+                 * Because we immediately redirect users, `/` won't be visible for
+                 * long; however, having this entry means that we avoid a console
+                 * warning and at least presents something if the redirect or
+                 * rendering fails for any reason.
+                 */}
+                <Route exact path="/" element="OSCAL Viewer" />
+                <Route exact path="/catalog" element="OSCAL Catalog Viewer" />
+                <Route
+                  exact
+                  path="/system-security-plan"
+                  element="OSCAL System Security Plan Viewer"
+                />
+                <Route
+                  exact
+                  path="/component-definition"
+                  element="OSCAL Component Viewer"
+                />
+                <Route exact path="/profile" element="OSCAL Profile Viewer" />
+              </Routes>
             </Typography>
             <Typography variant="body2" className={classes.logoText}>
               Powered by
@@ -108,7 +141,7 @@ function App() {
               target="_blank"
               rel="noreferrer"
             >
-              <GitHubIcon color="white" />
+              <GitHubIcon htmlColor="white" />
             </IconButton>
           </Toolbar>
         </AppBar>
@@ -119,46 +152,62 @@ function App() {
           open={Boolean(anchorEl)}
           onClose={handleAppNavClose}
         >
-          <MenuItem onClick={handleAppNavClose}>
-            <Link component={RouterLink} to="/catalog">
-              Catalog Viewer
-            </Link>
+          <MenuItem
+            onClick={handleAppNavClose}
+            component={RouterLink}
+            to="/catalog"
+          >
+            Catalog Viewer
           </MenuItem>
-          <MenuItem onClick={handleAppNavClose}>
-            <Link component={RouterLink} to="/system-security-plan">
-              System Security Plan Viewer
-            </Link>
+          <MenuItem
+            onClick={handleAppNavClose}
+            component={RouterLink}
+            to="/system-security-plan"
+          >
+            System Security Plan Viewer
           </MenuItem>
-          <MenuItem onClick={handleAppNavClose}>
-            <Link component={RouterLink} to="/component-definition">
-              Component Viewer
-            </Link>
+          <MenuItem
+            onClick={handleAppNavClose}
+            component={RouterLink}
+            to="/component-definition"
+          >
+            Component Viewer
           </MenuItem>
-          <MenuItem onClick={handleAppNavClose}>
-            <Link component={RouterLink} to="/profile">
-              Profile Viewer
-            </Link>
+          <MenuItem
+            onClick={handleAppNavClose}
+            component={RouterLink}
+            to="/profile"
+          >
+            Profile Viewer
           </MenuItem>
         </Menu>
         <Container component="main">
-          <Switch>
-            {/* TODO - This doesn't load properly */}
-            <Route exact path="/">
-              <Redirect to="/catalog" />
-            </Route>
-            <Route path="/catalog">
-              <OSCALCatalogLoader renderForm />
-            </Route>
-            <Route exact path="/system-security-plan">
-              <OSCALSSPLoader renderForm />
-            </Route>
-            <Route exact path="/component-definition">
-              <OSCALComponentLoader renderForm />
-            </Route>
-            <Route exact path="/profile">
-              <OSCALProfileLoader renderForm />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route
+              exact
+              path="/"
+              element={<Navigate replace to="/catalog" />}
+            />
+            <Route
+              path="/catalog"
+              element={<OSCALCatalogLoader renderForm />}
+            />
+            <Route
+              exact
+              path="/system-security-plan"
+              element={<OSCALSSPLoader renderForm />}
+            />
+            <Route
+              exact
+              path="/component-definition"
+              element={<OSCALComponentLoader renderForm />}
+            />
+            <Route
+              exact
+              path="/profile"
+              element={<OSCALProfileLoader renderForm />}
+            />
+          </Routes>
         </Container>
       </div>
     </ThemeProvider>

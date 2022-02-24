@@ -27,18 +27,18 @@ export default function OSCALSsp(props) {
 
   const patchData = {
     "system-security-plan": {
-      uuid: ssp.uuid,
+      uuid: props["system-security-plan"].uuid,
     },
   };
 
   let sspParties;
-  if (ssp.metadata) {
-    sspParties = ssp.metadata.parties;
+  if (props["system-security-plan"].metadata) {
+    sspParties = props["system-security-plan"].metadata.parties;
   }
 
   useEffect(() => {
     OSCALSspResolveProfile(
-      ssp,
+      props["system-security-plan"],
       props.parentUrl,
       (profilesCatalogsTree) => {
         if (!unmounted.current) {
@@ -83,25 +83,30 @@ export default function OSCALSsp(props) {
   return (
     <div className={classes.paper}>
       <OSCALMetadata
-        metadata={ssp.metadata}
+        metadata={props["system-security-plan"].metadata}
         isEditable={props.isEditable}
         onFieldSave={props.onFieldSave}
         patchData={patchData}
-        update={setSsp}
       />
       <OSCALProfileCatalogInheritance
         inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}
       />
       <OSCALSystemCharacteristics
-        systemCharacteristics={ssp["system-characteristics"]}
+        systemCharacteristics={
+          props["system-security-plan"]["system-characteristics"]
+        }
+        backMatter={props["system-security-plan"]["back-matter"]}
+        parentUrl={props.parentUrl}
       />
       <OSCALSystemImplementation
-        systemImplementation={ssp["system-implementation"]}
+        systemImplementation={
+          props["system-security-plan"]["system-implementation"]
+        }
         parties={sspParties}
       />
       {controlImpl}
       <OSCALBackMatter
-        backMatter={ssp["back-matter"]}
+        backMatter={props["system-security-plan"]["back-matter"]}
         parentUrl={props.parentUrl}
       />
     </div>

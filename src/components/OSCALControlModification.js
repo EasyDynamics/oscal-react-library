@@ -157,7 +157,7 @@ export default function OSCALControlModification(props) {
           }}
           color="secondary"
           badgeContent={modLength}
-          overlap="circle"
+          overlap="circular"
         >
           <IconButton
             variant="outlined"
