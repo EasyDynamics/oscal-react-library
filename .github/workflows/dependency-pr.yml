@@ -16,6 +16,8 @@ jobs:
   update:
     # If the pull request was closed then nothing needs to be done
     # if: github.event.pull_request.merged == 'true'
+    runs-on: ubuntu-latest
+    name: Synchronize version
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -46,3 +48,5 @@ jobs:
             the `example/package-lock.json` file.
           branch: automation/update-dependencies/${{ github.event.pull_request.number }}
           base: develop
+          committer: noreply@easydynamics.com
+          author: Easy Dynamics Automation <noreply@easydynamics.com>
