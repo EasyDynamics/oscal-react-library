@@ -1,5 +1,5 @@
 import OSCALResolveProfileOrCatalogUrlControls from "./OSCALProfileResolver";
-import { fixJsonUrls } from "./OSCALBackMatterUtils";
+import { fixJsonUrls } from "./OSCALLinkUtils";
 /**
  * Loads an SSP's 'import-profile' and adds the resulting controls to the SSP
  *

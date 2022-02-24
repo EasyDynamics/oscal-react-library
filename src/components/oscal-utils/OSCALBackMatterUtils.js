@@ -1,24 +1,3 @@
-export function fixJsonUrls(absoluteUrl) {
-  // TODO this is incorrect in the profile (https://github.com/usnistgov/oscal-content/issues/59, https://easydynamics.atlassian.net/browse/EGRC-266)
-  // TODO this workaround must be improved in https://easydynamics.atlassian.net/browse/EGRC-296
-  if (!absoluteUrl.endsWith(".xml")) {
-    return absoluteUrl;
-  }
-  // Replacing all instances of xml with json in the path *should* get us the correct json URL
-  return absoluteUrl.replace(/xml/g, "json");
-}
-
-export function getAbsoluteUrl(rlink, parentUrl) {
-  let absoluteUrl = rlink.href;
-
-  // TODO - this should be improved for other use cases
-  if (!absoluteUrl.startsWith("http")) {
-    absoluteUrl = `${parentUrl}/../${absoluteUrl}`;
-  }
-
-  return absoluteUrl;
-}
-
 /**
  * Gets a resource from the given back matter's resource by the given HREF UUID.
  */
@@ -42,7 +21,6 @@ export function getResourceFromBackMatterByHref(backMatter, href) {
 export default function getUriFromBackMatterByHref(
   backMatter,
   href,
-  parentUrl,
   mediaTypeRegex
 ) {
   const foundResource = getResourceFromBackMatterByHref(backMatter, href);
@@ -59,5 +37,5 @@ export default function getUriFromBackMatterByHref(
     throw new Error("resource not found for href");
   }
 
-  return fixJsonUrls(getAbsoluteUrl(foundLink, parentUrl));
+  return foundLink;
 }
