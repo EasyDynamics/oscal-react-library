@@ -45,6 +45,9 @@ export default function OSCALPopover(props) {
                   defaultValue={props.statementByComponent[
                     "set-parameters"
                   ][0].values.toString()}
+                  inputProps={{
+                    "data-testid": "Popover Implementation TextField",
+                  }}
                   inputRef={implementationReference}
                 />
               </Grid>
@@ -59,6 +62,9 @@ export default function OSCALPopover(props) {
             <TextField
               fullWidth
               multiline
+              inputProps={{
+                "data-testid": "Popover Description TextField",
+              }}
               inputRef={descriptionReference}
               defaultValue={props.statementByComponent.description}
             />
