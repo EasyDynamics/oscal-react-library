@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { populatePartialPatchData } from "./oscal-utils/OSCALSspResolver";
 import ErrorBoundary from "./ErrorBoundary";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
@@ -55,12 +54,61 @@ function jsonPathRegexReplace(matched) {
   return ".";
 }
 
+function populatePartialPatchData(
+  data,
+  editedFieldJsonPath,
+  newValue = null,
+  appendToLastFieldInPath = false
+) {
+  if (editedFieldJsonPath.length === 1) {
+    const editData = data;
+
+    if (typeof editedFieldJsonPath.at(0) === "function") {
+      editedFieldJsonPath.at(0)(data);
+    } else if (appendToLastFieldInPath) {
+      editData[editedFieldJsonPath].push(newValue);
+    } else {
+      editData[editedFieldJsonPath] = newValue;
+    }
+
+    return;
+  }
+
+  if (Number.isInteger(editedFieldJsonPath.at(0))) {
+    populatePartialPatchData(
+      data[Number(editedFieldJsonPath.shift())],
+      editedFieldJsonPath,
+      newValue,
+      appendToLastFieldInPath
+    );
+  } else if (typeof editedFieldJsonPath.at(0) === "function") {
+    populatePartialPatchData(
+      editedFieldJsonPath.shift()(data),
+      editedFieldJsonPath,
+      newValue,
+      appendToLastFieldInPath
+    );
+  } else {
+    populatePartialPatchData(
+      data[editedFieldJsonPath.shift()],
+      editedFieldJsonPath,
+      newValue,
+      appendToLastFieldInPath
+    );
+  }
+}
+
 /**
  *
+ * @param appendToLastFieldInPath boolean indicating if the updated value should be appended to an array or replace an existing value
  * @param partialPatchData data that will be passed into the body of the PATCH request, doesn't initially contain the updates
  * @param onSuccessfulPatch function that will update a state, forcing a re-rendering if the PATCH request is successful
  * @param editedFieldJsonPath path to the field that is being updated
  * @param newValue updated value for the edited field
+ * @param restMethod the REST request type
+ * @param restUrlPath path defining where in the file the modifications are made
+ * @param jsonRootName root OSCAL object, as it appears on the corresponding object file, of the JSON file
+ * @param restPath main url path for access the OSCAL files in REST mode
  */
 function restPatch(
   appendToLastFieldInPath,
