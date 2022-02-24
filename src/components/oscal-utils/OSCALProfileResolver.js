@@ -1,4 +1,4 @@
-import getUriFromBackMatterByHref from "./OSCALBackMatterUtils";
+import resolveLinkHref from "./OSCALLinkUtils";
 
 const OSCAL_MEDIA_TYPE_REGEX = /^application\/oscal.*\+json$/;
 /**
@@ -83,7 +83,7 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
           modifications.alters.push(...result.profile.modify.alters);
 
           result.profile.imports.forEach((profileImport) => {
-            const importUrl = getUriFromBackMatterByHref(
+            const importUrl = resolveLinkHref(
               result.profile["back-matter"],
               profileImport.href,
               null,
@@ -138,7 +138,7 @@ export function OSCALResolveProfile(profile, parentUrl, onSuccess, onError) {
     OSCALResolveProfileOrCatalogUrlControls(
       profile.resolvedControls,
       profile.modifications,
-      getUriFromBackMatterByHref(
+      resolveLinkHref(
         profile["back-matter"],
         imp.href,
         parentUrl,

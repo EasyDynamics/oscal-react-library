@@ -3,7 +3,7 @@ import {
   systemCharacteristicsDescriptionUrl,
   systemCharacteristicsInformationUrl,
 } from "./Urls";
-import diagramData from "./DiagramData";
+import { localReferenceDiagram } from "./DiagramData";
 import { backMatterTestData } from "./BackMatterData";
 
 const title = "Example Component";
@@ -152,7 +152,7 @@ export const systemCharacteristicsTestData = {
   ],
   "authorization-boundary": {
     description: "The description of the authorization boundary would go here.",
-    diagrams: [diagramData],
+    diagrams: [localReferenceDiagram],
   },
 };
 
