@@ -40,10 +40,11 @@ jobs:
             Synchronize OSCAL Viewer example app depenencies
           title: Synchronize example app `package-lock.json` (#${{ github.event.pull_request.number }})
           body: |
-            Pull request #${{ github.event.pull_request.number }} which updated some dependencies
+            Pull request #${{ github.event.pull_request.number }} which updated some dependencies in
             `/package-lock.json` was recently merged. This synchronizes those same updates back into
             the `example/package-lock.json` file.
           branch: automation/update-dependencies/${{ github.event.pull_request.number }}
           base: develop
           committer: Easy Dynamics Automation <noreply@easydynamics.com>
           author: Easy Dynamics Automation <noreply@easydynamics.com>
+          path: example/
