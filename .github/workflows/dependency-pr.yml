@@ -5,15 +5,17 @@ on:
   # Because we so heavily reference the pull request number within the workflow,
   # it is preferable to use the pull_request_target. This will run after every
   # pull request merged to develop that touches the main package-lock.json
-  pull_request_target:
-    types: [closed]
-    branches: [develop]
-    paths: ["package-lock.json"]
+  # pull_request_target:
+  #   types: [closed]
+  #   branches: [develop]
+  #   paths: ["package-lock.json"]
+  pull_request:
+    branches: [feature/automate-example-app-package-updates]
 
 jobs:
   update:
     # If the pull request was closed then nothing needs to be done
-    if: github.event.pull_request.merged == 'true'
+    # if: github.event.pull_request.merged == 'true'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
