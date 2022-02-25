@@ -2,27 +2,46 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import OSCALDiagram from "./OSCALDiagram";
 import { backMatterTestData } from "../test-data/BackMatterData";
-import diagramTestData from "../test-data/DiagramData";
+import {
+  localReferenceDiagram,
+  uriReferenceDiagram,
+} from "../test-data/DiagramData";
 
-function diagramRenderer() {
+function diagramRenderer(testData) {
   render(
     <OSCALDiagram
-      diagram={diagramTestData}
+      diagram={testData}
       backMatter={backMatterTestData}
       parentUrl="./"
     />
   );
 }
 
-export default function testOSCALDiagram(parentElementName, renderer) {
+export default function testOSCALDiagram(
+  parentElementName,
+  renderer,
+  testData,
+  expectedSrc
+) {
   test(`${parentElementName} displays diagram`, () => {
-    renderer();
+    renderer(testData);
     const result = screen.getByAltText("Authorization Boundary Diagram");
     expect(result).toBeVisible();
-    expect(result).toHaveAttribute("src", ".//../diagram.png");
+    expect(result).toHaveAttribute("src", expectedSrc);
   });
 }
 
 if (!require.main) {
-  testOSCALDiagram("OSCALDiagram", diagramRenderer);
+  testOSCALDiagram(
+    "OSCALDiagram",
+    diagramRenderer,
+    localReferenceDiagram,
+    ".//../diagram.png"
+  );
+  testOSCALDiagram(
+    "OSCALDiagram",
+    diagramRenderer,
+    uriReferenceDiagram,
+    uriReferenceDiagram.links[0].href
+  );
 }

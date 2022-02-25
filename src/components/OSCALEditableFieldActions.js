@@ -17,7 +17,6 @@ export default function OSCALEditableFieldActions(props) {
           props.setInEditState(!props.inEditState);
           props.onFieldSave(
             props.patchData,
-            props.update,
             props.editedField,
             props.reference.current.value
           );
