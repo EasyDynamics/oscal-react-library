@@ -78,7 +78,6 @@ function populatePartialPatchData(data, editedFieldJsonPath, newValue) {
 
 export default function OSCALLoader(props) {
   const classes = useStyles();
-  const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isResolutionComplete, setIsResolutionComplete] = useState(false);
   const [isRestMode, setIsRestMode] = useState(
@@ -106,6 +105,30 @@ export default function OSCALLoader(props) {
     }
   };
 
+  const handleRestRequest = (httpMethod, url, data) => {
+    setIsLoaded(false);
+    setIsResolutionComplete(false);
+    const requestInfo = {
+      method: httpMethod,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+    fetch(url, requestInfo)
+      .then((response) => {
+        if (!response.ok) throw new Error(response.status);
+        else return response.json();
+      })
+      .then((result) => {
+        if (!unmounted.current) {
+          setOscalData(result);
+          setIsLoaded(true);
+        }
+      });
+  };
+
   /**
    *
    * @param partialPatchData data that will be passed into the body of the PATCH request, doesn't initially contain the updates
@@ -122,26 +145,12 @@ export default function OSCALLoader(props) {
     restPath
   ) => {
     const url = `${process.env.REACT_APP_REST_BASE_URL}/${restPath}/${partialPatchData[jsonRootName].uuid}`;
-
     populatePartialPatchData(partialPatchData, editedFieldJsonPath, newValue);
+    handleRestRequest("PATCH", url, partialPatchData);
+  };
 
-    setIsLoaded(false);
-    setIsResolutionComplete(false);
-
-    fetch(url, {
-      method: "PATCH",
-      body: JSON.stringify(partialPatchData),
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error(response.status);
-        else return response.json();
-      })
-      .then((result) => {
-        if (!unmounted.current) {
-          setOscalData(result);
-          setIsLoaded(true);
-        }
-      });
+  const handleRestPut = (jsonString) => {
+    handleRestRequest("PUT", oscalUrl, JSON.parse(jsonString));
   };
 
   const handleUrlChange = (event) => {
@@ -177,19 +186,6 @@ export default function OSCALLoader(props) {
       setOscalUrl(props.oscalObjectType.defaultUrl);
       loadOscalData(props.oscalObjectType.defaultUrl);
     }
-  };
-
-  const handleEditorSave = (jsonString) => {
-    const requestOptions = {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: jsonString,
-    };
-    const promise = new Promise((resolve) => {
-      resolve("done");
-    });
-    promise.then(() => setOscalData(jsonString));
-    fetch(oscalUrl, requestOptions);
   };
 
   const onResolutionComplete = () => {
@@ -235,7 +231,7 @@ export default function OSCALLoader(props) {
       >
         <div>
           {isRestMode && (
-            <OSCALJsonEditor value={oscalData} onSave={handleEditorSave} />
+            <OSCALJsonEditor value={oscalData} onSave={handleRestPut} />
           )}
         </div>
         <div>

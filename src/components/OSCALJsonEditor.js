@@ -31,18 +31,6 @@ export default function OSCALJsonEditor(props) {
     tabSize: 2,
   };
 
-  handleEditorDidMount = (editor) => {
-    editorRef.current = editor;
-  };
-
-  handleSaveButtonClick = () => {
-    props.onSave(editorRef.current.getValue());
-  };
-
-  handleDiscardButtonClick = () =>
-    editorRef.current.setValue(JSON.stringify(props.value, null, "\t"));
-  };
-
   return (
     <Grid container className={classes.grid} direction="column">
       <Grid item>
@@ -54,7 +42,9 @@ export default function OSCALJsonEditor(props) {
         <Editor
           height="85vh"
           options={editorOptions}
-          onMount={handleEditorDidMount}
+          onMount={(editor) => {
+            editorRef.current = editor;
+          }}
           value={JSON.stringify(props.value, null, "\t")}
           defaultLanguage="json"
         />
@@ -62,7 +52,9 @@ export default function OSCALJsonEditor(props) {
       <Grid item>
         <Button
           className={classes.chrome}
-          onClick={handleSaveButtonClick}
+          onClick={() => {
+            props.onSave(editorRef.current.getValue());
+          }}
           startIcon={<SaveIcon />}
           variant="contained"
           color="primary"
@@ -71,7 +63,9 @@ export default function OSCALJsonEditor(props) {
         </Button>
         <Button
           className={classes.chrome}
-          onClick={handleDiscardButtonClick}
+          onClick={() => {
+            editorRef.current.setValue(JSON.stringify(props.value, null, "\t"));
+          }}
           variant="contained"
           color="secondary"
         >
