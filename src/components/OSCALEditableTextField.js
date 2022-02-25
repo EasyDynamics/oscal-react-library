@@ -12,70 +12,39 @@ function textFieldWithEditableActions(
   setInEditState
 ) {
   if (inEditState) {
-    if (Number.isInteger(props.size)) {
-      return (
-        <>
-          <Grid item xs={props.size} className={props.className}>
-            <Typography>
-              <TextField
-                fullWidth
-                inputProps={{
-                  "data-testid": `textField-${getElementLabel(
-                    props.editedField
-                  )}`,
-                }}
-                inputRef={reference}
-                size={props.textFieldSize}
-                defaultValue={props.value}
-                variant={props.textFieldVariant}
-              />
-            </Typography>
-          </Grid>
-          <Grid item>
-            <OSCALEditableFieldActions
-              appendToLastFieldInPath={props.appendToLastFieldInPath}
-              inEditState={inEditState}
-              editedField={props.editedField}
-              setInEditState={setInEditState}
-              onCancel={props.onCancel}
-              onFieldSave={props.onFieldSave}
-              patchData={props.patchData}
-              reference={reference}
-              restMethod={props.restMethod}
-              restUrlPath={props.restUrlPath}
-              update={props.update}
-            />
-          </Grid>
-        </>
-      );
-    }
-
     return (
       <>
-        <Typography display="inline" variant={props.typographyVariant}>
-          <TextField
-            inputProps={{
-              "data-testid": `textField-${getElementLabel(props.editedField)}`,
-            }}
-            inputRef={reference}
-            size={props.textFieldSize}
-            defaultValue={props.defaultValue}
-            variant={props.textFieldVariant}
+        <Grid item xs={props.size} className={props.className}>
+          <Typography>
+            <TextField
+              fullWidth
+              inputProps={{
+                "data-testid": `textField-${getElementLabel(
+                  props.editedField
+                )}`,
+              }}
+              inputRef={reference}
+              size={props.textFieldSize}
+              defaultValue={props.value}
+              variant={props.textFieldVariant}
+            />
+          </Typography>
+        </Grid>
+        <Grid item>
+          <OSCALEditableFieldActions
+            appendToLastFieldInPath={props.appendToLastFieldInPath}
+            inEditState={inEditState}
+            editedField={props.editedField}
+            setInEditState={setInEditState}
+            onCancel={props.onCancel}
+            onFieldSave={props.onFieldSave}
+            patchData={props.patchData}
+            reference={reference}
+            restMethod={props.restMethod}
+            restUrlPath={props.restUrlPath}
+            update={props.update}
           />
-        </Typography>
-        <OSCALEditableFieldActions
-          appendToLastFieldInPath={props.appendToLastFieldInPath}
-          inEditState={inEditState}
-          editedField={props.editedField}
-          setInEditState={setInEditState}
-          onCancel={props.onCancel}
-          onFieldSave={props.onFieldSave}
-          patchData={props.patchData}
-          reference={reference}
-          restMethod={props.restMethod}
-          restUrlPath={props.restUrlPath}
-          update={props.update}
-        />
+        </Grid>
       </>
     );
   }

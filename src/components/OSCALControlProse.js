@@ -7,7 +7,6 @@ import { Grid, IconButton } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import cloneDeep from "lodash/cloneDeep";
 import { v4 } from "uuid";
-import { populatePartialPatchData } from "./oscal-utils/OSCALSspResolver";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 import StyledTooltip from "./OSCALStyledTooltip";
 import OSCALPopover from "./OSCALPopover";
@@ -384,68 +383,37 @@ function onFieldSaveByComponentParameterValue(
   props,
   restMethod,
   restUrlPath,
-  statementByComponent,
   descriptionReference,
   implementationReference
 ) {
   const partialPatchData = cloneDeep(props.implementedRequirement);
-  const paramId =
-    props.parameters.find((element) => props.prose.includes(element.id))?.id ||
-    null;
+  const byComponent = partialPatchData.statements
+    .find((element) => element["statement-id"] === props.statementId)
+    ["by-components"].find(
+      (element) => element["component-uuid"] === props.componentId
+    );
+  byComponent.description = descriptionReference.current.value;
 
   const editedField = [
     "statements",
-    (patchData) =>
-      patchData.find(
-        (element) => element["statement-id"] === props.statementId
-      ),
+    `statement-id[${props.statementId}]`,
     "by-components",
-    (patchData) =>
-      patchData.find(
-        (element) => element["component-uuid"] === props.componentId
-      ),
-    "description",
+    `component-uuid[${props.componentId}]`,
   ];
 
-  populatePartialPatchData(
-    partialPatchData,
-    cloneDeep(editedField),
-    descriptionReference.current.value
-  );
-
-  if (statementByComponent["set-parameters"]) {
-    editedField.pop();
-    editedField.push(
-      "set-parameters",
-      (patchData) =>
-        patchData.find((element) => element["param-id"] === paramId),
-      (patchData) => {
-        const data = patchData;
-        data.values = [implementationReference.current.value];
-      }
+  if (byComponent["set-parameters"]) {
+    const paramId =
+      props.parameters.find((element) => props.prose.includes(element.id))
+        ?.id || null;
+    const setParameter = byComponent["set-parameters"].find(
+      (element) => element["param-id"] === paramId
     );
-
-    populatePartialPatchData(partialPatchData, cloneDeep(editedField));
-
-    editedField[1] = `statement-id[${props.statementId}]`;
-    editedField[3] = `component-uuid[${props.componentId}]`;
-    editedField[5] = `param-id[${paramId}]`;
-    editedField[6] = "values";
-
-    props.onFieldSave(
-      false,
-      partialPatchData,
-      props.update,
-      editedField,
-      null,
-      restMethod,
-      restUrlPath
-    );
-    return;
+    setParameter.values = [implementationReference.current.value];
+    editedField.push("set-parameters", `param-id[${paramId}]`, "values");
+  } else {
+    editedField.push("description");
   }
 
-  editedField[1] = `statement-id[${props.statementId}]`;
-  editedField[3] = `component-uuid[${props.componentId}]`;
   props.onFieldSave(
     false,
     partialPatchData,
@@ -553,7 +521,6 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
                   props,
                   "PUT",
                   `${rootOscalObjectName}/${props.patchData[rootOscalObjectName].uuid}/control-implementation/implemented-requirements/${props.implementedRequirement.uuid}`,
-                  statementByComponent,
                   descriptionReference,
                   implementationReference
                 );
