@@ -44,6 +44,7 @@ jobs:
             `/package-lock.json` was recently merged. This synchronizes those same updates back into
             the `example/package-lock.json` file.
           branch: automation/update-dependencies/${{ github.event.pull_request.number }}
+          delete-branch: true
           base: develop
           committer: Easy Dynamics Automation <noreply@easydynamics.com>
           author: Easy Dynamics Automation <noreply@easydynamics.com>
