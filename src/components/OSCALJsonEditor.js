@@ -5,19 +5,21 @@ import { Grid, makeStyles, Typography } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
 
 export default function OSCALJsonEditor(props) {
-  const useStyles = makeStyles({
+  const useStyles = makeStyles((theme) => ({
     grid: {
-      paddingRight: "16px",
+      paddingRight: theme.spacing(1),
+      top: theme.spacing(1),
       position: "sticky",
-      top: "16px",
       overflow: "hidden",
     },
+    buttonGrid: {
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
+    },
     editor: {
-      marginTop: "8px",
-      marginBottom: "8px",
       width: "100%",
     },
-  });
+  }));
   const classes = useStyles();
   const editorRef = useRef(null);
 
@@ -34,9 +36,7 @@ export default function OSCALJsonEditor(props) {
   return (
     <Grid container className={classes.grid} direction="column">
       <Grid item>
-        <Typography className={classes.chrome} variant="h6">
-          JSON Editor
-        </Typography>
+        <Typography variant="h6">JSON Editor</Typography>
       </Grid>
       <Grid className={classes.editor} item>
         <Editor
@@ -50,27 +50,33 @@ export default function OSCALJsonEditor(props) {
         />
       </Grid>
       <Grid item>
-        <Button
-          className={classes.chrome}
-          onClick={() => {
-            props.onSave(editorRef.current.getValue());
-          }}
-          startIcon={<SaveIcon />}
-          variant="contained"
-          color="primary"
-        >
-          Save
-        </Button>
-        <Button
-          className={classes.chrome}
-          onClick={() => {
-            editorRef.current.setValue(JSON.stringify(props.value, null, "\t"));
-          }}
-          variant="contained"
-          color="secondary"
-        >
-          Discard
-        </Button>
+        <Grid className={classes.buttonGrid} container spacing={2}>
+          <Grid item>
+            <Button
+              onClick={() => {
+                props.onSave(editorRef.current.getValue());
+              }}
+              startIcon={<SaveIcon />}
+              variant="contained"
+              color="primary"
+            >
+              Save
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              onClick={() => {
+                editorRef.current.setValue(
+                  JSON.stringify(props.value, null, "\t")
+                );
+              }}
+              variant="contained"
+              color="secondary"
+            >
+              Discard
+            </Button>
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );
