@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { populatePartialPatchData } from "./oscal-utils/OSCALSspResolver";
+import { populatePartialRestData } from "./oscal-utils/OSCALSspResolver";
 import ErrorBoundary from "./ErrorBoundary";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
@@ -58,8 +58,8 @@ function jsonPathRegexReplace(matched) {
 /**
  *
  * @param appendToLastFieldInPath boolean indicating if the updated value should be appended to an array or replace an existing value
- * @param partialPatchData data that will be passed into the body of the PATCH request, doesn't initially contain the updates
- * @param onSuccessfulPatch function that will update a state, forcing a re-rendering if the PATCH request is successful
+ * @param partialRestData data that will be passed into the body of the REST request, doesn't initially contain the updates
+ * @param onSuccessfulRequest function that will update a state, forcing a re-rendering if the REST request is successful
  * @param editedFieldJsonPath path to the field that is being updated
  * @param newValue updated value for the edited field
  * @param restMethod the REST request type
@@ -67,10 +67,10 @@ function jsonPathRegexReplace(matched) {
  * @param jsonRootName root OSCAL object, as it appears on the corresponding object file, of the JSON file
  * @param restPath main url path for access the OSCAL files in REST mode
  */
-function restPatch(
+function restRequest(
   appendToLastFieldInPath,
-  partialPatchData,
-  onSuccessfulPatch,
+  partialRestData,
+  onSuccessfulRequest,
   editedFieldJsonPath,
   newValue,
   restMethod,
@@ -80,7 +80,7 @@ function restPatch(
 ) {
   let url;
   if (restUrlPath === "") {
-    url = `${process.env.REACT_APP_REST_BASE_URL}/${restPath}/${partialPatchData[jsonRootName].uuid}`;
+    url = `${process.env.REACT_APP_REST_BASE_URL}/${restPath}/${partialRestData[jsonRootName].uuid}`;
   } else {
     url = `${process.env.REACT_APP_REST_BASE_URL}/${restUrlPath}`;
   }
@@ -88,8 +88,8 @@ function restPatch(
   const path = editedFieldJsonPath.toString();
 
   if (newValue) {
-    populatePartialPatchData(
-      partialPatchData,
+    populatePartialRestData(
+      partialRestData,
       editedFieldJsonPath,
       newValue,
       appendToLastFieldInPath
@@ -98,12 +98,12 @@ function restPatch(
 
   fetch(url, {
     method: restMethod,
-    body: JSON.stringify(partialPatchData),
+    body: JSON.stringify(partialRestData),
   })
     .then((res) => res.json())
     .then(
       (result) => {
-        onSuccessfulPatch(result);
+        onSuccessfulRequest(result);
       },
       () => {
         alert(
@@ -218,7 +218,7 @@ export default function OSCALLoader(props) {
       oscalData,
       oscalUrl,
       onResolutionComplete,
-      restPatch
+      restRequest
     );
   }
 
@@ -256,7 +256,7 @@ export function OSCALCatalogLoader(props) {
         restMethod,
         restUrlPath
       ) => {
-        restPatch(
+        restRequest(
           appendToLastFieldInPath,
           data,
           update,
@@ -297,7 +297,7 @@ export function OSCALSSPLoader(props) {
         restMethod,
         restUrlPath
       ) => {
-        restPatch(
+        restRequest(
           appendToLastFieldInPath,
           data,
           update,
@@ -337,7 +337,7 @@ export function OSCALComponentLoader(props) {
         restMethod,
         restUrlPath
       ) => {
-        restPatch(
+        restRequest(
           appendToLastFieldInPath,
           data,
           update,
@@ -377,7 +377,7 @@ export function OSCALProfileLoader(props) {
         restMethod,
         restUrlPath
       ) => {
-        restPatch(
+        restRequest(
           appendToLastFieldInPath,
           data,
           update,

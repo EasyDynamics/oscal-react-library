@@ -164,7 +164,7 @@ export const sspTestData = {
   "back-matter": backMatterTestData,
 };
 
-export const sspPatchData = {
+export const sspRestData = {
   "system-security-plan": {
     uuid: "12345678-9012-3456-7890-123456789012",
   },

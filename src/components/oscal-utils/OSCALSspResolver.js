@@ -60,7 +60,7 @@ export default function OSCALSspResolveProfile(
  * @param newValue updated value for the edited field
  * @param appendToLastFieldInPath boolean indicating if the updated value should be appended to an array or replace an existing value
  */
-export function populatePartialPatchData(
+export function populatePartialRestData(
   data,
   editedFieldJsonPath,
   newValue = null,
@@ -81,21 +81,21 @@ export function populatePartialPatchData(
   }
 
   if (Number.isInteger(editedFieldJsonPath.at(0))) {
-    populatePartialPatchData(
+    populatePartialRestData(
       data[Number(editedFieldJsonPath.shift())],
       editedFieldJsonPath,
       newValue,
       appendToLastFieldInPath
     );
   } else if (typeof editedFieldJsonPath.at(0) === "function") {
-    populatePartialPatchData(
+    populatePartialRestData(
       editedFieldJsonPath.shift()(data),
       editedFieldJsonPath,
       newValue,
       appendToLastFieldInPath
     );
   } else {
-    populatePartialPatchData(
+    populatePartialRestData(
       data[editedFieldJsonPath.shift()],
       editedFieldJsonPath,
       newValue,

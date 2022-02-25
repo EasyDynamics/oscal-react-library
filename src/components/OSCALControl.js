@@ -93,7 +93,7 @@ export default function OSCALControl(props) {
               modificationSetParameters={props.modificationSetParameters}
               onFieldSave={props.onFieldSave}
               parameters={props.control.params}
-              patchData={props.patchData}
+              restData={props.restData}
               update={props.update}
             />
           ))}
@@ -110,7 +110,7 @@ export default function OSCALControl(props) {
               modificationSetParameters={props.modificationSetParameters}
               onFieldSave={props.onFieldSave}
               parameters={control.params}
-              patchData={props.patchData}
+              restData={props.restData}
               update={props.update}
             />
           ))}

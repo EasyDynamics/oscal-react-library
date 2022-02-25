@@ -38,7 +38,7 @@ function textFieldWithEditableActions(
             setInEditState={setInEditState}
             onCancel={props.onCancel}
             onFieldSave={props.onFieldSave}
-            patchData={props.patchData}
+            restData={props.restData}
             reference={reference}
             restMethod={props.restMethod}
             restUrlPath={props.restUrlPath}
@@ -57,7 +57,7 @@ function textFieldWithEditableActions(
       <OSCALEditableFieldActions
         editedField={props.editedField}
         inEditState={inEditState}
-        patchData={props.patchData}
+        restData={props.restData}
         setInEditState={setInEditState}
       />
     </>

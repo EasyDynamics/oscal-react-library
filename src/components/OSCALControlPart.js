@@ -66,7 +66,7 @@ export default function OSCALControlPart(props) {
         modificationSetParameters={props.modificationSetParameters}
         onFieldSave={props.onFieldSave}
         parameters={props.parameters}
-        patchData={props.patchData}
+        restData={props.restData}
         prose={props.part.prose}
         statementId={props.part.id}
         statementUuid={
@@ -90,7 +90,7 @@ export default function OSCALControlPart(props) {
         modificationSetParameters={props.modificationSetParameters}
         onFieldSave={props.onFieldSave}
         parameters={props.parameters}
-        patchData={props.patchData}
+        restData={props.restData}
         prose={props.part.prose}
         statementId={props.statementId}
         statementUuid={
@@ -126,7 +126,7 @@ export default function OSCALControlPart(props) {
             modificationSetParameters={props.modificationSetParameters}
             onFieldSave={props.onFieldSave}
             parameters={props.parameters}
-            patchData={props.patchData}
+            restData={props.restData}
             statementId={props.statementId}
             update={props.update}
           />

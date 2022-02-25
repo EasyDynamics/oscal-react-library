@@ -66,15 +66,15 @@ export default function OSCALMetadata(props) {
           canEdit={props.isEditable}
           editedField={
             props.isEditable
-              ? [Object.keys(props.patchData)[0], "metadata", "title"]
+              ? [Object.keys(props.restData)[0], "metadata", "title"]
               : null
           }
           onFieldSave={props.onFieldSave}
-          patchData={
+          restData={
             props.isEditable
               ? {
-                  [Object.keys(props.patchData)[0]]: {
-                    uuid: props.patchData[Object.keys(props.patchData)[0]].uuid,
+                  [Object.keys(props.restData)[0]]: {
+                    uuid: props.restData[Object.keys(props.restData)[0]].uuid,
                     metadata: {
                       title: props.metadata.title,
                     },
@@ -136,15 +136,15 @@ export default function OSCALMetadata(props) {
               className={classes.OSCALMetadataVersion}
               editedField={
                 props.isEditable
-                  ? [Object.keys(props.patchData)[0], "metadata", "version"]
+                  ? [Object.keys(props.restData)[0], "metadata", "version"]
                   : null
               }
               onFieldSave={props.onFieldSave}
-              patchData={
+              restData={
                 props.isEditable
                   ? {
-                      [Object.keys(props.patchData)[0]]: {
-                        uuid: props.patchData[Object.keys(props.patchData)[0]]
+                      [Object.keys(props.restData)[0]]: {
+                        uuid: props.restData[Object.keys(props.restData)[0]]
                           .uuid,
                         metadata: {
                           version: props.metadata.version,
