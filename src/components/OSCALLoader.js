@@ -46,13 +46,10 @@ const oscalObjectTypes = {
   },
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   split: {
     display: "flex",
     flexDirection: " row",
-    "& > .viewer": {
-      marginLeft: theme.spacing(2),
-    },
     "& > .gutter": {
       backgroundColor: "#eee",
       backgroundRepeat: "no-repeat",
@@ -227,18 +224,12 @@ export default function OSCALLoader(props) {
   if (!isLoaded) {
     result = <CircularProgress />;
   } else if (oscalUrl) {
-    result = (
-      <Split
-        className={classes.split}
-        minSize={500}
-        sizes={isRestMode ? [50, 50] : []}
-      >
+    result = isRestMode ? (
+      <Split className={classes.split} minSize={500} sizes={[50, 50]}>
         <Box>
-          {isRestMode && (
-            <OSCALJsonEditor value={oscalData} onSave={handleRestPut} />
-          )}
+          <OSCALJsonEditor value={oscalData} onSave={handleRestPut} />
         </Box>
-        <Box className={classes.viewer}>
+        <Box>
           {props.renderer(
             isRestMode,
             oscalData,
@@ -248,6 +239,16 @@ export default function OSCALLoader(props) {
           )}
         </Box>
       </Split>
+    ) : (
+      <>
+        {props.renderer(
+          isRestMode,
+          oscalData,
+          oscalUrl,
+          onResolutionComplete,
+          handleRestPatch
+        )}
+      </>
     );
   }
 
