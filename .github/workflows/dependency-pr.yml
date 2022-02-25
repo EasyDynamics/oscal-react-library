@@ -48,4 +48,6 @@ jobs:
           base: develop
           committer: Easy Dynamics Automation <noreply@easydynamics.com>
           author: Easy Dynamics Automation <noreply@easydynamics.com>
-          path: example/
+          add-paths: |
+            example/package.json
+            example/package-lock.json
