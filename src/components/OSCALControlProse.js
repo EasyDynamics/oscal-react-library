@@ -5,11 +5,11 @@ import Link from "@material-ui/core/Link";
 import EditIcon from "@material-ui/icons/Edit";
 import { Grid, IconButton } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import cloneDeep from "lodash/cloneDeep";
-import { v4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 import StyledTooltip from "./OSCALStyledTooltip";
 import OSCALPopover from "./OSCALPopover";
+import { deepClone } from "./oscal-utils/OSCALUtils";
 
 const prosePlaceholderRegexpString = "{{ insert: param, ([0-9a-zA-B-_.]*) }}";
 
@@ -247,6 +247,57 @@ function getParameterValueSegment(
   );
 }
 
+function onFieldSaveParameterLabel(
+  props,
+  descriptionReference,
+  implementationReference,
+  paramId,
+  partialRestData
+) {
+  const statement =
+    partialRestData?.statements?.find(
+      (element) => element["statement-id"] === props.statementId
+    ) || null;
+  const rootOscalObjectName = Object.keys(props.restData)[0];
+
+  const newByComponent = {
+    "component-uuid": props.componentId,
+    uuid: uuidv4(),
+    description: descriptionReference.current.value,
+  };
+
+  statement["by-components"].push(newByComponent);
+
+  const editedField = [
+    "statements",
+    `statement-id[${props.statementId}]`,
+    "by-components",
+    `component-uuid[${props.componentId}]`,
+  ];
+
+  if (paramId) {
+    newByComponent["set-parameters"] = [
+      {
+        "param-id": paramId,
+        values: [implementationReference.current.value],
+      },
+    ];
+
+    editedField.push("set-parameters", `param-id[${paramId}]`, "values");
+  } else {
+    editedField.push("description");
+  }
+
+  props.onFieldSave(
+    false,
+    partialRestData,
+    editedField,
+    null,
+    "PUT",
+    `${rootOscalObjectName}/${props.restData[rootOscalObjectName].uuid}/control-implementation/implemented-requirements/${props.implementedRequirement.uuid}`
+  );
+}
+
 /**
  * Replaces the parameter placeholders in the given prose with the given label
  * @param {Object} props
@@ -254,9 +305,6 @@ function getParameterValueSegment(
  */
 export function OSCALReplacedProseWithParameterLabel(props) {
   const [anchorEl, setAnchorEl] = useState(null);
-  const rootOscalObjectName = props.restData
-    ? Object.keys(props.restData)[0]
-    : null;
 
   if (!props.prose) {
     return null;
@@ -272,16 +320,19 @@ export function OSCALReplacedProseWithParameterLabel(props) {
     );
   }
 
+  const partialRestData = props.implementedRequirement
+    ? deepClone(props.implementedRequirement)
+    : null;
+  const statement =
+    partialRestData?.statements?.find(
+      (element) => element["statement-id"] === props.statementId
+    ) || null;
+
   let labelWithProse = props.prose;
   if (props.label) {
     labelWithProse = props.label.concat(` ${props.prose}`);
   }
 
-  const partialRestData = cloneDeep(props.implementedRequirement);
-  const statement =
-    partialRestData?.statements?.find(
-      (element) => element["statement-id"] === props.statementId
-    ) || null;
   const paramId = props.prose.split(
     RegExp(prosePlaceholderRegexpString, "g")
   )[1];
@@ -326,51 +377,16 @@ export function OSCALReplacedProseWithParameterLabel(props) {
               setAnchorEl(null);
             }}
             onFieldSave={(descriptionReference, implementationReference) => {
-              const newByComponent = {
-                "component-uuid": props.componentId,
-                uuid: v4(),
-                description: descriptionReference.current.value,
-              };
-
-              statement["by-components"].push(newByComponent);
-
-              const editedField = [
-                "statements",
-                `statement-id[${props.statementId}]`,
-                "by-components",
-                `component-uuid[${props.componentId}]`,
-              ];
-
-              if (paramId) {
-                newByComponent["set-parameters"] = [
-                  {
-                    "param-id": paramId,
-                    values: [implementationReference.current.value],
-                  },
-                ];
-
-                editedField.push(
-                  "set-parameters",
-                  `param-id[${paramId}]`,
-                  "values"
-                );
-              } else {
-                editedField.push("description");
-              }
-
-              props.onFieldSave(
-                false,
-                partialRestData,
-                props.update,
-                editedField,
-                null,
-                "PUT",
-                `${rootOscalObjectName}/${props.restData[rootOscalObjectName].uuid}/control-implementation/implemented-requirements/${props.implementedRequirement.uuid}`
+              onFieldSaveParameterLabel(
+                props,
+                descriptionReference,
+                implementationReference,
+                paramId,
+                partialRestData
               );
             }}
             statementByComponent={statement}
             statementId={props.statementId}
-            update={props.update}
             updatingLabelPlaceholder={paramId}
           />
         </Grid>
@@ -386,7 +402,7 @@ function onFieldSaveByComponentParameterValue(
   descriptionReference,
   implementationReference
 ) {
-  const partialRestData = cloneDeep(props.implementedRequirement);
+  const partialRestData = deepClone(props.implementedRequirement);
   const byComponent = partialRestData.statements
     .find((element) => element["statement-id"] === props.statementId)
     ["by-components"].find(
@@ -417,7 +433,6 @@ function onFieldSaveByComponentParameterValue(
   props.onFieldSave(
     false,
     partialRestData,
-    props.update,
     editedField,
     null,
     restMethod,
@@ -527,7 +542,6 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
               }}
               statementByComponent={statementByComponent}
               statementId={props.statementId}
-              update={props.update}
             />
           </Grid>
         </>

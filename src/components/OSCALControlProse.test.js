@@ -2,13 +2,20 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { OSCALReplacedProseWithParameterLabel } from "./OSCALControlProse";
 import { exampleModificationSetParameters } from "../test-data/ModificationsData";
-import { controlProseTestData, exampleParams } from "../test-data/ControlsData";
+import {
+  controlImplTestData,
+  controlProseTestData,
+  exampleParams,
+} from "../test-data/ControlsData";
 
 const labelTestData = "label-1";
 
 function proseParamLabelsRenderer() {
   render(
     <OSCALReplacedProseWithParameterLabel
+      implementedRequirement={
+        controlImplTestData["implemented-requirements"][0]
+      }
       label={labelTestData}
       prose={controlProseTestData}
       parameters={exampleParams}
