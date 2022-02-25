@@ -1,10 +1,14 @@
-import { makeStyles } from "@material-ui/core/styles";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
 
-export default function useLoaderStyles() {
-  return makeStyles(() => ({
+const useLoaderStyles = makeStyles((theme) =>
+  createStyles({
     paper: {
+      paddingLeft: theme.spacing(2),
       display: "flex",
       flexDirection: "column",
     },
-  }));
-}
+  })
+);
+
+// eslint-disable-next-line import/prefer-default-export
+export { useLoaderStyles };

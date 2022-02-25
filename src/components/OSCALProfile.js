@@ -3,7 +3,7 @@ import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import Skeleton from "@material-ui/lab/Skeleton";
 import CardContent from "@material-ui/core/CardContent";
-import useLoaderStyles from "./OSCALLoaderStyles";
+import { useLoaderStyles } from "./OSCALLoaderStyles";
 import OSCALMetadata from "./OSCALMetadata";
 import OSCALControl from "./OSCALControl";
 import OSCALBackMatter from "./OSCALBackMatter";

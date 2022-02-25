@@ -5,7 +5,7 @@ import OSCALComponentResolveSources from "./oscal-utils/OSCALComponentResolver";
 import OSCALComponentDefinitionComponent from "./OSCALComponentDefinitionComponent";
 import OSCALBackMatter from "./OSCALBackMatter";
 import OSCALProfileCatalogInheritance from "./OSCALProfileCatalogInheritance";
-import useLoaderStyles from "./OSCALLoaderStyles";
+import { useLoaderStyles } from "./OSCALLoaderStyles";
 
 export default function OSCALComponentDefinition(props) {
   const [error, setError] = useState(null);

@@ -6,7 +6,7 @@ import OSCALControlImplementation from "./OSCALControlImplementation";
 import OSCALSspResolveProfile from "./oscal-utils/OSCALSspResolver";
 import OSCALBackMatter from "./OSCALBackMatter";
 import OSCALProfileCatalogInheritance from "./OSCALProfileCatalogInheritance";
-import useLoaderStyles from "./OSCALLoaderStyles";
+import { useLoaderStyles } from "./OSCALLoaderStyles";
 
 export default function OSCALSsp(props) {
   const classes = useLoaderStyles();
