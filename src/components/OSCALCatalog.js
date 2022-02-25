@@ -1,20 +1,13 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
+import useLoaderStyles from "./OSCALLoaderStyles";
 import OSCALMetadata from "./OSCALMetadata";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALBackMatter from "./OSCALBackMatter";
 
-const useStyles = makeStyles(() => ({
-  paper: {
-    display: "flex",
-    flexDirection: "column",
-  },
-}));
-
 export default function OSCALCatalog(props) {
-  const classes = useStyles();
+  const classes = useLoaderStyles();
 
   props.onResolutionComplete();
 
