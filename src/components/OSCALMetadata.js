@@ -11,6 +11,7 @@ import Avatar from "@material-ui/core/Avatar";
 import GroupIcon from "@material-ui/icons/Group";
 import { makeStyles } from "@material-ui/core/styles";
 import OSCALEditableTextField from "./OSCALEditableTextField";
+import { restMethods } from "./oscal-utils/OSCALUtils";
 
 const useStyles = makeStyles((theme) => ({
   OSCALMetadataAdditional: {
@@ -82,7 +83,7 @@ export default function OSCALMetadata(props) {
                 }
               : null
           }
-          restMethod="PATCH"
+          restMethod={restMethods.PATCH}
           restUrlPath=""
           size={6}
           textFieldSize="medium"
@@ -153,7 +154,7 @@ export default function OSCALMetadata(props) {
                     }
                   : null
               }
-              restMethod="PATCH"
+              restMethod={restMethods.PATCH}
               restUrlPath=""
               size={4}
               textFieldSize="small"

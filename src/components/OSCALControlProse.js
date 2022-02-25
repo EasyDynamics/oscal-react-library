@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 import StyledTooltip from "./OSCALStyledTooltip";
 import OSCALPopover from "./OSCALPopover";
-import { deepClone } from "./oscal-utils/OSCALUtils";
+import { deepClone, restMethods } from "./oscal-utils/OSCALUtils";
 
 const prosePlaceholderRegexpString = "{{ insert: param, ([0-9a-zA-B-_.]*) }}";
 
@@ -293,7 +293,7 @@ function onFieldSaveParameterLabel(
     partialRestData,
     editedField,
     null,
-    "PUT",
+    restMethods.PUT,
     `${rootOscalObjectName}/${props.restData[rootOscalObjectName].uuid}/control-implementation/implemented-requirements/${props.implementedRequirement.uuid}`
   );
 }
@@ -397,7 +397,6 @@ export function OSCALReplacedProseWithParameterLabel(props) {
 
 function onFieldSaveByComponentParameterValue(
   props,
-  restMethod,
   restUrlPath,
   descriptionReference,
   implementationReference
@@ -435,7 +434,7 @@ function onFieldSaveByComponentParameterValue(
     partialRestData,
     editedField,
     null,
-    restMethod,
+    restMethods.PUT,
     restUrlPath
   );
 }
@@ -534,7 +533,6 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
               onFieldSave={(descriptionReference, implementationReference) => {
                 onFieldSaveByComponentParameterValue(
                   props,
-                  "PUT",
                   `${rootOscalObjectName}/${props.restData[rootOscalObjectName].uuid}/control-implementation/implemented-requirements/${props.implementedRequirement.uuid}`,
                   descriptionReference,
                   implementationReference
