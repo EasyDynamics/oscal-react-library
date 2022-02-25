@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Split from "react-split";
 import { makeStyles } from "@material-ui/core/styles";
+import { Box } from "@material-ui/core";
 import ErrorBoundary from "./ErrorBoundary";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
@@ -45,10 +46,13 @@ const oscalObjectTypes = {
   },
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   split: {
     display: "flex",
     flexDirection: " row",
+    "& > .viewer": {
+      marginLeft: theme.spacing(2),
+    },
     "& > .gutter": {
       backgroundColor: "#eee",
       backgroundRepeat: "no-repeat",
@@ -60,7 +64,7 @@ const useStyles = makeStyles({
       },
     },
   },
-});
+}));
 
 function populatePartialPatchData(data, editedFieldJsonPath, newValue) {
   if (editedFieldJsonPath.length === 1) {
@@ -229,12 +233,12 @@ export default function OSCALLoader(props) {
         minSize={500}
         sizes={isRestMode ? [50, 50] : []}
       >
-        <div>
+        <Box>
           {isRestMode && (
             <OSCALJsonEditor value={oscalData} onSave={handleRestPut} />
           )}
-        </div>
-        <div>
+        </Box>
+        <Box className={classes.viewer}>
           {props.renderer(
             isRestMode,
             oscalData,
@@ -242,7 +246,7 @@ export default function OSCALLoader(props) {
             onResolutionComplete,
             handleRestPatch
           )}
-        </div>
+        </Box>
       </Split>
     );
   }
