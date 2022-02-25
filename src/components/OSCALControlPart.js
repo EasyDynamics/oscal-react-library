@@ -74,7 +74,6 @@ export default function OSCALControlPart(props) {
             (statement) => statement["statement-id"] === props.part.id
           )?.uuid || null
         }
-        update={props.update}
       />
     );
   } else {
@@ -98,7 +97,6 @@ export default function OSCALControlPart(props) {
             (statement) => statement["statement-id"] === props.statementId
           )?.uuid || null
         }
-        update={props.update}
       />
     );
   }
@@ -128,7 +126,6 @@ export default function OSCALControlPart(props) {
             parameters={props.parameters}
             restData={props.restData}
             statementId={props.statementId}
-            update={props.update}
           />
         ))}
     </div>

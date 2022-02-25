@@ -69,7 +69,6 @@ export default function OSCALControlImplementation(props) {
                             .uuid,
                         },
                       }}
-                      update={props.update}
                     />
                   )
                 )}

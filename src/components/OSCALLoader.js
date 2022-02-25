@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { populatePartialRestData } from "./oscal-utils/OSCALSspResolver";
+import { populatePartialRestData } from "./oscal-utils/OSCALUtils";
 import ErrorBoundary from "./ErrorBoundary";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
@@ -43,78 +43,6 @@ const oscalObjectTypes = {
   },
 };
 
-function jsonPathRegexReplace(matched) {
-  if (matched === ",0,") {
-    return "[0].";
-  }
-
-  if (matched === ",0") {
-    return "[0]";
-  }
-
-  return ".";
-}
-
-/**
- *
- * @param appendToLastFieldInPath boolean indicating if the updated value should be appended to an array or replace an existing value
- * @param partialRestData data that will be passed into the body of the REST request, doesn't initially contain the updates
- * @param onSuccessfulRequest function that will update a state, forcing a re-rendering if the REST request is successful
- * @param editedFieldJsonPath path to the field that is being updated
- * @param newValue updated value for the edited field
- * @param restMethod the REST request type
- * @param restUrlPath path defining where in the file the modifications are made
- * @param jsonRootName root OSCAL object, as it appears on the corresponding object file, of the JSON file
- * @param restPath main url path for access the OSCAL files in REST mode
- */
-function restRequest(
-  appendToLastFieldInPath,
-  partialRestData,
-  onSuccessfulRequest,
-  editedFieldJsonPath,
-  newValue,
-  restMethod,
-  restUrlPath,
-  jsonRootName,
-  restPath
-) {
-  let url;
-  if (restUrlPath === "") {
-    url = `${process.env.REACT_APP_REST_BASE_URL}/${restPath}/${partialRestData[jsonRootName].uuid}`;
-  } else {
-    url = `${process.env.REACT_APP_REST_BASE_URL}/${restUrlPath}`;
-  }
-
-  const path = editedFieldJsonPath.toString();
-
-  if (newValue) {
-    populatePartialRestData(
-      partialRestData,
-      editedFieldJsonPath,
-      newValue,
-      appendToLastFieldInPath
-    );
-  }
-
-  fetch(url, {
-    method: restMethod,
-    body: JSON.stringify(partialRestData),
-  })
-    .then((res) => res.json())
-    .then(
-      (result) => {
-        onSuccessfulRequest(result);
-      },
-      () => {
-        alert(
-          `Could not update the ${path.replace(/,0,|,0|,/g, (matched) =>
-            jsonPathRegexReplace(matched)
-          )} field${newValue ? ` with value: ${newValue}.` : "."}`
-        );
-      }
-    );
-}
-
 export default function OSCALLoader(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isResolutionComplete, setIsResolutionComplete] = useState(false);
@@ -141,6 +69,60 @@ export default function OSCALLoader(props) {
     } else {
       setIsLoaded(true);
     }
+  };
+
+  /**
+   *
+   * @param appendToLastFieldInPath boolean indicating if the updated value should be appended to an array or replace an existing value
+   * @param partialRestData data that will be passed into the body of the REST request, doesn't initially contain the updates
+   * @param onSuccessfulRequest function that will update a state, forcing a re-rendering if the REST request is successful
+   * @param editedFieldJsonPath path to the field that is being updated
+   * @param newValue updated value for the edited field
+   * @param restMethod the REST request type
+   * @param restUrlPath path defining where in the file the modifications are made
+   * @param jsonRootName root OSCAL object, as it appears on the corresponding object file, of the JSON file
+   * @param restPath main url path for access the OSCAL files in REST mode
+   */
+  const restRequest = (
+    appendToLastFieldInPath,
+    partialRestData,
+    editedFieldJsonPath,
+    newValue,
+    restMethod,
+    restUrlPath,
+    jsonRootName,
+    restPath
+  ) => {
+    let url;
+    if (restUrlPath === "") {
+      url = `${process.env.REACT_APP_REST_BASE_URL}/${restPath}/${partialRestData[jsonRootName].uuid}`;
+    } else {
+      url = `${process.env.REACT_APP_REST_BASE_URL}/${restUrlPath}`;
+    }
+
+    if (newValue) {
+      populatePartialRestData(
+        partialRestData,
+        editedFieldJsonPath,
+        newValue,
+        appendToLastFieldInPath
+      );
+    }
+
+    fetch(url, {
+      method: restMethod,
+      body: JSON.stringify(partialRestData),
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error(response.status);
+        else return response.json();
+      })
+      .then((result) => {
+        if (!unmounted.current) {
+          setOscalData(result);
+          setIsLoaded(true);
+        }
+      });
   };
 
   const handleUrlChange = (event) => {
@@ -242,7 +224,13 @@ export function getRequestedUrl() {
 
 export function OSCALCatalogLoader(props) {
   const oscalObjectType = oscalObjectTypes.catalog;
-  const renderer = (isRestMode, oscalData, oscalUrl, onResolutionComplete) => (
+  const renderer = (
+    isRestMode,
+    oscalData,
+    oscalUrl,
+    onResolutionComplete,
+    restRequest
+  ) => (
     <OSCALCatalog
       catalog={oscalData[oscalObjectType.jsonRootName]}
       parentUrl={oscalUrl}
@@ -250,7 +238,6 @@ export function OSCALCatalogLoader(props) {
       onFieldSave={(
         appendToLastFieldInPath,
         data,
-        update,
         editedField,
         newValue,
         restMethod,
@@ -259,7 +246,6 @@ export function OSCALCatalogLoader(props) {
         restRequest(
           appendToLastFieldInPath,
           data,
-          update,
           editedField,
           newValue,
           restMethod,
@@ -282,7 +268,13 @@ export function OSCALCatalogLoader(props) {
 
 export function OSCALSSPLoader(props) {
   const oscalObjectType = oscalObjectTypes.ssp;
-  const renderer = (isRestMode, oscalData, oscalUrl, onResolutionComplete) => (
+  const renderer = (
+    isRestMode,
+    oscalData,
+    oscalUrl,
+    onResolutionComplete,
+    restRequest
+  ) => (
     <OSCALSsp
       system-security-plan={oscalData[oscalObjectType.jsonRootName]}
       isEditable={isRestMode}
@@ -291,7 +283,6 @@ export function OSCALSSPLoader(props) {
       onFieldSave={(
         appendToLastFieldInPath,
         data,
-        update,
         editedField,
         newValue,
         restMethod,
@@ -300,7 +291,6 @@ export function OSCALSSPLoader(props) {
         restRequest(
           appendToLastFieldInPath,
           data,
-          update,
           editedField,
           newValue,
           restMethod,
@@ -323,7 +313,13 @@ export function OSCALSSPLoader(props) {
 
 export function OSCALComponentLoader(props) {
   const oscalObjectType = oscalObjectTypes.component;
-  const renderer = (isRestMode, oscalData, oscalUrl, onResolutionComplete) => (
+  const renderer = (
+    isRestMode,
+    oscalData,
+    oscalUrl,
+    onResolutionComplete,
+    restRequest
+  ) => (
     <OSCALComponentDefinition
       componentDefinition={oscalData[oscalObjectType.jsonRootName]}
       parentUrl={oscalUrl}
@@ -331,7 +327,6 @@ export function OSCALComponentLoader(props) {
       onFieldSave={(
         appendToLastFieldInPath,
         data,
-        update,
         editedField,
         newValue,
         restMethod,
@@ -340,7 +335,6 @@ export function OSCALComponentLoader(props) {
         restRequest(
           appendToLastFieldInPath,
           data,
-          update,
           editedField,
           newValue,
           restMethod,
@@ -363,7 +357,13 @@ export function OSCALComponentLoader(props) {
 
 export function OSCALProfileLoader(props) {
   const oscalObjectType = oscalObjectTypes.profile;
-  const renderer = (isRestMode, oscalData, oscalUrl, onResolutionComplete) => (
+  const renderer = (
+    isRestMode,
+    oscalData,
+    oscalUrl,
+    onResolutionComplete,
+    restRequest
+  ) => (
     <OSCALProfile
       profile={oscalData[oscalObjectType.jsonRootName]}
       parentUrl={oscalUrl}
@@ -371,7 +371,6 @@ export function OSCALProfileLoader(props) {
       onFieldSave={(
         appendToLastFieldInPath,
         data,
-        update,
         editedField,
         newValue,
         restMethod,
@@ -380,7 +379,6 @@ export function OSCALProfileLoader(props) {
         restRequest(
           appendToLastFieldInPath,
           data,
-          update,
           editedField,
           newValue,
           restMethod,

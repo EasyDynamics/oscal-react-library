@@ -158,7 +158,6 @@ export default function OSCALMetadata(props) {
               size={4}
               textFieldSize="small"
               typographyVariant="body2"
-              update={props.update}
               defaultValue={props.metadata.version}
               value={props.metadata.version}
             />

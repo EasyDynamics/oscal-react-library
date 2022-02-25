@@ -94,7 +94,6 @@ export default function OSCALControl(props) {
               onFieldSave={props.onFieldSave}
               parameters={props.control.params}
               restData={props.restData}
-              update={props.update}
             />
           ))}
         {props.control.controls &&
@@ -111,7 +110,6 @@ export default function OSCALControl(props) {
               onFieldSave={props.onFieldSave}
               parameters={control.params}
               restData={props.restData}
-              update={props.update}
             />
           ))}
       </CardContent>
