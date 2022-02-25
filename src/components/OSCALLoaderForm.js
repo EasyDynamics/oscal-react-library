@@ -63,27 +63,9 @@ export default function OSCALLoaderForm(props) {
       }}
     >
       <Grid container spacing={3}>
-        {process.env.REACT_APP_REST_BASE_URL && (
-          <>
-            <Grid item xs={10} />
-            <Grid item xs={2}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={props.isRestMode}
-                    color="primary"
-                    onChange={props.onChangeRestMode}
-                    name="isRestMode"
-                  />
-                }
-                label="REST Mode"
-              />
-            </Grid>
-          </>
-        )}
         {!props.isRestMode ? (
           <>
-            <Grid item xs={10}>
+            <Grid item xs={9}>
               <TextField
                 id="oscal-url"
                 label={`OSCAL ${props.oscalObjectType.name} URL`}
@@ -94,7 +76,7 @@ export default function OSCALLoaderForm(props) {
                 onChange={props.onUrlChange}
               />
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={1}>
               <Button
                 variant="contained"
                 color="primary"
@@ -133,6 +115,21 @@ export default function OSCALLoaderForm(props) {
                   ))}
               </Select>
             </FormControl>
+          </Grid>
+        )}
+        {process.env.REACT_APP_REST_BASE_URL && (
+          <Grid item xs={2}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={props.isRestMode}
+                  color="primary"
+                  onChange={props.onChangeRestMode}
+                  name="isRestMode"
+                />
+              }
+              label="REST Mode"
+            />
           </Grid>
         )}
       </Grid>
