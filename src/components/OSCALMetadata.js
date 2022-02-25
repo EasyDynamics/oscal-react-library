@@ -13,6 +13,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import OSCALEditableTextField from "./OSCALEditableTextField";
 
 const useStyles = makeStyles((theme) => ({
+  OSCALMetadataTitle: {
+    height: "56px",
+  },
   OSCALMetadataAdditional: {
     padding: theme.spacing(1),
   },
@@ -61,7 +64,12 @@ export default function OSCALMetadata(props) {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Grid spa container direction="row" alignItems="center">
+        <Grid
+          className={classes.OSCALMetadataTitle}
+          container
+          direction="row"
+          alignItems="center"
+        >
           <OSCALEditableTextField
             canEdit={props.isEditable}
             editedField={
