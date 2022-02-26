@@ -62,6 +62,10 @@ function App() {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const [isRestMode, setIsRestMode] = useState(
+    !!process.env.REACT_APP_REST_BASE_URL
+  );
+  const [backendUrl] = useState(process.env.REACT_APP_REST_BASE_URL);
 
   const handleAppNavOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -190,22 +194,50 @@ function App() {
             />
             <Route
               path="/catalog"
-              element={<OSCALCatalogLoader renderForm />}
+              element={
+                <OSCALCatalogLoader
+                  renderForm
+                  isRestMode={isRestMode}
+                  setIsRestMode={setIsRestMode}
+                  backendUrl={backendUrl}
+                />
+              }
             />
             <Route
               exact
               path="/system-security-plan"
-              element={<OSCALSSPLoader renderForm />}
+              element={
+                <OSCALSSPLoader
+                  renderForm
+                  isRestMode={isRestMode}
+                  setIsRestMode={setIsRestMode}
+                  backendUrl={backendUrl}
+                />
+              }
             />
             <Route
               exact
               path="/component-definition"
-              element={<OSCALComponentLoader renderForm />}
+              element={
+                <OSCALComponentLoader
+                  renderForm
+                  isRestMode={isRestMode}
+                  setIsRestMode={setIsRestMode}
+                  backendUrl={backendUrl}
+                />
+              }
             />
             <Route
               exact
               path="/profile"
-              element={<OSCALProfileLoader renderForm />}
+              element={
+                <OSCALProfileLoader
+                  renderForm
+                  isRestMode={isRestMode}
+                  setIsRestMode={setIsRestMode}
+                  backendUrl={backendUrl}
+                />
+              }
             />
           </Routes>
         </Container>
