@@ -225,7 +225,7 @@ export default function OSCALLoader(props) {
     result = <CircularProgress />;
   } else if (oscalUrl) {
     result = isRestMode ? (
-      <Split className={classes.split} minSize={500} sizes={[50, 50]}>
+      <Split className={classes.split} minSize={300} sizes={[34, 66]}>
         <Box>
           <OSCALJsonEditor value={oscalData} onSave={handleRestPut} />
         </Box>
