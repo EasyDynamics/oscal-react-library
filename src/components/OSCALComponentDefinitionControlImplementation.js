@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function OSCALComponentDefinitionControlImplementation(props) {
   const classes = useStyles();
-
   return (
     <div className={classes.paper}>
       <Card>
@@ -61,6 +60,7 @@ export default function OSCALComponentDefinitionControlImplementation(props) {
                                 controls={props.controls}
                                 childLevel={0}
                                 key={implementedRequirement.uuid}
+                                modifications={controlImpl.modifications}
                               />
                             )
                           )}

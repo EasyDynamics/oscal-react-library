@@ -111,9 +111,13 @@ export default function OSCALControlImplementationImplReq(props) {
   if (!implReqStatements) {
     implReqStatements = [];
   }
+
+  // Error check modifications
+  const modAlters = props.modifications?.alters || null;
+  const modParams = props.modifications?.["set-parameters"] || null;
+
   // Setup UI of Control Implemention with verticle tabs and a tab panel to
   // display control implementation, which are both wrapped in a card
-
   return (
     <Card className={`${classes.OSCALImplReq} ${classes.OSCALImplChildLevel}`}>
       <CardContent>
@@ -150,6 +154,8 @@ export default function OSCALControlImplementationImplReq(props) {
                 childLevel={0}
                 implReqStatements={implReqStatements}
                 componentId={component.uuid}
+                modificationAlters={modAlters}
+                modificationSetParameters={modParams}
               />
             </TabPanel>
           ))}

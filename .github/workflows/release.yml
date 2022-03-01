@@ -1,0 +1,95 @@
+---
+name: Create a New Release
+on:
+  push:
+    branches: [EGRC-492-package]
+  workflow_dispatch:
+    inputs:
+      release-type:
+        description: >-
+          The type of release; either a new feature (minor version) or bug fix
+          (patch version)
+        required: true
+        type: choice
+        options: [feature, bug]
+
+concurrency: package-repo-release
+
+jobs:
+  release:
+    name: Create a New Release
+    runs-on: ubuntu-20.04
+    steps:
+      # Check out develop branch
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          ref: develop
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+          registry-url: https://npm.pkg.github.com/
+          cache: npm
+
+      - name: Update Npm
+        run: npm install -g npm@latest
+
+      - name: Set Up Git User Info
+        run: |
+          git config --global user.email "info@easydynamics.com"
+          git config --global user.name "${{ github.actor }}"
+
+      # Increment the version to the next minor release
+      - name: Set Version (Feature)
+        if: ${{ github.event.inputs.release-type  == 'feature' }}
+        run: |
+          npm version minor
+          cd example
+          npm version minor
+
+      # Increment the version to the next bug fix
+      # Push the new version to the develop branch
+      - name: Set Version (Bug Fix)
+        #if: ${{ github.event.inputs.release-type == 'bug' }}
+        run: |
+          npm version patch
+          cd example
+          npm version patch
+
+      # Output the new package version to environment variable
+      - name: Get Package Version
+        run: |
+          echo "PKG_VERSION=$(npm pkg get version | tr -d '"')" >> $GITHUB_ENV
+
+      - name: Build OSCAL Viewer
+        run: |
+          npm ci
+          cd example
+          npm ci
+          npm run build
+          zip -r viewer.zip ./build/
+
+      - name: Create a GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name:
+            ${{ env.PKG_VERSION }}
+          files:
+            example/viewer.zip
+
+      # Commit the new version and push changes to main
+      # And push a new preminor version to develop.
+      # Should only run when triggered for a feature - for bug fixes
+      # this should be done manually since a merge might be needed.
+      - name: Push Changes
+        if: ${{ github.event.inputs.release-type  == 'feature' }}
+        run: |
+          git push origin develop:main
+          git add ./{,example/}package{,-lock}.json
+          git commit -m "Build Viewer for Release ${{ env.PKG_VERSION }}"
+          npm version preminor
+          cd example
+          npm version preminor
+          git push origin develop

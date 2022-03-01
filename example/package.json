@@ -1,8 +1,13 @@
 {
-  "name": "oscal-viewer",
+  "name": "@EasyDynamics/oscal-viewer",
   "homepage": ".",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.3.0",
+  "private": "true",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EasyDynamics/oscal-react-library.git",
+    "directory": "example"
+  },
   "scripts": {
     "start": "node ../node_modules/react-scripts/bin/react-scripts.js start",
     "build": "node ../node_modules/react-scripts/bin/react-scripts.js build",
@@ -10,19 +15,20 @@
     "eject": "node ../node_modules/react-scripts/bin/react-scripts.js eject"
   },
   "dependencies": {
+    "@EasyDynamics/oscal-react-library": "file:..",
     "@testing-library/jest-dom": "file:../node_modules/@testing-library/jest-dom",
     "@testing-library/react": "file:../node_modules/@testing-library/react",
     "@testing-library/user-event": "file:../node_modules/@testing-library/user-event",
-    "oscal-react-library": "file:..",
+    "history": "file:../node_modules/history",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
+    "react-ga": "^3.3.0",
     "react-router-dom": "file:../node_modules/react-router-dom",
     "react-scripts": "file:../node_modules/react-scripts",
-    "history": "file:../node_modules/history"
+    "web-vitals": "^2.1.0"
   },
   "devDependencies": {
-    "@babel/plugin-syntax-object-rest-spread": "^7.8.3",
-    "web-vitals": "^2.1.0"
+    "@babel/plugin-syntax-object-rest-spread": "^7.8.3"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -32,5 +38,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
+  ],
+  "files": [
+    "build"
   ]
 }

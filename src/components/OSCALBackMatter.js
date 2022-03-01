@@ -8,7 +8,7 @@ import { Typography } from "@material-ui/core";
 import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
 import DescriptionIcon from "@material-ui/icons/Description";
 import StyledTooltip from "./OSCALStyledTooltip";
-import { getAbsoluteUrl } from "./oscal-utils/OSCALBackMatterUtils";
+import { getAbsoluteUrl } from "./oscal-utils/OSCALLinkUtils";
 
 // TODO: Temporary fix for missing media type (https://github.com/GSA/fedramp-automation/issues/103)
 // Uses file extension instead
@@ -98,7 +98,7 @@ export default function OSCALBackMatter(props) {
 
   const getMediaType = (rlink) =>
     rlink["media-type"] ||
-    getURLMediaType(getAbsoluteUrl(rlink, props.parentUrl));
+    getURLMediaType(getAbsoluteUrl(rlink.href, props.parentUrl));
 
   const backMatterDisplay = (resource) => (
     <Grid item xs={3} key={resource.uuid}>
@@ -109,7 +109,7 @@ export default function OSCALBackMatter(props) {
               <TitleDisplay resource={resource} />
             </Grid>
             <Grid item xs={2}>
-              <Grid container spacing={0} justify="flex-end">
+              <Grid container spacing={0} justifyContent="flex-end">
                 <DescriptionDisplay resource={resource} />
                 <CitationDisplay resource={resource} />
               </Grid>
@@ -120,10 +120,10 @@ export default function OSCALBackMatter(props) {
               {resource.rlinks &&
                 resource.rlinks.map((rlink) => (
                   <Chip
-                    key={resource.uuid}
+                    key={rlink.href}
                     label={getMediaType(rlink)}
                     component="a"
-                    href={getAbsoluteUrl(rlink, props.parentUrl)}
+                    href={getAbsoluteUrl(rlink.href, props.parentUrl)}
                     variant="outlined"
                     clickable
                   />

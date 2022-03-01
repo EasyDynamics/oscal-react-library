@@ -1,8 +1,4 @@
-# Default markdownlint.yaml:
-#     https://github.com/DavidAnson/markdownlint/blob/main/schema/.markdownlint.yaml
-# Rule explanation:
-#     https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
-
+---
 # Enable all rules by default
 default: true
 

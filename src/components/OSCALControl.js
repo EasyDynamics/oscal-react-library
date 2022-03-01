@@ -8,7 +8,11 @@ import OSCALControlModification from "./OSCALControlModification";
 
 // TODO - This is probably 800-53 specific?
 function getControlStatusCss(props) {
-  if (props.control?.props?.find((property) => property.name === "status")) {
+  if (
+    props.control?.props?.find(
+      (property) => property.name === "status" && property.value === "withdrawn"
+    )
+  ) {
     return {
       "text-decoration": "line-through",
       color: "#d4d4d4",
@@ -52,10 +56,10 @@ export default function OSCALControl(props) {
   const classes = useStyles(props);
 
   let modificationDisplay;
-  if (props.modifications) {
+  if (props.modificationAlters) {
     modificationDisplay = (
       <OSCALControlModification
-        modifications={props.modifications}
+        modificationAlters={props.modificationAlters}
         controlId={props.control.id}
       />
     );
@@ -78,11 +82,13 @@ export default function OSCALControl(props) {
           props.control.parts.map((part, index) => (
             <OSCALControlPart
               part={part}
+              control={props.control}
+              controlId={props.control.id}
               parameters={props.control.params}
               implReqStatements={props.implReqStatements}
               componentId={props.componentId}
-              control={props.control}
-              modifications={props.modifications}
+              modificationAlters={props.modificationAlters}
+              modificationSetParameters={props.modificationSetParameters}
               key={part.id ?? `part-${index}`}
             />
           ))}
@@ -90,9 +96,10 @@ export default function OSCALControl(props) {
           props.control.controls.map((control) => (
             <OSCALControl
               control={control}
-              includeControlIds={props.includeControlIds}
-              modifications={props.modifications}
               parameters={control.params}
+              includeControlIds={props.includeControlIds}
+              modificationAlters={props.modificationAlters}
+              modificationSetParameters={props.modificationSetParameters}
               childLevel={props.childLevel + 1}
               key={control.id}
             />

@@ -11,9 +11,7 @@ OSCAL data or entire catalogs, profiles, component definitions, and system secur
 Take a tour with the [live demo](https://oscal-viewer.msd.easydynamics.com/) or learn more about
 developing with the library below.
 
-## Setting Up
-
-### Introduction
+## Components and Documentation
 
 The library provides OSCAL UI developers a flexible framework for using OSCAL React components in their own
 applications.
@@ -21,7 +19,12 @@ applications.
 Those components directly visualize granular elements of the OSCAL JSON format, allowing a developer to assemble them
 in the manner that best fits their application.
 
+Documentation for the React components, as well as an editable mockup of each component, can be found on our
+[Storybook page.](https://docs.oscal-react-library.msd.easydynamics.com/)
+
 The [example](./example) folder shows how those components can be assembled to create an OSCAL Viewer application.
+
+## Setting Up
 
 ### Building and Running Locally
 
@@ -53,8 +56,8 @@ The OSCAL Viewer example application allows developers to sample the various OSC
 
 ### Running
 
-Once root dependencies have been installed, the application dependencies can be built and OSCAL Viewer can be ran by
-issuing the following command:
+Once root dependencies are installed, build application dependencies and run OSCAL Viewer with the following
+command:
 
 ```text
 npm run build-and-run-example
@@ -67,6 +70,30 @@ npm run run-example
 ```
 
 For more details about OSCAL Viewer, please refer to the [example (OSCAL Viewer) README.md](/example/README.md).
+
+### Google Analytics
+
+The OSCAL Viewer example application includes an optional integration for Google Analytics. Google
+Analytics is enabled only when `REACT_APP_GOOGLE_ANALYTICS` is set to a Google Analytics Univeral
+Analytics identifier when `npm run build` is run. For example:
+
+```bash
+export REACT_APP_GOOGLE_ANALYTICS="UA-XXXXXXXX-X"`
+npm run build
+```
+
+will produce an application build with Google Analytics tracking enabled. The only way to toggle
+Google Analytics or change the tracking ID is to rebuild the application.
+
+## Experimental REST Features
+
+To enabled experimental features that make REST calls defined in
+[`oscal-rest`](https://github.com/EasyDynamics/oscal-rest) to a backend service, add a `.env.local` file in
+the root of the example project with a variable of `REACT_APP_REST_BASE_URL` pointing to the REST service, i.e.
+
+```text
+REACT_APP_REST_BASE_URL=http://localhost:8080/oscal/v1
+```
 
 ## Contributing
 

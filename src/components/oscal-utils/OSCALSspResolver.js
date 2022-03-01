@@ -1,4 +1,5 @@
 import OSCALResolveProfileOrCatalogUrlControls from "./OSCALProfileResolver";
+import { fixJsonUrls } from "./OSCALLinkUtils";
 /**
  * Loads an SSP's 'import-profile' and adds the resulting controls to the SSP
  *
@@ -14,6 +15,15 @@ export default function OSCALSspResolveProfile(
     return;
   }
   let profileUrl = ssp["import-profile"].href;
+
+  const inheritedProfilesAndCatalogs = {
+    inherited: [],
+  };
+
+  // Fix profile URL if not a json
+  if (!profileUrl.endsWith(".json")) {
+    profileUrl = fixJsonUrls(profileUrl);
+  }
   // TODO - this is incorrect in the ssp-example.json data (https://github.com/usnistgov/oscal-content/issues/60, https://easydynamics.atlassian.net/browse/EGRC-266)
   // TODO - this should be improved for other use cases
   if (!profileUrl.startsWith("http")) {
@@ -23,12 +33,21 @@ export default function OSCALSspResolveProfile(
   // Fixing linting error here would take significant change to codebase given how we use props.
   /* eslint no-param-reassign: "error" */
   ssp.resolvedControls = [];
+  ssp.modifications = {
+    "set-parameters": [],
+    alters: [],
+  };
+
   OSCALResolveProfileOrCatalogUrlControls(
     ssp.resolvedControls,
+    ssp.modifications,
     profileUrl,
     parentUrl,
     ssp["back-matter"],
-    onSuccess,
+    inheritedProfilesAndCatalogs.inherited,
+    () => {
+      onSuccess(inheritedProfilesAndCatalogs);
+    },
     onError,
     []
   );

@@ -1,5 +1,6 @@
-import getUriFromBackMatterByHref from "./OSCALBackMatterUtils";
+import resolveLinkHref from "./OSCALLinkUtils";
 
+const OSCAL_MEDIA_TYPE_REGEX = /^application\/oscal.*\+json$/;
 /**
  * Profiles are brought in through different methods in OSCAL models.
  *
@@ -29,14 +30,17 @@ import getUriFromBackMatterByHref from "./OSCALBackMatterUtils";
  */
 export default function OSCALResolveProfileOrCatalogUrlControls(
   resolvedControls,
+  modifications,
   origItemUrl,
   parentUrl,
   backMatter,
+  inheritedProfilesAndCatalogs,
   onSuccess,
   onError,
   pendingProcesses // tracks state of recursive calls
 ) {
   let itemUrl = origItemUrl;
+
   // TODO - this should be improved for other use cases
   if (!origItemUrl.startsWith("http")) {
     itemUrl = `${parentUrl}/../${origItemUrl}`;
@@ -54,7 +58,11 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
     .then((res) => res.json())
     .then(
       (result) => {
+        const inheritedOSCALObject = {};
         if (result.catalog) {
+          inheritedOSCALObject.title = result.catalog.metadata.title;
+          inheritedOSCALObject.uuid = result.catalog.uuid;
+          inheritedOSCALObject.type = "catalog";
           // Dig through catalog controls and add to profile.controls
           result.catalog.groups.forEach((group) => {
             resolvedControls.push(...group.controls);
@@ -64,22 +72,38 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
           }
         } else if (result.profile) {
           // Iterate over each import and recursively call this method to get either another profile or catalog
+          inheritedOSCALObject.title = result.profile.metadata.title;
+          inheritedOSCALObject.uuid = result.profile.uuid;
+          inheritedOSCALObject.type = "profile";
+          inheritedOSCALObject.inherited = [];
+
+          modifications["set-parameters"].push(
+            ...(result.profile.modify["set-parameters"] ?? [])
+          );
+          modifications.alters.push(...result.profile.modify.alters);
+
           result.profile.imports.forEach((profileImport) => {
-            const importUrl = getUriFromBackMatterByHref(
+            const importUrl = resolveLinkHref(
               result.profile["back-matter"],
-              profileImport.href
+              profileImport.href,
+              null,
+              OSCAL_MEDIA_TYPE_REGEX
             );
             OSCALResolveProfileOrCatalogUrlControls(
               resolvedControls,
+              modifications,
               importUrl,
               itemUrl,
               result.profile["back-matter"],
+              inheritedOSCALObject.inherited,
               onSuccess,
               onError,
               pendingProcesses
             );
           });
         }
+        inheritedProfilesAndCatalogs.push(inheritedOSCALObject);
+
         // We're done processing this itemUrl, remove it from pendingProcesses
         const processIndex = pendingProcesses.indexOf(itemUrl);
         if (processIndex > -1) {
@@ -98,25 +122,36 @@ export function OSCALResolveProfile(profile, parentUrl, onSuccess, onError) {
   if (!profile.imports) {
     return;
   }
-
+  const inheritedProfilesAndCatalogs = {
+    inherited: [],
+  };
   // profile does not have a resolvedControls field.
   // profile.resolvedControls needs to be declared & initialized here.
   /* eslint no-param-reassign: "error" */
   profile.resolvedControls = [];
+  profile.modifications = {
+    "set-parameters": [],
+    alters: [],
+  };
 
-  profile.imports
-    .map((imp) =>
-      getUriFromBackMatterByHref(profile["back-matter"], imp.href, parentUrl)
-    )
-    .forEach((importUrl) => {
-      OSCALResolveProfileOrCatalogUrlControls(
-        profile.resolvedControls,
-        importUrl,
-        parentUrl,
+  profile.imports.forEach((imp) => {
+    OSCALResolveProfileOrCatalogUrlControls(
+      profile.resolvedControls,
+      profile.modifications,
+      resolveLinkHref(
         profile["back-matter"],
-        onSuccess,
-        onError,
-        []
-      );
-    });
+        imp.href,
+        parentUrl,
+        OSCAL_MEDIA_TYPE_REGEX
+      ),
+      parentUrl,
+      profile["back-matter"],
+      inheritedProfilesAndCatalogs.inherited,
+      () => {
+        onSuccess(inheritedProfilesAndCatalogs);
+      },
+      onError,
+      []
+    );
+  });
 }

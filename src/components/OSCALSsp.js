@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import OSCALMetadata from "./OSCALMetadata";
 import OSCALSystemCharacteristics from "./OSCALSystemCharacteristics";
@@ -6,6 +6,7 @@ import OSCALSystemImplementation from "./OSCALSystemImplementation";
 import OSCALControlImplementation from "./OSCALControlImplementation";
 import OSCALSspResolveProfile from "./oscal-utils/OSCALSspResolver";
 import OSCALBackMatter from "./OSCALBackMatter";
+import OSCALProfileCatalogInheritance from "./OSCALProfileCatalogInheritance";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -16,29 +17,47 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function OSCALSsp(props) {
-  const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
   const classes = useStyles();
+  const [error, setError] = useState(null);
+  const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] =
+    useState({});
+  const [isLoaded, setIsLoaded] = useState(false);
+  const unmounted = useRef(false);
 
-  const ssp = props["system-security-plan"];
+  const patchData = {
+    "system-security-plan": {
+      uuid: props["system-security-plan"].uuid,
+    },
+  };
 
   let sspParties;
-  if (ssp.metadata) {
-    sspParties = ssp.metadata.parties;
+  if (props["system-security-plan"].metadata) {
+    sspParties = props["system-security-plan"].metadata.parties;
   }
 
   useEffect(() => {
     OSCALSspResolveProfile(
-      ssp,
+      props["system-security-plan"],
       props.parentUrl,
-      () => {
-        setIsLoaded(true);
+      (profilesCatalogsTree) => {
+        if (!unmounted.current) {
+          setIsLoaded(true);
+          setInheritedProfilesAndCatalogs(profilesCatalogsTree);
+          props.onResolutionComplete();
+        }
       },
       () => {
-        setError(error);
-        setIsLoaded(true);
+        if (!unmounted.current) {
+          setError(error);
+          setIsLoaded(true);
+          props.onResolutionComplete();
+        }
       }
     );
+
+    return () => {
+      unmounted.current = true;
+    };
   }, []);
 
   let controlImpl;
@@ -48,26 +67,45 @@ export default function OSCALSsp(props) {
   } else {
     controlImpl = (
       <OSCALControlImplementation
-        controlImplementation={ssp["control-implementation"]}
-        components={ssp["system-implementation"].components}
-        controls={ssp.resolvedControls}
+        controlImplementation={
+          props["system-security-plan"]["control-implementation"]
+        }
+        components={
+          props["system-security-plan"]["system-implementation"].components
+        }
+        controls={props["system-security-plan"].resolvedControls}
+        modifications={props["system-security-plan"].modifications}
       />
     );
   }
 
   return (
     <div className={classes.paper}>
-      <OSCALMetadata metadata={ssp.metadata} />
+      <OSCALMetadata
+        metadata={props["system-security-plan"].metadata}
+        isEditable={props.isEditable}
+        onFieldSave={props.onFieldSave}
+        patchData={patchData}
+      />
+      <OSCALProfileCatalogInheritance
+        inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}
+      />
       <OSCALSystemCharacteristics
-        systemCharacteristics={ssp["system-characteristics"]}
+        systemCharacteristics={
+          props["system-security-plan"]["system-characteristics"]
+        }
+        backMatter={props["system-security-plan"]["back-matter"]}
+        parentUrl={props.parentUrl}
       />
       <OSCALSystemImplementation
-        systemImplementation={ssp["system-implementation"]}
+        systemImplementation={
+          props["system-security-plan"]["system-implementation"]
+        }
         parties={sspParties}
       />
       {controlImpl}
       <OSCALBackMatter
-        backMatter={ssp["back-matter"]}
+        backMatter={props["system-security-plan"]["back-matter"]}
         parentUrl={props.parentUrl}
       />
     </div>

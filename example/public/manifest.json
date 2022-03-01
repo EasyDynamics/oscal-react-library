@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "OSCAL Viewer",
+  "name": "Browse OSCAL data, including catalogs, profiles, component definitions, and system security plans",
   "icons": [
     {
       "src": "favicon.ico",
@@ -19,6 +19,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#002867",
   "background_color": "#ffffff"
 }

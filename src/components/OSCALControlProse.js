@@ -35,13 +35,13 @@ const useStyles = makeStyles(() => ({
  * @param {String} parameterId
  * @returns the parameter label
  */
-const getParameterLabel = (parameters, parameterId) => {
+function getParameterLabel(parameters, parameterId) {
   const parameter = parameters.find(
     (testParameter) => testParameter.id === parameterId
   );
 
   if (!parameter) {
-    return null;
+    return `< ${parameterId} >`;
   }
   if (parameter.label) {
     return `< ${parameter.label} >`;
@@ -50,22 +50,27 @@ const getParameterLabel = (parameters, parameterId) => {
     return `< ${parameter.select.choice.join(" | ")} >`;
   }
   return `< ${parameterId} >`;
-};
+}
 
 /**
  * Finds a parameter setting in a component statement
  * @param {Object} statementByComponent
+ * @param {Object} implReqSetParameters
  * @param {String} parameterId
  * @returns the parameter label
  */
-function getParameterValue(statementByComponent, parameterId) {
-  // Locate matching parameter to parameterId
-  if (!statementByComponent["set-parameters"]) {
-    return null;
+function getParameterValue(
+  statementByComponent,
+  implReqSetParameters,
+  parameterId
+) {
+  function parameterHasGivenId(parameterSetting) {
+    return parameterSetting["param-id"] === parameterId;
   }
-  const foundParameterSetting = statementByComponent["set-parameters"].find(
-    (parameterSetting) => parameterSetting["param-id"] === parameterId
-  );
+  // Locate set-parameters when found in the by-component
+  const setParameters =
+    statementByComponent?.["set-parameters"] || implReqSetParameters;
+  const foundParameterSetting = setParameters?.find(parameterHasGivenId);
 
   // Error checking: Exit function when parameter setting or it's values are not found
   if (!foundParameterSetting?.values) {
@@ -77,20 +82,24 @@ function getParameterValue(statementByComponent, parameterId) {
 
 /**
  * Builds the display of constraints for the given parameterId
- * @param {Object} modifications
+ * @param {Object} modificationSetParameters
  * @param {String} parameterId
  * @returns the parameter label
  */
-function getConstraintsDisplay(modifications, parameterId) {
-  if (!modifications || !modifications["set-parameters"] || !parameterId) {
+function getConstraintsDisplay(modificationSetParameters, parameterId) {
+  // Error check parameters for null
+  if (!modificationSetParameters || !parameterId) {
     return "";
   }
-  const foundParameterSetting = modifications["set-parameters"].find(
+  // Search for matching parameter id
+  const foundParameterSetting = modificationSetParameters.find(
     (parameterSetting) => parameterSetting["param-id"] === parameterId
   );
+  // Error check constraints
   if (!foundParameterSetting?.constraints) {
     return "";
   }
+  // Provide list of constraints
   const constraintDescriptions = [];
   foundParameterSetting.constraints.forEach((constraint) => {
     constraintDescriptions.push(constraint.description);
@@ -99,12 +108,30 @@ function getConstraintsDisplay(modifications, parameterId) {
 }
 
 /**
+ * Retrieve the set-parameters when contained in the top-level implemented requirement statement
+ *
+ * @param {Object} implReqStatements statements on how the control is implemented
+ * @param {String} componentId uuid of the component and desired by-component
+ * @returns An array of set-parameters
+ */
+function getImplReqSetParameters(implReqStatements, componentId) {
+  // Get the top-level implemented requirement statement
+  return (
+    implReqStatements
+      ?.find((statement) => statement["statement-id"].endsWith("_smt"))
+      ?.["by-components"]?.find(
+        (byComp) => byComp["component-uuid"] === componentId
+      )?.["set-parameters"] || null
+  );
+}
+
+/**
  * Builds the display of a segment of non-placeholder text within prose
  * @param {String} text
  * @param {String} key
  * @returns the text segment component
  */
-const getTextSegment = (text, key) => {
+function getTextSegment(text, key) {
   if (!text) {
     return null;
   }
@@ -113,7 +140,7 @@ const getTextSegment = (text, key) => {
       {text}
     </Typography>
   );
-};
+}
 
 /**
  * Wraps a placeholder display in a styled tooltip
@@ -134,18 +161,21 @@ function SegmentTooltipWrapper(props) {
  * Builds the display of a segment of placeholder label text within prose
  * @param {Array} parameters
  * @param {String} parameterId
- * @param {Object} modifications
+ * @param {Object} modificationSetParameters
  * @param {String} key
  * @returns the parameter label segment component
  */
-const getParameterLabelSegment = (
+function getParameterLabelSegment(
   parameters,
   parameterId,
-  modifications,
+  modificationSetParameters,
   key
-) => {
+) {
   const parameterLabel = getParameterLabel(parameters, parameterId);
-  const constraintsDisplay = getConstraintsDisplay(modifications, parameterId);
+  const constraintsDisplay = getConstraintsDisplay(
+    modificationSetParameters,
+    parameterId
+  );
   if (!constraintsDisplay) {
     return (
       <ParamLabel component="span" key={`param-label-key-${key}`}>
@@ -163,24 +193,33 @@ const getParameterLabelSegment = (
       </ParamLabel>
     </SegmentTooltipWrapper>
   );
-};
+}
 
 /**
  * Builds the display of a segment of placeholder value text within prose
  * @param {Object} statementByComponent
+ * @param {Object} implReqSetParameters
  * @param {String} parameterId
- * @param {Object} modifications
+ * @param {Object} modificationSetParameters
  * @param {String} key
  * @returns the parameter value segment component
  */
-const getParameterValueSegment = (
+function getParameterValueSegment(
   statementByComponent,
+  implReqSetParameters,
   parameterId,
-  modifications,
+  modificationSetParameters,
   key
-) => {
-  const parameterValue = getParameterValue(statementByComponent, parameterId);
-  const constraintsDisplay = getConstraintsDisplay(modifications, parameterId);
+) {
+  const parameterValue = getParameterValue(
+    statementByComponent,
+    implReqSetParameters,
+    parameterId
+  );
+  const constraintsDisplay = getConstraintsDisplay(
+    modificationSetParameters,
+    parameterId
+  );
   if (!constraintsDisplay.length) {
     return (
       <ParamValue component="span" key={`param-value-key-${key}`}>
@@ -198,7 +237,7 @@ const getParameterValueSegment = (
       </ParamValue>
     </SegmentTooltipWrapper>
   );
-};
+}
 
 /**
  * Replaces the parameter placeholders in the given prose with the given label
@@ -232,7 +271,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
           return getParameterLabelSegment(
             props.parameters,
             segment,
-            props.modifications,
+            props.modificationSetParameters,
             index.toString()
           );
         })}
@@ -274,7 +313,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   const { description } = statementByComponent;
   return (
     <Typography>
-      <StyledTooltip title={description}>
+      <StyledTooltip title={description ?? props.componentId}>
         <Link href="#{props.label}">{props.label}</Link>
       </StyledTooltip>
       {props.prose
@@ -285,8 +324,9 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
           }
           return getParameterValueSegment(
             statementByComponent,
+            getImplReqSetParameters(props.implReqStatements, props.componentId),
             segment,
-            props.modifications,
+            props.modificationSetParameters,
             index.toString()
           );
         })}

@@ -2,36 +2,12 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import OSCALBackMatter from "./OSCALBackMatter";
-
-export const backMatterTestData = {
-  resources: [
-    {
-      uuid: "dc380596-027f-423b-83f2-82757554ee27",
-      title: "Resource Test Title",
-      description: "This is a test description for resource",
-      rlinks: [
-        {
-          href: "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_catalog.json",
-          "media-type": "application/oscal.catalog+json",
-        },
-      ],
-    },
-    {
-      uuid: "dc380596-027f-423b-83f2-82757554ee28",
-      title: "Resource Test Title 2",
-      description: "This is a test description for resource 2",
-      rlinks: [
-        {
-          href: "NIST_SP-800-53_rev4_catalog.json",
-          "media-type": "application/oscal.catalog+json2",
-        },
-      ],
-    },
-  ],
-};
-
-const parentUrlTestData =
-  "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json";
+import {
+  backMatterTestUrl,
+  parentUrlTestData,
+  revFourCatalog,
+} from "../test-data/Urls";
+import { backMatterTestData } from "../test-data/BackMatterData";
 
 function backMatterRenderer() {
   render(
@@ -71,9 +47,7 @@ export default function testOSCALBackMatter(parentElementName, renderer) {
     const button = screen.getByRole("button", {
       name: "application/oscal.catalog+json",
     });
-    expect(button.getAttribute("href")).toEqual(
-      "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_catalog.json"
-    );
+    expect(button.getAttribute("href")).toEqual(revFourCatalog);
   });
 
   test(`${parentElementName} renders relative href`, async () => {
@@ -81,9 +55,7 @@ export default function testOSCALBackMatter(parentElementName, renderer) {
     const button = screen.getByRole("button", {
       name: "application/oscal.catalog+json2",
     });
-    expect(button.getAttribute("href")).toEqual(
-      "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json/../NIST_SP-800-53_rev4_catalog.json"
-    );
+    expect(button.getAttribute("href")).toEqual(backMatterTestUrl);
   });
 }
 

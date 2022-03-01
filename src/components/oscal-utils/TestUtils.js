@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 
-function getByTextIncludingChildern(textMatch) {
+function getByTextIncludingChildren(textMatch) {
   return screen.getByText((content, node) => {
     const hasText = (testNode) =>
       testNode.textContent === textMatch ||
@@ -13,4 +13,4 @@ function getByTextIncludingChildern(textMatch) {
   });
 }
 
-export { getByTextIncludingChildern as default };
+export default getByTextIncludingChildren;
