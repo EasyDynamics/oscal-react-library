@@ -3,6 +3,8 @@ export function deepClone(obj) {
 }
 
 /**
+ * Update a partial REST data at the field defined by editedFieldJsonPath with
+ * newValue.
  *
  * @param data data to be updated with new value, for later use in a REST request
  * @param editedFieldJsonPath path to the field that is being updated
@@ -18,9 +20,7 @@ export function populatePartialRestData(
   if (editedFieldJsonPath.length === 1) {
     const editData = data;
 
-    if (typeof editedFieldJsonPath.at(0) === "function") {
-      editedFieldJsonPath.at(0)(data);
-    } else if (appendToLastFieldInPath) {
+    if (appendToLastFieldInPath) {
       editData[editedFieldJsonPath].push(newValue);
     } else {
       editData[editedFieldJsonPath] = newValue;
@@ -36,13 +36,6 @@ export function populatePartialRestData(
       newValue,
       appendToLastFieldInPath
     );
-  } else if (typeof editedFieldJsonPath.at(0) === "function") {
-    populatePartialRestData(
-      editedFieldJsonPath.shift()(data),
-      editedFieldJsonPath,
-      newValue,
-      appendToLastFieldInPath
-    );
   } else {
     populatePartialRestData(
       data[editedFieldJsonPath.shift()],
@@ -53,6 +46,9 @@ export function populatePartialRestData(
   }
 }
 
+/**
+ * enum describing the available REST methods
+ */
 export const restMethods = {
   DELETE: "DELETE",
   GET: "GET",

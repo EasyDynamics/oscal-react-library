@@ -72,10 +72,11 @@ export default function OSCALLoader(props) {
   };
 
   /**
+   * Sends a REST request of type restMethod to a backend service and updates the viewer if
+   * the request is successful.
    *
    * @param appendToLastFieldInPath boolean indicating if the updated value should be appended to an array or replace an existing value
-   * @param partialRestData data that will be passed into the body of the REST request, doesn't initially contain the updates
-   * @param onSuccessfulRequest function that will update a state, forcing a re-rendering if the REST request is successful
+   * @param partialRestData data that will be passed into the body of the REST request, may not initially contain the updates
    * @param editedFieldJsonPath path to the field that is being updated
    * @param newValue updated value for the edited field
    * @param restMethod the REST request type
