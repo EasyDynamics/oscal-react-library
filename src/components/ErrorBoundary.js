@@ -6,10 +6,11 @@ import Alert from "@material-ui/lab/Alert";
  * message using a Material UI Alert.
  */
 export function BasicError(props) {
+  // Cleanup the message to prevent potential weird spacing around the parenthesis
+  const message = props.error.message?.trim();
   return (
     <Alert severity="error">
-      Yikes! Something went wrong loading the OSCAL data. Sorry, we&apos;ll look
-      into it. ({props.error.message})
+      Yikes! Something went wrong loading the OSCAL data. ({message})
     </Alert>
   );
 }
