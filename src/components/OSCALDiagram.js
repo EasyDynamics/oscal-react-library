@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import getUriFromBackMatterByHref from "./oscal-utils/OSCALBackMatterUtils";
+import resolveLinkHref from "./oscal-utils/OSCALLinkUtils";
 
 const useStyles = makeStyles(() => ({
   OSCALDiagramImg: {
@@ -18,12 +18,18 @@ export default function OSCALDiagram(props) {
     throw new Error("no rlink found");
   }
 
-  const diagramUri = getUriFromBackMatterByHref(
-    props.backMatter,
-    link.href,
-    props.parentUrl,
-    /^image\//
-  );
+  let diagramUri;
+  try {
+    diagramUri = resolveLinkHref(
+      props.backMatter,
+      link.href,
+      props.parentUrl,
+      /^image\//
+    );
+  } catch (err) {
+    // Silently fail on unresolved diagram resources
+    diagramUri = link.href;
+  }
 
   return (
     <>

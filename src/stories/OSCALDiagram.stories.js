@@ -1,7 +1,7 @@
 import React from "react";
 import OSCALDiagram from "../components/OSCALDiagram";
 import { backMatterTestData } from "../test-data/BackMatterData";
-import diagramTestData from "../test-data/DiagramData";
+import { localReferenceDiagram } from "../test-data/DiagramData";
 
 export default {
   title: "Components/Diagram",
@@ -15,7 +15,7 @@ function Template(args) {
 export const Default = Template.bind({});
 
 Default.args = {
-  diagram: diagramTestData,
+  diagram: localReferenceDiagram,
   backMatter: backMatterTestData,
   parentUrl: "./",
 };

@@ -28,7 +28,8 @@
       "react/destructuring-assignment": [0],
       "react/jsx-props-no-spreading": "off",
       "prettier/prettier": "error",
-      "import/no-extraneous-dependencies": ["error", {"packageDir": ["./", "./example"]}]
+      "import/no-extraneous-dependencies": ["error", {"packageDir": ["./", "./example"]}],
+      "no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_", "caughtErrorsIgnorePattern": "^_" }]
     },
     "overrides": [
         {

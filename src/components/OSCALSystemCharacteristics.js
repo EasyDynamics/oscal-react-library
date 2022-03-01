@@ -238,15 +238,61 @@ export default function OSCALSystemCharacteristics(props) {
                 Authorization Boundary
               </Typography>
               <Typography variant="body2">
-                {props.systemCharacteristics["authorization-boundary"] &&
-                  props.systemCharacteristics["authorization-boundary"]
-                    .description}
+                {
+                  props.systemCharacteristics?.["authorization-boundary"]
+                    ?.description
+                }
               </Typography>
               <Grid container spacing={2} justifyContent="center">
-                {props.systemCharacteristics["authorization-boundary"] &&
-                  props.systemCharacteristics[
-                    "authorization-boundary"
-                  ].diagrams?.map((diagram) => (
+                {props.systemCharacteristics?.[
+                  "authorization-boundary"
+                ]?.diagrams?.map((diagram) => (
+                  <Grid item xs={6} key={diagram.uuid}>
+                    <OSCALDiagram
+                      diagram={diagram}
+                      backMatter={props.backMatter}
+                      parentUrl={props.parentUrl}
+                      mediaTypeRegex={/^image\//}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="subtitle1" gutterBottom component="div">
+                Network Architecture
+              </Typography>
+              <Typography variant="body2">
+                {
+                  props.systemCharacteristics?.["network-architecture"]
+                    ?.description
+                }
+              </Typography>
+              <Grid container spacing={2} justifyContent="center">
+                {props.systemCharacteristics?.[
+                  "network-architecture"
+                ]?.diagrams?.map((diagram) => (
+                  <Grid item xs={6} key={diagram.uuid}>
+                    <OSCALDiagram
+                      diagram={diagram}
+                      backMatter={props.backMatter}
+                      parentUrl={props.parentUrl}
+                      mediaTypeRegex={/^image\//}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="subtitle1" gutterBottom component="div">
+                Data Flow
+              </Typography>
+              <Typography variant="body2">
+                {props.systemCharacteristics?.["data-flow"]?.description}
+              </Typography>
+              <Grid container spacing={2} justifyContent="center">
+                {props.systemCharacteristics?.["data-flow"]?.diagrams?.map(
+                  (diagram) => (
                     <Grid item xs={6} key={diagram.uuid}>
                       <OSCALDiagram
                         diagram={diagram}
@@ -255,7 +301,8 @@ export default function OSCALSystemCharacteristics(props) {
                         mediaTypeRegex={/^image\//}
                       />
                     </Grid>
-                  ))}
+                  )
+                )}
               </Grid>
             </Grid>
           </Grid>
