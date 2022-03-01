@@ -10,7 +10,10 @@ export function BasicError(props) {
   const message = props.error.message?.trim();
   return (
     <Alert severity="error">
-      Yikes! Something went wrong loading the OSCAL data. ({message})
+      <details>
+        <summary>Yikes! Something went wrong loading the OSCAL data.</summary>
+        {message}
+      </details>
     </Alert>
   );
 }
