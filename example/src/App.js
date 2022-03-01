@@ -63,6 +63,9 @@ function App() {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [isRestMode, setIsRestMode] = useState(
+    // We want to ensure that throughout the app is is always a boolean
+    // so that it can be decoupled from the _actual_ API URL (which may
+    // be different).
     !!process.env.REACT_APP_REST_BASE_URL
   );
   const [backendUrl] = useState(process.env.REACT_APP_REST_BASE_URL);

@@ -116,7 +116,7 @@ export default function OSCALLoaderForm(props) {
             </FormControl>
           </Grid>
         )}
-        {!!props.backendUrl && (
+        {props.backendUrl && (
           <Grid item xs={2} md={1}>
             <FormControlLabel
               control={
