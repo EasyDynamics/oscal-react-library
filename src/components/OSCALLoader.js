@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import ErrorBoundary from "./ErrorBoundary";
+import ErrorBoundary, { BasicError } from "./ErrorBoundary";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
@@ -65,23 +65,40 @@ export default function OSCALLoader(props) {
   const [oscalData, setOscalData] = useState([]);
   const [oscalUrl, setOscalUrl] = useState(isRestMode ? null : props.oscalUrl);
   const unmounted = useRef(false);
+  const [error, setError] = useState(null);
+  // We "count" the number of times the reload button has been pressed (when active).
+  // This will force a redraw of the form on each click, allowing us to reset after
+  // an error and to ensure.
+  const [reloadCount, setReloadCount] = useState(0);
+
+  const handleFetchError = (err) => {
+    setIsLoaded(true);
+    setIsResolutionComplete(true);
+    setError(err);
+  };
 
   const loadOscalData = (newOscalUrl) => {
-    if (newOscalUrl) {
-      fetch(newOscalUrl)
-        .then((response) => {
+    if (!newOscalUrl) {
+      setIsLoaded(true);
+      return;
+    }
+    fetch(newOscalUrl)
+      .then(
+        (response) => {
           if (!response.ok) throw new Error(response.status);
           else return response.json();
-        })
-        .then((result) => {
+        },
+        (err) => handleFetchError(err)
+      )
+      .then(
+        (result) => {
           if (!unmounted.current) {
             setOscalData(result);
             setIsLoaded(true);
           }
-        });
-    } else {
-      setIsLoaded(true);
-    }
+        },
+        (err) => handleFetchError(err)
+      );
   };
 
   /**
@@ -110,16 +127,22 @@ export default function OSCALLoader(props) {
       method: "PATCH",
       body: JSON.stringify(partialPatchData),
     })
-      .then((response) => {
-        if (!response.ok) throw new Error(response.status);
-        else return response.json();
-      })
-      .then((result) => {
-        if (!unmounted.current) {
-          setOscalData(result);
-          setIsLoaded(true);
-        }
-      });
+      .then(
+        (response) => {
+          if (!response.ok) throw new Error(response.status);
+          else return response.json();
+        },
+        (err) => handleFetchError(err)
+      )
+      .then(
+        (result) => {
+          if (!unmounted.current) {
+            setOscalData(result);
+            setIsLoaded(true);
+          }
+        },
+        (err) => handleFetchError(err)
+      );
   };
 
   const handleUrlChange = (event) => {
@@ -139,6 +162,7 @@ export default function OSCALLoader(props) {
     if (isLoaded && isResolutionComplete) {
       setIsLoaded(false);
       setIsResolutionComplete(false);
+      setReloadCount((current) => current + 1);
       loadOscalData(oscalUrl);
     }
   };
@@ -184,12 +208,15 @@ export default function OSCALLoader(props) {
         isRestMode={isRestMode}
         onChangeRestMode={handleChangeRestMode}
         isResolutionComplete={isResolutionComplete}
+        onError={handleFetchError}
       />
     );
   }
 
   let result;
-  if (!isLoaded) {
+  if (error) {
+    result = <BasicError error={error} />;
+  } else if (!isLoaded) {
     result = <CircularProgress />;
   } else if (oscalUrl) {
     result = props.renderer(
@@ -204,7 +231,15 @@ export default function OSCALLoader(props) {
   return (
     <>
       {form}
-      <ErrorBoundary>{result}</ErrorBoundary>
+      <ErrorBoundary
+        key={reloadCount}
+        onError={() => {
+          setIsLoaded(true);
+          setIsResolutionComplete(true);
+        }}
+      >
+        {result}
+      </ErrorBoundary>
     </>
   );
 }
