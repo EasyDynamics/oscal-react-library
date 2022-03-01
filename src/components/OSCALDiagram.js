@@ -18,12 +18,18 @@ export default function OSCALDiagram(props) {
     throw new Error("no rlink found");
   }
 
-  const diagramUri = resolveLinkHref(
-    props.backMatter,
-    link.href,
-    props.parentUrl,
-    /^image\//
-  );
+  let diagramUri;
+  try {
+    diagramUri = resolveLinkHref(
+      props.backMatter,
+      link.href,
+      props.parentUrl,
+      /^image\//
+    );
+  } catch (err) {
+    // Silently fail on unresolved diagram resources
+    diagramUri = link.href;
+  }
 
   return (
     <>
