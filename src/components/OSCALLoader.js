@@ -127,6 +127,9 @@ export default function OSCALLoader(props) {
       );
     }
 
+    setIsLoaded(false);
+    setIsResolutionComplete(false);
+
     fetch(url, {
       method: restMethod,
       body: JSON.stringify(partialRestData),

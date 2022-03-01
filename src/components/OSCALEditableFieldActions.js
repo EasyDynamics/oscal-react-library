@@ -18,11 +18,10 @@ export default function OSCALEditableFieldActions(props) {
             : `save-${props.editedFieldPath}`
         }
         onClick={() => {
-          if (props.onFieldSave.length === 7) {
+          if (props.onFieldSave.length === 6) {
             props.onFieldSave(
               props.appendToLastFieldInPath,
               props.restData,
-              props.update,
               props.editedField,
               props.reference.current.value,
               props.restMethod,
