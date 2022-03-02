@@ -1,7 +1,7 @@
 {
   "name": "@EasyDynamics/oscal-viewer",
   "homepage": ".",
-  "version": "0.4.0",
+  "version": "0.5.0-0",
   "private": "true",
   "repository": {
     "type": "git",
