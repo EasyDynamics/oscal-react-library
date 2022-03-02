@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Split from "react-split";
+import { makeStyles } from "@material-ui/core/styles";
+import { Box, Fab } from "@material-ui/core";
+import CodeIcon from "@material-ui/icons/Code";
 import ErrorBoundary, { BasicError } from "./ErrorBoundary";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
 import OSCALProfile from "./OSCALProfile";
 import OSCALLoaderForm from "./OSCALLoaderForm";
+import OSCALJsonEditor from "./OSCALJsonEditor";
 
 const oscalObjectTypes = {
   catalog: {
@@ -42,6 +47,30 @@ const oscalObjectTypes = {
   },
 };
 
+const useStyles = makeStyles((theme) => ({
+  split: {
+    display: "flex",
+    flexDirection: " row",
+    "& > .gutter": {
+      backgroundColor: "#eee",
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "50%",
+      "&.gutter-horizontal": {
+        backgroundImage:
+          "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==')",
+        cursor: "col-resize",
+      },
+    },
+  },
+  toolbar: {
+    position: "sticky",
+    display: "flex",
+    justifyContent: "flex-start",
+    marginBottom: theme.spacing(1),
+    zIndex: 1,
+  },
+}));
+
 function populatePartialPatchData(data, editedFieldJsonPath, newValue) {
   if (editedFieldJsonPath.length === 1) {
     const editData = data;
@@ -57,6 +86,7 @@ function populatePartialPatchData(data, editedFieldJsonPath, newValue) {
 }
 
 export default function OSCALLoader(props) {
+  const classes = useStyles();
   const [isLoaded, setIsLoaded] = useState(false);
   const [isResolutionComplete, setIsResolutionComplete] = useState(false);
   const [isRestMode, setIsRestMode] = useState(
@@ -64,6 +94,7 @@ export default function OSCALLoader(props) {
   );
   const [oscalData, setOscalData] = useState([]);
   const [oscalUrl, setOscalUrl] = useState(isRestMode ? null : props.oscalUrl);
+  const [editorIsVisible, setEditorIsVisble] = useState(true);
   const unmounted = useRef(false);
   const [error, setError] = useState(null);
   // We "count" the number of times the reload button has been pressed (when active).
@@ -93,6 +124,39 @@ export default function OSCALLoader(props) {
       .then(
         (result) => {
           if (!unmounted.current) {
+            // TODO https://github.com/EasyDynamics/oscal-react-library/issues/297
+            /* eslint no-param-reassign: "error" */
+            result.oscalSource = JSON.stringify(result, null, "\t");
+            setOscalData(result);
+            setIsLoaded(true);
+          }
+        },
+        (err) => handleFetchError(err)
+      );
+  };
+
+  const handleRestRequest = (httpMethod, url, data) => {
+    setIsLoaded(false);
+    setIsResolutionComplete(false);
+    const requestInfo = {
+      method: httpMethod,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(data),
+    };
+    fetch(url, requestInfo)
+      .then((response) => {
+        if (!response.ok) throw new Error(response.status);
+        else return response.json();
+      })
+      .then(
+        (result) => {
+          if (!unmounted.current) {
+            // TODO https://github.com/EasyDynamics/oscal-react-library/issues/297
+            /* eslint no-param-reassign: "error" */
+            result.oscalSource = JSON.stringify(result, null, "\t");
             setOscalData(result);
             setIsLoaded(true);
           }
@@ -117,32 +181,12 @@ export default function OSCALLoader(props) {
     restPath
   ) => {
     const url = `${process.env.REACT_APP_REST_BASE_URL}/${restPath}/${partialPatchData[jsonRootName].uuid}`;
-
     populatePartialPatchData(partialPatchData, editedFieldJsonPath, newValue);
+    handleRestRequest("PATCH", url, partialPatchData);
+  };
 
-    setIsLoaded(false);
-    setIsResolutionComplete(false);
-
-    fetch(url, {
-      method: "PATCH",
-      body: JSON.stringify(partialPatchData),
-    })
-      .then(
-        (response) => {
-          if (!response.ok) throw new Error(response.status);
-          else return response.json();
-        },
-        (err) => handleFetchError(err)
-      )
-      .then(
-        (result) => {
-          if (!unmounted.current) {
-            setOscalData(result);
-            setIsLoaded(true);
-          }
-        },
-        (err) => handleFetchError(err)
-      );
+  const handleRestPut = (jsonString) => {
+    handleRestRequest("PUT", oscalUrl, JSON.parse(jsonString));
   };
 
   const handleUrlChange = (event) => {
@@ -219,12 +263,53 @@ export default function OSCALLoader(props) {
   } else if (!isLoaded) {
     result = <CircularProgress />;
   } else if (oscalUrl) {
-    result = props.renderer(
-      isRestMode,
-      oscalData,
-      oscalUrl,
-      onResolutionComplete,
-      handleRestPatch
+    result = isRestMode ? (
+      <>
+        <Box className={classes.toolbar}>
+          <Fab
+            aria-label="show code"
+            color={editorIsVisible ? "default" : "primary"}
+            size="small"
+            onClick={() => {
+              setEditorIsVisble(!editorIsVisible);
+            }}
+          >
+            <CodeIcon />
+          </Fab>
+        </Box>
+        <Split
+          className={classes.split}
+          gutterSize={editorIsVisible ? 10 : 0}
+          minSize={editorIsVisible ? 300 : 0}
+          sizes={editorIsVisible ? [34, 66] : [0, 100]}
+        >
+          <Box display={editorIsVisible ? "block" : "none"}>
+            <OSCALJsonEditor
+              value={oscalData.oscalSource}
+              onSave={handleRestPut}
+            />
+          </Box>
+          <Box>
+            {props.renderer(
+              isRestMode,
+              oscalData,
+              oscalUrl,
+              onResolutionComplete,
+              handleRestPatch
+            )}
+          </Box>
+        </Split>
+      </>
+    ) : (
+      <>
+        {props.renderer(
+          isRestMode,
+          oscalData,
+          oscalUrl,
+          onResolutionComplete,
+          handleRestPatch
+        )}
+      </>
     );
   }
 
