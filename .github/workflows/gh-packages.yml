@@ -16,7 +16,7 @@ jobs:
       packages: write
     steps:
       - name: Delete previous oscal-react-library version
-        uses: actions/delete-package-versions@v2.0.1
+        uses: actions/delete-package-versions@v2.0.2
         with:
           package-name: oscal-react-library
       - name: Checkout code
