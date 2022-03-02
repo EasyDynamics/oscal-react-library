@@ -181,7 +181,7 @@ function App() {
             Profile Viewer
           </MenuItem>
         </Menu>
-        <Container component="main">
+        <Container maxWidth="xl" component="main">
           <Routes>
             <Route
               exact
