@@ -284,7 +284,10 @@ export default function OSCALLoader(props) {
           sizes={editorIsVisible ? [34, 66] : [0, 100]}
         >
           <Box display={editorIsVisible ? "block" : "none"}>
-            <OSCALJsonEditor value={oscalData.oscalSource} onSave={handleRestPut} />
+            <OSCALJsonEditor
+              value={oscalData.oscalSource}
+              onSave={handleRestPut}
+            />
           </Box>
           <Box>
             {props.renderer(

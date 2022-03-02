@@ -124,7 +124,7 @@ describe("OSCALJsonEditor", () => {
     await waitFor(() => {
       expect(mockEditorRef.setValue).toBeCalledTimes(1);
       expect(mockEditorRef.setValue).toHaveBeenLastCalledWith(
-       oscalData.oscalSource
+        oscalData.oscalSource
       );
     });
   });
