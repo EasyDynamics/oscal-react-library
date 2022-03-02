@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Split from "react-split";
 import { makeStyles } from "@material-ui/core/styles";
-import { Box } from "@material-ui/core";
+import { Box, Fab } from "@material-ui/core";
+import CodeIcon from "@material-ui/icons/Code";
 import ErrorBoundary, { BasicError } from "./ErrorBoundary";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
@@ -46,7 +47,7 @@ const oscalObjectTypes = {
   },
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   split: {
     display: "flex",
     flexDirection: " row",
@@ -60,6 +61,13 @@ const useStyles = makeStyles(() => ({
         cursor: "col-resize",
       },
     },
+  },
+  toolbar: {
+    position: "sticky",
+    top: theme.spacing(1),
+    display: "flex",
+    justifyContent: "flex-end",
+    zIndex: 1,
   },
 }));
 
@@ -86,6 +94,7 @@ export default function OSCALLoader(props) {
   );
   const [oscalData, setOscalData] = useState([]);
   const [oscalUrl, setOscalUrl] = useState(isRestMode ? null : props.oscalUrl);
+  const [editorIsVisible, setEditorIsVisble] = useState(false);
   const unmounted = useRef(false);
   const [error, setError] = useState(null);
   // We "count" the number of times the reload button has been pressed (when active).
@@ -249,20 +258,39 @@ export default function OSCALLoader(props) {
     result = <CircularProgress />;
   } else if (oscalUrl) {
     result = isRestMode ? (
-      <Split className={classes.split} minSize={300} sizes={[34, 66]}>
-        <Box>
-          <OSCALJsonEditor value={oscalData} onSave={handleRestPut} />
+      <>
+        <Box className={classes.toolbar}>
+          <Fab
+            aria-label="show code"
+            color="primary"
+            size="medium"
+            onClick={() => {
+              setEditorIsVisble(!editorIsVisible);
+            }}
+          >
+            <CodeIcon />
+          </Fab>
         </Box>
-        <Box>
-          {props.renderer(
-            isRestMode,
-            oscalData,
-            oscalUrl,
-            onResolutionComplete,
-            handleRestPatch
-          )}
-        </Box>
-      </Split>
+        <Split
+          className={classes.split}
+          gutterSize={editorIsVisible ? 10 : 0}
+          minSize={editorIsVisible ? 300 : 0}
+          sizes={editorIsVisible ? [34, 66] : [0, 100]}
+        >
+          <Box display={editorIsVisible ? "block" : "none"}>
+            <OSCALJsonEditor value={oscalData} onSave={handleRestPut} />
+          </Box>
+          <Box>
+            {props.renderer(
+              isRestMode,
+              oscalData,
+              oscalUrl,
+              onResolutionComplete,
+              handleRestPatch
+            )}
+          </Box>
+        </Split>
+      </>
     ) : (
       <>
         {props.renderer(
