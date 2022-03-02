@@ -3,7 +3,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Split from "react-split";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box } from "@material-ui/core";
-import ErrorBoundary from "./ErrorBoundary";
+import ErrorBoundary, { BasicError } from "./ErrorBoundary";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
@@ -15,7 +15,7 @@ const oscalObjectTypes = {
   catalog: {
     name: "Catalog",
     defaultUrl:
-      "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
+      "https://raw.githubusercontent.com/EasyDynamics/oscal-demo-content/main/catalogs/NIST_SP-800-53_rev5_catalog.json",
     defaultUuid: "613fca2d-704a-42e7-8e2b-b206fb92b456",
     jsonRootName: "catalog",
     restPath: "catalogs",
@@ -23,7 +23,7 @@ const oscalObjectTypes = {
   component: {
     name: "Component",
     defaultUrl:
-      "https://raw.githubusercontent.com/EasyDynamics/oscal-content/manual-fix-of-component-paths/examples/component-definition/json/example-component.json",
+      "https://raw.githubusercontent.com/EasyDynamics/oscal-demo-content/main/component-definitions/example-component.json",
     defaultUuid: "8223d65f-57a9-4689-8f06-2a975ae2ad72",
     jsonRootName: "component-definition",
     restPath: "component-definitions",
@@ -31,7 +31,7 @@ const oscalObjectTypes = {
   profile: {
     name: "Profile",
     defaultUrl:
-      "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json",
+      "https://raw.githubusercontent.com/EasyDynamics/oscal-demo-content/main/profiles/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json",
     defaultUuid: "8b3beca1-fcdc-43e0-aebb-ffc0a080c486",
     jsonRootName: "profile",
     restPath: "profiles",
@@ -39,7 +39,7 @@ const oscalObjectTypes = {
   ssp: {
     name: "SSP",
     defaultUrl:
-      "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/ssp/json/ssp-example.json",
+      "https://raw.githubusercontent.com/EasyDynamics/oscal-demo-content/main/system-security-plans/ssp-example.json",
     defaultUuid: "cff8385f-108e-40a5-8f7a-82f3dc0eaba8",
     jsonRootName: "system-security-plan",
     restPath: "system-security-plans",
@@ -87,23 +87,40 @@ export default function OSCALLoader(props) {
   const [oscalData, setOscalData] = useState([]);
   const [oscalUrl, setOscalUrl] = useState(isRestMode ? null : props.oscalUrl);
   const unmounted = useRef(false);
+  const [error, setError] = useState(null);
+  // We "count" the number of times the reload button has been pressed (when active).
+  // This will force a redraw of the form on each click, allowing us to reset after
+  // an error and to ensure.
+  const [reloadCount, setReloadCount] = useState(0);
+
+  const handleFetchError = (err) => {
+    setIsLoaded(true);
+    setIsResolutionComplete(true);
+    setError(err);
+  };
 
   const loadOscalData = (newOscalUrl) => {
-    if (newOscalUrl) {
-      fetch(newOscalUrl)
-        .then((response) => {
+    if (!newOscalUrl) {
+      setIsLoaded(true);
+      return;
+    }
+    fetch(newOscalUrl)
+      .then(
+        (response) => {
           if (!response.ok) throw new Error(response.status);
           else return response.json();
-        })
-        .then((result) => {
+        },
+        (err) => handleFetchError(err)
+      )
+      .then(
+        (result) => {
           if (!unmounted.current) {
             setOscalData(result);
             setIsLoaded(true);
           }
-        });
-    } else {
-      setIsLoaded(true);
-    }
+        },
+        (err) => handleFetchError(err)
+      );
   };
 
   const handleRestRequest = (httpMethod, url, data) => {
@@ -122,12 +139,15 @@ export default function OSCALLoader(props) {
         if (!response.ok) throw new Error(response.status);
         else return response.json();
       })
-      .then((result) => {
-        if (!unmounted.current) {
-          setOscalData(result);
-          setIsLoaded(true);
-        }
-      });
+      .then(
+        (result) => {
+          if (!unmounted.current) {
+            setOscalData(result);
+            setIsLoaded(true);
+          }
+        },
+        (err) => handleFetchError(err)
+      );
   };
 
   /**
@@ -171,6 +191,7 @@ export default function OSCALLoader(props) {
     if (isLoaded && isResolutionComplete) {
       setIsLoaded(false);
       setIsResolutionComplete(false);
+      setReloadCount((current) => current + 1);
       loadOscalData(oscalUrl);
     }
   };
@@ -216,12 +237,15 @@ export default function OSCALLoader(props) {
         isRestMode={isRestMode}
         onChangeRestMode={handleChangeRestMode}
         isResolutionComplete={isResolutionComplete}
+        onError={handleFetchError}
       />
     );
   }
 
   let result;
-  if (!isLoaded) {
+  if (error) {
+    result = <BasicError error={error} />;
+  } else if (!isLoaded) {
     result = <CircularProgress />;
   } else if (oscalUrl) {
     result = isRestMode ? (
@@ -255,7 +279,15 @@ export default function OSCALLoader(props) {
   return (
     <>
       {form}
-      <ErrorBoundary>{result}</ErrorBoundary>
+      <ErrorBoundary
+        key={reloadCount}
+        onError={() => {
+          setIsLoaded(true);
+          setIsResolutionComplete(true);
+        }}
+      >
+        {result}
+      </ErrorBoundary>
     </>
   );
 }
