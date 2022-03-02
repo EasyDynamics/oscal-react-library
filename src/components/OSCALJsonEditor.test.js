@@ -26,6 +26,7 @@ const oscalData = {
     },
   },
 };
+oscalData.oscalSource = JSON.stringify(oscalData, null, "\t");
 
 jest.mock(
   "@monaco-editor/react",
@@ -46,7 +47,7 @@ describe("OSCALJsonEditor", () => {
   // This could generally be improved by using
   // snapshot testing https://jestjs.io/docs/snapshot-testing
   it("should render as expected", async () => {
-    render(<OSCALJsonEditor value={oscalData} />);
+    render(<OSCALJsonEditor value={oscalData.oscalSource} />);
 
     const container = await screen.findByTestId("container");
 
@@ -80,7 +81,7 @@ describe("OSCALJsonEditor", () => {
     render(
       <OSCALJsonEditor
         editorRef={mockEditorRef}
-        value={oscalData}
+        value={oscalData.oscalSource}
         onSave={handleSave}
       />
     );
@@ -108,7 +109,7 @@ describe("OSCALJsonEditor", () => {
     render(
       <OSCALJsonEditor
         editorRef={mockEditorRef}
-        value={oscalData}
+        value={oscalData.oscalSource}
         onSave={handleSave}
       />
     );
@@ -123,7 +124,7 @@ describe("OSCALJsonEditor", () => {
     await waitFor(() => {
       expect(mockEditorRef.setValue).toBeCalledTimes(1);
       expect(mockEditorRef.setValue).toHaveBeenLastCalledWith(
-        JSON.stringify(oscalData, null, "\t")
+        oscalData.oscalSource
       );
     });
   });

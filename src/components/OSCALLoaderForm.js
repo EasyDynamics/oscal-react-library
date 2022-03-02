@@ -14,7 +14,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 const useStyles = makeStyles((theme) => ({
   catalogForm: {
     marginTop: theme.spacing(4),
-    marginBottom: theme.spacing(4),
+    marginBottom: theme.spacing(2),
   },
 }));
 
