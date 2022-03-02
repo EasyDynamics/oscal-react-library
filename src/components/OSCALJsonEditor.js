@@ -34,12 +34,6 @@ export default function OSCALJsonEditor(props) {
     tabSize: 2,
   };
 
-  const sanitizedData = () => {
-    const copiedData = JSON.parse(JSON.stringify(props.value));
-    delete copiedData[Object.keys(copiedData)[0]].resolvedControls;
-    return JSON.stringify(copiedData, null, "\t");
-  };
-
   return (
     <Grid
       container
@@ -57,7 +51,7 @@ export default function OSCALJsonEditor(props) {
           onMount={(editor) => {
             editorRef.current = editor;
           }}
-          value={sanitizedData()}
+          value={props.value}
           defaultLanguage="json"
         />
       </Grid>
@@ -72,7 +66,7 @@ export default function OSCALJsonEditor(props) {
           <Grid item>
             <Button
               onClick={() => {
-                editorRef.current.setValue(sanitizedData());
+                editorRef.current.setValue(props.value);
               }}
               startIcon={<CancelIcon data-testid="cancel-icon" />}
               variant="contained"

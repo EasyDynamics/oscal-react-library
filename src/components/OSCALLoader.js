@@ -64,9 +64,9 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbar: {
     position: "sticky",
-    top: theme.spacing(1),
     display: "flex",
-    justifyContent: "flex-end",
+    justifyContent: "flex-start",
+    marginBottom: theme.spacing(1),
     zIndex: 1,
   },
 }));
@@ -94,7 +94,7 @@ export default function OSCALLoader(props) {
   );
   const [oscalData, setOscalData] = useState([]);
   const [oscalUrl, setOscalUrl] = useState(isRestMode ? null : props.oscalUrl);
-  const [editorIsVisible, setEditorIsVisble] = useState(false);
+  const [editorIsVisible, setEditorIsVisble] = useState(true);
   const unmounted = useRef(false);
   const [error, setError] = useState(null);
   // We "count" the number of times the reload button has been pressed (when active).
@@ -124,6 +124,9 @@ export default function OSCALLoader(props) {
       .then(
         (result) => {
           if (!unmounted.current) {
+            // TODO https://github.com/EasyDynamics/oscal-react-library/issues/297
+            /* eslint no-param-reassign: "error" */
+            result.oscalSource = JSON.stringify(result, null, "\t");
             setOscalData(result);
             setIsLoaded(true);
           }
@@ -151,6 +154,9 @@ export default function OSCALLoader(props) {
       .then(
         (result) => {
           if (!unmounted.current) {
+            // TODO https://github.com/EasyDynamics/oscal-react-library/issues/297
+            /* eslint no-param-reassign: "error" */
+            result.oscalSource = JSON.stringify(result, null, "\t");
             setOscalData(result);
             setIsLoaded(true);
           }
@@ -262,8 +268,8 @@ export default function OSCALLoader(props) {
         <Box className={classes.toolbar}>
           <Fab
             aria-label="show code"
-            color="primary"
-            size="medium"
+            color={editorIsVisible ? "default" : "primary"}
+            size="small"
             onClick={() => {
               setEditorIsVisble(!editorIsVisible);
             }}
@@ -278,7 +284,7 @@ export default function OSCALLoader(props) {
           sizes={editorIsVisible ? [34, 66] : [0, 100]}
         >
           <Box display={editorIsVisible ? "block" : "none"}>
-            <OSCALJsonEditor value={oscalData} onSave={handleRestPut} />
+            <OSCALJsonEditor value={oscalData.oscalSource} onSave={handleRestPut} />
           </Box>
           <Box>
             {props.renderer(
