@@ -91,10 +91,10 @@ export default function OSCALControlPart(props) {
         parameters={props.parameters}
         restData={props.restData}
         prose={props.part.prose}
-        statementId={props.statementId}
+        statementId={props.part.id}
         statementUuid={
           props.implReqStatements?.find(
-            (statement) => statement["statement-id"] === props.statementId
+            (statement) => statement["statement-id"] === props.part.id
           )?.uuid || null
         }
       />
@@ -125,7 +125,7 @@ export default function OSCALControlPart(props) {
             onFieldSave={props.onFieldSave}
             parameters={props.parameters}
             restData={props.restData}
-            statementId={props.statementId}
+            statementId={props.part.id}
           />
         ))}
     </div>

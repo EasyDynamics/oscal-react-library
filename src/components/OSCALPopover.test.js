@@ -12,7 +12,7 @@ function OSCALPopoverRenderer() {
     <OSCALPopover
       anchorEl
       controlId={implementedRequirement["control-id"]}
-      statementByComponent={statement["by-components"][0]}
+      isUserDefinedImplementation
       statementId={statement["statement-id"]}
     />
   );

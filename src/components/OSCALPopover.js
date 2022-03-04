@@ -34,7 +34,7 @@ export default function OSCALPopover(props) {
           Editing control {props.controlId}, statement {props.statementId}
         </Typography>
         <Grid container xs={12}>
-          {props.statementByComponent["set-parameters"] ? (
+          {props.isUserDefinedImplementation ? (
             <>
               <Grid item xs={3}>
                 <Typography>Implementation: </Typography>
@@ -42,9 +42,11 @@ export default function OSCALPopover(props) {
               <Grid item xs={9}>
                 <TextField
                   fullWidth
-                  defaultValue={props.statementByComponent[
-                    "set-parameters"
-                  ][0].values.toString()}
+                  defaultValue={
+                    props.statementByComponent?.[
+                      "set-parameters"
+                    ]?.[0]?.values.toString() || "Enter Implementation"
+                  }
                   inputProps={{
                     "data-testid": "Popover Implementation TextField",
                   }}
@@ -66,7 +68,9 @@ export default function OSCALPopover(props) {
                 "data-testid": "Popover Description TextField",
               }}
               inputRef={descriptionReference}
-              defaultValue={props.statementByComponent.description}
+              defaultValue={
+                props.statementByComponent?.description || "Enter Description"
+              }
             />
           </Grid>
         </Grid>

@@ -254,10 +254,17 @@ function onFieldSaveParameterLabel(
   paramId,
   partialRestData
 ) {
-  const statement =
+  const statementExists =
     partialRestData?.statements?.find(
       (element) => element["statement-id"] === props.statementId
     ) || null;
+
+  const statement = statementExists || {
+    "statement-id": props.statementId,
+    uuid: uuidv4(),
+    "by-components": [],
+  };
+
   const rootOscalObjectName = Object.keys(props.restData)[0];
 
   const newByComponent = {
@@ -288,9 +295,17 @@ function onFieldSaveParameterLabel(
     editedField.push("description");
   }
 
+  const restData = partialRestData;
+
+  if (!restData.statements) {
+    restData.statements = [statement];
+  } else if (!statementExists) {
+    restData.statements.push(statement);
+  }
+
   props.onFieldSave(
     false,
-    partialRestData,
+    restData,
     editedField,
     null,
     restMethods.PUT,
@@ -373,6 +388,9 @@ export function OSCALReplacedProseWithParameterLabel(props) {
             anchorEl={anchorEl}
             setAnchorEl={setAnchorEl}
             controlId={props.controlId}
+            isUserDefinedImplementation={props.prose.match(
+              prosePlaceholderRegexpString
+            )}
             onCancel={() => {
               setAnchorEl(null);
             }}
@@ -527,6 +545,9 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
               anchorEl={anchorEl}
               setAnchorEl={setAnchorEl}
               controlId={props.controlId}
+              isUserDefinedImplementation={props.prose.match(
+                prosePlaceholderRegexpString
+              )}
               onCancel={() => {
                 setAnchorEl(null);
               }}
