@@ -1,22 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import Skeleton from "@material-ui/lab/Skeleton";
 import CardContent from "@material-ui/core/CardContent";
+import { useLoaderStyles } from "./OSCALLoaderStyles";
 import OSCALMetadata from "./OSCALMetadata";
 import OSCALControl from "./OSCALControl";
 import OSCALBackMatter from "./OSCALBackMatter";
 import { OSCALResolveProfile } from "./oscal-utils/OSCALProfileResolver";
 import OSCALProfileCatalogInheritance from "./OSCALProfileCatalogInheritance";
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(2),
-    display: "flex",
-    flexDirection: "column",
-  },
-}));
 
 /**
  * Displays a given OSCAL Profile is an easily consumable format. According to NIST, a profile
@@ -31,7 +23,7 @@ export default function OSCALProfile(props) {
   const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] =
     useState({});
   const [isLoaded, setIsLoaded] = useState(false);
-  const classes = useStyles();
+  const classes = useLoaderStyles();
   const unmounted = useRef(false);
 
   // Resolved profile using oscal-utils. Provides error when failure.

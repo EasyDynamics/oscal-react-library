@@ -14,7 +14,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 const useStyles = makeStyles((theme) => ({
   catalogForm: {
     marginTop: theme.spacing(4),
-    marginBottom: theme.spacing(4),
+    marginBottom: theme.spacing(2),
   },
 }));
 
@@ -63,27 +63,9 @@ export default function OSCALLoaderForm(props) {
       }}
     >
       <Grid container spacing={3}>
-        {process.env.REACT_APP_REST_BASE_URL && (
-          <>
-            <Grid item xs={10} />
-            <Grid item xs={2}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={props.isRestMode}
-                    color="primary"
-                    onChange={props.onChangeRestMode}
-                    name="isRestMode"
-                  />
-                }
-                label="REST Mode"
-              />
-            </Grid>
-          </>
-        )}
         {!props.isRestMode ? (
           <>
-            <Grid item xs={10}>
+            <Grid item xs={6} md={9}>
               <TextField
                 id="oscal-url"
                 label={`OSCAL ${props.oscalObjectType.name} URL`}
@@ -94,9 +76,10 @@ export default function OSCALLoaderForm(props) {
                 onChange={props.onUrlChange}
               />
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={4} md={2}>
               <Button
                 variant="contained"
+                size="large"
                 color="primary"
                 endIcon={<ReplayIcon>send</ReplayIcon>}
                 onClick={props.onReloadClick}
@@ -107,7 +90,7 @@ export default function OSCALLoaderForm(props) {
             </Grid>
           </>
         ) : (
-          <Grid item xs={10}>
+          <Grid item xs={10} md={11}>
             <FormControl fullWidth variant="outlined">
               <InputLabel id="oscal-object-select-label">
                 Select OSCAL {props.oscalObjectType.name}
@@ -133,6 +116,21 @@ export default function OSCALLoaderForm(props) {
                   ))}
               </Select>
             </FormControl>
+          </Grid>
+        )}
+        {process.env.REACT_APP_REST_BASE_URL && (
+          <Grid item xs={2} md={1}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={props.isRestMode}
+                  color="primary"
+                  onChange={props.onChangeRestMode}
+                  name="isRestMode"
+                />
+              }
+              label="REST Mode"
+            />
           </Grid>
         )}
       </Grid>
