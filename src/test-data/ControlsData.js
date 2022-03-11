@@ -1,5 +1,5 @@
 export const controlProseTestData =
-  "Does something with {{ insert: param, control-1_prm_1 }} and {{ insert: param, control-1_prm_2 }}";
+  "Does something with {{ insert: param, control-1_prm_1 }} and {{ insert: param, control-1_prm_2 }}, and a set value of {{ insert: param, control-1_prm_3 }}";
 
 export const exampleParams = [
   {
