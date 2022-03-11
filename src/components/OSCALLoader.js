@@ -76,9 +76,7 @@ export default function OSCALLoader(props) {
   const classes = useStyles();
   const [isLoaded, setIsLoaded] = useState(false);
   const [isResolutionComplete, setIsResolutionComplete] = useState(false);
-  const [isRestMode, setIsRestMode] = useState(
-    process.env.REACT_APP_REST_BASE_URL
-  );
+  const { isRestMode, setIsRestMode } = props;
   const [oscalData, setOscalData] = useState([]);
   const [oscalUrl, setOscalUrl] = useState(isRestMode ? null : props.oscalUrl);
   const [editorIsVisible, setEditorIsVisible] = useState(true);
@@ -196,7 +194,7 @@ export default function OSCALLoader(props) {
   };
 
   const handleUuidChange = (event) => {
-    const newOscalUrl = `${process.env.REACT_APP_REST_BASE_URL}/${props.oscalObjectType.restPath}/${event.target.value}`;
+    const newOscalUrl = `${props.backendUrl}/${props.oscalObjectType.restPath}/${event.target.value}`;
     setOscalUrl(newOscalUrl);
     setIsLoaded(false);
     setIsResolutionComplete(false);
@@ -266,6 +264,7 @@ export default function OSCALLoader(props) {
         onChangeRestMode={handleChangeRestMode}
         isResolutionComplete={isResolutionComplete}
         onError={handleFetchError}
+        backendUrl={props.backendUrl}
       />
     );
   }
@@ -392,6 +391,9 @@ export function OSCALCatalogLoader(props) {
       oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
       renderer={renderer}
       renderForm={props.renderForm}
+      backendUrl={props.backendUrl}
+      isRestMode={props.isRestMode}
+      setIsRestMode={props.setIsRestMode}
     />
   );
 }
@@ -437,6 +439,9 @@ export function OSCALSSPLoader(props) {
       oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
       renderer={renderer}
       renderForm={props.renderForm}
+      backendUrl={props.backendUrl}
+      isRestMode={props.isRestMode}
+      setIsRestMode={props.setIsRestMode}
     />
   );
 }
@@ -481,6 +486,9 @@ export function OSCALComponentLoader(props) {
       oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
       renderer={renderer}
       renderForm={props.renderForm}
+      backendUrl={props.backendUrl}
+      isRestMode={props.isRestMode}
+      setIsRestMode={props.setIsRestMode}
     />
   );
 }
@@ -525,6 +533,9 @@ export function OSCALProfileLoader(props) {
       oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
       renderer={renderer}
       renderForm={props.renderForm}
+      backendUrl={props.backendUrl}
+      isRestMode={props.isRestMode}
+      setIsRestMode={props.setIsRestMode}
     />
   );
 }

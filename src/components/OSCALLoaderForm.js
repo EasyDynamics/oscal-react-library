@@ -24,9 +24,7 @@ export default function OSCALLoaderForm(props) {
   const unmounted = useRef(false);
 
   const findAllObjects = () => {
-    fetch(
-      `${process.env.REACT_APP_REST_BASE_URL}/${props.oscalObjectType.restPath}`
-    )
+    fetch(`${props.backendUrl}/${props.oscalObjectType.restPath}`)
       .then((response) => {
         if (!response.ok) throw new Error(response.status);
         else return response.json();
@@ -118,7 +116,7 @@ export default function OSCALLoaderForm(props) {
             </FormControl>
           </Grid>
         )}
-        {process.env.REACT_APP_REST_BASE_URL && (
+        {props.backendUrl && (
           <Grid item xs={2} md={1}>
             <FormControlLabel
               control={
