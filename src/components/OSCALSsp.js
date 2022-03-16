@@ -16,7 +16,7 @@ export default function OSCALSsp(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const unmounted = useRef(false);
 
-  const patchData = {
+  const restData = {
     "system-security-plan": {
       uuid: props["system-security-plan"].uuid,
     },
@@ -67,6 +67,7 @@ export default function OSCALSsp(props) {
         }
         controls={props["system-security-plan"].resolvedControls}
         modifications={props["system-security-plan"].modifications}
+        restData={restData}
       />
     );
   }
@@ -77,7 +78,7 @@ export default function OSCALSsp(props) {
         metadata={props["system-security-plan"].metadata}
         isEditable={props.isEditable}
         onFieldSave={props.onFieldSave}
-        patchData={patchData}
+        restData={restData}
       />
       <OSCALProfileCatalogInheritance
         inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}

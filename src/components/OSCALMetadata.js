@@ -8,6 +8,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
+import EditIcon from "@material-ui/icons/Edit";
 import GroupIcon from "@material-ui/icons/Group";
 import { makeStyles } from "@material-ui/core/styles";
 import OSCALEditableTextField from "./OSCALEditableTextField";
@@ -72,18 +73,18 @@ export default function OSCALMetadata(props) {
         >
           <OSCALEditableTextField
             canEdit={props.isEditable}
+            editIcon={<EditIcon />}
             editedField={
               props.isEditable
-                ? [Object.keys(props.patchData)[0], "metadata", "title"]
+                ? [Object.keys(props.restData)[0], "metadata", "title"]
                 : null
             }
             onFieldSave={props.onFieldSave}
-            patchData={
+            restData={
               props.isEditable
                 ? {
-                    [Object.keys(props.patchData)[0]]: {
-                      uuid: props.patchData[Object.keys(props.patchData)[0]]
-                        .uuid,
+                    [Object.keys(props.restData)[0]]: {
+                      uuid: props.restData[Object.keys(props.restData)[0]].uuid,
                       metadata: {
                         title: props.metadata.title,
                       },
@@ -145,17 +146,17 @@ export default function OSCALMetadata(props) {
                   className={classes.OSCALMetadataVersion}
                   editedField={
                     props.isEditable
-                      ? [Object.keys(props.patchData)[0], "metadata", "version"]
+                      ? [Object.keys(props.restData)[0], "metadata", "version"]
                       : null
                   }
+                  editIcon={<EditIcon />}
                   onFieldSave={props.onFieldSave}
-                  patchData={
+                  restData={
                     props.isEditable
                       ? {
-                          [Object.keys(props.patchData)[0]]: {
-                            uuid: props.patchData[
-                              Object.keys(props.patchData)[0]
-                            ].uuid,
+                          [Object.keys(props.restData)[0]]: {
+                            uuid: props.restData[Object.keys(props.restData)[0]]
+                              .uuid,
                             metadata: {
                               version: props.metadata.version,
                             },

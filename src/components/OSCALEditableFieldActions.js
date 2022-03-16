@@ -1,6 +1,5 @@
 import React from "react";
 import CancelIcon from "@material-ui/icons/Cancel";
-import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
 import { IconButton } from "@material-ui/core";
 
@@ -16,9 +15,9 @@ export default function OSCALEditableFieldActions(props) {
         onClick={() => {
           props.setInEditState(!props.inEditState);
           props.onFieldSave(
-            props.patchData,
+            props.restData,
             props.editedField,
-            props.reference.current.value
+            props.reference ? props.reference.current.value : props.value
           );
         }}
       >
@@ -40,7 +39,7 @@ export default function OSCALEditableFieldActions(props) {
         props.setInEditState(!props.inEditState);
       }}
     >
-      <EditIcon fontSize={props.iconFontSize} />
+      {props.editIcon}
     </IconButton>
   );
 }

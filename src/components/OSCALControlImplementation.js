@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import List from "@material-ui/core/List";
 import OSCALControlImplementationImplReq from "./OSCALControlImplementationImplReq";
+import OSCALControlImplementationAdd from "./OSCALControlImplementationAdd";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -24,6 +25,10 @@ const useStyles = makeStyles((theme) => ({
       color: "#0000008a",
     },
   },
+
+  OSCALControlImplementationAdd: {
+    margin: theme.spacing(2),
+  },
 }));
 
 /**
@@ -35,6 +40,11 @@ const useStyles = makeStyles((theme) => ({
  */
 export default function OSCALControlImplementation(props) {
   const classes = useStyles();
+
+  const controlIds = props.controlImplementation[
+    "implemented-requirements"
+  ].map((implementedControl) => implementedControl["control-id"]);
+
   return (
     <div className={classes.paper}>
       <Card>
@@ -68,6 +78,13 @@ export default function OSCALControlImplementation(props) {
             </Grid>
           </Grid>
         </CardContent>
+        <Grid item className={classes.OSCALControlImplementationAdd}>
+          <OSCALControlImplementationAdd
+            controls={props.controls}
+            implementedControls={controlIds}
+            restData={props.restData}
+          />
+        </Grid>
       </Card>
     </div>
   );
