@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { styled, withTheme, makeStyles } from "@material-ui/core/styles";
-import Badge from "@material-ui/core/Badge";
+import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
+import Badge from "@material-ui/core/Badge";
 import EditIcon from "@material-ui/icons/Edit";
 import { Grid, IconButton } from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
 import { v4 as uuidv4 } from "uuid";
-import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 import StyledTooltip from "./OSCALStyledTooltip";
-import OSCALPopover from "./OSCALPopover";
+import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
+import OSCALControlPartEditor from "./OSCALControlPartEditor";
 import { deepClone, restMethods } from "./oscal-utils/OSCALUtils";
 
 const prosePlaceholderRegexpString = "{{ insert: param, ([0-9a-zA-B-_.]*) }}";
@@ -384,7 +384,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
       ) : null}
       {props.isEditable ? (
         <Grid container>
-          <OSCALPopover
+          <OSCALControlPartEditor
             anchorEl={anchorEl}
             setAnchorEl={setAnchorEl}
             controlId={props.controlId}
@@ -479,22 +479,21 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     props.statementId,
     props.componentId
   );
-
   if (!statementByComponent) {
     return (
       <OSCALReplacedProseWithParameterLabel
+        label={props.label}
+        prose={props.prose}
+        parameters={props.parameters}
+        modificationDisplay={props.modificationDisplay}
+        className={classes.OSCALStatementNotImplemented}
         controlId={props.controlId}
         componentId={props.componentId}
         implementedRequirement={props.implementedRequirement}
         implReqStatements={props.implReqStatements}
         isEditable={props.isEditable}
-        label={props.label}
         onFieldSave={props.onFieldSave}
-        prose={props.prose}
-        parameters={props.parameters}
         restData={props.restData}
-        modificationDisplay={props.modificationDisplay}
-        className={classes.OSCALStatementNotImplemented}
         statementId={props.statementId}
         statementUuid={props.statementUuid}
       />
@@ -541,7 +540,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
             <EditIcon fontSize="small" />
           </IconButton>
           <Grid container>
-            <OSCALPopover
+            <OSCALControlPartEditor
               anchorEl={anchorEl}
               setAnchorEl={setAnchorEl}
               controlId={props.controlId}

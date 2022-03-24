@@ -56,19 +56,14 @@ export default function OSCALControlImplementation(props) {
                   (implementedRequirement) => (
                     <OSCALControlImplementationImplReq
                       implementedRequirement={implementedRequirement}
-                      childLevel={0}
                       components={props.components}
                       controls={props.controls}
-                      isEditable={props.isEditable}
+                      childLevel={0}
                       key={implementedRequirement.uuid}
                       modifications={props.modifications}
+                      isEditable={props.isEditable}
                       onFieldSave={props.onFieldSave}
-                      restData={{
-                        [Object.keys(props.restData)[0]]: {
-                          uuid: props.restData[Object.keys(props.restData)[0]]
-                            .uuid,
-                        },
-                      }}
+                      restData={props.restData}
                     />
                   )
                 )}

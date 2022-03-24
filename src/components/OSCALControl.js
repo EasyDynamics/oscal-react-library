@@ -82,17 +82,17 @@ export default function OSCALControl(props) {
           props.control.parts.map((part, index) => (
             <OSCALControlPart
               part={part}
-              componentId={props.componentId}
               control={props.control}
               controlId={props.control.id}
-              implementedRequirement={props.implementedRequirement}
+              parameters={props.control.params}
               implReqStatements={props.implReqStatements}
-              isEditable={props.isEditable}
-              key={part.id ?? `part-${index}`}
+              componentId={props.componentId}
               modificationAlters={props.modificationAlters}
               modificationSetParameters={props.modificationSetParameters}
+              key={part.id ?? `part-${index}`}
+              implementedRequirement={props.implementedRequirement}
+              isEditable={props.isEditable}
               onFieldSave={props.onFieldSave}
-              parameters={props.control.params}
               restData={props.restData}
             />
           ))}
@@ -100,15 +100,15 @@ export default function OSCALControl(props) {
           props.control.controls.map((control) => (
             <OSCALControl
               control={control}
-              childLevel={props.childLevel + 1}
-              implementedRequirement={props.implementedRequirement}
+              parameters={control.params}
               includeControlIds={props.includeControlIds}
-              isEditable={props.isEditable}
-              key={control.id}
               modificationAlters={props.modificationAlters}
               modificationSetParameters={props.modificationSetParameters}
+              childLevel={props.childLevel + 1}
+              key={control.id}
+              implementedRequirement={props.implementedRequirement}
+              isEditable={props.isEditable}
               onFieldSave={props.onFieldSave}
-              parameters={control.params}
               restData={props.restData}
             />
           ))}
