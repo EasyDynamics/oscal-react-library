@@ -22,7 +22,7 @@ function controlImplementationImplReqRenderer() {
       components={exampleComponents}
       controls={controlsTestData}
       modifications={profileModifyTestData}
-      restData={sspRestData}
+      partialRestData={sspRestData}
     />
   );
 }
@@ -67,7 +67,7 @@ export default function testOSCALControlImplementationImplReq(
         components={componentsTestData}
         controls={controlsTestData}
         modifications={emptyProfileModifyTestData}
-        restData={sspRestData}
+        partialRestData={sspRestData}
       />
     );
     expect(

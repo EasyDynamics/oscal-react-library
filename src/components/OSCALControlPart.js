@@ -67,7 +67,7 @@ export default function OSCALControlPart(props) {
         implementedRequirement={props.implementedRequirement}
         isEditable={props.isEditable}
         onFieldSave={props.onFieldSave}
-        restData={props.restData}
+        partialRestData={props.partialRestData}
         statementUuid={
           props.implReqStatements?.find(
             (statement) => statement["statement-id"] === props.part.id
@@ -89,7 +89,7 @@ export default function OSCALControlPart(props) {
         implReqStatements={props.implReqStatements}
         isEditable={props.isEditable}
         onFieldSave={props.onFieldSave}
-        restData={props.restData}
+        partialRestData={props.partialRestData}
         statementId={props.part.id}
         statementUuid={
           props.implReqStatements?.find(
@@ -123,7 +123,7 @@ export default function OSCALControlPart(props) {
             implementedRequirement={props.implementedRequirement}
             isEditable={props.isEditable}
             onFieldSave={props.onFieldSave}
-            restData={props.restData}
+            partialRestData={props.partialRestData}
             statementId={props.part.id}
           />
         ))}

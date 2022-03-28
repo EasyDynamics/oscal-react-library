@@ -265,7 +265,7 @@ function onFieldSaveParameterLabel(
     "by-components": [],
   };
 
-  const rootOscalObjectName = Object.keys(props.restData)[0];
+  const rootOscalObjectName = Object.keys(props.partialRestData)[0];
 
   const newByComponent = {
     "component-uuid": props.componentId,
@@ -295,7 +295,7 @@ function onFieldSaveParameterLabel(
     editedField.push("description");
   }
 
-  const restData = partialRestData;
+  const partialUpdateData = partialRestData;
 
   if (!restData.statements) {
     restData.statements = [statement];

@@ -1,14 +1,14 @@
 import React from "react";
-import OSCALPopover from "../components/OSCALPopover";
+import OSCALControlPartEditor from "../components/OSCALControlPartEditor";
 import { controlImplTestData } from "../test-data/ControlsData";
 
 export default {
-  title: "Components/Popover",
-  component: OSCALPopover,
+  title: "Components/Control Part Editor",
+  component: OSCALControlPartEditor,
 };
 
 function Template(args) {
-  return <OSCALPopover {...args} />;
+  return <OSCALControlPartEditor {...args} />;
 }
 
 export const Default = Template.bind({});

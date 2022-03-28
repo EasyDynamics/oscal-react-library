@@ -35,7 +35,7 @@ test("OSCALControl displays statement modifications", async () => {
       components={exampleComponents}
       controls={[exampleControl]}
       modifications={profileModifySmtTestData}
-      restData={sspRestData}
+      partialRestData={sspRestData}
     />
   );
   await testIfModificationsDisplayed("control-1_smt modifications");
