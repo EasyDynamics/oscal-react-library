@@ -5,11 +5,12 @@ import Link from "@material-ui/core/Link";
 import Badge from "@material-ui/core/Badge";
 import EditIcon from "@material-ui/icons/Edit";
 import { Grid, IconButton } from "@material-ui/core";
-import { v4 as uuidv4 } from "uuid";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
-import OSCALControlPartEditor from "./OSCALControlPartEditor";
-import { deepClone, restMethods } from "./oscal-utils/OSCALUtils";
+import OSCALControlPartEditor, {
+  onFieldSaveByComponentParameterValue,
+  onFieldSaveParameterLabel,
+} from "./OSCALControlPartEditor";
 
 const prosePlaceholderRegexpString = "{{ insert: param, ([0-9a-zA-B-_.]*) }}";
 
@@ -247,70 +248,6 @@ function getParameterValueSegment(
   );
 }
 
-function onFieldSaveParameterLabel(
-  props,
-  descriptionReference,
-  implementationReference,
-  paramId,
-  partialRestData,
-  rootOscalObjectName
-) {
-  const statementExists =
-    partialRestData?.statements?.find(
-      (element) => element["statement-id"] === props.statementId
-    ) || null;
-
-  const rootUuid = props.partialRestData[rootOscalObjectName].uuid;
-  const restUrl = `${props.restPath}/${rootUuid}/control-implementation/implemented-requirements/${props.implementedRequirement.uuid}`;
-  const statement = statementExists || {
-    "statement-id": props.statementId,
-    uuid: uuidv4(),
-    "by-components": [],
-  };
-  const newByComponent = {
-    "component-uuid": props.componentId,
-    uuid: uuidv4(),
-    description: descriptionReference.current.value,
-  };
-
-  statement["by-components"].push(newByComponent);
-
-  const editedField = [
-    "statements",
-    `statement-id[${props.statementId}]`,
-    "by-components",
-    `component-uuid[${props.componentId}]`,
-  ];
-
-  if (paramId) {
-    newByComponent["set-parameters"] = [
-      {
-        "param-id": paramId,
-        values: [implementationReference.current.value],
-      },
-    ];
-    editedField.push("set-parameters", `param-id[${paramId}]`, "values");
-  } else {
-    editedField.push("description");
-  }
-
-  const restData = partialRestData;
-  if (!restData.statements) {
-    restData.statements = [statement];
-  } else if (!statementExists) {
-    restData.statements.push(statement);
-  }
-
-  props.onFieldSave(
-    false,
-    restData,
-    editedField,
-    null,
-    restMethods.PUT,
-    restUrl
-  );
-}
-
 /**
  * Replaces the parameter placeholders in the given prose with the given label
  * @param {Object} props
@@ -333,14 +270,10 @@ export function OSCALReplacedProseWithParameterLabel(props) {
     );
   }
 
-  const partialRestData = props.implementedRequirement
-    ? deepClone(props.implementedRequirement)
-    : null;
   const statement =
-    partialRestData?.statements?.find(
+    props.implementedRequirement?.statements?.find(
       (element) => element["statement-id"] === props.statementId
     ) || null;
-  const rootOscalObjectName = Object.keys(props.partialRestData)[0];
 
   let labelWithProse = props.prose;
   if (props.label) {
@@ -398,9 +331,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
                 props,
                 descriptionReference,
                 implementationReference,
-                paramId,
-                partialRestData,
-                rootOscalObjectName
+                paramId
               );
             }}
             statementByComponent={statement}
@@ -410,52 +341,6 @@ export function OSCALReplacedProseWithParameterLabel(props) {
         </Grid>
       ) : null}
     </Typography>
-  );
-}
-
-function onFieldSaveByComponentParameterValue(
-  props,
-  descriptionReference,
-  implementationReference,
-  rootUuid
-) {
-  const partialRestData = deepClone(props.implementedRequirement);
-  const byComponent = partialRestData.statements
-    .find((element) => element["statement-id"] === props.statementId)
-    ["by-components"].find(
-      (element) => element["component-uuid"] === props.componentId
-    );
-  byComponent.description = descriptionReference.current.value;
-
-  const rootRestPath = `${props.restPath}/${rootUuid}`;
-  const restUrl = `${rootRestPath}/control-implementation/implemented-requirements/${props.implementedRequirement.uuid}`;
-  const editedField = [
-    "statements",
-    `statement-id[${props.statementId}]`,
-    "by-components",
-    `component-uuid[${props.componentId}]`,
-  ];
-
-  if (byComponent["set-parameters"]) {
-    const paramId =
-      props.parameters.find((element) => props.prose.includes(element.id))
-        ?.id || null;
-    const setParameter = byComponent["set-parameters"].find(
-      (element) => element["param-id"] === paramId
-    );
-    setParameter.values = [implementationReference.current.value];
-    editedField.push("set-parameters", `param-id[${paramId}]`, "values");
-  } else {
-    editedField.push("description");
-  }
-
-  props.onFieldSave(
-    false,
-    partialRestData,
-    editedField,
-    null,
-    restMethods.PUT,
-    restUrl
   );
 }
 
@@ -470,8 +355,6 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const rootOscalObjectName = Object.keys(props.restData)[0];
-
   if (!props.prose) {
     return null;
   }
@@ -481,6 +364,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     props.statementId,
     props.componentId
   );
+
   if (!statementByComponent) {
     return (
       <OSCALReplacedProseWithParameterLabel
@@ -495,7 +379,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
         implReqStatements={props.implReqStatements}
         isEditable={props.isEditable}
         onFieldSave={props.onFieldSave}
-        restData={props.restData}
+        partialRestData={props.partialRestData}
         statementId={props.statementId}
         statementUuid={props.statementUuid}
         restPath={props.restPath}
@@ -557,8 +441,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
                 onFieldSaveByComponentParameterValue(
                   props,
                   descriptionReference,
-                  implementationReference,
-                  props.restData[rootOscalObjectName].uuid
+                  implementationReference
                 );
               }}
               statementByComponent={statementByComponent}

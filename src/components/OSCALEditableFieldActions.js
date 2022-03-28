@@ -21,7 +21,7 @@ export default function OSCALEditableFieldActions(props) {
           if (props.onFieldSave.length === 6) {
             props.onFieldSave(
               props.appendToLastFieldInPath,
-              props.restData,
+              props.partialRestData,
               props.editedField,
               props.reference.current.value,
               props.restMethod,

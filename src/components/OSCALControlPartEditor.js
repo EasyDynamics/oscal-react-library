@@ -3,7 +3,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import Popover from "@material-ui/core/Popover";
 import { Grid, TextField } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
+import { v4 as uuidv4 } from "uuid";
 import OSCALEditableFieldActions from "./OSCALEditableFieldActions";
+import { deepClone, restMethods } from "./oscal-utils/OSCALUtils";
 
 const useStyles = makeStyles((theme) => ({
   ControlProseEditor: {
@@ -11,6 +13,136 @@ const useStyles = makeStyles((theme) => ({
     width: 500,
   },
 }));
+
+/**
+ * Conducts preparation for a REST request that will be sent to a backend service to update a
+ * parameter placeholder value with an implementation and description. The request, if successful,
+ * saves the changes to the appropriate file and updates the changes to the Viewer.
+ *
+ * @param props object passed to the parent component containing necessary data to create and update the component
+ * @param descriptionReference reference to the text field input containing the new description for the control implementation
+ * @param implementationReference reference to the text field input containing the new implementation values for the control implementation
+ * @param paramId the set-parameter id
+ */
+export function onFieldSaveParameterLabel(
+  props,
+  descriptionReference,
+  implementationReference,
+  paramId
+) {
+  const partialRestData = deepClone(props.implementedRequirement);
+  const statementExists =
+    partialRestData?.statements?.find(
+      (element) => element["statement-id"] === props.statementId
+    ) || null;
+  const rootOscalObjectName = Object.keys(props.partialRestData)[0];
+  const rootUuid = props.partialRestData[rootOscalObjectName].uuid;
+  const restUrl = `${props.restPath}/${rootUuid}/control-implementation/implemented-requirements/${props.implementedRequirement.uuid}`;
+  const statement = statementExists || {
+    "statement-id": props.statementId,
+    uuid: uuidv4(),
+    "by-components": [],
+  };
+  const newByComponent = {
+    "component-uuid": props.componentId,
+    uuid: uuidv4(),
+    description: descriptionReference.current.value,
+  };
+
+  statement["by-components"].push(newByComponent);
+
+  const editedField = [
+    "statements",
+    `statement-id[${props.statementId}]`,
+    "by-components",
+    `component-uuid[${props.componentId}]`,
+  ];
+
+  if (paramId) {
+    newByComponent["set-parameters"] = [
+      {
+        "param-id": paramId,
+        values: [implementationReference.current.value],
+      },
+    ];
+    editedField.push("set-parameters", `param-id[${paramId}]`, "values");
+  } else {
+    editedField.push("description");
+  }
+
+  const restData = partialRestData;
+  if (!restData.statements) {
+    restData.statements = [statement];
+  } else if (!statementExists) {
+    restData.statements.push(statement);
+  }
+
+  props.onFieldSave(
+    false,
+    restData,
+    editedField,
+    null,
+    restMethods.PUT,
+    restUrl
+  );
+}
+
+/**
+ * Conducts preparation for a REST request that will be sent to a backend service to update a
+ * parameter placeholder value with an implementation and description. The request, if successful,
+ * saves the changes to the appropriate file and updates the changes to the Viewer.
+ *
+ * @param props object passed to the parent component containing necessary data to create and update the component
+ * @param descriptionReference reference to the text field input containing the new description for the control implementation
+ * @param implementationReference reference to the text field input containing the new implementation values for the control implementation
+ * @param rootUuid uuid of the root
+ */
+export function onFieldSaveByComponentParameterValue(
+  props,
+  descriptionReference,
+  implementationReference
+) {
+  const partialRestData = deepClone(props.implementedRequirement);
+  const byComponent = partialRestData.statements
+    .find((element) => element["statement-id"] === props.statementId)
+    ["by-components"].find(
+      (element) => element["component-uuid"] === props.componentId
+    );
+  byComponent.description = descriptionReference.current.value;
+
+  const rootOscalObjectName = Object.keys(props.partialRestData)[0];
+  const rootUuid = props.partialRestData[rootOscalObjectName].uuid;
+  const rootRestPath = `${props.restPath}/${rootUuid}`;
+  const restUrl = `${rootRestPath}/control-implementation/implemented-requirements/${props.implementedRequirement.uuid}`;
+  const editedField = [
+    "statements",
+    `statement-id[${props.statementId}]`,
+    "by-components",
+    `component-uuid[${props.componentId}]`,
+  ];
+
+  if (byComponent["set-parameters"]) {
+    const paramId =
+      props.parameters.find((element) => props.prose.includes(element.id))
+        ?.id || null;
+    const setParameter = byComponent["set-parameters"].find(
+      (element) => element["param-id"] === paramId
+    );
+    setParameter.values = [implementationReference.current.value];
+    editedField.push("set-parameters", `param-id[${paramId}]`, "values");
+  } else {
+    editedField.push("description");
+  }
+
+  props.onFieldSave(
+    false,
+    partialRestData,
+    editedField,
+    null,
+    restMethods.PUT,
+    restUrl
+  );
+}
 
 export default function OSCALControlPartEditor(props) {
   const classes = useStyles();

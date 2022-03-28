@@ -17,7 +17,7 @@ export default function OSCALSsp(props) {
   const unmounted = useRef(false);
 
   const ssp = props["system-security-plan"];
-  const restData = {
+  const partialRestData = {
     "system-security-plan": {
       uuid: ssp.uuid,
     },
@@ -66,7 +66,7 @@ export default function OSCALSsp(props) {
         isEditable={props.isEditable}
         modifications={ssp.modifications}
         onFieldSave={props.onFieldSave}
-        restData={restData}
+        partialRestData={partialRestData}
         restPath={props.restPath}
       />
     );
@@ -78,7 +78,7 @@ export default function OSCALSsp(props) {
         metadata={ssp.metadata}
         isEditable={props.isEditable}
         onFieldSave={props.onFieldSave}
-        restData={restData}
+        partialRestData={partialRestData}
         restPath={props.restPath}
       />
       <OSCALProfileCatalogInheritance
