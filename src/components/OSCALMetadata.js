@@ -92,6 +92,7 @@ export default function OSCALMetadata(props) {
                 : null
             }
             restMethod={restMethods.PATCH}
+            restPath={props.restPath}
             size={6}
             textFieldSize="medium"
             typographyVariant="h6"
@@ -164,6 +165,7 @@ export default function OSCALMetadata(props) {
                       : null
                   }
                   restMethod={restMethods.PATCH}
+                  restPath={props.restPath}
                   size={4}
                   textFieldSize="small"
                   typographyVariant="body2"

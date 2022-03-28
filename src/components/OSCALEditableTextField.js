@@ -41,7 +41,7 @@ function textFieldWithEditableActions(
             restData={props.restData}
             reference={reference}
             restMethod={props.restMethod}
-            restUrlPath={props.restUrlPath}
+            restPath={props.restPath}
           />
         </Grid>
       </>

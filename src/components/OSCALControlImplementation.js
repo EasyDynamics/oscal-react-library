@@ -64,6 +64,7 @@ export default function OSCALControlImplementation(props) {
                       isEditable={props.isEditable}
                       onFieldSave={props.onFieldSave}
                       partialRestData={props.partialRestData}
+                      restPath={props.restPath}
                     />
                   )
                 )}

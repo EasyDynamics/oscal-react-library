@@ -383,6 +383,7 @@ export function OSCALCatalogLoader(props) {
           oscalObjectType.restPath
         );
       }}
+      restPath={oscalObjectType.restPath}
     />
   );
   return (
@@ -431,6 +432,7 @@ export function OSCALSSPLoader(props) {
           oscalObjectType.restPath
         );
       }}
+      restPath={oscalObjectType.restPath}
     />
   );
   return (
@@ -478,6 +480,7 @@ export function OSCALComponentLoader(props) {
           oscalObjectType.restPath
         );
       }}
+      restPath={oscalObjectType.restPath}
     />
   );
   return (
@@ -525,6 +528,7 @@ export function OSCALProfileLoader(props) {
           oscalObjectType.restPath
         );
       }}
+      restPath={oscalObjectType.restPath}
     />
   );
   return (

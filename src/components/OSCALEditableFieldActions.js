@@ -25,7 +25,7 @@ export default function OSCALEditableFieldActions(props) {
               props.editedField,
               props.reference.current.value,
               props.restMethod,
-              props.restUrlPath
+              props.restPath
             );
           } else {
             props.onFieldSave();

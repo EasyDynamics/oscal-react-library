@@ -67,6 +67,7 @@ export default function OSCALSsp(props) {
         modifications={ssp.modifications}
         onFieldSave={props.onFieldSave}
         restData={restData}
+        restPath={props.restPath}
       />
     );
   }
@@ -78,6 +79,7 @@ export default function OSCALSsp(props) {
         isEditable={props.isEditable}
         onFieldSave={props.onFieldSave}
         restData={restData}
+        restPath={props.restPath}
       />
       <OSCALProfileCatalogInheritance
         inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}
