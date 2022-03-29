@@ -11,6 +11,13 @@ on:
     paths: ["package-lock.json"]
 
 jobs:
+  debug:
+    runs-on: ubuntu-latest
+    name: Debug -- Dump Event
+    steps:
+      - name: Dump GitHub event
+        run: |
+          echo "${{ toJSON(github.event) }}"
   update:
     # If the pull request was closed then nothing needs to be done
     if: github.event.pull_request_target.merged == true
