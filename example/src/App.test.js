@@ -4,14 +4,14 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "./App";
 
-test("renders menu navigation", () => {
+test("renders menu navigation", async () => {
   render(
     <MemoryRouter>
       <App />
     </MemoryRouter>
   );
 
-  userEvent.click(screen.getByRole("button", { name: /menu/i }));
+  await userEvent.click(screen.getByRole("button", { name: /menu/i }));
   const menuCVElement = screen.getByRole("menuitem", {
     name: /Catalog Viewer/i,
   });
