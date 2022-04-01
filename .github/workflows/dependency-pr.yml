@@ -17,10 +17,15 @@ jobs:
     steps:
       - name: Dump GitHub event
         run: |
-          echo "${{ toJSON(github.event) }}"
+          echo "$EVENT_CONTEXT"
+        env:
+          EVENT_CONTEXT: "${{ toJSON(github.event) }}"
   update:
-    # If the pull request was closed then nothing needs to be done
-    if: github.event.pull_request_target.merged == true
+    # If the pull request was closed then nothing needs to be done. The github docs suggest
+    # that the event key is `pull_request_target` but that's not actually a key on the events.
+    # Dumping the event has shown that the `merged` attribute is on the `pull_request` object
+    # (which _is_ on the event object).
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     name: Synchronize version
     steps:
