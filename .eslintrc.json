@@ -3,7 +3,7 @@
         "browser": true,
         "es2021": true
     },
-    "parser": "babel-eslint",
+    "parser": "@babel/eslint-parser",
     "extends": [
         "plugin:react/recommended",
         "plugin:json/recommended",
@@ -15,7 +15,8 @@
             "jsx": true
         },
         "ecmaVersion": 12,
-        "sourceType": "module"
+        "sourceType": "module",
+        "requireConfigFile": false
     },
     "plugins": [
         "react",
