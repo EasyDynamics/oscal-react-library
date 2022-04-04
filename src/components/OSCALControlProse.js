@@ -293,15 +293,11 @@ export function OSCALReplacedProseWithParameterLabel(props) {
             return getTextSegment(segment, index.toString());
           }
 
-          return (
-            <Typography display="inline" variant="body2">
-              {getParameterLabelSegment(
-                props.parameters,
-                segment,
-                props.modificationSetParameters,
-                index.toString()
-              )}
-            </Typography>
+          return getParameterLabelSegment(
+            props.parameters,
+            segment,
+            props.modificationSetParameters,
+            index.toString()
           );
         })}
       {props.modificationDisplay}
@@ -401,19 +397,12 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
             return getTextSegment(segment, index.toString());
           }
 
-          return (
-            <Typography display="inline" variant="body2">
-              {getParameterValueSegment(
-                statementByComponent,
-                getImplReqSetParameters(
-                  props.implReqStatements,
-                  props.componentId
-                ),
-                segment,
-                props.modificationSetParameters,
-                index.toString()
-              )}
-            </Typography>
+          return getParameterValueSegment(
+            statementByComponent,
+            getImplReqSetParameters(props.implReqStatements, props.componentId),
+            segment,
+            props.modificationSetParameters,
+            index.toString()
           );
         })}
       {props.modificationDisplay}
