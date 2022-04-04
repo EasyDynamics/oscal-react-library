@@ -1,43 +1,35 @@
 ---
-name: Auto-update example app after Dependabot
+name: Update example app dependencies
 
 on:
-  # Because we so heavily reference the pull request number within the workflow,
-  # it is preferable to use the pull_request_target. This will run after every
-  # pull request merged to develop that touches the main package-lock.json
-  pull_request_target:
-    types: [closed]
-    branches: [develop]
-    paths: ["package-lock.json"]
+  # Pull requests that are created becaue of a GitHub Actions workflow execution,
+  # especially for `pull_request*` events, do not trigger workflow executions when
+  # the pull request is opened. While it'd be preferable to just perform this
+  # synchronization when a pull request is merged, instead, we have to use a
+  # schedule trigger, which seems to be exempt from this
+  # workflows-can't-trigger-workflows limitation.
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch:
 
 jobs:
-  debug:
-    runs-on: ubuntu-latest
-    name: Debug -- Dump Event
-    steps:
-      - name: Dump GitHub event
-        run: |
-          echo "$EVENT_CONTEXT"
-        env:
-          EVENT_CONTEXT: "${{ toJSON(github.event) }}"
   update:
-    # If the pull request was closed then nothing needs to be done. The github docs suggest
-    # that the event key is `pull_request_target` but that's not actually a key on the events.
-    # Dumping the event has shown that the `merged` attribute is on the `pull_request` object
-    # (which _is_ on the event object).
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     name: Synchronize version
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
+          # Because we are going to be committing and creating branches, we will need the
+          # entire history of the repository.
           fetch-depth: 0
           ref: develop
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version: 14
+          # The specific version of Node isn't especially critical since we are just
+          # modifying the lock files.
+          node-version: "lts/*"
       - name: Globally update npm
         run: npm install -g npm@latest
       - name: Install library dependencies
@@ -45,21 +37,26 @@ jobs:
       - name: Update example application dependencies
         run: npm install
         working-directory: example
+      # It may be possible to run some sort of script with actions/github-script to provide
+      # more specific references to pull requests or commits that modified the package-lock.json
+      # file but that's unlikely to be especially useful information during the review.
       - name: Commit back changes to example app
         uses: peter-evans/create-pull-request@v4
         with:
           commit-message: >-
             Synchronize OSCAL Viewer example app depenencies
-          title: Synchronize example app `package-lock.json` (#${{ github.event.pull_request.number }})
-          body: |
-            Pull request #${{ github.event.pull_request.number }} which updated some dependencies in
-            `/package-lock.json` was recently merged. This synchronizes those same updates back into
-            the `example/package-lock.json` file.
-          branch: automation/update-dependencies/${{ github.event.pull_request.number }}
+          title: Synchronize example app `package-lock.json`
+          body: >-
+            This synchronizes the dependency versions from `package-lock.json` to
+            `example/package-lock.json`. This pull request will continue to be
+            updated daily until it has been merged.
+          branch: automation/update-dependencies/example-app
           delete-branch: true
           base: develop
           committer: Easy Dynamics Automation <noreply@easydynamics.com>
           author: Easy Dynamics Automation <noreply@easydynamics.com>
+          # Ignore any changes files outside of the example app's package
+          # list and lock files
           add-paths: |
             example/package.json
             example/package-lock.json
