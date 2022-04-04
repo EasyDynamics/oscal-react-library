@@ -31,7 +31,10 @@
     "@testing-library/user-event": "file:../node_modules/@testing-library/user-event"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": [
     ">0.2%",
