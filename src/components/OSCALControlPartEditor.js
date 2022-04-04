@@ -4,6 +4,7 @@ import Popover from "@material-ui/core/Popover";
 import { Grid, TextField } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import { v4 as uuidv4 } from "uuid";
+import { Autocomplete } from "@material-ui/lab";
 import OSCALEditableFieldActions from "./OSCALEditableFieldActions";
 import { deepClone, restMethods } from "./oscal-utils/OSCALUtils";
 
@@ -148,6 +149,8 @@ export default function OSCALControlPartEditor(props) {
   const classes = useStyles();
   const implementationReference = useRef("Reference to control implementation");
   const descriptionReference = useRef("Reference to control description");
+  const setParameters =
+    props.statementByComponent?.["set-parameters"]?.[0]?.values || [];
 
   return (
     <Popover
@@ -173,17 +176,22 @@ export default function OSCALControlPartEditor(props) {
                 <Typography>Parameter Values: </Typography>
               </Grid>
               <Grid item xs={9}>
-                <TextField
+                <Autocomplete
+                  defaultValue={setParameters}
+                  freeSolo
                   fullWidth
-                  defaultValue={
-                    props.statementByComponent?.[
-                      "set-parameters"
-                    ]?.[0]?.values.toString() || "Enter Implementation"
-                  }
-                  inputProps={{
-                    "data-testid": "Popover Implementation TextField",
-                  }}
-                  inputRef={implementationReference}
+                  multiple
+                  options={setParameters}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      inputProps={{
+                        "data-testid": "Popover Implementation Autocomplete TextField",
+                      }}
+                      label="Enter Parameter Values"
+                      inputRef={implementationReference}
+                    />
+                  )}
                 />
               </Grid>
             </>
@@ -196,14 +204,13 @@ export default function OSCALControlPartEditor(props) {
           <Grid item xs={9}>
             <TextField
               fullWidth
+              label="Enter Description"
               multiline
               inputProps={{
                 "data-testid": "Popover Description TextField",
               }}
               inputRef={descriptionReference}
-              defaultValue={
-                props.statementByComponent?.description || "Enter Description"
-              }
+              defaultValue={props.statementByComponent?.description}
             />
           </Grid>
         </Grid>

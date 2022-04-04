@@ -31,7 +31,7 @@ function testOSCALControlPartEditor(parentElementName, renderer) {
     expect(descriptionTextField).toBeVisible();
 
     const implementationTextField = screen.getByTestId(
-      "Popover Implementation TextField"
+      "Popover Implementation Autocomplete TextField"
     );
     expect(implementationTextField).toBeVisible();
   });
