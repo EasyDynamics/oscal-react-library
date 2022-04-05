@@ -153,3 +153,62 @@ export function performRestRequest(
       (err) => onError(err)
     );
 };
+
+/**
+ * Creates and performs the REST request for updating an SSP control implementation
+ * implemented requirement statement by compontent from the given data.
+ *
+ * @param partialRootRestData the partial root SSP object
+ * @param implementedRequirement the existing implemented requirement object
+ * @param statementId the id of the statement to be updated
+ * @param componentId the id of the by-component to be updated
+ * @param descriptionReference reference to the text field input containing the new description for the control implementation
+ * @param implementationSetParameters an array of the new set-parameters
+ * @param onPreRestRequest function called just before making the REST request
+ * @param onSuccess function called on a successful REST request with the result of the request as an argument
+ * @param onError function called on error with the error as an argument
+ */
+ export function updateSspControlImplementationImplementedRequirementStatementByComponent(
+  partialRootRestData,
+  implementedRequirement,
+  statementId,
+  componentId,
+  descriptionReference,
+  implementationSetParameters,
+  onPreRestRequest,
+  onSuccess,
+  onError
+) {
+  const partialRestImplementedRequirement = deepClone(implementedRequirement);
+
+  // Find our statementByComponent and update the description
+  const statementByComponent = partialRestImplementedRequirement.statements
+    .find((element) => element["statement-id"] === statementId)
+    ["by-components"].find(
+      (element) => element["component-uuid"] === componentId
+    );
+  statementByComponent.description = descriptionReference.current.value;
+
+  // Set each implementation parameter
+  if (implementationSetParameters) {
+    if (!statementByComponent["set-parameters"]) {
+      statementByComponent["set-parameters"] = [];
+    }
+    implementationSetParameters.forEach(
+      element => statementByComponent["set-parameters"].push(element)
+    );
+  }
+
+  const rootUuid = partialRootRestData[oscalObjectTypes.ssp.jsonRootName].uuid;
+  const rootRestPath = `${oscalObjectTypes.ssp.restPath}/${rootUuid}`;
+  const requestUrl = `${rootRestPath}/control-implementation/implemented-requirements/${implementedRequirement.uuid}`;
+
+  performRestRequest(
+    partialRestImplementedRequirement,
+    restMethods.PUT,
+    requestUrl,
+    onPreRestRequest,
+    onSuccess,
+    onError
+  );
+}

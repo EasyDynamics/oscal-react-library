@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import { v4 as uuidv4 } from "uuid";
 import { Autocomplete } from "@material-ui/lab";
 import OSCALEditableFieldActions from "./OSCALEditableFieldActions";
-import { deepClone, restMethods } from "./oscal-utils/OSCALUtils";
+import { deepClone, restMethods } from "./oscal-utils/OSCALRestUtils";
 
 const useStyles = makeStyles((theme) => ({
   ControlProseEditor: {
