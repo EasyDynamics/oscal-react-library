@@ -378,7 +378,6 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
         partialRestData={props.partialRestData}
         statementId={props.statementId}
         statementUuid={props.statementUuid}
-        restPath={props.restPath}
       />
     );
   }

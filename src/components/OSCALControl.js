@@ -94,7 +94,6 @@ export default function OSCALControl(props) {
               isEditable={props.isEditable}
               onFieldSave={props.onFieldSave}
               partialRestData={props.partialRestData}
-              restPath={props.restPath}
             />
           ))}
         {props.control.controls &&
@@ -111,7 +110,6 @@ export default function OSCALControl(props) {
               isEditable={props.isEditable}
               onFieldSave={props.onFieldSave}
               partialRestData={props.partialRestData}
-              restPath={props.restPath}
             />
           ))}
       </CardContent>
