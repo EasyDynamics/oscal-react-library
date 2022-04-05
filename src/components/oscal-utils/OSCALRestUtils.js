@@ -109,19 +109,16 @@ export function buildRestRequestUrl(
 }
 
 /**
- * Sends a REST request of type restMethod to a backend service and updates the viewer if
- * the request is successful.
+ * Sends a REST request of type restMethod to a backend service.
  *
- * @param appendToLastFieldInPath boolean indicating if the updated value should be appended to an array or replace an existing value
- * @param partialRestData data that will be passed into the body of the REST request, may not initially contain the updates
- * @param editedFieldJsonPath path to the field that is being updated
- * @param newValue updated value for the edited field
+ * @param restJsonPayload data that will be passed into the body of the REST request
  * @param httpMethod the HTTP request type
- * @param restUrlPath path defining where in the file the modifications are made
- * @param jsonRootName root OSCAL object, as it appears on the corresponding object file, of the JSON file
- * @param restPath main url path for access the OSCAL files in REST mode
+ * @param requestUrl the REST URL to send the request to
+ * @param onPreRestRequest function called just before making the REST request
+ * @param onSuccess function called on a successful REST request with the result of the request as an argument
+ * @param onError function called on error with the error as an argument
  */
-export function handleRestRequest(
+export function performRestRequest(
   restJsonPayload,
   httpMethod,
   requestUrl,

@@ -4,7 +4,7 @@ import Split from "react-split";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, Fab } from "@material-ui/core";
 import CodeIcon from "@material-ui/icons/Code";
-import { populatePartialRestData, buildRestRequestUrl, restMethods, oscalObjectTypes } from "./oscal-utils/OSCALRestUtils";
+import { populatePartialRestData, buildRestRequestUrl, performRestRequest, restMethods, oscalObjectTypes } from "./oscal-utils/OSCALRestUtils";
 import ErrorBoundary, { BasicError } from "./ErrorBoundary";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
@@ -104,7 +104,7 @@ export default function OSCALLoader(props) {
       );
     }
 
-    handleRestRequest(
+    performRestRequest(
       partialRestData,
       restMethods.PATCH,
       requestUrl,
@@ -160,7 +160,7 @@ export default function OSCALLoader(props) {
   };
 
   const handleRestPut = (jsonString) => {
-    handleRestRequest(
+    performRestRequest(
       JSON.parse(jsonString),
       restMethods.PUT,
       oscalUrl,
@@ -249,8 +249,7 @@ export default function OSCALLoader(props) {
               isRestMode,
               oscalData,
               oscalUrl,
-              onResolutionComplete,
-              handleRestRequest
+              onResolutionComplete
             )}
           </Box>
         </Split>
@@ -261,8 +260,7 @@ export default function OSCALLoader(props) {
           isRestMode,
           oscalData,
           oscalUrl,
-          onResolutionComplete,
-          handleRestRequest
+          onResolutionComplete
         )}
       </>
     );
@@ -300,8 +298,7 @@ export function OSCALCatalogLoader(props) {
     isRestMode,
     oscalData,
     oscalUrl,
-    onResolutionComplete,
-    handleRestRequest
+    onResolutionComplete
   ) => (
     <OSCALCatalog
       catalog={oscalData[oscalObjectType.jsonRootName]}
@@ -344,8 +341,7 @@ export function OSCALSSPLoader(props) {
     isRestMode,
     oscalData,
     oscalUrl,
-    onResolutionComplete,
-    handleRestRequest
+    onResolutionComplete
   ) => (
     <OSCALSsp
       system-security-plan={oscalData[oscalObjectType.jsonRootName]}
@@ -389,8 +385,7 @@ export function OSCALComponentLoader(props) {
     isRestMode,
     oscalData,
     oscalUrl,
-    onResolutionComplete,
-    handleRestRequest
+    onResolutionComplete
   ) => (
     <OSCALComponentDefinition
       componentDefinition={oscalData[oscalObjectType.jsonRootName]}
@@ -433,8 +428,7 @@ export function OSCALProfileLoader(props) {
     isRestMode,
     oscalData,
     oscalUrl,
-    onResolutionComplete,
-    handleRestRequest
+    onResolutionComplete
   ) => (
     <OSCALProfile
       profile={oscalData[oscalObjectType.jsonRootName]}
