@@ -249,7 +249,8 @@ export default function OSCALLoader(props) {
               isRestMode,
               oscalData,
               oscalUrl,
-              onResolutionComplete
+              onResolutionComplete,
+              handleFieldSave
             )}
           </Box>
         </Split>
@@ -260,7 +261,8 @@ export default function OSCALLoader(props) {
           isRestMode,
           oscalData,
           oscalUrl,
-          onResolutionComplete
+          onResolutionComplete,
+          handleFieldSave
         )}
       </>
     );
@@ -298,7 +300,8 @@ export function OSCALCatalogLoader(props) {
     isRestMode,
     oscalData,
     oscalUrl,
-    onResolutionComplete
+    onResolutionComplete,
+    handleFieldSave
   ) => (
     <OSCALCatalog
       catalog={oscalData[oscalObjectType.jsonRootName]}
@@ -341,7 +344,8 @@ export function OSCALSSPLoader(props) {
     isRestMode,
     oscalData,
     oscalUrl,
-    onResolutionComplete
+    onResolutionComplete,
+    handleFieldSave
   ) => (
     <OSCALSsp
       system-security-plan={oscalData[oscalObjectType.jsonRootName]}
@@ -385,7 +389,8 @@ export function OSCALComponentLoader(props) {
     isRestMode,
     oscalData,
     oscalUrl,
-    onResolutionComplete
+    onResolutionComplete,
+    handleFieldSave
   ) => (
     <OSCALComponentDefinition
       componentDefinition={oscalData[oscalObjectType.jsonRootName]}
@@ -428,7 +433,8 @@ export function OSCALProfileLoader(props) {
     isRestMode,
     oscalData,
     oscalUrl,
-    onResolutionComplete
+    onResolutionComplete,
+    handleFieldSave
   ) => (
     <OSCALProfile
       profile={oscalData[oscalObjectType.jsonRootName]}
