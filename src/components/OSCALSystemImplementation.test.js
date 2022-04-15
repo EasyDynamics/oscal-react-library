@@ -33,7 +33,7 @@ export default function testOSCALSystemImplementation(
 
   test(`${parentElementName} shows component description`, async () => {
     renderer();
-    userEvent.hover(screen.getByText("Example Component"));
+    await userEvent.hover(screen.getByText("Example Component"));
     expect(
       await screen.findByText("An example component.")
     ).toBeInTheDocument();
