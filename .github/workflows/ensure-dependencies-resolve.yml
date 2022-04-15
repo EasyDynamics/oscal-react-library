@@ -1,0 +1,52 @@
+---
+# This workflow ensures that the dependencies within `package.json` can
+# actually be resolved. It runs on any PR that modifies `package.json` in the
+# root or `example/` directories, as well as any PR that modifies this file.
+# It also runs on pushes to `develop` and `main` that touch the same.
+name: Ensure dependencies resolve
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+    paths:
+      - "package.json"
+      - "example/package.json"
+      - ".github/workflows/ensure-dependencies-resolve.yml"
+  pull_request:
+    paths:
+      - "package.json"
+      - "example/package.json"
+      - ".github/workflows/ensure-dependencies-resolve.yml"
+
+jobs:
+  cleanInstall:
+    name: Install without package-lock.json
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+          cache: npm
+      - name: Globally update npm
+        run: npm install -g npm@latest
+      - name: Clear `package-lock.json` and `node_modules`
+        run: |
+          rm -rf package-lock.json example/package-lock.json
+      - name: Install dependencies (root)
+        run: |
+          npm install
+      - name: Install dependencies (example)
+        run: |
+          npm install
+        working-directory: example/
+      - name: Ensure npm CI now works
+        run:
+          npm ci && cd example && npm ci
+      
