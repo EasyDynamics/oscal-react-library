@@ -7,6 +7,9 @@ on:
       - main
       - develop
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     name: Lint the code base

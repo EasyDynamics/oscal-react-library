@@ -10,6 +10,8 @@ concurrency: gh-pages
 jobs:
   publish:
     name: Publish Storybook to GitHub Pages
+    permissions:
+      contents: write
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
