@@ -51,6 +51,16 @@ jobs:
           npm install
           cd ..
 
+      - name: Login as the automation app
+        # This Action generates a token from the GitHub App and provides it as
+        # an output. It _does_ register that token as a secret so that it will be
+        # filtered from log output automatically
+        id: generate-token
+        uses: tibdex/github-app-token@c95b1c441a4dacd6d24f231b9697a5f9a04c607e
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: Create update pull request
         uses: peter-evans/create-pull-request@v4
         with:
@@ -64,4 +74,4 @@ jobs:
           base: develop
           committer: Easy Dynamics Automation <noreply@easydynamics.com>
           author: Easy Dynamics Automation <noreply@easydynamics.com>
-          token: "${{ secrets.DEPENDENCY_PR_TOKEN }}"
+          token: "${{ steps.generate-token.outputs.token }}"
