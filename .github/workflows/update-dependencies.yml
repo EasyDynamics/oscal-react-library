@@ -56,7 +56,7 @@ jobs:
         # an output. It _does_ register that token as a secret so that it will be
         # filtered from log output automatically
         id: generate-token
-        uses: tibdex/github-app-token@c95b1c441a4dacd6d24f231b9697a5f9a04c607e
+        uses: tibdex/github-app-token@586e1a624db6a5a4ac2c53daeeded60c5e3d50fe
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.APP_PRIVATE_KEY }}
