@@ -1,7 +1,7 @@
 /**
  * enum describing the available REST methods
  */
- export const restMethods = {
+export const restMethods = {
   DELETE: "DELETE",
   GET: "GET",
   PATCH: "PATCH",
@@ -92,14 +92,12 @@ export function populatePartialRestData(
   }
 }
 
-export function buildRestRequestUrl(
-  partialRestData,
-  restUrlPath,
-  oscalObjectType
-) {
+export function buildRequestUrl(partialRestData, restUrlPath, oscalObjectType) {
   let url;
   if (!restUrlPath || restUrlPath === "") {
-    url = `${process.env.REACT_APP_REST_BASE_URL}/${oscalObjectType.restPath}/${partialRestData[oscalObjectType.jsonRootName].uuid}`;
+    url = `${process.env.REACT_APP_REST_BASE_URL}/${oscalObjectType.restPath}/${
+      partialRestData[oscalObjectType.jsonRootName].uuid
+    }`;
   } else if (restUrlPath.startsWith("http", 0)) {
     url = restUrlPath;
   } else {
@@ -118,7 +116,7 @@ export function buildRestRequestUrl(
  * @param onSuccess function called on a successful REST request with the result of the request as an argument
  * @param onError function called on error with the error as an argument
  */
-export function performRestRequest(
+export function performRequest(
   restJsonPayload,
   httpMethod,
   requestUrl,
@@ -126,7 +124,6 @@ export function performRestRequest(
   onSuccess,
   onError
 ) {
-
   onPreRestRequest();
 
   const requestInfo = {
@@ -152,7 +149,7 @@ export function performRestRequest(
       },
       (err) => onError(err)
     );
-};
+}
 
 /**
  * Creates and performs the REST request for updating an SSP control implementation
@@ -162,18 +159,18 @@ export function performRestRequest(
  * @param implementedRequirement the existing implemented requirement object
  * @param statementId the id of the statement to be updated
  * @param componentId the id of the by-component to be updated
- * @param descriptionReference reference to the text field input containing the new description for the control implementation
+ * @param description the new description value for the control implementation
  * @param implementationSetParameters an array of the new set-parameters
  * @param onPreRestRequest function called just before making the REST request
  * @param onSuccess function called on a successful REST request with the result of the request as an argument
  * @param onError function called on error with the error as an argument
  */
- export function updateSspControlImplementationImplementedRequirementStatementByComponent(
+export function updateSspControlImplementationImplementedRequirementStatementByComponent(
   partialRootRestData,
   implementedRequirement,
   statementId,
   componentId,
-  descriptionReference,
+  description,
   implementationSetParameters,
   onPreRestRequest,
   onSuccess,
@@ -187,15 +184,15 @@ export function performRestRequest(
     ["by-components"].find(
       (element) => element["component-uuid"] === componentId
     );
-  statementByComponent.description = descriptionReference.current.value;
+  statementByComponent.description = description;
 
   // Set each implementation parameter
   if (implementationSetParameters) {
     if (!statementByComponent["set-parameters"]) {
       statementByComponent["set-parameters"] = [];
     }
-    implementationSetParameters.forEach(
-      element => statementByComponent["set-parameters"].push(element)
+    implementationSetParameters.forEach((element) =>
+      statementByComponent["set-parameters"].push(element)
     );
   }
 
@@ -203,7 +200,7 @@ export function performRestRequest(
   const rootRestPath = `${oscalObjectTypes.ssp.restPath}/${rootUuid}`;
   const requestUrl = `${rootRestPath}/control-implementation/implemented-requirements/${implementedRequirement.uuid}`;
 
-  performRestRequest(
+  performRequest(
     partialRestImplementedRequirement,
     restMethods.PUT,
     requestUrl,

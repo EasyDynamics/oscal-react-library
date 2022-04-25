@@ -4,7 +4,7 @@ import Split from "react-split";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, Fab } from "@material-ui/core";
 import CodeIcon from "@material-ui/icons/Code";
-import { populatePartialRestData, buildRestRequestUrl, performRestRequest, restMethods, oscalObjectTypes } from "./oscal-utils/OSCALRestUtils";
+import * as restUtils from "./oscal-utils/OSCALRestUtils";
 import ErrorBoundary, { BasicError } from "./ErrorBoundary";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
@@ -93,10 +93,14 @@ export default function OSCALLoader(props) {
     restUrlPath,
     oscalObjectType
   ) => {
-    const requestUrl = buildRestRequestUrl(partialRestData, restUrlPath, oscalObjectType);
+    const requestUrl = restUtils.buildRequestUrl(
+      partialRestData,
+      restUrlPath,
+      oscalObjectType
+    );
 
     if (newValue) {
-      populatePartialRestData(
+      restUtils.populatePartialRestData(
         partialRestData,
         editedFieldJsonPath,
         newValue,
@@ -104,9 +108,9 @@ export default function OSCALLoader(props) {
       );
     }
 
-    performRestRequest(
+    restUtils.performRequest(
       partialRestData,
-      restMethods.PATCH,
+      restUtils.restMethods.PATCH,
       requestUrl,
       () => {
         setIsLoaded(false);
@@ -160,9 +164,9 @@ export default function OSCALLoader(props) {
   };
 
   const handleRestPut = (jsonString) => {
-    performRestRequest(
+    restUtils.performRequest(
       JSON.parse(jsonString),
-      restMethods.PUT,
+      restUtils.restMethods.PUT,
       oscalUrl,
       () => {
         setIsLoaded(false);
@@ -295,7 +299,7 @@ export function getRequestedUrl() {
 }
 
 export function OSCALCatalogLoader(props) {
-  const oscalObjectType = oscalObjectTypes.catalog;
+  const oscalObjectType = restUtils.oscalObjectTypes.catalog;
   const renderer = (
     isRestMode,
     oscalData,
@@ -339,7 +343,7 @@ export function OSCALCatalogLoader(props) {
 }
 
 export function OSCALSSPLoader(props) {
-  const oscalObjectType = oscalObjectTypes.ssp;
+  const oscalObjectType = restUtils.oscalObjectTypes.ssp;
   const renderer = (
     isRestMode,
     oscalData,
@@ -384,7 +388,7 @@ export function OSCALSSPLoader(props) {
 }
 
 export function OSCALComponentLoader(props) {
-  const oscalObjectType = oscalObjectTypes.component;
+  const oscalObjectType = restUtils.oscalObjectTypes.component;
   const renderer = (
     isRestMode,
     oscalData,
@@ -428,7 +432,7 @@ export function OSCALComponentLoader(props) {
 }
 
 export function OSCALProfileLoader(props) {
-  const oscalObjectType = oscalObjectTypes.profile;
+  const oscalObjectType = restUtils.oscalObjectTypes.profile;
   const renderer = (
     isRestMode,
     oscalData,
