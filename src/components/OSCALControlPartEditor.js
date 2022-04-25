@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import { v4 as uuidv4 } from "uuid";
 import { Autocomplete } from "@material-ui/lab";
 import OSCALEditableFieldActions from "./OSCALEditableFieldActions";
-import { deepClone, restMethods } from "./oscal-utils/OSCALRestUtils";
+import * as restUtils from "./oscal-utils/OSCALRestUtils";
 
 const useStyles = makeStyles((theme) => ({
   ControlProseEditor: {
@@ -31,14 +31,20 @@ export function onFieldSaveParameterLabel(
   implementationReference,
   paramId
 ) {
-  const partialRestData = deepClone(props.implementedRequirement);
+  const partialRestData = restUtils.deepClone(props.implementedRequirement);
   const statementExists =
     partialRestData?.statements?.find(
       (element) => element["statement-id"] === props.statementId
     ) || null;
   const rootOscalObjectName = Object.keys(props.partialRestData)[0];
-  const rootUuid = props.partialRestData[rootOscalObjectName].uuid;
-  const restUrl = `${props.restPath}/${rootUuid}/control-implementation/implemented-requirements/${props.implementedRequirement.uuid}`;
+  const oscalObjectType =
+    restUtils.getOscalObjectTypeFromJsonRootName(rootOscalObjectName);
+  const baseRestUrl = restUtils.buildRequestUrl(
+    props.partialRestData,
+    null,
+    oscalObjectType
+  );
+  const restUrl = `${baseRestUrl}/control-implementation/implemented-requirements/${props.implementedRequirement.uuid}`;
   const statement = statementExists || {
     "statement-id": props.statementId,
     uuid: uuidv4(),
@@ -83,7 +89,7 @@ export function onFieldSaveParameterLabel(
     restData,
     editedField,
     null,
-    restMethods.PUT,
+    restUtils.restMethods.PUT,
     restUrl
   );
 }
@@ -103,7 +109,7 @@ export function onFieldSaveByComponentParameterValue(
   descriptionReference,
   implementationReference
 ) {
-  const partialRestData = deepClone(props.implementedRequirement);
+  const partialRestData = restUtils.deepClone(props.implementedRequirement);
   const byComponent = partialRestData.statements
     .find((element) => element["statement-id"] === props.statementId)
     ["by-components"].find(
@@ -112,9 +118,14 @@ export function onFieldSaveByComponentParameterValue(
   byComponent.description = descriptionReference.current.value;
 
   const rootOscalObjectName = Object.keys(props.partialRestData)[0];
-  const rootUuid = props.partialRestData[rootOscalObjectName].uuid;
-  const rootRestPath = `${props.restPath}/${rootUuid}`;
-  const restUrl = `${rootRestPath}/control-implementation/implemented-requirements/${props.implementedRequirement.uuid}`;
+  const oscalObjectType =
+    restUtils.getOscalObjectTypeFromJsonRootName(rootOscalObjectName);
+  const baseRestUrl = restUtils.buildRequestUrl(
+    props.partialRestData,
+    null,
+    oscalObjectType
+  );
+  const restUrl = `${baseRestUrl}/control-implementation/implemented-requirements/${props.implementedRequirement.uuid}`;
   const editedField = [
     "statements",
     `statement-id[${props.statementId}]`,
@@ -140,7 +151,7 @@ export function onFieldSaveByComponentParameterValue(
     partialRestData,
     editedField,
     null,
-    restMethods.PUT,
+    restUtils.restMethods.PUT,
     restUrl
   );
 }

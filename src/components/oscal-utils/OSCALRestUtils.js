@@ -44,6 +44,12 @@ export const oscalObjectTypes = {
   },
 };
 
+export function getOscalObjectTypeFromJsonRootName(jsonRootName) {
+  return Object.keys(oscalObjectTypes).find(
+    (element) => element.jsonRootName === jsonRootName
+  );
+}
+
 export function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
