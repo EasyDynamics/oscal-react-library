@@ -322,11 +322,11 @@ export function OSCALReplacedProseWithParameterLabel(props) {
             onCancel={() => {
               setAnchorEl(null);
             }}
-            onFieldSave={(descriptionReference, implementationReference) => {
+            onFieldSave={(descriptionReference, implementation) => {
               onFieldSaveParameterLabel(
                 props,
                 descriptionReference,
-                implementationReference,
+                implementation,
                 paramId
               );
             }}

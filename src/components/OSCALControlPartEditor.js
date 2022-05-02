@@ -22,13 +22,13 @@ const useStyles = makeStyles((theme) => ({
  *
  * @param props object passed to the parent component containing necessary data to create and update the component
  * @param descriptionReference reference to the text field input containing the new description for the control implementation
- * @param implementationReference reference to the text field input containing the new implementation values for the control implementation
+ * @param setParameterValues the set-parameter values for the control implementation statement
  * @param paramId the set-parameter id
  */
 export function onFieldSaveParameterLabel(
   props,
   descriptionReference,
-  implementationReference,
+  setParameterValues,
   paramId
 ) {
   const partialRestData = restUtils.deepClone(props.implementedRequirement);
@@ -69,7 +69,7 @@ export function onFieldSaveParameterLabel(
     newByComponent["set-parameters"] = [
       {
         "param-id": paramId,
-        values: [implementationReference.current.value],
+        values: setParameterValues,
       },
     ];
     editedField.push("set-parameters", `param-id[${paramId}]`, "values");
@@ -101,13 +101,12 @@ export function onFieldSaveParameterLabel(
  *
  * @param props object passed to the parent component containing necessary data to create and update the component
  * @param descriptionReference reference to the text field input containing the new description for the control implementation
- * @param implementationReference reference to the text field input containing the new implementation values for the control implementation
- * @param rootUuid uuid of the root
+ * @param setParameterValues the set-parameter values for the control implementation statement
  */
 export function onFieldSaveByComponentParameterValue(
   props,
   descriptionReference,
-  implementationReference
+  setParameterValues
 ) {
   const partialRestData = restUtils.deepClone(props.implementedRequirement);
   const byComponent = partialRestData.statements
@@ -140,7 +139,7 @@ export function onFieldSaveByComponentParameterValue(
     const setParameter = byComponent["set-parameters"].find(
       (element) => element["param-id"] === paramId
     );
-    setParameter.values = [implementationReference.current.value];
+    setParameter.values = setParameterValues;
     editedField.push("set-parameters", `param-id[${paramId}]`, "values");
   } else {
     editedField.push("description");
@@ -158,10 +157,10 @@ export function onFieldSaveByComponentParameterValue(
 
 export default function OSCALControlPartEditor(props) {
   const classes = useStyles();
-  const implementationReference = useRef("Reference to control implementation");
   const descriptionReference = useRef("Reference to control description");
   const setParameters =
     props.statementByComponent?.["set-parameters"]?.[0]?.values || [];
+  let newSetParameters = setParameters;
 
   return (
     <Popover
@@ -188,21 +187,17 @@ export default function OSCALControlPartEditor(props) {
               </Grid>
               <Grid item xs={9}>
                 <Autocomplete
+                  data-testid="Popover Implementation Autocomplete"
                   defaultValue={setParameters}
                   freeSolo
                   fullWidth
                   multiple
+                  onChange={(event, values) => {
+                    newSetParameters = values;
+                  }}
                   options={setParameters}
                   renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      inputProps={{
-                        "data-testid":
-                          "Popover Implementation Autocomplete TextField",
-                      }}
-                      label="Enter Parameter Values"
-                      inputRef={implementationReference}
-                    />
+                    <TextField {...params} label="Enter Parameter Values" />
                   )}
                 />
               </Grid>
@@ -232,7 +227,7 @@ export default function OSCALControlPartEditor(props) {
             editedFieldPath="statement-statement-id-by-components-component-uuid-description/values"
             onCancel={props.onCancel}
             onFieldSave={() => {
-              props.onFieldSave(descriptionReference, implementationReference);
+              props.onFieldSave(descriptionReference, newSetParameters);
             }}
             update={props.update}
           />
