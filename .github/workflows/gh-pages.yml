@@ -10,6 +10,8 @@ concurrency: gh-pages
 jobs:
   publish:
     name: Publish Storybook to GitHub Pages
+    permissions:
+      contents: write
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
@@ -26,7 +28,7 @@ jobs:
       - name: Build Storybook
         run: npm run build-storybook
       - name: Deploy to Pages
-        uses: JamesIves/github-pages-deploy-action@v4.2.5
+        uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
           branch: storybook-docs
           folder: storybook-static

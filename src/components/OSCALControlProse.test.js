@@ -30,6 +30,7 @@ function testOSCALControlProseParamLabels(parentElementName, renderer) {
     const result = await screen.findByText("< control 1 label >");
     fireEvent.mouseOver(result);
     expect(await screen.findByText("some constraint")).toBeVisible();
+    expect(await screen.findByText("param 3 value")).toBeVisible();
   });
 }
 

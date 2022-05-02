@@ -41,7 +41,7 @@ const useStyles = makeStyles(() => ({
  * @param {String} parameterId
  * @returns the parameter label
  */
-function getParameterLabel(parameters, parameterId) {
+function getParameterLabelText(parameters, parameterId) {
   const parameter = parameters.find(
     (testParameter) => testParameter.id === parameterId
   );
@@ -177,27 +177,54 @@ function getParameterLabelSegment(
   modificationSetParameters,
   key
 ) {
-  const parameterLabel = getParameterLabel(parameters, parameterId);
+  let paramSegment;
+  // First check for set-parameters in the profile/catalog
+  let parameterValueText;
+  if (modificationSetParameters) {
+    // Search for matching parameter id
+    const foundParameterSetting = modificationSetParameters.find(
+      (parameterSetting) => parameterSetting["param-id"] === parameterId
+    );
+    // Check values
+    if (foundParameterSetting?.values) {
+      parameterValueText = foundParameterSetting.values.toString();
+    }
+  }
+  if (parameterValueText) {
+    paramSegment = (
+      <ParamValue component="span" key={`param-value-key-${key}`}>
+        {parameterValueText}
+      </ParamValue>
+    );
+  } else {
+    const parameterLabelText = getParameterLabelText(
+      parameters,
+      parameterId,
+      modificationSetParameters
+    );
+    paramSegment = (
+      <ParamLabel component="span" key={`param-label-key-${key}`}>
+        {parameterLabelText}
+      </ParamLabel>
+    );
+  }
+
   const constraintsDisplay = getConstraintsDisplay(
     modificationSetParameters,
     parameterId
   );
 
   if (!constraintsDisplay) {
-    return (
-      <ParamLabel component="span" key={`param-label-key-${key}`}>
-        {parameterLabel}
-      </ParamLabel>
-    );
+    // This throws an error without fragment wrapper
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    return <>{paramSegment}</>;
   }
   return (
     <SegmentTooltipWrapper
       constraintsDisplay={constraintsDisplay}
       key={`segment-wrapper-key-${key}`}
     >
-      <ParamLabel component="span" key={`param-label-key-${key}`}>
-        {parameterLabel}
-      </ParamLabel>
+      {paramSegment}
     </SegmentTooltipWrapper>
   );
 }
