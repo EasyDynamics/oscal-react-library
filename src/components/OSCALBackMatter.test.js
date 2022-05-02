@@ -30,7 +30,7 @@ export default function testOSCALBackMatter(parentElementName, renderer) {
     const descriptionDisplay = screen.getByTitle(
       "Resource Test Title-description"
     );
-    userEvent.hover(descriptionDisplay);
+    await userEvent.hover(descriptionDisplay);
     expect(
       await screen.findByText("This is a test description for resource")
     ).toBeInTheDocument();

@@ -22,6 +22,10 @@ export const exampleModificationSetParameters = [
       },
     ],
   },
+  {
+    "param-id": "control-1_prm_3",
+    values: ["param 3 value"],
+  },
 ];
 
 export const exampleModificationAlters = [
