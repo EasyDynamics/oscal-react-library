@@ -73,7 +73,6 @@ export default function OSCALControlPart(props) {
             (statement) => statement["statement-id"] === props.part.id
           )?.uuid || null
         }
-        restPath={props.restPath}
       />
     );
   } else {
@@ -97,7 +96,6 @@ export default function OSCALControlPart(props) {
             (statement) => statement["statement-id"] === props.part.id
           )?.uuid || null
         }
-        restPath={props.restPath}
       />
     );
   }
@@ -127,7 +125,6 @@ export default function OSCALControlPart(props) {
             onFieldSave={props.onFieldSave}
             partialRestData={props.partialRestData}
             statementId={props.part.id}
-            restPath={props.restPath}
           />
         ))}
     </div>

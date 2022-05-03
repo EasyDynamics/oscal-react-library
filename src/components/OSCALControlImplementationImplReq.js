@@ -161,7 +161,6 @@ export default function OSCALControlImplementationImplReq(props) {
                 modificationSetParameters={modParams}
                 onFieldSave={props.onFieldSave}
                 partialRestData={props.partialRestData}
-                restPath={props.restPath}
               />
             </TabPanel>
           ))}

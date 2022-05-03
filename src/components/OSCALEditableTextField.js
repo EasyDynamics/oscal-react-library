@@ -40,8 +40,6 @@ function textFieldWithEditableActions(
             onFieldSave={props.onFieldSave}
             partialRestData={props.partialRestData}
             reference={reference}
-            restMethod={props.restMethod}
-            restPath={props.restPath}
           />
         </Grid>
       </>
