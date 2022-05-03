@@ -101,6 +101,9 @@
     "prettier": "^2.6.2",
     "webpack": "^5.72.0"
   },
+  "overrides": {
+    "react-refresh": "0.11.0"
+  },
   "files": [
     "dist"
   ]
