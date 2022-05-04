@@ -4,13 +4,11 @@ import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import Badge from "@material-ui/core/Badge";
 import EditIcon from "@material-ui/icons/Edit";
-import { Grid, IconButton } from "@material-ui/core";
+import SaveIcon from "@material-ui/icons/Save";
+import CancelIcon from "@material-ui/icons/Cancel";
+import { Grid, IconButton, TextField } from "@material-ui/core";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
-import OSCALControlPartEditor, {
-  onFieldSaveByComponentParameterValue,
-  onFieldSaveParameterLabel,
-} from "./OSCALControlPartEditor";
 
 const prosePlaceholderRegexpString = "{{ insert: param, ([0-9a-zA-B-_.]*) }}";
 
@@ -319,7 +317,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
 /**
  * Replaces the parameter placeholders in the given prose with the values
  * from the 'by-component' within the given statementId that matches the given componentId
- * from the given implReqStatements
+ * from the given implementedRequirement
  * @param {Object} props
  * @returns the parameter value component
  */
@@ -332,7 +330,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   }
 
   const statementByComponent = getStatementByComponent(
-    props.implReqStatements,
+    props.implementedRequirement?.statements,
     props.statementId,
     props.componentId
   );
@@ -352,6 +350,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
         <Grid item xs={1}>
           {props.isEditable ? (
             <IconButton
+            size="small"
               onClick={(event) => {
                 setIsEditingStatement(!isEditingStatement);
               }}
@@ -365,7 +364,8 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   }
   const { description } = statementByComponent;
   const implReqSetParameters =
-    getImplReqSetParameters(props.implReqStatements, props.componentId);
+    getImplReqSetParameters(props.implementedRequirement?.statements, props.componentId);
+  const editedImplementationSetParameters = [];
   const proseDisplay = props.prose
     .split(RegExp(prosePlaceholderRegexpString, "g"))
     .map((segment, index) => {
@@ -375,7 +375,8 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
       }
       if (isEditingStatement) {
         // We're currently editing this statement, so build param input
-        let setParameter = implReqSetParameters?.find(
+        // TODO - Populate implementationSetParameters with values from statementByComponent or empties
+        let setParameter = statementByComponent?.["set-parameters"]?.find(
           (element) => element["param-id"] === segment
         );
         if (!setParameter) {
@@ -386,9 +387,12 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
         if (!setParameter.values) {
           setParameter.values = [ null ];
         }
+        editedImplementationSetParameters[segment] = setParameter;
         // TODO - support for more than 1 item in values arrays
         return <TextField
-          label="{segment}"
+          label={segment}
+          variant="outlined"
+          size="small"
           value={setParameter.values[0]}
         />
       } else {
@@ -427,14 +431,12 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
       </Grid>
       {isEditingStatement ? (
         <>
-          <Grid item xs={3}>
-            <Typography>Description: </Typography>
-          </Grid>
-          <Grid item xs={7}>
+          <Grid item xs={10}>
             <TextField
               fullWidth
               label="Description"
               multiline
+              variant="outlined"
               inputProps={{
                 "data-testid": "Statement By Component Description TextField",
               }}
@@ -451,7 +453,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
                   props.statementId,
                   props.componentId,
                   statementByComponent.description,
-                  implReqSetParameters,
+                  editedImplementationSetParameters,
                   _TODO_onPreRestRequest,
                   () => {
                     setIsEditingStatement(false);

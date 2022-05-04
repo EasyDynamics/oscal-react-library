@@ -105,12 +105,6 @@ export default function OSCALControlImplementationImplReq(props) {
     setValue(newValue);
   };
 
-  // Error check implementedRequirement statements. In the case that none
-  // are provided, create an empty list.
-  if (!props.implementedRequirement?.statements) {
-    props.implementedRequirement?.statements = [];
-  }
-
   // Error check modifications
   const modAlters = props.modifications?.alters || null;
   const modParams = props.modifications?.["set-parameters"] || null;
