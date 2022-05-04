@@ -281,8 +281,6 @@ function getParameterValueSegment(
  * @returns the parameter label component
  */
 export function OSCALReplacedProseWithParameterLabel(props) {
-  const [anchorEl, setAnchorEl] = useState(null);
-
   if (!props.prose) {
     return null;
   }
@@ -297,29 +295,15 @@ export function OSCALReplacedProseWithParameterLabel(props) {
     );
   }
 
-  const statement =
-    props.implementedRequirement?.statements?.find(
-      (element) => element["statement-id"] === props.statementId
-    ) || null;
-
-  let labelWithProse = props.prose;
-  if (props.label) {
-    labelWithProse = props.label.concat(` ${props.prose}`);
-  }
-
-  const paramId = props.prose.split(
-    RegExp(prosePlaceholderRegexpString, "g")
-  )[1];
-
   return (
     <Typography className={props.className}>
-      {labelWithProse
+      {props.label}
+      {props.prose
         .split(RegExp(prosePlaceholderRegexpString, "g"))
         .map((segment, index) => {
           if (index % 2 === 0) {
             return getTextSegment(segment, index.toString());
           }
-
           return getParameterLabelSegment(
             props.parameters,
             segment,
@@ -328,41 +312,6 @@ export function OSCALReplacedProseWithParameterLabel(props) {
           );
         })}
       {props.modificationDisplay}
-      {props.label && props.isEditable ? (
-        <IconButton
-          onClick={(event) => {
-            setAnchorEl(event.currentTarget);
-          }}
-        >
-          <EditIcon fontSize="small" />
-        </IconButton>
-      ) : null}
-      {props.isEditable ? (
-        <Grid container>
-          <OSCALControlPartEditor
-            anchorEl={anchorEl}
-            setAnchorEl={setAnchorEl}
-            controlId={props.controlId}
-            isUserDefinedImplementation={props.prose.match(
-              prosePlaceholderRegexpString
-            )}
-            onCancel={() => {
-              setAnchorEl(null);
-            }}
-            onFieldSave={(descriptionReference, implementation) => {
-              onFieldSaveParameterLabel(
-                props,
-                descriptionReference,
-                implementation,
-                paramId
-              );
-            }}
-            statementByComponent={statement}
-            statementId={props.statementId}
-            updatingLabelPlaceholder={paramId}
-          />
-        </Grid>
-      ) : null}
     </Typography>
   );
 }
@@ -376,7 +325,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
  */
 export function OSCALReplacedProseWithByComponentParameterValue(props) {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [isEditingStatement, setIsEditingStatement] = useState(false);
 
   if (!props.prose) {
     return null;
@@ -388,83 +337,143 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     props.componentId
   );
 
-  if (!statementByComponent) {
+  if (!statementByComponent && !isEditingStatement) {
     return (
-      <OSCALReplacedProseWithParameterLabel
-        label={props.label}
-        prose={props.prose}
-        parameters={props.parameters}
-        modificationDisplay={props.modificationDisplay}
-        className={classes.OSCALStatementNotImplemented}
-        controlId={props.controlId}
-        componentId={props.componentId}
-        implementedRequirement={props.implementedRequirement}
-        implReqStatements={props.implReqStatements}
-        isEditable={props.isEditable}
-        onFieldSave={props.onFieldSave}
-        partialRestData={props.partialRestData}
-        statementId={props.statementId}
-        statementUuid={props.statementUuid}
-      />
+      <Grid container>
+        <Grid item xs={11}>
+          <OSCALReplacedProseWithParameterLabel
+            label={props.label}
+            prose={props.prose}
+            parameters={props.parameters}
+            modificationDisplay={props.modificationDisplay}
+            className={classes.OSCALStatementNotImplemented}
+          />
+        </Grid>
+        <Grid item xs={1}>
+          {props.isEditable ? (
+            <IconButton
+              onClick={(event) => {
+                setIsEditingStatement(!isEditingStatement);
+              }}
+            >
+              <EditIcon fontSize="small" />
+            </IconButton>
+          ) : null}
+        </Grid>
+      </Grid>
     );
   }
-
   const { description } = statementByComponent;
+  const implReqSetParameters =
+    getImplReqSetParameters(props.implReqStatements, props.componentId);
+  const proseDisplay = props.prose
+    .split(RegExp(prosePlaceholderRegexpString, "g"))
+    .map((segment, index) => {
+      if (index % 2 === 0) {
+        // This is not a parameter placeholder
+        return getTextSegment(segment, index.toString());
+      }
+      if (isEditingStatement) {
+        // We're currently editing this statement, so build param input
+        let setParameter = implReqSetParameters?.find(
+          (element) => element["param-id"] === segment
+        );
+        if (!setParameter) {
+          setParameter = {
+            "param-id": segment
+          }
+        }
+        if (!setParameter.values) {
+          setParameter.values = [ null ];
+        }
+        // TODO - support for more than 1 item in values arrays
+        return <TextField
+          label="{segment}"
+          value={setParameter.values[0]}
+        />
+      } else {
+        // We're not editing this statement, so return param value
+        return getParameterValueSegment(
+          statementByComponent,
+          implReqSetParameters,
+          segment,
+          props.modificationSetParameters,
+          index.toString()
+        );
+      }
+    });
 
   return (
-    <Typography className={props.className}>
-      <StyledTooltip title={description ?? props.componentId}>
-        <Link href="#{props.label}">{props.label}</Link>
-      </StyledTooltip>
-      {props.prose
-        .split(RegExp(prosePlaceholderRegexpString, "g"))
-        .map((segment, index) => {
-          if (index % 2 === 0) {
-            return getTextSegment(segment, index.toString());
-          }
-
-          return getParameterValueSegment(
-            statementByComponent,
-            getImplReqSetParameters(props.implReqStatements, props.componentId),
-            segment,
-            props.modificationSetParameters,
-            index.toString()
-          );
-        })}
-      {props.modificationDisplay}
-      {props.isEditable ? (
-        <>
+    <Grid container>
+       <Grid item xs={11}>
+        <Typography className={props.className}>
+          <StyledTooltip title={description ?? props.componentId}>
+            <Link href="#{props.label}">{props.label}</Link>
+          </StyledTooltip>
+          {proseDisplay}
+          {props.modificationDisplay}
+        </Typography>
+      </Grid>
+      <Grid item xs={1}>
+        {props.isEditable ? (
           <IconButton
             onClick={(event) => {
-              setAnchorEl(event.currentTarget);
+              setIsEditingStatement(!isEditingStatement);
             }}
           >
             <EditIcon fontSize="small" />
           </IconButton>
-          <Grid container>
-            <OSCALControlPartEditor
-              anchorEl={anchorEl}
-              setAnchorEl={setAnchorEl}
-              controlId={props.controlId}
-              isUserDefinedImplementation={props.prose.match(
-                prosePlaceholderRegexpString
-              )}
-              onCancel={() => {
-                setAnchorEl(null);
+        ) : null}
+      </Grid>
+      {isEditingStatement ? (
+        <>
+          <Grid item xs={3}>
+            <Typography>Description: </Typography>
+          </Grid>
+          <Grid item xs={7}>
+            <TextField
+              fullWidth
+              label="Description"
+              multiline
+              inputProps={{
+                "data-testid": "Statement By Component Description TextField",
               }}
-              onFieldSave={(descriptionReference, implementationReference) => {
-                onFieldSaveByComponentParameterValue(
-                  props,
-                  descriptionReference,
-                  implementationReference
-                );
-              }}
-              statementByComponent={statementByComponent}
-              statementId={props.statementId}
+              value={statementByComponent.description}
             />
+          </Grid>
+          <Grid item xs={1}>
+            <IconButton
+              aria-label={`save-${[props.statementId]}`}
+              onClick={() => {
+                restUtils.createOrUpdateSspControlImplementationImplementedRequirementStatementByComponent(
+                  props.partialRestData,
+                  props.implementedRequirement,
+                  props.statementId,
+                  props.componentId,
+                  statementByComponent.description,
+                  implReqSetParameters,
+                  _TODO_onPreRestRequest,
+                  () => {
+                    setIsEditingStatement(false);
+                    props.onRestSuccess();
+                  },
+                  _TODO_onError
+                )
+              }}
+            >
+              <SaveIcon fontSize={props.iconFontSize} />
+            </IconButton>
+          </Grid>
+          <Grid item xs={1}>
+            <IconButton
+              aria-label={`cancel-${[props.statementId]}`}
+              onClick={() => { setIsEditingStatement(false); }}
+            >
+              <CancelIcon fontSize={props.iconFontSize} />
+            </IconButton>
           </Grid>
         </>
       ) : null}
-    </Typography>
+    </Grid>
   );
 }

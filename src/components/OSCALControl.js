@@ -85,14 +85,13 @@ export default function OSCALControl(props) {
               control={props.control}
               controlId={props.control.id}
               parameters={props.control.params}
-              implReqStatements={props.implReqStatements}
+              implementedRequirement={props.implementedRequirement}
               componentId={props.componentId}
               modificationAlters={props.modificationAlters}
               modificationSetParameters={props.modificationSetParameters}
               key={part.id ?? `part-${index}`}
-              implementedRequirement={props.implementedRequirement}
               isEditable={props.isEditable}
-              onFieldSave={props.onFieldSave}
+              onRestSuccess={props.onRestSuccess}
               partialRestData={props.partialRestData}
             />
           ))}
@@ -108,7 +107,7 @@ export default function OSCALControl(props) {
               key={control.id}
               implementedRequirement={props.implementedRequirement}
               isEditable={props.isEditable}
-              onFieldSave={props.onFieldSave}
+              onRestSuccess={props.onRestSuccess}
               partialRestData={props.partialRestData}
             />
           ))}

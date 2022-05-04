@@ -171,7 +171,7 @@ export function performRequest(
  * @param onSuccess function called on a successful REST request with the result of the request as an argument
  * @param onError function called on error with the error as an argument
  */
-export function updateSspControlImplementationImplementedRequirementStatementByComponent(
+export function createOrUpdateSspControlImplementationImplementedRequirementStatementByComponent(
   partialRootRestData,
   implementedRequirement,
   statementId,
@@ -184,12 +184,39 @@ export function updateSspControlImplementationImplementedRequirementStatementByC
 ) {
   const partialRestImplementedRequirement = deepClone(implementedRequirement);
 
-  // Find our statementByComponent and update the description
-  const statementByComponent = partialRestImplementedRequirement.statements
-    .find((element) => element["statement-id"] === statementId)
-    ["by-components"].find(
-      (element) => element["component-uuid"] === componentId
-    );
+  // Find our statement
+  let statement = partialRestImplementedRequirement?.statements?.find(
+    (element) => element["statement-id"] === statementId
+  );
+
+  // If our statement doesn't exist, create and add it
+  if (!statement) {
+    statement = {
+      "statement-id": props.statementId,
+      uuid: uuidv4(),
+      "by-components": [],
+    };
+    if (!partialRestImplementedRequirement.statements) {
+      partialRestImplementedRequirement.statements = [];
+    }
+    partialRestImplementedRequirement.statements.push(statement);
+  }
+
+  // Find our statementByComponent
+  let statementByComponent = statement["by-components"].find(
+    (element) => element["component-uuid"] === componentId
+  );
+  // If our statementByComponent doesn't exit, create and add it
+  if (!statementByComponent) {
+    statementByComponent = {
+      "component-uuid": componentId,
+      uuid: uuidv4()
+    };
+    if (!statement["by-components"]) {
+      statement["by-components"] = [];
+    }
+    statement["by-components"].push(statementByComponent);
+  }
   statementByComponent.description = description;
 
   // Set each implementation parameter

@@ -62,7 +62,7 @@ export default function OSCALControlImplementation(props) {
                       key={implementedRequirement.uuid}
                       modifications={props.modifications}
                       isEditable={props.isEditable}
-                      onFieldSave={props.onFieldSave}
+                      onRestSuccess={props.onRestSuccess}
                       partialRestData={props.partialRestData}
                     />
                   )

@@ -107,9 +107,8 @@ export default function OSCALControlImplementationImplReq(props) {
 
   // Error check implementedRequirement statements. In the case that none
   // are provided, create an empty list.
-  let implReqStatements = props.implementedRequirement.statements;
-  if (!implReqStatements) {
-    implReqStatements = [];
+  if (!props.implementedRequirement?.statements) {
+    props.implementedRequirement?.statements = [];
   }
 
   // Error check modifications
@@ -154,12 +153,11 @@ export default function OSCALControlImplementationImplReq(props) {
                 )}
                 childLevel={0}
                 implementedRequirement={props.implementedRequirement}
-                implReqStatements={implReqStatements}
                 componentId={component.uuid}
                 isEditable={props.isEditable}
                 modificationAlters={modAlters}
                 modificationSetParameters={modParams}
-                onFieldSave={props.onFieldSave}
+                onRestSuccess={props.onRestSuccess}
                 partialRestData={props.partialRestData}
               />
             </TabPanel>
