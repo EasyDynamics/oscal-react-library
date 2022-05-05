@@ -27,9 +27,16 @@ const ParamValue = styled(withTheme(Typography))((props) => ({
   "border-radius": "5px",
 }));
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   OSCALStatementNotImplemented: {
     color: "silver",
+  },
+  OSCALStatementEditControlsContainer: {
+    "text-align": "right",
+  },
+  OSCALStatementEditing: {
+    "border-color": theme.palette.info.light,
+    "box-shadow": `0 0 5px ${theme.palette.info.light}`,
   },
 }));
 
@@ -337,7 +344,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
 
   if (!statementByComponent && !isEditingStatement) {
     return (
-      <Grid container>
+      <Grid container spacing={2}>
         <Grid item xs={11}>
           <OSCALReplacedProseWithParameterLabel
             label={props.label}
@@ -347,10 +354,10 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
             className={classes.OSCALStatementNotImplemented}
           />
         </Grid>
-        <Grid item xs={1}>
-          {props.isEditable ? (
+        <Grid item xs={1} className={classes.OSCALStatementEditControlsContainer}>
+          {(props.isEditable && !isEditingStatement) ? (
             <IconButton
-            size="small"
+              size="small"
               onClick={(event) => {
                 setIsEditingStatement(!isEditingStatement);
               }}
@@ -408,7 +415,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     });
 
   return (
-    <Grid container>
+    <Grid container spacing={2} className={(isEditingStatement) ? classes.OSCALStatementEditing : null }>
        <Grid item xs={11}>
         <Typography className={props.className}>
           <StyledTooltip title={description ?? props.componentId}>
@@ -418,9 +425,10 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
           {props.modificationDisplay}
         </Typography>
       </Grid>
-      <Grid item xs={1}>
-        {props.isEditable ? (
+      <Grid item xs={1} className={classes.OSCALStatementEditControlsContainer}>
+        {(props.isEditable && !isEditingStatement) ? (
           <IconButton
+            size="small"
             onClick={(event) => {
               setIsEditingStatement(!isEditingStatement);
             }}
@@ -443,7 +451,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
               value={statementByComponent.description}
             />
           </Grid>
-          <Grid item xs={1}>
+          <Grid item xs={1} className={classes.OSCALStatementEditControlsContainer}>
             <IconButton
               aria-label={`save-${[props.statementId]}`}
               onClick={() => {
@@ -466,7 +474,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
               <SaveIcon fontSize={props.iconFontSize} />
             </IconButton>
           </Grid>
-          <Grid item xs={1}>
+          <Grid item xs={1} className={classes.OSCALStatementEditControlsContainer}>
             <IconButton
               aria-label={`cancel-${[props.statementId]}`}
               onClick={() => { setIsEditingStatement(false); }}
