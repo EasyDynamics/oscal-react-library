@@ -52,7 +52,7 @@ export default function OSCALLoader(props) {
   // an error and to ensure.
   const [reloadCount, setReloadCount] = useState(0);
 
-  const handleFetchError = (err) => {
+  const handleRestError = (err) => {
     setIsLoaded(true);
     setIsResolutionComplete(true);
     setError(err);
@@ -69,7 +69,7 @@ export default function OSCALLoader(props) {
           if (!response.ok) throw new Error(response.status);
           else return response.json();
         },
-        (err) => handleFetchError(err)
+        (err) => handleRestError(err)
       )
       .then(
         (result) => {
@@ -81,7 +81,7 @@ export default function OSCALLoader(props) {
             setIsLoaded(true);
           }
         },
-        (err) => handleFetchError(err)
+        (err) => handleRestError(err)
       );
   };
 
@@ -123,7 +123,7 @@ export default function OSCALLoader(props) {
           setIsLoaded(true);
         }
       },
-      (err) => handleFetchError(err)
+      (err) => handleRestError(err)
     );
   };
 
@@ -179,7 +179,7 @@ export default function OSCALLoader(props) {
           setIsLoaded(true);
         }
       },
-      (err) => handleFetchError(err)
+      (err) => handleRestError(err)
     );
   };
 
@@ -210,7 +210,7 @@ export default function OSCALLoader(props) {
         isRestMode={isRestMode}
         onChangeRestMode={handleChangeRestMode}
         isResolutionComplete={isResolutionComplete}
-        onError={handleFetchError}
+        onError={handleRestError}
         backendUrl={props.backendUrl}
       />
     );
@@ -254,7 +254,8 @@ export default function OSCALLoader(props) {
               oscalData,
               oscalUrl,
               onResolutionComplete,
-              handleFieldSave
+              handleFieldSave,
+              handleRestError
             )}
           </Box>
         </Split>
@@ -349,7 +350,8 @@ export function OSCALSSPLoader(props) {
     oscalData,
     oscalUrl,
     onResolutionComplete,
-    handleFieldSave
+    handleFieldSave,
+    handleRestError
   ) => (
     <OSCALSsp
       system-security-plan={oscalData[oscalObjectType.jsonRootName]}
@@ -372,6 +374,8 @@ export function OSCALSSPLoader(props) {
           oscalObjectType
         );
       }}
+      onRestSuccess={() => { }}
+      onRestError={(error) => { handleRestError(error) }}
     />
   );
   return (

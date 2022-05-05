@@ -65,7 +65,8 @@ export default function OSCALSsp(props) {
         controls={ssp.resolvedControls}
         isEditable={props.isEditable}
         modifications={ssp.modifications}
-        onFieldSave={props.onFieldSave}
+        onRestSuccess={props.onRestSuccess}
+        onRestError={props.onRestError}
         partialRestData={partialRestData}
       />
     );

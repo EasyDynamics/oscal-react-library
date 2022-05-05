@@ -152,6 +152,7 @@ export default function OSCALControlImplementationImplReq(props) {
                 modificationAlters={modAlters}
                 modificationSetParameters={modParams}
                 onRestSuccess={props.onRestSuccess}
+                onRestError={props.onRestError}
                 partialRestData={props.partialRestData}
               />
             </TabPanel>

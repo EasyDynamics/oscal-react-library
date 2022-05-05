@@ -65,6 +65,7 @@ export default function OSCALControlPart(props) {
         modificationDisplay={modificationDisplay}
         isEditable={props.isEditable}
         onRestSuccess={props.onRestSuccess}
+        onRestError={props.onRestError}
         partialRestData={props.partialRestData}
       />
     );
@@ -102,6 +103,7 @@ export default function OSCALControlPart(props) {
             key={part.id}
             isEditable={props.isEditable}
             onRestSuccess={props.onRestSuccess}
+            onRestError={props.onRestError}
             partialRestData={props.partialRestData}
           />
         ))}

@@ -92,6 +92,7 @@ export default function OSCALControl(props) {
               key={part.id ?? `part-${index}`}
               isEditable={props.isEditable}
               onRestSuccess={props.onRestSuccess}
+              onRestError={props.onRestError}
               partialRestData={props.partialRestData}
             />
           ))}
@@ -108,6 +109,7 @@ export default function OSCALControl(props) {
               implementedRequirement={props.implementedRequirement}
               isEditable={props.isEditable}
               onRestSuccess={props.onRestSuccess}
+              onRestError={props.onRestError}
               partialRestData={props.partialRestData}
             />
           ))}

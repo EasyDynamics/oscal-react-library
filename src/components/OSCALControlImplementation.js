@@ -63,6 +63,7 @@ export default function OSCALControlImplementation(props) {
                       modifications={props.modifications}
                       isEditable={props.isEditable}
                       onRestSuccess={props.onRestSuccess}
+                      onRestError={props.onRestError}
                       partialRestData={props.partialRestData}
                     />
                   )

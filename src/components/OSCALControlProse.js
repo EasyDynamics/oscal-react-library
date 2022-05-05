@@ -8,7 +8,9 @@ import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { Grid, IconButton, TextField } from "@material-ui/core";
 import StyledTooltip from "./OSCALStyledTooltip";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
+import * as restUtils from "./oscal-utils/OSCALRestUtils";
 
 const prosePlaceholderRegexpString = "{{ insert: param, ([0-9a-zA-B-_.]*) }}";
 
@@ -331,6 +333,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
 export function OSCALReplacedProseWithByComponentParameterValue(props) {
   const classes = useStyles();
   const [isEditingStatement, setIsEditingStatement] = useState(false);
+  const [isProcessingRequest, setIsProcessingRequest] = useState(false);
 
   if (!props.prose) {
     return null;
@@ -343,6 +346,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   );
 
   if (!statementByComponent && !isEditingStatement) {
+    // We don't have a by component implementation, but we're not editing, so just display param labels
     return (
       <Grid container spacing={2}>
         <Grid item xs={11}>
@@ -369,7 +373,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
       </Grid>
     );
   }
-  const { description } = statementByComponent;
+  const statementByComponentDescription = statementByComponent?.description || null;
   const implReqSetParameters =
     getImplReqSetParameters(props.implementedRequirement?.statements, props.componentId);
   const editedImplementationSetParameters = [];
@@ -418,7 +422,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     <Grid container spacing={2} className={(isEditingStatement) ? classes.OSCALStatementEditing : null }>
        <Grid item xs={11}>
         <Typography className={props.className}>
-          <StyledTooltip title={description ?? props.componentId}>
+          <StyledTooltip title={statementByComponentDescription ?? props.componentId}>
             <Link href="#{props.label}">{props.label}</Link>
           </StyledTooltip>
           {proseDisplay}
@@ -448,40 +452,49 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
               inputProps={{
                 "data-testid": "Statement By Component Description TextField",
               }}
-              value={statementByComponent.description}
+              value={statementByComponentDescription}
             />
           </Grid>
-          <Grid item xs={1} className={classes.OSCALStatementEditControlsContainer}>
-            <IconButton
-              aria-label={`save-${[props.statementId]}`}
-              onClick={() => {
-                restUtils.createOrUpdateSspControlImplementationImplementedRequirementStatementByComponent(
-                  props.partialRestData,
-                  props.implementedRequirement,
-                  props.statementId,
-                  props.componentId,
-                  statementByComponent.description,
-                  editedImplementationSetParameters,
-                  _TODO_onPreRestRequest,
-                  () => {
-                    setIsEditingStatement(false);
-                    props.onRestSuccess();
-                  },
-                  _TODO_onError
-                )
-              }}
-            >
-              <SaveIcon fontSize={props.iconFontSize} />
-            </IconButton>
-          </Grid>
-          <Grid item xs={1} className={classes.OSCALStatementEditControlsContainer}>
-            <IconButton
-              aria-label={`cancel-${[props.statementId]}`}
-              onClick={() => { setIsEditingStatement(false); }}
-            >
-              <CancelIcon fontSize={props.iconFontSize} />
-            </IconButton>
-          </Grid>
+          {!isProcessingRequest ? (
+            <>
+              <Grid item xs={1} className={classes.OSCALStatementEditControlsContainer}>
+                <IconButton
+                  aria-label={`save-${[props.statementId]}`}
+                  onClick={() => {
+                    restUtils.createOrUpdateSspControlImplementationImplementedRequirementStatementByComponent(
+                      props.partialRestData,
+                      props.implementedRequirement,
+                      props.statementId,
+                      props.componentId,
+                      statementByComponentDescription,
+                      editedImplementationSetParameters,
+                      () => { setIsProcessingRequest(true); },
+                      () => {
+                        setIsEditingStatement(false);
+                        setIsProcessingRequest(false);
+                        props.onRestSuccess();
+                      },
+                      (error) => { props.onRestError(error); }
+                    )
+                  }}
+                >
+                  <SaveIcon fontSize={props.iconFontSize} />
+                </IconButton>
+              </Grid>
+              <Grid item xs={1} className={classes.OSCALStatementEditControlsContainer}>
+                <IconButton
+                  aria-label={`cancel-${[props.statementId]}`}
+                  onClick={() => { setIsEditingStatement(false); }}
+                >
+                  <CancelIcon fontSize={props.iconFontSize} />
+                </IconButton>
+              </Grid>
+            </>
+          ) : (
+            <Grid item xs={2}>
+              <CircularProgress />
+            </Grid>
+          )}
         </>
       ) : null}
     </Grid>
