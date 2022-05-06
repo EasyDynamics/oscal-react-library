@@ -222,7 +222,7 @@ export function createOrUpdateSspControlImplementationImplementedRequirementStat
   statementByComponent.description = description;
 
   // Set each implementation parameter
-  if (implementationSetParameters) {
+  if (implementationSetParameters?.length > 0) {
     if (!statementByComponent["set-parameters"]) {
       statementByComponent["set-parameters"] = [];
     }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { styled, withTheme, makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
@@ -344,6 +344,8 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     props.statementId,
     props.componentId
   );
+  const statementByComponentDescription = statementByComponent?.description || null;
+  const statementByComponentDescriptionRef = useRef(statementByComponentDescription);
 
   if (!statementByComponent && !isEditingStatement) {
     // We don't have a by component implementation, but we're not editing, so just display param labels
@@ -373,7 +375,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
       </Grid>
     );
   }
-  const statementByComponentDescription = statementByComponent?.description || null;
+
   const implReqSetParameters =
     getImplReqSetParameters(props.implementedRequirement?.statements, props.componentId);
   const editedImplementationSetParameters = [];
@@ -452,7 +454,8 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
               inputProps={{
                 "data-testid": "Statement By Component Description TextField",
               }}
-              value={statementByComponentDescription}
+              inputRef={statementByComponentDescriptionRef}
+              defaultValue={statementByComponentDescription}
             />
           </Grid>
           {!isProcessingRequest ? (
@@ -466,7 +469,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
                       props.implementedRequirement,
                       props.statementId,
                       props.componentId,
-                      statementByComponentDescription,
+                      statementByComponentDescriptionRef.current.value,
                       editedImplementationSetParameters,
                       () => { setIsProcessingRequest(true); },
                       () => {
