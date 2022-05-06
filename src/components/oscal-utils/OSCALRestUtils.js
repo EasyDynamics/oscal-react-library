@@ -226,9 +226,11 @@ export function createOrUpdateSspControlImplementationImplementedRequirementStat
     if (!statementByComponent["set-parameters"]) {
       statementByComponent["set-parameters"] = [];
     }
-    implementationSetParameters.forEach((element) =>
-      statementByComponent["set-parameters"].push(element)
-    );
+    implementationSetParameters.forEach((element) => {
+      if (element) {
+        statementByComponent["set-parameters"].push(element);
+      }
+    });
   }
 
   const rootUuid = partialRootRestData[oscalObjectTypes.ssp.jsonRootName].uuid;

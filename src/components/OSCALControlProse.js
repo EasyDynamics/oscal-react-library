@@ -344,8 +344,20 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     props.statementId,
     props.componentId
   );
+
+  // TODO - This approach may not scale well.  We're creating a ref for every
+  // editable field for every control statement/prose for every component before
+  // the user has even asked to edit.  However, other attempts resulted in a
+  // React error of: "Rendered more hooks than during the previous render".
+  // This should be investigated further.
   const statementByComponentDescription = statementByComponent?.description || null;
   const statementByComponentDescriptionRef = useRef(statementByComponentDescription);
+  const setParametersRefs = {};
+  if (props.parameters?.length > 0) {
+    props.parameters.forEach((parameter) => {
+      setParametersRefs[parameter.id] = useRef()
+    });
+  }
 
   if (!statementByComponent && !isEditingStatement) {
     // We don't have a by component implementation, but we're not editing, so just display param labels
@@ -378,7 +390,6 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
 
   const implReqSetParameters =
     getImplReqSetParameters(props.implementedRequirement?.statements, props.componentId);
-  const editedImplementationSetParameters = [];
   const proseDisplay = props.prose
     .split(RegExp(prosePlaceholderRegexpString, "g"))
     .map((segment, index) => {
@@ -400,13 +411,14 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
         if (!setParameter.values) {
           setParameter.values = [ null ];
         }
-        editedImplementationSetParameters[segment] = setParameter;
+        const setParameterRef = setParametersRefs[segment];
         // TODO - support for more than 1 item in values arrays
         return <TextField
           label={segment}
           variant="outlined"
           size="small"
-          value={setParameter.values[0]}
+          inputRef={setParameterRef}
+          defaultValue={setParameter.values[0]}
         />
       } else {
         // We're not editing this statement, so return param value
@@ -470,7 +482,15 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
                       props.statementId,
                       props.componentId,
                       statementByComponentDescriptionRef.current.value,
-                      editedImplementationSetParameters,
+                      Object.keys(setParametersRefs).map((setParameterId) => {
+                        const setParameterValue = setParametersRefs[setParameterId]?.current?.value;
+                        return (setParameterValue) ? {
+                          "param-id": setParameterId,
+                          values: setParameterValue
+                        }
+                        :
+                        null
+                      }),
                       () => { setIsProcessingRequest(true); },
                       () => {
                         setIsEditingStatement(false);
