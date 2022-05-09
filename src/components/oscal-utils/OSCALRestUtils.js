@@ -187,50 +187,42 @@ export function createOrUpdateSspControlImplementationImplementedRequirementStat
   const partialRestImplementedRequirement = deepClone(implementedRequirement);
 
   // Find our statement
-  let statement = partialRestImplementedRequirement?.statements?.find(
+  let statement = partialRestImplementedRequirement.statements?.find(
     (element) => element["statement-id"] === statementId
   );
 
   // If our statement doesn't exist, create and add it
   if (!statement) {
     statement = {
-      "statement-id": props.statementId,
+      "statement-id": statementId,
       uuid: uuidv4(),
       "by-components": [],
     };
-    if (!partialRestImplementedRequirement.statements) {
-      partialRestImplementedRequirement.statements = [];
-    }
+    partialRestImplementedRequirement.statements ??= [];
     partialRestImplementedRequirement.statements.push(statement);
   }
 
   // Find our statementByComponent
-  let statementByComponent = statement["by-components"].find(
+  let statementByComponent = statement["by-components"]?.find(
     (element) => element["component-uuid"] === componentId
   );
   // If our statementByComponent doesn't exit, create and add it
   if (!statementByComponent) {
     statementByComponent = {
       "component-uuid": componentId,
-      uuid: uuidv4()
+      uuid: uuidv4(),
     };
-    if (!statement["by-components"]) {
-      statement["by-components"] = [];
-    }
+    statement["by-components"] ??= [];
     statement["by-components"].push(statementByComponent);
   }
   statementByComponent.description = description;
 
   // Set each implementation parameter
-  if (implementationSetParameters?.length > 0) {
-    if (!statementByComponent["set-parameters"]) {
-      statementByComponent["set-parameters"] = [];
-    }
-    implementationSetParameters.forEach((element) => {
-      if (element) {
-        statementByComponent["set-parameters"].push(element);
-      }
-    });
+  if (implementationSetParameters?.length) {
+    statementByComponent["set-parameters"] ??= [];
+    statementByComponent["set-parameters"].push(
+      ...implementationSetParameters.filter((element) => !!element)
+    );
   }
 
   const rootUuid = partialRootRestData[oscalObjectTypes.ssp.jsonRootName].uuid;

@@ -374,8 +374,10 @@ export function OSCALSSPLoader(props) {
           oscalObjectType
         );
       }}
-      onRestSuccess={() => { }}
-      onRestError={(error) => { handleRestError(error) }}
+      onRestSuccess={() => {}}
+      onRestError={(error) => {
+        handleRestError(error);
+      }}
     />
   );
   return (
