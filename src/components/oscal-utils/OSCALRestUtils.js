@@ -230,7 +230,7 @@ export function createOrUpdateSspControlImplementationImplementedRequirementStat
   const requestUrl = `${rootRestPath}/control-implementation/implemented-requirements/${implementedRequirement.uuid}`;
 
   performRequest(
-    partialRestImplementedRequirement,
+    { "implemented-requirement": partialRestImplementedRequirement },
     restMethods.PUT,
     requestUrl,
     onPreRestRequest,
