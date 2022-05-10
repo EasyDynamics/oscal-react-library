@@ -14,6 +14,12 @@ export default function OSCALComponentDefinition(props) {
     useState({});
   const classes = useLoaderStyles();
 
+  const partialRestData = {
+    "component-definition": {
+      uuid: props.componentDefinition.uuid,
+    },
+  };
+
   useEffect(() => {
     OSCALComponentResolveSources(
       props.componentDefinition,
@@ -54,7 +60,12 @@ export default function OSCALComponentDefinition(props) {
 
   return (
     <div className={classes.paper}>
-      <OSCALMetadata metadata={props.componentDefinition.metadata} />
+      <OSCALMetadata
+        metadata={props.componentDefinition.metadata}
+        isEditable={props.isEditable}
+        onFieldSave={props.onFieldSave}
+        patchData={partialRestData}
+      />
       <OSCALProfileCatalogInheritance
         inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}
       />

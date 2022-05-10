@@ -26,6 +26,12 @@ export default function OSCALProfile(props) {
   const classes = useLoaderStyles();
   const unmounted = useRef(false);
 
+  const partialRestData = {
+    profile: {
+      uuid: props.profile.uuid,
+    },
+  };
+
   // Resolved profile using oscal-utils. Provides error when failure.
   useEffect(() => {
     OSCALResolveProfile(
@@ -104,7 +110,12 @@ export default function OSCALProfile(props) {
   // Display Metadata and BackMatter components at bottom of Profile
   return (
     <div className={classes.paper}>
-      <OSCALMetadata metadata={props.profile.metadata} />
+      <OSCALMetadata
+        metadata={props.profile.metadata}
+        isEditable={props.isEditable}
+        onFieldSave={props.onFieldSave}
+        patchData={partialRestData}
+      />
       <OSCALProfileCatalogInheritance
         inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}
       />

@@ -10,9 +10,20 @@ export default function OSCALCatalog(props) {
   const classes = useLoaderStyles();
   props.onResolutionComplete();
 
+  const partialRestData = {
+    catalog: {
+      uuid: props.catalog.uuid,
+    },
+  };
+
   return (
     <div className={classes.paper}>
-      <OSCALMetadata metadata={props.catalog.metadata} />
+      <OSCALMetadata
+        metadata={props.catalog.metadata}
+        isEditable={props.isEditable}
+        onFieldSave={props.onFieldSave}
+        patchData={partialRestData}
+      />
       <List
         subheader={
           <ListSubheader
