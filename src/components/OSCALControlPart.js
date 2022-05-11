@@ -24,7 +24,7 @@ const getPartLabel = (props) =>
 export default function OSCALControlPart(props) {
   // Don't display assessment if we're displaying a control implementation
   if (
-    (props.implReqStatements ||
+    (props.implementedRequirement ||
       props.modificationSetParameters ||
       props.modificationAlters) &&
     (props.part.name === "objective" || props.part.name === "assessment")
@@ -52,27 +52,21 @@ export default function OSCALControlPart(props) {
   const label = getPartLabel(props.part.props);
 
   let replacedProse;
-  if (props.implReqStatements?.length > 0) {
+  if (props.implementedRequirement) {
     replacedProse = (
       <OSCALReplacedProseWithByComponentParameterValue
         label={label}
         prose={props.part.prose}
         parameters={props.parameters}
-        implReqStatements={props.implReqStatements}
+        implementedRequirement={props.implementedRequirement}
         statementId={props.part.id}
         componentId={props.componentId}
         modificationSetParameters={props.modificationSetParameters}
         modificationDisplay={modificationDisplay}
-        controlId={props.controlId}
-        implementedRequirement={props.implementedRequirement}
         isEditable={props.isEditable}
-        onFieldSave={props.onFieldSave}
+        onRestSuccess={props.onRestSuccess}
+        onRestError={props.onRestError}
         partialRestData={props.partialRestData}
-        statementUuid={
-          props.implReqStatements?.find(
-            (statement) => statement["statement-id"] === props.part.id
-          )?.uuid || null
-        }
       />
     );
   } else {
@@ -83,19 +77,6 @@ export default function OSCALControlPart(props) {
         parameters={props.parameters}
         modificationSetParameters={props.modificationSetParameters}
         modificationDisplay={modificationDisplay}
-        controlId={props.controlId}
-        componentId={props.componentId}
-        implementedRequirement={props.implementedRequirement}
-        implReqStatements={props.implReqStatements}
-        isEditable={props.isEditable}
-        onFieldSave={props.onFieldSave}
-        partialRestData={props.partialRestData}
-        statementId={props.part.id}
-        statementUuid={
-          props.implReqStatements?.find(
-            (statement) => statement["statement-id"] === props.part.id
-          )?.uuid || null
-        }
       />
     );
   }
@@ -115,16 +96,15 @@ export default function OSCALControlPart(props) {
             part={part}
             controlId={props.controlId ?? props.control.id}
             parameters={props.parameters}
-            implReqStatements={props.implReqStatements}
+            implementedRequirement={props.implementedRequirement}
             componentId={props.componentId}
             modificationAlters={props.modificationAlters}
             modificationSetParameters={props.modificationSetParameters}
             key={part.id}
-            implementedRequirement={props.implementedRequirement}
             isEditable={props.isEditable}
-            onFieldSave={props.onFieldSave}
+            onRestSuccess={props.onRestSuccess}
+            onRestError={props.onRestError}
             partialRestData={props.partialRestData}
-            statementId={props.part.id}
           />
         ))}
     </div>
