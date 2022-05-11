@@ -18,10 +18,21 @@ export const Default = Template.bind({});
 
 export const WithPartiesAndRoles = Template.bind({});
 
+export const Editable = Template.bind({});
+
 Default.args = {
   metadata: exampleMetadata,
 };
 
 WithPartiesAndRoles.args = {
   metadata: exampleMetadataWithPartiesAndRoles,
+};
+
+function nop() {}
+
+Editable.args = {
+  metadata: exampleMetadata,
+  isEditable: true,
+  onFieldSave: nop,
+  partialRestData: { topLevel: { uuid: "" } },
 };
