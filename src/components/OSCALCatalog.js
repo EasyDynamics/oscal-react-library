@@ -22,7 +22,7 @@ export default function OSCALCatalog(props) {
         metadata={props.catalog.metadata}
         isEditable={props.isEditable}
         onFieldSave={props.onFieldSave}
-        patchData={partialRestData}
+        partialRestData={partialRestData}
       />
       <List
         subheader={

@@ -68,7 +68,7 @@ export default function OSCALComponentDefinition(props) {
         metadata={props.componentDefinition.metadata}
         isEditable={props.isEditable}
         onFieldSave={props.onFieldSave}
-        patchData={partialRestData}
+        partialRestData={partialRestData}
       />
       <OSCALProfileCatalogInheritance
         inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}

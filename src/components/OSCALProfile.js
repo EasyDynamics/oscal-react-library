@@ -119,7 +119,7 @@ export default function OSCALProfile(props) {
         metadata={props.profile.metadata}
         isEditable={props.isEditable}
         onFieldSave={props.onFieldSave}
-        patchData={partialRestData}
+        partialRestData={partialRestData}
       />
       <OSCALProfileCatalogInheritance
         inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}
