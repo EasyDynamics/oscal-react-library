@@ -28,11 +28,9 @@ WithPartiesAndRoles.args = {
   metadata: exampleMetadataWithPartiesAndRoles,
 };
 
-function nop() {}
-
 Editable.args = {
   metadata: exampleMetadata,
   isEditable: true,
-  onFieldSave: nop,
-  partialRestData: { topLevel: { uuid: "" } },
+  onFieldSave: () => {},
+  partialRestData: { "top-level": { uuid: "" } },
 };
