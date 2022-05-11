@@ -64,7 +64,12 @@ export default function OSCALComponentDefinition(props) {
 
   return (
     <div className={classes.paper}>
-      <OSCALMetadata metadata={props.componentDefinition.metadata} />
+      <OSCALMetadata
+        metadata={props.componentDefinition.metadata}
+        isEditable={props.isEditable}
+        onFieldSave={props.onFieldSave}
+        partialRestData={partialRestData}
+      />
       <OSCALProfileCatalogInheritance
         inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}
       />

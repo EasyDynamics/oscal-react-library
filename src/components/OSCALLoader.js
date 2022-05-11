@@ -310,6 +310,7 @@ export function OSCALCatalogLoader(props) {
   ) => (
     <OSCALCatalog
       catalog={oscalData[oscalObjectType.jsonRootName]}
+      isEditable={isRestMode}
       parentUrl={oscalUrl}
       onResolutionComplete={onResolutionComplete}
       onFieldSave={(
@@ -404,6 +405,7 @@ export function OSCALComponentLoader(props) {
   ) => (
     <OSCALComponentDefinition
       componentDefinition={oscalData[oscalObjectType.jsonRootName]}
+      isEditable={isRestMode}
       parentUrl={oscalUrl}
       onResolutionComplete={onResolutionComplete}
       onFieldSave={(
@@ -448,6 +450,7 @@ export function OSCALProfileLoader(props) {
   ) => (
     <OSCALProfile
       profile={oscalData[oscalObjectType.jsonRootName]}
+      isEditable={isRestMode}
       parentUrl={oscalUrl}
       onResolutionComplete={onResolutionComplete}
       onFieldSave={(
