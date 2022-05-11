@@ -53,6 +53,10 @@ export default function OSCALComponentDefinition(props) {
           components={props.componentDefinition.components}
           controls={props.componentDefinition.resolvedControls}
           key={key}
+          isEditable={props.isEditable}
+          onRestSuccess={props.onRestSuccess}
+          onRestError={props.onRestError}
+          partialRestData={partialRestData}
         />
       )
     );
