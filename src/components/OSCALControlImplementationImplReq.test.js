@@ -9,6 +9,7 @@ import {
   componentsTestData,
 } from "../test-data/ComponentsData";
 import { profileModifyTestData } from "../test-data/ModificationsData";
+import { sspRestData } from "../test-data/SystemData";
 
 const controlsTestData = [exampleControl];
 
@@ -21,6 +22,7 @@ function controlImplementationImplReqRenderer() {
       components={exampleComponents}
       controls={controlsTestData}
       modifications={profileModifyTestData}
+      partialRestData={sspRestData}
     />
   );
 }
@@ -65,6 +67,7 @@ export default function testOSCALControlImplementationImplReq(
         components={componentsTestData}
         controls={controlsTestData}
         modifications={emptyProfileModifyTestData}
+        partialRestData={sspRestData}
       />
     );
     expect(

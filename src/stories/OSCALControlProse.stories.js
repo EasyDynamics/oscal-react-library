@@ -26,6 +26,8 @@ export const ByComp = TemplateByComponent.bind({});
 
 export const WithParameterConstraints = TemplateParameterLabel.bind({});
 
+export const ByCompEdting = TemplateByComponent.bind({});
+
 WithParameterConstraints.args = {
   modificationSetParameters: exampleModificationSetParameters,
   label: "a.",
@@ -50,3 +52,14 @@ ByComp.args = {
 };
 
 ByComp.storyName = "Parameters Replaced With By-Component Value";
+
+ByCompEdting.args = {
+  label: "a.",
+  prose:
+    "Does something with {{ insert: param, control-1_prm_1 }} and {{ insert: param, control-1_prm_2 }}",
+  parameters: exampleParams,
+  statementId: "a_smt",
+  componentId: "component-1",
+  implReqStatements: exampleImplReqStatements,
+  isEditable: true,
+};

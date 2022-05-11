@@ -4,6 +4,7 @@ import Split from "react-split";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, Fab } from "@material-ui/core";
 import CodeIcon from "@material-ui/icons/Code";
+import * as restUtils from "./oscal-utils/OSCALRestUtils";
 import ErrorBoundary, { BasicError } from "./ErrorBoundary";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
@@ -11,41 +12,6 @@ import OSCALComponentDefinition from "./OSCALComponentDefinition";
 import OSCALProfile from "./OSCALProfile";
 import OSCALLoaderForm from "./OSCALLoaderForm";
 import OSCALJsonEditor from "./OSCALJsonEditor";
-
-const oscalObjectTypes = {
-  catalog: {
-    name: "Catalog",
-    defaultUrl:
-      "https://raw.githubusercontent.com/EasyDynamics/oscal-demo-content/main/catalogs/NIST_SP-800-53_rev5_catalog.json",
-    defaultUuid: "613fca2d-704a-42e7-8e2b-b206fb92b456",
-    jsonRootName: "catalog",
-    restPath: "catalogs",
-  },
-  component: {
-    name: "Component",
-    defaultUrl:
-      "https://raw.githubusercontent.com/EasyDynamics/oscal-demo-content/main/component-definitions/example-component.json",
-    defaultUuid: "8223d65f-57a9-4689-8f06-2a975ae2ad72",
-    jsonRootName: "component-definition",
-    restPath: "component-definitions",
-  },
-  profile: {
-    name: "Profile",
-    defaultUrl:
-      "https://raw.githubusercontent.com/EasyDynamics/oscal-demo-content/main/profiles/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json",
-    defaultUuid: "8b3beca1-fcdc-43e0-aebb-ffc0a080c486",
-    jsonRootName: "profile",
-    restPath: "profiles",
-  },
-  ssp: {
-    name: "SSP",
-    defaultUrl:
-      "https://raw.githubusercontent.com/EasyDynamics/oscal-demo-content/main/system-security-plans/ssp-example.json",
-    defaultUuid: "cff8385f-108e-40a5-8f7a-82f3dc0eaba8",
-    jsonRootName: "system-security-plan",
-    restPath: "system-security-plans",
-  },
-};
 
 const useStyles = makeStyles((theme) => ({
   split: {
@@ -71,20 +37,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function populatePartialPatchData(data, editedFieldJsonPath, newValue) {
-  if (editedFieldJsonPath.length === 1) {
-    const editData = data;
-    editData[editedFieldJsonPath] = newValue;
-    return;
-  }
-
-  populatePartialPatchData(
-    data[editedFieldJsonPath.shift()],
-    editedFieldJsonPath,
-    newValue
-  );
-}
-
 export default function OSCALLoader(props) {
   const classes = useStyles();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -92,7 +44,7 @@ export default function OSCALLoader(props) {
   const { isRestMode, setIsRestMode } = props;
   const [oscalData, setOscalData] = useState([]);
   const [oscalUrl, setOscalUrl] = useState(isRestMode ? null : props.oscalUrl);
-  const [editorIsVisible, setEditorIsVisble] = useState(true);
+  const [editorIsVisible, setEditorIsVisible] = useState(true);
   const unmounted = useRef(false);
   const [error, setError] = useState(null);
   // We "count" the number of times the reload button has been pressed (when active).
@@ -100,7 +52,7 @@ export default function OSCALLoader(props) {
   // an error and to ensure.
   const [reloadCount, setReloadCount] = useState(0);
 
-  const handleFetchError = (err) => {
+  const handleRestError = (err) => {
     setIsLoaded(true);
     setIsResolutionComplete(true);
     setError(err);
@@ -117,7 +69,7 @@ export default function OSCALLoader(props) {
           if (!response.ok) throw new Error(response.status);
           else return response.json();
         },
-        (err) => handleFetchError(err)
+        (err) => handleRestError(err)
       )
       .then(
         (result) => {
@@ -129,63 +81,50 @@ export default function OSCALLoader(props) {
             setIsLoaded(true);
           }
         },
-        (err) => handleFetchError(err)
+        (err) => handleRestError(err)
       );
   };
 
-  const handleRestRequest = (httpMethod, url, data) => {
-    setIsLoaded(false);
-    setIsResolutionComplete(false);
-    const requestInfo = {
-      method: httpMethod,
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(data),
-    };
-    fetch(url, requestInfo)
-      .then((response) => {
-        if (!response.ok) throw new Error(response.status);
-        else return response.json();
-      })
-      .then(
-        (result) => {
-          if (!unmounted.current) {
-            // TODO https://github.com/EasyDynamics/oscal-react-library/issues/297
-            /* eslint no-param-reassign: "error" */
-            result.oscalSource = JSON.stringify(result, null, "\t");
-            setOscalData(result);
-            setIsLoaded(true);
-          }
-        },
-        (err) => handleFetchError(err)
-      );
-  };
-
-  /**
-   *
-   * @param partialPatchData data that will be passed into the body of the PATCH request, doesn't initially contain the updates
-   * @param editedFieldJsonPath path to the field that is being updated
-   * @param newValue updated value for the edited field
-   * @param jsonRootName name of the JSON root object
-   * @param restPath the path for the REST request
-   */
-  const handleRestPatch = (
-    partialPatchData,
+  const handleFieldSave = (
+    appendToLastFieldInPath,
+    partialRestData,
     editedFieldJsonPath,
     newValue,
-    jsonRootName,
-    restPath
+    restUrlPath,
+    oscalObjectType
   ) => {
-    const url = `${props.backendUrl}/${restPath}/${partialPatchData[jsonRootName].uuid}`;
+    const requestUrl = restUtils.buildRequestUrl(
+      partialRestData,
+      restUrlPath,
+      oscalObjectType
+    );
 
-    populatePartialPatchData(partialPatchData, editedFieldJsonPath, newValue);
-    handleRestRequest("PATCH", url, partialPatchData);
-  };
+    if (newValue) {
+      restUtils.populatePartialRestData(
+        partialRestData,
+        editedFieldJsonPath,
+        newValue,
+        appendToLastFieldInPath
+      );
+    }
 
-  const handleRestPut = (jsonString) => {
-    handleRestRequest("PUT", oscalUrl, JSON.parse(jsonString));
+    restUtils.performRequest(
+      partialRestData,
+      restUtils.restMethods.PATCH,
+      requestUrl,
+      () => {
+        setIsLoaded(false);
+        setIsResolutionComplete(false);
+      },
+      (result) => {
+        if (!unmounted.current) {
+          result.oscalSource = JSON.stringify(result, null, "\t");
+          setOscalData(result);
+          setIsLoaded(true);
+        }
+      },
+      (err) => handleRestError(err)
+    );
   };
 
   const handleUrlChange = (event) => {
@@ -224,6 +163,26 @@ export default function OSCALLoader(props) {
     }
   };
 
+  const handleRestPut = (jsonString) => {
+    restUtils.performRequest(
+      JSON.parse(jsonString),
+      restUtils.restMethods.PUT,
+      oscalUrl,
+      () => {
+        setIsLoaded(false);
+        setIsResolutionComplete(false);
+      },
+      (result) => {
+        if (!unmounted.current) {
+          result.oscalSource = JSON.stringify(result, null, "\t");
+          setOscalData(result);
+          setIsLoaded(true);
+        }
+      },
+      (err) => handleRestError(err)
+    );
+  };
+
   const onResolutionComplete = () => {
     setIsResolutionComplete(true);
   };
@@ -251,7 +210,7 @@ export default function OSCALLoader(props) {
         isRestMode={isRestMode}
         onChangeRestMode={handleChangeRestMode}
         isResolutionComplete={isResolutionComplete}
-        onError={handleFetchError}
+        onError={handleRestError}
         backendUrl={props.backendUrl}
       />
     );
@@ -271,7 +230,7 @@ export default function OSCALLoader(props) {
             color={editorIsVisible ? "default" : "primary"}
             size="small"
             onClick={() => {
-              setEditorIsVisble(!editorIsVisible);
+              setEditorIsVisible(!editorIsVisible);
             }}
           >
             <CodeIcon />
@@ -295,7 +254,8 @@ export default function OSCALLoader(props) {
               oscalData,
               oscalUrl,
               onResolutionComplete,
-              handleRestPatch
+              handleFieldSave,
+              handleRestError
             )}
           </Box>
         </Split>
@@ -307,7 +267,7 @@ export default function OSCALLoader(props) {
           oscalData,
           oscalUrl,
           onResolutionComplete,
-          handleRestPatch
+          handleFieldSave
         )}
       </>
     );
@@ -340,25 +300,32 @@ export function getRequestedUrl() {
 }
 
 export function OSCALCatalogLoader(props) {
-  const oscalObjectType = oscalObjectTypes.catalog;
+  const oscalObjectType = restUtils.oscalObjectTypes.catalog;
   const renderer = (
     isRestMode,
     oscalData,
     oscalUrl,
     onResolutionComplete,
-    handleRestPatch
+    handleFieldSave
   ) => (
     <OSCALCatalog
       catalog={oscalData[oscalObjectType.jsonRootName]}
       parentUrl={oscalUrl}
       onResolutionComplete={onResolutionComplete}
-      onFieldSave={(data, editedField, newValue) => {
-        handleRestPatch(
-          data,
-          editedField,
+      onFieldSave={(
+        appendToLastFieldInPath,
+        partialRestData,
+        editedFieldJsonPath,
+        newValue,
+        restUrlPath
+      ) => {
+        handleFieldSave(
+          appendToLastFieldInPath,
+          partialRestData,
+          editedFieldJsonPath,
           newValue,
-          oscalObjectType.jsonRootName,
-          oscalObjectType.restPath
+          restUrlPath,
+          oscalObjectType
         );
       }}
     />
@@ -377,27 +344,39 @@ export function OSCALCatalogLoader(props) {
 }
 
 export function OSCALSSPLoader(props) {
-  const oscalObjectType = oscalObjectTypes.ssp;
+  const oscalObjectType = restUtils.oscalObjectTypes.ssp;
   const renderer = (
     isRestMode,
     oscalData,
     oscalUrl,
     onResolutionComplete,
-    handleRestPatch
+    handleFieldSave,
+    handleRestError
   ) => (
     <OSCALSsp
       system-security-plan={oscalData[oscalObjectType.jsonRootName]}
       isEditable={isRestMode}
       parentUrl={oscalUrl}
       onResolutionComplete={onResolutionComplete}
-      onFieldSave={(data, editedField, newValue) => {
-        handleRestPatch(
-          data,
-          editedField,
+      onFieldSave={(
+        appendToLastFieldInPath,
+        partialRestData,
+        editedFieldJsonPath,
+        newValue,
+        restUrlPath
+      ) => {
+        handleFieldSave(
+          appendToLastFieldInPath,
+          partialRestData,
+          editedFieldJsonPath,
           newValue,
-          oscalObjectType.jsonRootName,
-          oscalObjectType.restPath
+          restUrlPath,
+          oscalObjectType
         );
+      }}
+      onRestSuccess={() => {}}
+      onRestError={(error) => {
+        handleRestError(error);
       }}
     />
   );
@@ -415,25 +394,32 @@ export function OSCALSSPLoader(props) {
 }
 
 export function OSCALComponentLoader(props) {
-  const oscalObjectType = oscalObjectTypes.component;
+  const oscalObjectType = restUtils.oscalObjectTypes.component;
   const renderer = (
     isRestMode,
     oscalData,
     oscalUrl,
     onResolutionComplete,
-    handleRestPatch
+    handleFieldSave
   ) => (
     <OSCALComponentDefinition
       componentDefinition={oscalData[oscalObjectType.jsonRootName]}
       parentUrl={oscalUrl}
       onResolutionComplete={onResolutionComplete}
-      onFieldSave={(data, editedField, newValue) => {
-        handleRestPatch(
-          data,
-          editedField,
+      onFieldSave={(
+        appendToLastFieldInPath,
+        partialRestData,
+        editedFieldJsonPath,
+        newValue,
+        restUrlPath
+      ) => {
+        handleFieldSave(
+          appendToLastFieldInPath,
+          partialRestData,
+          editedFieldJsonPath,
           newValue,
-          oscalObjectType.jsonRootName,
-          oscalObjectType.restPath
+          restUrlPath,
+          oscalObjectType
         );
       }}
     />
@@ -450,26 +436,34 @@ export function OSCALComponentLoader(props) {
     />
   );
 }
+
 export function OSCALProfileLoader(props) {
-  const oscalObjectType = oscalObjectTypes.profile;
+  const oscalObjectType = restUtils.oscalObjectTypes.profile;
   const renderer = (
     isRestMode,
     oscalData,
     oscalUrl,
     onResolutionComplete,
-    handleRestPatch
+    handleFieldSave
   ) => (
     <OSCALProfile
       profile={oscalData[oscalObjectType.jsonRootName]}
       parentUrl={oscalUrl}
       onResolutionComplete={onResolutionComplete}
-      onFieldSave={(data, editedField, newValue) => {
-        handleRestPatch(
-          data,
-          editedField,
+      onFieldSave={(
+        appendToLastFieldInPath,
+        partialRestData,
+        editedFieldJsonPath,
+        newValue,
+        restUrlPath
+      ) => {
+        handleFieldSave(
+          appendToLastFieldInPath,
+          partialRestData,
+          editedFieldJsonPath,
           newValue,
-          oscalObjectType.jsonRootName,
-          oscalObjectType.restPath
+          restUrlPath,
+          oscalObjectType
         );
       }}
     />

@@ -80,6 +80,11 @@ export default function OSCALProfile(props) {
             includeControlIds={includeControlIds}
             modificationAlters={props.profile.modify.alters}
             modificationSetParameters={props.profile.modify["set-parameters"]}
+            restData={{
+              profile: {
+                uuid: props.profile.uuid,
+              },
+            }}
             childLevel={0}
             key={`control-${control.id}`}
           />
