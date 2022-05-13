@@ -11,22 +11,46 @@ export default function OSCALEditableFieldActions(props) {
   return props.inEditState ? (
     <>
       <IconButton
-        aria-label={`save-${getElementLabel(props.editedField)}`}
+        aria-label={
+          props.editedField
+            ? `save-${getElementLabel(props.editedField)}`
+            : `save-${props.editedFieldPath}`
+        }
         onClick={() => {
-          props.setInEditState(!props.inEditState);
-          props.onFieldSave(
-            props.restData,
-            props.editedField,
-            props.reference ? props.reference.current.value : props.value
-          );
+          if (props.onFieldSave.length > 0) {
+            props.onFieldSave(
+              props.appendToLastFieldInPath,
+              props.partialRestData,
+              props.editedField,
+              props.reference.current.value
+            );
+          } else {
+            props.onFieldSave();
+          }
+
+          if (props.setInEditState) {
+            props.setInEditState(!props.inEditState);
+          }
+
+          if (props.onCancel) {
+            props.onCancel();
+          }
         }}
       >
         <SaveIcon fontSize={props.iconFontSize} />
       </IconButton>
       <IconButton
-        aria-label={`cancel-${getElementLabel(props.editedField)}`}
+        aria-label={
+          props.editedField
+            ? `cancel-${getElementLabel(props.editedField)}`
+            : `cancel-${props.editedFieldPath}`
+        }
         onClick={() => {
-          props.setInEditState(!props.inEditState);
+          if (props.onCancel) {
+            props.onCancel();
+          } else {
+            props.setInEditState(!props.inEditState);
+          }
         }}
       >
         <CancelIcon fontSize={props.iconFontSize} />
@@ -34,7 +58,11 @@ export default function OSCALEditableFieldActions(props) {
     </>
   ) : (
     <IconButton
-      aria-label={`edit-${getElementLabel(props.editedField)}`}
+      aria-label={
+        props.editedField
+          ? `edit-${getElementLabel(props.editedField)}`
+          : `edit-${props.editedFieldPath}`
+      }
       onClick={() => {
         props.setInEditState(!props.inEditState);
       }}

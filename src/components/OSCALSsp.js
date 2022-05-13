@@ -16,20 +16,21 @@ export default function OSCALSsp(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const unmounted = useRef(false);
 
-  const restData = {
+  const ssp = props["system-security-plan"];
+  const partialRestData = {
     "system-security-plan": {
-      uuid: props["system-security-plan"].uuid,
+      uuid: ssp.uuid,
     },
   };
 
   let sspParties;
-  if (props["system-security-plan"].metadata) {
-    sspParties = props["system-security-plan"].metadata.parties;
+  if (ssp.metadata) {
+    sspParties = ssp.metadata.parties;
   }
 
   useEffect(() => {
     OSCALSspResolveProfile(
-      props["system-security-plan"],
+      ssp,
       props.parentUrl,
       (profilesCatalogsTree) => {
         if (!unmounted.current) {
@@ -59,15 +60,14 @@ export default function OSCALSsp(props) {
   } else {
     controlImpl = (
       <OSCALControlImplementation
-        controlImplementation={
-          props["system-security-plan"]["control-implementation"]
-        }
-        components={
-          props["system-security-plan"]["system-implementation"].components
-        }
-        controls={props["system-security-plan"].resolvedControls}
-        modifications={props["system-security-plan"].modifications}
-        restData={restData}
+        controlImplementation={ssp["control-implementation"]}
+        components={ssp["system-implementation"].components}
+        controls={ssp.resolvedControls}
+        isEditable={props.isEditable}
+        modifications={ssp.modifications}
+        onRestSuccess={props.onRestSuccess}
+        onRestError={props.onRestError}
+        partialRestData={partialRestData}
       />
     );
   }
@@ -75,30 +75,26 @@ export default function OSCALSsp(props) {
   return (
     <div className={classes.paper}>
       <OSCALMetadata
-        metadata={props["system-security-plan"].metadata}
+        metadata={ssp.metadata}
         isEditable={props.isEditable}
         onFieldSave={props.onFieldSave}
-        restData={restData}
+        partialRestData={partialRestData}
       />
       <OSCALProfileCatalogInheritance
         inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}
       />
       <OSCALSystemCharacteristics
-        systemCharacteristics={
-          props["system-security-plan"]["system-characteristics"]
-        }
-        backMatter={props["system-security-plan"]["back-matter"]}
+        systemCharacteristics={ssp["system-characteristics"]}
+        backMatter={ssp["back-matter"]}
         parentUrl={props.parentUrl}
       />
       <OSCALSystemImplementation
-        systemImplementation={
-          props["system-security-plan"]["system-implementation"]
-        }
+        systemImplementation={ssp["system-implementation"]}
         parties={sspParties}
       />
       {controlImpl}
       <OSCALBackMatter
-        backMatter={props["system-security-plan"]["back-matter"]}
+        backMatter={ssp["back-matter"]}
         parentUrl={props.parentUrl}
       />
     </div>

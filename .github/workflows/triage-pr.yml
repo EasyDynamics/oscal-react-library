@@ -1,0 +1,84 @@
+---
+name: Triage pull request
+
+on:
+  pull_request_review:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+
+env:
+  DEFAULT_REVIEW_TEAM: "easygrc-reviewers"
+
+jobs:
+  assignReviewers:
+    # This job automatically continues to assign reviews to a pull request each time
+    # a pull request is (re)opened or a review is added/edited/dismissed until the
+    # review threshold has been met. This pauses requesting reviews when a reviwer
+    # has requested changes (and therefore, set the overall review state to
+    # CHANGES_REQUESTED). It will happily continue running once that review is
+    # dismissed or the reviewer changes their review to an approval. This matches
+    # the general expectations of our branch protection rules where all requested
+    # changes must be resolved before a PR can be merged.
+    name: Automatically assign reviewers
+    runs-on: ubuntu-latest
+    permissions:
+      # This job itself only needs to be able to read pull requests. We use a
+      # separate token to perform the actual review request.
+      pull-requests: read
+    steps:
+      - name: Get review status
+        id: pr-reviews
+        uses: actions/github-script@v6
+        with:
+          # Leverage the GraphQL API to determine whether the current review
+          # decision status. This is different from the `mergeable`-related statuses
+          # available directly on the event context as this purely factors in reviews,
+          # not status checks or other situations. Additionally, in many cases,
+          # the `mergeable`-related fields are null/"unknown" and so we'd have to query
+          # for them anyway.
+          # This query is performed with the basic pull-requests:read permissions on
+          # the overall `secrets.GITHUB_TOKEN` to limit the permissions. Notable, that
+          # means this cannot perform mutations or call non-PR APIs.
+          script: |
+            const query = `query($owner:String!, $name:String!, $number:Int!) {
+              repository(owner:$owner, name:$name) {
+                pullRequest(number:$number) {
+                  reviewDecision
+                }
+              }
+            }`;
+            const variables = {
+              owner: context.repo.owner,
+              name: context.repo.repo,
+              number: context.payload.pull_request.number,
+            };
+            console.log(`Request variables: ${JSON.stringify(variables)}`);
+            const result = await github.graphql(query, variables);
+            const decision = result.repository.pullRequest.reviewDecision;
+            console.log(`Review Decision: ${decision}`);
+            core.setOutput("review-decision", decision);
+      - name: Generate token from App
+        # Only authenticate as the application if a review is still required. If the review
+        # criteria have been met then there's not much point in requesting another review and
+        # it will just generate unnecessary noise. Additionally, we really want to use the
+        # app's elevated permissions as infrequently as possible.
+        if: steps.pr-reviews.outputs.review-decision == 'REVIEW_REQUIRED'
+        id: generate_token
+        uses: tibdex/github-app-token@586e1a624db6a5a4ac2c53daeeded60c5e3d50fe
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+      - name: Assign reviewers
+        uses: actions/github-script@v6
+        if: steps.pr-reviews.outputs.review-decision == 'REVIEW_REQUIRED'
+        with:
+          github-token: ${{ steps.generate_token.outputs.token }}
+          script: |
+            await github.rest.pulls.requestReviewers({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              team_reviewers: ["${{ env.DEFAULT_REVIEW_TEAM }}"]
+            });

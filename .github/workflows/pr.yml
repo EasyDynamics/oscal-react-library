@@ -7,6 +7,9 @@ on:
       - main
       - develop
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     name: Lint the code base
@@ -26,31 +29,18 @@ jobs:
       - name: Install dependencies
         run:
           npm ci && cd example && npm ci && cd ..
-      - name: Lint Code Base
-        # super-linter@v4.4.0 moves to using eslint for JSON files which in
-        # our configuration results in JSON parsing failures. Temporarily,
-        # pinning to @v4.3.0 (using jsonlint) allows validation to succeed
-        uses: github/super-linter@v4
-        env:
-          DEFAULT_BRANCH: develop
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Our linter configuration files will be specified relative to the
-          # root of the workspace (/) rather than within the default directory
-          # (.github/linters)
-          LINTER_RULES_PATH: /
-          JAVASCRIPT_ES_CONFIG_FILE: .eslintrc.json
-          MARKDOWN_CONFIG_FILE: .markdownlint.yaml
-          # A specific subset of linters are enabled
-          VALIDATE_HTML: true
-          VALIDATE_JAVASCRIPT_ES: true
-          VALIDATE_MARKDOWN: true
-          VALIDATE_JSON: true
-          VALIDATE_YAML: true
-          # Ideally, we should validate only changed files; we don't want to
-          # have a PR fail because rules changed outside the PR itself.
-          VALIDATE_ALL_CODEBASE: false
-          # The possum is fun but it does add a little noise to the workflow
-          SUPPRESS_POSSUM: true
+      - name: Install lint dependencies
+        run: |
+          npm install -g markdownlint-cli
+          pip install yamllint
+      - name: Lint code base
+        run: |
+          # Run built-in JavaScript/JSON linting
+          npm run lint
+          # Lint markdown files
+          markdownlint '**/*.md' --ignore node_modules --ignore example/node_modules
+          # Lint YAML files
+          yamllint --format github --config-file .yaml-lint.yml .
   build_and_test:
     strategy:
       matrix:
@@ -82,7 +72,7 @@ jobs:
         run:
           npm run predeploy
       - name: Archive artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: oscal-viewer
           path: example/build

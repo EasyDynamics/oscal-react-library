@@ -5,67 +5,65 @@ import OSCALEditableFieldActions, {
   getElementLabel,
 } from "./OSCALEditableFieldActions";
 
-function inEditStateTextField(props, reference) {
-  return (
-    <Grid item xs={props.size} className={props.className}>
-      <Typography>
-        <TextField
-          fullWidth
-          inputProps={{
-            "data-testid": `textField-${getElementLabel(props.editedField)}`,
-          }}
-          inputRef={reference}
-          size={props.textFieldSize}
-          defaultValue={props.value}
-          variant={props.textFieldVariant}
-        />
-      </Typography>
-    </Grid>
-  );
-}
-
 function textFieldWithEditableActions(
   props,
   reference,
   inEditState,
   setInEditState
 ) {
-  return inEditState ? (
+  if (inEditState) {
+    return (
+      <>
+        <Grid item xs={props.size} className={props.className}>
+          <Typography>
+            <TextField
+              fullWidth
+              inputProps={{
+                "data-testid": `textField-${getElementLabel(
+                  props.editedField
+                )}`,
+              }}
+              inputRef={reference}
+              size={props.textFieldSize}
+              defaultValue={props.value}
+              variant={props.textFieldVariant}
+            />
+          </Typography>
+        </Grid>
+        <Grid item>
+          <OSCALEditableFieldActions
+            appendToLastFieldInPath={props.appendToLastFieldInPath}
+            inEditState={inEditState}
+            editedField={props.editedField}
+            setInEditState={setInEditState}
+            onCancel={props.onCancel}
+            onFieldSave={props.onFieldSave}
+            partialRestData={props.partialRestData}
+            reference={reference}
+          />
+        </Grid>
+      </>
+    );
+  }
+
+  return (
     <>
-      {inEditStateTextField(props, reference)}
-      <Grid item>
-        <OSCALEditableFieldActions
-          inEditState={inEditState}
-          editedField={props.editedField}
-          editIcon={props.editIcon}
-          setInEditState={setInEditState}
-          onFieldSave={props.onFieldSave}
-          restData={props.restData}
-          reference={reference}
-        />
-      </Grid>
-    </>
-  ) : (
-    <>
-      <Grid item className={props.className}>
-        <Typography variant={props.typographyVariant}>{props.value}</Typography>
-      </Grid>
-      <Grid item>
-        <OSCALEditableFieldActions
-          editIcon={props.editIcon}
-          editedField={props.editedField}
-          inEditState={inEditState}
-          restData={props.restData}
-          setInEditState={setInEditState}
-        />
-      </Grid>
+      <Typography display="inline" variant={props.typographyVariant}>
+        {props.value}
+      </Typography>
+      <OSCALEditableFieldActions
+        editedField={props.editedField}
+        inEditState={inEditState}
+        partialRestData={props.partialRestData}
+        setInEditState={setInEditState}
+      />
     </>
   );
 }
 
 export default function OSCALEditableTextField(props) {
   const reference = useRef("reference to text field");
-  const [inEditState, setInEditState] = useState(false);
+  const [inEditState, setInEditState] = useState(props.inEditState);
 
   return props.canEdit ? (
     textFieldWithEditableActions(props, reference, inEditState, setInEditState)

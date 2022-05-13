@@ -16,22 +16,25 @@
   },
   "dependencies": {
     "@EasyDynamics/oscal-react-library": "file:..",
-    "@testing-library/jest-dom": "file:../node_modules/@testing-library/jest-dom",
-    "@testing-library/react": "file:../node_modules/@testing-library/react",
-    "@testing-library/user-event": "file:../node_modules/@testing-library/user-event",
     "history": "file:../node_modules/history",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
     "react-ga": "^3.3.0",
     "react-router-dom": "file:../node_modules/react-router-dom",
     "react-scripts": "file:../node_modules/react-scripts",
-    "web-vitals": "^2.1.0"
+    "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "@babel/plugin-syntax-object-rest-spread": "^7.8.3"
+    "@babel/plugin-syntax-object-rest-spread": "^7.8.3",
+    "@testing-library/jest-dom": "file:../node_modules/@testing-library/jest-dom",
+    "@testing-library/react": "file:../node_modules/@testing-library/react",
+    "@testing-library/user-event": "file:../node_modules/@testing-library/user-event"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": [
     ">0.2%",

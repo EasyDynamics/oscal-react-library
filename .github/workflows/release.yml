@@ -15,6 +15,9 @@ on:
 
 concurrency: package-repo-release
 
+permissions:
+  contents: write
+
 jobs:
   release:
     name: Create a New Release

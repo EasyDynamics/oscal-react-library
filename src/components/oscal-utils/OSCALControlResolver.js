@@ -48,7 +48,7 @@ export function getStatementByComponent(
 ) {
   // TODO Remove underscore replacement when OSCAL example content is fixed (https://github.com/usnistgov/oscal-content/issues/58, https://easydynamics.atlassian.net/browse/EGRC-266)
   // Locate matching statement to statementId
-  const foundStatement = implReqStatements.find(
+  const foundStatement = implReqStatements?.find(
     (statement) =>
       statement["statement-id"] === statementId ||
       statement["statement-id"] === statementId.replace("_", "")

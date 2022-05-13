@@ -9,6 +9,7 @@ import {
   componentsTestData,
 } from "../test-data/ComponentsData";
 import { profileModifyTestData } from "../test-data/ModificationsData";
+import { sspRestData } from "../test-data/SystemData";
 
 const controlsTestData = [exampleControl];
 
@@ -21,6 +22,7 @@ function controlImplementationImplReqRenderer() {
       components={exampleComponents}
       controls={controlsTestData}
       modifications={profileModifyTestData}
+      partialRestData={sspRestData}
     />
   );
 }
@@ -46,7 +48,7 @@ export default function testOSCALControlImplementationImplReq(
   test(`${parentElementName} displays component implementation description`, async () => {
     renderer();
 
-    userEvent.hover(
+    await userEvent.hover(
       screen.getByRole("link", {
         name: "Component 1 description of implementing control 1",
       })
@@ -65,6 +67,7 @@ export default function testOSCALControlImplementationImplReq(
         components={componentsTestData}
         controls={controlsTestData}
         modifications={emptyProfileModifyTestData}
+        partialRestData={sspRestData}
       />
     );
     expect(
