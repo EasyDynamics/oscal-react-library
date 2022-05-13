@@ -504,7 +504,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
                         return setParameterValue
                           ? {
                               "param-id": setParameterId,
-                              values: setParameterValue,
+                              values: [setParameterValue],
                             }
                           : null;
                       }),
