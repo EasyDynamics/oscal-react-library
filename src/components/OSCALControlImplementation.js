@@ -82,13 +82,15 @@ export default function OSCALControlImplementation(props) {
             </Grid>
           </Grid>
         </CardContent>
-        <Grid item className={classes.OSCALControlImplementationAdd}>
-          <OSCALControlImplementationAdd
-            controls={props.controls}
-            implementedControls={controlIds}
-            restData={props.restData}
-          />
-        </Grid>
+        {props.isEditable ? (
+          <Grid item className={classes.OSCALControlImplementationAdd}>
+            <OSCALControlImplementationAdd
+              controls={props.controls}
+              implementedControls={controlIds}
+              restData={props.restData}
+            />
+          </Grid>
+        ) : null}
       </Card>
     </div>
   );

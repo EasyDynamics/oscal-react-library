@@ -55,7 +55,7 @@ export default function OSCALControlImplementationAdd(props) {
           editIcon={editIcon}
           inEditState={addingNewImplementation}
           onFieldSave={(restData, editedField, value) => {
-            setNewControl("");
+            props.onFieldSave(restData, editedField, value);
           }}
           restData={props.restData}
           setInEditState={setAddingNewImplementation}
