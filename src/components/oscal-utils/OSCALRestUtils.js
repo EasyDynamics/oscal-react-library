@@ -232,7 +232,7 @@ export function createOrUpdateSspControlImplementationImplementedRequirementStat
   performRequest(
     { "implemented-requirement": partialRestImplementedRequirement },
     restMethods.PUT,
-    requestUrl,
+    buildRequestUrl(null, requestUrl, null),
     onPreRestRequest,
     onSuccess,
     onError
