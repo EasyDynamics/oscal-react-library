@@ -3,7 +3,9 @@ import Grid from "@material-ui/core/Grid";
 import { TextField } from "@material-ui/core";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import { Autocomplete } from "@material-ui/lab";
-import OSCALEditableFieldActions from "./OSCALEditableFieldActions";
+import OSCALEditableFieldActions, {
+  getElementLabel,
+} from "./OSCALEditableFieldActions";
 
 // function to calculate possible new controls
 function getControlIdsAndTitles(controls, implementedControls) {
@@ -25,6 +27,7 @@ export default function OSCALControlImplementationAdd(props) {
   const rootOscalObjectName = props.restData
     ? Object.keys(props.restData)[0]
     : null;
+  const editedFieldContents = [rootOscalObjectName, "control-implementations"];
 
   return (
     <Grid container xs={12} justifyContent="flex-start" alignItems="center">
@@ -33,6 +36,7 @@ export default function OSCALControlImplementationAdd(props) {
           <Autocomplete
             disablePortal
             fullWidth
+            aria-label={`autocomplete-${getElementLabel(editedFieldContents)}`}
             onChange={(event) => {
               setNewControl(event.target.textContent);
             }}
@@ -51,7 +55,7 @@ export default function OSCALControlImplementationAdd(props) {
       ) : null}
       <Grid item>
         <OSCALEditableFieldActions
-          editedField={[rootOscalObjectName, "control-implementations"]}
+          editedField={editedFieldContents}
           editIcon={editIcon}
           inEditState={addingNewImplementation}
           onFieldSave={(restData, editedField, value) => {
