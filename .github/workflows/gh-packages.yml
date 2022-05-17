@@ -10,29 +10,30 @@ concurrency: package-push
 
 jobs:
   publish:
-    name: Publish OSCAL Viewer Build to GitHub Packages
-    runs-on: ubuntu-20.04
+    name: Publish OSCAL Viewer Build to NPM and GitHub Packages
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     steps:
-      - name: Delete previous oscal-react-library version
-        uses: actions/delete-package-versions@v3
-        with:
-          package-name: oscal-react-library
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Setup NodeJS
+      - name: Setup Node.js for NPM publish
         uses: actions/setup-node@v3
         with:
-          node-version: 14
-          registry-url: https://npm.pkg.github.com/
-          cache: npm
-      - name: Update Npm
-        run: npm install -g npm@latest
-      - name: Build and Publish Library
-        run: |
-          npm ci
-          npm publish
+          node-version: 'lts/*'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install depdendencies
+        run: npm ci
+      - name: Publish to NPM
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Reconfigure Node.js for GitHub Packages publish
+        uses: actions/setup-node@v3
+        with:
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Publish to GitHub Packages
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
