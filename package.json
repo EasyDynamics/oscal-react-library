@@ -69,8 +69,8 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-syntax-jsx": "^7.16.7",
-    "@babel/preset-react": "^7.16.7",
+    "@babel/plugin-syntax-jsx": "^7.17.12",
+    "@babel/preset-react": "^7.17.12",
     "@babel/eslint-parser": "^7.17.0",
     "@storybook/addon-actions": "^6.4.22",
     "@storybook/addon-docs": "^6.4.22",
@@ -91,7 +91,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jest": "^26.2.1",
+    "eslint-plugin-jest": "^26.2.2",
     "eslint-plugin-json": "^3.1.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
