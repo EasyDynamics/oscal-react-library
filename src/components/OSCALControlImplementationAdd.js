@@ -9,8 +9,9 @@ import { v4 as uuidv4 } from "uuid";
 import OSCALEditableFieldActions, {
   getElementLabel,
 } from "./OSCALEditableFieldActions";
+import * as restUtils from "./oscal-utils/OSCALRestUtils";
 
-// function to calculate possible new controls
+// calculates possible new controls
 function getControlIdsAndTitles(controls, implementedControls) {
   return controls
     .filter(
@@ -24,7 +25,7 @@ function getControlIdsAndTitles(controls, implementedControls) {
 
 export default function OSCALControlImplementationAdd(props) {
   const [inEditState, setInEditState] = useState(false);
-  const [inSaveMode, setInSaveMode] = useState(true);
+  const [isProcessingRequest, setIsProcessingRequest] = useState(false);
   const [newControl, setNewControl] = useState("");
   const editIcon = <AddBoxIcon />;
   const continueIcon = <CheckCircleIcon fontSize="small" />;
@@ -38,7 +39,7 @@ export default function OSCALControlImplementationAdd(props) {
 
   return (
     <Grid container xs={12} justifyContent="flex-start" alignItems="center">
-      {!inSaveMode ? (
+      {inEditState && !isProcessingRequest ? (
         <Grid item xs={6}>
           <Autocomplete
             disablePortal
@@ -66,14 +67,18 @@ export default function OSCALControlImplementationAdd(props) {
           editIcon={editIcon}
           inEditState={inEditState}
           onCancel={() => {
-            setSaveIconButton(continueIcon);
             setNewControl("");
-            setInSaveMode(true);
+            if (isProcessingRequest) {
+              props.setImplementedRequirements(
+                props.oldImplementedRequirements
+              );
+              setIsProcessingRequest(false);
+              setSaveIconButton(continueIcon);
+            }
             setInEditState(false);
-            props.setImplementedRequirements(props.oldImplementedRequirements);
           }}
           onFieldSave={() => {
-            if (!inSaveMode) {
+            if (inEditState && !isProcessingRequest) {
               setSaveIconButton(saveIcon);
               const implementationId = newControl.substring(0, 4).toLowerCase();
               const implementedRequirement = {
@@ -84,16 +89,27 @@ export default function OSCALControlImplementationAdd(props) {
               props.setImplementedRequirements(
                 props.implementedRequirements.concat([implementedRequirement])
               );
+              setIsProcessingRequest(true);
             } else {
-              setInEditState(false);
-              setInSaveMode(true);
+              restUtils.createNewSspControlImplementation(
+                props.partialRestData,
+                props.implementedRequirements[
+                  props.implementedRequirements.length - 1
+                ],
+                () => {},
+                () => {
+                  props.onRestSuccess();
+                },
+                (error) => {
+                  props.onRestError(error);
+                }
+              );
             }
           }}
           restData={props.restData}
           saveIcon={saveIconButton}
-          saveMode={inSaveMode}
-          setSaveMode={setInSaveMode}
           setInEditState={setInEditState}
+          isProcessingRequest={!isProcessingRequest}
           value={newControl}
         />
       </Grid>

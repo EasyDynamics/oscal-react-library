@@ -27,16 +27,7 @@ export default function OSCALEditableFieldActions(props) {
             props.onFieldSave();
           }
 
-          if (!props.saveMode && props.setSaveMode) {
-            props.setSaveMode(true);
-            return;
-          }
-
-          if (props.setInEditState) {
-            props.setInEditState(!props.inEditState);
-          }
-
-          if (props.onCancel) {
+          if (props.onCancel && !props.isProcessingRequest) {
             props.onCancel();
           }
         }}
@@ -52,9 +43,8 @@ export default function OSCALEditableFieldActions(props) {
         onClick={() => {
           if (props.onCancel) {
             props.onCancel();
-          } else {
-            props.setInEditState(!props.inEditState);
           }
+          props.setInEditState(false);
         }}
       >
         <CancelIcon fontSize={props.iconFontSize} />
@@ -68,8 +58,7 @@ export default function OSCALEditableFieldActions(props) {
           : `edit-${props.editedFieldPath}`
       }
       onClick={() => {
-        props.setInEditState(!props.inEditState);
-        props.setSaveMode(false);
+        props.setInEditState(true);
       }}
     >
       {props.editIcon}

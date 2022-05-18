@@ -93,7 +93,9 @@ export default function OSCALControlImplementation(props) {
               oldImplementedRequirements={
                 props.controlImplementation["implemented-requirements"]
               }
-              restData={props.restData}
+              onRestSuccess={props.onRestSuccess}
+              onRestError={props.onRestError}
+              partialRestData={props.partialRestData}
               setImplementedRequirements={setImplementedRequirements}
             />
           </Grid>

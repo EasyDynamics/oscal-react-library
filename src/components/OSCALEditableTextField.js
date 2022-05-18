@@ -39,10 +39,13 @@ function textFieldWithEditableActions(
           <OSCALEditableFieldActions
             appendToLastFieldInPath={props.appendToLastFieldInPath}
             inEditState={inEditState}
-            editedField={props.editedField}
             setInEditState={setInEditState}
+            editedField={props.editedField}
             onCancel={props.onCancel}
-            onFieldSave={props.onFieldSave}
+            onFieldSave={() => {
+              props.onFieldSave();
+              setInEditState(!inEditState);
+            }}
             partialRestData={props.partialRestData}
             reference={reference}
             editIcon={editIcon}
