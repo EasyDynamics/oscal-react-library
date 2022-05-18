@@ -78,6 +78,10 @@ export default function OSCALControlImplementationAdd(props) {
             setInEditState(false);
           }}
           onFieldSave={() => {
+            if (!newControl) {
+              return;
+            }
+
             if (inEditState && !isProcessingRequest) {
               setSaveIconButton(saveIcon);
               const implementationId = newControl.substring(0, 4).toLowerCase();
