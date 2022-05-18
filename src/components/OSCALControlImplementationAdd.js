@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import { TextField } from "@material-ui/core";
 import AddBoxIcon from "@material-ui/icons/AddBox";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import SaveIcon from "@material-ui/icons/Save";
 import { Autocomplete } from "@material-ui/lab";
+import { v4 as uuidv4 } from "uuid";
 import OSCALEditableFieldActions, {
   getElementLabel,
 } from "./OSCALEditableFieldActions";
@@ -20,9 +23,13 @@ function getControlIdsAndTitles(controls, implementedControls) {
 }
 
 export default function OSCALControlImplementationAdd(props) {
-  const [addingNewImplementation, setAddingNewImplementation] = useState(false);
+  const [inEditState, setInEditState] = useState(false);
+  const [inSaveMode, setInSaveMode] = useState(true);
   const [newControl, setNewControl] = useState("");
   const editIcon = <AddBoxIcon />;
+  const continueIcon = <CheckCircleIcon fontSize="small" />;
+  const saveIcon = <SaveIcon fontSize="small" />;
+  const [saveIconButton, setSaveIconButton] = useState(continueIcon);
 
   const rootOscalObjectName = props.restData
     ? Object.keys(props.restData)[0]
@@ -31,7 +38,7 @@ export default function OSCALControlImplementationAdd(props) {
 
   return (
     <Grid container xs={12} justifyContent="flex-start" alignItems="center">
-      {addingNewImplementation ? (
+      {!inSaveMode ? (
         <Grid item xs={6}>
           <Autocomplete
             disablePortal
@@ -57,12 +64,36 @@ export default function OSCALControlImplementationAdd(props) {
         <OSCALEditableFieldActions
           editedField={editedFieldContents}
           editIcon={editIcon}
-          inEditState={addingNewImplementation}
-          onFieldSave={(restData, editedField, value) => {
-            props.onFieldSave(restData, editedField, value);
+          inEditState={inEditState}
+          onCancel={() => {
+            setSaveIconButton(continueIcon);
+            setNewControl("");
+            setInSaveMode(true);
+            setInEditState(false);
+            props.setImplementedRequirements(props.oldImplementedRequirements);
+          }}
+          onFieldSave={() => {
+            if (!inSaveMode) {
+              setSaveIconButton(saveIcon);
+              const implementationId = newControl.substring(0, 4).toLowerCase();
+              const implementedRequirement = {
+                "control-id": implementationId,
+                uuid: uuidv4(),
+                statements: [],
+              };
+              props.setImplementedRequirements(
+                props.implementedRequirements.concat([implementedRequirement])
+              );
+            } else {
+              setInEditState(false);
+              setInSaveMode(true);
+            }
           }}
           restData={props.restData}
-          setInEditState={setAddingNewImplementation}
+          saveIcon={saveIconButton}
+          saveMode={inSaveMode}
+          setSaveMode={setInSaveMode}
+          setInEditState={setInEditState}
           value={newControl}
         />
       </Grid>

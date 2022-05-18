@@ -1,6 +1,5 @@
 import React from "react";
 import CancelIcon from "@material-ui/icons/Cancel";
-import SaveIcon from "@material-ui/icons/Save";
 import { IconButton } from "@material-ui/core";
 
 export function getElementLabel(editedField) {
@@ -28,6 +27,11 @@ export default function OSCALEditableFieldActions(props) {
             props.onFieldSave();
           }
 
+          if (!props.saveMode && props.setSaveMode) {
+            props.setSaveMode(true);
+            return;
+          }
+
           if (props.setInEditState) {
             props.setInEditState(!props.inEditState);
           }
@@ -37,7 +41,7 @@ export default function OSCALEditableFieldActions(props) {
           }
         }}
       >
-        <SaveIcon fontSize={props.iconFontSize} />
+        {props.saveIcon}
       </IconButton>
       <IconButton
         aria-label={
@@ -65,6 +69,7 @@ export default function OSCALEditableFieldActions(props) {
       }
       onClick={() => {
         props.setInEditState(!props.inEditState);
+        props.setSaveMode(false);
       }}
     >
       {props.editIcon}

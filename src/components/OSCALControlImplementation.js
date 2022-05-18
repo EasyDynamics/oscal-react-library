@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import List from "@material-ui/core/List";
 import OSCALControlImplementationImplReq from "./OSCALControlImplementationImplReq";
 import OSCALControlImplementationAdd from "./OSCALControlImplementationAdd";
+import { deepClone } from "./oscal-utils/OSCALRestUtils";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -40,10 +41,13 @@ const useStyles = makeStyles((theme) => ({
  */
 export default function OSCALControlImplementation(props) {
   const classes = useStyles();
+  const [implementedRequirements, setImplementedRequirements] = useState(
+    deepClone(props.controlImplementation["implemented-requirements"])
+  );
 
-  const controlIds = props.controlImplementation[
-    "implemented-requirements"
-  ].map((implementedControl) => implementedControl["control-id"]);
+  const controlIds = implementedRequirements.map(
+    (implementedControl) => implementedControl["control-id"]
+  );
 
   return (
     <div className={classes.paper}>
@@ -62,22 +66,20 @@ export default function OSCALControlImplementation(props) {
             </Grid>
             <Grid item xs={12}>
               <List className={classes.OSCALControlImplementationImplReqList}>
-                {props.controlImplementation["implemented-requirements"].map(
-                  (implementedRequirement) => (
-                    <OSCALControlImplementationImplReq
-                      implementedRequirement={implementedRequirement}
-                      components={props.components}
-                      controls={props.controls}
-                      childLevel={0}
-                      key={implementedRequirement.uuid}
-                      modifications={props.modifications}
-                      isEditable={props.isEditable}
-                      onRestSuccess={props.onRestSuccess}
-                      onRestError={props.onRestError}
-                      partialRestData={props.partialRestData}
-                    />
-                  )
-                )}
+                {implementedRequirements.map((implementedRequirement) => (
+                  <OSCALControlImplementationImplReq
+                    implementedRequirement={implementedRequirement}
+                    components={props.components}
+                    controls={props.controls}
+                    childLevel={0}
+                    key={implementedRequirement.uuid}
+                    modifications={props.modifications}
+                    isEditable={props.isEditable}
+                    onRestSuccess={props.onRestSuccess}
+                    onRestError={props.onRestError}
+                    partialRestData={props.partialRestData}
+                  />
+                ))}
               </List>
             </Grid>
           </Grid>
@@ -87,7 +89,12 @@ export default function OSCALControlImplementation(props) {
             <OSCALControlImplementationAdd
               controls={props.controls}
               implementedControls={controlIds}
+              implementedRequirements={implementedRequirements}
+              oldImplementedRequirements={
+                props.controlImplementation["implemented-requirements"]
+              }
               restData={props.restData}
+              setImplementedRequirements={setImplementedRequirements}
             />
           </Grid>
         ) : null}
