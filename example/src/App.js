@@ -93,7 +93,7 @@ function App() {
   }, [location]);
 useEffect(() => {
     setAppType(isRestMode ? "Editor" : "Viewer");
-    document.title = `OSCAL ${appType}`
+    document.title = `OSCAL ${appType}`;
 }, [isRestMode]);
   return (
     <ThemeProvider theme={theme}>
