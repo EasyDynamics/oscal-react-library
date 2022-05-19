@@ -38,7 +38,6 @@ jobs:
 
       - name: Update project dependencies
         run: |-
-          rm package-lock.json example/package-lock.json
           # Only allow minor/patch versions of react (and tightly-couple packages) and
           # upgrade all others to the newest version available.
           ncu --deep --upgrade --filter "react* @testing-library/react" --target minor
@@ -47,8 +46,10 @@ jobs:
       - name: Install updated dependencies
         run: |-
           npm install
+          npm update
           cd example
           npm install
+          npm update
           cd ..
 
       - name: Login as the automation app
