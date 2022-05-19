@@ -91,13 +91,10 @@ function App() {
       ReactGA.pageview(location.pathname + location.search);
     }
   }, [location]);
-  useEffect(() => {
+useEffect(() => {
     setAppType(isRestMode ? "Editor" : "Viewer");
-  }, [isRestMode]);
-  useEffect(() => {
-    document.title = `OSCAL ${appType}`;
-  }, [appType]);
-
+    document.title = `OSCAL ${appType}`
+}, [isRestMode]);
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
