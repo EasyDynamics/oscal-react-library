@@ -7,7 +7,6 @@ import Typography from "@material-ui/core/Typography";
 import List from "@material-ui/core/List";
 import OSCALControlImplementationImplReq from "./OSCALControlImplementationImplReq";
 import OSCALControlImplementationAdd from "./OSCALControlImplementationAdd";
-import { deepClone } from "./oscal-utils/OSCALRestUtils";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -42,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 export default function OSCALControlImplementation(props) {
   const classes = useStyles();
   const [implementedRequirements, setImplementedRequirements] = useState(
-    deepClone(props.controlImplementation["implemented-requirements"])
+    props.controlImplementation["implemented-requirements"]
   );
 
   const controlIds = implementedRequirements.map(
@@ -90,9 +89,6 @@ export default function OSCALControlImplementation(props) {
               controls={props.controls}
               implementedControls={controlIds}
               implementedRequirements={implementedRequirements}
-              oldImplementedRequirements={
-                props.controlImplementation["implemented-requirements"]
-              }
               onRestSuccess={props.onRestSuccess}
               onRestError={props.onRestError}
               partialRestData={props.partialRestData}

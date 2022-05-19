@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import { TextField } from "@material-ui/core";
 import AddBoxIcon from "@material-ui/icons/AddBox";
@@ -13,20 +13,21 @@ import * as restUtils from "./oscal-utils/OSCALRestUtils";
 
 // calculates possible new controls
 function getControlIdsAndTitles(controls, implementedControls) {
-  return controls
-    .filter(
-      (control) =>
-        !implementedControls.find(
-          (implementedControl) => implementedControl === control.id
-        )
-    )
-    .map((control) => `${control.id.toUpperCase()} ${control.title}`);
+  const controlIdsAndTitles = {};
+  controls
+    .filter((control) => !implementedControls.includes(control.id))
+    .forEach((control) => {
+      const title = `${control.id.toUpperCase()} ${control.title}`;
+      controlIdsAndTitles[title] = control.id;
+    });
+  return controlIdsAndTitles;
 }
 
 export default function OSCALControlImplementationAdd(props) {
   const [inEditState, setInEditState] = useState(false);
   const [isProcessingRequest, setIsProcessingRequest] = useState(false);
   const [newControl, setNewControl] = useState("");
+  const oldImplementedRequirements = useRef(props.implementedRequirements);
   const editIcon = <AddBoxIcon />;
   const continueIcon = <CheckCircleIcon fontSize="small" />;
   const saveIcon = <SaveIcon fontSize="small" />;
@@ -36,6 +37,10 @@ export default function OSCALControlImplementationAdd(props) {
     ? Object.keys(props.restData)[0]
     : null;
   const editedFieldContents = [rootOscalObjectName, "control-implementations"];
+  const controlIdsAndTitles = getControlIdsAndTitles(
+    props.controls,
+    props.implementedControls
+  );
 
   return (
     <Grid container xs={12} justifyContent="flex-start" alignItems="center">
@@ -51,10 +56,7 @@ export default function OSCALControlImplementationAdd(props) {
             onInputChange={(event) => {
               setNewControl(event.target.textContent);
             }}
-            options={getControlIdsAndTitles(
-              props.controls,
-              props.implementedControls
-            )}
+            options={Object.keys(controlIdsAndTitles)}
             renderInput={(params) => (
               <TextField {...params} label="Select Control" />
             )}
@@ -70,7 +72,7 @@ export default function OSCALControlImplementationAdd(props) {
             setNewControl("");
             if (isProcessingRequest) {
               props.setImplementedRequirements(
-                props.oldImplementedRequirements
+                oldImplementedRequirements.current
               );
               setIsProcessingRequest(false);
               setSaveIconButton(continueIcon);
@@ -84,7 +86,7 @@ export default function OSCALControlImplementationAdd(props) {
 
             if (inEditState && !isProcessingRequest) {
               setSaveIconButton(saveIcon);
-              const implementationId = newControl.substring(0, 4).toLowerCase();
+              const implementationId = controlIdsAndTitles[newControl];
               const implementedRequirement = {
                 "control-id": implementationId,
                 uuid: uuidv4(),
@@ -101,12 +103,8 @@ export default function OSCALControlImplementationAdd(props) {
                   props.implementedRequirements.length - 1
                 ],
                 () => {},
-                () => {
-                  props.onRestSuccess();
-                },
-                (error) => {
-                  props.onRestError(error);
-                }
+                props.onRestSuccess,
+                props.onRestError
               );
             }
           }}
