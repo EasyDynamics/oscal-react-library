@@ -97,7 +97,7 @@ export default function OSCALControlImplementationAdd(props) {
               );
               setIsProcessingRequest(true);
             } else {
-              restUtils.createNewSspControlImplementation(
+              restUtils.createSspControlImplementationImplementedRequirement(
                 props.partialRestData,
                 props.implementedRequirements[
                   props.implementedRequirements.length - 1

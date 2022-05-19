@@ -249,7 +249,7 @@ export function createOrUpdateSspControlImplementationImplementedRequirementStat
  * @param {*} onSuccess function called on a successful REST request with the result of the request as an argument
  * @param {*} onError function called on error with the error as an argument
  */
-export function createNewSspControlImplementation(
+export function createSspControlImplementationImplementedRequirement(
   partialRootRestData,
   newImplementedRequirement,
   onPreRestRequest,
