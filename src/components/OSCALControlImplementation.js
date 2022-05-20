@@ -25,10 +25,6 @@ const useStyles = makeStyles((theme) => ({
       color: "#0000008a",
     },
   },
-
-  OSCALControlImplementationAdd: {
-    margin: theme.spacing(2),
-  },
 }));
 
 /**
@@ -79,20 +75,20 @@ export default function OSCALControlImplementation(props) {
                   />
                 ))}
               </List>
+              {props.isEditable ? (
+                <Grid item>
+                  <OSCALControlImplementationAdd
+                    controls={props.controls}
+                    implementedControls={controlIds}
+                    onRestSuccess={props.onRestSuccess}
+                    onRestError={props.onRestError}
+                    partialRestData={props.partialRestData}
+                  />
+                </Grid>
+              ) : null}
             </Grid>
           </Grid>
         </CardContent>
-        {props.isEditable ? (
-          <Grid item className={classes.OSCALControlImplementationAdd}>
-            <OSCALControlImplementationAdd
-              controls={props.controls}
-              implementedControls={controlIds}
-              onRestSuccess={props.onRestSuccess}
-              onRestError={props.onRestError}
-              partialRestData={props.partialRestData}
-            />
-          </Grid>
-        ) : null}
       </Card>
     </div>
   );

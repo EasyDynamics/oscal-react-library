@@ -1,20 +1,12 @@
 import React, { useState } from "react";
 import Grid from "@material-ui/core/Grid";
-import { Button, IconButton, makeStyles, TextField } from "@material-ui/core";
+import { Button, IconButton, TextField } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
 import SaveIcon from "@material-ui/icons/Save";
 import { Autocomplete } from "@material-ui/lab";
 import { v4 as uuidv4 } from "uuid";
 import { getElementLabel } from "./OSCALEditableFieldActions";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
-
-const useStyles = makeStyles(() => ({
-  contained: {
-    "&.MuiButton-contained": {
-      backgroundColor: "white",
-    },
-  },
-}));
 
 // calculates possible new controls
 function getControlIdsAndTitles(controls, implementedControls) {
@@ -31,7 +23,6 @@ function getControlIdsAndTitles(controls, implementedControls) {
 export default function OSCALControlImplementationAdd(props) {
   const [inEditState, setInEditState] = useState(false);
   const [newControl, setNewControl] = useState("");
-  const classes = useStyles();
 
   const rootOscalObjectName = props.restData
     ? Object.keys(props.restData)[0]
@@ -95,7 +86,6 @@ export default function OSCALControlImplementationAdd(props) {
     <Grid container justifyContent="flex-end" alignItems="center">
       <Button
         aria-label="add-system-security-plan-control-implementation"
-        className={classes.contained}
         variant="contained"
         onClick={() => {
           setInEditState(true);
