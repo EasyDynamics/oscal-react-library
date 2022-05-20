@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -40,10 +40,9 @@ const useStyles = makeStyles((theme) => ({
  */
 export default function OSCALControlImplementation(props) {
   const classes = useStyles();
-  const [implementedRequirements, setImplementedRequirements] = useState(
-    props.controlImplementation["implemented-requirements"]
-  );
 
+  const implementedRequirements =
+    props.controlImplementation["implemented-requirements"];
   const controlIds = implementedRequirements.map(
     (implementedControl) => implementedControl["control-id"]
   );
@@ -88,11 +87,9 @@ export default function OSCALControlImplementation(props) {
             <OSCALControlImplementationAdd
               controls={props.controls}
               implementedControls={controlIds}
-              implementedRequirements={implementedRequirements}
               onRestSuccess={props.onRestSuccess}
               onRestError={props.onRestError}
               partialRestData={props.partialRestData}
-              setImplementedRequirements={setImplementedRequirements}
             />
           </Grid>
         ) : null}

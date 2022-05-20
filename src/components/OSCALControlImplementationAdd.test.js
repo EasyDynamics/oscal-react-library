@@ -28,7 +28,7 @@ export default function testOSCALControlImplementationAdd(
     renderer();
 
     const addButton = screen.getByRole("button", {
-      name: "edit-system-security-plan-control-implementations",
+      name: "add-system-security-plan-control-implementation",
     });
 
     expect(addButton).toBeVisible();
@@ -38,22 +38,22 @@ export default function testOSCALControlImplementationAdd(
     renderer();
 
     const addButton = screen.getByRole("button", {
-      name: "edit-system-security-plan-control-implementations",
+      name: "add-system-security-plan-control-implementation",
     });
     addButton.click();
 
     const saveButton = screen.getByRole("button", {
-      name: "save-system-security-plan-control-implementations",
+      name: "save-system-security-plan-control-implementation",
     });
     expect(saveButton).toBeVisible();
 
     const cancelButton = screen.getByRole("button", {
-      name: "cancel-system-security-plan-control-implementations",
+      name: "cancel-system-security-plan-control-implementation",
     });
     expect(cancelButton).toBeVisible();
 
     const autocomplete = screen.getByRole("combobox", {
-      name: "autocomplete-system-security-plan-control-implementations",
+      name: "autocomplete-system-security-plan-control-implementation",
     });
     expect(autocomplete).toBeVisible();
   });
