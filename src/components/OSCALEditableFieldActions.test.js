@@ -1,6 +1,5 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import EditIcon from "@material-ui/icons/Edit";
 import OSCALEditableFieldActions from "./OSCALEditableFieldActions";
 import { testModifiableMetadata } from "../test-data/MetadataData";
 
@@ -9,7 +8,6 @@ test("OSCALEditableFieldActions loads", () => {
     <OSCALEditableFieldActions
       canEdit
       editedField={["version"]}
-      editIcon={<EditIcon />}
       isInEditState={[false, () => {}]}
       modifiableData={testModifiableMetadata.version}
     />
@@ -19,7 +17,6 @@ test("OSCALEditableFieldActions loads", () => {
     <OSCALEditableFieldActions
       canEdit
       editedField={["version"]}
-      editIcon={<EditIcon />}
       isInEditState={[true, () => {}]}
       modifiableData={testModifiableMetadata.version}
     />

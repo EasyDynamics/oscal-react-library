@@ -1,8 +1,6 @@
 import React, { useRef, useState } from "react";
 import Typography from "@material-ui/core/Typography";
 import { Grid, TextField } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
-import SaveIcon from "@material-ui/icons/Save";
 import OSCALEditableFieldActions, {
   getElementLabel,
 } from "./OSCALEditableFieldActions";
@@ -13,9 +11,6 @@ function textFieldWithEditableActions(
   inEditState,
   setInEditState
 ) {
-  const saveIcon = <SaveIcon fontSize="small" />;
-  const editIcon = <EditIcon fontSize="small" />;
-
   if (inEditState) {
     return (
       <>
@@ -39,17 +34,12 @@ function textFieldWithEditableActions(
           <OSCALEditableFieldActions
             appendToLastFieldInPath={props.appendToLastFieldInPath}
             inEditState={inEditState}
-            setInEditState={setInEditState}
             editedField={props.editedField}
+            setInEditState={setInEditState}
             onCancel={props.onCancel}
-            onFieldSave={() => {
-              props.onFieldSave();
-              setInEditState(!inEditState);
-            }}
+            onFieldSave={props.onFieldSave}
             partialRestData={props.partialRestData}
             reference={reference}
-            editIcon={editIcon}
-            saveIcon={saveIcon}
           />
         </Grid>
       </>
@@ -66,8 +56,6 @@ function textFieldWithEditableActions(
         inEditState={inEditState}
         partialRestData={props.partialRestData}
         setInEditState={setInEditState}
-        editIcon={editIcon}
-        saveIcon={saveIcon}
       />
     </>
   );

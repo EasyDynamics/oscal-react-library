@@ -8,7 +8,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
-import EditIcon from "@material-ui/icons/Edit";
 import GroupIcon from "@material-ui/icons/Group";
 import { makeStyles } from "@material-ui/core/styles";
 import OSCALEditableTextField from "./OSCALEditableTextField";
@@ -73,7 +72,6 @@ export default function OSCALMetadata(props) {
         >
           <OSCALEditableTextField
             canEdit={props.isEditable}
-            editIcon={<EditIcon />}
             editedField={
               props.isEditable
                 ? [Object.keys(props.partialRestData)[0], "metadata", "title"]
@@ -155,7 +153,6 @@ export default function OSCALMetadata(props) {
                         ]
                       : null
                   }
-                  editIcon={<EditIcon />}
                   onFieldSave={props.onFieldSave}
                   partialRestData={
                     props.isEditable
