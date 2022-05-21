@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import List from "@material-ui/core/List";
 import OSCALControlImplementationImplReq from "./OSCALControlImplementationImplReq";
+import OSCALControlImplementationAdd from "./OSCALControlImplementationAdd";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,6 +36,13 @@ const useStyles = makeStyles((theme) => ({
  */
 export default function OSCALControlImplementation(props) {
   const classes = useStyles();
+
+  const implementedRequirements =
+    props.controlImplementation["implemented-requirements"];
+  const controlIds = implementedRequirements.map(
+    (implementedControl) => implementedControl["control-id"]
+  );
+
   return (
     <div className={classes.paper}>
       <Card>
@@ -52,23 +60,32 @@ export default function OSCALControlImplementation(props) {
             </Grid>
             <Grid item xs={12}>
               <List className={classes.OSCALControlImplementationImplReqList}>
-                {props.controlImplementation["implemented-requirements"].map(
-                  (implementedRequirement) => (
-                    <OSCALControlImplementationImplReq
-                      implementedRequirement={implementedRequirement}
-                      components={props.components}
-                      controls={props.controls}
-                      childLevel={0}
-                      key={implementedRequirement.uuid}
-                      modifications={props.modifications}
-                      isEditable={props.isEditable}
-                      onRestSuccess={props.onRestSuccess}
-                      onRestError={props.onRestError}
-                      partialRestData={props.partialRestData}
-                    />
-                  )
-                )}
+                {implementedRequirements.map((implementedRequirement) => (
+                  <OSCALControlImplementationImplReq
+                    implementedRequirement={implementedRequirement}
+                    components={props.components}
+                    controls={props.controls}
+                    childLevel={0}
+                    key={implementedRequirement.uuid}
+                    modifications={props.modifications}
+                    isEditable={props.isEditable}
+                    onRestSuccess={props.onRestSuccess}
+                    onRestError={props.onRestError}
+                    partialRestData={props.partialRestData}
+                  />
+                ))}
               </List>
+              {props.isEditable ? (
+                <Grid item>
+                  <OSCALControlImplementationAdd
+                    controls={props.controls}
+                    implementedControls={controlIds}
+                    onRestSuccess={props.onRestSuccess}
+                    onRestError={props.onRestError}
+                    partialRestData={props.partialRestData}
+                  />
+                </Grid>
+              ) : null}
             </Grid>
           </Grid>
         </CardContent>
