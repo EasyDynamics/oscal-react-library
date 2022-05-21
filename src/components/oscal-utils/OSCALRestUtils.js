@@ -220,9 +220,23 @@ export function createOrUpdateSspControlImplementationImplementedRequirementStat
   // Set each implementation parameter
   if (implementationSetParameters?.length) {
     statementByComponent["set-parameters"] ??= [];
-    statementByComponent["set-parameters"].push(
-      ...implementationSetParameters.filter((element) => !!element)
-    );
+    implementationSetParameters
+      .filter((element) => !!element)
+      .forEach((implementationSetParameter) => {
+        const foundExistingSetParam = statementByComponent[
+          "set-parameters"
+        ].find(
+          (element) =>
+            element["param-id"] === implementationSetParameter["param-id"]
+        );
+        if (foundExistingSetParam) {
+          foundExistingSetParam.values = implementationSetParameter.values;
+        } else {
+          statementByComponent["set-parameters"].push(
+            implementationSetParameter
+          );
+        }
+      });
   }
 
   const rootUuid = partialRootRestData[oscalObjectTypes.ssp.jsonRootName].uuid;
@@ -232,7 +246,7 @@ export function createOrUpdateSspControlImplementationImplementedRequirementStat
   performRequest(
     { "implemented-requirement": partialRestImplementedRequirement },
     restMethods.PUT,
-    requestUrl,
+    buildRequestUrl(null, requestUrl, null),
     onPreRestRequest,
     onSuccess,
     onError

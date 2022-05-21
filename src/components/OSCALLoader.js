@@ -139,9 +139,9 @@ export default function OSCALLoader(props) {
     loadOscalData(newOscalUrl);
   };
 
-  const handleReloadClick = () => {
+  const handleReload = (isForced) => {
     // Only reload if we're done loading
-    if (isLoaded && isResolutionComplete) {
+    if (isForced || (isLoaded && isResolutionComplete)) {
       setIsLoaded(false);
       setIsResolutionComplete(false);
       setReloadCount((current) => current + 1);
@@ -183,6 +183,10 @@ export default function OSCALLoader(props) {
     );
   };
 
+  const handleRestSuccess = () => {
+    handleReload(true);
+  };
+
   const onResolutionComplete = () => {
     setIsResolutionComplete(true);
   };
@@ -206,7 +210,7 @@ export default function OSCALLoader(props) {
         oscalUrl={oscalUrl}
         onUrlChange={handleUrlChange}
         onUuidChange={handleUuidChange}
-        onReloadClick={handleReloadClick}
+        onReloadClick={handleReload}
         isRestMode={isRestMode}
         onChangeRestMode={handleChangeRestMode}
         isResolutionComplete={isResolutionComplete}
@@ -255,6 +259,7 @@ export default function OSCALLoader(props) {
               oscalUrl,
               onResolutionComplete,
               handleFieldSave,
+              handleRestSuccess,
               handleRestError
             )}
           </Box>
@@ -267,7 +272,9 @@ export default function OSCALLoader(props) {
           oscalData,
           oscalUrl,
           onResolutionComplete,
-          handleFieldSave
+          handleFieldSave,
+          handleRestSuccess,
+          handleRestError
         )}
       </>
     );
@@ -306,7 +313,9 @@ export function OSCALCatalogLoader(props) {
     oscalData,
     oscalUrl,
     onResolutionComplete,
-    handleFieldSave
+    handleFieldSave,
+    handleRestSuccess,
+    handleRestError
   ) => (
     <OSCALCatalog
       catalog={oscalData[oscalObjectType.jsonRootName]}
@@ -328,6 +337,10 @@ export function OSCALCatalogLoader(props) {
           restUrlPath,
           oscalObjectType
         );
+      }}
+      onRestSuccess={handleRestSuccess}
+      onRestError={(error) => {
+        handleRestError(error);
       }}
     />
   );
@@ -352,6 +365,7 @@ export function OSCALSSPLoader(props) {
     oscalUrl,
     onResolutionComplete,
     handleFieldSave,
+    handleRestSuccess,
     handleRestError
   ) => (
     <OSCALSsp
@@ -375,7 +389,7 @@ export function OSCALSSPLoader(props) {
           oscalObjectType
         );
       }}
-      onRestSuccess={() => {}}
+      onRestSuccess={handleRestSuccess}
       onRestError={(error) => {
         handleRestError(error);
       }}
@@ -401,7 +415,9 @@ export function OSCALComponentLoader(props) {
     oscalData,
     oscalUrl,
     onResolutionComplete,
-    handleFieldSave
+    handleFieldSave,
+    handleRestSuccess,
+    handleRestError
   ) => (
     <OSCALComponentDefinition
       componentDefinition={oscalData[oscalObjectType.jsonRootName]}
@@ -423,6 +439,10 @@ export function OSCALComponentLoader(props) {
           restUrlPath,
           oscalObjectType
         );
+      }}
+      onRestSuccess={handleRestSuccess}
+      onRestError={(error) => {
+        handleRestError(error);
       }}
     />
   );
@@ -446,7 +466,9 @@ export function OSCALProfileLoader(props) {
     oscalData,
     oscalUrl,
     onResolutionComplete,
-    handleFieldSave
+    handleFieldSave,
+    handleRestSuccess,
+    handleRestError
   ) => (
     <OSCALProfile
       profile={oscalData[oscalObjectType.jsonRootName]}
@@ -468,6 +490,10 @@ export function OSCALProfileLoader(props) {
           restUrlPath,
           oscalObjectType
         );
+      }}
+      onRestSuccess={handleRestSuccess}
+      onRestError={(error) => {
+        handleRestError(error);
       }}
     />
   );
