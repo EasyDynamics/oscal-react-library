@@ -1,17 +1,23 @@
 import "./App.css";
-import { makeStyles, createTheme } from "@material-ui/core/styles";
+import {
+  createTheme,
+  ThemeProvider,
+  StyledEngineProvider,
+  adaptV4Theme,
+} from "@mui/material/styles";
+import makeStyles from "@mui/styles/makeStyles";
 import React, { useEffect, useState } from "react";
-import Typography from "@material-ui/core/Typography";
-import Container from "@material-ui/core/Container";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Button from "@material-ui/core/Button";
-import MenuIcon from "@material-ui/icons/Menu";
-import GitHubIcon from "@material-ui/icons/GitHub";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
+import MenuIcon from "@mui/icons-material/Menu";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import CssBaseline from "@mui/material/CssBaseline";
 import ReactGA from "react-ga";
 import {
   Navigate,
@@ -21,7 +27,6 @@ import {
   useLocation,
 } from "react-router-dom";
 
-import { ThemeProvider } from "@material-ui/styles";
 import {
   OSCALCatalogLoader,
   OSCALSSPLoader,
@@ -30,13 +35,15 @@ import {
 } from "@EasyDynamics/oscal-react-library";
 import logo from "./images/logo-header.svg";
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#002867",
+const theme = createTheme(
+  adaptV4Theme({
+    palette: {
+      primary: {
+        main: "#002867",
+      },
     },
-  },
-});
+  })
+);
 
 const useStyles = makeStyles((themeData) => ({
   title: {
@@ -57,6 +64,16 @@ const useStyles = makeStyles((themeData) => ({
     color: "white",
   },
 }));
+
+function AppWrapper() {
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    </StyledEngineProvider>
+  );
+}
 
 function App() {
   const classes = useStyles();
@@ -91,162 +108,158 @@ function App() {
     }
   }, [location]);
   return (
-    <ThemeProvider theme={theme}>
-      <div className="App">
-        <CssBaseline />
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton
-              edge="start"
-              className={classes.menuButton}
-              onClick={handleAppNavOpen}
-              color="inherit"
-              aria-label="menu"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" className={classes.title}>
-              <Routes>
-                {/*
-                 * Because we immediately redirect users, `/` won't be visible for
-                 * long; however, having this entry means that we avoid a console
-                 * warning and at least presents something if the redirect or
-                 * rendering fails for any reason.
-                 */}
-                <Route exact path="/" element="OSCAL Viewer" />
-                <Route exact path="/catalog" element="OSCAL Catalog Viewer" />
-                <Route
-                  exact
-                  path="/system-security-plan"
-                  element="OSCAL System Security Plan Viewer"
-                />
-                <Route
-                  exact
-                  path="/component-definition"
-                  element="OSCAL Component Viewer"
-                />
-                <Route exact path="/profile" element="OSCAL Profile Viewer" />
-              </Routes>
-            </Typography>
-            <Typography variant="body2" className={classes.logoText}>
-              Powered by
-            </Typography>
-            <Button
-              href="https://www.easydynamics.com"
-              className={classes.githubButton}
-              target="_blank"
-            >
-              <img
-                src={logo}
-                alt="Easy Dynamics Logo"
-                className={classes.logoImage}
+    <div className="App">
+      <CssBaseline />
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            onClick={handleAppNavOpen}
+            color="inherit"
+            aria-label="menu"
+            size="large"
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" className={classes.title}>
+            <Routes>
+              {/*
+               * Because we immediately redirect users, `/` won't be visible for
+               * long; however, having this entry means that we avoid a console
+               * warning and at least presents something if the redirect or
+               * rendering fails for any reason.
+               */}
+              <Route exact path="/" element="OSCAL Viewer" />
+              <Route exact path="/catalog" element="OSCAL Catalog Viewer" />
+              <Route
+                exact
+                path="/system-security-plan"
+                element="OSCAL System Security Plan Viewer"
               />
-            </Button>
-            <IconButton
-              href="https://github.com/EasyDynamics/oscal-react-library"
-              className={classes.githubButton}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <GitHubIcon htmlColor="white" />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        <Menu
-          id="app-nav-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleAppNavClose}
+              <Route
+                exact
+                path="/component-definition"
+                element="OSCAL Component Viewer"
+              />
+              <Route exact path="/profile" element="OSCAL Profile Viewer" />
+            </Routes>
+          </Typography>
+          <Typography variant="body2" className={classes.logoText}>
+            Powered by
+          </Typography>
+          <Button
+            href="https://www.easydynamics.com"
+            className={classes.githubButton}
+            target="_blank"
+          >
+            <img
+              src={logo}
+              alt="Easy Dynamics Logo"
+              className={classes.logoImage}
+            />
+          </Button>
+          <IconButton
+            href="https://github.com/EasyDynamics/oscal-react-library"
+            className={classes.githubButton}
+            target="_blank"
+            rel="noreferrer"
+            size="large"
+          >
+            <GitHubIcon htmlColor="white" />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <Menu
+        id="app-nav-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleAppNavClose}
+      >
+        <MenuItem
+          onClick={handleAppNavClose}
+          component={RouterLink}
+          to="/catalog"
         >
-          <MenuItem
-            onClick={handleAppNavClose}
-            component={RouterLink}
-            to="/catalog"
-          >
-            Catalog Viewer
-          </MenuItem>
-          <MenuItem
-            onClick={handleAppNavClose}
-            component={RouterLink}
-            to="/system-security-plan"
-          >
-            System Security Plan Viewer
-          </MenuItem>
-          <MenuItem
-            onClick={handleAppNavClose}
-            component={RouterLink}
-            to="/component-definition"
-          >
-            Component Viewer
-          </MenuItem>
-          <MenuItem
-            onClick={handleAppNavClose}
-            component={RouterLink}
-            to="/profile"
-          >
-            Profile Viewer
-          </MenuItem>
-        </Menu>
-        <Container maxWidth="xl" component="main">
-          <Routes>
-            <Route
-              exact
-              path="/"
-              element={<Navigate replace to="/catalog" />}
-            />
-            <Route
-              path="/catalog"
-              element={
-                <OSCALCatalogLoader
-                  renderForm
-                  isRestMode={isRestMode}
-                  setIsRestMode={setIsRestMode}
-                  backendUrl={backendUrl}
-                />
-              }
-            />
-            <Route
-              exact
-              path="/system-security-plan"
-              element={
-                <OSCALSSPLoader
-                  renderForm
-                  isRestMode={isRestMode}
-                  setIsRestMode={setIsRestMode}
-                  backendUrl={backendUrl}
-                />
-              }
-            />
-            <Route
-              exact
-              path="/component-definition"
-              element={
-                <OSCALComponentLoader
-                  renderForm
-                  isRestMode={isRestMode}
-                  setIsRestMode={setIsRestMode}
-                  backendUrl={backendUrl}
-                />
-              }
-            />
-            <Route
-              exact
-              path="/profile"
-              element={
-                <OSCALProfileLoader
-                  renderForm
-                  isRestMode={isRestMode}
-                  setIsRestMode={setIsRestMode}
-                  backendUrl={backendUrl}
-                />
-              }
-            />
-          </Routes>
-        </Container>
-      </div>
-    </ThemeProvider>
+          Catalog Viewer
+        </MenuItem>
+        <MenuItem
+          onClick={handleAppNavClose}
+          component={RouterLink}
+          to="/system-security-plan"
+        >
+          System Security Plan Viewer
+        </MenuItem>
+        <MenuItem
+          onClick={handleAppNavClose}
+          component={RouterLink}
+          to="/component-definition"
+        >
+          Component Viewer
+        </MenuItem>
+        <MenuItem
+          onClick={handleAppNavClose}
+          component={RouterLink}
+          to="/profile"
+        >
+          Profile Viewer
+        </MenuItem>
+      </Menu>
+      <Container maxWidth="xl" component="main">
+        <Routes>
+          <Route exact path="/" element={<Navigate replace to="/catalog" />} />
+          <Route
+            path="/catalog"
+            element={
+              <OSCALCatalogLoader
+                renderForm
+                isRestMode={isRestMode}
+                setIsRestMode={setIsRestMode}
+                backendUrl={backendUrl}
+              />
+            }
+          />
+          <Route
+            exact
+            path="/system-security-plan"
+            element={
+              <OSCALSSPLoader
+                renderForm
+                isRestMode={isRestMode}
+                setIsRestMode={setIsRestMode}
+                backendUrl={backendUrl}
+              />
+            }
+          />
+          <Route
+            exact
+            path="/component-definition"
+            element={
+              <OSCALComponentLoader
+                renderForm
+                isRestMode={isRestMode}
+                setIsRestMode={setIsRestMode}
+                backendUrl={backendUrl}
+              />
+            }
+          />
+          <Route
+            exact
+            path="/profile"
+            element={
+              <OSCALProfileLoader
+                renderForm
+                isRestMode={isRestMode}
+                setIsRestMode={setIsRestMode}
+                backendUrl={backendUrl}
+              />
+            }
+          />
+        </Routes>
+      </Container>
+    </div>
   );
 }
 
-export default App;
+export default AppWrapper;

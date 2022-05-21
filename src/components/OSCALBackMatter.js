@@ -1,12 +1,12 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Chip from "@material-ui/core/Chip";
-import Grid from "@material-ui/core/Grid";
-import { Typography } from "@material-ui/core";
-import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
-import DescriptionIcon from "@material-ui/icons/Description";
+import makeStyles from "@mui/styles/makeStyles";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Chip from "@mui/material/Chip";
+import Grid from "@mui/material/Grid";
+import { Typography } from "@mui/material";
+import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
+import DescriptionIcon from "@mui/icons-material/Description";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getAbsoluteUrl } from "./oscal-utils/OSCALLinkUtils";
 

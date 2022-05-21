@@ -1,6 +1,6 @@
 import React from "react";
-import List from "@material-ui/core/List";
-import ListSubheader from "@material-ui/core/ListSubheader";
+import List from "@mui/material/List";
+import ListSubheader from "@mui/material/ListSubheader";
 import { useLoaderStyles } from "./OSCALLoaderStyles";
 import OSCALMetadata from "./OSCALMetadata";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";

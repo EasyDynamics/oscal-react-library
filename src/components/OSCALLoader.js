@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import CircularProgress from "@mui/material/CircularProgress";
 import Split from "react-split";
-import { makeStyles } from "@material-ui/core/styles";
-import { Box, Fab } from "@material-ui/core";
-import CodeIcon from "@material-ui/icons/Code";
+import makeStyles from "@mui/styles/makeStyles";
+import { Box, Fab } from "@mui/material";
+import CodeIcon from "@mui/icons-material/Code";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
 import ErrorBoundary, { BasicError } from "./ErrorBoundary";
 import OSCALSsp from "./OSCALSsp";

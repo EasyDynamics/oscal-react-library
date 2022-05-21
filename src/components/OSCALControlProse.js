@@ -1,13 +1,15 @@
 import React, { useState, useRef } from "react";
-import { styled, withTheme, makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Badge from "@material-ui/core/Badge";
-import EditIcon from "@material-ui/icons/Edit";
-import SaveIcon from "@material-ui/icons/Save";
-import CancelIcon from "@material-ui/icons/Cancel";
-import { Grid, IconButton, TextField } from "@material-ui/core";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { styled } from "@mui/material/styles";
+import withTheme from "@mui/styles/withTheme";
+import makeStyles from "@mui/styles/makeStyles";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
+import Badge from "@mui/material/Badge";
+import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Cancel";
+import { Grid, IconButton, TextField } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
@@ -521,6 +523,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
                       }
                     );
                   }}
+                  size="large"
                 >
                   <SaveIcon fontSize={props.iconFontSize} />
                 </IconButton>
@@ -535,6 +538,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
                   onClick={() => {
                     setIsEditingStatement(false);
                   }}
+                  size="large"
                 >
                   <CancelIcon fontSize={props.iconFontSize} />
                 </IconButton>

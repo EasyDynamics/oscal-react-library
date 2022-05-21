@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { TreeItem, TreeView } from "@material-ui/lab";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import { Grid, IconButton, List, Paper } from "@material-ui/core";
-import ListSubheader from "@material-ui/core/ListSubheader";
+import makeStyles from "@mui/styles/makeStyles";
+import { TreeItem, TreeView } from "@mui/lab";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import { Grid, IconButton, List, Paper } from "@mui/material";
+import ListSubheader from "@mui/material/ListSubheader";
 
 const useStyles = makeStyles((theme) => ({
   inheritance: {
@@ -76,12 +76,12 @@ export default function OSCALProfileCatalogInheritance(props) {
           <TreeView
             className={classes.treeStyle}
             defaultExpandIcon={
-              <IconButton>
+              <IconButton size="large">
                 <ExpandMoreIcon />
               </IconButton>
             }
             defaultCollapseIcon={
-              <IconButton>
+              <IconButton size="large">
                 <ExpandLessIcon />
               </IconButton>
             }

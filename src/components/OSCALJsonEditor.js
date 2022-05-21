@@ -1,9 +1,10 @@
 import React, { useRef } from "react";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import Editor from "@monaco-editor/react";
-import { Grid, makeStyles, Typography } from "@material-ui/core";
-import SaveIcon from "@material-ui/icons/Save";
-import CancelIcon from "@material-ui/icons/Cancel";
+import { Grid, Typography } from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 export default function OSCALJsonEditor(props) {
   const useStyles = makeStyles((theme) => ({

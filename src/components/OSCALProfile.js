@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import List from "@material-ui/core/List";
-import ListSubheader from "@material-ui/core/ListSubheader";
-import Skeleton from "@material-ui/lab/Skeleton";
-import CardContent from "@material-ui/core/CardContent";
+import List from "@mui/material/List";
+import ListSubheader from "@mui/material/ListSubheader";
+import Skeleton from "@mui/material/Skeleton";
+import CardContent from "@mui/material/CardContent";
 import { useLoaderStyles } from "./OSCALLoaderStyles";
 import OSCALMetadata from "./OSCALMetadata";
 import OSCALControl from "./OSCALControl";
@@ -102,10 +102,10 @@ export default function OSCALProfile(props) {
             key="controls load 0"
           >
             <Skeleton variant="text" width="25em" height="3em" />
-            <Skeleton variant="circle" width="3em" height="3em" />
+            <Skeleton variant="circular" width="3em" height="3em" />
           </span>
           <Skeleton variant="text" width="10em" height="2.5em" />
-          <Skeleton variant="rect" width="100%" height={115} />
+          <Skeleton variant="rectangular" width="100%" height={115} />
           <Skeleton variant="text" width="6.5em" height="3.5em" />
         </CardContent>
       )}
