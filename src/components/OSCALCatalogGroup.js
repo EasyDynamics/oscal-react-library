@@ -11,19 +11,10 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import FolderIcon from "@mui/icons-material/Folder";
 import OSCALControl from "./OSCALControl";
 
-const PREFIX = "OSCALCatalogGroup";
-
-const classes = {
-  OSCALControlList: `${PREFIX}-OSCALControlList`,
-};
-
-// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
-const Root = styled("div")(() => ({
-  [`& .${classes.OSCALControlList}`]: {
-    "padding-left": "2em",
-    "padding-right": "2em",
-  },
-}));
+export const OSCALControlList = styled(List)`
+  padding-left: 2em;
+  padding-right: 2em;
+`;
 
 export default function OSCALCatalogGroup(props) {
   const [open, setOpen] = React.useState(false);
@@ -49,7 +40,7 @@ export default function OSCALCatalogGroup(props) {
   };
 
   return (
-    <Root>
+    <div>
       <ListItem key={groupKey(props.group)} button onClick={handleClick}>
         <ListItemAvatar key={`${groupKey(props.group)}-avatar`}>
           <Avatar variant="rounded">
@@ -60,7 +51,7 @@ export default function OSCALCatalogGroup(props) {
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <List className={classes.OSCALControlList}>
+        <OSCALControlList>
           {props.group.groups?.map((innerGroup) => (
             <OSCALCatalogGroup group={innerGroup} key={innerGroup.id} />
           ))}
@@ -71,8 +62,8 @@ export default function OSCALCatalogGroup(props) {
               key={`control-${control.id}`}
             />
           ))}
-        </List>
+        </OSCALControlList>
       </Collapse>
-    </Root>
+    </div>
   );
 }

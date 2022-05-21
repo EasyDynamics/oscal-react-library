@@ -1,5 +1,4 @@
 import React from "react";
-import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
@@ -14,70 +13,23 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import StyledTooltip from "./OSCALStyledTooltip";
 import OSCALDiagram from "./OSCALDiagram";
-
-const PREFIX = "OSCALSystemCharacteristics";
-
-const classes = {
-  paper: `${PREFIX}-paper`,
-  OSCALSystemCharacteristicsInfo: `${PREFIX}-OSCALSystemCharacteristicsInfo`,
-  OSCALSystemCharacteristicsHeader: `${PREFIX}-OSCALSystemCharacteristicsHeader`,
-  OSCALSystemCharacteristicsStatus: `${PREFIX}-OSCALSystemCharacteristicsStatus`,
-};
-
-const Root = styled("div")(({ theme }) => ({
-  [`&.${classes.paper}`]: {
-    marginTop: theme.spacing(2),
-    display: "flex",
-    flexDirection: "column",
-  },
-
-  [`& .${classes.OSCALSystemCharacteristicsInfo}`]: {
-    "text-transform": "capitalize",
-    "& .MuiTextField-root": {
-      margin: theme.spacing(1),
-    },
-  },
-
-  // TODO - This is hacky
-  [`& .${classes.OSCALSystemCharacteristicsHeader}`]: {
-    "& .MuiTypography-root": {
-      "font-size": "0.875rem",
-      color: "#0000008a",
-    },
-  },
-
-  [`& .${classes.OSCALSystemCharacteristicsStatus}`]: {
-    "text-transform": "capitalize",
-  },
-}));
+import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 
 export default function OSCALSystemCharacteristics(props) {
   return (
-    <Root className={classes.paper}>
+    <OSCALSection>
       <Card>
         <CardContent>
           <Grid container spacing={2}>
-            <Grid
-              item
-              xs={12}
-              className={classes.OSCALSystemCharacteristicsHeader}
-            >
-              <Typography>System Characteristics</Typography>
+            <Grid item xs={12}>
+              <OSCALSectionHeader>System Characteristics</OSCALSectionHeader>
             </Grid>
-            <Grid
-              item
-              xs={6}
-              className={classes.OSCALSystemCharacteristicsInfo}
-            >
+            <Grid item xs={6}>
               <Typography variant="h6">
                 {props.systemCharacteristics["system-name"]}
               </Typography>
             </Grid>
-            <Grid
-              item
-              xs={6}
-              className={classes.OSCALSystemCharacteristicsInfo}
-            >
+            <Grid item xs={6}>
               <TableContainer>
                 <Table size="small">
                   <TableBody>
@@ -93,11 +45,7 @@ export default function OSCALSystemCharacteristics(props) {
                 </Table>
               </TableContainer>
             </Grid>
-            <Grid
-              item
-              xs={2}
-              className={classes.OSCALSystemCharacteristicsInfo}
-            >
+            <Grid item xs={2}>
               <StyledTooltip title={props.systemCharacteristics.status.remarks}>
                 <TextField
                   disabled
@@ -110,11 +58,7 @@ export default function OSCALSystemCharacteristics(props) {
                 />
               </StyledTooltip>
             </Grid>
-            <Grid
-              item
-              xs={2}
-              className={classes.OSCALSystemCharacteristicsInfo}
-            >
+            <Grid item xs={2}>
               <TextField
                 disabled
                 id="security-sensitivity-level"
@@ -127,11 +71,7 @@ export default function OSCALSystemCharacteristics(props) {
                 fullWidth
               />
             </Grid>
-            <Grid
-              item
-              xs={2}
-              className={classes.OSCALSystemCharacteristicsInfo}
-            >
+            <Grid item xs={2}>
               <TextField
                 disabled
                 id="security-objective-confidentiality"
@@ -146,11 +86,7 @@ export default function OSCALSystemCharacteristics(props) {
                 fullWidth
               />
             </Grid>
-            <Grid
-              item
-              xs={2}
-              className={classes.OSCALSystemCharacteristicsInfo}
-            >
+            <Grid item xs={2}>
               <TextField
                 disabled
                 id="security-objective-integrity"
@@ -165,11 +101,7 @@ export default function OSCALSystemCharacteristics(props) {
                 fullWidth
               />
             </Grid>
-            <Grid
-              item
-              xs={2}
-              className={classes.OSCALSystemCharacteristicsInfo}
-            >
+            <Grid item xs={2}>
               <TextField
                 disabled
                 id="security-objective-availability"
@@ -318,6 +250,6 @@ export default function OSCALSystemCharacteristics(props) {
           </Grid>
         </CardContent>
       </Card>
-    </Root>
+    </OSCALSection>
   );
 }

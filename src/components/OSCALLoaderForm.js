@@ -11,18 +11,12 @@ import Select from "@mui/material/Select";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
-const PREFIX = "OSCALLoaderForm";
-
-const classes = {
-  catalogForm: `${PREFIX}-catalogForm`,
-};
-
-const Root = styled("form")(({ theme }) => ({
-  [`&.${classes.catalogForm}`]: {
-    marginTop: theme.spacing(4),
-    marginBottom: theme.spacing(2),
-  },
-}));
+const OSCALDocumentForm = styled("form")(
+  ({ theme }) => `
+  margin-top: ${theme.spacing(4)};
+  margin-bottom: ${theme.spacing(2)};
+`
+);
 
 export default function OSCALLoaderForm(props) {
   const [oscalObjects, setOscalObjects] = useState([]);
@@ -57,8 +51,7 @@ export default function OSCALLoaderForm(props) {
   }, []);
 
   return (
-    <Root
-      className={classes.catalogForm}
+    <OSCALDocumentForm
       noValidate
       autoComplete="off"
       onSubmit={(e) => {
@@ -104,19 +97,17 @@ export default function OSCALLoaderForm(props) {
                 label={`Select OSCAL ${props.oscalObjectType.name}`}
                 onChange={props.onUuidChange}
               >
-                {oscalObjects &&
-                  oscalObjects.map((oscalObject) => (
-                    <MenuItem
-                      value={
-                        oscalObject[props.oscalObjectType.jsonRootName].uuid
-                      }
-                    >
-                      {
-                        oscalObject[props.oscalObjectType.jsonRootName].metadata
-                          .title
-                      }
-                    </MenuItem>
-                  ))}
+                {oscalObjects?.map((oscalObject) => (
+                  <MenuItem
+                    value={oscalObject[props.oscalObjectType.jsonRootName].uuid}
+                    key={oscalObject[props.oscalObjectType.jsonRootName].uuid}
+                  >
+                    {
+                      oscalObject[props.oscalObjectType.jsonRootName].metadata
+                        .title
+                    }
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Grid>
@@ -137,6 +128,6 @@ export default function OSCALLoaderForm(props) {
           </Grid>
         )}
       </Grid>
-    </Root>
+    </OSCALDocumentForm>
   );
 }

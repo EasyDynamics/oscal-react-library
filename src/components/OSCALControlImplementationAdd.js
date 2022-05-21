@@ -33,7 +33,7 @@ export default function OSCALControlImplementationAdd(props) {
   );
 
   return inEditState ? (
-    <Grid container xs={12} justifyContent="flex-end" alignItems="center">
+    <Grid container item xs={12} justifyContent="flex-end" alignItems="center">
       <Grid item xs={6}>
         <Autocomplete
           disablePortal

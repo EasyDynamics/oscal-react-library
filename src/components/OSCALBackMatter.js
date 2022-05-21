@@ -9,37 +9,15 @@ import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import DescriptionIcon from "@mui/icons-material/Description";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getAbsoluteUrl } from "./oscal-utils/OSCALLinkUtils";
+import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 
-const PREFIX = "OSCALBackMatter";
-
-const classes = {
-  paper: `${PREFIX}-paper`,
-  OSCALBackMatterInfo: `${PREFIX}-OSCALBackMatterInfo`,
-  OSCALBackMatterHeader: `${PREFIX}-OSCALBackMatterHeader`,
-};
-
-const StyledCard = styled(Card)(({ theme }) => ({
-  [`& .${classes.paper}`]: {
-    marginTop: theme.spacing(2),
-    display: "flex",
-    flexDirection: "column",
-  },
-
-  [`& .${classes.OSCALBackMatterInfo}`]: {
-    "text-transform": "capitalize",
-    "& .MuiTextField-root": {
-      margin: theme.spacing(1),
-    },
-  },
-
-  // TODO - This is hacky
-  [`& .${classes.OSCALBackMatterHeader}`]: {
-    "& .MuiTypography-root": {
-      "font-size": "0.875rem",
-      color: "#0000008a",
-    },
-  },
-}));
+export const OSCALBackMatterCard = styled(Card)(
+  ({ theme }) => `
+    margin-top: ${theme.spacing(2)};
+    display: flex;
+    flex-direction: column;
+`
+);
 
 // TODO: Temporary fix for missing media type (https://github.com/GSA/fedramp-automation/issues/103)
 // Uses file extension instead
@@ -111,7 +89,7 @@ export default function OSCALBackMatter(props) {
 
   const backMatterDisplay = (resource) => (
     <Grid item xs={3} key={resource.uuid}>
-      <StyledCard>
+      <OSCALBackMatterCard>
         <CardContent>
           <Grid container spacing={0}>
             <Grid item xs={10}>
@@ -140,27 +118,29 @@ export default function OSCALBackMatter(props) {
             </Typography>
           </Grid>
         </CardContent>
-      </StyledCard>
+      </OSCALBackMatterCard>
     </Grid>
   );
 
   return (
-    <Card>
-      <CardContent>
-        <Grid container spacing={2}>
-          <Grid item xs={12} className={classes.OSCALBackMatterHeader}>
-            <Typography>Back Matter</Typography>
+    <OSCALSection>
+      <Card>
+        <CardContent>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <OSCALSectionHeader>Back Matter</OSCALSectionHeader>
+            </Grid>
+            <Grid item xs={7}>
+              <Typography variant="body1">Resources</Typography>
+            </Grid>
           </Grid>
-          <Grid item xs={7} className={classes.OSCALBackMatterInfo}>
-            <Typography variant="h6">Resources</Typography>
+          <Grid container spacing={2}>
+            {props.backMatter.resources.map((resource) =>
+              backMatterDisplay(resource)
+            )}
           </Grid>
-        </Grid>
-        <Grid container spacing={2}>
-          {props.backMatter.resources.map((resource) =>
-            backMatterDisplay(resource)
-          )}
-        </Grid>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </OSCALSection>
   );
 }

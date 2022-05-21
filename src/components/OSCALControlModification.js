@@ -11,17 +11,9 @@ import LayersIcon from "@mui/icons-material/Layers";
 import { Typography } from "@mui/material";
 import StyledTooltip from "./OSCALStyledTooltip";
 
-const PREFIX = "OSCALControlModification";
-
-const classes = {
-  OSCALControlModificationsButton: `${PREFIX}-OSCALControlModificationsButton`,
-};
-
-const Root = styled("span")(() => ({
-  [`& .${classes.OSCALControlModificationsButton}`]: {
-    color: "#002867",
-  },
-}));
+const OSCALControlModificationsButton = styled(IconButton)(
+  ({ theme }) => `color: ${theme.palette.primary.main}`
+);
 
 /**
  * Create a typography html object for addsOrRemovesLabel
@@ -152,26 +144,25 @@ export default function OSCALControlModification(props) {
   // Display modifications if there are any
   if (!modLength) return null;
   return (
-    <Root>
+    <>
       <StyledTooltip title="Modifications">
         <Badge
           anchorOrigin={{
             vertical: "top",
             horizontal: "right",
           }}
-          color="secondary"
+          color="info"
           badgeContent={modLength}
           overlap="circular"
         >
-          <IconButton
+          <OSCALControlModificationsButton
             variant="outlined"
             size="small"
-            className={classes.OSCALControlModificationsButton}
             aria-label={`${controlPartId} modifications`}
             onClick={handleClick}
           >
             <LayersIcon />
-          </IconButton>
+          </OSCALControlModificationsButton>
         </Badge>
       </StyledTooltip>
       <Dialog
@@ -190,6 +181,6 @@ export default function OSCALControlModification(props) {
           </Button>
         </DialogActions>
       </Dialog>
-    </Root>
+    </>
   );
 }

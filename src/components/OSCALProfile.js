@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import List from "@mui/material/List";
-import ListSubheader from "@mui/material/ListSubheader";
 import Skeleton from "@mui/material/Skeleton";
 import CardContent from "@mui/material/CardContent";
-import { useLoaderStyles } from "./OSCALLoaderStyles";
+import { List, ListSubheader } from "@mui/material";
 import OSCALMetadata from "./OSCALMetadata";
+import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
 import OSCALControl from "./OSCALControl";
 import OSCALBackMatter from "./OSCALBackMatter";
 import { OSCALResolveProfile } from "./oscal-utils/OSCALProfileResolver";
@@ -23,7 +22,6 @@ export default function OSCALProfile(props) {
   const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] =
     useState({});
   const [isLoaded, setIsLoaded] = useState(false);
-  const classes = useLoaderStyles();
   const unmounted = useRef(false);
 
   const partialRestData = {
@@ -67,10 +65,8 @@ export default function OSCALProfile(props) {
   // resembling the content.
   const profileImports = (
     <List
-      className={classes.OSCALControlList}
       subheader={
         <ListSubheader
-          className={classes.OSCALMetadataPartiesHeader}
           component="div"
           id="oscal-profile-importedControls"
           disableSticky
@@ -114,7 +110,7 @@ export default function OSCALProfile(props) {
 
   // Display Metadata and BackMatter components at bottom of Profile
   return (
-    <div className={classes.paper}>
+    <OSCALDocumentRoot>
       <OSCALMetadata
         metadata={props.profile.metadata}
         isEditable={props.isEditable}
@@ -129,6 +125,6 @@ export default function OSCALProfile(props) {
         backMatter={props.profile["back-matter"]}
         parentUrl={props.parentUrl}
       />
-    </div>
+    </OSCALDocumentRoot>
   );
 }

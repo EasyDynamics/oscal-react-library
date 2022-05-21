@@ -1,5 +1,4 @@
 import React from "react";
-import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
@@ -12,37 +11,16 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
 import StyledTooltip from "./OSCALStyledTooltip";
-
-const PREFIX = "OSCALComponentDefinitionComponent";
-
-const classes = {
-  paper: `${PREFIX}-paper`,
-  OSCALComponentsHeader: `${PREFIX}-OSCALComponentsHeader`,
-};
-
-const Root = styled("div")(({ theme }) => ({
-  [`&.${classes.paper}`]: {
-    marginTop: theme.spacing(2),
-    display: "flex",
-    flexDirection: "column",
-  },
-
-  [`& .${classes.OSCALComponentsHeader}`]: {
-    "& .MuiTypography-root": {
-      "font-size": "0.875rem",
-      color: "#0000008a",
-    },
-  },
-}));
+import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 
 export default function OSCALComponentDefinitionComponent(props) {
   return (
-    <Root className={classes.paper}>
+    <OSCALSection>
       <Card>
         <CardContent>
           <Grid container spacing={2}>
-            <Grid item xs={12} className={classes.OSCALComponentsHeader}>
-              <Typography>Components</Typography>
+            <Grid item xs={12}>
+              <OSCALSectionHeader>Components</OSCALSectionHeader>
             </Grid>
             <Grid item xs={12}>
               <TableContainer>
@@ -80,6 +58,6 @@ export default function OSCALComponentDefinitionComponent(props) {
           </Grid>
         </CardContent>
       </Card>
-    </Root>
+    </OSCALSection>
   );
 }

@@ -6,42 +6,27 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 
-const PREFIX = "OSCALResponsibleRoles";
-
-const classes = {
-  paper: `${PREFIX}-paper`,
-  OSCALResponsibleRolesSubDataHeader: `${PREFIX}-OSCALResponsibleRolesSubDataHeader`,
-};
-
-const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
-  [`& .${classes.paper}`]: {
-    marginTop: theme.spacing(2),
-    display: "flex",
-    flexDirection: "column",
-  },
-
-  [`& .${classes.OSCALResponsibleRolesSubDataHeader}`]: {
-    "text-transform": "capitalize",
-    "white-space": "nowrap",
-  },
-}));
+const ResponsibleRolesTable = styled(TableContainer)(
+  ({ theme }) => `
+  margin-top: ${theme.spacing(2)};
+  display: flex;
+  flex-direction: column;
+  text-transform: capitalize;
+`
+);
 
 export default function OSCALResponsibleRoles(props) {
   const getPartyName = (partyUuid) =>
     props.parties?.find((party) => party.uuid === partyUuid)?.name;
 
   return (
-    <StyledTableContainer>
+    <ResponsibleRolesTable>
       <Table size="small">
         <TableBody>
           {props.responsibleRoles &&
             Object.entries(props.responsibleRoles).map(([key, role]) => (
               <TableRow key={key}>
-                <TableCell
-                  className={classes.OSCALResponsibleRolesSubDataHeader}
-                  component="th"
-                  scope="row"
-                >
+                <TableCell component="th" scope="row">
                   {role["role-id"]}
                 </TableCell>
                 <TableCell align="right">
@@ -54,6 +39,6 @@ export default function OSCALResponsibleRoles(props) {
             ))}
         </TableBody>
       </Table>
-    </StyledTableContainer>
+    </ResponsibleRolesTable>
   );
 }

@@ -5,14 +5,13 @@ import OSCALComponentResolveSources from "./oscal-utils/OSCALComponentResolver";
 import OSCALComponentDefinitionComponent from "./OSCALComponentDefinitionComponent";
 import OSCALBackMatter from "./OSCALBackMatter";
 import OSCALProfileCatalogInheritance from "./OSCALProfileCatalogInheritance";
-import { useLoaderStyles } from "./OSCALLoaderStyles";
+import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
 
 export default function OSCALComponentDefinition(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] =
     useState({});
-  const classes = useLoaderStyles();
 
   const partialRestData = {
     "component-definition": {
@@ -63,7 +62,7 @@ export default function OSCALComponentDefinition(props) {
   }
 
   return (
-    <div className={classes.paper}>
+    <OSCALDocumentRoot>
       <OSCALMetadata
         metadata={props.componentDefinition.metadata}
         isEditable={props.isEditable}
@@ -87,6 +86,6 @@ export default function OSCALComponentDefinition(props) {
         backMatter={props.componentDefinition["back-matter"]}
         parentUrl={props.parentUrl}
       />
-    </div>
+    </OSCALDocumentRoot>
   );
 }

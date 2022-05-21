@@ -12,14 +12,14 @@ import getControlOrSubControl from "./oscal-utils/OSCALControlResolver";
 const PREFIX = "OSCALControlImplementationImplReq";
 
 const classes = {
-  OSCALImplReq: `${PREFIX}-OSCALImplReq`,
-  OSCALImplReqpControlId: `${PREFIX}-OSCALImplReqpControlId`,
-  OSCALImplChildLevel: `${PREFIX}-OSCALImplChildLevel`,
-  OSCALImplReqChildLevelTitle: `${PREFIX}-OSCALImplReqChildLevelTitle`,
-  tabsContainer: `${PREFIX}-tabsContainer`,
-  tabs: `${PREFIX}-tabs`,
-  tabButton: `${PREFIX}-tabButton`,
-  tabPanelScrollable: `${PREFIX}-tabPanelScrollable`,
+  OSCALImplReq: `${PREFIX}OSCALImplReq`,
+  OSCALImplReqpControlId: `${PREFIX}OSCALImplReqpControlId`,
+  OSCALImplChildLevel: `${PREFIX}OSCALImplChildLevel`,
+  OSCALImplReqChildLevelTitle: `${PREFIX}OSCALImplReqChildLevelTitle`,
+  tabsContainer: `${PREFIX}tabsContainer`,
+  tabs: `${PREFIX}tabs`,
+  tabButton: `${PREFIX}tabButton`,
+  tabPanelScrollable: `${PREFIX}tabPanelScrollable`,
 };
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -28,21 +28,21 @@ const StyledCard = styled(Card)(({ theme }) => ({
   },
 
   [`& .${classes.OSCALImplReqpControlId}`]: {
-    "text-transform": "uppercase",
+    textTransform: "uppercase",
   },
 
   [`& .${classes.OSCALImplChildLevel}`]: (props) =>
     props.childLevel > 0
       ? {
           margin: "1em 1.5em 1em 1.5em",
-          "background-color": "#fffcf0",
+          backgroundColor: "#fffcf0",
         }
       : "",
 
   [`& .${classes.OSCALImplReqChildLevelTitle}`]: (props) =>
     props.childLevel > 0
       ? {
-          "font-size": "1.1rem",
+          fontSize: "1.1rem",
         }
       : "",
 

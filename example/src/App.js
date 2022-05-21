@@ -4,7 +4,6 @@ import {
   createTheme,
   ThemeProvider,
   StyledEngineProvider,
-  adaptV4Theme,
 } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
@@ -35,59 +34,37 @@ import {
 } from "@EasyDynamics/oscal-react-library";
 import logo from "./images/logo-header.svg";
 
-const PREFIX = "AppWrapper";
-
-const classes = {
-  title: `${PREFIX}-title`,
-  menuButton: `${PREFIX}-menuButton`,
-  logoText: `${PREFIX}-logoText`,
-  logoImage: `${PREFIX}-logoImage`,
-  githubButton: `${PREFIX}-githubButton`,
-};
-
-const Root = styled("div")(({ themeData }) => ({
-  [`& .${classes.title}`]: {
-    flexGrow: 1,
+const appTheme = createTheme({
+  palette: {
+    primary: {
+      main: "#002867",
+    },
+    background: {
+      // This is the background used in @material-ui v4
+      default: "#fafafa",
+    },
   },
-
-  [`& .${classes.menuButton}`]: {
-    marginRight: themeData.spacing(2),
-  },
-
-  [`& .${classes.logoText}`]: {
-    color: "white",
-    "font-style": "italic",
-  },
-
-  [`& .${classes.logoImage}`]: {
-    width: "150px",
-    "margin-right": "1em",
-  },
-
-  [`& .${classes.githubButton}`]: {
-    color: "white",
-  },
-}));
-
-const theme = createTheme(
-  adaptV4Theme({
-    palette: {
-      primary: {
-        main: "#002867",
+  components: {
+    // This restores font sizing to match @material-ui v4
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          fontSize: "0.875rem",
+          lineHeight: 1.43,
+          letterSpacing: "0.01071em",
+        },
       },
     },
-  })
-);
+  },
+});
 
-function AppWrapper() {
-  return (
-    <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={theme}>
-        <App />
-      </ThemeProvider>
-    </StyledEngineProvider>
-  );
-}
+const OpenNavButton = styled(IconButton)(
+  ({ theme }) => `margin-right: ${theme.spacing(2)}`
+);
+const LogoImage = styled("img")`
+  width: 150px;
+  margin-right: 1em;
+`;
 
 function App() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -120,158 +97,163 @@ function App() {
     }
   }, [location]);
   return (
-    <Root className="App">
-      <CssBaseline />
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            onClick={handleAppNavOpen}
-            color="inherit"
-            aria-label="menu"
-            size="large"
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={appTheme}>
+        <CssBaseline />
+        <div className="App">
+          <AppBar position="static">
+            <Toolbar>
+              <OpenNavButton
+                edge="start"
+                onClick={handleAppNavOpen}
+                color="inherit"
+                aria-label="menu"
+                size="large"
+              >
+                <MenuIcon />
+              </OpenNavButton>
+              <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                <Routes>
+                  {/*
+                   * Because we immediately redirect users, `/` won't be visible for
+                   * long; however, having this entry means that we avoid a console
+                   * warning and at least presents something if the redirect or
+                   * rendering fails for any reason.
+                   */}
+                  <Route exact path="/" element="OSCAL Viewer" />
+                  <Route exact path="/catalog" element="OSCAL Catalog Viewer" />
+                  <Route
+                    exact
+                    path="/system-security-plan"
+                    element="OSCAL System Security Plan Viewer"
+                  />
+                  <Route
+                    exact
+                    path="/component-definition"
+                    element="OSCAL Component Viewer"
+                  />
+                  <Route exact path="/profile" element="OSCAL Profile Viewer" />
+                </Routes>
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ color: "white", fontStyle: "italic" }}
+              >
+                Powered by
+              </Typography>
+              <Button
+                href="https://www.easydynamics.com"
+                target="_blank"
+                sx={{ color: "white" }}
+              >
+                <LogoImage src={logo} alt="Easy Dynamics Logo" />
+              </Button>
+              <IconButton
+                href="https://github.com/EasyDynamics/oscal-react-library"
+                target="_blank"
+                rel="noreferrer"
+                size="large"
+              >
+                <GitHubIcon htmlColor="white" />
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <Menu
+            id="app-nav-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleAppNavClose}
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
+            <MenuItem
+              onClick={handleAppNavClose}
+              component={RouterLink}
+              to="/catalog"
+            >
+              Catalog Viewer
+            </MenuItem>
+            <MenuItem
+              onClick={handleAppNavClose}
+              component={RouterLink}
+              to="/system-security-plan"
+            >
+              System Security Plan Viewer
+            </MenuItem>
+            <MenuItem
+              onClick={handleAppNavClose}
+              component={RouterLink}
+              to="/component-definition"
+            >
+              Component Viewer
+            </MenuItem>
+            <MenuItem
+              onClick={handleAppNavClose}
+              component={RouterLink}
+              to="/profile"
+            >
+              Profile Viewer
+            </MenuItem>
+          </Menu>
+          <Container maxWidth={false} component="main">
             <Routes>
-              {/*
-               * Because we immediately redirect users, `/` won't be visible for
-               * long; however, having this entry means that we avoid a console
-               * warning and at least presents something if the redirect or
-               * rendering fails for any reason.
-               */}
-              <Route exact path="/" element="OSCAL Viewer" />
-              <Route exact path="/catalog" element="OSCAL Catalog Viewer" />
+              <Route
+                exact
+                path="/"
+                element={<Navigate replace to="/catalog" />}
+              />
+              <Route
+                path="/catalog"
+                element={
+                  <OSCALCatalogLoader
+                    renderForm
+                    isRestMode={isRestMode}
+                    setIsRestMode={setIsRestMode}
+                    backendUrl={backendUrl}
+                  />
+                }
+              />
               <Route
                 exact
                 path="/system-security-plan"
-                element="OSCAL System Security Plan Viewer"
+                element={
+                  <OSCALSSPLoader
+                    renderForm
+                    isRestMode={isRestMode}
+                    setIsRestMode={setIsRestMode}
+                    backendUrl={backendUrl}
+                  />
+                }
               />
               <Route
                 exact
                 path="/component-definition"
-                element="OSCAL Component Viewer"
+                element={
+                  <OSCALComponentLoader
+                    renderForm
+                    isRestMode={isRestMode}
+                    setIsRestMode={setIsRestMode}
+                    backendUrl={backendUrl}
+                  />
+                }
               />
-              <Route exact path="/profile" element="OSCAL Profile Viewer" />
+              <Route
+                exact
+                path="/profile"
+                element={
+                  <OSCALProfileLoader
+                    renderForm
+                    isRestMode={isRestMode}
+                    setIsRestMode={setIsRestMode}
+                    backendUrl={backendUrl}
+                  />
+                }
+              />
             </Routes>
-          </Typography>
-          <Typography variant="body2" className={classes.logoText}>
-            Powered by
-          </Typography>
-          <Button
-            href="https://www.easydynamics.com"
-            className={classes.githubButton}
-            target="_blank"
-          >
-            <img
-              src={logo}
-              alt="Easy Dynamics Logo"
-              className={classes.logoImage}
-            />
-          </Button>
-          <IconButton
-            href="https://github.com/EasyDynamics/oscal-react-library"
-            className={classes.githubButton}
-            target="_blank"
-            rel="noreferrer"
-            size="large"
-          >
-            <GitHubIcon htmlColor="white" />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Menu
-        id="app-nav-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleAppNavClose}
-      >
-        <MenuItem
-          onClick={handleAppNavClose}
-          component={RouterLink}
-          to="/catalog"
-        >
-          Catalog Viewer
-        </MenuItem>
-        <MenuItem
-          onClick={handleAppNavClose}
-          component={RouterLink}
-          to="/system-security-plan"
-        >
-          System Security Plan Viewer
-        </MenuItem>
-        <MenuItem
-          onClick={handleAppNavClose}
-          component={RouterLink}
-          to="/component-definition"
-        >
-          Component Viewer
-        </MenuItem>
-        <MenuItem
-          onClick={handleAppNavClose}
-          component={RouterLink}
-          to="/profile"
-        >
-          Profile Viewer
-        </MenuItem>
-      </Menu>
-      <Container maxWidth="xl" component="main">
-        <Routes>
-          <Route exact path="/" element={<Navigate replace to="/catalog" />} />
-          <Route
-            path="/catalog"
-            element={
-              <OSCALCatalogLoader
-                renderForm
-                isRestMode={isRestMode}
-                setIsRestMode={setIsRestMode}
-                backendUrl={backendUrl}
-              />
-            }
-          />
-          <Route
-            exact
-            path="/system-security-plan"
-            element={
-              <OSCALSSPLoader
-                renderForm
-                isRestMode={isRestMode}
-                setIsRestMode={setIsRestMode}
-                backendUrl={backendUrl}
-              />
-            }
-          />
-          <Route
-            exact
-            path="/component-definition"
-            element={
-              <OSCALComponentLoader
-                renderForm
-                isRestMode={isRestMode}
-                setIsRestMode={setIsRestMode}
-                backendUrl={backendUrl}
-              />
-            }
-          />
-          <Route
-            exact
-            path="/profile"
-            element={
-              <OSCALProfileLoader
-                renderForm
-                isRestMode={isRestMode}
-                setIsRestMode={setIsRestMode}
-                backendUrl={backendUrl}
-              />
-            }
-          />
-        </Routes>
-      </Container>
-    </Root>
+          </Container>
+        </div>
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 }
 
-export default AppWrapper;
+export default App;

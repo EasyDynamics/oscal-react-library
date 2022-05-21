@@ -16,9 +16,25 @@ import OSCALJsonEditor from "./OSCALJsonEditor";
 const PREFIX = "OSCALLoader";
 
 const classes = {
-  split: `${PREFIX}-split`,
-  toolbar: `${PREFIX}-toolbar`,
+  split: `split`,
+  toolbar: `${PREFIX}toolbar`,
 };
+
+const EditorSplit = styled(Split)`
+  display: flex;
+  flex-direction: row;
+
+  & > .gutter {
+    background-color: #eee;
+    background-repeat: no-repeat;
+    background-position: 50%;
+  }
+
+  & .gutter-horizontal {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
+    cursor: col-resize;
+  }
+`;
 
 export default function OSCALLoader(props) {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -222,8 +238,7 @@ export default function OSCALLoader(props) {
             <CodeIcon />
           </Fab>
         </Box>
-        <Split
-          className={classes.split}
+        <EditorSplit
           gutterSize={editorIsVisible ? 10 : 0}
           minSize={editorIsVisible ? 300 : 0}
           sizes={editorIsVisible ? [34, 66] : [0, 100]}
@@ -245,7 +260,7 @@ export default function OSCALLoader(props) {
               handleRestError
             )}
           </Box>
-        </Split>
+        </EditorSplit>
       </>
     ) : (
       <>
@@ -281,12 +296,12 @@ export default function OSCALLoader(props) {
 const StyledOSCALLoader = styled(OSCALLoader)(({ theme }) => ({
   [`& .${classes.split}`]: {
     display: "flex",
-    flexDirection: " row",
+    flexDirection: "row",
     "& > .gutter": {
       backgroundColor: "#eee",
       backgroundRepeat: "no-repeat",
       backgroundPosition: "50%",
-      "&.gutter-horizontal": {
+      "& .gutter-horizontal": {
         backgroundImage:
           "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==')",
         cursor: "col-resize",

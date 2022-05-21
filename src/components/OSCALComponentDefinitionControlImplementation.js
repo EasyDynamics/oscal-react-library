@@ -1,53 +1,19 @@
 import React from "react";
-import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 import { List, ListItem, ListItemText } from "@mui/material";
 import OSCALControlImplementationImplReq from "./OSCALControlImplementationImplReq";
-
-const PREFIX = "OSCALComponentDefinitionControlImplementation";
-
-const classes = {
-  paper: `${PREFIX}-paper`,
-  OSCALSystemImplementationSubDataHeader: `${PREFIX}-OSCALSystemImplementationSubDataHeader`,
-  OSCALComponentControlImplementationHeader: `${PREFIX}-OSCALComponentControlImplementationHeader`,
-};
-
-const Root = styled("div")(({ theme }) => ({
-  [`&.${classes.paper}`]: {
-    marginTop: theme.spacing(2),
-    display: "flex",
-    flexDirection: "column",
-  },
-
-  [`& .${classes.OSCALSystemImplementationSubDataHeader}`]: {
-    "text-transform": "capitalize",
-    "white-space": "nowrap",
-  },
-
-  // TODO - This is hacky
-  [`& .${classes.OSCALComponentControlImplementationHeader}`]: {
-    "& .MuiTypography-root": {
-      "font-size": "0.875rem",
-      color: "#0000008a",
-    },
-  },
-}));
+import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 
 export default function OSCALComponentDefinitionControlImplementation(props) {
   return (
-    <Root className={classes.paper}>
+    <OSCALSection>
       <Card>
         <CardContent>
           <Grid container spacing={2}>
-            <Grid
-              item
-              xs={12}
-              className={classes.OSCALComponentControlImplementationHeader}
-            >
-              <Typography>Control Implementations</Typography>
+            <Grid item xs={12}>
+              <OSCALSectionHeader>Control Implementations</OSCALSectionHeader>
             </Grid>
             <Grid item xs={12}>
               <List>
@@ -56,11 +22,7 @@ export default function OSCALComponentDefinitionControlImplementation(props) {
                     <ListItemText>
                       {controlImpl.description}
                       <Grid item xs={12}>
-                        <List
-                          className={
-                            classes.OSCALControlImplementationImplReqList
-                          }
-                        >
+                        <List>
                           {controlImpl["implemented-requirements"].map(
                             (implementedRequirement) => (
                               <OSCALControlImplementationImplReq
@@ -87,6 +49,6 @@ export default function OSCALComponentDefinitionControlImplementation(props) {
           </Grid>
         </CardContent>
       </Card>
-    </Root>
+    </OSCALSection>
   );
 }

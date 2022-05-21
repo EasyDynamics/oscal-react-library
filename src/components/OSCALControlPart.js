@@ -7,25 +7,9 @@ import {
   OSCALReplacedProseWithParameterLabel,
 } from "./OSCALControlProse";
 
-const PREFIX = "OSCALControlPart";
-
-const classes = {
-  OSCALControlPart: `${PREFIX}-OSCALControlPart`,
-  OSCALControlStatement: `${PREFIX}-OSCALControlStatement`,
-  OSCALStatement: `${PREFIX}-OSCALStatement`,
-};
-
-const Root = styled("div")(() => ({
-  [`& .${classes.OSCALControlPart}`]: {
-    "padding-left": "2em",
-  },
-
-  [`& .${classes.OSCALControlStatement}`]: {
-    "padding-left": "0em",
-  },
-
-  [`& .${classes.OSCALStatement}`]: {},
-}));
+const OSCALControlPartWrapper = styled("div")`
+  padding-left: ${(props) => (props.partName !== "statement" ? "2em" : "0")};
+`;
 
 // TODO - This is probably 800-53 specific?
 const getPartLabel = (props) =>
@@ -89,14 +73,8 @@ export default function OSCALControlPart(props) {
     );
   }
 
-  // Set classname to control statement when part name is "statement"
-  const className =
-    props.part.name === "statement"
-      ? classes.OSCALControlStatement
-      : classes.OSCALControlPart;
-
   return (
-    <Root className={className}>
+    <OSCALControlPartWrapper partName={props.part.name}>
       {replacedProse}
       {props.part.parts &&
         props.part.parts.map((part) => (
@@ -115,6 +93,6 @@ export default function OSCALControlPart(props) {
             partialRestData={props.partialRestData}
           />
         ))}
-    </Root>
+    </OSCALControlPartWrapper>
   );
 }

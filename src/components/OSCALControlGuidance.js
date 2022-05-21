@@ -7,20 +7,13 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-const PREFIX = "OSCALControlGuidance";
-
-const classes = {
-  OSCALControlGuidanceButton: `${PREFIX}-OSCALControlGuidanceButton`,
-};
-
-// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
-const Root = styled("div")(() => ({
-  [`& .${classes.OSCALControlGuidanceButton}`]: {
-    color: "#002867",
-    "margin-top": "1em",
-    "margin-bottom": "0.5em",
-  },
-}));
+const OSCALControlGuidanceButton = styled(Button)(
+  ({ theme }) => `
+  color: ${theme.palette.primary.main};
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+`
+);
 
 export default function OSCALControlGuidance(props) {
   const [open, setOpen] = React.useState(false);
@@ -43,15 +36,14 @@ export default function OSCALControlGuidance(props) {
   }, [open]);
 
   return (
-    <Root>
-      <Button
+    <>
+      <OSCALControlGuidanceButton
         variant="outlined"
         size="small"
-        className={classes.OSCALControlGuidanceButton}
         onClick={handleClick}
       >
         Guidance
-      </Button>
+      </OSCALControlGuidanceButton>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -75,6 +67,6 @@ export default function OSCALControlGuidance(props) {
           </Button>
         </DialogActions>
       </Dialog>
-    </Root>
+    </>
   );
 }

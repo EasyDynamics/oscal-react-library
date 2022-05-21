@@ -12,45 +12,33 @@ import Avatar from "@mui/material/Avatar";
 import GroupIcon from "@mui/icons-material/Group";
 import OSCALEditableTextField from "./OSCALEditableTextField";
 
-const PREFIX = "OSCALMetadata";
+export const OSCALMetadataPartiesHeader = styled(ListSubheader)(
+  ({ theme }) => `
+  background-color: ${theme.palette.background.paper};
+`
+);
+const OSCALMetadataLabel = styled(Typography)`
+  text-align: right;
+  color: #0000008a;
+`;
 
-const classes = {
-  OSCALMetadataTitle: `${PREFIX}-OSCALMetadataTitle`,
-  OSCALMetadataAdditional: `${PREFIX}-OSCALMetadataAdditional`,
-  OSCALMetadataLabel: `${PREFIX}-OSCALMetadataLabel`,
-  OSCALMetadataParties: `${PREFIX}-OSCALMetadataParties`,
-  OSCALMetadataPartiesHeader: `${PREFIX}-OSCALMetadataPartiesHeader`,
-  OSCALMetadataVersion: `${PREFIX}-OSCALMetadataVersion`,
-};
+const OSCALMetadataTitle = styled(Grid)`
+  height: 56px;
+`;
 
-const StyledGrid = styled(Grid)(({ theme }) => ({
-  [`& .${classes.OSCALMetadataTitle}`]: {
-    height: "56px",
-  },
+const OSCALMetadataKey = styled(Grid)(
+  ({ theme }) => `margin-left: ${theme.spacing(1)};`
+);
 
-  [`& .${classes.OSCALMetadataAdditional}`]: {
-    padding: theme.spacing(1),
-  },
+const OSCALMetadataAdditional = styled(Paper)(
+  ({ theme }) => `padding: ${theme.spacing(1)};`
+);
 
-  [`& .${classes.OSCALMetadataLabel}`]: {
-    "text-align": "right",
-    color: "#0000008a",
-  },
-
-  [`& .${classes.OSCALMetadataParties}`]: {
-    backgroundColor: theme.palette.background.paper,
-    position: "relative",
-    overflow: "auto",
-    maxHeight: "12em",
-  },
-
-  [`& .${classes.OSCALMetadataPartiesHeader}`]: {
-    backgroundColor: theme.palette.background.paper,
-  },
-
-  [`& .${classes.OSCALMetadataVersion}`]: {
-    marginLeft: theme.spacing(1),
-  },
+const OSCALMetadataPartiesCard = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
+  position: "relative",
+  overflow: "auto",
+  maxHeight: "12em",
 }));
 
 // Returns a string with a locality-sensitive representation of this date
@@ -76,14 +64,9 @@ export default function OSCALMetadata(props) {
       .join(", ");
 
   return (
-    <StyledGrid container>
+    <Grid container>
       <Grid item xs={12}>
-        <Grid
-          className={classes.OSCALMetadataTitle}
-          container
-          direction="row"
-          alignItems="center"
-        >
+        <OSCALMetadataTitle container direction="row" alignItems="center">
           <OSCALEditableTextField
             canEdit={props.isEditable}
             editedField={
@@ -111,21 +94,20 @@ export default function OSCALMetadata(props) {
             typographyVariant="h6"
             value={props.metadata.title}
           />
-        </Grid>
+        </OSCALMetadataTitle>
       </Grid>
       <Grid item xs={12}>
         <Grid container spacing={3}>
           <Grid item xs={8}>
-            <Paper className={classes.OSCALMetadataParties}>
+            <OSCALMetadataPartiesCard>
               <List
                 subheader={
-                  <ListSubheader
-                    className={classes.OSCALMetadataPartiesHeader}
+                  <OSCALMetadataPartiesHeader
                     component="div"
                     id="oscal-metadata-parties"
                   >
                     Parties
-                  </ListSubheader>
+                  </OSCALMetadataPartiesHeader>
                 }
               >
                 {props.metadata.parties?.map((party) => (
@@ -142,22 +124,18 @@ export default function OSCALMetadata(props) {
                   </ListItem>
                 ))}
               </List>
-            </Paper>
+            </OSCALMetadataPartiesCard>
           </Grid>
           <Grid item xs={4}>
-            <Paper className={classes.OSCALMetadataAdditional}>
+            <OSCALMetadataAdditional>
               <Grid container direction="row" alignItems="center">
-                <Grid item className={classes.OSCALMetadataVersion}>
-                  <Typography
-                    variant="body2"
-                    className={classes.OSCALMetadataLabel}
-                  >
+                <OSCALMetadataKey item>
+                  <OSCALMetadataLabel variant="body2">
                     Version:
-                  </Typography>
-                </Grid>
+                  </OSCALMetadataLabel>
+                </OSCALMetadataKey>
                 <OSCALEditableTextField
                   canEdit={props.isEditable}
-                  className={classes.OSCALMetadataVersion}
                   editedField={
                     props.isEditable
                       ? [
@@ -189,14 +167,11 @@ export default function OSCALMetadata(props) {
                 />
               </Grid>
               <Grid container spacing={1} direction="row" alignItems="center">
-                <Grid item className={classes.OSCALMetadataVersion}>
-                  <Typography
-                    variant="body2"
-                    className={classes.OSCALMetadataLabel}
-                  >
+                <OSCALMetadataKey item>
+                  <OSCALMetadataLabel variant="body2">
                     Last Modified:
-                  </Typography>
-                </Grid>
+                  </OSCALMetadataLabel>
+                </OSCALMetadataKey>
                 <Grid item>
                   <Typography variant="body2">
                     {formatDate(props.metadata["last-modified"])}
@@ -204,24 +179,21 @@ export default function OSCALMetadata(props) {
                 </Grid>
               </Grid>
               <Grid container spacing={1} direction="row" alignItems="center">
-                <Grid item className={classes.OSCALMetadataVersion}>
-                  <Typography
-                    variant="body2"
-                    className={classes.OSCALMetadataLabel}
-                  >
+                <OSCALMetadataKey item>
+                  <OSCALMetadataLabel variant="body2">
                     OSCAL Version:
-                  </Typography>
-                </Grid>
+                  </OSCALMetadataLabel>
+                </OSCALMetadataKey>
                 <Grid item>
                   <Typography variant="body2">
                     {props.metadata["oscal-version"]}
                   </Typography>
                 </Grid>
               </Grid>
-            </Paper>
+            </OSCALMetadataAdditional>
           </Grid>
         </Grid>
       </Grid>
-    </StyledGrid>
+    </Grid>
   );
 }

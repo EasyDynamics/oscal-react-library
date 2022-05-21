@@ -7,57 +7,20 @@ import OSCALControlPart from "./OSCALControlPart";
 import OSCALControlModification from "./OSCALControlModification";
 
 // TODO - This is probably 800-53 specific?
-function getControlStatusCss(props) {
-  if (
-    props.control?.props?.find(
-      (property) => property.name === "status" && property.value === "withdrawn"
-    )
-  ) {
-    return {
-      "text-decoration": "line-through",
-      color: "#d4d4d4",
-    };
-  }
-  return "";
-}
+const isWithdrawn = (control) =>
+  control?.props?.find(
+    (prop) => prop.name === "status" && prop.value === "withdrawn"
+  );
 
-const PREFIX = "OSCALControl";
-
-const classes = {
-  OSCALControl: `${PREFIX}-OSCALControl`,
-  OSCALControlId: `${PREFIX}-OSCALControlId`,
-  OSCALControlChildLevel: `${PREFIX}-OSCALControlChildLevel`,
-  OSCALControlChildLevelTitle: `${PREFIX}-OSCALControlChildLevelTitle`,
-  OSCALControlStatus: `${PREFIX}-OSCALControlStatus`,
-};
-
-const StyledCard = styled(Card)(() => ({
-  [`& .${classes.OSCALControl}`]: {
-    margin: "1em 0 1em 0",
-  },
-
-  [`& .${classes.OSCALControlId}`]: {
-    "text-transform": "uppercase",
-  },
-
-  [`& .${classes.OSCALControlChildLevel}`]: (props) =>
-    props.childLevel > 0
-      ? {
-          margin: "1em 1.5em 1em 1.5em",
-          "background-color": "#fffcf0",
-        }
-      : "",
-
-  [`& .${classes.OSCALControlChildLevelTitle}`]: (props) =>
-    props.childLevel > 0
-      ? {
-          "font-size": "1.1rem",
-        }
-      : "",
-
-  // TODO - This is probably 800-53 specific?
-  [`& .${classes.OSCALControlStatus}`]: (props) => getControlStatusCss(props),
-}));
+const OSCALControlCard = styled(Card)`
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: ${(props) => (props.childLevel > 0 ? "1.5em" : "0")};
+  margin-right: ${(props) => (props.childLevel > 0 ? "1.5em" : "0")};
+  ${(props) => props.childLevel > 0 && "background-color: #fffcf0;"}
+  ${(props) =>
+    props.withdrawn && `text-decoration: line-through; color: #d4d4d4;`}
+`;
 
 export default function OSCALControl(props) {
   if (
@@ -79,16 +42,17 @@ export default function OSCALControl(props) {
   }
 
   return (
-    <StyledCard
-      className={`${classes.OSCALControl} ${classes.OSCALControlStatus} ${classes.OSCALControlChildLevel}`}
+    <OSCALControlCard
+      childLevel={props.childLevel ?? 0}
+      withdrawn={isWithdrawn(props.control)}
     >
       <CardContent>
         <Typography
           variant="h6"
           component="h2"
-          className={classes.OSCALControlChildLevelTitle}
+          style={props.childLevel > 0 ? { fontSize: "1.1rem" } : undefined}
         >
-          <span className={classes.OSCALControlId}>{props.control.id}</span>{" "}
+          <span style={{ textTransform: "uppercase" }}>{props.control.id}</span>{" "}
           {props.control.title} {modificationDisplay}
         </Typography>
         {props.control.parts &&
@@ -127,6 +91,6 @@ export default function OSCALControl(props) {
             />
           ))}
       </CardContent>
-    </StyledCard>
+    </OSCALControlCard>
   );
 }

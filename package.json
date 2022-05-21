@@ -23,7 +23,6 @@
     "@mui/icons-material": "^5.8.0",
     "@mui/lab": "^5.0.0-alpha.82",
     "@mui/material": "^5.8.0",
-    "@mui/styles": "^5.8.0",
     "history": "^5.3.0",
     "prop-types": "^15.8.1",
     "react": "^17.0.2",
@@ -72,6 +71,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.18.2",
+    "@babel/plugin-proposal-logical-assignment-operators": "^7.17.12",
     "@babel/plugin-syntax-jsx": "^7.17.12",
     "@babel/preset-react": "^7.17.12",
     "@storybook/addon-actions": "^6.5.5",
