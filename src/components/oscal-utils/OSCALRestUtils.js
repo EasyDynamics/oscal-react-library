@@ -277,7 +277,7 @@ export function createSspControlImplementationImplementedRequirement(
   performRequest(
     { "implemented-requirement": newImplementedRequirement },
     restMethods.POST,
-    requestUrl,
+    buildRequestUrl(null, requestUrl, null),
     onPreRestRequest,
     onSuccess,
     onError
