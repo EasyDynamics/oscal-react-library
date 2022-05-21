@@ -7,7 +7,10 @@ import {
   OSCALReplacedProseWithParameterLabel,
 } from "./OSCALControlProse";
 
-const OSCALControlPartWrapper = styled("div")`
+const OSCALControlPartWrapper = styled("div", {
+  shouldForwardProp: (prop) =>
+    !["partName", "ownerState", "theme", "sx", "as"].includes(prop),
+})`
   padding-left: ${(props) => (props.partName !== "statement" ? "2em" : "0")};
 `;
 
@@ -74,7 +77,7 @@ export default function OSCALControlPart(props) {
   }
 
   return (
-    <OSCALControlPartWrapper partName={props.part.name}>
+    <OSCALControlPartWrapper ownerState partName={props.part.name}>
       {replacedProse}
       {props.part.parts &&
         props.part.parts.map((part) => (

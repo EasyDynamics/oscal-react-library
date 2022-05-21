@@ -110,6 +110,7 @@ export default function OSCALBackMatter(props) {
                     key={rlink.href}
                     label={getMediaType(rlink)}
                     component="a"
+                    role="button"
                     href={getAbsoluteUrl(rlink.href, props.parentUrl)}
                     variant="outlined"
                     clickable

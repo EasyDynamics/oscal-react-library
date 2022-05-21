@@ -56,7 +56,7 @@ describe("OSCALJsonEditor", () => {
     expect(heading).toHaveClass("MuiTypography-h6");
 
     const buttonGrid = within(container).getByTestId("button-grid");
-    expect(buttonGrid).toHaveClass("MuiGrid-justify-content-xs-flex-end");
+    expect(buttonGrid).toHaveClass("MuiGrid-container");
 
     const saveButton = within(buttonGrid).getByTestId("save-button");
     expect(saveButton).toHaveTextContent("Save");
@@ -69,7 +69,7 @@ describe("OSCALJsonEditor", () => {
     const cancelButon = within(buttonGrid).getByTestId("cancel-button");
     expect(cancelButon).toHaveTextContent("Cancel");
     expect(cancelButon).toBeInstanceOf(HTMLButtonElement);
-    expect(cancelButon).toHaveClass("MuiButton-containedSecondary");
+    expect(cancelButon).toHaveClass("MuiButton-contained");
   });
 
   it("should return JSON after clicking save", async () => {

@@ -12,7 +12,13 @@ const isWithdrawn = (control) =>
     (prop) => prop.name === "status" && prop.value === "withdrawn"
   );
 
-const OSCALControlCard = styled(Card)`
+const OSCALControlCard = styled(Card, {
+  // https://github.com/mui/material-ui/blob/c34935814b81870ca325099cdf41a1025a85d4b5/packages/mui-system/src/createStyled.js#L56
+  shouldForwardProp: (prop) =>
+    !["childLevel", "withdrawn", "ownerState", "theme", "sx", "as"].includes(
+      prop
+    ),
+})`
   margin-top: 1em;
   margin-bottom: 1em;
   margin-left: ${(props) => (props.childLevel > 0 ? "1.5em" : "0")};
@@ -50,7 +56,7 @@ export default function OSCALControl(props) {
         <Typography
           variant="h6"
           component="h2"
-          style={props.childLevel > 0 ? { fontSize: "1.1rem" } : undefined}
+          style={props.childLevel ? { fontSize: "1.1rem" } : undefined}
         >
           <span style={{ textTransform: "uppercase" }}>{props.control.id}</span>{" "}
           {props.control.title} {modificationDisplay}
@@ -81,7 +87,7 @@ export default function OSCALControl(props) {
               includeControlIds={props.includeControlIds}
               modificationAlters={props.modificationAlters}
               modificationSetParameters={props.modificationSetParameters}
-              childLevel={props.childLevel + 1}
+              childLevel={(props?.childLevel ?? 0) + 1}
               key={control.id}
               implementedRequirement={props.implementedRequirement}
               isEditable={props.isEditable}
