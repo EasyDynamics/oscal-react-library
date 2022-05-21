@@ -1,4 +1,5 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import Badge from "@mui/material/Badge";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -7,12 +8,17 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import LayersIcon from "@mui/icons-material/Layers";
-import makeStyles from "@mui/styles/makeStyles";
 import { Typography } from "@mui/material";
 import StyledTooltip from "./OSCALStyledTooltip";
 
-const useStyles = makeStyles(() => ({
-  OSCALControlModificationsButton: {
+const PREFIX = "OSCALControlModification";
+
+const classes = {
+  OSCALControlModificationsButton: `${PREFIX}-OSCALControlModificationsButton`,
+};
+
+const Root = styled("span")(() => ({
+  [`& .${classes.OSCALControlModificationsButton}`]: {
     color: "#002867",
   },
 }));
@@ -112,8 +118,6 @@ export default function OSCALControlModification(props) {
     return null;
   }
 
-  const classes = useStyles();
-
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
@@ -148,7 +152,7 @@ export default function OSCALControlModification(props) {
   // Display modifications if there are any
   if (!modLength) return null;
   return (
-    <span>
+    <Root>
       <StyledTooltip title="Modifications">
         <Badge
           anchorOrigin={{
@@ -186,6 +190,6 @@ export default function OSCALControlModification(props) {
           </Button>
         </DialogActions>
       </Dialog>
-    </span>
+    </Root>
   );
 }

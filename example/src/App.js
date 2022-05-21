@@ -1,11 +1,11 @@
 import "./App.css";
 import {
+  styled,
   createTheme,
   ThemeProvider,
   StyledEngineProvider,
   adaptV4Theme,
 } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
 import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
@@ -35,6 +35,40 @@ import {
 } from "@EasyDynamics/oscal-react-library";
 import logo from "./images/logo-header.svg";
 
+const PREFIX = "AppWrapper";
+
+const classes = {
+  title: `${PREFIX}-title`,
+  menuButton: `${PREFIX}-menuButton`,
+  logoText: `${PREFIX}-logoText`,
+  logoImage: `${PREFIX}-logoImage`,
+  githubButton: `${PREFIX}-githubButton`,
+};
+
+const Root = styled("div")(({ themeData }) => ({
+  [`& .${classes.title}`]: {
+    flexGrow: 1,
+  },
+
+  [`& .${classes.menuButton}`]: {
+    marginRight: themeData.spacing(2),
+  },
+
+  [`& .${classes.logoText}`]: {
+    color: "white",
+    "font-style": "italic",
+  },
+
+  [`& .${classes.logoImage}`]: {
+    width: "150px",
+    "margin-right": "1em",
+  },
+
+  [`& .${classes.githubButton}`]: {
+    color: "white",
+  },
+}));
+
 const theme = createTheme(
   adaptV4Theme({
     palette: {
@@ -44,26 +78,6 @@ const theme = createTheme(
     },
   })
 );
-
-const useStyles = makeStyles((themeData) => ({
-  title: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: themeData.spacing(2),
-  },
-  logoText: {
-    color: "white",
-    "font-style": "italic",
-  },
-  logoImage: {
-    width: "150px",
-    "margin-right": "1em",
-  },
-  githubButton: {
-    color: "white",
-  },
-}));
 
 function AppWrapper() {
   return (
@@ -76,8 +90,6 @@ function AppWrapper() {
 }
 
 function App() {
-  const classes = useStyles();
-
   const [anchorEl, setAnchorEl] = useState(null);
   const [isRestMode, setIsRestMode] = useState(
     // We want to ensure that throughout the app this is always a boolean
@@ -108,7 +120,7 @@ function App() {
     }
   }, [location]);
   return (
-    <div className="App">
+    <Root className="App">
       <CssBaseline />
       <AppBar position="static">
         <Toolbar>
@@ -258,7 +270,7 @@ function App() {
           />
         </Routes>
       </Container>
-    </div>
+    </Root>
   );
 }
 

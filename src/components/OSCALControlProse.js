@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import { styled } from "@mui/material/styles";
 import withTheme from "@mui/styles/withTheme";
-import makeStyles from "@mui/styles/makeStyles";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Badge from "@mui/material/Badge";
@@ -13,6 +12,29 @@ import CircularProgress from "@mui/material/CircularProgress";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
+
+const PREFIX = "OSCALControlProse";
+
+const classes = {
+  OSCALStatementNotImplemented: `${PREFIX}-OSCALStatementNotImplemented`,
+  OSCALStatementEditControlsContainer: `${PREFIX}-OSCALStatementEditControlsContainer`,
+  OSCALStatementEditing: `${PREFIX}-OSCALStatementEditing`,
+};
+
+const StyledGrid = styled(Grid)(({ theme }) => ({
+  [`& .${classes.OSCALStatementNotImplemented}`]: {
+    color: "silver",
+  },
+
+  [`& .${classes.OSCALStatementEditControlsContainer}`]: {
+    "text-align": "right",
+  },
+
+  [`& .${classes.OSCALStatementEditing}`]: {
+    "border-color": theme.palette.info.light,
+    "box-shadow": `0 0 5px ${theme.palette.info.light}`,
+  },
+}));
 
 const prosePlaceholderRegexpString = "{{ insert: param, ([0-9a-zA-B-_.]*) }}";
 
@@ -29,19 +51,6 @@ const ParamValue = styled(withTheme(Typography))((props) => ({
   color: "white",
   padding: "0.2em 0.5em",
   "border-radius": "5px",
-}));
-
-const useStyles = makeStyles((theme) => ({
-  OSCALStatementNotImplemented: {
-    color: "silver",
-  },
-  OSCALStatementEditControlsContainer: {
-    "text-align": "right",
-  },
-  OSCALStatementEditing: {
-    "border-color": theme.palette.info.light,
-    "box-shadow": `0 0 5px ${theme.palette.info.light}`,
-  },
 }));
 
 /**
@@ -333,7 +342,6 @@ export function OSCALReplacedProseWithParameterLabel(props) {
  * @returns the parameter value component
  */
 export function OSCALReplacedProseWithByComponentParameterValue(props) {
-  const classes = useStyles();
   const [isEditingStatement, setIsEditingStatement] = useState(false);
   const [isProcessingRequest, setIsProcessingRequest] = useState(false);
 
@@ -367,7 +375,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   if (!statementByComponent && !isEditingStatement) {
     // We don't have a by component implementation, but we're not editing, so just display param labels
     return (
-      <Grid container spacing={2}>
+      <StyledGrid container spacing={2}>
         <Grid item xs={11}>
           <OSCALReplacedProseWithParameterLabel
             label={props.label}
@@ -393,7 +401,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
             </IconButton>
           ) : null}
         </Grid>
-      </Grid>
+      </StyledGrid>
     );
   }
 

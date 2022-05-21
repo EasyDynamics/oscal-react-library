@@ -1,4 +1,5 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -9,30 +10,45 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import GroupIcon from "@mui/icons-material/Group";
-import makeStyles from "@mui/styles/makeStyles";
 import OSCALEditableTextField from "./OSCALEditableTextField";
 
-const useStyles = makeStyles((theme) => ({
-  OSCALMetadataTitle: {
+const PREFIX = "OSCALMetadata";
+
+const classes = {
+  OSCALMetadataTitle: `${PREFIX}-OSCALMetadataTitle`,
+  OSCALMetadataAdditional: `${PREFIX}-OSCALMetadataAdditional`,
+  OSCALMetadataLabel: `${PREFIX}-OSCALMetadataLabel`,
+  OSCALMetadataParties: `${PREFIX}-OSCALMetadataParties`,
+  OSCALMetadataPartiesHeader: `${PREFIX}-OSCALMetadataPartiesHeader`,
+  OSCALMetadataVersion: `${PREFIX}-OSCALMetadataVersion`,
+};
+
+const StyledGrid = styled(Grid)(({ theme }) => ({
+  [`& .${classes.OSCALMetadataTitle}`]: {
     height: "56px",
   },
-  OSCALMetadataAdditional: {
+
+  [`& .${classes.OSCALMetadataAdditional}`]: {
     padding: theme.spacing(1),
   },
-  OSCALMetadataLabel: {
+
+  [`& .${classes.OSCALMetadataLabel}`]: {
     "text-align": "right",
     color: "#0000008a",
   },
-  OSCALMetadataParties: {
+
+  [`& .${classes.OSCALMetadataParties}`]: {
     backgroundColor: theme.palette.background.paper,
     position: "relative",
     overflow: "auto",
     maxHeight: "12em",
   },
-  OSCALMetadataPartiesHeader: {
+
+  [`& .${classes.OSCALMetadataPartiesHeader}`]: {
     backgroundColor: theme.palette.background.paper,
   },
-  OSCALMetadataVersion: {
+
+  [`& .${classes.OSCALMetadataVersion}`]: {
     marginLeft: theme.spacing(1),
   },
 }));
@@ -41,8 +57,6 @@ const useStyles = makeStyles((theme) => ({
 const formatDate = (isoDate) => new Date(isoDate).toLocaleString();
 
 export default function OSCALMetadata(props) {
-  const classes = useStyles();
-
   if (!props.metadata) {
     return null;
   }
@@ -62,7 +76,7 @@ export default function OSCALMetadata(props) {
       .join(", ");
 
   return (
-    <Grid container>
+    <StyledGrid container>
       <Grid item xs={12}>
         <Grid
           className={classes.OSCALMetadataTitle}
@@ -208,6 +222,6 @@ export default function OSCALMetadata(props) {
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
+    </StyledGrid>
   );
 }

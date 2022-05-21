@@ -1,5 +1,5 @@
 import React from "react";
-import makeStyles from "@mui/styles/makeStyles";
+import { styled } from "@mui/material/styles";
 import OSCALControlGuidance from "./OSCALControlGuidance";
 import OSCALControlModification from "./OSCALControlModification";
 import {
@@ -7,14 +7,24 @@ import {
   OSCALReplacedProseWithParameterLabel,
 } from "./OSCALControlProse";
 
-const useStyles = makeStyles(() => ({
-  OSCALControlPart: {
+const PREFIX = "OSCALControlPart";
+
+const classes = {
+  OSCALControlPart: `${PREFIX}-OSCALControlPart`,
+  OSCALControlStatement: `${PREFIX}-OSCALControlStatement`,
+  OSCALStatement: `${PREFIX}-OSCALStatement`,
+};
+
+const Root = styled("div")(() => ({
+  [`& .${classes.OSCALControlPart}`]: {
     "padding-left": "2em",
   },
-  OSCALControlStatement: {
+
+  [`& .${classes.OSCALControlStatement}`]: {
     "padding-left": "0em",
   },
-  OSCALStatement: {},
+
+  [`& .${classes.OSCALStatement}`]: {},
 }));
 
 // TODO - This is probably 800-53 specific?
@@ -31,8 +41,6 @@ export default function OSCALControlPart(props) {
   ) {
     return null;
   }
-
-  const classes = useStyles();
 
   if (props.part.name === "guidance") {
     return <OSCALControlGuidance prose={props.part.prose} />;
@@ -88,7 +96,7 @@ export default function OSCALControlPart(props) {
       : classes.OSCALControlPart;
 
   return (
-    <div className={className}>
+    <Root className={className}>
       {replacedProse}
       {props.part.parts &&
         props.part.parts.map((part) => (
@@ -107,6 +115,6 @@ export default function OSCALControlPart(props) {
             partialRestData={props.partialRestData}
           />
         ))}
-    </div>
+    </Root>
   );
 }

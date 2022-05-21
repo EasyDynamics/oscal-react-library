@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import makeStyles from "@mui/styles/makeStyles";
+import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
@@ -11,15 +11,20 @@ import Select from "@mui/material/Select";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
-const useStyles = makeStyles((theme) => ({
-  catalogForm: {
+const PREFIX = "OSCALLoaderForm";
+
+const classes = {
+  catalogForm: `${PREFIX}-catalogForm`,
+};
+
+const Root = styled("form")(({ theme }) => ({
+  [`&.${classes.catalogForm}`]: {
     marginTop: theme.spacing(4),
     marginBottom: theme.spacing(2),
   },
 }));
 
 export default function OSCALLoaderForm(props) {
-  const classes = useStyles();
   const [oscalObjects, setOscalObjects] = useState([]);
   const unmounted = useRef(false);
 
@@ -52,7 +57,7 @@ export default function OSCALLoaderForm(props) {
   }, []);
 
   return (
-    <form
+    <Root
       className={classes.catalogForm}
       noValidate
       autoComplete="off"
@@ -132,6 +137,6 @@ export default function OSCALLoaderForm(props) {
           </Grid>
         )}
       </Grid>
-    </form>
+    </Root>
   );
 }

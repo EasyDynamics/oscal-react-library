@@ -1,19 +1,27 @@
 import React, { useState } from "react";
-import makeStyles from "@mui/styles/makeStyles";
+import { styled } from "@mui/material/styles";
 import { TreeItem, TreeView } from "@mui/lab";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { Grid, IconButton, List, Paper } from "@mui/material";
 import ListSubheader from "@mui/material/ListSubheader";
 
-const useStyles = makeStyles((theme) => ({
-  inheritance: {
+const PREFIX = "OSCALProfileCatalogInheritance";
+
+const classes = {
+  inheritance: `${PREFIX}-inheritance`,
+  treeStyle: `${PREFIX}-treeStyle`,
+};
+
+const StyledGrid = styled(Grid)(({ theme }) => ({
+  [`& .${classes.inheritance}`]: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
     position: "relative",
     overflow: "auto",
   },
-  treeStyle: {
+
+  [`& .${classes.treeStyle}`]: {
     marginLeft: theme.spacing(2),
   },
 }));
@@ -49,7 +57,6 @@ function createTree(tree, ids) {
 }
 
 export default function OSCALProfileCatalogInheritance(props) {
-  const classes = useStyles();
   const [expandedIds, setExpandedIds] = useState([]);
   const ids = [];
 
@@ -60,7 +67,7 @@ export default function OSCALProfileCatalogInheritance(props) {
   }
 
   return expandedIds.length > 0 ? (
-    <Grid item>
+    <StyledGrid item>
       <Paper className={classes.inheritance}>
         <List
           subheader={
@@ -91,6 +98,6 @@ export default function OSCALProfileCatalogInheritance(props) {
           </TreeView>
         </List>
       </Paper>
-    </Grid>
+    </StyledGrid>
   ) : null;
 }

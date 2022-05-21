@@ -1,5 +1,5 @@
 import React from "react";
-import makeStyles from "@mui/styles/makeStyles";
+import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
@@ -13,42 +13,55 @@ import TableRow from "@mui/material/TableRow";
 import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
 import StyledTooltip from "./OSCALStyledTooltip";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
+const PREFIX = "OSCALSystemImplementation";
+
+const classes = {
+  paper: `${PREFIX}-paper`,
+  OSCALSystemImplementationSubDataHeader: `${PREFIX}-OSCALSystemImplementationSubDataHeader`,
+  OSCALSystemImplementationHeader: `${PREFIX}-OSCALSystemImplementationHeader`,
+  SmallTableCell: `${PREFIX}-SmallTableCell`,
+  ComponentTitleCell: `${PREFIX}-ComponentTitleCell`,
+};
+
+const Root = styled("div")(({ theme }) => ({
+  [`&.${classes.paper}`]: {
     marginTop: theme.spacing(2),
     display: "flex",
     flexDirection: "column",
   },
-  OSCALSystemImplementationSubDataHeader: {
+
+  [`& .${classes.OSCALSystemImplementationSubDataHeader}`]: {
     "text-transform": "capitalize",
     "white-space": "nowrap",
     padding: "0.75em 0.75em",
   },
+
   // TODO - This is hacky
-  OSCALSystemImplementationHeader: {
+  [`& .${classes.OSCALSystemImplementationHeader}`]: {
     "& .MuiTypography-root": {
       "font-size": "0.875rem",
       color: "#0000008a",
     },
   },
-  SmallTableCell: {
+
+  [`& .${classes.SmallTableCell}`]: {
     "text-align": "right",
     padding: "0.75em 0.75em",
   },
-  ComponentTitleCell: {
+
+  [`& .${classes.ComponentTitleCell}`]: {
     "text-align": "left",
     minWidth: "20em",
   },
 }));
 
 export default function OSCALSystemImplementation(props) {
-  const classes = useStyles();
   if (!props.systemImplementation) {
     return null;
   }
 
   return (
-    <div className={classes.paper}>
+    <Root className={classes.paper}>
       <Card>
         <CardContent>
           <Grid container spacing={2}>
@@ -140,6 +153,6 @@ export default function OSCALSystemImplementation(props) {
           </Grid>
         </CardContent>
       </Card>
-    </div>
+    </Root>
   );
 }

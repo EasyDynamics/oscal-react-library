@@ -1,28 +1,38 @@
 import React, { useRef } from "react";
+import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import Editor from "@monaco-editor/react";
 import { Grid, Typography } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
 
+const PREFIX = "OSCALJsonEditor";
+
+const classes = {
+  grid: `${PREFIX}-grid`,
+  buttonGrid: `${PREFIX}-buttonGrid`,
+  editor: `${PREFIX}-editor`,
+};
+
+const StyledGrid = styled(Grid)(({ theme }) => ({
+  [`&.${classes.grid}`]: {
+    paddingRight: theme.spacing(1),
+    top: theme.spacing(1),
+    position: "sticky",
+    overflow: "hidden",
+  },
+
+  [`& .${classes.buttonGrid}`]: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+  },
+
+  [`& .${classes.editor}`]: {
+    width: "100%",
+  },
+}));
+
 export default function OSCALJsonEditor(props) {
-  const useStyles = makeStyles((theme) => ({
-    grid: {
-      paddingRight: theme.spacing(1),
-      top: theme.spacing(1),
-      position: "sticky",
-      overflow: "hidden",
-    },
-    buttonGrid: {
-      marginTop: theme.spacing(1),
-      marginBottom: theme.spacing(1),
-    },
-    editor: {
-      width: "100%",
-    },
-  }));
-  const classes = useStyles();
   const editorRef = useRef(props.editorRef);
 
   const editorOptions = {
@@ -36,7 +46,7 @@ export default function OSCALJsonEditor(props) {
   };
 
   return (
-    <Grid
+    <StyledGrid
       container
       className={classes.grid}
       direction="column"
@@ -92,6 +102,6 @@ export default function OSCALJsonEditor(props) {
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
+    </StyledGrid>
   );
 }

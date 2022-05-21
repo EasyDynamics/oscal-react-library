@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+import { styled } from "@mui/material/styles";
 import CircularProgress from "@mui/material/CircularProgress";
 import Split from "react-split";
-import makeStyles from "@mui/styles/makeStyles";
 import { Box, Fab } from "@mui/material";
 import CodeIcon from "@mui/icons-material/Code";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
@@ -13,32 +13,14 @@ import OSCALProfile from "./OSCALProfile";
 import OSCALLoaderForm from "./OSCALLoaderForm";
 import OSCALJsonEditor from "./OSCALJsonEditor";
 
-const useStyles = makeStyles((theme) => ({
-  split: {
-    display: "flex",
-    flexDirection: " row",
-    "& > .gutter": {
-      backgroundColor: "#eee",
-      backgroundRepeat: "no-repeat",
-      backgroundPosition: "50%",
-      "&.gutter-horizontal": {
-        backgroundImage:
-          "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==')",
-        cursor: "col-resize",
-      },
-    },
-  },
-  toolbar: {
-    position: "sticky",
-    display: "flex",
-    justifyContent: "flex-start",
-    marginBottom: theme.spacing(1),
-    zIndex: 1,
-  },
-}));
+const PREFIX = "OSCALLoader";
+
+const classes = {
+  split: `${PREFIX}-split`,
+  toolbar: `${PREFIX}-toolbar`,
+};
 
 export default function OSCALLoader(props) {
-  const classes = useStyles();
   const [isLoaded, setIsLoaded] = useState(false);
   const [isResolutionComplete, setIsResolutionComplete] = useState(false);
   const { isRestMode, setIsRestMode } = props;
@@ -296,6 +278,31 @@ export default function OSCALLoader(props) {
   );
 }
 
+const StyledOSCALLoader = styled(OSCALLoader)(({ theme }) => ({
+  [`& .${classes.split}`]: {
+    display: "flex",
+    flexDirection: " row",
+    "& > .gutter": {
+      backgroundColor: "#eee",
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "50%",
+      "&.gutter-horizontal": {
+        backgroundImage:
+          "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==')",
+        cursor: "col-resize",
+      },
+    },
+  },
+
+  [`& .${classes.toolbar}`]: {
+    position: "sticky",
+    display: "flex",
+    justifyContent: "flex-start",
+    marginBottom: theme.spacing(1),
+    zIndex: 1,
+  },
+}));
+
 /**
  * Returns url parameter provided by the browser url, if it exists. If the url
  * parameter exists, we want to override the default viewer url.
@@ -345,7 +352,7 @@ export function OSCALCatalogLoader(props) {
     />
   );
   return (
-    <OSCALLoader
+    <StyledOSCALLoader
       oscalObjectType={oscalObjectType}
       oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
       renderer={renderer}
@@ -396,7 +403,7 @@ export function OSCALSSPLoader(props) {
     />
   );
   return (
-    <OSCALLoader
+    <StyledOSCALLoader
       oscalObjectType={oscalObjectType}
       oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
       renderer={renderer}
@@ -447,7 +454,7 @@ export function OSCALComponentLoader(props) {
     />
   );
   return (
-    <OSCALLoader
+    <StyledOSCALLoader
       oscalObjectType={oscalObjectType}
       oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
       renderer={renderer}
@@ -498,7 +505,7 @@ export function OSCALProfileLoader(props) {
     />
   );
   return (
-    <OSCALLoader
+    <StyledOSCALLoader
       oscalObjectType={oscalObjectType}
       oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
       renderer={renderer}

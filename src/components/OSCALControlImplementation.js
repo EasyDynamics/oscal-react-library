@@ -1,5 +1,5 @@
 import React from "react";
-import makeStyles from "@mui/styles/makeStyles";
+import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
@@ -8,18 +8,28 @@ import List from "@mui/material/List";
 import OSCALControlImplementationImplReq from "./OSCALControlImplementationImplReq";
 import OSCALControlImplementationAdd from "./OSCALControlImplementationAdd";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
+const PREFIX = "OSCALControlImplementation";
+
+const classes = {
+  paper: `${PREFIX}-paper`,
+  OSCALSystemImplementationSubDataHeader: `${PREFIX}-OSCALSystemImplementationSubDataHeader`,
+  OSCALControlImplementationHeader: `${PREFIX}-OSCALControlImplementationHeader`,
+};
+
+const Root = styled("div")(({ theme }) => ({
+  [`&.${classes.paper}`]: {
     marginTop: theme.spacing(2),
     display: "flex",
     flexDirection: "column",
   },
-  OSCALSystemImplementationSubDataHeader: {
+
+  [`& .${classes.OSCALSystemImplementationSubDataHeader}`]: {
     "text-transform": "capitalize",
     "white-space": "nowrap",
   },
+
   // TODO - This is hacky
-  OSCALControlImplementationHeader: {
+  [`& .${classes.OSCALControlImplementationHeader}`]: {
     "& .MuiTypography-root": {
       "font-size": "0.875rem",
       color: "#0000008a",
@@ -35,8 +45,6 @@ const useStyles = makeStyles((theme) => ({
  * @returns The corresponding Control Implementation
  */
 export default function OSCALControlImplementation(props) {
-  const classes = useStyles();
-
   const implementedRequirements =
     props.controlImplementation["implemented-requirements"];
   const controlIds = implementedRequirements.map(
@@ -44,7 +52,7 @@ export default function OSCALControlImplementation(props) {
   );
 
   return (
-    <div className={classes.paper}>
+    <Root className={classes.paper}>
       <Card>
         <CardContent>
           <Grid container spacing={2}>
@@ -90,6 +98,6 @@ export default function OSCALControlImplementation(props) {
           </Grid>
         </CardContent>
       </Card>
-    </div>
+    </Root>
   );
 }

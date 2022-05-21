@@ -1,31 +1,37 @@
 import React from "react";
-import makeStyles from "@mui/styles/makeStyles";
+import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
+const PREFIX = "OSCALResponsibleRoles";
+
+const classes = {
+  paper: `${PREFIX}-paper`,
+  OSCALResponsibleRolesSubDataHeader: `${PREFIX}-OSCALResponsibleRolesSubDataHeader`,
+};
+
+const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
+  [`& .${classes.paper}`]: {
     marginTop: theme.spacing(2),
     display: "flex",
     flexDirection: "column",
   },
-  OSCALResponsibleRolesSubDataHeader: {
+
+  [`& .${classes.OSCALResponsibleRolesSubDataHeader}`]: {
     "text-transform": "capitalize",
     "white-space": "nowrap",
   },
 }));
 
 export default function OSCALResponsibleRoles(props) {
-  const classes = useStyles();
-
   const getPartyName = (partyUuid) =>
     props.parties?.find((party) => party.uuid === partyUuid)?.name;
 
   return (
-    <TableContainer>
+    <StyledTableContainer>
       <Table size="small">
         <TableBody>
           {props.responsibleRoles &&
@@ -48,6 +54,6 @@ export default function OSCALResponsibleRoles(props) {
             ))}
         </TableBody>
       </Table>
-    </TableContainer>
+    </StyledTableContainer>
   );
 }

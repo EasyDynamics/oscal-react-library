@@ -1,8 +1,8 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import makeStyles from "@mui/styles/makeStyles";
 import OSCALControlPart from "./OSCALControlPart";
 import OSCALControlModification from "./OSCALControlModification";
 
@@ -21,28 +21,42 @@ function getControlStatusCss(props) {
   return "";
 }
 
-const useStyles = makeStyles(() => ({
-  OSCALControl: {
+const PREFIX = "OSCALControl";
+
+const classes = {
+  OSCALControl: `${PREFIX}-OSCALControl`,
+  OSCALControlId: `${PREFIX}-OSCALControlId`,
+  OSCALControlChildLevel: `${PREFIX}-OSCALControlChildLevel`,
+  OSCALControlChildLevelTitle: `${PREFIX}-OSCALControlChildLevelTitle`,
+  OSCALControlStatus: `${PREFIX}-OSCALControlStatus`,
+};
+
+const StyledCard = styled(Card)(() => ({
+  [`& .${classes.OSCALControl}`]: {
     margin: "1em 0 1em 0",
   },
-  OSCALControlId: {
+
+  [`& .${classes.OSCALControlId}`]: {
     "text-transform": "uppercase",
   },
-  OSCALControlChildLevel: (props) =>
+
+  [`& .${classes.OSCALControlChildLevel}`]: (props) =>
     props.childLevel > 0
       ? {
           margin: "1em 1.5em 1em 1.5em",
           "background-color": "#fffcf0",
         }
       : "",
-  OSCALControlChildLevelTitle: (props) =>
+
+  [`& .${classes.OSCALControlChildLevelTitle}`]: (props) =>
     props.childLevel > 0
       ? {
           "font-size": "1.1rem",
         }
       : "",
+
   // TODO - This is probably 800-53 specific?
-  OSCALControlStatus: (props) => getControlStatusCss(props),
+  [`& .${classes.OSCALControlStatus}`]: (props) => getControlStatusCss(props),
 }));
 
 export default function OSCALControl(props) {
@@ -53,7 +67,6 @@ export default function OSCALControl(props) {
   ) {
     return null;
   }
-  const classes = useStyles(props);
 
   let modificationDisplay;
   if (props.modificationAlters) {
@@ -66,7 +79,7 @@ export default function OSCALControl(props) {
   }
 
   return (
-    <Card
+    <StyledCard
       className={`${classes.OSCALControl} ${classes.OSCALControlStatus} ${classes.OSCALControlChildLevel}`}
     >
       <CardContent>
@@ -114,6 +127,6 @@ export default function OSCALControl(props) {
             />
           ))}
       </CardContent>
-    </Card>
+    </StyledCard>
   );
 }

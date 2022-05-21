@@ -1,5 +1,5 @@
 import React from "react";
-import makeStyles from "@mui/styles/makeStyles";
+import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Chip from "@mui/material/Chip";
@@ -10,33 +10,43 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getAbsoluteUrl } from "./oscal-utils/OSCALLinkUtils";
 
-// TODO: Temporary fix for missing media type (https://github.com/GSA/fedramp-automation/issues/103)
-// Uses file extension instead
-const getURLMediaType = (url) => {
-  const lastUrlPath = url.split("//").pop().split("/").pop();
-  return lastUrlPath.match(/\.[A-Za-z]{3,4}($|\?)/) || "Unknown";
+const PREFIX = "OSCALBackMatter";
+
+const classes = {
+  paper: `${PREFIX}-paper`,
+  OSCALBackMatterInfo: `${PREFIX}-OSCALBackMatterInfo`,
+  OSCALBackMatterHeader: `${PREFIX}-OSCALBackMatterHeader`,
 };
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
+const StyledCard = styled(Card)(({ theme }) => ({
+  [`& .${classes.paper}`]: {
     marginTop: theme.spacing(2),
     display: "flex",
     flexDirection: "column",
   },
-  OSCALBackMatterInfo: {
+
+  [`& .${classes.OSCALBackMatterInfo}`]: {
     "text-transform": "capitalize",
     "& .MuiTextField-root": {
       margin: theme.spacing(1),
     },
   },
+
   // TODO - This is hacky
-  OSCALBackMatterHeader: {
+  [`& .${classes.OSCALBackMatterHeader}`]: {
     "& .MuiTypography-root": {
       "font-size": "0.875rem",
       color: "#0000008a",
     },
   },
 }));
+
+// TODO: Temporary fix for missing media type (https://github.com/GSA/fedramp-automation/issues/103)
+// Uses file extension instead
+const getURLMediaType = (url) => {
+  const lastUrlPath = url.split("//").pop().split("/").pop();
+  return lastUrlPath.match(/\.[A-Za-z]{3,4}($|\?)/) || "Unknown";
+};
 
 function TitleDisplay(props) {
   const title = props.resource.title || "No Title";
@@ -94,7 +104,6 @@ export default function OSCALBackMatter(props) {
   if (!props.backMatter) {
     return null;
   }
-  const classes = useStyles(props);
 
   const getMediaType = (rlink) =>
     rlink["media-type"] ||
@@ -102,7 +111,7 @@ export default function OSCALBackMatter(props) {
 
   const backMatterDisplay = (resource) => (
     <Grid item xs={3} key={resource.uuid}>
-      <Card>
+      <StyledCard>
         <CardContent>
           <Grid container spacing={0}>
             <Grid item xs={10}>
@@ -131,7 +140,7 @@ export default function OSCALBackMatter(props) {
             </Typography>
           </Grid>
         </CardContent>
-      </Card>
+      </StyledCard>
     </Grid>
   );
 

@@ -1,17 +1,22 @@
 import React from "react";
-import makeStyles from "@mui/styles/makeStyles";
+import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import resolveLinkHref from "./oscal-utils/OSCALLinkUtils";
 
-const useStyles = makeStyles(() => ({
-  OSCALDiagramImg: {
+const PREFIX = "OSCALDiagram";
+
+const classes = {
+  OSCALDiagramImg: `${PREFIX}-OSCALDiagramImg`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled("div")(() => ({
+  [`& .${classes.OSCALDiagramImg}`]: {
     maxWidth: "100%",
   },
 }));
 
 export default function OSCALDiagram(props) {
-  const classes = useStyles(props);
-
   // Just grab the first rlink for now
   const link = props.diagram?.links[0];
   if (!link) {
@@ -32,7 +37,7 @@ export default function OSCALDiagram(props) {
   }
 
   return (
-    <>
+    <Root>
       <img
         src={diagramUri}
         alt={props.diagram.caption}
@@ -41,6 +46,6 @@ export default function OSCALDiagram(props) {
       <Typography variant="caption" display="block" align="center" gutterBottom>
         {props.diagram.caption}
       </Typography>
-    </>
+    </Root>
   );
 }

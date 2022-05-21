@@ -1,50 +1,70 @@
 import React from "react";
+import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import makeStyles from "@mui/styles/makeStyles";
 import OSCALControl from "./OSCALControl";
 import getControlOrSubControl from "./oscal-utils/OSCALControlResolver";
 
-const useStyles = makeStyles((theme) => ({
-  OSCALImplReq: {
+const PREFIX = "OSCALControlImplementationImplReq";
+
+const classes = {
+  OSCALImplReq: `${PREFIX}-OSCALImplReq`,
+  OSCALImplReqpControlId: `${PREFIX}-OSCALImplReqpControlId`,
+  OSCALImplChildLevel: `${PREFIX}-OSCALImplChildLevel`,
+  OSCALImplReqChildLevelTitle: `${PREFIX}-OSCALImplReqChildLevelTitle`,
+  tabsContainer: `${PREFIX}-tabsContainer`,
+  tabs: `${PREFIX}-tabs`,
+  tabButton: `${PREFIX}-tabButton`,
+  tabPanelScrollable: `${PREFIX}-tabPanelScrollable`,
+};
+
+const StyledCard = styled(Card)(({ theme }) => ({
+  [`& .${classes.OSCALImplReq}`]: {
     margin: "1em 0 1em 0",
   },
-  OSCALImplReqpControlId: {
+
+  [`& .${classes.OSCALImplReqpControlId}`]: {
     "text-transform": "uppercase",
   },
-  OSCALImplChildLevel: (props) =>
+
+  [`& .${classes.OSCALImplChildLevel}`]: (props) =>
     props.childLevel > 0
       ? {
           margin: "1em 1.5em 1em 1.5em",
           "background-color": "#fffcf0",
         }
       : "",
-  OSCALImplReqChildLevelTitle: (props) =>
+
+  [`& .${classes.OSCALImplReqChildLevelTitle}`]: (props) =>
     props.childLevel > 0
       ? {
           "font-size": "1.1rem",
         }
       : "",
-  tabsContainer: {
+
+  [`& .${classes.tabsContainer}`]: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
     display: "flex",
     height: 440,
   },
-  tabs: {
+
+  [`& .${classes.tabs}`]: {
     borderRight: `1px solid ${theme.palette.divider}`,
     width: 340,
     minWidth: 340,
   },
-  tabButton: {
+
+  [`& .${classes.tabButton}`]: {
     width: 340,
     maxWidth: 340,
   },
-  tabPanelScrollable: {
+
+  [`& .${classes.tabPanelScrollable}`]: {
     overflow: "scroll",
   },
 }));
@@ -98,7 +118,6 @@ function a11yProps(index) {
  * @returns The corresponding Control Implementation Request
  */
 export default function OSCALControlImplementationImplReq(props) {
-  const classes = useStyles(props);
   const [value, setValue] = React.useState(0);
   // Updates panel based on tab state change
   const handleChange = (event, newValue) => {
@@ -113,7 +132,9 @@ export default function OSCALControlImplementationImplReq(props) {
   // display control implementation, which are both wrapped in a card
 
   return (
-    <Card className={`${classes.OSCALImplReq} ${classes.OSCALImplChildLevel}`}>
+    <StyledCard
+      className={`${classes.OSCALImplReq} ${classes.OSCALImplChildLevel}`}
+    >
       <CardContent>
         <div className={classes.tabsContainer}>
           <Tabs
@@ -159,6 +180,6 @@ export default function OSCALControlImplementationImplReq(props) {
           ))}
         </div>
       </CardContent>
-    </Card>
+    </StyledCard>
   );
 }
