@@ -13,12 +13,15 @@ import OSCALProfile from "./OSCALProfile";
 import OSCALLoaderForm from "./OSCALLoaderForm";
 import OSCALJsonEditor from "./OSCALJsonEditor";
 
-const PREFIX = "OSCALLoader";
-
-const classes = {
-  split: `split`,
-  toolbar: `${PREFIX}toolbar`,
-};
+const EditorToolbar = styled(Box)(
+  ({ theme }) => `
+  position: sticky;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: ${theme.spacing(1)};
+  z-index: 1;
+`
+);
 
 const EditorSplit = styled(Split)`
   display: flex;
@@ -226,7 +229,7 @@ export default function OSCALLoader(props) {
   } else if (oscalUrl) {
     result = isRestMode ? (
       <>
-        <Box className={classes.toolbar}>
+        <EditorToolbar>
           <Fab
             aria-label="show code"
             color={editorIsVisible ? "default" : "primary"}
@@ -237,7 +240,7 @@ export default function OSCALLoader(props) {
           >
             <CodeIcon />
           </Fab>
-        </Box>
+        </EditorToolbar>
         <EditorSplit
           gutterSize={editorIsVisible ? 10 : 0}
           minSize={editorIsVisible ? 300 : 0}
@@ -293,31 +296,6 @@ export default function OSCALLoader(props) {
   );
 }
 
-const StyledOSCALLoader = styled(OSCALLoader)(({ theme }) => ({
-  [`& .${classes.split}`]: {
-    display: "flex",
-    flexDirection: "row",
-    "& > .gutter": {
-      backgroundColor: "#eee",
-      backgroundRepeat: "no-repeat",
-      backgroundPosition: "50%",
-      "& .gutter-horizontal": {
-        backgroundImage:
-          "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==')",
-        cursor: "col-resize",
-      },
-    },
-  },
-
-  [`& .${classes.toolbar}`]: {
-    position: "sticky",
-    display: "flex",
-    justifyContent: "flex-start",
-    marginBottom: theme.spacing(1),
-    zIndex: 1,
-  },
-}));
-
 /**
  * Returns url parameter provided by the browser url, if it exists. If the url
  * parameter exists, we want to override the default viewer url.
@@ -367,7 +345,7 @@ export function OSCALCatalogLoader(props) {
     />
   );
   return (
-    <StyledOSCALLoader
+    <OSCALLoader
       oscalObjectType={oscalObjectType}
       oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
       renderer={renderer}
@@ -418,7 +396,7 @@ export function OSCALSSPLoader(props) {
     />
   );
   return (
-    <StyledOSCALLoader
+    <OSCALLoader
       oscalObjectType={oscalObjectType}
       oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
       renderer={renderer}
@@ -469,7 +447,7 @@ export function OSCALComponentLoader(props) {
     />
   );
   return (
-    <StyledOSCALLoader
+    <OSCALLoader
       oscalObjectType={oscalObjectType}
       oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
       renderer={renderer}
@@ -520,7 +498,7 @@ export function OSCALProfileLoader(props) {
     />
   );
   return (
-    <StyledOSCALLoader
+    <OSCALLoader
       oscalObjectType={oscalObjectType}
       oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
       renderer={renderer}
