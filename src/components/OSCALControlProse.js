@@ -12,14 +12,6 @@ import StyledTooltip from "./OSCALStyledTooltip";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
 
-const PREFIX = "OSCALControlProse";
-
-const classes = {
-  OSCALStatementNotImplemented: `${PREFIX}OSCALStatementNotImplemented`,
-  OSCALStatementEditControlsContainer: `${PREFIX}OSCALStatementEditControlsContainer`,
-  OSCALStatementEditing: `${PREFIX}OSCALStatementEditing`,
-};
-
 const OSCALStatementEditing = styled(Grid)`
   ${(props) =>
     props.isEditing &&
@@ -32,11 +24,9 @@ const OSCALStatementEditControlsContainer = styled(Grid)`
   text-align: right;
 `;
 
-const StyledGrid = styled(Grid)`
-  & .${classes.OSCALStatementNotImplemented} {
-    color: "silver",
-  },
-`;
+const NotImplementedStatement = styled(Typography)(
+  ({ theme }) => `color: ${theme.palette.grey[400]};`
+);
 
 const prosePlaceholderRegexpString = "{{ insert: param, ([0-9a-zA-B-_.]*) }}";
 
@@ -308,20 +298,8 @@ export function OSCALReplacedProseWithParameterLabel(props) {
     return null;
   }
 
-  if (!props.parameters) {
-    return (
-      <Typography className={props.className}>
-        {props.label}
-        {props.prose}
-        {props.modificationDisplay}
-      </Typography>
-    );
-  }
-
-  return (
-    <Typography className={props.className}>
-      {props.label}
-      {props.prose
+  const prose = props.parameters
+    ? props.prose
         .split(RegExp(prosePlaceholderRegexpString, "g"))
         .map((segment, index) => {
           if (index % 2 === 0) {
@@ -333,7 +311,22 @@ export function OSCALReplacedProseWithParameterLabel(props) {
             props.modificationSetParameters,
             index.toString()
           );
-        })}
+        })
+    : props.prose;
+
+  if (!props.isImplemented) {
+    return (
+      <NotImplementedStatement>
+        {props.label}
+        {prose}
+        {props.modificationDisplay}
+      </NotImplementedStatement>
+    );
+  }
+  return (
+    <Typography>
+      {props.label}
+      {prose}
       {props.modificationDisplay}
     </Typography>
   );
@@ -380,7 +373,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   if (!statementByComponent && !isEditingStatement) {
     // We don't have a by component implementation, but we're not editing, so just display param labels
     return (
-      <StyledGrid container spacing={2}>
+      <Grid container spacing={2}>
         <Grid item xs={11}>
           <OSCALReplacedProseWithParameterLabel
             label={props.label}
@@ -388,7 +381,6 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
             prose={props.prose}
             parameters={props.parameters}
             modificationDisplay={props.modificationDisplay}
-            className={classes.OSCALStatementNotImplemented}
           />
         </Grid>
         <OSCALStatementEditControlsContainer item xs={1}>
@@ -403,7 +395,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
             </IconButton>
           ) : null}
         </OSCALStatementEditControlsContainer>
-      </StyledGrid>
+      </Grid>
     );
   }
 
@@ -455,13 +447,15 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
           <StyledTooltip
             title={statementByComponentDescription ?? props.componentId}
           >
-            <Link href="#{props.label}">{props.label}</Link>
+            <Link underline="hover" href={`#${props.label}`}>
+              {props.label}
+            </Link>
           </StyledTooltip>
           {proseDisplay}
           {props.modificationDisplay}
         </Typography>
       </Grid>
-      <Grid item xs={1} className={classes.OSCALStatementEditControlsContainer}>
+      <OSCALStatementEditControlsContainer item xs={1}>
         {props.isEditable && !isEditingStatement ? (
           <IconButton
             aria-label={`edit-bycomponent-${props.componentId}-statement-${props.statementId}`}
@@ -473,7 +467,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
             <EditIcon fontSize="small" />
           </IconButton>
         ) : null}
-      </Grid>
+      </OSCALStatementEditControlsContainer>
       {isEditingStatement ? (
         <>
           <Grid item xs={10}>
@@ -492,11 +486,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
           </Grid>
           {!isProcessingRequest ? (
             <>
-              <Grid
-                item
-                xs={1}
-                className={classes.OSCALStatementEditControlsContainer}
-              >
+              <OSCALStatementEditControlsContainer item xs={1}>
                 <IconButton
                   aria-label={`save-${[props.statementId]}`}
                   onClick={() => {
@@ -533,12 +523,8 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
                 >
                   <SaveIcon fontSize={props.iconFontSize} />
                 </IconButton>
-              </Grid>
-              <Grid
-                item
-                xs={1}
-                className={classes.OSCALStatementEditControlsContainer}
-              >
+              </OSCALStatementEditControlsContainer>
+              <OSCALStatementEditControlsContainer item xs={1}>
                 <IconButton
                   aria-label={`cancel-${[props.statementId]}`}
                   onClick={() => {
@@ -548,7 +534,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
                 >
                   <CancelIcon fontSize={props.iconFontSize} />
                 </IconButton>
-              </Grid>
+              </OSCALStatementEditControlsContainer>
             </>
           ) : (
             <Grid item xs={2}>

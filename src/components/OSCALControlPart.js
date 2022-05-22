@@ -72,6 +72,7 @@ export default function OSCALControlPart(props) {
         parameters={props.parameters}
         modificationSetParameters={props.modificationSetParameters}
         modificationDisplay={modificationDisplay}
+        isImplemented
       />
     );
   }
