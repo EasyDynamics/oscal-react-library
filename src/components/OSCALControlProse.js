@@ -382,6 +382,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
         >
           {props.isEditable && !isEditingStatement ? (
             <IconButton
+              aria-label={`edit-bycomponent-${props.componentId}-statement-${props.statementId}`}
               size="small"
               onClick={() => {
                 setIsEditingStatement(!isEditingStatement);
