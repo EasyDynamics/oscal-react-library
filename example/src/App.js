@@ -39,22 +39,6 @@ const appTheme = createTheme({
     primary: {
       main: "#002867",
     },
-    background: {
-      // This is the background used in @material-ui v4
-      default: "#fafafa",
-    },
-  },
-  components: {
-    // This restores font sizing to match @material-ui v4
-    MuiCssBaseline: {
-      styleOverrides: {
-        body: {
-          fontSize: "0.875rem",
-          lineHeight: 1.43,
-          letterSpacing: "0.01071em",
-        },
-      },
-    },
   },
 });
 
