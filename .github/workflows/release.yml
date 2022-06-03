@@ -74,9 +74,11 @@ jobs:
       - name: Bump version 
         run: |
           npm version $NPM_RELEASE_TYPE
+          npm install
           cd example
           npm version $NPM_RELEASE_TYPE
           npm install
+          cd ..
 
       - name: Build OSCAL Viewer
         run: |
