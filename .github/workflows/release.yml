@@ -35,7 +35,8 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: develop
-          token: steps.generate-token.outputs.token
+          fetch-depth: 0
+          token: ${{ steps.generate-token.outputs.token }}
 
       - name: Setup NodeJS
         uses: actions/setup-node@v3
@@ -77,18 +78,6 @@ jobs:
           npm version $NPM_RELEASE_TYPE
           npm install
 
-      - name: Push release commit to develop main
-        run: |
-          git add ./{,example/}package{,-lock}.json
-          git commit -m "Release v${{ env.PKG_VERSION }}"
-          git push origin develop
-          git push origin develop:main
-
-      # Output the new package version to environment variable
-      - name: Get Package Version
-        run: |
-          echo "PKG_VERSION=$(npm pkg get version | tr -d '"')" >> $GITHUB_ENV
-
       - name: Build OSCAL Viewer
         run: |
           npm ci
@@ -96,6 +85,18 @@ jobs:
           npm ci
           npm run build
           zip -r oscal-viewer.zip ./build/
+
+      # Output the new package version to environment variable
+      - name: Get Package Version
+        run: |
+          echo "PKG_VERSION=$(npm pkg get version | tr -d '"')" >> $GITHUB_ENV
+
+      - name: Push release commit to develop main
+        run: |
+          git add ./{,example/}package{,-lock}.json
+          git commit -m "Release v${{ env.PKG_VERSION }}"
+          git push origin develop
+          git push origin develop:main
 
       - name: Create a GitHub Release
         uses: softprops/action-gh-release@v1
@@ -114,7 +115,8 @@ jobs:
         run: |
           npm version prepatch
           cd example
-          npm version patch
+          npm version prepatch
+          cd ..
           git add ./{,example/}package{,-lock}.json
-          git commit -m "Bump version to v$(npm pkg get version | tr -d '"')"
+          git commit -m "Start work on v$(npm pkg get version | tr -d '"')"
           git push origin develop
