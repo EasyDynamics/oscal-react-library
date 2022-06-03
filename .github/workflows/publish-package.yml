@@ -3,7 +3,7 @@ name: Publish NPM Packages
 on:
   push:
     tags:
-      - "v*"
+      - v*
   workflow_dispatch:
 
 concurrency: package-push
@@ -26,9 +26,9 @@ jobs:
       - name: Install depdendencies
         run: npm ci
       - name: Publish to NPM
-        run: npm publish
+        run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Reconfigure Node.js for GitHub Packages publish
         uses: actions/setup-node@v3
         with:
@@ -36,4 +36,4 @@ jobs:
       - name: Publish to GitHub Packages
         run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
