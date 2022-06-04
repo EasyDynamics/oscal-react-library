@@ -17,6 +17,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import CssBaseline from "@mui/material/CssBaseline";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import ReactGA from "react-ga";
 import {
   Navigate,
@@ -33,14 +34,6 @@ import {
   OSCALProfileLoader,
 } from "@EasyDynamics/oscal-react-library";
 import logo from "./images/logo-header.svg";
-
-const appTheme = createTheme({
-  palette: {
-    primary: {
-      main: "#002867",
-    },
-  },
-});
 
 const OpenNavButton = styled(IconButton)(
   ({ theme }) => `margin-right: ${theme.spacing(2)}`
@@ -75,14 +68,32 @@ function App() {
   }
 
   const location = useLocation();
+
+  // Send a Google Analytics pageview action each time the current browser/window
+  // URL changes
   useEffect(() => {
     if (process.env.REACT_APP_GOOGLE_ANALYTICS) {
       ReactGA.pageview(location.pathname + location.search);
     }
   }, [location]);
+
+  // Use a dark theme when the user has a system-wide dark theme applied (and their browser
+  // supports telling us about that). We don't currently expose a toggle in the UI for this;
+  // however, this at least helps the app match their current system a bit better.
+  const isDarkModePreferred = useMediaQuery("(prefers-color-scheme: dark)");
+  const getDesignTokens = (isDarkModePreferred) => ({
+    palette: {
+      mode: isDarkModePreferred ? "dark" : "light",
+      primary: {
+        main: "#002867",
+      }
+    }
+  });
+  const theme = React.useMemo(() => createTheme(getDesignTokens(isDarkModePreferred)), [isDarkModePreferred]);
+
   return (
     <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={appTheme}>
+      <ThemeProvider theme={theme}>
         <CssBaseline />
         <div className="App">
           <AppBar position="static">
