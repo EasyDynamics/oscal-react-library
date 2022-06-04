@@ -81,22 +81,32 @@ function App() {
   // supports telling us about that). We don't currently expose a toggle in the UI for this;
   // however, this at least helps the app match their current system a bit better.
   const isDarkModePreferred = useMediaQuery("(prefers-color-scheme: dark)");
-  const getDesignTokens = (isDarkModePreferred) => ({
+  const getDesignTokens = (isInDarkMode) => ({
     palette: {
-      mode: isDarkModePreferred ? "dark" : "light",
+      mode: isInDarkMode ? "dark" : "light",
       primary: {
         main: "#002867",
+        light: "#405095",
+        dark: "#00003c",
+      },
+      secondary: {
+        main: "#ff6600",
+        light: "#ff983f",
+        dark: "#c43300",
       }
-    }
+    },
   });
-  const theme = React.useMemo(() => createTheme(getDesignTokens(isDarkModePreferred)), [isDarkModePreferred]);
+  const theme = React.useMemo(
+    () => createTheme(getDesignTokens(isDarkModePreferred)),
+    [isDarkModePreferred]
+  );
 
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <div className="App">
-          <AppBar position="static">
+          <AppBar position="static" enableColorOnDark>
             <Toolbar>
               <OpenNavButton
                 edge="start"

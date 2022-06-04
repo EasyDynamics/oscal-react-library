@@ -9,7 +9,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 const OSCALControlGuidanceButton = styled(Button)(
   ({ theme }) => `
-  color: ${theme.palette.primary.main};
+  color: ${theme.palette.secondary.main};
   margin-top: 1em;
   margin-bottom: 0.5em;
 `

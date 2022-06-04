@@ -12,14 +12,10 @@ import Avatar from "@mui/material/Avatar";
 import GroupIcon from "@mui/icons-material/Group";
 import OSCALEditableTextField from "./OSCALEditableTextField";
 
-export const OSCALMetadataPartiesHeader = styled(ListSubheader)(
-  ({ theme }) => `
-  background-color: ${theme.palette.background.paper};
-`
-);
+export const OSCALMetadataPartiesHeader = styled(ListSubheader)``;
+
 const OSCALMetadataLabel = styled(Typography)`
   text-align: right;
-  color: #0000008a;
 `;
 
 const OSCALMetadataTitle = styled(Grid)`
@@ -27,7 +23,7 @@ const OSCALMetadataTitle = styled(Grid)`
 `;
 
 const OSCALMetadataKey = styled(Grid)(
-  ({ theme }) => `margin-left: ${theme.spacing(1)};`
+  ({ theme }) => `padding-right: ${theme.spacing(1)};`
 );
 
 const OSCALMetadataAdditional = styled(Paper)(
