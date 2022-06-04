@@ -70,8 +70,13 @@ function App() {
   );
   const [backendUrl] = useState(process.env.REACT_APP_REST_BASE_URL);
 
-  const appType = React.useMemo(() => isRestMode ? "Editor" : "Viewer", [isRestMode]);
-  useEffect(() => document.title = `OSCAL ${appType}`, [appType]);
+  const appType = React.useMemo(
+    () => (isRestMode ? "Editor" : "Viewer"),
+    [isRestMode]
+  );
+  useEffect(() => {
+    document.title = `OSCAL ${appType}`;
+  }, [appType]);
 
   const handleAppNavOpen = (event) => {
     setAnchorEl(event.currentTarget);
