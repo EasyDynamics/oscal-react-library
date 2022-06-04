@@ -68,8 +68,10 @@ function App() {
     // be different).
     !!process.env.REACT_APP_REST_BASE_URL
   );
-  const [appType, setAppType] = useState(isRestMode ? "Editor" : "Viewer");
   const [backendUrl] = useState(process.env.REACT_APP_REST_BASE_URL);
+
+  const appType = React.useMemo(() => isRestMode ? "Editor" : "Viewer", [isRestMode]);
+  useEffect(() => document.title = `OSCAL ${appType}`, [appType]);
 
   const handleAppNavOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -91,12 +93,6 @@ function App() {
       ReactGA.pageview(location.pathname + location.search);
     }
   }, [location]);
-  useEffect(() => {
-    setAppType(isRestMode ? "Editor" : "Viewer");
-  }, [isRestMode]);
-  useEffect(() => {
-    document.title = `OSCAL ${appType}`;
-  }, [appType]);
 
   return (
     <ThemeProvider theme={theme}>
