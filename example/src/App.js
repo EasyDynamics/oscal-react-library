@@ -60,6 +60,14 @@ function App() {
   );
   const [backendUrl] = useState(process.env.REACT_APP_REST_BASE_URL);
 
+  const appType = React.useMemo(
+    () => (isRestMode ? "Editor" : "Viewer"),
+    [isRestMode]
+  );
+  useEffect(() => {
+    document.title = `OSCAL ${appType}`;
+  }, [appType]);
+
   const handleAppNavOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -80,6 +88,7 @@ function App() {
       ReactGA.pageview(location.pathname + location.search);
     }
   }, [location]);
+
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={appTheme}>
@@ -104,19 +113,27 @@ function App() {
                    * warning and at least presents something if the redirect or
                    * rendering fails for any reason.
                    */}
-                  <Route exact path="/" element="OSCAL Viewer" />
-                  <Route exact path="/catalog" element="OSCAL Catalog Viewer" />
+                  <Route exact path="/" element={`OSCAL ${appType}`} />
+                  <Route
+                    exact
+                    path="/catalog"
+                    element={`OSCAL Catalog ${appType}`}
+                  />
                   <Route
                     exact
                     path="/system-security-plan"
-                    element="OSCAL System Security Plan Viewer"
+                    element={`OSCAL System Security Plan ${appType}`}
                   />
                   <Route
                     exact
                     path="/component-definition"
-                    element="OSCAL Component Viewer"
+                    element={`OSCAL Component ${appType}`}
                   />
-                  <Route exact path="/profile" element="OSCAL Profile Viewer" />
+                  <Route
+                    exact
+                    path="/profile"
+                    element={`OSCAL Profile ${appType}`}
+                  />
                 </Routes>
               </Typography>
               <Typography
@@ -154,28 +171,28 @@ function App() {
               component={RouterLink}
               to="/catalog"
             >
-              Catalog Viewer
+              {`Catalog ${appType}`}
             </MenuItem>
             <MenuItem
               onClick={handleAppNavClose}
               component={RouterLink}
               to="/system-security-plan"
             >
-              System Security Plan Viewer
+              {`System Security Plan ${appType}`}
             </MenuItem>
             <MenuItem
               onClick={handleAppNavClose}
               component={RouterLink}
               to="/component-definition"
             >
-              Component Viewer
+              {`Component ${appType}`}
             </MenuItem>
             <MenuItem
               onClick={handleAppNavClose}
               component={RouterLink}
               to="/profile"
             >
-              Profile Viewer
+              {`Profile ${appType}`}
             </MenuItem>
           </Menu>
           <Container maxWidth={false} component="main">
