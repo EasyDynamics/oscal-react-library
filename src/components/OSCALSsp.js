@@ -6,10 +6,9 @@ import OSCALControlImplementation from "./OSCALControlImplementation";
 import OSCALSspResolveProfile from "./oscal-utils/OSCALSspResolver";
 import OSCALBackMatter from "./OSCALBackMatter";
 import OSCALProfileCatalogInheritance from "./OSCALProfileCatalogInheritance";
-import { useLoaderStyles } from "./OSCALLoaderStyles";
+import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
 
 export default function OSCALSsp(props) {
-  const classes = useLoaderStyles();
   const [error, setError] = useState(null);
   const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] =
     useState({});
@@ -73,7 +72,7 @@ export default function OSCALSsp(props) {
   }
 
   return (
-    <div className={classes.paper}>
+    <OSCALDocumentRoot>
       <OSCALMetadata
         metadata={ssp.metadata}
         isEditable={props.isEditable}
@@ -97,6 +96,6 @@ export default function OSCALSsp(props) {
         backMatter={ssp["back-matter"]}
         parentUrl={props.parentUrl}
       />
-    </div>
+    </OSCALDocumentRoot>
   );
 }

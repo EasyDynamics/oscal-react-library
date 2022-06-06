@@ -1,53 +1,49 @@
 import React from "react";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
+import { styled } from "@mui/material/styles";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 import PropTypes from "prop-types";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Box from "@material-ui/core/Box";
-import { makeStyles } from "@material-ui/core/styles";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
 import OSCALControl from "./OSCALControl";
 import getControlOrSubControl from "./oscal-utils/OSCALControlResolver";
 
-const useStyles = makeStyles((theme) => ({
-  OSCALImplReq: {
-    margin: "1em 0 1em 0",
-  },
-  OSCALImplReqpControlId: {
-    "text-transform": "uppercase",
-  },
-  OSCALImplChildLevel: (props) =>
-    props.childLevel > 0
-      ? {
-          margin: "1em 1.5em 1em 1.5em",
-          "background-color": "#fffcf0",
-        }
-      : "",
-  OSCALImplReqChildLevelTitle: (props) =>
-    props.childLevel > 0
-      ? {
-          "font-size": "1.1rem",
-        }
-      : "",
-  tabsContainer: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
-    display: "flex",
-    height: 440,
-  },
-  tabs: {
-    borderRight: `1px solid ${theme.palette.divider}`,
-    width: 340,
-    minWidth: 340,
-  },
-  tabButton: {
-    width: 340,
-    maxWidth: 340,
-  },
-  tabPanelScrollable: {
-    overflow: "scroll",
-  },
-}));
+const OSCALImplReqCard = styled(Card, {
+  // https://github.com/mui/material-ui/blob/c34935814b81870ca325099cdf41a1025a85d4b5/packages/mui-system/src/createStyled.js#L56
+  shouldForwardProp: (prop) =>
+    !["childLevel", "withdrawn", "ownerState", "theme", "sx", "as"].includes(
+      prop
+    ),
+})`
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: ${(props) => (props.childLevel > 0 ? "1.5em" : "0")};
+  margin-right: ${(props) => (props.childLevel > 0 ? "1.5em" : "0")};
+  ${(props) => props.childLevel > 0 && "background-color: #fffcf0;"}
+`;
+
+const ComponentTabContainer = styled("div")(
+  ({ theme }) => `
+  flex-grow: 1;
+  background-color: ${theme.palette.background.paper};
+  display: flex;
+  height: 440;
+`
+);
+
+const ComponentTabs = styled(Tabs)(
+  ({ theme }) => `
+  border-right: 1px solid ${theme.palette.divider};
+  width: 340;
+  min-width: 340;
+`
+);
+
+const ComponentTabButton = styled(Tab)`
+  width: 340;
+  min-width: 340;
+`;
 
 /**
  * Sets up elements of the tab panel.
@@ -77,6 +73,9 @@ TabPanel.propTypes = {
   index: PropTypes.node.isRequired,
   value: PropTypes.node.isRequired,
 };
+const ComponentTabPanelScrollable = styled(TabPanel)`
+  overflow: scroll;
+`;
 
 /**
  * Makes a component dynamic and fit it's associated tab.
@@ -98,7 +97,6 @@ function a11yProps(index) {
  * @returns The corresponding Control Implementation Request
  */
 export default function OSCALControlImplementationImplReq(props) {
-  const classes = useStyles(props);
   const [value, setValue] = React.useState(0);
   // Updates panel based on tab state change
   const handleChange = (event, newValue) => {
@@ -113,31 +111,28 @@ export default function OSCALControlImplementationImplReq(props) {
   // display control implementation, which are both wrapped in a card
 
   return (
-    <Card className={`${classes.OSCALImplReq} ${classes.OSCALImplChildLevel}`}>
+    <OSCALImplReqCard>
       <CardContent>
-        <div className={classes.tabsContainer}>
-          <Tabs
+        <ComponentTabContainer>
+          <ComponentTabs
             orientation="vertical"
             variant="scrollable"
             value={value}
             onChange={handleChange}
             aria-label="Vertical tabs example"
-            className={classes.tabs}
           >
             {Object.values(props.components).map((component, index) => (
-              <Tab
+              <ComponentTabButton
                 label={component.title}
                 {...a11yProps(index)}
-                className={classes.tabButton}
                 key={component.uuid}
               />
             ))}
-          </Tabs>
+          </ComponentTabs>
           {Object.values(props.components).map((component, index) => (
-            <TabPanel
+            <ComponentTabPanelScrollable
               value={value}
               index={index}
-              className={classes.tabPanelScrollable}
               key={component.uuid}
             >
               <OSCALControl
@@ -155,10 +150,10 @@ export default function OSCALControlImplementationImplReq(props) {
                 onRestError={props.onRestError}
                 partialRestData={props.partialRestData}
               />
-            </TabPanel>
+            </ComponentTabPanelScrollable>
           ))}
-        </div>
+        </ComponentTabContainer>
       </CardContent>
-    </Card>
+    </OSCALImplReqCard>
   );
 }

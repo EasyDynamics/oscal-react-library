@@ -1,22 +1,18 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { TreeItem, TreeView } from "@material-ui/lab";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import { Grid, IconButton, List, Paper } from "@material-ui/core";
-import ListSubheader from "@material-ui/core/ListSubheader";
+import { styled } from "@mui/material/styles";
+import { TreeItem, TreeView } from "@mui/lab";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import { Grid, IconButton, List, Paper, ListSubheader } from "@mui/material";
 
-const useStyles = makeStyles((theme) => ({
-  inheritance: {
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-    position: "relative",
-    overflow: "auto",
-  },
-  treeStyle: {
-    marginLeft: theme.spacing(2),
-  },
-}));
+const CatalogInheritancePaper = styled(Paper)(
+  ({ theme }) => `
+  margin-top: ${theme.spacing(2)};
+  margin-bottom: ${theme.spacing(2)};
+  position: relative;
+  overflow: auto;
+`
+);
 
 function generateLabel(title, type) {
   return type === "profile" ? `Profile: ${title}` : `Catalog: ${title}`;
@@ -49,7 +45,6 @@ function createTree(tree, ids) {
 }
 
 export default function OSCALProfileCatalogInheritance(props) {
-  const classes = useStyles();
   const [expandedIds, setExpandedIds] = useState([]);
   const ids = [];
 
@@ -61,27 +56,22 @@ export default function OSCALProfileCatalogInheritance(props) {
 
   return expandedIds.length > 0 ? (
     <Grid item>
-      <Paper className={classes.inheritance}>
+      <CatalogInheritancePaper>
         <List
           subheader={
-            <ListSubheader
-              className={classes.OSCALMetadataPartiesHeader}
-              component="div"
-              id="oscal-metadata-parties"
-            >
+            <ListSubheader component="div" id="oscal-metadata-parties">
               Profiles/Catalog Inheritance
             </ListSubheader>
           }
         >
           <TreeView
-            className={classes.treeStyle}
             defaultExpandIcon={
-              <IconButton>
+              <IconButton size="large">
                 <ExpandMoreIcon />
               </IconButton>
             }
             defaultCollapseIcon={
-              <IconButton>
+              <IconButton size="large">
                 <ExpandLessIcon />
               </IconButton>
             }
@@ -90,7 +80,7 @@ export default function OSCALProfileCatalogInheritance(props) {
             {children}
           </TreeView>
         </List>
-      </Paper>
+      </CatalogInheritancePaper>
     </Grid>
   ) : null;
 }

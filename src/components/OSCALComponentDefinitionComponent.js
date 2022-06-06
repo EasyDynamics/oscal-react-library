@@ -1,42 +1,26 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
 import StyledTooltip from "./OSCALStyledTooltip";
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(2),
-    display: "flex",
-    flexDirection: "column",
-  },
-  OSCALComponentsHeader: {
-    "& .MuiTypography-root": {
-      "font-size": "0.875rem",
-      color: "#0000008a",
-    },
-  },
-}));
+import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 
 export default function OSCALComponentDefinitionComponent(props) {
-  const classes = useStyles();
-
   return (
-    <div className={classes.paper}>
+    <OSCALSection>
       <Card>
         <CardContent>
           <Grid container spacing={2}>
-            <Grid item xs={12} className={classes.OSCALComponentsHeader}>
-              <Typography>Components</Typography>
+            <Grid item xs={12}>
+              <OSCALSectionHeader>Components</OSCALSectionHeader>
             </Grid>
             <Grid item xs={12}>
               <TableContainer>
@@ -74,6 +58,6 @@ export default function OSCALComponentDefinitionComponent(props) {
           </Grid>
         </CardContent>
       </Card>
-    </div>
+    </OSCALSection>
   );
 }

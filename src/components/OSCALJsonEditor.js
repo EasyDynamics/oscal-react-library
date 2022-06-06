@@ -1,27 +1,28 @@
 import React, { useRef } from "react";
-import Button from "@material-ui/core/Button";
+import { styled } from "@mui/material/styles";
+import Button from "@mui/material/Button";
 import Editor from "@monaco-editor/react";
-import { Grid, makeStyles, Typography } from "@material-ui/core";
-import SaveIcon from "@material-ui/icons/Save";
-import CancelIcon from "@material-ui/icons/Cancel";
+import { Grid, Typography } from "@mui/material";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Cancel";
+
+const BaseEditorGrid = styled(Grid)(
+  ({ theme }) => `
+  padding-right: ${theme.spacing(1)};
+  top: ${theme.spacing(1)};
+  position: sticky;
+  overflow: hidden
+`
+);
+
+const ButtonGrid = styled(Grid)(
+  ({ theme }) => `
+  margin-top: ${theme.spacing(1)};
+  margin-bottom: ${theme.spacing(1)};
+`
+);
 
 export default function OSCALJsonEditor(props) {
-  const useStyles = makeStyles((theme) => ({
-    grid: {
-      paddingRight: theme.spacing(1),
-      top: theme.spacing(1),
-      position: "sticky",
-      overflow: "hidden",
-    },
-    buttonGrid: {
-      marginTop: theme.spacing(1),
-      marginBottom: theme.spacing(1),
-    },
-    editor: {
-      width: "100%",
-    },
-  }));
-  const classes = useStyles();
   const editorRef = useRef(props.editorRef);
 
   const editorOptions = {
@@ -35,16 +36,11 @@ export default function OSCALJsonEditor(props) {
   };
 
   return (
-    <Grid
-      container
-      className={classes.grid}
-      direction="column"
-      data-testid="container"
-    >
+    <BaseEditorGrid container direction="column" data-testid="container">
       <Grid item>
         <Typography variant="h6">JSON Editor</Typography>
       </Grid>
-      <Grid className={classes.editor} item>
+      <Grid sx={{ width: "100%" }} item>
         <Editor
           height="85vh"
           options={editorOptions}
@@ -56,8 +52,7 @@ export default function OSCALJsonEditor(props) {
         />
       </Grid>
       <Grid item>
-        <Grid
-          className={classes.buttonGrid}
+        <ButtonGrid
           container
           spacing={2}
           justifyContent="flex-end"
@@ -70,7 +65,7 @@ export default function OSCALJsonEditor(props) {
               }}
               startIcon={<CancelIcon data-testid="cancel-icon" />}
               variant="contained"
-              color="secondary"
+              color="error"
               data-testid="cancel-button"
             >
               Cancel
@@ -89,8 +84,8 @@ export default function OSCALJsonEditor(props) {
               Save
             </Button>
           </Grid>
-        </Grid>
+        </ButtonGrid>
       </Grid>
-    </Grid>
+    </BaseEditorGrid>
   );
 }

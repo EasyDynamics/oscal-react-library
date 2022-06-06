@@ -1,8 +1,8 @@
 import React from "react";
-import CancelIcon from "@material-ui/icons/Cancel";
-import EditIcon from "@material-ui/icons/Edit";
-import SaveIcon from "@material-ui/icons/Save";
-import { IconButton } from "@material-ui/core";
+import CancelIcon from "@mui/icons-material/Cancel";
+import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
+import { IconButton } from "@mui/material";
 
 export function getElementLabel(editedField) {
   return editedField.toString().replace(/,/g, "-");
@@ -37,6 +37,7 @@ export default function OSCALEditableFieldActions(props) {
             props.onCancel();
           }
         }}
+        size="large"
       >
         <SaveIcon fontSize={props.iconFontSize} />
       </IconButton>
@@ -53,6 +54,7 @@ export default function OSCALEditableFieldActions(props) {
             props.setInEditState(!props.inEditState);
           }
         }}
+        size="large"
       >
         <CancelIcon fontSize={props.iconFontSize} />
       </IconButton>
@@ -67,6 +69,7 @@ export default function OSCALEditableFieldActions(props) {
       onClick={() => {
         props.setInEditState(!props.inEditState);
       }}
+      size="large"
     >
       <EditIcon fontSize={props.iconFontSize} />
     </IconButton>

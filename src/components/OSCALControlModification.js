@@ -1,21 +1,19 @@
 import React from "react";
-import Badge from "@material-ui/core/Badge";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import IconButton from "@material-ui/core/IconButton";
-import LayersIcon from "@material-ui/icons/Layers";
-import { makeStyles } from "@material-ui/core/styles";
-import { Typography } from "@material-ui/core";
+import { styled } from "@mui/material/styles";
+import Badge from "@mui/material/Badge";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import LayersIcon from "@mui/icons-material/Layers";
+import { Typography } from "@mui/material";
 import StyledTooltip from "./OSCALStyledTooltip";
 
-const useStyles = makeStyles(() => ({
-  OSCALControlModificationsButton: {
-    color: "#002867",
-  },
-}));
+const OSCALControlModificationsButton = styled(IconButton)(
+  ({ theme }) => `color: ${theme.palette.primary.main}`
+);
 
 /**
  * Create a typography html object for addsOrRemovesLabel
@@ -112,8 +110,6 @@ export default function OSCALControlModification(props) {
     return null;
   }
 
-  const classes = useStyles();
-
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
@@ -148,26 +144,25 @@ export default function OSCALControlModification(props) {
   // Display modifications if there are any
   if (!modLength) return null;
   return (
-    <span>
+    <>
       <StyledTooltip title="Modifications">
         <Badge
           anchorOrigin={{
             vertical: "top",
             horizontal: "right",
           }}
-          color="secondary"
+          color="info"
           badgeContent={modLength}
           overlap="circular"
         >
-          <IconButton
+          <OSCALControlModificationsButton
             variant="outlined"
             size="small"
-            className={classes.OSCALControlModificationsButton}
             aria-label={`${controlPartId} modifications`}
             onClick={handleClick}
           >
             <LayersIcon />
-          </IconButton>
+          </OSCALControlModificationsButton>
         </Badge>
       </StyledTooltip>
       <Dialog
@@ -186,6 +181,6 @@ export default function OSCALControlModification(props) {
           </Button>
         </DialogActions>
       </Dialog>
-    </span>
+    </>
   );
 }

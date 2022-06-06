@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { styled } from "@mui/material/styles";
+import CircularProgress from "@mui/material/CircularProgress";
 import Split from "react-split";
-import { makeStyles } from "@material-ui/core/styles";
-import { Box, Fab } from "@material-ui/core";
-import CodeIcon from "@material-ui/icons/Code";
+import { Box, Fab } from "@mui/material";
+import CodeIcon from "@mui/icons-material/Code";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
 import ErrorBoundary, { BasicError } from "./ErrorBoundary";
 import OSCALSsp from "./OSCALSsp";
@@ -13,32 +13,33 @@ import OSCALProfile from "./OSCALProfile";
 import OSCALLoaderForm from "./OSCALLoaderForm";
 import OSCALJsonEditor from "./OSCALJsonEditor";
 
-const useStyles = makeStyles((theme) => ({
-  split: {
-    display: "flex",
-    flexDirection: " row",
-    "& > .gutter": {
-      backgroundColor: "#eee",
-      backgroundRepeat: "no-repeat",
-      backgroundPosition: "50%",
-      "&.gutter-horizontal": {
-        backgroundImage:
-          "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==')",
-        cursor: "col-resize",
-      },
-    },
-  },
-  toolbar: {
-    position: "sticky",
-    display: "flex",
-    justifyContent: "flex-start",
-    marginBottom: theme.spacing(1),
-    zIndex: 1,
-  },
-}));
+const EditorToolbar = styled(Box)(
+  ({ theme }) => `
+  position: sticky;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: ${theme.spacing(1)};
+  z-index: 1;
+`
+);
+
+const EditorSplit = styled(Split)`
+  display: flex;
+  flex-direction: row;
+
+  & > .gutter {
+    background-color: #eee;
+    background-repeat: no-repeat;
+    background-position: 50%;
+  }
+
+  & .gutter-horizontal {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
+    cursor: col-resize;
+  }
+`;
 
 export default function OSCALLoader(props) {
-  const classes = useStyles();
   const [isLoaded, setIsLoaded] = useState(false);
   const [isResolutionComplete, setIsResolutionComplete] = useState(false);
   const { isRestMode, setIsRestMode } = props;
@@ -228,7 +229,7 @@ export default function OSCALLoader(props) {
   } else if (oscalUrl) {
     result = isRestMode ? (
       <>
-        <Box className={classes.toolbar}>
+        <EditorToolbar>
           <Fab
             aria-label="show code"
             color={editorIsVisible ? "default" : "primary"}
@@ -239,9 +240,8 @@ export default function OSCALLoader(props) {
           >
             <CodeIcon />
           </Fab>
-        </Box>
-        <Split
-          className={classes.split}
+        </EditorToolbar>
+        <EditorSplit
           gutterSize={editorIsVisible ? 10 : 0}
           minSize={editorIsVisible ? 300 : 0}
           sizes={editorIsVisible ? [34, 66] : [0, 100]}
@@ -263,7 +263,7 @@ export default function OSCALLoader(props) {
               handleRestError
             )}
           </Box>
-        </Split>
+        </EditorSplit>
       </>
     ) : (
       <>

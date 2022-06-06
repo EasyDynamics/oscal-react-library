@@ -53,7 +53,7 @@ export default function testOSCALControlImplementationAdd(
     expect(cancelButton).toBeVisible();
 
     const autocomplete = screen.getByRole("combobox", {
-      name: "autocomplete-system-security-plan-control-implementation",
+      name: "Select Control",
     });
     expect(autocomplete).toBeVisible();
   });

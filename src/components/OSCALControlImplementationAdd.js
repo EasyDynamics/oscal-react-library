@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import Grid from "@material-ui/core/Grid";
-import { Button, IconButton, TextField } from "@material-ui/core";
-import CancelIcon from "@material-ui/icons/Cancel";
-import SaveIcon from "@material-ui/icons/Save";
-import { Autocomplete } from "@material-ui/lab";
+import Grid from "@mui/material/Grid";
+import { Button, IconButton, TextField, Autocomplete } from "@mui/material";
+import CancelIcon from "@mui/icons-material/Cancel";
+import SaveIcon from "@mui/icons-material/Save";
 import { v4 as uuidv4 } from "uuid";
 import { getElementLabel } from "./OSCALEditableFieldActions";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
@@ -34,7 +33,7 @@ export default function OSCALControlImplementationAdd(props) {
   );
 
   return inEditState ? (
-    <Grid container xs={12} justifyContent="flex-end" alignItems="center">
+    <Grid container item xs={12} justifyContent="flex-end" alignItems="center">
       <Grid item xs={6}>
         <Autocomplete
           disablePortal
@@ -71,12 +70,14 @@ export default function OSCALControlImplementationAdd(props) {
             );
             setInEditState(false);
           }}
+          size="large"
         >
           <SaveIcon fontSize="small" />
         </IconButton>
         <IconButton
           aria-label="cancel-system-security-plan-control-implementation"
           onClick={() => setInEditState(false)}
+          size="large"
         >
           <CancelIcon fontSize="small" />
         </IconButton>

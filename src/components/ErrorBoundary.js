@@ -1,5 +1,5 @@
 import React from "react";
-import Alert from "@material-ui/lab/Alert";
+import Alert from "@mui/material/Alert";
 
 /**
  * A basic FallbackComponent for the {@link ErrorBoundary}. Displays a "yikes"
