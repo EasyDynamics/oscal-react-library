@@ -1,69 +1,49 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
+import { styled } from "@mui/material/styles";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
 import StyledTooltip from "./OSCALStyledTooltip";
+import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(2),
-    display: "flex",
-    flexDirection: "column",
-  },
-  OSCALSystemImplementationSubDataHeader: {
-    "text-transform": "capitalize",
-    "white-space": "nowrap",
-    padding: "0.75em 0.75em",
-  },
-  // TODO - This is hacky
-  OSCALSystemImplementationHeader: {
-    "& .MuiTypography-root": {
-      "font-size": "0.875rem",
-      color: "#0000008a",
-    },
-  },
-  SmallTableCell: {
-    "text-align": "right",
-    padding: "0.75em 0.75em",
-  },
-  ComponentTitleCell: {
-    "text-align": "left",
-    minWidth: "20em",
-  },
-}));
+const SmallTableCell = styled(TableCell)`
+  text-align: right;
+  padding: 0.75em 0.75em;
+`;
+
+const ComponentTableCell = styled(TableCell)`
+  text-align: left;
+  minwidth: 20em;
+`;
+
+const OSCALSystemImplementationSubDataHeader = styled(TableCell)`
+  text-transform: capitalize;
+  white-space: nowrap;
+  padding: 0.75em 0.75em;
+`;
 
 export default function OSCALSystemImplementation(props) {
-  const classes = useStyles();
   if (!props.systemImplementation) {
     return null;
   }
 
   return (
-    <div className={classes.paper}>
+    <OSCALSection>
       <Card>
         <CardContent>
           <Grid container spacing={2}>
-            <Grid
-              item
-              xs={12}
-              className={classes.OSCALSystemImplementationHeader}
-            >
-              <Typography>System Implementation</Typography>
+            <Grid item xs={12}>
+              <OSCALSectionHeader>System Implementation</OSCALSectionHeader>
             </Grid>
-            <Grid
-              item
-              xs={12}
-              className={classes.OSCALSystemCharacteristicsInfo}
-            >
+            <Grid item xs={12}>
               <Typography>{props.systemImplementation.remarks}</Typography>
             </Grid>
             <Grid item xs={12}>
@@ -82,17 +62,13 @@ export default function OSCALSystemImplementation(props) {
                     {Object.entries(props.systemImplementation.components).map(
                       ([key, component]) => (
                         <TableRow key={key}>
-                          <TableCell
-                            component="th"
-                            scope="row"
-                            className={classes.ComponentTitleCell}
-                          >
+                          <ComponentTableCell component="th" scope="row">
                             <StyledTooltip title={component.description}>
                               <Typography variant="body2">
                                 {component.title}
                               </Typography>
                             </StyledTooltip>
-                          </TableCell>
+                          </ComponentTableCell>
                           <TableCell>{component.type}</TableCell>
                           <TableCell>
                             {component.status && component.status.state}
@@ -104,20 +80,15 @@ export default function OSCALSystemImplementation(props) {
                                   {component.props &&
                                     component.props.map((property) => (
                                       <TableRow key={property.name}>
-                                        <TableCell
-                                          className={
-                                            classes.OSCALSystemImplementationSubDataHeader
-                                          }
+                                        <OSCALSystemImplementationSubDataHeader
                                           component="th"
                                           scope="row"
                                         >
                                           {property.name}
-                                        </TableCell>
-                                        <TableCell
-                                          className={classes.SmallTableCell}
-                                        >
+                                        </OSCALSystemImplementationSubDataHeader>
+                                        <SmallTableCell>
                                           {property.value}
-                                        </TableCell>
+                                        </SmallTableCell>
                                       </TableRow>
                                     ))}
                                 </TableBody>
@@ -140,6 +111,6 @@ export default function OSCALSystemImplementation(props) {
           </Grid>
         </CardContent>
       </Card>
-    </div>
+    </OSCALSection>
   );
 }

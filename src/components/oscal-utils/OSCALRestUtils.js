@@ -161,7 +161,7 @@ export function performRequest(
 
 /**
  * Creates and performs the REST request for updating an SSP control implementation
- * implemented requirement statement by compontent from the given data.
+ * implemented requirement statement by component from the given data.
  *
  * @param partialRootRestData the partial root SSP object
  * @param implementedRequirement the existing implemented requirement object
@@ -220,9 +220,23 @@ export function createOrUpdateSspControlImplementationImplementedRequirementStat
   // Set each implementation parameter
   if (implementationSetParameters?.length) {
     statementByComponent["set-parameters"] ??= [];
-    statementByComponent["set-parameters"].push(
-      ...implementationSetParameters.filter((element) => !!element)
-    );
+    implementationSetParameters
+      .filter((element) => !!element)
+      .forEach((implementationSetParameter) => {
+        const foundExistingSetParam = statementByComponent[
+          "set-parameters"
+        ].find(
+          (element) =>
+            element["param-id"] === implementationSetParameter["param-id"]
+        );
+        if (foundExistingSetParam) {
+          foundExistingSetParam.values = implementationSetParameter.values;
+        } else {
+          statementByComponent["set-parameters"].push(
+            implementationSetParameter
+          );
+        }
+      });
   }
 
   const rootUuid = partialRootRestData[oscalObjectTypes.ssp.jsonRootName].uuid;
@@ -232,6 +246,37 @@ export function createOrUpdateSspControlImplementationImplementedRequirementStat
   performRequest(
     { "implemented-requirement": partialRestImplementedRequirement },
     restMethods.PUT,
+    buildRequestUrl(null, requestUrl, null),
+    onPreRestRequest,
+    onSuccess,
+    onError
+  );
+}
+
+/**
+ * Creates and performs the REST request for adding a new SSP control implementation
+ * implemented requirement from the data.
+ *
+ * @param {*} partialRootRestData the partial root SSP object
+ * @param {*} newImplementedRequirement the new implemented requirement to add
+ * @param {*} onPreRestRequest function called just before making the REST request
+ * @param {*} onSuccess function called on a successful REST request with the result of the request as an argument
+ * @param {*} onError function called on error with the error as an argument
+ */
+export function createSspControlImplementationImplementedRequirement(
+  partialRootRestData,
+  newImplementedRequirement,
+  onPreRestRequest,
+  onSuccess,
+  onError
+) {
+  const rootUuid = partialRootRestData[oscalObjectTypes.ssp.jsonRootName].uuid;
+  const rootRestPath = `${oscalObjectTypes.ssp.restPath}/${rootUuid}`;
+  const requestUrl = `${rootRestPath}/control-implementation/implemented-requirements`;
+
+  performRequest(
+    { "implemented-requirement": newImplementedRequirement },
+    restMethods.POST,
     buildRequestUrl(null, requestUrl, null),
     onPreRestRequest,
     onSuccess,

@@ -1,8 +1,6 @@
 ---
 name: Create a New Release
 on:
-  push:
-    branches: [EGRC-492-package]
   workflow_dispatch:
     inputs:
       release-type:
@@ -21,20 +19,39 @@ permissions:
 jobs:
   release:
     name: Create a New Release
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      # Check out develop branch
+      - name: Login as the automation app
+        # This Action generates a token from the GitHub App and provides it as
+        # an output. It _does_ register that token as a secret so that it will be
+        # filtered from log output automatically
+        id: generate-token
+        uses: tibdex/github-app-token@586e1a624db6a5a4ac2c53daeeded60c5e3d50fe
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: Checkout Code
         uses: actions/checkout@v3
         with:
           ref: develop
+          fetch-depth: 0
+          token: ${{ steps.generate-token.outputs.token }}
 
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version: 14
-          registry-url: https://npm.pkg.github.com/
+          node-version: "lts/*"
           cache: npm
+
+      - name: Set release type to patch
+        if: ${{ github.event.inputs.release-type == 'bug' }}
+        run:
+          echo 'NPM_RELEASE_TYPE=patch' >> $GITHUB_ENV
+      - name: Set release type to minor
+        if: ${{ github.event.inputs.release-type == 'feature' }}
+        run:
+          echo 'NPM_RELEASE_TYPE=minor' >> $GITHUB_ENV
 
       - name: Update Npm
         run: npm install -g npm@latest
@@ -42,29 +59,26 @@ jobs:
       - name: Set Up Git User Info
         run: |
           git config --global user.email "info@easydynamics.com"
-          git config --global user.name "${{ github.actor }}"
+          git config --global user.name "Easy Dynamics Automation"
+
+      # This is needed so that we can handle the situation where other
+      # fixes have been applied to main and since we also need to push to
+      # develop, we can't rewrite history
+      - name: Pull the main branch and merge it into develop
+        run: |
+          git pull origin main --no-rebase
 
       # Increment the version to the next minor release
-      - name: Set Version (Feature)
-        if: ${{ github.event.inputs.release-type  == 'feature' }}
+      # We install to update the example app's lock file to reference
+      # the new version of the library.
+      - name: Bump version 
         run: |
-          npm version minor
+          npm version $NPM_RELEASE_TYPE
+          npm install
           cd example
-          npm version minor
-
-      # Increment the version to the next bug fix
-      # Push the new version to the develop branch
-      - name: Set Version (Bug Fix)
-        #if: ${{ github.event.inputs.release-type == 'bug' }}
-        run: |
-          npm version patch
-          cd example
-          npm version patch
-
-      # Output the new package version to environment variable
-      - name: Get Package Version
-        run: |
-          echo "PKG_VERSION=$(npm pkg get version | tr -d '"')" >> $GITHUB_ENV
+          npm version $NPM_RELEASE_TYPE
+          npm install
+          cd ..
 
       - name: Build OSCAL Viewer
         run: |
@@ -72,27 +86,39 @@ jobs:
           cd example
           npm ci
           npm run build
-          zip -r viewer.zip ./build/
+          zip -r oscal-viewer.zip ./build/
+
+      # Output the new package version to environment variable
+      - name: Get Package Version
+        run: |
+          echo "PKG_VERSION=$(npm pkg get version | tr -d '"')" >> $GITHUB_ENV
+
+      - name: Push release commit to develop main
+        run: |
+          git add ./{,example/}package{,-lock}.json
+          git commit -m "Release v${{ env.PKG_VERSION }}"
+          git push origin develop
+          git push origin develop:main
 
       - name: Create a GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name:
-            ${{ env.PKG_VERSION }}
+          generate_release_notes: true
+          tag_name: v${{ env.PKG_VERSION }}
           files:
-            example/viewer.zip
+            example/oscal-viewer.zip
 
       # Commit the new version and push changes to main
-      # And push a new preminor version to develop.
-      # Should only run when triggered for a feature - for bug fixes
-      # this should be done manually since a merge might be needed.
-      - name: Push Changes
-        if: ${{ github.event.inputs.release-type  == 'feature' }}
+      # And push a new prepatch version to develop. We assume prepatch
+      # because we're going into develop and devs can always change this if
+      # needed. But this means we push "x.y.(z+1)-0" instead of "x.(y+1).0-0".
+      # This _does not_ get pushed to main
+      - name: Start work on the next version
         run: |
-          git push origin develop:main
-          git add ./{,example/}package{,-lock}.json
-          git commit -m "Build Viewer for Release ${{ env.PKG_VERSION }}"
-          npm version preminor
+          npm version prepatch
           cd example
-          npm version preminor
+          npm version prepatch
+          cd ..
+          git add ./{,example/}package{,-lock}.json
+          git commit -m "Start work on v$(npm pkg get version | tr -d '"')"
           git push origin develop

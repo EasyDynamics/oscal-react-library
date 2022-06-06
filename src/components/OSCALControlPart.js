@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { styled } from "@mui/material/styles";
 import OSCALControlGuidance from "./OSCALControlGuidance";
 import OSCALControlModification from "./OSCALControlModification";
 import {
@@ -7,15 +7,12 @@ import {
   OSCALReplacedProseWithParameterLabel,
 } from "./OSCALControlProse";
 
-const useStyles = makeStyles(() => ({
-  OSCALControlPart: {
-    "padding-left": "2em",
-  },
-  OSCALControlStatement: {
-    "padding-left": "0em",
-  },
-  OSCALStatement: {},
-}));
+const OSCALControlPartWrapper = styled("div", {
+  shouldForwardProp: (prop) =>
+    !["partName", "ownerState", "theme", "sx", "as"].includes(prop),
+})`
+  padding-left: ${(props) => (props.partName !== "statement" ? "2em" : "0")};
+`;
 
 // TODO - This is probably 800-53 specific?
 const getPartLabel = (props) =>
@@ -31,8 +28,6 @@ export default function OSCALControlPart(props) {
   ) {
     return null;
   }
-
-  const classes = useStyles();
 
   if (props.part.name === "guidance") {
     return <OSCALControlGuidance prose={props.part.prose} />;
@@ -77,18 +72,13 @@ export default function OSCALControlPart(props) {
         parameters={props.parameters}
         modificationSetParameters={props.modificationSetParameters}
         modificationDisplay={modificationDisplay}
+        isImplemented
       />
     );
   }
 
-  // Set classname to control statement when part name is "statement"
-  const className =
-    props.part.name === "statement"
-      ? classes.OSCALControlStatement
-      : classes.OSCALControlPart;
-
   return (
-    <div className={className}>
+    <OSCALControlPartWrapper ownerState partName={props.part.name}>
       {replacedProse}
       {props.part.parts &&
         props.part.parts.map((part) => (
@@ -107,6 +97,6 @@ export default function OSCALControlPart(props) {
             partialRestData={props.partialRestData}
           />
         ))}
-    </div>
+    </OSCALControlPartWrapper>
   );
 }

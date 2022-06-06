@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
-import Typography from "@material-ui/core/Typography";
-import { Grid, TextField } from "@material-ui/core";
+import Typography from "@mui/material/Typography";
+import { Grid, TextField } from "@mui/material";
 import OSCALEditableFieldActions, {
   getElementLabel,
 } from "./OSCALEditableFieldActions";

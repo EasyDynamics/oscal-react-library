@@ -1,0 +1,39 @@
+---
+name: Publish NPM Packages
+on:
+  push:
+    tags:
+      - v**
+  workflow_dispatch:
+
+concurrency: package-push
+
+jobs:
+  publish:
+    name: Publish OSCAL Viewer Build to NPM and GitHub Packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup Node.js for NPM publish
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install depdendencies
+        run: npm ci
+      - name: Publish to NPM
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Reconfigure Node.js for GitHub Packages publish
+        uses: actions/setup-node@v3
+        with:
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Publish to GitHub Packages
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

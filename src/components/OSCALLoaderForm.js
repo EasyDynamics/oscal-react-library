@@ -1,25 +1,24 @@
 import React, { useState, useEffect, useRef } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Button from "@material-ui/core/Button";
-import ReplayIcon from "@material-ui/icons/Replay";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { styled } from "@mui/material/styles";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
+import ReplayIcon from "@mui/icons-material/Replay";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import Switch from "@mui/material/Switch";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
-const useStyles = makeStyles((theme) => ({
-  catalogForm: {
-    marginTop: theme.spacing(4),
-    marginBottom: theme.spacing(2),
-  },
-}));
+const OSCALDocumentForm = styled("form")(
+  ({ theme }) => `
+  margin-top: ${theme.spacing(4)};
+  margin-bottom: ${theme.spacing(2)};
+`
+);
 
 export default function OSCALLoaderForm(props) {
-  const classes = useStyles();
   const [oscalObjects, setOscalObjects] = useState([]);
   const unmounted = useRef(false);
 
@@ -52,8 +51,7 @@ export default function OSCALLoaderForm(props) {
   }, []);
 
   return (
-    <form
-      className={classes.catalogForm}
+    <OSCALDocumentForm
       noValidate
       autoComplete="off"
       onSubmit={(e) => {
@@ -99,19 +97,17 @@ export default function OSCALLoaderForm(props) {
                 label={`Select OSCAL ${props.oscalObjectType.name}`}
                 onChange={props.onUuidChange}
               >
-                {oscalObjects &&
-                  oscalObjects.map((oscalObject) => (
-                    <MenuItem
-                      value={
-                        oscalObject[props.oscalObjectType.jsonRootName].uuid
-                      }
-                    >
-                      {
-                        oscalObject[props.oscalObjectType.jsonRootName].metadata
-                          .title
-                      }
-                    </MenuItem>
-                  ))}
+                {oscalObjects?.map((oscalObject) => (
+                  <MenuItem
+                    value={oscalObject[props.oscalObjectType.jsonRootName].uuid}
+                    key={oscalObject[props.oscalObjectType.jsonRootName].uuid}
+                  >
+                    {
+                      oscalObject[props.oscalObjectType.jsonRootName].metadata
+                        .title
+                    }
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Grid>
@@ -132,6 +128,6 @@ export default function OSCALLoaderForm(props) {
           </Grid>
         )}
       </Grid>
-    </form>
+    </OSCALDocumentForm>
   );
 }

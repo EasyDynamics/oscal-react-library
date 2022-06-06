@@ -1,41 +1,32 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableRow from "@material-ui/core/TableRow";
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableRow from "@mui/material/TableRow";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(2),
-    display: "flex",
-    flexDirection: "column",
-  },
-  OSCALResponsibleRolesSubDataHeader: {
-    "text-transform": "capitalize",
-    "white-space": "nowrap",
-  },
-}));
+const ResponsibleRolesTable = styled(TableContainer)(
+  ({ theme }) => `
+  margin-top: ${theme.spacing(2)};
+  display: flex;
+  flex-direction: column;
+  text-transform: capitalize;
+`
+);
 
 export default function OSCALResponsibleRoles(props) {
-  const classes = useStyles();
-
   const getPartyName = (partyUuid) =>
     props.parties?.find((party) => party.uuid === partyUuid)?.name;
 
   return (
-    <TableContainer>
+    <ResponsibleRolesTable>
       <Table size="small">
         <TableBody>
           {props.responsibleRoles &&
             Object.entries(props.responsibleRoles).map(([key, role]) => (
               <TableRow key={key}>
-                <TableCell
-                  className={classes.OSCALResponsibleRolesSubDataHeader}
-                  component="th"
-                  scope="row"
-                >
+                <TableCell component="th" scope="row">
                   {role["role-id"]}
                 </TableCell>
                 <TableCell align="right">
@@ -48,6 +39,6 @@ export default function OSCALResponsibleRoles(props) {
             ))}
         </TableBody>
       </Table>
-    </TableContainer>
+    </ResponsibleRolesTable>
   );
 }
