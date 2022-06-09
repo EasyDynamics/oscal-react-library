@@ -1,4 +1,4 @@
-import resolveLinkHref from "./OSCALLinkUtils";
+import resolveLinkHref, { fixJsonUrls } from "./OSCALLinkUtils";
 
 const OSCAL_MEDIA_TYPE_REGEX = /^application\/oscal.*\+json$/;
 /**
@@ -52,6 +52,7 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
   if (itemUrl.includes("/content/fedramp.gov/")) {
     itemUrl = itemUrl.replace("/content/fedramp.gov/", "/fedramp.gov/");
   }
+  itemUrl = fixJsonUrls(itemUrl);
   // Add our current itemUrl to the list of pending processes
   pendingProcesses.push(itemUrl);
   fetch(itemUrl)
