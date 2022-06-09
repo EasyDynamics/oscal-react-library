@@ -27,6 +27,11 @@ function textFieldWithEditableActions(
               size={props.textFieldSize}
               defaultValue={props.value}
               variant={props.textFieldVariant}
+              onKeyDown={(event) => {
+                if (event.key === "Escape") {
+                  setInEditState(false);
+                }
+              }}
             />
           </Typography>
         </Grid>
