@@ -4,6 +4,7 @@ import { Grid, TextField } from "@mui/material";
 import OSCALEditableFieldActions, {
   getElementLabel,
 } from "./OSCALEditableFieldActions";
+import { StaticDatePicker } from "@mui/lab";
 
 function textFieldWithEditableActions(
   props,
@@ -25,14 +26,23 @@ function textFieldWithEditableActions(
               }}
               inputRef={reference}
               size={props.textFieldSize}
-              defaultValue={props.value}
+              defaultValue={props.value} 
               variant={props.textFieldVariant}
               onKeyDown={(event) => {
                 if (event.key === "Escape") {
                   setInEditState(false);
                 }
-              }}
-            />
+                else if(event.key === "Enter"){
+                  props.onFieldSave(
+                   props.appendToLastFieldInPath,
+                   props.partialRestData,
+                   props.editedField,
+                   reference.current.value
+                  );
+                   setInEditState(false);
+             
+              }
+            }}/>
           </Typography>
         </Grid>
         <Grid item>
