@@ -26,23 +26,22 @@ function textFieldWithEditableActions(
               }}
               inputRef={reference}
               size={props.textFieldSize}
-              defaultValue={props.value} 
+              defaultValue={props.value}
               variant={props.textFieldVariant}
               onKeyDown={(event) => {
                 if (event.key === "Escape") {
                   setInEditState(false);
-                }
-                else if(event.key === "Enter"){
+                } else if (event.key === "Enter") {
                   props.onFieldSave(
-                   props.appendToLastFieldInPath,
-                   props.partialRestData,
-                   props.editedField,
-                   reference.current.value
+                    props.appendToLastFieldInPath,
+                    props.partialRestData,
+                    props.editedField,
+                    reference.current.value
                   );
-                   setInEditState(false);
-             
-              }
-            }}/>
+                  setInEditState(false);
+                }
+              }}
+            />
           </Typography>
         </Grid>
         <Grid item>
