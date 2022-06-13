@@ -46,7 +46,8 @@
     "run-example": "cd example && npm start",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "react-scripts": "react-scripts"
+    "react-scripts": "react-scripts",
+    "build-all-and-watch": "concurrently \"npm run start\" \"cd example && npm run start\""
   },
   "eslintConfig": {
     "extends": [
@@ -84,6 +85,7 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^14.2.0",
+    "concurrently": "^7.2.1",
     "cross-env": "^7.0.3",
     "eslint": "^8.17.0",
     "eslint-config-airbnb": "^19.0.4",
