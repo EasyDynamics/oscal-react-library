@@ -31,13 +31,13 @@ function textFieldWithEditableActions(
                 if (event.key === "Escape") {
                   setInEditState(false);
                 } else if (event.key === "Enter") {
+                  event.preventDefault()
                   props.onFieldSave(
                     props.appendToLastFieldInPath,
                     props.partialRestData,
                     props.editedField,
                     reference.current.value
                     );
-                    event.preventDefault()
                     setInEditState(false);
                   }
               }}
