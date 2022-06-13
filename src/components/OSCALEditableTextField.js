@@ -4,7 +4,6 @@ import { Grid, TextField } from "@mui/material";
 import OSCALEditableFieldActions, {
   getElementLabel,
 } from "./OSCALEditableFieldActions";
-import { StaticDatePicker } from "@mui/lab";
 
 function textFieldWithEditableActions(
   props,
