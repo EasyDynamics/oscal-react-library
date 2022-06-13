@@ -47,7 +47,7 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "react-scripts": "react-scripts",
-    "live-edit": "concurrently \"npm run start\" \"cd example && npm run start\""
+    "build-all-and-watch": "concurrently \"npm run start\" \"cd example && npm run start\""
   },
   "eslintConfig": {
     "extends": [
