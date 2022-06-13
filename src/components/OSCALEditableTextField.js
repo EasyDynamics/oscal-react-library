@@ -36,9 +36,10 @@ function textFieldWithEditableActions(
                     props.partialRestData,
                     props.editedField,
                     reference.current.value
-                  );
-                  setInEditState(false);
-                }
+                    );
+                    event.preventDefault()
+                    setInEditState(false);
+                  }
               }}
             />
           </Typography>
