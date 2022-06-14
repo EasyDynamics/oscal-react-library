@@ -51,3 +51,20 @@ test("OSCALControl displays profile control modifications", async () => {
   );
   await testIfModificationsDisplayed("ac-1 modifications");
 });
+
+test("OSCALControl displays legend", async () => {
+  const testControl = { id: "ac-1" };
+  render(<OSCALControl control={testControl} />);
+
+  const placeholderBox = screen.getByLabelText("legend-placeholder-label");
+  expect(placeholderBox).toBeVisible();
+
+  const placeholderBoxLabel = screen.getByText("Value");
+  expect(placeholderBoxLabel).toBeVisible();
+
+  const valueBox = screen.getByLabelText("legend-value-label");
+  expect(valueBox).toBeVisible();
+
+  const valueBoxLabel = screen.getByText("Value");
+  expect(valueBoxLabel).toBeVisible();
+});
