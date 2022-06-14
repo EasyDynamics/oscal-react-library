@@ -228,10 +228,9 @@ function getParameterLabelSegment(
   );
 
   if (!constraintsDisplay) {
-    // This throws an error without fragment wrapper
-    // eslint-disable-next-line react/jsx-no-useless-fragment
-    return <>{paramSegment}</>;
+    return paramSegment;
   }
+
   return (
     <SegmentTooltipWrapper
       constraintsDisplay={constraintsDisplay}
@@ -303,13 +302,13 @@ export function OSCALReplacedProseWithParameterLabel(props) {
         .split(RegExp(prosePlaceholderRegexpString, "g"))
         .map((segment, index) => {
           if (index % 2 === 0) {
-            return getTextSegment(segment, index.toString());
+            return getTextSegment(segment, index);
           }
           return getParameterLabelSegment(
             props.parameters,
             segment,
             props.modificationSetParameters,
-            index.toString()
+            index
           );
         })
     : props.prose;
