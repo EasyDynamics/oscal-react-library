@@ -418,6 +418,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
         ) ?? { "param-id": segment };
         setParameter.values ??= [null];
         const setParameterRef = setParametersRefs[segment];
+
         // TODO - support for more than 1 item in values arrays
         return (
           <TextField
@@ -427,6 +428,9 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
             size="small"
             inputRef={setParameterRef}
             defaultValue={setParameter.values[0]}
+            // Due to a lack of a good value for a key, the index is being used
+            // eslint-disable-next-line react/no-array-index-key
+            key={index}
           />
         );
       }
