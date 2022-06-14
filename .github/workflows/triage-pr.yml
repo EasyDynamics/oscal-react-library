@@ -72,7 +72,7 @@ jobs:
           private_key: ${{ secrets.APP_PRIVATE_KEY }}
       - name: Assign reviewers
         uses: actions/github-script@v6
-        if: steps.pr-reviews.outputs.review-decision == 'REVIEW_REQUIRED'
+        if: ${{ github.event.pull_request.draft == false && steps.pr-reviews.outputs.review-decision == 'REVIEW_REQUIRED' }}
         with:
           github-token: ${{ steps.generate_token.outputs.token }}
           script: |
