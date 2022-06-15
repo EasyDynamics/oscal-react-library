@@ -68,6 +68,7 @@ export default function OSCALMetadata(props) {
       <Grid item xs={12}>
         <OSCALMetadataTitle container direction="row" alignItems="center">
           <OSCALEditableTextField
+            fieldName="Title"
             canEdit={props.isEditable}
             editedField={
               props.isEditable
@@ -135,6 +136,7 @@ export default function OSCALMetadata(props) {
                   </OSCALMetadataLabel>
                 </OSCALMetadataKey>
                 <OSCALEditableTextField
+                  fieldName="Version"
                   canEdit={props.isEditable}
                   editedField={
                     props.isEditable
