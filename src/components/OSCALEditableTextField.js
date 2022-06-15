@@ -17,6 +17,7 @@ function textFieldWithEditableActions(
         <Grid item xs={props.size} className={props.className}>
           <Typography>
             <TextField
+              aria-label="Text"
               fullWidth
               inputProps={{
                 "data-testid": `textField-${getElementLabel(
