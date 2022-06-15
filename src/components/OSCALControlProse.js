@@ -447,17 +447,15 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   return (
     <OSCALStatementEditing container spacing={2}>
       <Grid item xs={11}>
-        <Typography className={props.className}>
-          <StyledTooltip
-            title={statementByComponentDescription ?? props.componentId}
-          >
-            <Link underline="hover" href={`#${props.label}`}>
-              {props.label}
-            </Link>
-          </StyledTooltip>
-          {proseDisplay}
-          {props.modificationDisplay}
-        </Typography>
+        <StyledTooltip
+          title={statementByComponentDescription ?? props.componentId}
+        >
+          <Link underline="hover" href={`#${props.label}`}>
+            {props.label}
+          </Link>
+        </StyledTooltip>
+        {proseDisplay}
+        {props.modificationDisplay}
       </Grid>
       <OSCALStatementEditControlsContainer item xs={1}>
         {props.isEditable && !isEditingStatement ? (
