@@ -20,6 +20,7 @@ const OSCALDocumentForm = styled("form")(
 
 export default function OSCALLoaderForm(props) {
   const [oscalObjects, setOscalObjects] = useState([]);
+  const [selectedUuid, setSelectedUuid] = useState("");
   const unmounted = useRef(false);
 
   const findAllObjects = () => {
@@ -95,7 +96,11 @@ export default function OSCALLoaderForm(props) {
                 labelId="oscal-object-select-label"
                 id="oscal-object-simple-select"
                 label={`Select OSCAL ${props.oscalObjectType.name}`}
-                onChange={props.onUuidChange}
+                value={selectedUuid}
+                onChange={(event) => {
+                  setSelectedUuid(event.target.value);
+                  props.onUuidChange(event);
+                }}
               >
                 {oscalObjects?.map((oscalObject) => (
                   <MenuItem
