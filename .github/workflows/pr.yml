@@ -70,7 +70,7 @@ jobs:
           grep --group-separator='~' -A 4 "Console" "$FULL_OUTPUT" > "$MATCHES" || true
 
           if [ -s "$MATCHES" ]; then
-            echo "## Test Warnings Found" >> $GITHUB_STEP_SUMMARY
+            echo '## `/src` Test Warnings Found' >> $GITHUB_STEP_SUMMARY
             cat "$MATCHES" | while read -d'~' -r match; do
               echo '```' >> $GITHUB_STEP_SUMMARY
               echo "$match" >> $GITHUB_STEP_SUMMARY
@@ -78,10 +78,28 @@ jobs:
               echo '' >> $GITHUB_STEP_SUMMARY
             done
           else
-            echo "No warnings found" >> $GITHUB_STEP_SUMMARY
+            echo 'No warnings found in `/src`' >> $GITHUB_STEP_SUMMARY
           fi
       - name: Run example app tests
-        run: cd example && npm run test -- --ci --watchAll=false && cd ..
+        run: |
+          cd example
+          FULL_OUTPUT="$(mktemp -t output.XXXXXXXXXXXXXX)"
+          MATCHES="$(mktemp -t matches.XXXXXXXXXXXXXX)"
+          npm run test -- --ci --watchAll=false 2>&1 | tee "$FULL_OUTPUT"
+          grep --group-separator='~' -A 4 "Console" "$FULL_OUTPUT" > "$MATCHES" || true
+
+          if [ -s "$MATCHES" ]; then
+            echo '## `/example` Test Warnings Found' >> $GITHUB_STEP_SUMMARY
+            cat "$MATCHES" | while read -d'~' -r match; do
+              echo '```' >> $GITHUB_STEP_SUMMARY
+              echo "$match" >> $GITHUB_STEP_SUMMARY
+              echo '```' >> $GITHUB_STEP_SUMMARY
+              echo '' >> $GITHUB_STEP_SUMMARY
+            done
+          else
+            echo 'No warnings found in `/example`' >> $GITHUB_STEP_SUMMARY
+          fi
+          cd ..
       - name: Build application
         run: npm run predeploy
       - name: Archive artifacts
