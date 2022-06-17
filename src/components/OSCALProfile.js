@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Skeleton from "@mui/material/Skeleton";
 import CardContent from "@mui/material/CardContent";
+import Grid from "@mui/material/Grid";
 import { List, ListSubheader } from "@mui/material";
 import OSCALMetadata from "./OSCALMetadata";
 import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
@@ -8,6 +9,7 @@ import OSCALControl from "./OSCALControl";
 import OSCALBackMatter from "./OSCALBackMatter";
 import { OSCALResolveProfile } from "./oscal-utils/OSCALProfileResolver";
 import OSCALProfileCatalogInheritance from "./OSCALProfileCatalogInheritance";
+import OSCALControlParamLegend from "./OSCALControlParamLegend";
 
 /**
  * Displays a given OSCAL Profile is an easily consumable format. According to NIST, a profile
@@ -66,13 +68,17 @@ export default function OSCALProfile(props) {
   const profileImports = (
     <List
       subheader={
-        <ListSubheader
-          component="div"
-          id="oscal-profile-importedControls"
-          disableSticky
-        >
-          Imported Controls
-        </ListSubheader>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <ListSubheader
+              component="div"
+              id="oscal-profile-importedControls"
+              disableSticky
+            >
+              Imported Controls
+            </ListSubheader>
+          </Grid>
+        </Grid>
       }
     >
       {isLoaded ? (

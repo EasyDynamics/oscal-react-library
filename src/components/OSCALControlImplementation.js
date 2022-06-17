@@ -7,6 +7,7 @@ import List from "@mui/material/List";
 import OSCALControlImplementationImplReq from "./OSCALControlImplementationImplReq";
 import OSCALControlImplementationAdd from "./OSCALControlImplementationAdd";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
+import OSCALControlParamLegend from "./OSCALControlParamLegend";
 
 /**
  * Creates the control implementation by setting up the header and outer grid elements
@@ -27,8 +28,11 @@ export default function OSCALControlImplementation(props) {
       <Card>
         <CardContent>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid item xs={6}>
               <OSCALSectionHeader>Control Implementation</OSCALSectionHeader>
+            </Grid>
+            <Grid item xs={6} align="right">
+              <OSCALControlParamLegend />
             </Grid>
             <Grid item xs={12}>
               <Typography>{props.controlImplementation.description}</Typography>

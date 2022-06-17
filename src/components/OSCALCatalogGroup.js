@@ -10,6 +10,7 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import FolderIcon from "@mui/icons-material/Folder";
 import OSCALControl from "./OSCALControl";
+import OSCALControlParamLegend from "./OSCALControlParamLegend";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -51,6 +52,9 @@ export default function OSCALCatalogGroup(props) {
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
+        <div align="right">
+          <OSCALControlParamLegend />
+        </div>
         <OSCALControlList>
           {props.group.groups?.map((innerGroup) => (
             <OSCALCatalogGroup group={innerGroup} key={innerGroup.id} />
