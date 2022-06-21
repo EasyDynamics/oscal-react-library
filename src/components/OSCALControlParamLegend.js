@@ -14,7 +14,7 @@ export default function OSCALControlParamLegend() {
       font-size: 0.85em;
       padding-left: 1em;
       padding-right: 1em;
-      padding-top: 0.25em;
+      padding-top: 0.5em;
     `
   );
 

@@ -78,6 +78,9 @@ export default function OSCALProfile(props) {
               Imported Controls
             </ListSubheader>
           </Grid>
+          <Grid item xs={6} align="right">
+            <OSCALControlParamLegend />
+          </Grid>
         </Grid>
       }
     >

@@ -16,7 +16,7 @@ export default function OSCALComponentDefinitionControlImplementation(props) {
             <Grid item xs={6}>
               <OSCALSectionHeader>Control Implementations</OSCALSectionHeader>
             </Grid>
-            <Grid item xs={6}  align="right">
+            <Grid item xs={6} align="right">
               <OSCALControlParamLegend />
             </Grid>
             <Grid item xs={12}>

@@ -50,6 +50,26 @@ function testOSCALProfile(parentElementName, renderer) {
   });
 }
 
+test("OSCALProfile displays legend", async () => {
+  render(
+    <OSCALProfile
+      profile={profileTestData}
+      parentUrl={parentUrlTestData}
+      onResolutionComplete={() => {}}
+    />
+  );
+
+  const placeholderBox = screen.getByLabelText("legend-placeholder-label");
+  expect(placeholderBox).toBeVisible();
+  const placeholderBoxLabel = screen.getByText("Placeholder");
+  expect(placeholderBoxLabel).toBeVisible();
+
+  const valueBox = screen.getByLabelText("legend-value-label");
+  expect(valueBox).toBeVisible();
+  const valueBoxLabel = screen.getByText("Value");
+  expect(valueBoxLabel).toBeVisible();
+});
+
 testOSCALMetadata("OSCALProfile", profileRenderer);
 
 testOSCALProfile("OSCALProfile", profileRenderer);
