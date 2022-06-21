@@ -176,9 +176,9 @@ function App() {
             <MenuItem
               onClick={handleAppNavClose}
               component={RouterLink}
-              to="/system-security-plan"
+              to="/profile"
             >
-              {`System Security Plan ${appType}`}
+              {`Profile ${appType}`}
             </MenuItem>
             <MenuItem
               onClick={handleAppNavClose}
@@ -190,9 +190,9 @@ function App() {
             <MenuItem
               onClick={handleAppNavClose}
               component={RouterLink}
-              to="/profile"
+              to="/system-security-plan"
             >
-              {`Profile ${appType}`}
+              {`System Security Plan ${appType}`}
             </MenuItem>
           </Menu>
           <Container maxWidth={false} component="main">
