@@ -15,25 +15,31 @@ function textFieldWithEditableActions(
     return (
       <>
         <Grid item xs={props.size} className={props.className}>
-          <Typography>
-            <TextField
-              fullWidth
-              inputProps={{
-                "data-testid": `textField-${getElementLabel(
-                  props.editedField
-                )}`,
-              }}
-              inputRef={reference}
-              size={props.textFieldSize}
-              defaultValue={props.value}
-              variant={props.textFieldVariant}
-              onKeyDown={(event) => {
-                if (event.key === "Escape") {
-                  setInEditState(false);
-                }
-              }}
-            />
-          </Typography>
+          <TextField
+            label={props.fieldName}
+            fullWidth
+            inputProps={{
+              "data-testid": `textField-${getElementLabel(props.editedField)}`,
+            }}
+            inputRef={reference}
+            size={props.textFieldSize}
+            defaultValue={props.value}
+            variant={props.textFieldVariant}
+            onKeyDown={(event) => {
+              if (event.key === "Escape") {
+                setInEditState(false);
+              } else if (event.key === "Enter") {
+                event.preventDefault();
+                props.onFieldSave(
+                  props.appendToLastFieldInPath,
+                  props.partialRestData,
+                  props.editedField,
+                  reference.current.value
+                );
+                setInEditState(false);
+              }
+            }}
+          />
         </Grid>
         <Grid item>
           <OSCALEditableFieldActions

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import List from "@mui/material/List";
 import ListSubheader from "@mui/material/ListSubheader";
 import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
@@ -7,7 +7,7 @@ import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALBackMatter from "./OSCALBackMatter";
 
 export default function OSCALCatalog(props) {
-  props.onResolutionComplete();
+  useEffect(props.onResolutionComplete);
 
   const partialRestData = {
     catalog: {

@@ -228,10 +228,9 @@ function getParameterLabelSegment(
   );
 
   if (!constraintsDisplay) {
-    // This throws an error without fragment wrapper
-    // eslint-disable-next-line react/jsx-no-useless-fragment
-    return <>{paramSegment}</>;
+    return paramSegment;
   }
+
   return (
     <SegmentTooltipWrapper
       constraintsDisplay={constraintsDisplay}
@@ -303,13 +302,13 @@ export function OSCALReplacedProseWithParameterLabel(props) {
         .split(RegExp(prosePlaceholderRegexpString, "g"))
         .map((segment, index) => {
           if (index % 2 === 0) {
-            return getTextSegment(segment, index.toString());
+            return getTextSegment(segment, index);
           }
           return getParameterLabelSegment(
             props.parameters,
             segment,
             props.modificationSetParameters,
-            index.toString()
+            index
           );
         })
     : props.prose;
@@ -419,6 +418,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
         ) ?? { "param-id": segment };
         setParameter.values ??= [null];
         const setParameterRef = setParametersRefs[segment];
+
         // TODO - support for more than 1 item in values arrays
         return (
           <TextField
@@ -428,6 +428,9 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
             size="small"
             inputRef={setParameterRef}
             defaultValue={setParameter.values[0]}
+            // Due to a lack of a good value for a key, the index is being used
+            // eslint-disable-next-line react/no-array-index-key
+            key={index}
           />
         );
       }
@@ -444,17 +447,15 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   return (
     <OSCALStatementEditing container spacing={2}>
       <Grid item xs={11}>
-        <Typography className={props.className}>
-          <StyledTooltip
-            title={statementByComponentDescription ?? props.componentId}
-          >
-            <Link underline="hover" href={`#${props.label}`}>
-              {props.label}
-            </Link>
-          </StyledTooltip>
-          {proseDisplay}
-          {props.modificationDisplay}
-        </Typography>
+        <StyledTooltip
+          title={statementByComponentDescription ?? props.componentId}
+        >
+          <Link underline="hover" href={`#${props.label}`}>
+            {props.label}
+          </Link>
+        </StyledTooltip>
+        {proseDisplay}
+        {props.modificationDisplay}
       </Grid>
       <OSCALStatementEditControlsContainer item xs={1}>
         {props.isEditable && !isEditingStatement ? (
