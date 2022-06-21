@@ -69,8 +69,8 @@ jobs:
           npm run test -- --ci --watchAll=false 2>&1 | tee "$FULL_OUTPUT"
           grep --group-separator='~' -A 4 "Console" "$FULL_OUTPUT" > "$MATCHES" || true
 
+          echo '## React Library' >> $GITHUB_STEP_SUMMARY
           if [ -s "$MATCHES" ]; then
-            echo '## `/src` Test Warnings Found' >> $GITHUB_STEP_SUMMARY
             cat "$MATCHES" | while read -d'~' -r match; do
               echo '```' >> $GITHUB_STEP_SUMMARY
               echo "$match" >> $GITHUB_STEP_SUMMARY
@@ -88,8 +88,8 @@ jobs:
           npm run test -- --ci --watchAll=false 2>&1 | tee "$FULL_OUTPUT"
           grep --group-separator='~' -A 4 "Console" "$FULL_OUTPUT" > "$MATCHES" || true
 
+          echo '## Viewer Application' >> $GITHUB_STEP_SUMMARY
           if [ -s "$MATCHES" ]; then
-            echo '## `/example` Test Warnings Found' >> $GITHUB_STEP_SUMMARY
             cat "$MATCHES" | while read -d'~' -r match; do
               echo '```' >> $GITHUB_STEP_SUMMARY
               echo "$match" >> $GITHUB_STEP_SUMMARY
