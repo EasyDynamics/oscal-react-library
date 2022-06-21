@@ -1,10 +1,9 @@
 import React from "react";
 import { styled, useTheme } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 
 export default function OSCALControlParamLegend() {
-  const LegendLabel = styled(Typography)(
+  const LegendLabel = styled("div")(
     ({ theme }) => `
       display: inline-flex;
       flex-direction: row;
@@ -35,12 +34,12 @@ export default function OSCALControlParamLegend() {
   return (
     <div>
       <LegendLabel aria-label="legend-placeholder-label">
-        <span>{legendBox(theme.palette.warning.light)}</span>
-        <span>Placeholder</span>
+        {legendBox(theme.palette.warning.light)}
+        Placeholder
       </LegendLabel>
       <LegendLabel aria-label="legend-value-label">
-        <span>{legendBox(theme.palette.info.light)}</span>
-        <span>Value</span>
+        {legendBox(theme.palette.info.light)}
+        Value
       </LegendLabel>
     </div>
   );
