@@ -32,7 +32,7 @@ export default function OSCALControlParamLegend() {
   const theme = useTheme();
 
   return (
-    <div>
+    <>
       <LegendLabel aria-label="legend-placeholder-label">
         {legendBox(theme.palette.warning.light)}
         Placeholder
@@ -41,6 +41,6 @@ export default function OSCALControlParamLegend() {
         {legendBox(theme.palette.info.light)}
         Value
       </LegendLabel>
-    </div>
+    </>
   );
 }

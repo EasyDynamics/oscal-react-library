@@ -12,6 +12,7 @@ import testOSCALMetadata from "./OSCALMetadata.test";
 import testOSCALBackMatter from "./OSCALBackMatter.test";
 import { parentUrlTestData } from "../test-data/Urls";
 import profileTestData from "../test-data/ProfileData";
+import testOSCALControlParamLegend from "../common-tests/ControlParamLegend.test";
 
 test("OSCALProfile loads", () => {
   render(<OSCALProfileLoader />);
@@ -50,26 +51,17 @@ function testOSCALProfile(parentElementName, renderer) {
   });
 }
 
-test("OSCALProfile displays legend", async () => {
-  render(
-    <OSCALProfile
-      profile={profileTestData}
-      parentUrl={parentUrlTestData}
-      onResolutionComplete={() => {}}
-    />
-  );
-  const placeholderBox = screen.getByLabelText("legend-placeholder-label");
-  expect(placeholderBox).toBeVisible();
-  const placeholderBoxLabel = screen.getByText("Placeholder");
-  expect(placeholderBoxLabel).toBeVisible();
-  const valueBox = screen.getByLabelText("legend-value-label");
-  expect(valueBox).toBeVisible();
-  const valueBoxLabel = screen.getByText("Value");
-  expect(valueBoxLabel).toBeVisible();
-});
-
 testOSCALMetadata("OSCALProfile", profileRenderer);
 
 testOSCALProfile("OSCALProfile", profileRenderer);
 
 testOSCALBackMatter("OSCALProfile", profileRenderer);
+
+testOSCALControlParamLegend(
+  "OSCALProfile",
+  <OSCALProfile
+    profile={profileTestData}
+    parentUrl={parentUrlTestData}
+    onResolutionComplete={() => {}}
+  />
+);

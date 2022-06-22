@@ -7,6 +7,7 @@ import {
   componentDefinitionControlImplementationTestData,
   componentDefinitionTestData,
 } from "../test-data/ComponentsData";
+import testOSCALControlParamLegend from "../common-tests/ControlParamLegend.test";
 
 test("OSCALComponentDefinitionControlImplementation displays component implementation description", () => {
   render(
@@ -48,20 +49,11 @@ test("OSCALComponentDefinitionControlImplementation displays component parameter
   expect(resultByProse).toBeVisible();
 });
 
-test("OSCALComponentDefinitionControlImplementation displays legend", async () => {
-  render(
-    <OSCALComponentDefinitionControlImplementation
-      controlImplementations={componentDefinitionControlImplementationTestData}
-      components={componentDefinitionTestData.components}
-      controls={controlsData}
-    />
-  );
-  const placeholderBox = screen.getByLabelText("legend-placeholder-label");
-  expect(placeholderBox).toBeVisible();
-  const placeholderBoxLabel = screen.getByText("Placeholder");
-  expect(placeholderBoxLabel).toBeVisible();
-  const valueBox = screen.getByLabelText("legend-value-label");
-  expect(valueBox).toBeVisible();
-  const valueBoxLabel = screen.getByText("Value");
-  expect(valueBoxLabel).toBeVisible();
-});
+testOSCALControlParamLegend(
+  "OSCALComponentDefinitionControlImplementation",
+  <OSCALComponentDefinitionControlImplementation
+    controlImplementations={componentDefinitionControlImplementationTestData}
+    components={componentDefinitionTestData.components}
+    controls={controlsData}
+  />
+);

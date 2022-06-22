@@ -10,6 +10,7 @@ import {
 } from "../test-data/ComponentsData";
 import { profileModifyTestData } from "../test-data/ModificationsData";
 import { sspRestData } from "../test-data/SystemData";
+import testOSCALControlParamLegend from "../common-tests/ControlParamLegend.test";
 
 const controlsTestData = [exampleControl];
 
@@ -86,22 +87,13 @@ testOSCALControlImplementationImplReq(
   controlImplementationImplReqRenderer
 );
 
-test("OSCALComponentDefinitionControlImplementation displays legend", async () => {
-  render(
-    <OSCALControlImplementation
-      controlImplementation={controlImplTestData}
-      components={exampleComponents}
-      controls={controlsTestData}
-      modifications={profileModifyTestData}
-      partialRestData={sspRestData}
-    />
-  );
-  const placeholderBox = screen.getByLabelText("legend-placeholder-label");
-  expect(placeholderBox).toBeVisible();
-  const placeholderBoxLabel = screen.getByText("Placeholder");
-  expect(placeholderBoxLabel).toBeVisible();
-  const valueBox = screen.getByLabelText("legend-value-label");
-  expect(valueBox).toBeVisible();
-  const valueBoxLabel = screen.getByText("Value");
-  expect(valueBoxLabel).toBeVisible();
-});
+testOSCALControlParamLegend(
+  "OSCALComponentControlImplementationImplReq",
+  <OSCALControlImplementation
+    controlImplementation={controlImplTestData}
+    components={exampleComponents}
+    controls={controlsTestData}
+    modifications={profileModifyTestData}
+    partialRestData={sspRestData}
+  />
+);
