@@ -8,7 +8,7 @@ test("OSCALEditableTextField loads", () => {
     <OSCALEditableTextField
       canEdit
       editedField={["version"]}
-      isInEditState={[false, () => {}]}
+      isInEditState={[true, () => {}]}
       modifiableData={testModifiableMetadata.version}
     />
   );
@@ -31,10 +31,10 @@ export default function testOSCALEditableTextField(
     renderer();
 
     screen
-        .getByRole("button", {
-            name: "edit-system-security-plan-metadata-title",
-        })
-        .click();
+      .getByRole("button", {
+        name: "edit-system-security-plan-metadata-title",
+      })
+      .click();
 
     const textField = screen.getByTestId(
       "textField-system-security-plan-metadata-title"
@@ -42,38 +42,14 @@ export default function testOSCALEditableTextField(
     expect(textField).toBeVisible();
   });
 
-  test(`${parentElementName} tests if editing ends after 'Esc' key pressed`, () => {
+  test(`${parentElementName} tests text field is no longer editable after 'Esc' key is pressed`, () => {
     renderer();
 
     screen
-        .getByRole("button", {
-            name: "edit-system-security-plan-metadata-title",
-        })
-        .click();
-
-    const textField = screen.getByTestId(
-      "textField-system-security-plan-metadata-title"
-    );
-
-    fireEvent.keyDown(textField, {
-      key: 'Escape',
-      charCode: 27,
-    });
-
-    const editButton = screen.getByRole("button", {
+      .getByRole("button", {
         name: "edit-system-security-plan-metadata-title",
-      });
-    expect(editButton).toBeVisible();
-  });
-
-  /* test(`${parentElementName} tests if text value remains same after 'Esc' key pressed`, () => {
-    renderer();
-
-    screen
-        .getByRole("button", {
-            name: "edit-system-security-plan-metadata-title",
-        })
-        .click();
+      })
+      .click();
 
     const textField = screen.getByTestId(
       "textField-system-security-plan-metadata-title"
@@ -81,71 +57,30 @@ export default function testOSCALEditableTextField(
 
     fireEvent.keyDown(textField, {
       key: "Escape",
-      code: "Escape",
-      keyCode: 27,
       charCode: 27,
     });
 
-    screen
-        .getByRole("button", {
-            name: "edit-system-security-plan-metadata-title",
-        })
-        .click();
-
-    const textFieldAfterEvent = screen.getByTestId(
-        "textField-system-security-plan-metadata-title"
-    );
-
-    expect(textFieldAfterEvent).toBe(textField);
-  }); */
-
-  test(`${parentElementName} tests if editing ends after 'Enter' key is pressed`, () => {
-    renderer();
-
-    screen
-        .getByRole("button", {
-            name: "edit-system-security-plan-metadata-title",
-        })
-        .click();
-
-    const textField = screen.getByTestId(
-      "textField-system-security-plan-metadata-title"
-    );
-    fireEvent.keyDown(textField, {
-      key: 'Enter',
-      charCode: 13,
-     });
-
-    const editButton = screen.getByRole("button", {
-        name: "edit-system-security-plan-metadata-title",
-    });
-    expect(editButton).toBeVisible();
+    expect(screen.isInEditState).toBeFalsy();
   });
 
-  /*test(`${parentElementName} tests if saved after 'Enter' key is pressed`, () => {
+  test(`${parentElementName} tests text field is no longer editable after 'Enter' key is pressed`, () => {
     renderer();
 
     screen
-        .getByRole("button", {
-            name: "edit-system-security-plan-metadata-title",
-        })
-        .click();
+      .getByRole("button", {
+        name: "edit-system-security-plan-metadata-title",
+      })
+      .click();
 
     const textField = screen.getByTestId(
       "textField-system-security-plan-metadata-title"
     );
-    fireEvent.keyDown(textField, {
+
+    fireEvent.keyPress(textField, {
       key: "Enter",
-      code: "Enter",
-      keyCode: 13,
       charCode: 13,
     });
 
-    console.log(textField);
-
-    const editButton = screen.getByRole("button", {
-        name: "edit-system-security-plan-metadata-title",
-      });
-    expect(editButton).toBeVisible();
-  }); */
+    expect(screen.isInEditState).toBeFalsy();
+  });
 }
