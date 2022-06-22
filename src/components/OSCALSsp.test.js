@@ -7,6 +7,7 @@ import testOSCALSystemImplementation from "./OSCALSystemImplementation.test";
 import testOSCALMetadata from "./OSCALMetadata.test";
 import { sspTestData } from "../test-data/SystemData";
 import testOSCALEditableFieldActions from "./OSCALEditableFieldActions.test";
+import testOSCALEditableTextField from "./OSCALEditableTextField.test";
 import testOSCALDiagram from "./OSCALDiagram.test";
 import testOSCALEditableTextField from "./OSCALEditableTextField.test";
 
@@ -29,14 +30,14 @@ function sspRendererRestMode() {
   );
 }
 
-testOSCALSystemCharacteristics("OSCALSsp", sspRenderer);
+testOSCALSystemCharacteristics("OSCALSystemCharacteristics", sspRenderer);
 
-testOSCALSystemImplementation("OSCALSsp", sspRenderer);
+testOSCALSystemImplementation("OSCALSystemImplementation", sspRenderer);
 
-testOSCALMetadata("OSCALSsp", sspRenderer);
+testOSCALMetadata("OSCALSMetadata", sspRenderer);
 
-testOSCALEditableFieldActions("OSCALSsp", sspRendererRestMode);
+testOSCALEditableFieldActions("OSCALEditableFieldActions", sspRendererRestMode);
 
-testOSCALDiagram("OSCALSsp", sspRenderer);
+testOSCALDiagram("OSCALDiagram", sspRenderer);
 
-testOSCALEditableTextField("OSCALSsp", sspRendererRestMode);
+testOSCALEditableTextField("OSCALEditableTextField", sspRendererRestMode);

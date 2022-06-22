@@ -25,7 +25,7 @@ export default function testOSCALEditableTextField(
   parentElementName,
   renderer
 ) {
-  test(`${parentElementName} displays text field and can be edited`, () => {
+  test(`Tests ${parentElementName} to see if the textfield has the default value "Test Title"`, () => {
     renderer();
 
     screen
@@ -37,10 +37,11 @@ export default function testOSCALEditableTextField(
     const textField = screen.getByTestId(
       "textField-system-security-plan-metadata-title"
     );
+    expect(textField.value).toEqual("Test Title");
     expect(textField).toBeVisible();
   });
 
-  test(`${parentElementName} tests text field is no longer editable after 'Esc' key is pressed`, () => {
+  test(`${parentElementName} tests if text field value remains same after 'Esc' key pressed`, () => {
     renderer();
 
     screen
@@ -53,12 +54,13 @@ export default function testOSCALEditableTextField(
       "textField-system-security-plan-metadata-title"
     );
 
+    textField.click();
     fireEvent.keyDown(textField, {
       key: "Escape",
-      charCode: 27,
+      keyCode: 27,
     });
 
-    expect(textField).not.toBeVisible();
+    expect(textField.value).toEqual("Test Title");
   });
 
   test(`${parentElementName} tests text field is no longer editable after 'Enter' key is pressed`, () => {
@@ -74,11 +76,25 @@ export default function testOSCALEditableTextField(
       "textField-system-security-plan-metadata-title"
     );
 
+    fireEvent.keyPress(
+      screen.getElementById("security-objective-availability"),
+      {
+        key: "Enter",
+        code: "Enter",
+        keyCode: 13,
+        charCode: 13,
+      }
+    );
+
+    const textFieldAfterEvent = screen.getByTestId(
+      "textField-system-security-plan-metadata-title"
+    );
+    expect(textFieldAfterEvent).not.toEqual(textField);
+
     fireEvent.keyDown(textField, {
       key: "Enter",
       charCode: 13,
     });
-
     expect(textField).not.toBeVisible();
   });
 }
