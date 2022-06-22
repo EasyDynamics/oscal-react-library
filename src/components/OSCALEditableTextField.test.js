@@ -8,7 +8,6 @@ test("OSCALEditableTextField loads", () => {
     <OSCALEditableTextField
       canEdit
       editedField={["version"]}
-      isInEditState={[true, () => {}]}
       modifiableData={testModifiableMetadata.version}
     />
   );
@@ -17,7 +16,6 @@ test("OSCALEditableTextField loads", () => {
     <OSCALEditableTextField
       canEdit
       editedField={["version"]}
-      isInEditState={[true, () => {}]}
       modifiableData={testModifiableMetadata.version}
     />
   );
@@ -60,7 +58,7 @@ export default function testOSCALEditableTextField(
       charCode: 27,
     });
 
-    expect(screen.isInEditState).toBeFalsy();
+    expect(textField).not.toBeVisible();
   });
 
   test(`${parentElementName} tests text field is no longer editable after 'Enter' key is pressed`, () => {
@@ -76,11 +74,11 @@ export default function testOSCALEditableTextField(
       "textField-system-security-plan-metadata-title"
     );
 
-    fireEvent.keyPress(textField, {
+    fireEvent.keyDown(textField, {
       key: "Enter",
       charCode: 13,
     });
 
-    expect(screen.isInEditState).toBeFalsy();
+    expect(textField).not.toBeVisible();
   });
 }
