@@ -8,6 +8,7 @@ import testOSCALMetadata from "./OSCALMetadata.test";
 import { sspTestData } from "../test-data/SystemData";
 import testOSCALEditableFieldActions from "./OSCALEditableFieldActions.test";
 import testOSCALDiagram from "./OSCALDiagram.test";
+import testOSCALEditableTextField from "./OSCALEditableTextField.test";
 
 test("OSCALSsp loads", () => {
   render(<OSCALSSPLoader />);
@@ -32,3 +33,5 @@ testOSCALMetadata("OSCALSsp", sspRenderer);
 testOSCALEditableFieldActions("OSCALSsp", sspRendererRestMode);
 
 testOSCALDiagram("OSCALSsp", sspRenderer);
+
+testOSCALEditableTextField("OSCALSsp", sspRendererRestMode);
