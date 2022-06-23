@@ -85,11 +85,29 @@ export default function testOSCALEditableTextField(
     );
 
     expect(textFieldAfterEvent.value).toEqual(textField.value);
+  });
 
-    fireEvent.keyDown(textField, {
+  test(`${parentElementName} tests textfield changes to a new value after editing`, () => {
+    renderer();
+
+    screen
+      .getByRole("button", {
+        name: "edit-system-security-plan-metadata-title",
+      })
+      .click();
+
+    const textField = screen.getByTestId(
+      "textField-system-security-plan-metadata-title"
+    );
+    fireEvent.change(textField, { target: { value: "new Test Title" } });
+    fireEvent.keyPress(textField, {
       key: "Enter",
       charCode: 13,
     });
-    expect(textField).not.toBeVisible();
+
+    const textFieldAfterEvent = screen.getByTestId(
+      "textField-system-security-plan-metadata-title"
+    );
+    expect(textFieldAfterEvent.value).toEqual("new Test Title");
   });
 }
