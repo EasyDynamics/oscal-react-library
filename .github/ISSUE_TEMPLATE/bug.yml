@@ -10,8 +10,8 @@ body:
       label: Description
       description: >-
         Please provide a general description of the bug you're experiencing
-      validations:
-        required: true
+    validations:
+      required: true
 
   - type: input
     id: environment
@@ -20,8 +20,8 @@ body:
       description: >-
         If the issue is ocurring in a particular environment, please provide its
         name or URL
-      validations:
-        required: false
+    validations:
+      required: false
 
   - type: textarea
     id: reproduction
@@ -32,8 +32,8 @@ body:
 
         If there is a particular code sample that can be provided, please provide either a
         link or a relevant snippet of the code.
-      validations:
-        required: true
+    validations:
+      required: true
 
   - type: textarea
     id: expected-behavior
@@ -41,8 +41,8 @@ body:
       label: Expected behavior
       description: >-
         What did you expect to happen when you encountered the bug?
-      validations:
-        required: true
+    validations:
+      required: true
 
   - type: textarea
     id: actual-behavior
@@ -51,8 +51,8 @@ body:
       description: >-
         What unexpected behavior actually occurred? Please include specific error messages,
         if relevant.
-      validations:
-        required: true
+    validations:
+      required: true
 
   - type: textarea
     id: notes
@@ -60,5 +60,5 @@ body:
       label: Additional Notes
       description: >-
         Any additional information that you feel may be relevant to this bug report
-      validations:
-        required: false
+    validations:
+      required: false
