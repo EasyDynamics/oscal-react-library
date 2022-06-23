@@ -25,7 +25,7 @@ export default function testOSCALEditableTextField(
   parentElementName,
   renderer
 ) {
-  test(`Tests ${parentElementName} to see if the textfield has the default value "Test Title"`, () => {
+  test(`${parentElementName} verifies default value "Test Title"`, () => {
     renderer();
 
     screen
@@ -41,7 +41,7 @@ export default function testOSCALEditableTextField(
     expect(textField).toBeVisible();
   });
 
-  test(`${parentElementName} tests if textfield value remains same after 'Esc' key pressed`, () => {
+  test(`${parentElementName} verifies textfield remains same (ESC)`, () => {
     renderer();
 
     screen
@@ -62,7 +62,7 @@ export default function testOSCALEditableTextField(
     expect(textField.value).toEqual("Test Title");
   });
 
-  test(`${parentElementName} tests textfield remains the same after pressing Enter without editing`, () => {
+  test(`${parentElementName} verifies textfield without editing (Enter)`, () => {
     renderer();
 
     screen
@@ -87,7 +87,7 @@ export default function testOSCALEditableTextField(
     expect(textFieldAfterEvent.value).toEqual(textField.value);
   });
 
-  test(`${parentElementName} tests textfield changes to a new value after editing`, () => {
+  test(`${parentElementName} verifies value changes to "New Test Title (Enter)`, () => {
     renderer();
 
     screen
@@ -99,7 +99,7 @@ export default function testOSCALEditableTextField(
     const textField = screen.getByTestId(
       "textField-system-security-plan-metadata-title"
     );
-    fireEvent.change(textField, { target: { value: "new Test Title" } });
+    fireEvent.change(textField, { target: { value: "New Test Title" } });
     fireEvent.keyPress(textField, {
       key: "Enter",
       charCode: 13,
@@ -108,6 +108,6 @@ export default function testOSCALEditableTextField(
     const textFieldAfterEvent = screen.getByTestId(
       "textField-system-security-plan-metadata-title"
     );
-    expect(textFieldAfterEvent.value).toEqual("new Test Title");
+    expect(textFieldAfterEvent.value).toEqual("New Test Title");
   });
 }
