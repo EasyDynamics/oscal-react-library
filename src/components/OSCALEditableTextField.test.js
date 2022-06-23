@@ -77,7 +77,7 @@ export default function testOSCALEditableTextField(
 
     fireEvent.keyPress(textField, {
       key: "Enter",
-      charCode: 13,
+      keyCode: 13,
     });
 
     const textFieldAfterEvent = screen.getByTestId(
@@ -102,7 +102,7 @@ export default function testOSCALEditableTextField(
     fireEvent.change(textField, { target: { value: "New Test Title" } });
     fireEvent.keyPress(textField, {
       key: "Enter",
-      charCode: 13,
+      keyCode: 13,
     });
 
     const textFieldAfterEvent = screen.getByTestId(
