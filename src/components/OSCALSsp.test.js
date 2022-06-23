@@ -29,14 +29,14 @@ function sspRendererRestMode() {
   );
 }
 
-testOSCALSystemCharacteristics("OSCALSystemCharacteristics", sspRenderer);
+testOSCALSystemCharacteristics("OSCALSsp", sspRenderer);
 
-testOSCALSystemImplementation("OSCALSystemImplementation", sspRenderer);
+testOSCALSystemImplementation("OSCALSsp", sspRenderer);
 
-testOSCALMetadata("OSCALSMetadata", sspRenderer);
+testOSCALMetadata("OSCALSsp", sspRenderer);
 
-testOSCALEditableFieldActions("OSCALEditableFieldActions", sspRendererRestMode);
+testOSCALEditableFieldActions("OSCALSsp", sspRendererRestMode);
 
-testOSCALDiagram("OSCALDiagram", sspRenderer);
+testOSCALDiagram("OSCALSsp", sspRenderer);
 
 testOSCALEditableTextField("OSCALEditableTextField", sspRendererRestMode);
