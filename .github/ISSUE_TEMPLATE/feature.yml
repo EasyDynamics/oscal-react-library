@@ -1,0 +1,53 @@
+---
+name: Feature Request
+description: Request an enhancement or new feature
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: >-
+        An overview of the feature that you would like to see added, including a use case. It
+        may be helpful to frame this as a
+        [user story](https://www.atlassian.com/agile/project-management/user-stories), such as:
+
+        > As a user, I want to [feature], so that [use case].
+      validations:
+        required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: >-
+        The conditions that must be met for this ticket to be accepted
+      validations:
+        required: false
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: >-
+        If you have an idea for how this feature could be implemented, please provide that
+      validations:
+        required: false
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional Notes
+      description: >-
+        foo
+      validations:
+        required: false
+
+  - type: checkboxes
+    id: implementation
+    attributes:
+      label: Implementation
+      options:
+        - label: I can (or plan to) submit a pull request to implement this
+        - label: Implementing this may result in a breaking change

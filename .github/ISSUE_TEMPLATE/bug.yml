@@ -1,0 +1,64 @@
+---
+name: Bug Report
+description: Report a bug
+labels:
+  - bug
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: >-
+        Please provide a general description of the bug you're experiencing
+      validations:
+        required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: >-
+        If the issue is ocurring in a particular environment, please provide its
+        name or URL
+      validations:
+        required: false
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: >-
+        A series of steps that can be taken to reproduce the bug.
+
+        If there is a particular code sample that can be provided, please provide either a
+        link or a relevant snippet of the code.
+      validations:
+        required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected behavior
+      description: >-
+        What did you expect to happen when you encountered the bug?
+      validations:
+        required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual Behavior
+      description: >-
+        What unexpected behavior actually occurred? Please include specific error messages,
+        if relevant.
+      validations:
+        required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional Notes
+      description: >-
+        Any additional information that you feel may be relevant to this bug report
+      validations:
+        required: false
