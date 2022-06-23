@@ -25,7 +25,7 @@ export default function testOSCALEditableTextField(
   parentElementName,
   renderer
 ) {
-  test(`${parentElementName} displays default value "Test Title"`, () => {
+  test(`${parentElementName} displays default value as "Test Title"`, () => {
     renderer();
 
     screen
@@ -41,7 +41,7 @@ export default function testOSCALEditableTextField(
     expect(textField).toBeVisible();
   });
 
-  test(`${parentElementName} shows textfield remains same (ESC)`, () => {
+  test(`${parentElementName} remains same on ESC`, () => {
     renderer();
 
     screen
@@ -62,7 +62,7 @@ export default function testOSCALEditableTextField(
     expect(textField.value).toEqual("Test Title");
   });
 
-  test(`${parentElementName} shows textfield without editing (Enter)`, () => {
+  test(`${parentElementName} remains same Enter`, () => {
     renderer();
 
     screen
@@ -87,7 +87,7 @@ export default function testOSCALEditableTextField(
     expect(textFieldAfterEvent.value).toEqual(textField.value);
   });
 
-  test(`${parentElementName} shows value saves changes on edit (Enter)`, () => {
+  test(`${parentElementName} changes value on Enter`, () => {
     renderer();
 
     screen

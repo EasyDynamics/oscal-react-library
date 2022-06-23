@@ -39,4 +39,4 @@ testOSCALEditableFieldActions("OSCALSsp", sspRendererRestMode);
 
 testOSCALDiagram("OSCALSsp", sspRenderer);
 
-testOSCALEditableTextField("OSCALEditableTextField", sspRendererRestMode);
+testOSCALEditableTextField("OSCALSsp", sspRendererRestMode);
