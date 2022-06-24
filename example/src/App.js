@@ -31,6 +31,7 @@ import {
   OSCALSSPLoader,
   OSCALComponentLoader,
   OSCALProfileLoader,
+  OSCALDrawerSelector,
 } from "@EasyDynamics/oscal-react-library";
 import logo from "./images/logo-header.svg";
 
@@ -52,6 +53,7 @@ const LogoImage = styled("img")`
 
 function App() {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   const [isRestMode, setIsRestMode] = useState(
     // We want to ensure that throughout the app this is always a boolean
     // so that it can be decoupled from the _actual_ API URL (which may
@@ -70,10 +72,12 @@ function App() {
 
   const handleAppNavOpen = (event) => {
     setAnchorEl(event.currentTarget);
+    setDrawerIsOpen(true);
   };
 
   const handleAppNavClose = () => {
     setAnchorEl(null);
+    setDrawerIsOpen(false);
   };
 
   if (process.env.REACT_APP_GOOGLE_ANALYTICS) {
@@ -88,6 +92,47 @@ function App() {
       ReactGA.pageview(location.pathname + location.search);
     }
   }, [location]);
+
+  const menu = !isRestMode ? (
+    <Menu
+      id="app-nav-menu"
+      anchorEl={anchorEl}
+      keepMounted
+      open={Boolean(anchorEl)}
+      onClose={handleAppNavClose}
+    >
+      <MenuItem
+        onClick={handleAppNavClose}
+        component={RouterLink}
+        to="/catalog"
+      >
+        {`Catalog ${appType}`}
+      </MenuItem>
+      <MenuItem
+        onClick={handleAppNavClose}
+        component={RouterLink}
+        to="/profile"
+      >
+        {`Profile ${appType}`}
+      </MenuItem>
+      <MenuItem
+        onClick={handleAppNavClose}
+        component={RouterLink}
+        to="/component-definition"
+      >
+        {`Component ${appType}`}
+      </MenuItem>
+      <MenuItem
+        onClick={handleAppNavClose}
+        component={RouterLink}
+        to="/system-security-plan"
+      >
+        {`System Security Plan ${appType}`}
+      </MenuItem>
+    </Menu>
+  ) : (
+    <OSCALDrawerSelector open={drawerIsOpen} handleClose={handleAppNavClose} />
+  );
 
   return (
     <StyledEngineProvider injectFirst>
@@ -105,6 +150,7 @@ function App() {
               >
                 <MenuIcon />
               </OpenNavButton>
+              {menu}
               <Typography variant="h6" sx={{ flexGrow: 1 }}>
                 <Routes>
                   {/*
@@ -159,42 +205,6 @@ function App() {
               </IconButton>
             </Toolbar>
           </AppBar>
-          <Menu
-            id="app-nav-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleAppNavClose}
-          >
-            <MenuItem
-              onClick={handleAppNavClose}
-              component={RouterLink}
-              to="/catalog"
-            >
-              {`Catalog ${appType}`}
-            </MenuItem>
-            <MenuItem
-              onClick={handleAppNavClose}
-              component={RouterLink}
-              to="/profile"
-            >
-              {`Profile ${appType}`}
-            </MenuItem>
-            <MenuItem
-              onClick={handleAppNavClose}
-              component={RouterLink}
-              to="/component-definition"
-            >
-              {`Component ${appType}`}
-            </MenuItem>
-            <MenuItem
-              onClick={handleAppNavClose}
-              component={RouterLink}
-              to="/system-security-plan"
-            >
-              {`System Security Plan ${appType}`}
-            </MenuItem>
-          </Menu>
           <Container maxWidth={false} component="main">
             <Routes>
               <Route
