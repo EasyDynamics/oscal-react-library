@@ -3,6 +3,7 @@ import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
 import OSCALControlPart from "./OSCALControlPart";
 import OSCALControlModification from "./OSCALControlModification";
 
@@ -53,14 +54,20 @@ export default function OSCALControl(props) {
       withdrawn={isWithdrawn(props.control)}
     >
       <CardContent>
-        <Typography
-          variant="h6"
-          component="h2"
-          style={props.childLevel ? { fontSize: "1.1rem" } : undefined}
-        >
-          <span style={{ textTransform: "uppercase" }}>{props.control.id}</span>{" "}
-          {props.control.title} {modificationDisplay}
-        </Typography>
+        <Grid container spacing={1}>
+          <Grid item xs={12}>
+            <Typography
+              variant="h6"
+              component="h2"
+              style={props.childLevel ? { fontSize: "1.1rem" } : undefined}
+            >
+              <span style={{ textTransform: "uppercase" }}>
+                {props.control.id}
+              </span>{" "}
+              {props.control.title} {modificationDisplay}
+            </Typography>
+          </Grid>
+        </Grid>
         {props.control.parts &&
           props.control.parts.map((part, index) => (
             <OSCALControlPart
