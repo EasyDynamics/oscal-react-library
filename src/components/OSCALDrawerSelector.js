@@ -1,11 +1,19 @@
-import { Divider, Drawer, IconButton, styled, useTheme } from "@mui/material";
-import React from "react";
+import {
+  Divider,
+  Drawer,
+  IconButton,
+  Typography,
+  styled,
+  useTheme,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 import TreeView from "@mui/lab/TreeView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
+import { oscalObjectTypes } from "./oscal-utils/OSCALRestUtils";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -16,25 +24,79 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-const drawerWidth = 200;
+const drawerWidth = "300px";
+
+const StyledDrawer = styled(Drawer)`
+  flex-shrink: 0;
+  & .MuiDrawer-paper {
+    width: ${drawerWidth};
+    box-sizing: border-box;
+    max-width: ${drawerWidth};
+  }
+`;
+
+const StyledTreeView = styled(TreeView)`
+  height: 240px;
+  flexgrow: 1;
+  overflowy: hidden;
+  max-width: ${drawerWidth};
+`;
+
+function createTree(backendUrl) {
+  const [oscalObjects, setOscalObjects] = useState({});
+
+  const findAllObjects = (oscalObjectType) => {
+    fetch(`${backendUrl}/${oscalObjectType.restPath}`)
+      .then((response) => {
+        if (!response.ok) throw new Error(response.status);
+        else return response.json();
+      })
+      .then((result) => {
+        setOscalObjects((current) => ({
+          ...current,
+          [oscalObjectType.jsonRootName]: result,
+        }));
+      });
+  };
+
+  useEffect(() => {
+    Object.values(oscalObjectTypes).forEach(findAllObjects);
+  }, []);
+
+  return (
+    <StyledTreeView
+      aria-label="file system navigator"
+      defaultCollapseIcon={<ExpandMoreIcon />}
+      defaultExpandIcon={<ChevronRightIcon />}
+    >
+      {Object.values(oscalObjectTypes).map((oscalObjectType, index) => (
+        <TreeItem
+          nodeId={index.toString()}
+          label={oscalObjectType.name}
+          key={oscalObjectType.defaultUuid}
+        >
+          {oscalObjects[oscalObjectType.jsonRootName]
+            ?.map((oscalObject) => oscalObject[oscalObjectType.jsonRootName])
+            ?.map((oscalObject) => (
+              <TreeItem
+                nodeId={oscalObject.uuid}
+                key={oscalObject.uuid}
+                label={
+                  <Typography noWrap>{oscalObject.metadata.title}</Typography>
+                }
+              />
+            ))}
+        </TreeItem>
+      ))}
+    </StyledTreeView>
+  );
+}
 
 export default function OSCALDrawerSelector(props) {
   const theme = useTheme();
 
   return (
-    <Drawer
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        "& .MuiDrawer-paper": {
-          width: drawerWidth,
-          boxSizing: "border-box",
-        },
-      }}
-      variant="persistent"
-      anchor="left"
-      open={props.open}
-    >
+    <StyledDrawer variant="persistent" anchor="left" open={props.open}>
       <DrawerHeader>
         <IconButton onClick={props.handleClose}>
           {theme.direction === "ltr" ? (
@@ -45,23 +107,8 @@ export default function OSCALDrawerSelector(props) {
         </IconButton>
       </DrawerHeader>
       <Divider />
-      <TreeView
-        aria-label="file system navigator"
-        defaultCollapseIcon={<ExpandMoreIcon />}
-        defaultExpandIcon={<ChevronRightIcon />}
-        sx={{ height: 240, flexGrow: 1, maxWidth: 400, overflowY: "auto" }}
-      >
-        <TreeItem nodeId="1" label="Applications">
-          <TreeItem nodeId="2" label="Calendar" />
-        </TreeItem>
-        <TreeItem nodeId="5" label="Documents">
-          <TreeItem nodeId="10" label="OSS" />
-          <TreeItem nodeId="6" label="MUI">
-            <TreeItem nodeId="8" label="index.js" />
-          </TreeItem>
-        </TreeItem>
-      </TreeView>
+      {createTree(props.backendUrl)}
       <Divider />
-    </Drawer>
+    </StyledDrawer>
   );
 }

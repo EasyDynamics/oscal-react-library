@@ -53,7 +53,7 @@ const LogoImage = styled("img")`
 
 function App() {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [drawerIsOpen, setDrawerIsOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isRestMode, setIsRestMode] = useState(
     // We want to ensure that throughout the app this is always a boolean
     // so that it can be decoupled from the _actual_ API URL (which may
@@ -72,12 +72,12 @@ function App() {
 
   const handleAppNavOpen = (event) => {
     setAnchorEl(event.currentTarget);
-    setDrawerIsOpen(true);
+    setIsDrawerOpen(true);
   };
 
   const handleAppNavClose = () => {
     setAnchorEl(null);
-    setDrawerIsOpen(false);
+    setIsDrawerOpen(false);
   };
 
   if (process.env.REACT_APP_GOOGLE_ANALYTICS) {
@@ -93,7 +93,13 @@ function App() {
     }
   }, [location]);
 
-  const menu = !isRestMode ? (
+  const navigation = isRestMode ? (
+    <OSCALDrawerSelector
+      open={isDrawerOpen}
+      handleClose={handleAppNavClose}
+      backendUrl={backendUrl}
+    />
+  ) : (
     <Menu
       id="app-nav-menu"
       anchorEl={anchorEl}
@@ -130,8 +136,6 @@ function App() {
         {`System Security Plan ${appType}`}
       </MenuItem>
     </Menu>
-  ) : (
-    <OSCALDrawerSelector open={drawerIsOpen} handleClose={handleAppNavClose} />
   );
 
   return (
@@ -150,7 +154,7 @@ function App() {
               >
                 <MenuIcon />
               </OpenNavButton>
-              {menu}
+              {navigation}
               <Typography variant="h6" sx={{ flexGrow: 1 }}>
                 <Routes>
                   {/*
