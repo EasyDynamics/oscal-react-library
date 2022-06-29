@@ -116,14 +116,13 @@ function App() {
       <Route index element={`OSCAL Catalog ${appType}`} />
       {oscalObjectTypes.map((oscalObjectType) => (
         <Route path={oscalObjectType.pathName} key={oscalObjectType.pathName}>
-          <Route
-            path=""
-            element={`OSCAL ${oscalObjectType.elementName} ${appType}`}
-          />
-          <Route
-            path=":id"
-            element={`OSCAL ${oscalObjectType.elementName} ${appType}`}
-          />
+          {["", ":id"].map((path) => (
+            <Route
+              path={path}
+              key={path}
+              element={`OSCAL ${oscalObjectType.elementName} ${appType}`}
+            />
+          ))}
         </Route>
       ))}
     </Route>
@@ -148,20 +147,16 @@ function App() {
       />
       {oscalObjectTypes.map((oscalObjectType) => (
         <Route path={oscalObjectType.pathName} key={oscalObjectType.pathName}>
-          <Route
-            path=""
-            element={createElement(
-              oscalObjectType.loaderElement,
-              oscalObjectLoaderProps
-            )}
-          />
-          <Route
-            path=":id"
-            element={createElement(
-              oscalObjectType.loaderElement,
-              oscalObjectLoaderProps
-            )}
-          />
+          {["", ":id"].map((path) => (
+            <Route
+              path={path}
+              key={path}
+              element={createElement(
+                oscalObjectType.loaderElement,
+                oscalObjectLoaderProps
+              )}
+            />
+          ))}
         </Route>
       ))}
     </Route>
@@ -246,7 +241,7 @@ function App() {
             </MenuItem>
           </Menu>
           <Container maxWidth={false} component="main">
-            <Routes>{navRoutes} </Routes>
+            <Routes>{navRoutes}</Routes>
           </Container>
         </div>
       </ThemeProvider>

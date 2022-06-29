@@ -58,7 +58,7 @@ export default function OSCALLoaderForm(props) {
     setSelectedUuid(
       oscalObjects
         .map((item) => item[props.oscalObjectType.jsonRootName].uuid)
-        .filter((uuid) => uuid === requestedId)?.[0] ?? ""
+        .find((uuid) => uuid === requestedId) ?? ""
     );
   }, [oscalObjects, requestedId]);
 
