@@ -10,6 +10,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import { useNavigate, useParams } from "react-router-dom";
 
 const OSCALDocumentForm = styled("form")(
   ({ theme }) => `
@@ -21,7 +22,9 @@ const OSCALDocumentForm = styled("form")(
 export default function OSCALLoaderForm(props) {
   const [oscalObjects, setOscalObjects] = useState([]);
   const [selectedUuid, setSelectedUuid] = useState("");
+  const requestedId = useParams()?.id;
   const unmounted = useRef(false);
+  const navigate = useNavigate();
 
   const findAllObjects = () => {
     fetch(`${props.backendUrl}/${props.oscalObjectType.restPath}`)
@@ -50,6 +53,14 @@ export default function OSCALLoaderForm(props) {
       unmounted.current = true;
     };
   }, []);
+
+  useEffect(() => {
+    setSelectedUuid(
+      oscalObjects
+        .map((item) => item[props.oscalObjectType.jsonRootName].uuid)
+        .find((uuid) => uuid === requestedId) ?? ""
+    );
+  }, [oscalObjects, requestedId]);
 
   return (
     <OSCALDocumentForm
@@ -99,7 +110,11 @@ export default function OSCALLoaderForm(props) {
                 value={selectedUuid}
                 onChange={(event) => {
                   setSelectedUuid(event.target.value);
-                  props.onUuidChange(event);
+                  props.onUuidChange(event.target.value);
+                  navigate(
+                    `/${props.oscalObjectType.jsonRootName}/${event.target.value}`,
+                    { replace: true }
+                  );
                 }}
               >
                 {oscalObjects?.map((oscalObject) => (
