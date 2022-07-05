@@ -5,7 +5,7 @@ import {
   ThemeProvider,
   StyledEngineProvider,
 } from "@mui/material/styles";
-import React, { useEffect, useState } from "react";
+import React, { createElement, useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import AppBar from "@mui/material/AppBar";
@@ -19,7 +19,6 @@ import MenuItem from "@mui/material/MenuItem";
 import CssBaseline from "@mui/material/CssBaseline";
 import ReactGA from "react-ga";
 import {
-  Navigate,
   Route,
   Routes,
   Link as RouterLink,
@@ -138,6 +137,82 @@ function App() {
     </Menu>
   );
 
+  const oscalObjectTypes = [
+    {
+      pathName: "catalog",
+      elementName: "Catalog",
+      loaderElement: OSCALCatalogLoader,
+    },
+    {
+      pathName: "profile",
+      elementName: "Profile",
+      loaderElement: OSCALProfileLoader,
+    },
+    {
+      pathName: "component-definition",
+      elementName: "Component Definition",
+      loaderElement: OSCALComponentLoader,
+    },
+    {
+      pathName: "system-security-plan",
+      elementName: "System Security Plan",
+      loaderElement: OSCALSSPLoader,
+    },
+  ];
+
+  const routePaths = ["", ":id"];
+
+  const appBarRoutes = (
+    <Route path="/">
+      <Route index element={`OSCAL Catalog ${appType}`} />
+      {oscalObjectTypes.map((oscalObjectType) => (
+        <Route path={oscalObjectType.pathName} key={oscalObjectType.pathName}>
+          {routePaths.map((path) => (
+            <Route
+              path={path}
+              key={path}
+              element={`OSCAL ${oscalObjectType.elementName} ${appType}`}
+            />
+          ))}
+        </Route>
+      ))}
+    </Route>
+  );
+
+  const oscalObjectLoaderProps = {
+    renderForm: true,
+    isRestMode,
+    setIsRestMode,
+    backendUrl,
+  };
+
+  const navRoutes = (
+    <Route path="/">
+      {/* Default index will open up the Catalog */}
+      <Route
+        index
+        element={createElement(
+          oscalObjectTypes[0].loaderElement,
+          oscalObjectLoaderProps
+        )}
+      />
+      {oscalObjectTypes.map((oscalObjectType) => (
+        <Route path={oscalObjectType.pathName} key={oscalObjectType.pathName}>
+          {routePaths.map((path) => (
+            <Route
+              path={path}
+              key={path}
+              element={createElement(
+                oscalObjectType.loaderElement,
+                oscalObjectLoaderProps
+              )}
+            />
+          ))}
+        </Route>
+      ))}
+    </Route>
+  );
+
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={appTheme}>
@@ -156,35 +231,7 @@ function App() {
               </OpenNavButton>
               {navigation}
               <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                <Routes>
-                  {/*
-                   * Because we immediately redirect users, `/` won't be visible for
-                   * long; however, having this entry means that we avoid a console
-                   * warning and at least presents something if the redirect or
-                   * rendering fails for any reason.
-                   */}
-                  <Route exact path="/" element={`OSCAL ${appType}`} />
-                  <Route
-                    exact
-                    path="/catalog"
-                    element={`OSCAL Catalog ${appType}`}
-                  />
-                  <Route
-                    exact
-                    path="/system-security-plan"
-                    element={`OSCAL System Security Plan ${appType}`}
-                  />
-                  <Route
-                    exact
-                    path="/component-definition"
-                    element={`OSCAL Component ${appType}`}
-                  />
-                  <Route
-                    exact
-                    path="/profile"
-                    element={`OSCAL Profile ${appType}`}
-                  />
-                </Routes>
+                <Routes>{appBarRoutes}</Routes>
               </Typography>
               <Typography
                 variant="body2"
@@ -210,60 +257,7 @@ function App() {
             </Toolbar>
           </AppBar>
           <Container maxWidth={false} component="main">
-            <Routes>
-              <Route
-                exact
-                path="/"
-                element={<Navigate replace to="/catalog" />}
-              />
-              <Route
-                path="/catalog"
-                element={
-                  <OSCALCatalogLoader
-                    renderForm
-                    isRestMode={isRestMode}
-                    setIsRestMode={setIsRestMode}
-                    backendUrl={backendUrl}
-                  />
-                }
-              />
-              <Route
-                exact
-                path="/system-security-plan"
-                element={
-                  <OSCALSSPLoader
-                    renderForm
-                    isRestMode={isRestMode}
-                    setIsRestMode={setIsRestMode}
-                    backendUrl={backendUrl}
-                  />
-                }
-              />
-              <Route
-                exact
-                path="/component-definition"
-                element={
-                  <OSCALComponentLoader
-                    renderForm
-                    isRestMode={isRestMode}
-                    setIsRestMode={setIsRestMode}
-                    backendUrl={backendUrl}
-                  />
-                }
-              />
-              <Route
-                exact
-                path="/profile"
-                element={
-                  <OSCALProfileLoader
-                    renderForm
-                    isRestMode={isRestMode}
-                    setIsRestMode={setIsRestMode}
-                    backendUrl={backendUrl}
-                  />
-                }
-              />
-            </Routes>
+            <Routes>{navRoutes}</Routes>
           </Container>
         </div>
       </ThemeProvider>

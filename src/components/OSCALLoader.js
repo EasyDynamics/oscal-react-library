@@ -4,6 +4,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Split from "react-split";
 import { Box, Fab } from "@mui/material";
 import CodeIcon from "@mui/icons-material/Code";
+import { useParams } from "react-router-dom";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
 import ErrorBoundary, { BasicError } from "./ErrorBoundary";
 import OSCALSsp from "./OSCALSsp";
@@ -132,8 +133,8 @@ export default function OSCALLoader(props) {
     setOscalUrl(event.target.value);
   };
 
-  const handleUuidChange = (event) => {
-    const newOscalUrl = `${props.backendUrl}/${props.oscalObjectType.restPath}/${event.target.value}`;
+  const handleUuidChange = (objectUuid) => {
+    const newOscalUrl = `${props.backendUrl}/${props.oscalObjectType.restPath}/${objectUuid}`;
     setOscalUrl(newOscalUrl);
     setIsLoaded(false);
     setIsResolutionComplete(false);
@@ -197,6 +198,10 @@ export default function OSCALLoader(props) {
   // similar to componentDidMount()
   useEffect(() => {
     loadOscalData(oscalUrl);
+
+    if (props.oscalObjectUuid) {
+      handleUuidChange(props.oscalObjectUuid);
+    }
 
     return () => {
       unmounted.current = true;
@@ -307,6 +312,7 @@ export function getRequestedUrl() {
 }
 
 export function OSCALCatalogLoader(props) {
+  const { id } = useParams();
   const oscalObjectType = restUtils.oscalObjectTypes.catalog;
   const renderer = (
     isRestMode,
@@ -347,6 +353,7 @@ export function OSCALCatalogLoader(props) {
   return (
     <OSCALLoader
       oscalObjectType={oscalObjectType}
+      oscalObjectUuid={id}
       oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
       renderer={renderer}
       renderForm={props.renderForm}
@@ -358,6 +365,7 @@ export function OSCALCatalogLoader(props) {
 }
 
 export function OSCALSSPLoader(props) {
+  const { id } = useParams();
   const oscalObjectType = restUtils.oscalObjectTypes.ssp;
   const renderer = (
     isRestMode,
@@ -395,9 +403,11 @@ export function OSCALSSPLoader(props) {
       }}
     />
   );
+
   return (
     <OSCALLoader
       oscalObjectType={oscalObjectType}
+      oscalObjectUuid={id}
       oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
       renderer={renderer}
       renderForm={props.renderForm}
@@ -409,6 +419,7 @@ export function OSCALSSPLoader(props) {
 }
 
 export function OSCALComponentLoader(props) {
+  const { id } = useParams();
   const oscalObjectType = restUtils.oscalObjectTypes.component;
   const renderer = (
     isRestMode,
@@ -449,6 +460,7 @@ export function OSCALComponentLoader(props) {
   return (
     <OSCALLoader
       oscalObjectType={oscalObjectType}
+      oscalObjectUuid={id}
       oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
       renderer={renderer}
       renderForm={props.renderForm}
@@ -460,6 +472,7 @@ export function OSCALComponentLoader(props) {
 }
 
 export function OSCALProfileLoader(props) {
+  const { id } = useParams();
   const oscalObjectType = restUtils.oscalObjectTypes.profile;
   const renderer = (
     isRestMode,
@@ -500,6 +513,7 @@ export function OSCALProfileLoader(props) {
   return (
     <OSCALLoader
       oscalObjectType={oscalObjectType}
+      oscalObjectUuid={id}
       oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
       renderer={renderer}
       renderForm={props.renderForm}
