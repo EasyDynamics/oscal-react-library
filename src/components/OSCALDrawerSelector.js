@@ -8,11 +8,11 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-
 import TreeView from "@mui/lab/TreeView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
+import { Link } from "react-router-dom";
 import { oscalObjectTypes } from "./oscal-utils/OSCALRestUtils";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -42,7 +42,7 @@ const StyledTreeView = styled(TreeView)`
   max-width: ${drawerWidth};
 `;
 
-function createTree(backendUrl) {
+function createTree(backendUrl, handleClose) {
   const [oscalObjects, setOscalObjects] = useState({});
 
   const findAllObjects = (oscalObjectType) => {
@@ -72,7 +72,7 @@ function createTree(backendUrl) {
       {Object.values(oscalObjectTypes).map((oscalObjectType, index) => (
         <TreeItem
           nodeId={index.toString()}
-          label={oscalObjectType.name}
+          label={<Typography noWrap>{oscalObjectType.name}</Typography>}
           key={oscalObjectType.defaultUuid}
         >
           {oscalObjects[oscalObjectType.jsonRootName]
@@ -82,7 +82,12 @@ function createTree(backendUrl) {
                 nodeId={oscalObject.uuid}
                 key={oscalObject.uuid}
                 label={
-                  <Typography noWrap>{oscalObject.metadata.title}</Typography>
+                  <Link
+                    to={`${oscalObjectType.jsonRootName}/${oscalObject.uuid}`}
+                    onClick={handleClose}
+                  >
+                    <Typography noWrap>{oscalObject.metadata.title}</Typography>
+                  </Link>
                 }
               />
             ))}
@@ -107,7 +112,7 @@ export default function OSCALDrawerSelector(props) {
         </IconButton>
       </DrawerHeader>
       <Divider />
-      {createTree(props.backendUrl)}
+      {createTree(props.backendUrl, props.handleClose)}
       <Divider />
     </StyledDrawer>
   );
