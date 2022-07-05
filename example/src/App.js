@@ -111,12 +111,14 @@ function App() {
     },
   ];
 
+  const routePaths = ["", ":id"];
+
   const appBarRoutes = (
     <Route path="/">
       <Route index element={`OSCAL Catalog ${appType}`} />
       {oscalObjectTypes.map((oscalObjectType) => (
         <Route path={oscalObjectType.pathName} key={oscalObjectType.pathName}>
-          {["", ":id"].map((path) => (
+          {routePaths.map((path) => (
             <Route
               path={path}
               key={path}
@@ -147,7 +149,7 @@ function App() {
       />
       {oscalObjectTypes.map((oscalObjectType) => (
         <Route path={oscalObjectType.pathName} key={oscalObjectType.pathName}>
-          {["", ":id"].map((path) => (
+          {routePaths.map((path) => (
             <Route
               path={path}
               key={path}
