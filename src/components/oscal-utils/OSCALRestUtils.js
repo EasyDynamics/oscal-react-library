@@ -37,7 +37,7 @@ export const oscalObjectTypes = {
     restPath: "profiles",
   },
   ssp: {
-    name: "SSP",
+    name: "System Security Plan",
     defaultUrl:
       "https://raw.githubusercontent.com/EasyDynamics/oscal-demo-content/main/system-security-plans/ssp-example.json",
     defaultUuid: "cff8385f-108e-40a5-8f7a-82f3dc0eaba8",
