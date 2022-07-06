@@ -46,6 +46,31 @@ export const oscalObjectTypes = {
   },
 };
 
+/**
+ * Populates a map of oscal object types to oscal objects retrieved from a get request.
+ *
+ * @param {string} backendUrl base url of server to fetch from
+ * @param {Object} oscalObjectType Object that contains information on an oscalObject
+ * @param {function} setOscalObjects Function to map a fetched result to the json root name of an oscal object
+ */
+export function populateOscalObjects(
+  backendUrl,
+  oscalObjectType,
+  setOscalObjects
+) {
+  fetch(`${backendUrl}/${oscalObjectType.restPath}`)
+    .then((response) => {
+      if (!response.ok) throw new Error(response.status);
+      else return response.json();
+    })
+    .then((result) => {
+      setOscalObjects((current) => ({
+        ...current,
+        [oscalObjectType.jsonRootName]: result,
+      }));
+    });
+}
+
 export function getOscalObjectTypeFromJsonRootName(jsonRootName) {
   return Object.keys(oscalObjectTypes).find(
     (element) => element.jsonRootName === jsonRootName

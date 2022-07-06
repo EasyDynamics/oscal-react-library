@@ -13,7 +13,10 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
 import { Link } from "react-router-dom";
-import { oscalObjectTypes } from "./oscal-utils/OSCALRestUtils";
+import {
+  oscalObjectTypes,
+  populateOscalObjects,
+} from "./oscal-utils/OSCALRestUtils";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -45,22 +48,10 @@ const StyledTreeView = styled(TreeView)`
 function createTree(backendUrl, handleClose) {
   const [oscalObjects, setOscalObjects] = useState({});
 
-  const findAllObjects = (oscalObjectType) => {
-    fetch(`${backendUrl}/${oscalObjectType.restPath}`)
-      .then((response) => {
-        if (!response.ok) throw new Error(response.status);
-        else return response.json();
-      })
-      .then((result) => {
-        setOscalObjects((current) => ({
-          ...current,
-          [oscalObjectType.jsonRootName]: result,
-        }));
-      });
-  };
-
   useEffect(() => {
-    Object.values(oscalObjectTypes).forEach(findAllObjects);
+    Object.values(oscalObjectTypes).forEach((oscalObjectType) =>
+      populateOscalObjects(backendUrl, oscalObjectType, setOscalObjects)
+    );
   }, []);
 
   return (
