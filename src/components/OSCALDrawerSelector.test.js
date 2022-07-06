@@ -22,7 +22,7 @@ test(`OSCALDrawerSelector displays expected tree items`, () => {
   });
 
   const SSPItem = screen.getByRole("treeitem", {
-    name: "SSP",
+    name: "System Security Plan",
   });
 
   expect(catalogItem).toBeVisible();
