@@ -185,28 +185,28 @@ function App() {
       <MenuItem
         onClick={handleAppNavClose}
         component={RouterLink}
-        to="/catalog"
+        to="/catalog/"
       >
         {`Catalog ${appType}`}
       </MenuItem>
       <MenuItem
         onClick={handleAppNavClose}
         component={RouterLink}
-        to="/profile"
+        to="/profile/"
       >
         {`Profile ${appType}`}
       </MenuItem>
       <MenuItem
         onClick={handleAppNavClose}
         component={RouterLink}
-        to="/component-definition"
+        to="/component-definition/"
       >
         {`Component ${appType}`}
       </MenuItem>
       <MenuItem
         onClick={handleAppNavClose}
         component={RouterLink}
-        to="/system-security-plan"
+        to="/system-security-plan/"
       >
         {`System Security Plan ${appType}`}
       </MenuItem>
