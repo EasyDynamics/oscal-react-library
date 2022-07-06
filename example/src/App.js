@@ -101,7 +101,7 @@ function App() {
     },
     {
       pathName: "component-definition",
-      elementName: "Component Definition",
+      elementName: "Component",
       loaderElement: OSCALComponentLoader,
     },
     {
