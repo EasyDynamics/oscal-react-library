@@ -22,14 +22,14 @@ describe("OSCALDrawerSelector", () => {
       name: "Profile",
     });
 
-    const SSPItem = screen.getByRole("treeitem", {
+    const sspItem = screen.getByRole("treeitem", {
       name: "System Security Plan",
     });
 
     expect(catalogItem).toBeVisible();
     expect(componentItem).toBeVisible();
     expect(profileItem).toBeVisible();
-    expect(SSPItem).toBeVisible();
+    expect(sspItem).toBeVisible();
   });
 
   test(`displays close button`, () => {
