@@ -15,7 +15,7 @@ import TreeItem from "@mui/lab/TreeItem";
 import { Link } from "react-router-dom";
 import {
   oscalObjectTypes,
-  populateOscalObjects,
+  fetchAllResourcesOfType,
 } from "./oscal-utils/OSCALRestUtils";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -50,7 +50,12 @@ function createTree(backendUrl, handleClose) {
 
   useEffect(() => {
     Object.values(oscalObjectTypes).forEach((oscalObjectType) =>
-      populateOscalObjects(backendUrl, oscalObjectType, setOscalObjects)
+      fetchAllResourcesOfType(backendUrl, oscalObjectType, (result) =>
+        setOscalObjects((current) => ({
+          ...current,
+          [oscalObjectType.jsonRootName]: result,
+        }))
+      )
     );
   }, []);
 
