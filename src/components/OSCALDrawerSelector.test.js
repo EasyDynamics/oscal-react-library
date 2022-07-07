@@ -11,19 +11,19 @@ describe("OSCALDrawerSelector", () => {
     render(<OSCALDrawerSelector open />);
 
     const catalogItem = screen.getByRole("treeitem", {
-      name: "Catalog",
+      name: "Catalogs",
     });
 
     const componentItem = screen.getByRole("treeitem", {
-      name: "Component",
+      name: "Components",
     });
 
     const profileItem = screen.getByRole("treeitem", {
-      name: "Profile",
+      name: "Profiles",
     });
 
     const sspItem = screen.getByRole("treeitem", {
-      name: "System Security Plan",
+      name: "System Security Plans",
     });
 
     expect(catalogItem).toBeVisible();

@@ -63,7 +63,7 @@ function createTree(backendUrl, handleClose) {
       {Object.values(oscalObjectTypes).map((oscalObjectType, index) => (
         <TreeItem
           nodeId={index.toString()}
-          label={<Typography noWrap>{oscalObjectType.name}</Typography>}
+          label={<Typography noWrap>{`${oscalObjectType.name}s`}</Typography>}
           key={oscalObjectType.defaultUuid}
         >
           {oscalObjects[oscalObjectType.jsonRootName]
