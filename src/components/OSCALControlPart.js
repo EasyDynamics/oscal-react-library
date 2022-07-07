@@ -90,6 +90,9 @@ export default function OSCALControlPart(props) {
             componentId={props.componentId}
             modificationAlters={props.modificationAlters}
             modificationSetParameters={props.modificationSetParameters}
+            // The NIST_SP-80053_rev 5 catalog contains parts with duplicate ids.
+            // In order to avoid key duplication, the index of the part as well
+            // as it's id is necessary.
             // eslint-disable-next-line
             key={`control-part-${part.id}-${index}`}
             isEditable={props.isEditable}
