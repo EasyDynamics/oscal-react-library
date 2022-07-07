@@ -81,22 +81,25 @@ export default function OSCALControlPart(props) {
     <OSCALControlPartWrapper ownerState partName={props.part.name}>
       {replacedProse}
       {props.part.parts &&
-        props.part.parts.map((part) => (
-          <OSCALControlPart
-            part={part}
-            controlId={props.controlId ?? props.control.id}
-            parameters={props.parameters}
-            implementedRequirement={props.implementedRequirement}
-            componentId={props.componentId}
-            modificationAlters={props.modificationAlters}
-            modificationSetParameters={props.modificationSetParameters}
-            key={part.id}
-            isEditable={props.isEditable}
-            onRestSuccess={props.onRestSuccess}
-            onRestError={props.onRestError}
-            partialRestData={props.partialRestData}
-          />
-        ))}
+        props.part.parts.map((part, index) => {
+          const partKey = `control-part-${part.id}-${index}`;
+          return (
+            <OSCALControlPart
+              part={part}
+              controlId={props.controlId ?? props.control.id}
+              parameters={props.parameters}
+              implementedRequirement={props.implementedRequirement}
+              componentId={props.componentId}
+              modificationAlters={props.modificationAlters}
+              modificationSetParameters={props.modificationSetParameters}
+              key={partKey}
+              isEditable={props.isEditable}
+              onRestSuccess={props.onRestSuccess}
+              onRestError={props.onRestError}
+              partialRestData={props.partialRestData}
+            />
+          );
+        })}
     </OSCALControlPartWrapper>
   );
 }
