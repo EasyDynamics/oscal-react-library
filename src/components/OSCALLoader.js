@@ -53,9 +53,12 @@ export default function OSCALLoader(props) {
   // an error and to ensure.
   const [reloadCount, setReloadCount] = useState(0);
   const oscalObjectUuid = useParams()?.id ?? "";
-  const buildOscalUrl = (uuid) => `${props.backendUrl}/${props.oscalObjectType.restPath}/${uuid}`;
-  const [oscalUrl, setOscalUrl] = useState(isRestMode ? null : (props.oscalUrl || props.oscalObjectType.defaultUrl));
-  
+  const buildOscalUrl = (uuid) =>
+    `${props.backendUrl}/${props.oscalObjectType.restPath}/${uuid}`;
+  const [oscalUrl, setOscalUrl] = useState(
+    isRestMode ? null : props.oscalUrl || props.oscalObjectType.defaultUrl
+  );
+
   const handleRestError = (err) => {
     setIsLoaded(true);
     setIsResolutionComplete(true);
@@ -205,7 +208,7 @@ export default function OSCALLoader(props) {
   // this useEffect will run once
   // similar to componentDidMount()
   useEffect(() => {
-    if (!isRestMode) { 
+    if (!isRestMode) {
       loadOscalData(oscalUrl);
     }
     return () => {
