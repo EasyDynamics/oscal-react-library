@@ -45,7 +45,6 @@ export default function OSCALLoader(props) {
   const [isResolutionComplete, setIsResolutionComplete] = useState(false);
   const { isRestMode, setIsRestMode } = props;
   const [oscalData, setOscalData] = useState([]);
-  const [oscalUrl, setOscalUrl] = useState(isRestMode ? null : props.oscalUrl);
   const [editorIsVisible, setEditorIsVisible] = useState(true);
   const unmounted = useRef(false);
   const [error, setError] = useState(null);
@@ -53,6 +52,12 @@ export default function OSCALLoader(props) {
   // This will force a redraw of the form on each click, allowing us to reset after
   // an error and to ensure.
   const [reloadCount, setReloadCount] = useState(0);
+  const oscalObjectUuid = useParams()?.id ?? "";
+  const buildOscalUrl = (uuid) =>
+    `${props.backendUrl}/${props.oscalObjectType.restPath}/${uuid}`;
+  const [oscalUrl, setOscalUrl] = useState(
+    isRestMode ? null : props.oscalUrl || props.oscalObjectType.defaultUrl
+  );
 
   const handleRestError = (err) => {
     setIsLoaded(true);
@@ -134,7 +139,7 @@ export default function OSCALLoader(props) {
   };
 
   const handleUuidChange = (objectUuid) => {
-    const newOscalUrl = `${props.backendUrl}/${props.oscalObjectType.restPath}/${objectUuid}`;
+    const newOscalUrl = buildOscalUrl(objectUuid);
     setOscalUrl(newOscalUrl);
     setIsLoaded(false);
     setIsResolutionComplete(false);
@@ -193,16 +198,19 @@ export default function OSCALLoader(props) {
     setIsResolutionComplete(true);
   };
 
+  useEffect(() => {
+    if (oscalObjectUuid) {
+      handleUuidChange(oscalObjectUuid);
+    }
+  }, [oscalObjectUuid]);
+
   // Note: the empty deps array [] means
   // this useEffect will run once
   // similar to componentDidMount()
   useEffect(() => {
-    loadOscalData(oscalUrl);
-
-    if (props.oscalObjectUuid) {
-      handleUuidChange(props.oscalObjectUuid);
+    if (!isRestMode) {
+      loadOscalData(oscalUrl);
     }
-
     return () => {
       unmounted.current = true;
     };
@@ -354,7 +362,7 @@ export function OSCALCatalogLoader(props) {
     <OSCALLoader
       oscalObjectType={oscalObjectType}
       oscalObjectUuid={id}
-      oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
+      oscalUrl={getRequestedUrl()}
       renderer={renderer}
       renderForm={props.renderForm}
       backendUrl={props.backendUrl}
@@ -408,7 +416,7 @@ export function OSCALSSPLoader(props) {
     <OSCALLoader
       oscalObjectType={oscalObjectType}
       oscalObjectUuid={id}
-      oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
+      oscalUrl={getRequestedUrl()}
       renderer={renderer}
       renderForm={props.renderForm}
       backendUrl={props.backendUrl}
@@ -461,7 +469,7 @@ export function OSCALComponentLoader(props) {
     <OSCALLoader
       oscalObjectType={oscalObjectType}
       oscalObjectUuid={id}
-      oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
+      oscalUrl={getRequestedUrl()}
       renderer={renderer}
       renderForm={props.renderForm}
       backendUrl={props.backendUrl}
@@ -514,7 +522,7 @@ export function OSCALProfileLoader(props) {
     <OSCALLoader
       oscalObjectType={oscalObjectType}
       oscalObjectUuid={id}
-      oscalUrl={getRequestedUrl() || oscalObjectType.defaultUrl}
+      oscalUrl={getRequestedUrl()}
       renderer={renderer}
       renderForm={props.renderForm}
       backendUrl={props.backendUrl}
