@@ -62,11 +62,18 @@ export default function OSCALLoaderForm(props) {
     );
   }, [oscalObjects, requestedId]);
 
+  const url = useRef(null);
+  const submitForm = () => {
+    props.onUrlChange(url.current.value);
+    props.onReloadClick();
+  };
+
   return (
     <OSCALDocumentForm
       noValidate
       autoComplete="off"
       onSubmit={(e) => {
+        submitForm();
         e.preventDefault();
       }}
     >
@@ -81,7 +88,7 @@ export default function OSCALLoaderForm(props) {
                 helperText="(JSON Format)"
                 variant="outlined"
                 fullWidth
-                onChange={props.onUrlChange}
+                inputRef={url}
               />
             </Grid>
             <Grid item xs={4} md={2}>
@@ -90,8 +97,8 @@ export default function OSCALLoaderForm(props) {
                 size="large"
                 color="primary"
                 endIcon={<ReplayIcon>send</ReplayIcon>}
-                onClick={props.onReloadClick}
                 disabled={!props.isResolutionComplete}
+                type="submit"
               >
                 Reload
               </Button>

@@ -124,8 +124,8 @@ export default function OSCALLoader(props) {
     );
   };
 
-  const handleUrlChange = (event) => {
-    setOscalUrl(event.target.value);
+  const handleUrlChange = (value) => {
+    setOscalUrl(value);
   };
 
   const handleUuidChange = (objectUuid) => {
