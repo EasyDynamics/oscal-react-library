@@ -139,7 +139,6 @@ function App() {
   const oscalObjectLoaderProps = {
     renderForm: true,
     isRestMode,
-    setIsRestMode,
     backendUrl,
   };
 
@@ -214,6 +213,10 @@ function App() {
       </MenuItem>
     </Menu>
   );
+
+  const onChangeRestMode = (event) => {
+    setIsRestMode(event.target.checked);
+  };
 
   return (
     <StyledEngineProvider injectFirst>
