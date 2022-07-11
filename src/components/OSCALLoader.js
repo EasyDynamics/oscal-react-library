@@ -194,20 +194,15 @@ export default function OSCALLoader(props) {
 
   useEffect(() => {
     if (isRestMode) {
-      console.log("isRestMode: " + isRestMode);
       setOscalUrl(null);
       setIsLoaded(true);
-      console.log(isLoaded);
       setIsResolutionComplete(true);
     } else {
-      console.log("isRestMode: " + isRestMode);
       setOscalUrl(props.oscalObjectType.defaultUrl);
       loadOscalData(props.oscalObjectType.defaultUrl);
       setIsLoaded(false);
       setIsResolutionComplete(false);
     }
-    console.log("isLoaded: " + isLoaded);
-    console.log("oscalUrl: " + oscalUrl);
   }, [isRestMode]);
 
   let form;
