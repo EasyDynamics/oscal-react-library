@@ -2,14 +2,14 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import resolveLinkHref from "./oscal-utils/OSCALLinkUtils";
 
-export default function OSCALDiagram(props) {
+export default function OSCALDiagram(props: any) {
   // Just grab the first rlink for now
   const link = props.diagram?.links[0];
   if (!link) {
     throw new Error("no rlink found");
   }
 
-  let diagramUri;
+  let diagramUri: string;
   try {
     diagramUri = resolveLinkHref(
       props.backMatter,

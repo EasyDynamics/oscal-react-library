@@ -1,7 +1,10 @@
 /**
  * Gets a resource from the given back matter's resource by the given HREF UUID.
  */
-export function getResourceFromBackMatterByHref(backMatter, href) {
+export function getResourceFromBackMatterByHref(
+  backMatter: any,
+  href: string
+): any | undefined {
   if (!href.startsWith("#")) {
     throw new Error("not an internal href");
   }
@@ -9,7 +12,7 @@ export function getResourceFromBackMatterByHref(backMatter, href) {
   const importUuid = href.substring(1);
 
   return backMatter?.resources?.find(
-    (resource) => resource.uuid === importUuid
+    (resource: any) => resource.uuid === importUuid
   );
 }
 
@@ -19,9 +22,9 @@ export function getResourceFromBackMatterByHref(backMatter, href) {
  * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/implementation-layer/component/xml-schema/##local_back-matter-resource-rlink_def-h3}
  */
 export default function getUriFromBackMatterByHref(
-  backMatter,
-  href,
-  mediaTypeRegex
+  backMatter: any,
+  href: string,
+  mediaTypeRegex: RegExp
 ) {
   const foundResource = getResourceFromBackMatterByHref(backMatter, href);
 
@@ -29,7 +32,7 @@ export default function getUriFromBackMatterByHref(
     throw new Error("resource not found for href");
   }
 
-  const foundLink = foundResource.rlinks.find((rlink) =>
+  const foundLink = foundResource.rlinks?.find((rlink: any) =>
     mediaTypeRegex.test(rlink["media-type"])
   );
 

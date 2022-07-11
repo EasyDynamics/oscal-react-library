@@ -100,11 +100,11 @@ export default function OSCALLoader(props) {
     restUrlPath,
     oscalObjectType
   ) => {
-    const requestUrl = restUtils.buildRequestUrl(
+    const requestUrl = restUtils.buildRequestUrl({
       partialRestData,
       restUrlPath,
-      oscalObjectType
-    );
+      oscalObjectType,
+    });
 
     if (newValue) {
       restUtils.populatePartialRestData(

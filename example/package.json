@@ -15,7 +15,7 @@
     "eject": "node ../node_modules/react-scripts/bin/react-scripts.js eject"
   },
   "dependencies": {
-    "@EasyDynamics/oscal-react-library": "file:..",
+    "@easydynamics/oscal-react-library": "file:..",
     "history": "file:../node_modules/history",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",

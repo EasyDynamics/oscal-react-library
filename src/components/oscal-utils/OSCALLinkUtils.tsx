@@ -1,6 +1,6 @@
 import getUriFromBackMatterByHref from "./OSCALBackMatterUtils";
 
-export function fixJsonUrls(absoluteUrl) {
+export function fixJsonUrls(absoluteUrl: string): string {
   // TODO this is incorrect in the profile (https://github.com/usnistgov/oscal-content/issues/59, https://easydynamics.atlassian.net/browse/EGRC-266)
   // TODO this workaround must be improved in https://easydynamics.atlassian.net/browse/EGRC-296
   if (!absoluteUrl.endsWith(".xml")) {
@@ -10,16 +10,16 @@ export function fixJsonUrls(absoluteUrl) {
   return absoluteUrl.replace(/xml/g, "json");
 }
 
-export function getAbsoluteUrl(href, parentUrl) {
+export function getAbsoluteUrl(href: string, parentUrl: string): string {
   return href.startsWith("http") ? href : `${parentUrl}/../${href}`;
 }
 
 export default function resolveLinkHref(
-  backMatter,
-  href,
-  parentUrl,
-  mediaTypeRegex
-) {
+  backMatter: any,
+  href: string,
+  parentUrl: string,
+  mediaTypeRegex: RegExp
+): string {
   if (!href.startsWith("#")) {
     return getAbsoluteUrl(href, parentUrl);
   }

@@ -31,7 +31,7 @@ import {
   OSCALComponentLoader,
   OSCALProfileLoader,
   OSCALDrawerSelector,
-} from "@EasyDynamics/oscal-react-library";
+} from "@easydynamics/oscal-react-library";
 import logo from "./images/logo-header.svg";
 
 const appTheme = createTheme({

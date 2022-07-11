@@ -11,7 +11,15 @@ export const restMethods = {
   PUT: "PUT",
 };
 
-export const oscalObjectTypes = {
+interface OscalObjectType {
+  name: string;
+  defaultUrl: string;
+  defaultUuid: string;
+  jsonRootName: string;
+  restPath: string;
+}
+
+export const oscalObjectTypes: { [key: string]: OscalObjectType } = {
   catalog: {
     name: "Catalog",
     defaultUrl:
@@ -54,25 +62,19 @@ export const oscalObjectTypes = {
  * @param {(any) => void} handleResult Function to map a fetched result to the json root name of an oscal object
  */
 export function fetchAllResourcesOfType(
-  backendUrl,
-  oscalObjectType,
-  handleResult
+  backendUrl: string,
+  oscalObjectType: OscalObjectType,
+  handleResult: (_: any) => void
 ) {
   fetch(`${backendUrl}/${oscalObjectType.restPath}`)
     .then((response) => {
-      if (!response.ok) throw new Error(response.status);
+      if (!response.ok) throw new Error(`${response.status}`);
       else return response.json();
     })
     .then(handleResult);
 }
 
-export function getOscalObjectTypeFromJsonRootName(jsonRootName) {
-  return Object.keys(oscalObjectTypes).find(
-    (element) => element.jsonRootName === jsonRootName
-  );
-}
-
-export function deepClone(obj) {
+export function deepClone<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));
 }
 
@@ -86,8 +88,8 @@ export function deepClone(obj) {
  * @param appendToLastFieldInPath boolean indicating if the updated value should be appended to an array or replace an existing value
  */
 export function populatePartialRestData(
-  data,
-  editedFieldJsonPath,
+  data: any,
+  editedFieldJsonPath: string[],
   newValue = null,
   appendToLastFieldInPath = false
 ) {
@@ -95,9 +97,9 @@ export function populatePartialRestData(
     const editData = data;
 
     if (appendToLastFieldInPath) {
-      editData[editedFieldJsonPath].push(newValue);
+      editData[editedFieldJsonPath[0]].push(newValue);
     } else {
-      editData[editedFieldJsonPath] = newValue;
+      editData[editedFieldJsonPath[0]] = newValue;
     }
 
     return;
@@ -112,7 +114,7 @@ export function populatePartialRestData(
     );
   } else {
     populatePartialRestData(
-      data[editedFieldJsonPath.shift()],
+      data[editedFieldJsonPath.shift()!],
       editedFieldJsonPath,
       newValue,
       appendToLastFieldInPath
@@ -120,18 +122,34 @@ export function populatePartialRestData(
   }
 }
 
-export function buildRequestUrl(partialRestData, restUrlPath, oscalObjectType) {
-  let url;
-  if (!restUrlPath || restUrlPath === "") {
-    url = `${process.env.REACT_APP_REST_BASE_URL}/${oscalObjectType.restPath}/${
-      partialRestData[oscalObjectType.jsonRootName].uuid
-    }`;
-  } else if (restUrlPath.startsWith("http", 0)) {
-    url = restUrlPath;
-  } else {
-    url = `${process.env.REACT_APP_REST_BASE_URL}/${restUrlPath}`;
+interface RequestUrlProps {
+  partialRestData?: any;
+  restUrlPath?: string;
+  oscalObjectType?: OscalObjectType;
+}
+
+function buildRequestUrlWithoutObject(restUrlPath: string): string {
+  if (restUrlPath.startsWith("http://") || restUrlPath.startsWith("https://")) {
+    return restUrlPath;
   }
-  return url;
+  return `${process.env.REACT_APP_REST_BASE_URL}/${restUrlPath}`;
+}
+
+function buildRequestUrlWithObject(
+  oscalObjectType: OscalObjectType,
+  partialRestData: any
+) {
+  return `${process.env.REACT_APP_REST_BASE_URL}/${oscalObjectType.restPath}/${
+    partialRestData[oscalObjectType.jsonRootName].uuid
+  }`;
+}
+
+export function buildRequestUrl(props: RequestUrlProps): string {
+  const { partialRestData, restUrlPath, oscalObjectType } = props;
+  if (!partialRestData && !oscalObjectType) {
+    return buildRequestUrlWithoutObject(restUrlPath!);
+  }
+  return buildRequestUrlWithObject(oscalObjectType!, partialRestData);
 }
 
 /**
@@ -145,12 +163,12 @@ export function buildRequestUrl(partialRestData, restUrlPath, oscalObjectType) {
  * @param onError function called on error with the error as an argument
  */
 export function performRequest(
-  restJsonPayload,
-  httpMethod,
-  requestUrl,
-  onPreRestRequest,
-  onSuccess,
-  onError
+  restJsonPayload: any,
+  httpMethod: string,
+  requestUrl: string,
+  onPreRestRequest: () => void,
+  onSuccess: (_: any) => void,
+  onError: (_: Error) => void
 ) {
   onPreRestRequest();
 
@@ -166,7 +184,7 @@ export function performRequest(
   fetch(requestUrl, requestInfo)
     .then(
       (response) => {
-        if (!response.ok) throw new Error(response.status);
+        if (!response.ok) throw new Error(response.status.toString());
         else return response.json();
       },
       (err) => onError(err)
@@ -194,21 +212,21 @@ export function performRequest(
  * @param onError function called on error with the error as an argument
  */
 export function createOrUpdateSspControlImplementationImplementedRequirementStatementByComponent(
-  partialRootRestData,
-  implementedRequirement,
-  statementId,
-  componentId,
-  description,
-  implementationSetParameters,
-  onPreRestRequest,
-  onSuccess,
-  onError
+  partialRootRestData: any,
+  implementedRequirement: any,
+  statementId: string,
+  componentId: string,
+  description: string,
+  implementationSetParameters: any,
+  onPreRestRequest: () => void,
+  onSuccess: (_: any) => void,
+  onError: (_: Error) => void
 ) {
   const partialRestImplementedRequirement = deepClone(implementedRequirement);
 
   // Find our statement
   let statement = partialRestImplementedRequirement.statements?.find(
-    (element) => element["statement-id"] === statementId
+    (element: any) => element["statement-id"] === statementId
   );
 
   // If our statement doesn't exist, create and add it
@@ -224,7 +242,7 @@ export function createOrUpdateSspControlImplementationImplementedRequirementStat
 
   // Find our statementByComponent
   let statementByComponent = statement["by-components"]?.find(
-    (element) => element["component-uuid"] === componentId
+    (element: any) => element["component-uuid"] === componentId
   );
   // If our statementByComponent doesn't exit, create and add it
   if (!statementByComponent) {
@@ -241,12 +259,12 @@ export function createOrUpdateSspControlImplementationImplementedRequirementStat
   if (implementationSetParameters?.length) {
     statementByComponent["set-parameters"] ??= [];
     implementationSetParameters
-      .filter((element) => !!element)
-      .forEach((implementationSetParameter) => {
+      .filter((element: any) => !!element)
+      .forEach((implementationSetParameter: any) => {
         const foundExistingSetParam = statementByComponent[
           "set-parameters"
         ].find(
-          (element) =>
+          (element: any) =>
             element["param-id"] === implementationSetParameter["param-id"]
         );
         if (foundExistingSetParam) {
@@ -266,7 +284,7 @@ export function createOrUpdateSspControlImplementationImplementedRequirementStat
   performRequest(
     { "implemented-requirement": partialRestImplementedRequirement },
     restMethods.PUT,
-    buildRequestUrl(null, requestUrl, null),
+    buildRequestUrl({ restUrlPath: requestUrl }),
     onPreRestRequest,
     onSuccess,
     onError
@@ -284,11 +302,11 @@ export function createOrUpdateSspControlImplementationImplementedRequirementStat
  * @param {*} onError function called on error with the error as an argument
  */
 export function createSspControlImplementationImplementedRequirement(
-  partialRootRestData,
-  newImplementedRequirement,
-  onPreRestRequest,
-  onSuccess,
-  onError
+  partialRootRestData: any,
+  newImplementedRequirement: any,
+  onPreRestRequest: () => void,
+  onSuccess: (_: any) => void,
+  onError: (_: Error) => void
 ) {
   const rootUuid = partialRootRestData[oscalObjectTypes.ssp.jsonRootName].uuid;
   const rootRestPath = `${oscalObjectTypes.ssp.restPath}/${rootUuid}`;
@@ -297,7 +315,7 @@ export function createSspControlImplementationImplementedRequirement(
   performRequest(
     { "implemented-requirement": newImplementedRequirement },
     restMethods.POST,
-    buildRequestUrl(null, requestUrl, null),
+    buildRequestUrl({ restUrlPath: requestUrl }),
     onPreRestRequest,
     onSuccess,
     onError
