@@ -24,7 +24,9 @@ import {
   Link as RouterLink,
   useLocation,
 } from "react-router-dom";
-
+import Grid from "@mui/material/Grid";
+import Switch from "@mui/material/Switch";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import {
   OSCALCatalogLoader,
   OSCALSSPLoader,
@@ -233,6 +235,21 @@ function App() {
               <Typography variant="h6" sx={{ flexGrow: 1 }}>
                 <Routes>{appBarRoutes}</Routes>
               </Typography>
+              {backendUrl && (
+                <Grid item xs={2} md={1}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={isRestMode}
+                        color="warning"
+                        onChange={onChangeRestMode}
+                        name="isRestMode"
+                      />
+                    }
+                    label="REST Mode"
+                  />
+                </Grid>
+              )}
               <Typography
                 variant="body2"
                 sx={{ color: "white", fontStyle: "italic" }}

@@ -4,8 +4,6 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import ReplayIcon from "@mui/icons-material/Replay";
-import Switch from "@mui/material/Switch";
-import FormControlLabel from "@mui/material/FormControlLabel";
 
 const OSCALDocumentForm = styled("form")(
   ({ theme }) => `
@@ -50,21 +48,6 @@ export default function OSCALLoaderForm(props) {
               </Button>
             </Grid>
           </>
-        )}
-        {props.backendUrl && (
-          <Grid item xs={2} md={1}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={props.isRestMode}
-                  color="primary"
-                  onChange={props.onChangeRestMode}
-                  name="isRestMode"
-                />
-              }
-              label="REST Mode"
-            />
-          </Grid>
         )}
       </Grid>
     </OSCALDocumentForm>
