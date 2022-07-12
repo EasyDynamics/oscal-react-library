@@ -7,7 +7,6 @@ import Grid from "@mui/material/Grid";
 import OSCALControlPart from "./OSCALControlPart";
 import OSCALControlModification from "./OSCALControlModification";
 
-// TODO - This is probably 800-53 specific?
 const isWithdrawn = (control) =>
   control?.props?.find(
     (prop) => prop.name === "status" && prop.value === "withdrawn"

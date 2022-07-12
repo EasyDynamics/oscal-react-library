@@ -352,11 +352,6 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     props.componentId
   );
 
-  // TODO - This approach may not scale well.  We're creating a ref for every
-  // editable field for every control statement/prose for every component before
-  // the user has even asked to edit.  However, other attempts resulted in a
-  // React error of: "Rendered more hooks than during the previous render".
-  // This should be investigated further.
   const statementByComponentDescription =
     statementByComponent?.description || null;
   const statementByComponentDescriptionRef = useRef(
@@ -412,14 +407,12 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
       }
       if (isEditingStatement) {
         // We're currently editing this statement, so build param input
-        // TODO - Populate implementationSetParameters with values from statementByComponent or empties
         const setParameter = statementByComponent?.["set-parameters"]?.find(
           (element) => element["param-id"] === segment
         ) ?? { "param-id": segment };
         setParameter.values ??= [null];
         const setParameterRef = setParametersRefs[segment];
 
-        // TODO - support for more than 1 item in values arrays
         return (
           <TextField
             id={`edit-bycomponent-${props.componentId}-statement-${props.statementId}-param-${segment}`}

@@ -19,8 +19,6 @@ export const OSCALBackMatterCard = styled(Card)(
 `
 );
 
-// TODO: Temporary fix for missing media type (https://github.com/GSA/fedramp-automation/issues/103)
-// Uses file extension instead
 const getURLMediaType = (url) => {
   const lastUrlPath = url.split("//").pop().split("/").pop();
   return lastUrlPath.match(/\.[A-Za-z]{3,4}($|\?)/) || "Unknown";

@@ -83,12 +83,6 @@ function isRelevantId(controlPartId, controlId, element, field) {
 function getModifications(controlPartId, controlId, modList, modText) {
   // Add everything with ids that match controlPartId
 
-  /* TODO: Differences in implementations of the OSCAL standard makes
-  /* this check needed; Certain implementations specify the control ID 
-  /* in the "by-id" field for top-level modifications, 
-  /* others leave "by-id" undefined. 
-  /* See if this can be cleaned up at some point if these differences are resolved.
-  */
   const controlParts = modList.filter((element) =>
     isRelevantId(controlPartId, controlId, element, "by-id")
   );
@@ -138,7 +132,6 @@ export default function OSCALControlModification(props) {
     modLength += len;
   }
 
-  // TODO(EGRC-407): Implement remove modifications
   // if (alter.removes) { }
 
   // Display modifications if there are any

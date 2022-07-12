@@ -24,8 +24,6 @@ export default function OSCALSspResolveProfile(
   if (!profileUrl.endsWith(".json")) {
     profileUrl = fixJsonUrls(profileUrl);
   }
-  // TODO - this is incorrect in the ssp-example.json data (https://github.com/usnistgov/oscal-content/issues/60, https://easydynamics.atlassian.net/browse/EGRC-266)
-  // TODO - this should be improved for other use cases
   if (!profileUrl.startsWith("http")) {
     profileUrl = `${parentUrl}/../${profileUrl}`;
   }

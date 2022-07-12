@@ -14,7 +14,6 @@ const OSCALControlPartWrapper = styled("div", {
   padding-left: ${(props) => (props.partName !== "statement" ? "2em" : "0")};
 `;
 
-// TODO - This is probably 800-53 specific?
 const getPartLabel = (props) =>
   props?.find((property) => property.name === "label")?.value;
 

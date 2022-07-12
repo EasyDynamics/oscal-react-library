@@ -1,8 +1,6 @@
 import getUriFromBackMatterByHref from "./OSCALBackMatterUtils";
 
 export function fixJsonUrls(absoluteUrl) {
-  // TODO this is incorrect in the profile (https://github.com/usnistgov/oscal-content/issues/59, https://easydynamics.atlassian.net/browse/EGRC-266)
-  // TODO this workaround must be improved in https://easydynamics.atlassian.net/browse/EGRC-296
   if (!absoluteUrl.endsWith(".xml")) {
     return absoluteUrl;
   }

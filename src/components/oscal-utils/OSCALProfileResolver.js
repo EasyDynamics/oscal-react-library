@@ -41,11 +41,9 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
 ) {
   let itemUrl = origItemUrl;
 
-  // TODO - this should be improved for other use cases
   if (!origItemUrl.startsWith("http")) {
     itemUrl = `${parentUrl}/../${origItemUrl}`;
   }
-  // TODO - remove this when OSCAL Content has fixed their issue with source
   if (itemUrl.includes("/content/nist.gov/")) {
     itemUrl = itemUrl.replace("/content/nist.gov/", "/nist.gov/");
   }
