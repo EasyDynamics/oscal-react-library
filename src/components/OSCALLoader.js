@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { styled } from "@mui/material/styles";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -44,7 +44,7 @@ const EditorSplit = styled(Split)`
 export default function OSCALLoader(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isResolutionComplete, setIsResolutionComplete] = useState(false);
-  const isRestMode = props.isRestMode;
+  const { isRestMode, backendUrl } = props;
   const [oscalData, setOscalData] = useState([]);
   const [editorIsVisible, setEditorIsVisible] = useState(true);
   const unmounted = useRef(false);
@@ -56,7 +56,7 @@ export default function OSCALLoader(props) {
   const [reloadCount, setReloadCount] = useState(0);
   const oscalObjectUuid = useParams()?.id ?? "";
   const buildOscalUrl = (uuid) =>
-    `${props.backendUrl}/${props.oscalObjectType.restPath}/${uuid}`;
+    `${backendUrl}/${props.oscalObjectType.restPath}/${uuid}`;
   const [oscalUrl, setOscalUrl] = useState(
     isRestMode ? null : props.oscalUrl || props.oscalObjectType.defaultUrl
   );
@@ -192,7 +192,7 @@ export default function OSCALLoader(props) {
     };
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isRestMode) {
       setOscalUrl(null);
       setIsLoaded(true);
@@ -217,7 +217,7 @@ export default function OSCALLoader(props) {
         isRestMode={isRestMode}
         isResolutionComplete={isResolutionComplete}
         onError={handleError}
-        backendUrl={props.backendUrl}
+        backendUrl={backendUrl}
       />
     );
   }
