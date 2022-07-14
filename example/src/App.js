@@ -137,7 +137,7 @@ function App() {
   );
 
   const oscalObjectLoaderProps = {
-    renderForm: true,
+    renderForm: !isRestMode,
     isRestMode,
     backendUrl,
   };

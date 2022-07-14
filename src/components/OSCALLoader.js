@@ -183,14 +183,12 @@ export default function OSCALLoader(props) {
   // Note: the empty deps array [] means
   // this useEffect will run once
   // similar to componentDidMount()
-  useEffect(() => {
-    if (!isRestMode) {
-      loadOscalData(oscalUrl);
-    }
-    return () => {
+  useEffect(
+    () => () => {
       unmounted.current = true;
-    };
-  }, []);
+    },
+    []
+  );
 
   useLayoutEffect(() => {
     if (isRestMode) {
@@ -206,7 +204,7 @@ export default function OSCALLoader(props) {
   }, [isRestMode]);
 
   let form;
-  if (props.renderForm) {
+  if (props.renderForm && oscalUrl) {
     form = (
       <OSCALLoaderForm
         oscalObjectType={props.oscalObjectType}
