@@ -23,6 +23,7 @@ import {
   Routes,
   Link as RouterLink,
   useLocation,
+  useParams,
 } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Switch from "@mui/material/Switch";
@@ -63,6 +64,13 @@ function App() {
   );
   const [backendUrl] = useState(process.env.REACT_APP_REST_BASE_URL);
   const [hasDefaultUrl, setHasDefaultUrl] = useState(false);
+  const oscalObjectUuid = useParams()?.id ?? "";
+
+  useEffect(() => {
+    if (!oscalObjectUuid) {
+      setIsDrawerOpen(true);
+    }
+  }, [oscalObjectUuid]);
 
   const appType = React.useMemo(
     () => (isRestMode ? "Editor" : "Viewer"),
@@ -73,7 +81,10 @@ function App() {
   }, [appType]);
 
   const handleAppNavOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+    if (event) {
+      setAnchorEl(event.currentTarget);
+    }
+
     setIsDrawerOpen(true);
   };
 
@@ -177,6 +188,7 @@ function App() {
       open={isDrawerOpen}
       handleClose={handleAppNavClose}
       backendUrl={backendUrl}
+      handleOpen={handleAppNavOpen}
     />
   ) : (
     <Menu
