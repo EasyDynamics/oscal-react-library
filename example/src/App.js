@@ -225,55 +225,75 @@ function App() {
         <div className="App">
           <AppBar position="static">
             <Toolbar>
-              <OpenNavButton
-                edge="start"
-                onClick={handleAppNavOpen}
-                color="inherit"
-                aria-label="menu"
-                size="large"
-              >
-                <MenuIcon />
-              </OpenNavButton>
-              {navigation}
-              <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                <Routes>{appBarRoutes}</Routes>
-              </Typography>
-              {backendUrl && (
-                <Grid item xs={2} md={1}>
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        checked={isRestMode}
-                        color="warning"
-                        onChange={onChangeRestMode}
-                        name="isRestMode"
-                      />
-                    }
-                    label="REST Mode"
-                  />
+              <Grid container alignItems="center">
+                <Grid item md={4} align="left">
+                  <Grid container alignItems="center">
+                    <Grid item align="left">
+                      <OpenNavButton
+                        edge="start"
+                        onClick={handleAppNavOpen}
+                        color="inherit"
+                        aria-label="menu"
+                        size="large"
+                      >
+                        <MenuIcon />
+                      </OpenNavButton>
+                      {navigation}
+                    </Grid>
+                    <Grid item align="left">
+                      <Typography variant="h6">
+                        <Routes>{appBarRoutes}</Routes>
+                      </Typography>
+                    </Grid>
+                  </Grid>
                 </Grid>
-              )}
-              <Typography
-                variant="body2"
-                sx={{ color: "white", fontStyle: "italic" }}
-              >
-                Powered by
-              </Typography>
-              <Button
-                href="https://www.easydynamics.com"
-                target="_blank"
-                sx={{ color: "white" }}
-              >
-                <LogoImage src={logo} alt="Easy Dynamics Logo" />
-              </Button>
-              <IconButton
-                href="https://github.com/EasyDynamics/oscal-react-library"
-                target="_blank"
-                rel="noreferrer"
-                size="large"
-              >
-                <GitHubIcon htmlColor="white" />
-              </IconButton>
+                <Grid item md={4}>
+                  <Grid container alignItems="center" justifyContent="center">
+                    <Grid item align="center">
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "white", fontStyle: "italic" }}
+                      >  
+                        Powered by
+                      </Typography>
+                    </Grid>
+                    <Grid item align="center">
+                      <Button
+                        href="https://www.easydynamics.com"
+                        target="_blank"
+                        sx={{ color: "white" }}
+                      >
+                        <LogoImage src={logo} alt="Easy Dynamics Logo" />
+                      </Button>
+                    </Grid>
+                    <Grid item align="center">  
+                      <IconButton
+                        href="https://github.com/EasyDynamics/oscal-react-library"
+                        target="_blank"
+                        rel="noreferrer"
+                        size="large"
+                      >
+                        <GitHubIcon htmlColor="white" />
+                      </IconButton>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                {backendUrl && (
+                  <Grid item md={4} align="right">
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={isRestMode}
+                          color="warning"
+                          onChange={onChangeRestMode}
+                          name="isRestMode"
+                        />
+                      }
+                      label="REST Mode"
+                    />
+                  </Grid>
+                )}
+              </Grid>
             </Toolbar>
           </AppBar>
           <Container maxWidth={false} component="main">

@@ -4,6 +4,7 @@ import { styled } from "@mui/material/styles";
 import CircularProgress from "@mui/material/CircularProgress";
 import Split from "react-split";
 import { Box, Fab } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import CodeIcon from "@mui/icons-material/Code";
 import { useParams } from "react-router-dom";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
@@ -56,7 +57,7 @@ export default function OSCALLoader(props) {
   const [reloadCount, setReloadCount] = useState(0);
   const oscalObjectUuid = useParams()?.id ?? "";
   const buildOscalUrl = (uuid) =>
-    `${backendUrl}/${props.oscalObjectType.restPath}/${uuid}`;
+  `${backendUrl}/${props.oscalObjectType.restPath}/${uuid}`;
   const [oscalUrl, setOscalUrl] = useState(
     isRestMode ? null : props.oscalUrl || props.oscalObjectType.defaultUrl
   );
@@ -222,10 +223,14 @@ export default function OSCALLoader(props) {
 
   let result;
   if (!isLoaded) {
-    result = <CircularProgress />;
+    result = (
+      <Grid container pt={3}>
+        <CircularProgress />
+      </Grid>
+    );
   } else if (oscalUrl) {
     result = isRestMode ? (
-      <>
+      <Grid container pt={3}>
         <EditorToolbar>
           <Fab
             aria-label="show code"
@@ -261,7 +266,7 @@ export default function OSCALLoader(props) {
             )}
           </Box>
         </EditorSplit>
-      </>
+      </Grid>
     ) : (
       <>
         {props.renderer(
