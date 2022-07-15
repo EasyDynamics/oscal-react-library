@@ -132,8 +132,6 @@ export default function OSCALControlModification(props) {
     modLength += len;
   }
 
-  // if (alter.removes) { }
-
   // Display modifications if there are any
   if (!modLength) return null;
   return (
