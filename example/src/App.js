@@ -62,6 +62,7 @@ function App() {
     !!process.env.REACT_APP_REST_BASE_URL
   );
   const [backendUrl] = useState(process.env.REACT_APP_REST_BASE_URL);
+  const [hasDefaultUrl, setHasDefaultUrl] = useState(false);
 
   const appType = React.useMemo(
     () => (isRestMode ? "Editor" : "Viewer"),
@@ -139,6 +140,8 @@ function App() {
   const oscalObjectLoaderProps = {
     renderForm: !isRestMode,
     isRestMode,
+    hasDefaultUrl,
+    setHasDefaultUrl,
     backendUrl,
   };
 
@@ -216,6 +219,7 @@ function App() {
 
   const onChangeRestMode = (event) => {
     setIsRestMode(event.target.checked);
+    setHasDefaultUrl(false);
   };
 
   return (
@@ -253,7 +257,7 @@ function App() {
                       <Typography
                         variant="body2"
                         sx={{ color: "white", fontStyle: "italic" }}
-                      >  
+                      >
                         Powered by
                       </Typography>
                     </Grid>
@@ -266,7 +270,7 @@ function App() {
                         <LogoImage src={logo} alt="Easy Dynamics Logo" />
                       </Button>
                     </Grid>
-                    <Grid item align="center">  
+                    <Grid item align="center">
                       <IconButton
                         href="https://github.com/EasyDynamics/oscal-react-library"
                         target="_blank"

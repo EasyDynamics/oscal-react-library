@@ -45,7 +45,7 @@ const EditorSplit = styled(Split)`
 export default function OSCALLoader(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isResolutionComplete, setIsResolutionComplete] = useState(false);
-  const { isRestMode, backendUrl } = props;
+  const [hasDefaultUrl, setHasDefaultUrl] = useState(props.hasDefaultUrl);
   const [oscalData, setOscalData] = useState([]);
   const [editorIsVisible, setEditorIsVisible] = useState(true);
   const unmounted = useRef(false);
@@ -57,9 +57,9 @@ export default function OSCALLoader(props) {
   const [reloadCount, setReloadCount] = useState(0);
   const oscalObjectUuid = useParams()?.id ?? "";
   const buildOscalUrl = (uuid) =>
-  `${backendUrl}/${props.oscalObjectType.restPath}/${uuid}`;
+    `${props.backendUrl}/${props.oscalObjectType.restPath}/${uuid}`;
   const [oscalUrl, setOscalUrl] = useState(
-    isRestMode ? null : props.oscalUrl || props.oscalObjectType.defaultUrl
+    props.isRestMode ? null : props.oscalUrl || props.oscalObjectType.defaultUrl
   );
 
   const loadOscalData = (newOscalUrl) => {
@@ -192,20 +192,22 @@ export default function OSCALLoader(props) {
   );
 
   useLayoutEffect(() => {
-    if (isRestMode) {
+    if (props.isRestMode) {
       setOscalUrl(null);
       setIsLoaded(true);
       setIsResolutionComplete(true);
+      setHasDefaultUrl(false);
     } else {
       setOscalUrl(props.oscalObjectType.defaultUrl);
       loadOscalData(props.oscalObjectType.defaultUrl);
       setIsLoaded(false);
       setIsResolutionComplete(false);
+      setHasDefaultUrl(true);
     }
-  }, [isRestMode]);
+  }, [props.isRestMode]);
 
   let form;
-  if (props.renderForm && oscalUrl) {
+  if (props.renderForm && hasDefaultUrl) {
     form = (
       <OSCALLoaderForm
         oscalObjectType={props.oscalObjectType}
@@ -213,10 +215,10 @@ export default function OSCALLoader(props) {
         onUrlChange={handleUrlChange}
         onUuidChange={handleUuidChange}
         onReloadClick={handleReload}
-        isRestMode={isRestMode}
+        isRestMode={props.isRestMode}
         isResolutionComplete={isResolutionComplete}
         onError={handleError}
-        backendUrl={backendUrl}
+        backendUrl={props.backendUrl}
       />
     );
   }
@@ -229,7 +231,7 @@ export default function OSCALLoader(props) {
       </Grid>
     );
   } else if (oscalUrl) {
-    result = isRestMode ? (
+    result = props.isRestMode ? (
       <Grid container pt={3}>
         <EditorToolbar>
           <Fab
@@ -256,7 +258,7 @@ export default function OSCALLoader(props) {
           </Box>
           <Box>
             {props.renderer(
-              isRestMode,
+              props.isRestMode,
               oscalData,
               oscalUrl,
               onResolutionComplete,
@@ -270,7 +272,7 @@ export default function OSCALLoader(props) {
     ) : (
       <>
         {props.renderer(
-          isRestMode,
+          props.isRestMode,
           oscalData,
           oscalUrl,
           onResolutionComplete,
@@ -294,7 +296,7 @@ export default function OSCALLoader(props) {
           setIsResolutionComplete(true);
           setIsLoaded(true);
         }}
-        resetKeys={[reloadCount, isRestMode, oscalUrl]}
+        resetKeys={[reloadCount, props.isRestMode, oscalUrl]}
       >
         <ErrorThrower error={error} />
         {result}
