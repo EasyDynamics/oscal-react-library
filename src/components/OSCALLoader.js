@@ -192,7 +192,11 @@ export default function OSCALLoader(props) {
   );
 
   useLayoutEffect(() => {
-    if (props.isRestMode) {
+    if (oscalObjectUuid) {
+      setIsLoaded(true);
+      setIsResolutionComplete(true);
+      setHasDefaultUrl(true);
+    } else if (props.isRestMode) {
       setOscalUrl(null);
       setIsLoaded(true);
       setIsResolutionComplete(true);
