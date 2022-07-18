@@ -3,8 +3,8 @@ name: Update dependencies
 
 on:
   schedule:
-    # Run daily at 12:15 UTC (08:15 EDT/07:15 EST)
-    - cron: "15 12 * * *"
+    # Run daily (Monday-Friday) at 12:15 UTC (08:15 EDT/07:15 EST)
+    - cron: "15 12 * * 1-5"
   workflow_dispatch:
 
 # This workflow needs to leverage a GitHub Personal Access Token (PAT) in order
