@@ -7,6 +7,10 @@ import Grid from "@mui/material/Grid";
 import OSCALControlPart from "./OSCALControlPart";
 import OSCALControlModification from "./OSCALControlModification";
 
+/* TODO: This is probably 800-53 specific and it should be extracted if
+/* EasyGRC is intended to be used with other frameworks.
+/* https://github.com/EasyDynamics/oscal-react-library/issues/504 */
+
 const isWithdrawn = (control) =>
   control?.props?.find(
     (prop) => prop.name === "status" && prop.value === "withdrawn"

@@ -24,6 +24,9 @@ export default function OSCALSspResolveProfile(
   if (!profileUrl.endsWith(".json")) {
     profileUrl = fixJsonUrls(profileUrl);
   }
+
+  // TODO: This should be improved for other use cases. https://github.com/EasyDynamics/oscal-react-library/issues/505
+
   if (!profileUrl.startsWith("http")) {
     profileUrl = `${parentUrl}/../${profileUrl}`;
   }
