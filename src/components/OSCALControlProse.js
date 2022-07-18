@@ -353,7 +353,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   );
 
   // TODO: A React error is thrown unless a ref is created
-  // here. There should be an approach that does not require a ref created 
+  // here. There should be an approach that does not require a ref created
   // or each of these before editing. https://github.com/EasyDynamics/oscal-react-library/issues/499
 
   const statementByComponentDescription =

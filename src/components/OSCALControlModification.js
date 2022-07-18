@@ -83,7 +83,7 @@ function isRelevantId(controlPartId, controlId, element, field) {
 function getModifications(controlPartId, controlId, modList, modText) {
   // Add everything with ids that match controlPartId
 
-  // TODO: Some OSCAL standard implementations specify the control ID in 
+  // TODO: Some OSCAL standard implementations specify the control ID in
   // the "by-id" field, others do not, which is what makes this check needed.
   // If these implementation differences are resolved, this should be cleaned up.
   // https://github.com/EasyDynamics/oscal-react-library/issues/498
