@@ -352,9 +352,9 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     props.componentId
   );
 
-  /* TODO: A React error is thrown unless a ref is created
-  /* here. There should be an approach that does not require a ref created 
-  /* or each of these before editing. https://github.com/EasyDynamics/oscal-react-library/issues/499 */
+  // TODO: A React error is thrown unless a ref is created
+  // here. There should be an approach that does not require a ref created 
+  // or each of these before editing. https://github.com/EasyDynamics/oscal-react-library/issues/499
 
   const statementByComponentDescription =
     statementByComponent?.description || null;
@@ -411,14 +411,14 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
       }
       if (isEditingStatement) {
         // We're currently editing this statement, so build param input
-        /* TODO: Populate implementationSetParameters with values from statementByComponent or empties.
-        /* https://github.com/EasyDynamics/oscal-react-library/issues/503 */
+        // TODO: Populate implementationSetParameters with values from statementByComponent or empties.
+        // https://github.com/EasyDynamics/oscal-react-library/issues/503
         const setParameter = statementByComponent?.["set-parameters"]?.find(
           (element) => element["param-id"] === segment
         ) ?? { "param-id": segment };
         setParameter.values ??= [null];
         const setParameterRef = setParametersRefs[segment];
-        /* TODO: Support for more than one item in values array https://github.com/EasyDynamics/oscal-react-library/issues/501 */
+        // TODO: Support for more than one item in values array https://github.com/EasyDynamics/oscal-react-library/issues/501
         return (
           <TextField
             id={`edit-bycomponent-${props.componentId}-statement-${props.statementId}-param-${segment}`}
