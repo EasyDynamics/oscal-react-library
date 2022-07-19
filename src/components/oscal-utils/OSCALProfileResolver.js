@@ -41,11 +41,15 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
 ) {
   let itemUrl = origItemUrl;
 
-  // TODO - this should be improved for other use cases
+  // TODO: This should be improved for other use cases.
+  // https://github.com/EasyDynamics/oscal-react-library/issues/505
   if (!origItemUrl.startsWith("http")) {
     itemUrl = `${parentUrl}/../${origItemUrl}`;
   }
-  // TODO - remove this when OSCAL Content has fixed their issue with source
+
+  // TODO: This is only necessary because of a source issue with OSCAL Content.
+  // Once the issue has been resolved, this can be removed.
+  // https://github.com/EasyDynamics/oscal-react-library/issues/502
   if (itemUrl.includes("/content/nist.gov/")) {
     itemUrl = itemUrl.replace("/content/nist.gov/", "/nist.gov/");
   }
