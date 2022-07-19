@@ -196,6 +196,14 @@ export default function OSCALLoader(props) {
       setIsLoaded(true);
       setIsResolutionComplete(true);
       setHasDefaultUrl(true);
+      // Handle uuid displaying in url depending on REST mode
+      window.history.pushState(
+        "",
+        "",
+        `/${props.oscalObjectType.jsonRootName}/${
+          props.isRestMode ? `${oscalObjectUuid}` : ``
+        }`
+      );
     } else if (props.isRestMode) {
       setOscalUrl(null);
       setIsLoaded(true);
