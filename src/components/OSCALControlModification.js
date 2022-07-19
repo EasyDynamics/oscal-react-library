@@ -87,7 +87,6 @@ function getModifications(controlPartId, controlId, modList, modText) {
   // the "by-id" field, others do not, which is what makes this check needed.
   // If these implementation differences are resolved, this should be cleaned up.
   // https://github.com/EasyDynamics/oscal-react-library/issues/498
-
   const controlParts = modList.filter((element) =>
     isRelevantId(controlPartId, controlId, element, "by-id")
   );
@@ -136,10 +135,6 @@ export default function OSCALControlModification(props) {
     );
     modLength += len;
   }
-
-  // TODO: There should also be a way to get all remove modifications so that
-  // users can better understand control modifications with an OSCAL Profile.
-  // https://github.com/EasyDynamics/oscal-react-library/issues/89
 
   // Display modifications if there are any
   if (!modLength) return null;

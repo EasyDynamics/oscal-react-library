@@ -74,7 +74,8 @@ export default function OSCALLoader(props) {
       .then((result) => {
         if (!unmounted.current) {
           // TODO: Currently data is passed to components through modifying objects.
-          // This approach should be revisited. https://github.com/EasyDynamics/oscal-react-library/issues/297
+          // This approach should be revisited.
+          // https://github.com/EasyDynamics/oscal-react-library/issues/297
           /* eslint no-param-reassign: "error" */
           result.oscalSource = JSON.stringify(result, null, "\t");
           setOscalData(result);

@@ -41,8 +41,8 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
 ) {
   let itemUrl = origItemUrl;
 
-  // TODO: This should be improved for other use cases. https://github.com/EasyDynamics/oscal-react-library/issues/505
-
+  // TODO: This should be improved for other use cases.
+  // https://github.com/EasyDynamics/oscal-react-library/issues/505
   if (!origItemUrl.startsWith("http")) {
     itemUrl = `${parentUrl}/../${origItemUrl}`;
   }

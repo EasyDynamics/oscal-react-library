@@ -352,10 +352,12 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     props.componentId
   );
 
-  // TODO: A React error is thrown unless a ref is created
-  // here. There should be an approach that does not require a ref created
-  // or each of these before editing. https://github.com/EasyDynamics/oscal-react-library/issues/499
-
+  // TODO: This approach may not scale well. We're creating a ref
+  // for every editable field for every control statement/prose for every
+  // component before the user has even asked to edit. However, other attempts
+  // resulted in a React error of: "Rendered more hooks than during the previous
+  // render." This should be investigated further.
+  // https://github.com/EasyDynamics/oscal-react-library/issues/499
   const statementByComponentDescription =
     statementByComponent?.description || null;
   const statementByComponentDescriptionRef = useRef(
@@ -418,7 +420,8 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
         ) ?? { "param-id": segment };
         setParameter.values ??= [null];
         const setParameterRef = setParametersRefs[segment];
-        // TODO: Support for more than one item in values array https://github.com/EasyDynamics/oscal-react-library/issues/501
+        // TODO: Support for more than one item in values array
+        // https://github.com/EasyDynamics/oscal-react-library/issues/501
         return (
           <TextField
             id={`edit-bycomponent-${props.componentId}-statement-${props.statementId}-param-${segment}`}

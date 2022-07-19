@@ -19,6 +19,8 @@ export const OSCALBackMatterCard = styled(Card)(
 `
 );
 
+// TODO: Remove workaround for missing media type
+// https://github.com/EasyDynamics/oscal-react-library/issues/512
 const getURLMediaType = (url) => {
   const lastUrlPath = url.split("//").pop().split("/").pop();
   return lastUrlPath.match(/\.[A-Za-z]{3,4}($|\?)/) || "Unknown";
