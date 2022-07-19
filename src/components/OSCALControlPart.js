@@ -14,8 +14,8 @@ const OSCALControlPartWrapper = styled("div", {
   padding-left: ${(props) => (props.partName !== "statement" ? "2em" : "0")};
 `;
 
-// TODO: This is probably 800-53 specific and it should be extracted if
-// EasyGRC is intended to be used with other frameworks.
+// TODO: This is probably 800-53 specific and it should be made more
+// generic to allow the library to work with other frameworks.
 // https://github.com/EasyDynamics/oscal-react-library/issues/504
 const getPartLabel = (props) =>
   props?.find((property) => property.name === "label")?.value;
