@@ -23,7 +23,6 @@ import {
   Routes,
   Link as RouterLink,
   useLocation,
-  useParams,
 } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Switch from "@mui/material/Switch";
@@ -64,13 +63,19 @@ function App() {
   );
   const [backendUrl] = useState(process.env.REACT_APP_REST_BASE_URL);
   const [hasDefaultUrl, setHasDefaultUrl] = useState(false);
-  const oscalObjectUuid = useParams()?.id ?? "";
 
   useEffect(() => {
-    if (!oscalObjectUuid) {
+    const currentUrl = window.location.href;
+    // Open the drawer when in REST mode and no uuid is present.
+    // Note: The lowest subdirectory of the url is extracted to see if
+    // it contains a uuid.
+    if (
+      isRestMode &&
+      currentUrl.substring(currentUrl.lastIndexOf("/") + 1) === ""
+    ) {
       setIsDrawerOpen(true);
     }
-  }, [oscalObjectUuid]);
+  }, [isRestMode]);
 
   const appType = React.useMemo(
     () => (isRestMode ? "Editor" : "Viewer"),
