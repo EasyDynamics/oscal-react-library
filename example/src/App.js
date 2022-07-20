@@ -64,6 +64,19 @@ function App() {
   const [backendUrl] = useState(process.env.REACT_APP_REST_BASE_URL);
   const [hasDefaultUrl, setHasDefaultUrl] = useState(false);
 
+  useEffect(() => {
+    const currentUrl = window.location.href;
+    // Open the drawer when in REST mode and no uuid is present.
+    // Note: The lowest subdirectory of the url is extracted to see if
+    // it contains a uuid.
+    if (
+      isRestMode &&
+      currentUrl.substring(currentUrl.lastIndexOf("/") + 1) === ""
+    ) {
+      setIsDrawerOpen(true);
+    }
+  }, [isRestMode]);
+
   const appType = React.useMemo(
     () => (isRestMode ? "Editor" : "Viewer"),
     [isRestMode]
@@ -73,7 +86,10 @@ function App() {
   }, [appType]);
 
   const handleAppNavOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+    if (event) {
+      setAnchorEl(event.currentTarget);
+    }
+
     setIsDrawerOpen(true);
   };
 
@@ -177,6 +193,7 @@ function App() {
       open={isDrawerOpen}
       handleClose={handleAppNavClose}
       backendUrl={backendUrl}
+      handleOpen={handleAppNavOpen}
     />
   ) : (
     <Menu
