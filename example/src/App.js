@@ -52,6 +52,14 @@ const LogoImage = styled("img")`
   margin-right: 1em;
 `;
 
+const StyledFooter = styled("footer")(
+  ({ theme }) => `
+  height: 50px;
+  margin-top: -50px;
+  background-color: ${theme.palette.primary.main};
+`
+);
+
 function App() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -244,82 +252,119 @@ function App() {
       <ThemeProvider theme={appTheme}>
         <CssBaseline />
         <div className="App">
-          <AppBar position="static">
-            <Toolbar>
-              <Grid container alignItems="center">
-                <Grid item md={4} align="left">
-                  <Grid container alignItems="center">
-                    <Grid item align="left">
-                      <OpenNavButton
-                        edge="start"
-                        onClick={handleAppNavOpen}
-                        color="inherit"
-                        aria-label="menu"
-                        size="large"
-                      >
-                        <MenuIcon />
-                      </OpenNavButton>
-                      {navigation}
-                    </Grid>
-                    <Grid item align="left">
-                      <Typography variant="h6">
-                        <Routes>{appBarRoutes}</Routes>
-                      </Typography>
+          <div style={{ "min-height": "100vh" }}>
+            <AppBar position="static">
+              <Toolbar>
+                <Grid container alignItems="center">
+                  <Grid item md={4} align="left">
+                    <Grid container alignItems="center">
+                      <Grid item align="left">
+                        <OpenNavButton
+                          edge="start"
+                          onClick={handleAppNavOpen}
+                          color="inherit"
+                          aria-label="menu"
+                          size="large"
+                        >
+                          <MenuIcon />
+                        </OpenNavButton>
+                        {navigation}
+                      </Grid>
+                      <Grid item align="left">
+                        <Typography variant="h6">
+                          <Routes>{appBarRoutes}</Routes>
+                        </Typography>
+                      </Grid>
                     </Grid>
                   </Grid>
+                  <Grid item md={4}>
+                    <Grid container alignItems="center" justifyContent="center">
+                      <Grid item align="center">
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "white", fontStyle: "italic" }}
+                        >
+                          Powered by
+                        </Typography>
+                      </Grid>
+                      <Grid item align="center">
+                        <Button
+                          href="https://www.easydynamics.com"
+                          target="_blank"
+                          sx={{ color: "white" }}
+                        >
+                          <LogoImage src={logo} alt="Easy Dynamics Logo" />
+                        </Button>
+                      </Grid>
+                      <Grid item align="center">
+                        <IconButton
+                          href="https://github.com/EasyDynamics/oscal-react-library"
+                          target="_blank"
+                          rel="noreferrer"
+                          size="large"
+                        >
+                          <GitHubIcon htmlColor="white" />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  {backendUrl && (
+                    <Grid item md={4} align="right">
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={isRestMode}
+                            color="warning"
+                            onChange={onChangeRestMode}
+                            name="isRestMode"
+                          />
+                        }
+                        label="REST Mode"
+                      />
+                    </Grid>
+                  )}
                 </Grid>
-                <Grid item md={4}>
-                  <Grid container alignItems="center" justifyContent="center">
-                    <Grid item align="center">
-                      <Typography
-                        variant="body2"
-                        sx={{ color: "white", fontStyle: "italic" }}
-                      >
-                        Powered by
-                      </Typography>
-                    </Grid>
-                    <Grid item align="center">
-                      <Button
-                        href="https://www.easydynamics.com"
-                        target="_blank"
-                        sx={{ color: "white" }}
-                      >
-                        <LogoImage src={logo} alt="Easy Dynamics Logo" />
-                      </Button>
-                    </Grid>
-                    <Grid item align="center">
-                      <IconButton
-                        href="https://github.com/EasyDynamics/oscal-react-library"
-                        target="_blank"
-                        rel="noreferrer"
-                        size="large"
-                      >
-                        <GitHubIcon htmlColor="white" />
-                      </IconButton>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                {backendUrl && (
-                  <Grid item md={4} align="right">
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={isRestMode}
-                          color="warning"
-                          onChange={onChangeRestMode}
-                          name="isRestMode"
-                        />
-                      }
-                      label="REST Mode"
-                    />
-                  </Grid>
-                )}
+              </Toolbar>
+            </AppBar>
+            <Container
+              maxWidth={false}
+              component="main"
+              style={{ "padding-bottom": "50px" }}
+            >
+              <Routes>{navRoutes}</Routes>
+            </Container>
+          </div>
+          <StyledFooter>
+            <Grid container alignItems="center" justifyContent="center">
+              <Grid item align="center">
+                <Typography
+                  variant="body2"
+                  sx={{ color: "white", fontStyle: "italic" }}
+                >
+                  Powered by
+                </Typography>
               </Grid>
-            </Toolbar>
-          </AppBar>
-          <Container maxWidth={false} component="main">
-            <Routes>{navRoutes}</Routes>
-          </Container>
+              <Grid item align="center">
+                <Button
+                  href="https://www.easydynamics.com"
+                  target="_blank"
+                  sx={{ color: "white" }}
+                >
+                  <LogoImage src={logo} alt="Easy Dynamics Logo" />
+                </Button>
+              </Grid>
+              <Grid item align="center">
+                <IconButton
+                  href="https://github.com/EasyDynamics/oscal-react-library"
+                  target="_blank"
+                  rel="noreferrer"
+                  size="large"
+                >
+                  <GitHubIcon htmlColor="white" />
+                </IconButton>
+              </Grid>
+            </Grid>
+          </StyledFooter>
         </div>
       </ThemeProvider>
     </StyledEngineProvider>
