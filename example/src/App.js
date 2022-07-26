@@ -54,9 +54,13 @@ const LogoImage = styled("img")`
 
 const StyledFooter = styled("footer")(
   ({ theme }) => `
-  height: 50px;
-  margin-top: -50px;
-  background-color: ${theme.palette.primary.main};
+    position: fixed;
+    height: 50px;
+    width: 100vw;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    background-color: ${theme.palette.primary.main};
 `
 );
 

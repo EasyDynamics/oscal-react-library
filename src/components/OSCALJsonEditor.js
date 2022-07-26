@@ -42,7 +42,7 @@ export default function OSCALJsonEditor(props) {
       </Grid>
       <Grid sx={{ width: "100%" }} item>
         <Editor
-          height="85vh"
+          height="83vh"
           options={editorOptions}
           onMount={(editor) => {
             editorRef.current = editor;
