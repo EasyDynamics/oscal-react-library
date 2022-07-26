@@ -201,7 +201,7 @@ export default function OSCALLoader(props) {
         "",
         "",
         `/${props.oscalObjectType.jsonRootName}/${
-          props.isRestMode ? `${oscalObjectUuid}` : ``
+          props.isRestMode ? `${oscalObjectUuid}` : ""
         }`
       );
     } else if (props.isRestMode) {
