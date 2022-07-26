@@ -19,7 +19,7 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
           cache: "npm"
       - name: Globally update npm
         run: npm install -g npm@latest
