@@ -76,7 +76,8 @@ jobs:
           private_key: ${{ secrets.APP_PRIVATE_KEY }}
           permissions: >-
             {
-              "pull_requests": "write"
+              "pull_requests": "write",
+              "members": "read"
             }
       - name: Assign reviewers
         uses: actions/github-script@v6
