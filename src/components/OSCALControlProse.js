@@ -370,6 +370,11 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     });
   }
 
+  // if (props.parameters?.length > 0) {
+  //   props.parameters.forEach((parameter) => {
+  //     setParametersRefs[parameter.id] = useRef();
+  //   });
+  // }
   if (!statementByComponent && !isEditingStatement) {
     // We don't have a by component implementation, but we're not editing, so just display param labels
     return (
@@ -399,7 +404,6 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
       </Grid>
     );
   }
-
   const implReqSetParameters = getImplReqSetParameters(
     props.implementedRequirement?.statements,
     props.componentId
@@ -436,13 +440,47 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
           />
         );
       }
-      // We're not editing this statement, so return param value
-      return getParameterValueSegment(
+      const parameterValue = getParameterValue(
         statementByComponent,
         implReqSetParameters,
-        segment,
-        props.modificationSetParameters,
-        index.toString()
+        segment
+      );
+
+      if (parameterValue) {
+        return getParameterValueSegment(
+          statementByComponent,
+          implReqSetParameters,
+          segment,
+          props.modificationSetParameters,
+          index.toString()
+        );
+      }
+
+      return (
+        <Grid container spacing={2}>
+          <Grid item xs={11}>
+            <OSCALReplacedProseWithParameterLabel
+              label={props.label}
+              key={props.prose}
+              prose={props.prose}
+              parameters={props.parameters}
+              modificationDisplay={props.modificationDisplay}
+            />
+          </Grid>
+          <OSCALStatementEditControlsContainer item xs={1}>
+            {props.isEditable && !isEditingStatement ? (
+              <IconButton
+                aria-label={`edit-bycomponent-${props.componentId}-statement-${props.statementId}`}
+                size="small"
+                onClick={() => {
+                  setIsEditingStatement(!isEditingStatement);
+                }}
+              >
+                <EditIcon fontSize="small" />
+              </IconButton>
+            ) : null}
+          </OSCALStatementEditControlsContainer>
+        </Grid>
       );
     });
 
