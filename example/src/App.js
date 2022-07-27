@@ -52,6 +52,14 @@ const LogoImage = styled("img")`
   margin-right: 1em;
 `;
 
+const StyledAppBar = styled(AppBar)`
+  position: fixed;
+  height: 65px;
+  top: 0;
+  left: 0;
+  z-index: 2;
+`;
+
 const StyledFooter = styled("footer")(
   ({ theme }) => `
     position: fixed;
@@ -257,9 +265,9 @@ function App() {
         <CssBaseline />
         <div className="App">
           <div style={{ "min-height": "100vh" }}>
-            <AppBar position="static">
+            <StyledAppBar>
               <Toolbar>
-                <Grid container alignItems="center">
+                <Grid container alignItems="center" justify="center">
                   <Grid item md={3} align="left">
                     <OpenNavButton
                       edge="start"
@@ -294,11 +302,11 @@ function App() {
                   )}
                 </Grid>
               </Toolbar>
-            </AppBar>
+            </StyledAppBar>
             <Container
               maxWidth={false}
               component="main"
-              style={{ "padding-bottom": "50px" }}
+              style={{ "padding-top": "65px", "padding-bottom": "50px" }}
             >
               <Routes>{navRoutes}</Routes>
             </Container>
