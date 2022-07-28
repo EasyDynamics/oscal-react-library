@@ -255,7 +255,8 @@ function getParameterValueSegment(
   implReqSetParameters,
   parameterId,
   modificationSetParameters,
-  key
+  key,
+  parameters
 ) {
   const parameterValue = getParameterValue(
     statementByComponent,
@@ -267,22 +268,45 @@ function getParameterValueSegment(
     parameterId
   );
 
-  if (!constraintsDisplay.length) {
+  if (parameterValue) {
+    if (!constraintsDisplay.length) {
+      return (
+        <ParamValue component="span" key={`param-value-key-${key}`}>
+          {parameterValue}
+        </ParamValue>
+      );
+    }
     return (
-      <ParamValue component="span" key={`param-value-key-${key}`}>
-        {parameterValue}
-      </ParamValue>
+      <SegmentTooltipWrapper
+        constraintsDisplay={constraintsDisplay}
+        key={`segment-wrapper-key-${key}`}
+      >
+        <ParamValue component="span" key={`param-value-key-${key}`}>
+          {parameterValue}
+        </ParamValue>
+      </SegmentTooltipWrapper>
     );
   }
-
+  const parameterLabelText = getParameterLabelText(
+    parameters,
+    parameterId,
+    modificationSetParameters
+  );
+  if (!constraintsDisplay.length) {
+    return (
+      <ParamLabel component="span" key={`param-label-key-${key}`}>
+        {parameterLabelText}
+      </ParamLabel>
+    );
+  }
   return (
     <SegmentTooltipWrapper
-      constraintsDisplay={constraintsDisplay}
+      constraintDisplay={constraintsDisplay}
       key={`segment-wrapper-key-${key}`}
     >
-      <ParamValue component="span" key={`param-value-key-${key}`}>
-        {parameterValue}
-      </ParamValue>
+      <ParamLabel component="span" key={`param-label-key-${key}`}>
+        {parameterLabelText}
+      </ParamLabel>
     </SegmentTooltipWrapper>
   );
 }
@@ -370,11 +394,6 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     });
   }
 
-  // if (props.parameters?.length > 0) {
-  //   props.parameters.forEach((parameter) => {
-  //     setParametersRefs[parameter.id] = useRef();
-  //   });
-  // }
   if (!statementByComponent && !isEditingStatement) {
     // We don't have a by component implementation, but we're not editing, so just display param labels
     return (
@@ -440,47 +459,14 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
           />
         );
       }
-      const parameterValue = getParameterValue(
+
+      return getParameterValueSegment(
         statementByComponent,
         implReqSetParameters,
-        segment
-      );
-
-      if (parameterValue) {
-        return getParameterValueSegment(
-          statementByComponent,
-          implReqSetParameters,
-          segment,
-          props.modificationSetParameters,
-          index.toString()
-        );
-      }
-
-      return (
-        <Grid container spacing={2}>
-          <Grid item xs={11}>
-            <OSCALReplacedProseWithParameterLabel
-              label={props.label}
-              key={props.prose}
-              prose={props.prose}
-              parameters={props.parameters}
-              modificationDisplay={props.modificationDisplay}
-            />
-          </Grid>
-          <OSCALStatementEditControlsContainer item xs={1}>
-            {props.isEditable && !isEditingStatement ? (
-              <IconButton
-                aria-label={`edit-bycomponent-${props.componentId}-statement-${props.statementId}`}
-                size="small"
-                onClick={() => {
-                  setIsEditingStatement(!isEditingStatement);
-                }}
-              >
-                <EditIcon fontSize="small" />
-              </IconButton>
-            ) : null}
-          </OSCALStatementEditControlsContainer>
-        </Grid>
+        segment,
+        props.modificationSetParameters,
+        index.toString(),
+        props.parameters
       );
     });
 
