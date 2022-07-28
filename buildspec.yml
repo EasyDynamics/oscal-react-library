@@ -31,6 +31,8 @@ artifacts:
   base-directory: ./example/build
   files:
     - '**/*'
+  exclude-paths:
+    - 'robots.txt'
 
 cache:
   paths:
