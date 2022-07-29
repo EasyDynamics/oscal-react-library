@@ -48,6 +48,18 @@ const ParamValue = styled(Typography)(
 `
 );
 
+const styledParamLabel = (keyValue, parameterLabelText) => (
+  <ParamLabel component="span" key={keyValue}>
+    {parameterLabelText}
+  </ParamLabel>
+);
+
+const styledParamValue = (keyValue, parameterValue) => (
+  <ParamValue component="span" key={keyValue}>
+    {parameterValue}
+  </ParamValue>
+);
+
 /**
  * Gets the label for the given parameter ID from the given parameters
  * @param {Array} parameters
@@ -204,10 +216,9 @@ function getParameterLabelSegment(
     }
   }
   if (parameterValueText) {
-    paramSegment = (
-      <ParamValue component="span" key={`param-value-key-${key}`}>
-        {parameterValueText}
-      </ParamValue>
+    paramSegment = styledParamValue(
+      `param-value-key-${key}`,
+      parameterValueText
     );
   } else {
     const parameterLabelText = getParameterLabelText(
@@ -215,10 +226,9 @@ function getParameterLabelSegment(
       parameterId,
       modificationSetParameters
     );
-    paramSegment = (
-      <ParamLabel component="span" key={`param-label-key-${key}`}>
-        {parameterLabelText}
-      </ParamLabel>
+    paramSegment = styledParamLabel(
+      `param-label-key-${key}`,
+      parameterLabelText
     );
   }
 
@@ -274,40 +284,28 @@ function getParameterValueSegment(
     modificationSetParameters
   );
 
-  const paramValue = () => (
-    <ParamValue component="span" key={`param-value-key-${key}`}>
-      {parameterValue}
-    </ParamValue>
-  );
-
-  const paramLabel = () => (
-    <ParamLabel component="span" key={`param-label-key-${key}`}>
-      {parameterLabelText}
-    </ParamLabel>
-  );
-
   if (parameterValue) {
     if (!constraintsDisplay.length) {
-      return paramValue();
+      return styledParamValue(`param-value-key-${key}`, parameterValue);
     }
     return (
       <SegmentTooltipWrapper
         constraintsDisplay={constraintsDisplay}
         key={`segment-wrapper-key-${key}`}
       >
-        {paramValue()}
+        {styledParamValue(`param-value-key-${key}`, parameterValue)}
       </SegmentTooltipWrapper>
     );
   }
   if (!constraintsDisplay.length) {
-    return paramLabel();
+    return styledParamLabel(`param-label-key-${key}`, parameterLabelText);
   }
   return (
     <SegmentTooltipWrapper
       constraintDisplay={constraintsDisplay}
       key={`segment-wrapper-key-${key}`}
     >
-      {paramLabel()};
+      {styledParamLabel(`param-label-key-${key}`, parameterLabelText)};
     </SegmentTooltipWrapper>
   );
 }
