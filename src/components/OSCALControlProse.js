@@ -268,45 +268,46 @@ function getParameterValueSegment(
     parameterId
   );
 
+  const parameterLabelText = getParameterLabelText(
+    parameters,
+    parameterId,
+    modificationSetParameters
+  );
+
+  const paramValue = () => (
+    <ParamValue component="span" key={`param-value-key-${key}`}>
+      {parameterValue}
+    </ParamValue>
+  );
+
+  const paramLabel = () => (
+    <ParamLabel component="span" key={`param-label-key-${key}`}>
+      {parameterLabelText}
+    </ParamLabel>
+  );
+
   if (parameterValue) {
     if (!constraintsDisplay.length) {
-      return (
-        <ParamValue component="span" key={`param-value-key-${key}`}>
-          {parameterValue}
-        </ParamValue>
-      );
+      return paramValue();
     }
     return (
       <SegmentTooltipWrapper
         constraintsDisplay={constraintsDisplay}
         key={`segment-wrapper-key-${key}`}
       >
-        <ParamValue component="span" key={`param-value-key-${key}`}>
-          {parameterValue}
-        </ParamValue>
+        {paramValue()}
       </SegmentTooltipWrapper>
     );
   }
-  const parameterLabelText = getParameterLabelText(
-    parameters,
-    parameterId,
-    modificationSetParameters
-  );
   if (!constraintsDisplay.length) {
-    return (
-      <ParamLabel component="span" key={`param-label-key-${key}`}>
-        {parameterLabelText}
-      </ParamLabel>
-    );
+    return paramLabel();
   }
   return (
     <SegmentTooltipWrapper
       constraintDisplay={constraintsDisplay}
       key={`segment-wrapper-key-${key}`}
     >
-      <ParamLabel component="span" key={`param-label-key-${key}`}>
-        {parameterLabelText}
-      </ParamLabel>
+      {paramLabel()};
     </SegmentTooltipWrapper>
   );
 }
