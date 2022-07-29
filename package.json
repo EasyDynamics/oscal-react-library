@@ -18,8 +18,8 @@
     "@emotion/styled": "^11.9.3",
     "@monaco-editor/react": "^4.4.5",
     "@mui/icons-material": "^5.8.4",
-    "@mui/lab": "^5.0.0-alpha.89",
-    "@mui/material": "^5.8.7",
+    "@mui/lab": "^5.0.0-alpha.92",
+    "@mui/material": "^5.9.2",
     "history": "^5.3.0",
     "prop-types": "^15.8.1",
     "react": "^17.0.2",
@@ -69,8 +69,8 @@
     ]
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.18.2",
-    "@babel/plugin-proposal-logical-assignment-operators": "^7.18.6",
+    "@babel/eslint-parser": "^7.18.9",
+    "@babel/plugin-proposal-logical-assignment-operators": "^7.18.9",
     "@babel/plugin-syntax-jsx": "^7.18.6",
     "@babel/preset-react": "^7.18.6",
     "@storybook/addon-actions": "^6.5.9",
@@ -85,15 +85,15 @@
     "@testing-library/dom": "^8.16.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.1.5",
-    "@testing-library/user-event": "^14.2.1",
-    "concurrently": "^7.2.2",
+    "@testing-library/user-event": "^14.3.0",
+    "concurrently": "^7.3.0",
     "cross-env": "^7.0.3",
-    "eslint": "^8.19.0",
+    "eslint": "^8.20.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jest": "^26.5.3",
+    "eslint-plugin-jest": "^26.6.0",
     "eslint-plugin-json": "^3.1.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -102,7 +102,7 @@
     "microbundle-crl": "^0.13.11",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.7.1",
-    "webpack": "^5.73.0"
+    "webpack": "^5.74.0"
   },
   "overrides": {
     "react-refresh": "0.11.0"
