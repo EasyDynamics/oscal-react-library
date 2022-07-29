@@ -17,7 +17,6 @@ export default function OSCALLoaderForm(props) {
 
   const submitForm = () => {
     props.onUrlChange(url.current.value);
-    props.onReloadClick();
   };
 
   return (
