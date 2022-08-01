@@ -1,8 +1,9 @@
 import getUriFromBackMatterByHref from "./OSCALBackMatterUtils";
 
 export function fixJsonUrls(absoluteUrl: string): string {
-  // TODO this is incorrect in the profile (https://github.com/usnistgov/oscal-content/issues/59, https://easydynamics.atlassian.net/browse/EGRC-266)
-  // TODO this workaround must be improved in https://easydynamics.atlassian.net/browse/EGRC-296
+  // TODO: This workaround references JSON representation instead of the back-matter links to
+  // XML catalogs and it should be removed once the issue has been resolved.
+  // https://github.com/EasyDynamics/oscal-react-library/issues/158
   if (!absoluteUrl.endsWith(".xml")) {
     return absoluteUrl;
   }

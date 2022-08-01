@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { styled } from "@mui/material/styles";
 import CircularProgress from "@mui/material/CircularProgress";
 import Split from "react-split";
 import { Box, Fab } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import CodeIcon from "@mui/icons-material/Code";
 import { useParams } from "react-router-dom";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
-import ErrorBoundary, { BasicError } from "./ErrorBoundary";
+import { BasicError, ErrorThrower } from "./ErrorHandling";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
@@ -43,11 +45,12 @@ const EditorSplit = styled(Split)`
 export default function OSCALLoader(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isResolutionComplete, setIsResolutionComplete] = useState(false);
-  const { isRestMode, setIsRestMode } = props;
+  const [hasDefaultUrl, setHasDefaultUrl] = useState(props.hasDefaultUrl);
   const [oscalData, setOscalData] = useState([]);
   const [editorIsVisible, setEditorIsVisible] = useState(true);
   const unmounted = useRef(false);
   const [error, setError] = useState(null);
+  const handleError = setError;
   // We "count" the number of times the reload button has been pressed (when active).
   // This will force a redraw of the form on each click, allowing us to reset after
   // an error and to ensure.
@@ -56,14 +59,8 @@ export default function OSCALLoader(props) {
   const buildOscalUrl = (uuid) =>
     `${props.backendUrl}/${props.oscalObjectType.restPath}/${uuid}`;
   const [oscalUrl, setOscalUrl] = useState(
-    isRestMode ? null : props.oscalUrl || props.oscalObjectType.defaultUrl
+    props.isRestMode ? null : props.oscalUrl || props.oscalObjectType.defaultUrl
   );
-
-  const handleRestError = (err) => {
-    setIsLoaded(true);
-    setIsResolutionComplete(true);
-    setError(err);
-  };
 
   const loadOscalData = (newOscalUrl) => {
     if (!newOscalUrl) {
@@ -71,25 +68,21 @@ export default function OSCALLoader(props) {
       return;
     }
     fetch(newOscalUrl)
-      .then(
-        (response) => {
-          if (!response.ok) throw new Error(response.status);
-          else return response.json();
-        },
-        (err) => handleRestError(err)
-      )
-      .then(
-        (result) => {
-          if (!unmounted.current) {
-            // TODO https://github.com/EasyDynamics/oscal-react-library/issues/297
-            /* eslint no-param-reassign: "error" */
-            result.oscalSource = JSON.stringify(result, null, "\t");
-            setOscalData(result);
-            setIsLoaded(true);
-          }
-        },
-        (err) => handleRestError(err)
-      );
+      .then((response) => {
+        if (!response.ok) throw new Error(response.status);
+        else return response.json();
+      }, handleError)
+      .then((result) => {
+        if (!unmounted.current) {
+          // TODO: Currently data is passed to components through modifying objects.
+          // This approach should be revisited.
+          // https://github.com/EasyDynamics/oscal-react-library/issues/297
+          /* eslint no-param-reassign: "error" */
+          result.oscalSource = JSON.stringify(result, null, "\t");
+          setOscalData(result);
+          setIsLoaded(true);
+        }
+      }, handleError);
   };
 
   const handleFieldSave = (
@@ -130,7 +123,7 @@ export default function OSCALLoader(props) {
           setIsLoaded(true);
         }
       },
-      (err) => handleRestError(err)
+      handleError
     );
   };
 
@@ -156,20 +149,6 @@ export default function OSCALLoader(props) {
     }
   };
 
-  const handleChangeRestMode = (event) => {
-    setIsRestMode(event.target.checked);
-    if (event.target.checked) {
-      setOscalUrl(null);
-      setIsLoaded(true);
-      setIsResolutionComplete(true);
-    } else {
-      setIsLoaded(false);
-      setIsResolutionComplete(false);
-      setOscalUrl(props.oscalObjectType.defaultUrl);
-      loadOscalData(props.oscalObjectType.defaultUrl);
-    }
-  };
-
   const handleRestPut = (jsonString) => {
     restUtils.performRequest(
       JSON.parse(jsonString),
@@ -186,7 +165,7 @@ export default function OSCALLoader(props) {
           setIsLoaded(true);
         }
       },
-      (err) => handleRestError(err)
+      handleError
     );
   };
 
@@ -207,17 +186,42 @@ export default function OSCALLoader(props) {
   // Note: the empty deps array [] means
   // this useEffect will run once
   // similar to componentDidMount()
-  useEffect(() => {
-    if (!isRestMode) {
-      loadOscalData(oscalUrl);
-    }
-    return () => {
+  useEffect(
+    () => () => {
       unmounted.current = true;
-    };
-  }, []);
+    },
+    []
+  );
+
+  useLayoutEffect(() => {
+    if (oscalObjectUuid) {
+      setIsLoaded(true);
+      setIsResolutionComplete(true);
+      setHasDefaultUrl(true);
+      // Handle uuid displaying in url depending on REST mode
+      window.history.pushState(
+        "",
+        "",
+        `/${props.oscalObjectType.jsonRootName}/${
+          props.isRestMode ? `${oscalObjectUuid}` : ""
+        }`
+      );
+    } else if (props.isRestMode) {
+      setOscalUrl(null);
+      setIsLoaded(true);
+      setIsResolutionComplete(true);
+      setHasDefaultUrl(false);
+    } else {
+      setOscalUrl(props.oscalObjectType.defaultUrl);
+      loadOscalData(props.oscalObjectType.defaultUrl);
+      setIsLoaded(false);
+      setIsResolutionComplete(false);
+      setHasDefaultUrl(true);
+    }
+  }, [props.isRestMode]);
 
   let form;
-  if (props.renderForm) {
+  if (props.renderForm && hasDefaultUrl) {
     form = (
       <OSCALLoaderForm
         oscalObjectType={props.oscalObjectType}
@@ -225,23 +229,24 @@ export default function OSCALLoader(props) {
         onUrlChange={handleUrlChange}
         onUuidChange={handleUuidChange}
         onReloadClick={handleReload}
-        isRestMode={isRestMode}
-        onChangeRestMode={handleChangeRestMode}
+        isRestMode={props.isRestMode}
         isResolutionComplete={isResolutionComplete}
-        onError={handleRestError}
+        onError={handleError}
         backendUrl={props.backendUrl}
       />
     );
   }
 
   let result;
-  if (error) {
-    result = <BasicError error={error} />;
-  } else if (!isLoaded) {
-    result = <CircularProgress />;
+  if (!isLoaded) {
+    result = (
+      <Grid container pt={3}>
+        <CircularProgress />
+      </Grid>
+    );
   } else if (oscalUrl) {
-    result = isRestMode ? (
-      <>
+    result = props.isRestMode ? (
+      <Grid container pt={3}>
         <EditorToolbar>
           <Fab
             aria-label="show code"
@@ -267,27 +272,27 @@ export default function OSCALLoader(props) {
           </Box>
           <Box>
             {props.renderer(
-              isRestMode,
+              props.isRestMode,
               oscalData,
               oscalUrl,
               onResolutionComplete,
               handleFieldSave,
               handleRestSuccess,
-              handleRestError
+              handleError
             )}
           </Box>
         </EditorSplit>
-      </>
+      </Grid>
     ) : (
       <>
         {props.renderer(
-          isRestMode,
+          props.isRestMode,
           oscalData,
           oscalUrl,
           onResolutionComplete,
           handleFieldSave,
           handleRestSuccess,
-          handleRestError
+          handleError
         )}
       </>
     );
@@ -297,12 +302,17 @@ export default function OSCALLoader(props) {
     <>
       {form}
       <ErrorBoundary
-        key={reloadCount}
-        onError={() => {
-          setIsLoaded(true);
-          setIsResolutionComplete(true);
+        FallbackComponent={BasicError}
+        onResetKeysChange={() => {
+          setError(null);
         }}
+        onError={() => {
+          setIsResolutionComplete(true);
+          setIsLoaded(true);
+        }}
+        resetKeys={[reloadCount, props.isRestMode, oscalUrl]}
       >
+        <ErrorThrower error={error} />
         {result}
       </ErrorBoundary>
     </>
@@ -367,7 +377,6 @@ export function OSCALCatalogLoader(props) {
       renderForm={props.renderForm}
       backendUrl={props.backendUrl}
       isRestMode={props.isRestMode}
-      setIsRestMode={props.setIsRestMode}
     />
   );
 }
@@ -421,7 +430,6 @@ export function OSCALSSPLoader(props) {
       renderForm={props.renderForm}
       backendUrl={props.backendUrl}
       isRestMode={props.isRestMode}
-      setIsRestMode={props.setIsRestMode}
     />
   );
 }
@@ -474,7 +482,6 @@ export function OSCALComponentLoader(props) {
       renderForm={props.renderForm}
       backendUrl={props.backendUrl}
       isRestMode={props.isRestMode}
-      setIsRestMode={props.setIsRestMode}
     />
   );
 }
@@ -527,7 +534,6 @@ export function OSCALProfileLoader(props) {
       renderForm={props.renderForm}
       backendUrl={props.backendUrl}
       isRestMode={props.isRestMode}
-      setIsRestMode={props.setIsRestMode}
     />
   );
 }
