@@ -127,8 +127,8 @@ export default function OSCALLoader(props) {
     );
   };
 
-  const handleUrlChange = (event) => {
-    setOscalUrl(event.target.value);
+  const handleUrlChange = (value) => {
+    setOscalUrl(value);
   };
 
   const handleUuidChange = (objectUuid) => {
@@ -148,6 +148,10 @@ export default function OSCALLoader(props) {
       loadOscalData(oscalUrl);
     }
   };
+
+  useEffect(() => {
+    handleReload();
+  }, [oscalUrl]);
 
   const handleRestPut = (jsonString) => {
     restUtils.performRequest(
@@ -228,7 +232,6 @@ export default function OSCALLoader(props) {
         oscalUrl={oscalUrl}
         onUrlChange={handleUrlChange}
         onUuidChange={handleUuidChange}
-        onReloadClick={handleReload}
         isRestMode={props.isRestMode}
         isResolutionComplete={isResolutionComplete}
         onError={handleError}
