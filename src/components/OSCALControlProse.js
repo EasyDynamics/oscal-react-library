@@ -302,7 +302,7 @@ function getParameterValueSegment(
   }
   return (
     <SegmentTooltipWrapper
-      constraintDisplay={constraintsDisplay}
+      constraintsDisplay={constraintsDisplay}
       key={`segment-wrapper-key-${key}`}
     >
       {styledParamLabel(`param-label-key-${key}`, parameterLabelText)};
