@@ -258,6 +258,7 @@ function getParameterLabelSegment(
  * @param {String} parameterId
  * @param {Object} modificationSetParameters
  * @param {String} key
+ * @param {Array} parameters
  * @returns the parameter value segment component
  */
 function getParameterValueSegment(
