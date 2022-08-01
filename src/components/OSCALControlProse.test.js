@@ -68,9 +68,26 @@ function testOSCALControlProseEditing(parentElementName, renderer) {
       .click();
   });
 
+  renderer();
+  screen
+    .getByRole("button", {
+      name: "edit-bycomponent-component-1-statement-control-1_smt.a",
+    })
+    .click();
+  const paramValueTextField = screen.getByLabelText("control-1_prm_1");
+  const descriptionTextField = screen.getByLabelText("Description");
+  const changeDescription = () =>
+    fireEvent.change(descriptionTextField, {
+      target: { value: "Test Description" },
+    });
+  const saveChanges = () =>
+    screen
+      .getByRole("button", {
+        name: "save-control-1_smt.a",
+      })
+      .click();
+
   test(`${parentElementName} displays default description and parameter inputs`, async () => {
-    const descriptionTextField = screen.getByLabelText("Description");
-    const paramValueTextField = screen.getByLabelText("control-1_prm_1");
     expect(descriptionTextField.value).toBe(
       "Component 1 description of implementing control 1"
     );
@@ -81,17 +98,9 @@ function testOSCALControlProseEditing(parentElementName, renderer) {
   });
 
   test(`${parentElementName} handles edit with just description edit and keeps placeholders`, async () => {
-    const descriptionTextField = screen.getByLabelText("Description");
-    const paramValueTextField = screen.getByLabelText("control-1_prm_1");
-    fireEvent.change(descriptionTextField, {
-      target: { value: "New Description" },
-    });
-    screen
-      .getByRole("button", {
-        name: "save-control-1_smt.a",
-      })
-      .click();
-    expect(descriptionTextField.value).toBe("New Description");
+    changeDescription();
+    saveChanges();
+    expect(descriptionTextField.value).toBe("Test Description");
 
     screen.getByLabelText("control-1_prm_1");
     expect(paramValueTextField.value).toBe(
@@ -100,19 +109,11 @@ function testOSCALControlProseEditing(parentElementName, renderer) {
   });
 
   test(`${parentElementName} saves changes to controller name and description values`, async () => {
-    const descriptionTextField = screen.getByLabelText("Description");
-    const paramValueTextField = screen.getByLabelText("control-1_prm_1");
-    fireEvent.change(descriptionTextField, {
-      target: { value: "Test Description" },
-    });
+    changeDescription();
     fireEvent.change(paramValueTextField, {
       target: { value: "Test Control Name" },
     });
-    screen
-      .getByRole("button", {
-        name: "save-control-1_smt.a",
-      })
-      .click();
+    saveChanges();
     expect(descriptionTextField.value).toBe("Test Description");
     expect(paramValueTextField.value).toBe("Test Control Name");
   });
