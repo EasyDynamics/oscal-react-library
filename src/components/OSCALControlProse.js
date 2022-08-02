@@ -48,6 +48,18 @@ const ParamValue = styled(Typography)(
 `
 );
 
+const styledParamLabel = (keyValue, parameterLabelText) => (
+  <ParamLabel component="span" key={keyValue}>
+    {parameterLabelText}
+  </ParamLabel>
+);
+
+const styledParamValue = (keyValue, parameterValue) => (
+  <ParamValue component="span" key={keyValue}>
+    {parameterValue}
+  </ParamValue>
+);
+
 /**
  * Gets the label for the given parameter ID from the given parameters
  * @param {Array} parameters
@@ -204,10 +216,9 @@ function getParameterLabelSegment(
     }
   }
   if (parameterValueText) {
-    paramSegment = (
-      <ParamValue component="span" key={`param-value-key-${key}`}>
-        {parameterValueText}
-      </ParamValue>
+    paramSegment = styledParamValue(
+      `param-value-key-${key}`,
+      parameterValueText
     );
   } else {
     const parameterLabelText = getParameterLabelText(
@@ -215,10 +226,9 @@ function getParameterLabelSegment(
       parameterId,
       modificationSetParameters
     );
-    paramSegment = (
-      <ParamLabel component="span" key={`param-label-key-${key}`}>
-        {parameterLabelText}
-      </ParamLabel>
+    paramSegment = styledParamLabel(
+      `param-label-key-${key}`,
+      parameterLabelText
     );
   }
 
@@ -248,6 +258,7 @@ function getParameterLabelSegment(
  * @param {String} parameterId
  * @param {Object} modificationSetParameters
  * @param {String} key
+ * @param {Array} parameters
  * @returns the parameter value segment component
  */
 function getParameterValueSegment(
@@ -255,7 +266,8 @@ function getParameterValueSegment(
   implReqSetParameters,
   parameterId,
   modificationSetParameters,
-  key
+  key,
+  parameters
 ) {
   const parameterValue = getParameterValue(
     statementByComponent,
@@ -267,22 +279,34 @@ function getParameterValueSegment(
     parameterId
   );
 
-  if (!constraintsDisplay.length) {
+  const parameterLabelText = getParameterLabelText(
+    parameters,
+    parameterId,
+    modificationSetParameters
+  );
+
+  if (parameterValue) {
+    if (!constraintsDisplay.length) {
+      return styledParamValue(`param-value-key-${key}`, parameterValue);
+    }
     return (
-      <ParamValue component="span" key={`param-value-key-${key}`}>
-        {parameterValue}
-      </ParamValue>
+      <SegmentTooltipWrapper
+        constraintsDisplay={constraintsDisplay}
+        key={`segment-wrapper-key-${key}`}
+      >
+        {styledParamValue(`param-value-key-${key}`, parameterValue)}
+      </SegmentTooltipWrapper>
     );
   }
-
+  if (!constraintsDisplay.length) {
+    return styledParamLabel(`param-label-key-${key}`, parameterLabelText);
+  }
   return (
     <SegmentTooltipWrapper
       constraintsDisplay={constraintsDisplay}
       key={`segment-wrapper-key-${key}`}
     >
-      <ParamValue component="span" key={`param-value-key-${key}`}>
-        {parameterValue}
-      </ParamValue>
+      {styledParamLabel(`param-label-key-${key}`, parameterLabelText)};
     </SegmentTooltipWrapper>
   );
 }
@@ -399,7 +423,6 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
       </Grid>
     );
   }
-
   const implReqSetParameters = getImplReqSetParameters(
     props.implementedRequirement?.statements,
     props.componentId
@@ -436,13 +459,14 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
           />
         );
       }
-      // We're not editing this statement, so return param value
+
       return getParameterValueSegment(
         statementByComponent,
         implReqSetParameters,
         segment,
         props.modificationSetParameters,
-        index.toString()
+        index.toString(),
+        props.parameters
       );
     });
 
