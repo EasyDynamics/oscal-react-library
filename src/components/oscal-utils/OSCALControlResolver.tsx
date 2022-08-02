@@ -1,6 +1,9 @@
-export default function getControlOrSubControl(resolvedControls, controlId) {
-  const findControlById = (controls, desiredId) =>
-    controls?.find((control) => control.id === desiredId);
+export default function getControlOrSubControl(
+  resolvedControls: any,
+  controlId: any
+) {
+  const findControlById = (controls: any, desiredId: any) =>
+    controls?.find((control: any) => control.id === desiredId);
 
   // Try to find control at root level of the resolved controls
   const control = findControlById(resolvedControls, controlId);
@@ -10,7 +13,7 @@ export default function getControlOrSubControl(resolvedControls, controlId) {
 
   // If the control isn't at the root level, it may be a subcontrol of it's parent;
   // so for example, "ac-2.3" may be a child of "ac-2"
-  const isSubControl = (testControlId) => testControlId.includes(".");
+  const isSubControl = (testControlId: any) => testControlId.includes(".");
   if (isSubControl(controlId)) {
     const parentControlId = controlId.split(".")[0];
     const parentControl = findControlById(resolvedControls, parentControlId);
@@ -24,7 +27,7 @@ export default function getControlOrSubControl(resolvedControls, controlId) {
   // If the control isn't at root level or a subcontrol of it's parent,
   // it should be able to be found by just searching all subcontrols.
   return findControlById(
-    resolvedControls.flatMap((parentControl) => parentControl.controls),
+    resolvedControls.flatMap((parentControl: any) => parentControl.controls),
     controlId
   );
 }
@@ -42,15 +45,15 @@ export default function getControlOrSubControl(resolvedControls, controlId) {
  * @returns Returns the by-component object when a statement is found
  */
 export function getStatementByComponent(
-  implReqStatements,
-  statementId,
-  componentId
+  implReqStatements: any,
+  statementId: string,
+  componentId: string
 ) {
   // TODO: Remove underscore replacement when OSCAL example content is fixed
   // https://github.com/EasyDynamics/oscal-react-library/issues/511
   // Locate matching statement to statementId
   const foundStatement = implReqStatements?.find(
-    (statement) =>
+    (statement: any) =>
       statement["statement-id"] === statementId ||
       statement["statement-id"] === statementId.replace("_", "")
   );
@@ -61,6 +64,6 @@ export function getStatementByComponent(
 
   // Locate matching byComponent to componentId
   return foundStatement["by-components"].find(
-    (byComponent) => byComponent["component-uuid"] === componentId
+    (byComponent: any) => byComponent["component-uuid"] === componentId
   );
 }
