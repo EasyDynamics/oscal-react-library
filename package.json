@@ -85,7 +85,7 @@
     "@testing-library/dom": "^8.16.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.1.5",
-    "@testing-library/user-event": "^14.3.0",
+    "@testing-library/user-event": "^14.4.1",
     "concurrently": "^7.3.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.21.0",
