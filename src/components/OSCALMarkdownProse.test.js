@@ -1,20 +1,40 @@
 import React from "react";
-import { render, screen, within } from "@testing-library/react";
 import { OSCALMarkdownProse } from "./OSCALMarkdownProse";
-import ReactDom from 'react-dom'
-
-function markdownRenderer() {
-  render(<OSCALMarkdownProse children={props.text} />);
-}
+import ReactDomServer from "react-dom/server";
 
 function asHtml(input) {
-    return ReactDom.renderToStaticMarkup(input);
-  }
-  
-export default function testOSCALMarkdown(parentElementName, renderer) {
-  test(` ${parentElement} can convert plaintext`, () => {
-    renderer();
-    assert.equal(asHtml(<OSCALMarkdownProse>Test</OSCALMarkdownProse>), '<p>Test</p>');
-
-  });
+  return ReactDomServer.renderToStaticMarkup(input);
 }
+
+test(`OSCALMarkdownProse converts plaintext to HTML`, () => {
+  var testerString = asHtml(<OSCALMarkdownProse text={"Test"} />);
+  expect(testerString).toEqual("<p>Test</p>");
+});
+
+test(`OSCALMarkdownProse converts Italics, Bold and Plaintext`, () => {
+  var testerString = asHtml(
+    <OSCALMarkdownProse text={"*Hello*, **world** I am in markdown"} />
+  );
+  expect(testerString).toEqual(
+    "<p><em>Hello</em>, <strong>world</strong> I am in markdown</p>"
+  );
+});
+
+test(`OSCALMarkdownProse converts hyperlinks to HTML`, () => {
+  var testerString = asHtml(
+    <OSCALMarkdownProse
+      text={"[Link to EasyDynamics](https://www.easydynamics.com)]"}
+    />
+  );
+  expect(testerString).toEqual(
+    '<p><a href="https://www.easydynamics.com">Link to EasyDynamics</a>]</p>'
+  );
+});
+test(`OSCALMarkdownProse converts images to HTML`, () => {
+  var testerString = asHtml(
+    <OSCALMarkdownProse text={'![alt text](url "title text")'} />
+  );
+  expect(testerString).toEqual(
+    '<p><img src="url" alt="alt text" title="title text"/></p>'
+  );
+});
