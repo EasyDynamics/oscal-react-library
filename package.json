@@ -25,6 +25,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-error-boundary": "^3.1.4",
+    "react-markdown": "^8.0.3",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
     "react-split": "^2.0.14",
@@ -109,5 +110,11 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "jest": {
+    "transformIgnorePatterns": [
+      "(?!(/node_modules/(react-markdown|vfile|vfile-message|unist-.*|unified|bail|is-plain-obj|trough|remark-.*|mdast-util-.*|micromark.*|decode-named-character-reference|character-entities|property-information|hast-util-whitespace|space-separated-tokens|comma-separated-tokens|pretty-bytes|trim-lines)/))(/node_modules/.+.(js|jsx|mjs|cjs|ts|tsx)$)",
+      "^.+.module.(css|sass|scss)$"
+    ]
+  }
 }
