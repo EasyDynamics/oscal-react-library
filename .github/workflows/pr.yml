@@ -46,6 +46,10 @@ jobs:
         node: [14, 16]
     name: Build and test (on NodeJS ${{ matrix.node }})
     runs-on: ubuntu-20.04
+    defaults:
+      run:
+        # setting the shell to bash will enable fail-fast behavior
+        shell: bash
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
