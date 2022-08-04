@@ -55,11 +55,37 @@ test(`OSCALMarkdownProse converts script to HTML`, () => {
 });
 
 test(`OSCALMarkdownProse converts a multiline string to HTML`, () => {
-  const multilineMarkdown =
-    "this should b here # h1 Heading 8-    ## h2 Heading     This is in heading 2    ### h3 Heading      This is in heading 3    #### h4 Heading      ##### **h5 Heading**    ###### h6 Heading ";
-  const multilineAsHTML =
-    "<p>this should b here # h1 Heading 8-    ## h2 Heading     This is in heading 2    ### h3 Heading      This is in heading 3    #### h4 Heading      ##### <strong>h5 Heading</strong>    ###### h6 Heading</p>";
+  const multilineMarkdown = `
+  this should be here
+  # h1 heading
+  
+  ## h2 Heading
+  
+  This is in heading 2
+  
+  ### h3 Heading
+  
+  This is in heading 3
+  
+  #### **h4 Heading**
+  `;
+  const multilineAsHTML = `<p>this should be here</p>
+<h1>h1 heading</h1>
+<h2>h2 Heading</h2>
+<p>This is in heading 2</p>
+<h3>h3 Heading</h3>
+<p>This is in heading 3</p>
+<h4><strong>h4 Heading</strong></h4>`;
   const testerString = asHtml(<OSCALMarkdownProse text={multilineMarkdown} />);
-
   expect(testerString).toEqual(multilineAsHTML);
+});
+
+test(`OSCALMarkdownProse Handles titles of links`, () => {
+  const testerString = asHtml(
+    <OSCALMarkdownProse text="Empty: [](# 'Testing Title')" />
+  );
+
+  expect(testerString).toEqual(
+    '<p>Empty: <a href="#" title="Testing Title"></a></p>'
+  );
 });
