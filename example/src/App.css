@@ -36,3 +36,9 @@
     transform: rotate(360deg);
   }
 }
+
+a[href^="http"]:not([data-internal-link]):before {
+  margin-left: 10px;
+  content: '[external]';
+}
+

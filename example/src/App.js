@@ -283,6 +283,7 @@ function App() {
                         href="https://www.easydynamics.com"
                         target="_blank"
                         sx={{ color: "white" }}
+                        data-internal-link="true"
                       >
                         <LogoImage src={logo} alt="Easy Dynamics Logo" />
                       </Button>
@@ -293,6 +294,7 @@ function App() {
                         target="_blank"
                         rel="noreferrer"
                         size="large"
+                        data-internal-link="true"
                       >
                         <GitHubIcon htmlColor="white" />
                       </IconButton>
