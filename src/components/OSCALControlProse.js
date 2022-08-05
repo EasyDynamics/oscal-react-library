@@ -11,6 +11,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
+import OSCALMarkdownProse from "./OSCALMarkdownProse";
 
 const OSCALStatementEditing = styled(Grid)`
   ${(props) =>
@@ -384,6 +385,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   // https://github.com/EasyDynamics/oscal-react-library/issues/499
   const statementByComponentDescription =
     statementByComponent?.description || null;
+  const statementByComponentDescriptionMarkdown = <OSCALMarkdownProse text={statementByComponentDescription} />;
   const statementByComponentDescriptionRef = useRef(
     statementByComponentDescription
   );
@@ -474,7 +476,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     <OSCALStatementEditing container spacing={2}>
       <Grid item xs={11}>
         <StyledTooltip
-          title={statementByComponentDescription ?? props.componentId}
+          title={statementByComponentDescriptionMarkdown ?? props.componentId}
         >
           <Link underline="hover" href={`#${props.label}`}>
             {props.label}
