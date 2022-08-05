@@ -1,5 +1,7 @@
 export const controlProseTestData =
   "Does something with {{ insert: param, control-1_prm_1 }} and {{ insert: param, control-1_prm_2 }}, and a set value of {{ insert: param, control-1_prm_3 }}";
+export const controlProseDecimalTestData =
+  "Does something with {{ insert: param, control-1.1_prm_1 }} and {{ insert: param, control-1.1_prm_2 }}, and a set value of {{ insert: param, control-1.1_prm_3 }}";
 
 export const controlId = "control-1";
 export const statementId = "statement-1";
@@ -12,6 +14,17 @@ export const exampleParams = [
   {
     id: "control-1_prm_2",
     label: "control 2 label",
+  },
+];
+
+export const exampleDecimalParams = [
+  {
+    id: "control-1.1_prm_1",
+    label: "control 1.1 / parameter 1 label",
+  },
+  {
+    id: "control-1.1_prm_2",
+    label: "control 1.1 / parameter 2 label",
   },
 ];
 
