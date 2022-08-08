@@ -7,7 +7,11 @@ import ReactMarkdown from "react-markdown";
  * @returns a React element from the markdown
  */
 
-export default function OSCALMarkdownProse(props) {
+export default function OSCALMarkupMultiLine(props) {
+  return <ReactMarkdown>{props.text}</ReactMarkdown>;
+}
+
+export function OSCALMarkupSingleLine(props) {
   return (
     <ReactMarkdown
       components={{
