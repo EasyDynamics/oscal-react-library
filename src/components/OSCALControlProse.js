@@ -167,12 +167,8 @@ function getTextSegment(text, key) {
   if (!text) {
     return null;
   }
-  return (
-    <Typography component="span" key={key}>
-      {/* {text} */}
-      <OSCALMarkdownProse text={text} />
-    </Typography>
-  );
+
+  return <OSCALMarkdownProse text={text} />;
 }
 
 /**

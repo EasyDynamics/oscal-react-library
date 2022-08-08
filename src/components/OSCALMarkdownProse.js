@@ -8,5 +8,13 @@ import ReactMarkdown from "react-markdown";
  */
 
 export default function OSCALMarkdownProse(props) {
-  return <ReactMarkdown>{props.text}</ReactMarkdown>;
+  return (
+    <ReactMarkdown
+      components={{
+        p: React.Fragment,
+      }}
+    >
+      {props.text}
+    </ReactMarkdown>
+  );
 }
