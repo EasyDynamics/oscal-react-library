@@ -11,7 +11,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
-import { OSCALMarkupSingleLine } from "./OSCALMarkdownProse";
+import { OSCALMarkupLine } from "./OSCALMarkdownProse";
 
 const OSCALStatementEditing = styled(Grid)`
   ${(props) =>
@@ -168,7 +168,11 @@ function getTextSegment(text) {
     return null;
   }
 
-  return <OSCALMarkupSingleLine text={text} />;
+  return (
+    <Typography component="span">
+      <OSCALMarkupLine text={text} />;
+    </Typography>
+  );
 }
 
 /**
@@ -226,7 +230,7 @@ function getParameterLabelSegment(
     );
     paramSegment = styledParamLabel(
       `param-label-key-${key}`,
-      parameterLabelText
+      <OSCALMarkupLine text={parameterLabelText} />
     );
   }
 
@@ -333,7 +337,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
             index
           );
         })
-    : props.prose;
+    : getTextSegment(props.prose);
 
   if (!props.isImplemented) {
     return (

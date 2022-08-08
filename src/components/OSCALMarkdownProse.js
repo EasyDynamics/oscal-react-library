@@ -11,7 +11,7 @@ export default function OSCALMarkupMultiLine(props) {
   return <ReactMarkdown>{props.text}</ReactMarkdown>;
 }
 
-export function OSCALMarkupSingleLine(props) {
+export function OSCALMarkupLine(props) {
   return (
     <ReactMarkdown
       components={{
