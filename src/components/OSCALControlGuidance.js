@@ -7,6 +7,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import OSCALMarkdownProse from "./OSCALMarkdownProse";
+
 const OSCALControlGuidanceButton = styled(Button)(
   ({ theme }) => `
   color: ${theme.palette.primary.main};
@@ -58,7 +59,7 @@ export default function OSCALControlGuidance(props) {
             ref={descriptionElementRef}
             tabIndex={-1}
           >
-            {<OSCALMarkdownProse text = {props.prose}/>}
+            <OSCALMarkdownProse text={props.prose} />
           </DialogContentText>
         </DialogContent>
         <DialogActions>

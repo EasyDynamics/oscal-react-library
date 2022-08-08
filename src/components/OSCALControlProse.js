@@ -11,6 +11,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
+import OSCALMarkdownProse from "./OSCALMarkdownProse";
 
 const OSCALStatementEditing = styled(Grid)`
   ${(props) =>
@@ -168,7 +169,8 @@ function getTextSegment(text, key) {
   }
   return (
     <Typography component="span" key={key}>
-      {text}
+      {/* {text} */}
+      <OSCALMarkdownProse text={text} />
     </Typography>
   );
 }
