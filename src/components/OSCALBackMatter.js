@@ -120,6 +120,7 @@ export default function OSCALBackMatter(props) {
                     component="a"
                     role="button"
                     href={getAbsoluteUrl(rlink.href, props.parentUrl)}
+                    target="_blank"
                     variant="outlined"
                     clickable
                   />
