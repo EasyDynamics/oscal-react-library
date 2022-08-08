@@ -51,7 +51,7 @@ export default function testOSCALControlImplementationImplReq(
 
     await userEvent.hover(
       screen.getByRole("link", {
-        name: "Component 1 description of implementing control 1",
+        name: "a.",
       })
     );
     expect(

@@ -385,7 +385,9 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   // https://github.com/EasyDynamics/oscal-react-library/issues/499
   const statementByComponentDescription =
     statementByComponent?.description || null;
-  const statementByComponentDescriptionMarkdown = <OSCALMarkdownProse text={statementByComponentDescription} />;
+  const statementByComponentDescriptionMarkdown = (
+    <OSCALMarkdownProse text={statementByComponentDescription} />
+  );
   const statementByComponentDescriptionRef = useRef(
     statementByComponentDescription
   );
