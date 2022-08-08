@@ -11,7 +11,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
-import {OSCALMarkupSingleLine} from "./OSCALMarkdownProse";
+import { OSCALMarkupSingleLine } from "./OSCALMarkdownProse";
 
 const OSCALStatementEditing = styled(Grid)`
   ${(props) =>
@@ -163,7 +163,7 @@ function getImplReqSetParameters(implReqStatements, componentId) {
  * @param {String} key
  * @returns the text segment component
  */
-function getTextSegment(text, key) {
+function getTextSegment(text) {
   if (!text) {
     return null;
   }
@@ -324,7 +324,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
         .split(RegExp(prosePlaceholderRegexpString, "g"))
         .map((segment, index) => {
           if (index % 2 === 0) {
-            return getTextSegment(segment, index);
+            return getTextSegment(segment);
           }
           return getParameterLabelSegment(
             props.parameters,
@@ -430,7 +430,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     .map((segment, index) => {
       if (index % 2 === 0) {
         // This is not a parameter placeholder
-        return getTextSegment(segment, index.toString());
+        return getTextSegment(segment);
       }
       if (isEditingStatement) {
         // We're currently editing this statement, so build param input
