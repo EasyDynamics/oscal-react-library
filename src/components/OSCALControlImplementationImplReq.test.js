@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import OSCALControlImplementation from "./OSCALControlImplementation";
 import getByTextIncludingChildern from "./oscal-utils/TestUtils";
@@ -40,14 +40,10 @@ export default function testOSCALControlImplementationImplReq(
 
   test(`${parentElementName} displays component parameters in control prose`, () => {
     renderer();
-    const resultBeginning = getByTextIncludingChildern(
-      "Does something with"
+    const result = getByTextIncludingChildern(
+      "Does something with control 1 / component 1 / parameter 1 value and control 1 / component 1 / parameter 2 value"
     );
-    const param1 = within(resultBeginning).getByText("control 1 / component 1 / parameter 1 value");
-    const param2 = within(resultBeginning).getByText("control 1 / component 1 / parameter 2 value");
-    expect(resultBeginning).toBeVisible();
-    expect(param1).toBeVisible();
-    expect(param2).toBeVisible();
+    expect(result).toBeVisible();
   });
 
   test(`${parentElementName} displays component implementation description`, async () => {
