@@ -163,13 +163,13 @@ function getImplReqSetParameters(implReqStatements, componentId) {
  * @param {String} key
  * @returns the text segment component
  */
-function getTextSegment(text) {
+function getTextSegment(text, key) {
   if (!text) {
     return null;
   }
 
   return (
-    <Typography component="span">
+    <Typography component="span" key={key}>
       <OSCALMarkupLine text={text} />;
     </Typography>
   );
@@ -328,7 +328,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
         .split(RegExp(prosePlaceholderRegexpString, "g"))
         .map((segment, index) => {
           if (index % 2 === 0) {
-            return getTextSegment(segment);
+            return getTextSegment(segment, index);
           }
           return getParameterLabelSegment(
             props.parameters,
@@ -337,7 +337,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
             index
           );
         })
-    : getTextSegment(props.prose);
+    : getTextSegment(props.prose, 0);
 
   if (!props.isImplemented) {
     return (
@@ -434,7 +434,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     .map((segment, index) => {
       if (index % 2 === 0) {
         // This is not a parameter placeholder
-        return getTextSegment(segment);
+        return getTextSegment(segment, index.toString());
       }
       if (isEditingStatement) {
         // We're currently editing this statement, so build param input

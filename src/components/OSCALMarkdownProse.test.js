@@ -1,52 +1,49 @@
 import React from "react";
 import ReactDomServer from "react-dom/server";
-import OSCALMarkdownProse from "./OSCALMarkdownProse";
+import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkdownProse";
 
-function asHtml(input) {
-  return ReactDomServer.renderToStaticMarkup(input);
-}
-
-test(`OSCALMarkdownProse converts plaintext to HTML`, () => {
-  const testerString = asHtml(<OSCALMarkdownProse text="Test" />);
-  expect(testerString).toEqual("<p>Test</p>");
+const asHtml = (input) => ReactDomServer.renderToStaticMarkup(input);
+test(`OSCALMarkupLine converts plaintext to HTML`, () => {
+  const testerString = asHtml(<OSCALMarkupLine text="Test" />);
+  expect(testerString).toEqual("Test");
 });
 
-test(`OSCALMarkdownProse converts Italics, Bold and Plaintext`, () => {
+test(`OSCALMarkupLine converts Italics, Bold and Plaintext`, () => {
   const testerString = asHtml(
-    <OSCALMarkdownProse text="*Hello*, **world** I am in markdown" />
+    <OSCALMarkupLine text="*Hello*, **world** I am in markdown" />
   );
   expect(testerString).toEqual(
-    "<p><em>Hello</em>, <strong>world</strong> I am in markdown</p>"
+    "<em>Hello</em>, <strong>world</strong> I am in markdown"
   );
 });
 
-test(`OSCALMarkdownProse converts hyperlinks to HTML`, () => {
+test(`OSCALMarkupLine converts hyperlinks to HTML`, () => {
   const testerString = asHtml(
-    <OSCALMarkdownProse text="[Link to EasyDynamics](https://www.easydynamics.com)]" />
+    <OSCALMarkupLine text="[Link to EasyDynamics](https://www.easydynamics.com)]" />
   );
   expect(testerString).toEqual(
-    '<p><a href="https://www.easydynamics.com">Link to EasyDynamics</a>]</p>'
+    '<a href="https://www.easydynamics.com">Link to EasyDynamics</a>]'
   );
 });
-test(`OSCALMarkdownProse converts images to HTML`, () => {
+test(`OSCALMarkupLine converts images to HTML`, () => {
   const testerString = asHtml(
-    <OSCALMarkdownProse text={'![alt text](url "title text")'} />
+    <OSCALMarkupLine text={'![alt text](url "title text")'} />
   );
   expect(testerString).toEqual(
-    '<p><img src="url" alt="alt text" title="title text"/></p>'
+    '<img src="url" alt="alt text" title="title text"/>'
   );
 });
 
-test(`OSCALMarkdownProse converts images to HTML`, () => {
+test(`OSCALMarkupLine converts images to HTML`, () => {
   const testerString = asHtml(
-    <OSCALMarkdownProse text="`Inserting Tester Code`" />
+    <OSCALMarkupLine text="`Inserting Tester Code`" />
   );
-  expect(testerString).toEqual("<p><code>Inserting Tester Code</code></p>");
+  expect(testerString).toEqual("<code>Inserting Tester Code</code>");
 });
 
-test(`OSCALMarkdownProse converts script to HTML`, () => {
+test(`OSCALMarkupLine converts script to HTML`, () => {
   const testerString = asHtml(
-    <OSCALMarkdownProse text="<script>alert('Nasty script!')</script>" />
+    <OSCALMarkupLine text="<script>alert('Nasty script!')</script>" />
   );
 
   expect(testerString).toEqual(
@@ -54,7 +51,7 @@ test(`OSCALMarkdownProse converts script to HTML`, () => {
   );
 });
 
-test(`OSCALMarkdownProse converts a multiline string to HTML`, () => {
+test(`OSCALMarkupLine converts a multiline string to HTML`, () => {
   const multilineMarkdown = `
   this should be here
   # h1 heading
@@ -76,16 +73,16 @@ test(`OSCALMarkdownProse converts a multiline string to HTML`, () => {
 <h3>h3 Heading</h3>
 <p>This is in heading 3</p>
 <h4><strong>h4 Heading</strong></h4>`;
-  const testerString = asHtml(<OSCALMarkdownProse text={multilineMarkdown} />);
+  const testerString = asHtml(
+    <OSCALMarkupMultiLine text={multilineMarkdown} />
+  );
   expect(testerString).toEqual(multilineAsHTML);
 });
 
-test(`OSCALMarkdownProse Handles titles of links`, () => {
+test(`OSCALMarkupLine Handles titles of links`, () => {
   const testerString = asHtml(
-    <OSCALMarkdownProse text="Empty: [](# 'Testing Title')" />
+    <OSCALMarkupLine text="Empty: [](# 'Testing Title')" />
   );
 
-  expect(testerString).toEqual(
-    '<p>Empty: <a href="#" title="Testing Title"></a></p>'
-  );
+  expect(testerString).toEqual('Empty: <a href="#" title="Testing Title"></a>');
 });
