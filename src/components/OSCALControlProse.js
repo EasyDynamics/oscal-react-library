@@ -386,7 +386,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   const statementByComponentDescription =
     statementByComponent?.description || null;
   const statementByComponentDescriptionMarkup = (
-    <OSCALMarkupMultiLine text={statementByComponentDescription} />
+    <OSCALMarkupMultiLine text={statementByComponentDescription} paragraphComponent={'p'}/>
   );
   const statementByComponentDescriptionRef = useRef(
     statementByComponentDescription
