@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import OSCALComponentDefinitionControlImplementation from "./OSCALComponentDefinitionControlImplementation";
 import getByTextIncludingChildern from "./oscal-utils/TestUtils";
 import { controlsData } from "../test-data/ControlsData";
@@ -43,10 +43,14 @@ test("OSCALComponentDefinitionControlImplementation displays component parameter
       controls={controlsData}
     />
   );
-  const resultByProse = getByTextIncludingChildern(
-    "Does something with < control 1 / parameter 1 label > and < control 1 / parameter 2 label >"
+  const resultByProseBeginning = getByTextIncludingChildern(
+    "Does something with"
   );
-  expect(resultByProse).toBeVisible();
+  const param1 = within(resultByProseBeginning).getByText("< control 1 / parameter 1 label >");
+  const param2 = within(resultByProseBeginning).getByText("< control 1 / parameter 2 label >");
+  expect(resultByProseBeginning).toBeVisible();
+  expect(param1).toBeVisible();
+  expect(param2).toBeVisible();
 });
 
 testOSCALControlParamLegend(
