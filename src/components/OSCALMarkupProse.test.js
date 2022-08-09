@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDomServer from "react-dom/server";
-import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkdownProse";
+import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 const asHtml = (input) => ReactDomServer.renderToStaticMarkup(input);
 test(`OSCALMarkupLine converts plaintext to HTML`, () => {
