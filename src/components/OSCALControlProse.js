@@ -385,7 +385,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   // https://github.com/EasyDynamics/oscal-react-library/issues/499
   const statementByComponentDescription =
     statementByComponent?.description || null;
-  const statementByComponentDescriptionMarkdown = (
+  const statementByComponentDescriptionMarkup = (
     <OSCALMarkdownProse text={statementByComponentDescription} />
   );
   const statementByComponentDescriptionRef = useRef(
@@ -478,7 +478,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     <OSCALStatementEditing container spacing={2}>
       <Grid item xs={11}>
         <StyledTooltip
-          title={statementByComponentDescriptionMarkdown ?? props.componentId}
+          title={statementByComponentDescriptionMarkup ?? props.componentId}
         >
           <Link underline="hover" href={`#${props.label}`}>
             {props.label}
