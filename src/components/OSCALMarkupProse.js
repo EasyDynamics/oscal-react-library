@@ -8,15 +8,15 @@ import ReactMarkdown from "react-markdown";
  */
 
 export function OSCALMarkupMultiLine(props) {
-    return (
-      <ReactMarkdown
-        components={{
-          p: props.paragraphComponent,
-        }}
-      >
-        {props.text}
-      </ReactMarkdown>
-    );
+  return (
+    <ReactMarkdown
+      components={{
+        p: props.paragraphComponent,
+      }}
+    >
+      {props.text}
+    </ReactMarkdown>
+  );
 }
 
 export function OSCALMarkupLine(props) {
