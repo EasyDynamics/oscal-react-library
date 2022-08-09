@@ -11,7 +11,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
-import OSCALMarkdownProse from "./OSCALMarkdownProse";
+import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 const OSCALStatementEditing = styled(Grid)`
   ${(props) =>
@@ -386,7 +386,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   const statementByComponentDescription =
     statementByComponent?.description || null;
   const statementByComponentDescriptionMarkup = (
-    <OSCALMarkdownProse text={statementByComponentDescription} />
+    <OSCALMarkupMultiLine text={statementByComponentDescription} />
   );
   const statementByComponentDescriptionRef = useRef(
     statementByComponentDescription
