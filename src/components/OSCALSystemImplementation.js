@@ -45,10 +45,9 @@ export default function OSCALSystemImplementation(props) {
               <OSCALSectionHeader>System Implementation</OSCALSectionHeader>
             </Grid>
             <Grid item xs={12}>
-              <OSCALMarkupMultiLine
-                text={props.systemImplementation.remarks}
-                paragraphComponent={Typography}
-              />
+              <OSCALMarkupMultiLine paragraphComponent={Typography}>
+                {props.systemImplementation.remarks}
+              </OSCALMarkupMultiLine>
             </Grid>
             <Grid item xs={12}>
               <TableContainer>

@@ -11,10 +11,10 @@ export function OSCALMarkupMultiLine(props) {
   return (
     <ReactMarkdown
       components={{
-        p: props.paragraphComponent,
+        p: props.paragraphComponent ?? "p",
       }}
     >
-      {props.text}
+      {props.children}
     </ReactMarkdown>
   );
 }
