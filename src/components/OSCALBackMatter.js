@@ -10,6 +10,7 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getAbsoluteUrl } from "./oscal-utils/OSCALLinkUtils";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
+import { OSCALMarkupLine } from "./OSCALMarkupProse";
 
 export const OSCALBackMatterCard = styled(Card)(
   ({ theme }) => `
@@ -31,7 +32,7 @@ function TitleDisplay(props) {
   const color = props.resource.title ? "initial" : "error";
   return (
     <Typography color={color} variant="subtitle1">
-      {title}
+      <OSCALMarkupLine text={title} />
     </Typography>
   );
 }
@@ -47,7 +48,9 @@ function DescriptionDisplay(props) {
     );
   }
   return (
-    <StyledTooltip title={props.resource.description}>
+    <StyledTooltip
+      title={<OSCALMarkupLine text={props.resource.description} />}
+    >
       <DescriptionIcon
         color="primary"
         fontSize="small"
@@ -68,7 +71,9 @@ function CitationDisplay(props) {
     );
   }
   return (
-    <StyledTooltip title={props.resource.citation.text}>
+    <StyledTooltip
+      title={<OSCALMarkupLine text={props.resource.citation.text} />}
+    >
       <FormatQuoteIcon
         color="primary"
         fontSize="small"
