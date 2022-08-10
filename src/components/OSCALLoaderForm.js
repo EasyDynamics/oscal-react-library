@@ -13,7 +13,7 @@ const OSCALDocumentForm = styled("form")(
 );
 
 export default function OSCALLoaderForm(props) {
-  const url = useRef(null);
+  const url = useRef(props.oscalUrl);
 
   const submitForm = () => {
     props.onUrlChange(url.current.value);
