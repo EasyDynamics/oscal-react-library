@@ -74,7 +74,7 @@ test(`OSCALMarkupLine converts a multiline string to HTML`, () => {
 <p>This is in heading 3</p>
 <h4><strong>h4 Heading</strong></h4>`;
   const testerString = asHtml(
-    <OSCALMarkupMultiLine text={multilineMarkdown} />
+    <OSCALMarkupMultiLine>{multilineMarkdown}</OSCALMarkupMultiLine>
   );
   expect(testerString).toEqual(multilineAsHTML);
 });
