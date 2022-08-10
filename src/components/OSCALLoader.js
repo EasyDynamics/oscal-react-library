@@ -58,9 +58,11 @@ export default function OSCALLoader(props) {
   const oscalObjectUuid = useParams()?.id ?? "";
   const buildOscalUrl = (uuid) =>
     `${props.backendUrl}/${props.oscalObjectType.restPath}/${uuid}`;
-  const [oscalUrl, setOscalUrl] = useState(
-    props.isRestMode ? null : props.oscalUrl || props.oscalObjectType.defaultUrl
-  );
+  const determineDefaultOscalUrl = () =>
+    (props.isRestMode ? null : props.oscalUrl) ||
+    props.oscalObjectType.defaultUrl;
+
+  const [oscalUrl, setOscalUrl] = useState(determineDefaultOscalUrl());
 
   const loadOscalData = (newOscalUrl) => {
     if (!newOscalUrl) {
@@ -150,7 +152,7 @@ export default function OSCALLoader(props) {
   };
 
   useEffect(() => {
-    handleReload();
+    handleReload(!props.isRestMode);
   }, [oscalUrl]);
 
   const handleRestPut = (jsonString) => {
@@ -216,10 +218,7 @@ export default function OSCALLoader(props) {
       setIsResolutionComplete(true);
       setHasDefaultUrl(false);
     } else {
-      setOscalUrl(props.oscalObjectType.defaultUrl);
-      loadOscalData(props.oscalObjectType.defaultUrl);
-      setIsLoaded(false);
-      setIsResolutionComplete(false);
+      setOscalUrl(determineDefaultOscalUrl());
       setHasDefaultUrl(true);
     }
   }, [props.isRestMode]);
