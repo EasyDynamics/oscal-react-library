@@ -43,10 +43,19 @@ test("OSCALComponentDefinitionControlImplementation displays component parameter
       controls={controlsData}
     />
   );
-  const resultByProse = getByTextIncludingChildern(
-    "Does something with < control 1 / parameter 1 label > and < control 1 / parameter 2 label >"
+  const nonplaceholder1 = getByTextIncludingChildern(/Does something with/i);
+  const placeholderText1 = getByTextIncludingChildern(
+    /< control 1 \/ parameter 1 label >/i
   );
-  expect(resultByProse).toBeVisible();
+  const nonplaceholder2 = getByTextIncludingChildern(/and/i);
+  const placeholderText2 = getByTextIncludingChildern(
+    /< control 1 \/ parameter 2 label >/i
+  );
+
+  expect(nonplaceholder1).toBeVisible();
+  expect(placeholderText1).toBeVisible();
+  expect(nonplaceholder2).toBeVisible();
+  expect(placeholderText2).toBeVisible();
 });
 
 testOSCALControlParamLegend(

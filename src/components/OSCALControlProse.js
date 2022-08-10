@@ -170,7 +170,7 @@ function getTextSegment(text, key) {
 
   return (
     <Typography component="span" key={key}>
-      <OSCALMarkupLine text={text} />;
+      <OSCALMarkupLine text={text} />
     </Typography>
   );
 }
