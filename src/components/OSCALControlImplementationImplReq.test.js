@@ -3,16 +3,26 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import OSCALControlImplementation from "./OSCALControlImplementation";
 import getByTextIncludingChildern from "./oscal-utils/TestUtils";
-import { controlImplTestData, exampleControl } from "../test-data/ControlsData";
+import {
+  controlImplTestData,
+  controlImplWithDecSmtTestData,
+  exampleControl,
+  exampleControlWithDecSmt,
+} from "../test-data/ControlsData";
 import {
   exampleComponents,
   componentsTestData,
+  componentsDecimalTestData,
 } from "../test-data/ComponentsData";
-import { profileModifyTestData } from "../test-data/ModificationsData";
+import {
+  profileModifyTestData,
+  profileModifyDecSmtTestData,
+} from "../test-data/ModificationsData";
 import { sspRestData } from "../test-data/SystemData";
 import testOSCALControlParamLegend from "../common-tests/ControlParamLegend.test";
 
 const controlsTestData = [exampleControl];
+const controlsDecTestData = [exampleControlWithDecSmt];
 
 const emptyProfileModifyTestData = {};
 
@@ -42,6 +52,22 @@ export default function testOSCALControlImplementationImplReq(
     renderer();
     const result = getByTextIncludingChildern(
       "Does something with control 1 / component 1 / parameter 1 value and control 1 / component 1 / parameter 2 value"
+    );
+    expect(result).toBeVisible();
+  });
+
+  test(`${parentElementName}WithDecimalStatements displays component parameters in control prose`, () => {
+    render(
+      <OSCALControlImplementation
+        controlImplementation={controlImplWithDecSmtTestData}
+        components={componentsDecimalTestData}
+        controls={controlsDecTestData}
+        modifications={profileModifyDecSmtTestData}
+        partialRestData={sspRestData}
+      />
+    );
+    const result = getByTextIncludingChildern(
+      "Does something with control 1.1 / component 1.1 / parameter 1 value and control 1.1 / component 1.1 / parameter 2 value"
     );
     expect(result).toBeVisible();
   });
