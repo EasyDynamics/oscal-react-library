@@ -1,16 +1,17 @@
 import React from "react";
+import { render, screen } from "@testing-library/react";
 import ReactDomServer from "react-dom/server";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 const asHtml = (input) => ReactDomServer.renderToStaticMarkup(input);
 test(`OSCALMarkupLine converts plaintext to HTML`, () => {
-  const testerString = asHtml(<OSCALMarkupLine text="Test" />);
+  const testerString = asHtml(<OSCALMarkupLine>Test</OSCALMarkupLine>);
   expect(testerString).toEqual("Test");
 });
 
 test(`OSCALMarkupLine converts Italics, Bold and Plaintext`, () => {
   const testerString = asHtml(
-    <OSCALMarkupLine text="*Hello*, **world** I am in markdown" />
+    <OSCALMarkupLine>*Hello*, **world** I am in markdown</OSCALMarkupLine>
   );
   expect(testerString).toEqual(
     "<em>Hello</em>, <strong>world</strong> I am in markdown"
@@ -18,17 +19,19 @@ test(`OSCALMarkupLine converts Italics, Bold and Plaintext`, () => {
 });
 
 test(`OSCALMarkupLine converts hyperlinks to HTML`, () => {
-  const testerString = asHtml(
-    <OSCALMarkupLine text="[Link to EasyDynamics](https://www.easydynamics.com)]" />
+  render(
+    <OSCALMarkupLine>
+      [Link to EasyDynamics](https://www.easydynamics.com)]
+    </OSCALMarkupLine>
   );
-  expect(testerString).toEqual(
-    '<a href="https://www.easydynamics.com">Link to EasyDynamics</a>]'
-  );
+  const a = screen.getByText("Link to EasyDynamics");
+
+  expect(a.href).toEqual("https://www.easydynamics.com/");
 });
+
 test(`OSCALMarkupLine converts images to HTML`, () => {
-  const testerString = asHtml(
-    <OSCALMarkupLine text={'![alt text](url "title text")'} />
-  );
+  const altText = `![alt text](url "title text")`;
+  const testerString = asHtml(<OSCALMarkupLine>{altText}</OSCALMarkupLine>);
   expect(testerString).toEqual(
     '<img src="url" alt="alt text" title="title text"/>'
   );
@@ -36,22 +39,21 @@ test(`OSCALMarkupLine converts images to HTML`, () => {
 
 test(`OSCALMarkupLine converts images to HTML`, () => {
   const testerString = asHtml(
-    <OSCALMarkupLine text="`Inserting Tester Code`" />
+    <OSCALMarkupLine>`Inserting Tester Code`</OSCALMarkupLine>
   );
   expect(testerString).toEqual("<code>Inserting Tester Code</code>");
 });
 
 test(`OSCALMarkupLine converts script to HTML`, () => {
-  const testerString = asHtml(
-    <OSCALMarkupLine text="<script>alert('Nasty script!')</script>" />
-  );
+  const nastyBoi = `<script>alert('Nasty script!')</script>`;
+  const testerString = asHtml(<OSCALMarkupLine>{nastyBoi}</OSCALMarkupLine>);
 
   expect(testerString).toEqual(
     "&lt;script&gt;alert(&#x27;Nasty script!&#x27;)&lt;/script&gt;"
   );
 });
 
-test(`OSCALMarkupLine converts a multiline string to HTML`, () => {
+test(`OSCALMarkupMultiLine converts a multiline string to HTML`, () => {
   const multilineMarkdown = `
   this should be here
   # h1 heading
@@ -80,9 +82,11 @@ test(`OSCALMarkupLine converts a multiline string to HTML`, () => {
 });
 
 test(`OSCALMarkupLine Handles titles of links`, () => {
-  const testerString = asHtml(
-    <OSCALMarkupLine text="Empty: [](# 'Testing Title')" />
-  );
+  const testingTitle = `Empty: [](# 'Testing Title')`;
 
-  expect(testerString).toEqual('Empty: <a href="#" title="Testing Title"></a>');
+  render(<OSCALMarkupLine>{testingTitle}</OSCALMarkupLine>);
+  const a = screen.getByTitle("Testing Title");
+
+  expect(a.href).toEqual("http://localhost/#");
+  expect(a.title).toEqual("Testing Title");
 });
