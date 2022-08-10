@@ -4,7 +4,7 @@ import { Grid, TextField } from "@mui/material";
 import OSCALEditableFieldActions, {
   getElementLabel,
 } from "./OSCALEditableFieldActions";
-import OSCALMarkdownProse from "./OSCALMarkdownProse";
+import { OSCALMarkupLine } from "./OSCALMarkupProse";
 
 function textFieldWithEditableActions(
   props,
@@ -61,7 +61,7 @@ function textFieldWithEditableActions(
   return (
     <>
       <Typography display="inline" variant={props.typographyVariant}>
-        <OSCALMarkdownProse text={props.value} />
+        <OSCALMarkupLine text={props.value} />
       </Typography>
       <OSCALEditableFieldActions
         editedField={props.editedField}
@@ -81,7 +81,7 @@ export default function OSCALEditableTextField(props) {
     textFieldWithEditableActions(props, reference, inEditState, setInEditState)
   ) : (
     <Grid item className={props.className}>
-      <Typography variant={props.typographyVariant}></Typography>
+      <Typography variant={props.typographyVariant} />
     </Grid>
   );
 }
