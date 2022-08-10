@@ -81,7 +81,7 @@ export default function OSCALEditableTextField(props) {
     textFieldWithEditableActions(props, reference, inEditState, setInEditState)
   ) : (
     <Grid item className={props.className}>
-      <Typography variant={props.typographyVariant} />
+      <Typography variant={props.typographyVariant}>{props.value}</Typography>
     </Grid>
   );
 }
