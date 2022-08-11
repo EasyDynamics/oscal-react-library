@@ -84,7 +84,9 @@ function createTree(backendUrl, handleClose) {
                     onClick={handleClose}
                   >
                     <Typography noWrap>
-                      <OSCALMarkupLine text={oscalObject.metadata.title} />
+                      <OSCALMarkupLine>
+                        {oscalObject.metadata.title}
+                      </OSCALMarkupLine>
                     </Typography>
                   </Link>
                 }
