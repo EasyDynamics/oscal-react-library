@@ -59,7 +59,7 @@ export default function OSCALControlGuidance(props) {
             ref={descriptionElementRef}
             tabIndex={-1}
           >
-            <OSCALMarkupLine text={props.prose} />
+            <OSCALMarkupLine>{props.prose}</OSCALMarkupLine>
           </DialogContentText>
         </DialogContent>
         <DialogActions>

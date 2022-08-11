@@ -169,7 +169,7 @@ function getTextSegment(text, key) {
   }
   return (
     <Typography component="span" key={key}>
-      <OSCALMarkupLine text={text} />
+      <OSCALMarkupLine>{text}</OSCALMarkupLine>
     </Typography>
   );
 }
@@ -229,7 +229,7 @@ function getParameterLabelSegment(
     );
     paramSegment = styledParamLabel(
       `param-label-key-${key}`,
-      <OSCALMarkupLine text={parameterLabelText} />
+      <OSCALMarkupLine>{parameterLabelText}</OSCALMarkupLine>
     );
   }
 
