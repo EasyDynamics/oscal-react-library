@@ -10,7 +10,7 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getAbsoluteUrl } from "./oscal-utils/OSCALLinkUtils";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
-import { OSCALMarkupLine } from "./OSCALMarkupProse";
+import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 export const OSCALBackMatterCard = styled(Card)(
   ({ theme }) => `
@@ -49,7 +49,7 @@ function DescriptionDisplay(props) {
   }
   return (
     <StyledTooltip
-      title={<OSCALMarkupLine text={props.resource.description} />}
+      title={<OSCALMarkupMultiLine text={props.resource.description} />}
     >
       <DescriptionIcon
         color="primary"
