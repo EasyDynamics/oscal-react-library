@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import OSCALControlImplementation from "./OSCALControlImplementation";
-import getByTextIncludingChildern from "./oscal-utils/TestUtils";
+import getByTextIncludingChildren from "./oscal-utils/TestUtils";
 import { controlImplTestData, exampleControl } from "../test-data/ControlsData";
 import {
   exampleComponents,
@@ -40,12 +40,12 @@ export default function testOSCALControlImplementationImplReq(
 
   test(`${parentElementName} displays component parameters in control prose`, () => {
     renderer();
-    const nonplaceholder1 = getByTextIncludingChildern(/does something with/i);
-    const placeholderText1 = getByTextIncludingChildern(
+    const nonplaceholder1 = getByTextIncludingChildren(/does something with/i);
+    const placeholderText1 = getByTextIncludingChildren(
       /control 1 \/ component 1 \/ parameter 1 value/i
     );
-    const nonplaceholder2 = getByTextIncludingChildern(/and/i);
-    const placeholderText2 = getByTextIncludingChildern(
+    const nonplaceholder2 = getByTextIncludingChildren(/and/i);
+    const placeholderText2 = getByTextIncludingChildren(
       /control 1 \/ component 1 \/ parameter 2 value/i
     );
 
