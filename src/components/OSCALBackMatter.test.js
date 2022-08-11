@@ -1,6 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { within } from "@testing-library/dom";
 import OSCALBackMatter from "./OSCALBackMatter";
 import {
   backMatterTestUrl,
@@ -56,6 +57,15 @@ export default function testOSCALBackMatter(parentElementName, renderer) {
       name: "application/oscal.catalog+json2",
     });
     expect(button.getAttribute("href")).toEqual(backMatterTestUrl);
+  });
+
+  test(`${parentElementName} displays external link icon`, async () => {
+    renderer();
+    const button = screen.getByRole("button", {
+      name: /application\/something\.else/i,
+    });
+
+    within(button).getByTestId("OpenInNewIcon");
   });
 }
 

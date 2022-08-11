@@ -11,6 +11,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import StyledTooltip from "./OSCALStyledTooltip";
 import OSCALDiagram from "./OSCALDiagram";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
@@ -146,6 +147,13 @@ export default function OSCALSystemCharacteristics(props) {
                               categorization["information-type-ids"].map(
                                 (infoId) => (
                                   <Chip
+                                    icon={
+                                      categorization.system.startsWith(
+                                        "http"
+                                      ) ? (
+                                        <OpenInNewIcon />
+                                      ) : null
+                                    }
                                     label={infoId}
                                     component="a"
                                     href={categorization.system}
