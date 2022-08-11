@@ -13,6 +13,7 @@ import TableRow from "@mui/material/TableRow";
 import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
+import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 const SmallTableCell = styled(TableCell)`
   text-align: right;
@@ -44,7 +45,9 @@ export default function OSCALSystemImplementation(props) {
               <OSCALSectionHeader>System Implementation</OSCALSectionHeader>
             </Grid>
             <Grid item xs={12}>
-              <Typography>{props.systemImplementation.remarks}</Typography>
+              <OSCALMarkupMultiLine paragraphComponent={Typography}>
+                {props.systemImplementation.remarks}
+              </OSCALMarkupMultiLine>
             </Grid>
             <Grid item xs={12}>
               <TableContainer>

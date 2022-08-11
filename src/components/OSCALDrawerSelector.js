@@ -17,6 +17,7 @@ import {
   oscalObjectTypes,
   fetchAllResourcesOfType,
 } from "./oscal-utils/OSCALRestUtils";
+import { OSCALMarkupLine } from "./OSCALMarkupProse";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -82,7 +83,9 @@ function createTree(backendUrl, handleClose) {
                     to={`${oscalObjectType.jsonRootName}/${oscalObject.uuid}`}
                     onClick={handleClose}
                   >
-                    <Typography noWrap>{oscalObject.metadata.title}</Typography>
+                    <Typography noWrap>
+                      <OSCALMarkupLine text={oscalObject.metadata.title} />
+                    </Typography>
                   </Link>
                 }
               />
