@@ -1,16 +1,17 @@
 import React from "react";
+import Link from "@mui/material/Link";
 import ReactMarkdown from "react-markdown";
 
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
-const components = {
+const baseComponents = {
   a: ({ ...props }) =>
     props.href.startsWith("http") ? (
-      <a target="_blank" {...props}>
+      <Link target="_blank" {...props}>
         <OpenInNewIcon /> {props.children}
-      </a>
+      </Link>
     ) : (
-      <a {...props}>{props.children}</a>
+      <Link {...props}>{props.children}</Link>
     ),
 };
 
@@ -19,17 +20,28 @@ const components = {
  * @param {String} props.text
  * @returns a React element from the markdown
  */
-
 export function OSCALMarkupMultiLine(props) {
-  components.p = props.paragraphComponent ?? "p";
   return (
-    <ReactMarkdown components={components}>{props.children}</ReactMarkdown>
+    <ReactMarkdown
+      components={{
+        ...baseComponents,
+        p: props.paragraphComponent ?? "p",
+      }}
+    >
+      {props.children}
+    </ReactMarkdown>
   );
 }
 
 export function OSCALMarkupLine(props) {
-  components.p = React.Fragment;
   return (
-    <ReactMarkdown components={components}>{props.children}</ReactMarkdown>
+    <ReactMarkdown
+      components={{
+        ...baseComponents,
+        p: React.Fragment,
+      }}
+    >
+      {props.children}
+    </ReactMarkdown>
   );
 }
