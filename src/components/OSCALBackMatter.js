@@ -33,7 +33,7 @@ function TitleDisplay(props) {
   const color = props.resource.title ? "initial" : "error";
   return (
     <Typography color={color} variant="subtitle1">
-      <OSCALMarkupLine text={title} />
+      <OSCALMarkupLine>{title}</OSCALMarkupLine>
     </Typography>
   );
 }
@@ -50,7 +50,11 @@ function DescriptionDisplay(props) {
   }
   return (
     <StyledTooltip
-      title={<OSCALMarkupMultiLine text={props.resource.description} />}
+      title={
+        <OSCALMarkupMultiLine>
+          {props.resource.description}
+        </OSCALMarkupMultiLine>
+      }
     >
       <DescriptionIcon
         color="primary"
@@ -73,7 +77,7 @@ function CitationDisplay(props) {
   }
   return (
     <StyledTooltip
-      title={<OSCALMarkupLine text={props.resource.citation.text} />}
+      title={<OSCALMarkupLine>{props.resource.citation.text}</OSCALMarkupLine>}
     >
       <FormatQuoteIcon
         color="primary"
