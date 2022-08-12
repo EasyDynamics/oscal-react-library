@@ -61,7 +61,7 @@ function textFieldWithEditableActions(
   return (
     <>
       <Typography display="inline" variant={props.typographyVariant}>
-        <OSCALMarkupLine text={props.value} />
+        <OSCALMarkupLine>{props.value}</OSCALMarkupLine>
       </Typography>
       <OSCALEditableFieldActions
         editedField={props.editedField}
