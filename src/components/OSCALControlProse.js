@@ -443,8 +443,6 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
       }
       if (isEditingStatement) {
         // We're currently editing this statement, so build param input
-        // TODO: Populate implementationSetParameters with values from statementByComponent or empties.
-        // https://github.com/EasyDynamics/oscal-react-library/issues/503
         const setParameter = statementByComponent?.["set-parameters"]?.find(
           (element) => element["param-id"] === segment
         ) ?? { "param-id": segment };
