@@ -12,7 +12,9 @@ export function fixJsonUrls(absoluteUrl) {
 }
 
 export function getAbsoluteUrl(href, parentUrl) {
-  return href.startsWith("http") ? href : `${parentUrl}/../${href}`;
+  return href.startsWith("http") || !parentUrl
+    ? href
+    : `${parentUrl}/../${href}`;
 }
 
 export default function resolveLinkHref(

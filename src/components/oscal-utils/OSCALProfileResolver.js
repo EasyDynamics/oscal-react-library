@@ -41,10 +41,16 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
 ) {
   let itemUrl = origItemUrl;
 
-  // TODO: This should be improved for other use cases.
-  // https://github.com/EasyDynamics/oscal-react-library/issues/505
-  if (!origItemUrl.startsWith("http")) {
-    itemUrl = `${parentUrl}/../${origItemUrl}`;
+  // The itemUrl may be a path relative to the parent document, rather than an
+  // absolute URL. We should try to catch this and handle resolving the relative URL
+  // to an absolute URL. Technically, it may still not be an absolute URL but it's at
+  // least relative to some kind of document that loaded correctly in the first place
+  // so hopefully further relative paths relative to the parent work too.
+  if (
+    !origItemUrl.startsWith("http://") &&
+    !origItemUrl.startsWith("https://")
+  ) {
+    itemUrl = new URL(origItemUrl, parentUrl).toString();
   }
 
   itemUrl = fixJsonUrls(itemUrl);
