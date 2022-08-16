@@ -1,20 +1,10 @@
 import getUriFromBackMatterByHref from "./OSCALBackMatterUtils";
 
-export function fixJsonUrls(absoluteUrl) {
-  // TODO: This workaround references JSON representation instead of the back-matter links to
-  // XML catalogs and it should be removed once the issue has been resolved.
-  // https://github.com/EasyDynamics/oscal-react-library/issues/158
-  if (!absoluteUrl.endsWith(".xml")) {
-    return absoluteUrl;
-  }
-  // Replacing all instances of xml with json in the path *should* get us the correct json URL
-  return absoluteUrl.replace(/xml/g, "json");
-}
-
 export function getAbsoluteUrl(href, parentUrl) {
-  return href.startsWith("http") || !parentUrl
-    ? href
-    : `${parentUrl}/../${href}`;
+  if (href.startsWith("https://") || href.startsWith("http://") || !parentUrl) {
+    return href;
+  }
+  return new URL(href, parentUrl).toString();
 }
 
 export default function resolveLinkHref(
@@ -23,14 +13,8 @@ export default function resolveLinkHref(
   parentUrl,
   mediaTypeRegex
 ) {
-  if (!href.startsWith("#")) {
-    return getAbsoluteUrl(href, parentUrl);
-  }
-
-  return fixJsonUrls(
-    getAbsoluteUrl(
-      getUriFromBackMatterByHref(backMatter, href, mediaTypeRegex).href,
-      parentUrl
-    )
-  );
+  const fooBarBaz = !href.startsWith("#")
+    ? href
+    : getUriFromBackMatterByHref(backMatter, href, mediaTypeRegex).href;
+  return getAbsoluteUrl(fooBarBaz, parentUrl);
 }

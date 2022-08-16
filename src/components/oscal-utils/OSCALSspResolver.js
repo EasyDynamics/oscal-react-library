@@ -1,5 +1,4 @@
 import OSCALResolveProfileOrCatalogUrlControls from "./OSCALProfileResolver";
-import { fixJsonUrls } from "./OSCALLinkUtils";
 /**
  * Loads an SSP's 'import-profile' and adds the resulting controls to the SSP
  *
@@ -14,16 +13,11 @@ export default function OSCALSspResolveProfile(
   if (!ssp["import-profile"]) {
     return;
   }
-  let profileUrl = ssp["import-profile"].href;
+  const profileUrl = ssp["import-profile"].href;
 
   const inheritedProfilesAndCatalogs = {
     inherited: [],
   };
-
-  // Fix profile URL if not a json
-  if (!profileUrl.endsWith(".json")) {
-    profileUrl = fixJsonUrls(profileUrl);
-  }
 
   // Fixing linting error here would take significant change to codebase given how we use props.
   /* eslint no-param-reassign: "error" */

@@ -1,4 +1,4 @@
-import resolveLinkHref, { fixJsonUrls } from "./OSCALLinkUtils";
+import resolveLinkHref from "./OSCALLinkUtils";
 
 const OSCAL_MEDIA_TYPE_REGEX = /^application\/oscal.*\+json$/;
 /**
@@ -39,21 +39,8 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
   onError,
   pendingProcesses // tracks state of recursive calls
 ) {
-  let itemUrl = origItemUrl;
+  const itemUrl = new URL(origItemUrl, parentUrl).toString();
 
-  // The itemUrl may be a path relative to the parent document, rather than an
-  // absolute URL. We should try to catch this and handle resolving the relative URL
-  // to an absolute URL. Technically, it may still not be an absolute URL but it's at
-  // least relative to some kind of document that loaded correctly in the first place
-  // so hopefully further relative paths relative to the parent work too.
-  if (
-    !origItemUrl.startsWith("http://") &&
-    !origItemUrl.startsWith("https://")
-  ) {
-    itemUrl = new URL(origItemUrl, parentUrl).toString();
-  }
-
-  itemUrl = fixJsonUrls(itemUrl);
   // Add our current itemUrl to the list of pending processes
   pendingProcesses.push(itemUrl);
   fetch(itemUrl)
@@ -85,8 +72,9 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
           modifications.alters.push(...(result.profile.modify?.alters ?? []));
 
           result.profile.imports.forEach((profileImport) => {
+            const profileBackMatter = result.profile?.["back-matter"] ?? [];
             const importUrl = resolveLinkHref(
-              result.profile?.["back-matter"] ?? [],
+              profileBackMatter,
               profileImport.href,
               null,
               OSCAL_MEDIA_TYPE_REGEX
@@ -96,7 +84,7 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
               modifications,
               importUrl,
               itemUrl,
-              result.profilea?.["back-matter"] ?? [],
+              profileBackMatter,
               inheritedOSCALObject.inherited,
               onSuccess,
               onError,
