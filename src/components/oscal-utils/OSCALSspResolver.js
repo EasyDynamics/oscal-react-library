@@ -25,12 +25,6 @@ export default function OSCALSspResolveProfile(
     profileUrl = fixJsonUrls(profileUrl);
   }
 
-  // TODO: This should be improved for other use cases.
-  // https://github.com/EasyDynamics/oscal-react-library/issues/505
-  if (!profileUrl.startsWith("http")) {
-    profileUrl = `${parentUrl}/../${profileUrl}`;
-  }
-
   // Fixing linting error here would take significant change to codebase given how we use props.
   /* eslint no-param-reassign: "error" */
   ssp.resolvedControls = [];
