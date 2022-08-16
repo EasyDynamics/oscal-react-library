@@ -47,15 +47,6 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
     itemUrl = `${parentUrl}/../${origItemUrl}`;
   }
 
-  // TODO: This is only necessary because of a source issue with OSCAL Content.
-  // Once the issue has been resolved, this can be removed.
-  // https://github.com/EasyDynamics/oscal-react-library/issues/502
-  if (itemUrl.includes("/content/nist.gov/")) {
-    itemUrl = itemUrl.replace("/content/nist.gov/", "/nist.gov/");
-  }
-  if (itemUrl.includes("/content/fedramp.gov/")) {
-    itemUrl = itemUrl.replace("/content/fedramp.gov/", "/fedramp.gov/");
-  }
   itemUrl = fixJsonUrls(itemUrl);
   // Add our current itemUrl to the list of pending processes
   pendingProcesses.push(itemUrl);
