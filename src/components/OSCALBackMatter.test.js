@@ -3,11 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { within } from "@testing-library/dom";
 import OSCALBackMatter from "./OSCALBackMatter";
-import {
-  backMatterTestUrl,
-  parentUrlTestData,
-  revFourCatalog,
-} from "../test-data/Urls";
+import { parentUrlTestData, revFourCatalog } from "../test-data/Urls";
 import { backMatterTestData } from "../test-data/BackMatterData";
 
 function backMatterRenderer() {
@@ -56,7 +52,7 @@ export default function testOSCALBackMatter(parentElementName, renderer) {
     const button = screen.getByRole("button", {
       name: "application/oscal.catalog+json2",
     });
-    expect(button.getAttribute("href")).toEqual(backMatterTestUrl);
+    expect(button.getAttribute("href")).toEqual(revFourCatalog);
   });
 
   test(`${parentElementName} displays external link icon`, async () => {
