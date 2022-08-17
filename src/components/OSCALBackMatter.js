@@ -21,13 +21,6 @@ export const OSCALBackMatterCard = styled(Card)(
 `
 );
 
-// TODO: Remove workaround for missing media type
-// https://github.com/EasyDynamics/oscal-react-library/issues/512
-const getURLMediaType = (url) => {
-  const lastUrlPath = url.split("//").pop().split("/").pop();
-  return lastUrlPath.match(/\.[A-Za-z]{3,4}($|\?)/) || "Unknown";
-};
-
 function TitleDisplay(props) {
   const title = props.resource.title || "No Title";
   const color = props.resource.title ? "initial" : "error";
@@ -94,8 +87,7 @@ export default function OSCALBackMatter(props) {
   }
 
   const getMediaType = (rlink) =>
-    rlink["media-type"] ||
-    getURLMediaType(getAbsoluteUrl(rlink.href, props.parentUrl));
+    rlink["media-type"] || getAbsoluteUrl(rlink.href, props.parentUrl);
 
   const backMatterDisplay = (resource) => (
     <Grid item xs={3} key={resource.uuid}>
