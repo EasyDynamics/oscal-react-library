@@ -9,7 +9,7 @@ import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import DescriptionIcon from "@mui/icons-material/Description";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import StyledTooltip from "./OSCALStyledTooltip";
-import { getAbsoluteUrl, resolveLinkHref } from "./oscal-utils/OSCALLinkUtils";
+import { getAbsoluteUrl } from "./oscal-utils/OSCALLinkUtils";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
