@@ -21,6 +21,11 @@ export const OSCALBackMatterCard = styled(Card)(
 `
 );
 
+const getURLMediaType = (url) => {
+  const fileExtension = new URL(url).pathname.split(".").reverse()[0];
+  return fileExtension.length <= 4 ? fileExtension.toUpperCase() : "Unknown";
+};
+
 function TitleDisplay(props) {
   const title = props.resource.title || "No Title";
   const color = props.resource.title ? "initial" : "error";
@@ -87,7 +92,8 @@ export default function OSCALBackMatter(props) {
   }
 
   const getMediaType = (rlink) =>
-    rlink["media-type"] || getAbsoluteUrl(rlink.href, props.parentUrl);
+    rlink["media-type"] ||
+    getURLMediaType(getAbsoluteUrl(rlink.href, props.parentUrl));
 
   const backMatterDisplay = (resource) => (
     <Grid item xs={3} key={resource.uuid}>
