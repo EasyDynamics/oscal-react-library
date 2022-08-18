@@ -4,12 +4,11 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
-import List from "@mui/material/List";
 import ListSubheader from "@mui/material/ListSubheader";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
+import Container from "@mui/material/Container";
 import GroupIcon from "@mui/icons-material/Group";
 import OSCALEditableTextField from "./OSCALEditableTextField";
 
@@ -20,6 +19,10 @@ export const OSCALMetadataPartiesHeader = styled(ListSubheader)(
 );
 const OSCALMetadataLabel = styled(Typography)`
   text-align: right;
+  color: #0000008a;
+`;
+
+const OSCALMetadataPartyInformation = styled(Container)`
   color: #0000008a;
 `;
 
@@ -39,7 +42,7 @@ const OSCALMetadataPartiesCard = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   position: "relative",
   overflow: "auto",
-  maxHeight: "12em",
+  maxHeight: "18em",
 }));
 
 // Returns a string with a locality-sensitive representation of this date
@@ -60,38 +63,60 @@ export function OSCALMetadataPartyAddress(props) {
 }
 
 export function OSCALMetadataPartyEmail(props) {
-  return <Link href={`mailto:${props.email}`}>{props.email}</Link>;
+  return (
+    <Typography>
+      <Link href={`mailto:${props.email}`}>{props.email}</Link>
+    </Typography>
+  );
 }
 
 export function OSCALMetadataPartyTelephone(props) {
   // TODO: Show an icon for the telephone type (home, work, mobile)
   return (
-    <Link href={`tel:${props.telephone.number}`}>{props.telephone.number}</Link>
+    <Typography>
+      <Link href={`tel:${props.telephone.number}`}>
+        {props.telephone.number}
+      </Link>
+    </Typography>
   );
 }
 
 export function OSCALMetadataParty(props) {
   return (
-    <ListItem key={`${props.party.uuid}-parties-listItem`}>
-      <ListItemAvatar>
-        <Avatar>
-          {props.party.type === "organization" ? <GroupIcon /> : null}
-        </Avatar>
-      </ListItemAvatar>
-      <ListItemText
-        primary={props.party.name}
-        secondary={props.partyRolesText}
-      />
-      {props.party["telephone-numbers"]?.map((telephone) => (
-        <OSCALMetadataPartyTelephone telephone={telephone} />
-      ))}
-      {props.party["email-addresses"]?.map((email) => (
-        <OSCALMetadataPartyEmail email={email} />
-      ))}
-      {props.party.addresses?.map((address) => (
-        <OSCALMetadataPartyAddress address={address} />
-      ))}
-    </ListItem>
+    <Card>
+      <CardContent>
+        <Grid container spacing={2}>
+          <Grid item>
+            <Avatar>
+              {props.party.type === "organization" ? <GroupIcon /> : null}
+            </Avatar>
+          </Grid>
+          <Grid item>
+            <Typography>
+              {props.party.name}
+              {props.partyRolesText}
+            </Typography>
+          </Grid>
+        </Grid>
+        <OSCALMetadataPartyInformation>
+          {props.party["telephone-numbers"]?.map((telephone) => (
+            <OSCALMetadataPartyTelephone
+              key={`${telephone.type}-${telephone.number}`}
+              telephone={telephone}
+            />
+          ))}
+          {props.party["email-addresses"]?.map((email) => (
+            <OSCALMetadataPartyEmail key={email} email={email} />
+          ))}
+          {props.party.addresses?.map((address) => (
+            <OSCALMetadataPartyAddress
+              key={`${address.type}`}
+              address={address}
+            />
+          ))}
+        </OSCALMetadataPartyInformation>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -151,25 +176,14 @@ export default function OSCALMetadata(props) {
         <Grid container spacing={3}>
           <Grid item xs={8}>
             <OSCALMetadataPartiesCard>
-              <List
-                subheader={
-                  <OSCALMetadataPartiesHeader
-                    component="div"
-                    id="oscal-metadata-parties"
-                  >
-                    Parties
-                  </OSCALMetadataPartiesHeader>
-                }
-              >
-                {props.metadata.parties?.map((party) => (
-                  <OSCALMetadataParty
-                    key={party.uuid}
-                    party={party}
-                    partyRolesText={getPartyRolesText(party)}
-                  />
-                ))}
-                {props.metadata.parties?.map((party) => console.log(party))}
-              </List>
+              <OSCALMetadataPartiesHeader>Parties</OSCALMetadataPartiesHeader>
+              {props.metadata.parties?.map((party) => (
+                <OSCALMetadataParty
+                  key={party.uuid}
+                  party={party}
+                  partyRolesText={getPartyRolesText(party)}
+                />
+              ))}
             </OSCALMetadataPartiesCard>
           </Grid>
           <Grid item xs={4}>
