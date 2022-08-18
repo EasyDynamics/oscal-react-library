@@ -3,6 +3,7 @@ import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
 import List from "@mui/material/List";
 import ListSubheader from "@mui/material/ListSubheader";
 import ListItem from "@mui/material/ListItem";
@@ -44,27 +45,52 @@ const OSCALMetadataPartiesCard = styled(Paper)(({ theme }) => ({
 // Returns a string with a locality-sensitive representation of this date
 const formatDate = (isoDate) => new Date(isoDate).toLocaleString();
 
-function OSCALMetadataParty(partyName, partyUuid, partyType, metadata) {
-  const getRoleLabel = (roleId) =>
-    metadata.roles.find((role) => role.id === roleId)?.title;
-
-  const getPartyRolesText = () =>
-    metadata["responsible-parties"]
-      ?.filter((responsibleParty) =>
-        responsibleParty["party-uuids"]?.includes(partyUuid)
-      )
-      .map((item) => item["role-id"])
-      .map(getRoleLabel)
-      // Remove empty/falsey items from the list
-      .filter((item) => item)
-      .join(", ");
-
+export function OSCALMetadataPartyAddress(props) {
+  // TODO: Show an icon for the address type (home, work)
+  const { address } = props;
   return (
-    <ListItem key={`${partyUuid}-parties-listItem`}>
+    <address>
+      <Typography>
+        {`${address["addr-lines"]?.join(", ")} ${address.city} ${
+          address["postal-code"]
+        } ${address.country}`}
+      </Typography>
+    </address>
+  );
+}
+
+export function OSCALMetadataPartyEmail(props) {
+  return <Link href={`mailto:${props.email}`}>{props.email}</Link>;
+}
+
+export function OSCALMetadataPartyTelephone(props) {
+  // TODO: Show an icon for the telephone type (home, work, mobile)
+  return (
+    <Link href={`tel:${props.telephone.number}`}>{props.telephone.number}</Link>
+  );
+}
+
+export function OSCALMetadataParty(props) {
+  return (
+    <ListItem key={`${props.party.uuid}-parties-listItem`}>
       <ListItemAvatar>
-        <Avatar>{partyType === "organization" ? <GroupIcon /> : null}</Avatar>
+        <Avatar>
+          {props.party.type === "organization" ? <GroupIcon /> : null}
+        </Avatar>
       </ListItemAvatar>
-      <ListItemText primary={partyName} secondary={getPartyRolesText()} />{" "}
+      <ListItemText
+        primary={props.party.name}
+        secondary={props.partyRolesText}
+      />
+      {props.party["telephone-numbers"]?.map((telephone) => (
+        <OSCALMetadataPartyTelephone telephone={telephone} />
+      ))}
+      {props.party["email-addresses"]?.map((email) => (
+        <OSCALMetadataPartyEmail email={email} />
+      ))}
+      {props.party.addresses?.map((address) => (
+        <OSCALMetadataPartyAddress address={address} />
+      ))}
     </ListItem>
   );
 }
@@ -73,6 +99,19 @@ export default function OSCALMetadata(props) {
   if (!props.metadata) {
     return null;
   }
+  const getRoleLabel = (roleId) =>
+    props.metadata.roles.find((role) => role.id === roleId)?.title;
+
+  const getPartyRolesText = (party) =>
+    props.metadata["responsible-parties"]
+      ?.filter((responsibleParty) =>
+        responsibleParty["party-uuids"]?.includes(party.uuid)
+      )
+      .map((item) => item["role-id"])
+      .map(getRoleLabel)
+      // Remove empty/falsey items from the list
+      .filter((item) => item)
+      .join(", ");
 
   return (
     <Grid container>
@@ -122,14 +161,14 @@ export default function OSCALMetadata(props) {
                   </OSCALMetadataPartiesHeader>
                 }
               >
-                {props.metadata.parties?.map((party) =>
-                  OSCALMetadataParty(
-                    party.name,
-                    party.uuid,
-                    party.type,
-                    props.metadata
-                  )
-                )}
+                {props.metadata.parties?.map((party) => (
+                  <OSCALMetadataParty
+                    key={party.uuid}
+                    party={party}
+                    partyRolesText={getPartyRolesText(party)}
+                  />
+                ))}
+                {props.metadata.parties?.map((party) => console.log(party))}
               </List>
             </OSCALMetadataPartiesCard>
           </Grid>
