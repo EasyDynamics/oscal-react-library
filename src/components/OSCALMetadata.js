@@ -44,24 +44,35 @@ const OSCALMetadataPartiesCard = styled(Paper)(({ theme }) => ({
 // Returns a string with a locality-sensitive representation of this date
 const formatDate = (isoDate) => new Date(isoDate).toLocaleString();
 
-export default function OSCALMetadata(props) {
-  if (!props.metadata) {
-    return null;
-  }
-
+function OSCALMetadataParty(partyName, partyUuid, partyType, metadata) {
   const getRoleLabel = (roleId) =>
-    props.metadata.roles.find((role) => role.id === roleId)?.title;
+    metadata.roles.find((role) => role.id === roleId)?.title;
 
-  const getPartyRolesText = (party) =>
-    props.metadata["responsible-parties"]
+  const getPartyRolesText = () =>
+    metadata["responsible-parties"]
       ?.filter((responsibleParty) =>
-        responsibleParty["party-uuids"]?.includes(party.uuid)
+        responsibleParty["party-uuids"]?.includes(partyUuid)
       )
       .map((item) => item["role-id"])
       .map(getRoleLabel)
       // Remove empty/falsey items from the list
       .filter((item) => item)
       .join(", ");
+
+  return (
+    <ListItem key={`${partyUuid}-parties-listItem`}>
+      <ListItemAvatar>
+        <Avatar>{partyType === "organization" ? <GroupIcon /> : null}</Avatar>
+      </ListItemAvatar>
+      <ListItemText primary={partyName} secondary={getPartyRolesText()} />{" "}
+    </ListItem>
+  );
+}
+
+export default function OSCALMetadata(props) {
+  if (!props.metadata) {
+    return null;
+  }
 
   return (
     <Grid container>
@@ -111,19 +122,14 @@ export default function OSCALMetadata(props) {
                   </OSCALMetadataPartiesHeader>
                 }
               >
-                {props.metadata.parties?.map((party) => (
-                  <ListItem key={`${party.uuid}-parties-listItem`}>
-                    <ListItemAvatar>
-                      <Avatar>
-                        {party.type === "organization" ? <GroupIcon /> : null}
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={party.name}
-                      secondary={getPartyRolesText(party)}
-                    />
-                  </ListItem>
-                ))}
+                {props.metadata.parties?.map((party) =>
+                  OSCALMetadataParty(
+                    party.name,
+                    party.uuid,
+                    party.type,
+                    props.metadata
+                  )
+                )}
               </List>
             </OSCALMetadataPartiesCard>
           </Grid>
