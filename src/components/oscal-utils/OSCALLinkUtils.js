@@ -32,3 +32,8 @@ export default function resolveLinkHref(
     )
   );
 }
+
+export function getURLMediaType(url) {
+  const fileExtension = new URL(url).pathname.split(".").pop();
+  return fileExtension.length <= 4 ? fileExtension.toUpperCase() : "Unknown";
+}
