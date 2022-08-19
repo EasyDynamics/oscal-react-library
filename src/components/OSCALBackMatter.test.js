@@ -13,6 +13,7 @@ import {
   exampleBackMatterWithoutMediaTypeAndUnknownExtension,
   exampleBackMatterWithoutMediaType,
 } from "../test-data/BackMatterData";
+import { getURLMediaTypeWithUrl } from "./oscal-utils/TestUtils";
 
 function backMatterRenderer() {
   render(
@@ -101,4 +102,11 @@ export default function testOSCALBackMatter(parentElementName, renderer) {
 
 if (!require.main) {
   testOSCALBackMatter("OSCALBackMatter", backMatterRenderer);
+  expect(getURLMediaTypeWithUrl(`${backMatterTestUrl}/../diagram.png`, "PNG"));
+  expect(
+    getURLMediaTypeWithUrl(
+      `${backMatterTestUrl}/../unknown/unknown-filetype`,
+      "Unknown"
+    )
+  );
 }

@@ -1,6 +1,7 @@
 import { screen } from "@testing-library/react";
+import { getURLMediaType } from "./OSCALLinkUtils";
 
-function getByTextIncludingChildren(textMatch) {
+export default function getByTextIncludingChildren(textMatch) {
   return screen.getByText((content, node) => {
     const hasText = (testNode) =>
       testNode.textContent === textMatch ||
@@ -13,4 +14,6 @@ function getByTextIncludingChildren(textMatch) {
   });
 }
 
-export default getByTextIncludingChildren;
+export function getURLMediaTypeWithUrl(url, name) {
+  return getURLMediaType(url).match(name);
+}
