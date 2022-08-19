@@ -34,6 +34,14 @@ export default function resolveLinkHref(
 }
 
 export function getURLMediaType(url) {
-  const fileExtension = new URL(url).pathname.split(".").pop();
+  let fileExtension = "";
+  try {
+    fileExtension = new URL(url).pathname.split(".").pop();
+    if (fileExtension === "/") {
+      fileExtension = "href";
+    }
+  } catch {
+    fileExtension = "Unknown";
+  }
   return fileExtension.length <= 4 ? fileExtension.toUpperCase() : "Unknown";
 }
