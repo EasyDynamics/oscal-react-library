@@ -43,7 +43,6 @@ function getFileExtension(url) {
   try {
     return new URL(url).pathname.split("/").pop().split(".").pop();
   } catch {
-    console.warn(`Unable to detect extension for: ${url}`);
     return "";
   }
 }
@@ -57,12 +56,8 @@ function getFileExtension(url) {
  */
 export function guessExtensionFromHref(url) {
   const fallbackFileExtension = "Unknown";
-  // TODO: Use an HTTP HEAD request to attempt to get a `Content-Type` header
-  // for the underlying document. The request(s) should likely properly handle
-  // redirects in order to handle DOI URLs etc. This would require refactoring
-  // the length check in the return as well. In fact, doing so may replace the
-  // need for an extension-based check at all. But in implementing that we
-  // should remember that a HEAD is more expensive than splitting strings.
+  // TODO: Use an HTTP HEAD request to attempt to get a `Content-Type` header for the underlying
+  // document. (https://github.com/EasyDynamics/oscal-react-library/issues/580)
   const detectedExtension = getFileExtension(url).toUpperCase();
   const extensionLength = detectedExtension.length;
   // This is purely a guess based on typical file types. When the length is less
