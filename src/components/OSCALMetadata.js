@@ -23,6 +23,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import BusinessIcon from "@mui/icons-material/Business";
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
 import Dialog from "@mui/material/Dialog";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import OSCALEditableTextField from "./OSCALEditableTextField";
 
 export const OSCALMetadataPartiesHeader = styled(ListSubheader)(
@@ -58,11 +59,39 @@ const OSCALMetadataPartiesCard = styled(Paper)(({ theme }) => ({
 // Returns a string with a locality-sensitive representation of this date
 const formatDate = (isoDate) => new Date(isoDate).toLocaleString();
 
+const TELEPHONE_ICON_MAPPING = {
+  home: <HomeIcon />,
+  mobile: <SmartphoneIcon />,
+  office: <BusinessIcon />,
+};
+
+const ADDRESS_ICON_MAPPING = {
+  home: <HomeIcon />,
+  work: <BusinessIcon />,
+};
+
+const UNKNOWN_TYPE_ICON = <HelpOutlineIcon />;
+
+function getIconOfType(mapping, contactType) {
+  if (!mapping || !contactType) {
+    return UNKNOWN_TYPE_ICON;
+  }
+  return mapping[contactType] ?? UNKNOWN_TYPE_ICON;
+}
+
+function getPhoneIcon(contactType) {
+  return getIconOfType(TELEPHONE_ICON_MAPPING, contactType);
+}
+
+function getAddressIcon(contactType) {
+  return getIconOfType(ADDRESS_ICON_MAPPING, contactType);
+}
+
 export function OSCALMetadataPartyAddress(props) {
   const { address } = props;
   return (
     <>
-      {address.type === "home" ? <HomeIcon /> : <BusinessIcon />}
+      {getAddressIcon(address.type)}
       <address>
         <Typography>
           {`${address["addr-lines"]?.join(", ")} ${address.city} ${
@@ -84,25 +113,9 @@ export function OSCALMetadataPartyEmail(props) {
 
 export function OSCALMetadataPartyTelephone(props) {
   const { telephone } = props;
-  let icon = null;
-
-  switch (telephone.type) {
-    case "home":
-      icon = <HomeIcon />;
-      break;
-    case "mobile":
-      icon = <SmartphoneIcon />;
-      break;
-    case "office":
-      icon = <BusinessIcon />;
-      break;
-    default:
-      break;
-  }
-
   return (
     <Typography>
-      {icon}
+      {getPhoneIcon(telephone.type)}
       <Link href={`tel:${telephone.number}`}>{telephone.number}</Link>
     </Typography>
   );

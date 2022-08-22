@@ -13,6 +13,9 @@ export const exampleParties = [
         type: "office",
         number: "+18004444444",
       },
+      {
+        number: "+18006666666",
+      },
     ],
     addresses: [
       {

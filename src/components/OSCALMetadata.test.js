@@ -65,6 +65,18 @@ describe("OSCALMetadata", () => {
     expect(screen.getByRole("link", { name: /\+18004444444/i })).toBeVisible();
   });
 
+  test(`displays unknown type telephone number info`, () => {
+    const button = screen.getByRole("button", {
+      name: /contact/i,
+    });
+
+    button.click();
+
+    expect(screen.getByText("Phone")).toBeVisible();
+    expect(screen.getByTestId("HelpOutlineIcon")).toBeVisible();
+    expect(screen.getByRole("link", { name: /\+1800666666/i })).toBeVisible();
+  });
+
   test(`displays address info`, () => {
     const button = screen.getByRole("button", {
       name: /contact/i,
