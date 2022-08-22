@@ -16,11 +16,30 @@ export const exampleParties = [
       {
         number: "+18006666666",
       },
+      {
+        type: "home",
+        number: "+18007777777",
+      },
     ],
     addresses: [
       {
         type: "work",
         "addr-lines": ["0000 St", "Suite 3"],
+        city: "City",
+        state: "State",
+        "postal-code": "0000",
+        country: "US",
+      },
+      {
+        type: "home",
+        "addr-lines": ["1111 Road St"],
+        city: "City",
+        state: "State",
+        "postal-code": "0000",
+        country: "US",
+      },
+      {
+        "addr-lines": ["2222 St"],
         city: "City",
         state: "State",
         "postal-code": "0000",
