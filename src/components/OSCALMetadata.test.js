@@ -93,9 +93,8 @@ describe("OSCALMetadata", () => {
     });
 
     button.click();
-
     expect(screen.getByText("Addresses")).toBeVisible();
-    expect(screen.getByText(/0000 st, suite 3 city 0000 us/i)).toBeVisible();
+    expect(screen.getByText(/0000 stsuite 3city, state 0000us/i)).toBeVisible();
   });
 
   test(`displays home address info`, () => {
@@ -106,7 +105,7 @@ describe("OSCALMetadata", () => {
     button.click();
 
     expect(screen.getByText("Addresses")).toBeVisible();
-    expect(screen.getByText(/1111 road st city 0000 us/i)).toBeVisible();
+    expect(screen.getByText(/1111 road stcity, state 0000us/i)).toBeVisible();
   });
 
   test(`displays unknown type address info`, () => {
@@ -117,6 +116,6 @@ describe("OSCALMetadata", () => {
     button.click();
 
     expect(screen.getByText("Addresses")).toBeVisible();
-    expect(screen.getByText(/2222 st city 0000 us/i)).toBeVisible();
+    expect(screen.getByText(/2222 stcity, state 0000us/i)).toBeVisible();
   });
 });

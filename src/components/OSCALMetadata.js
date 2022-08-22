@@ -89,17 +89,21 @@ function getAddressIcon(contactType) {
 
 export function OSCALMetadataPartyAddress(props) {
   const { address } = props;
+  const addrString = [
+    ...address["addr-lines"],
+    `${address.city}, ${address.state} ${address["postal-code"]}`,
+    address.country,
+  ]
+    .filter((line) => line)
+    .flatMap((item) => [item, <br key={item} />]);
+
   return (
-    <>
-      {getAddressIcon(address.type)}
-      <address>
-        <Typography>
-          {`${address["addr-lines"]?.join(", ")} ${address.city} ${
-            address["postal-code"]
-          } ${address.country}`}
-        </Typography>
-      </address>
-    </>
+    <Grid container spacing={1}>
+      <Grid item>{getAddressIcon(address.type)}</Grid>
+      <Grid item>
+        <Typography>{addrString}</Typography>
+      </Grid>
+    </Grid>
   );
 }
 
@@ -132,6 +136,30 @@ export function OSCALMetadataPartyDialog(props) {
     setOpen(false);
   };
 
+  const TYPE_MAPPING = (infoProps) => ({
+    address: <OSCALMetadataPartyAddress address={infoProps} />,
+    telephone: <OSCALMetadataPartyTelephone telephone={infoProps} />,
+    email: <OSCALMetadataPartyEmail email={infoProps} />,
+  });
+
+  const getPartyInfoList = (
+    list,
+    partyInfoType,
+    emptyMessage = "No information provided"
+  ) => {
+    if (!list?.length) {
+      return <Typography> {emptyMessage} </Typography>;
+    }
+
+    return list.map((item) => (
+      <ListItem
+        key={partyInfoType === "email" ? item : `${item?.type}--${item?.name}`}
+      >
+        {TYPE_MAPPING(item)[partyInfoType]}
+      </ListItem>
+    ));
+  };
+
   return (
     <CardActions>
       <Button size="small" onClick={handleOpen}>
@@ -150,43 +178,43 @@ export function OSCALMetadataPartyDialog(props) {
         <DialogContent>
           <Grid container spacing={1}>
             <Grid item xs={4}>
-              <Typography>
+              <Typography variant="h6" component="h3">
                 <MapIcon />
                 Addresses
               </Typography>
               <List>
-                {props.party.addresses?.map((address) => (
-                  <ListItem key={`${address.type}`}>
-                    <OSCALMetadataPartyAddress address={address} />
-                  </ListItem>
-                ))}
+                {getPartyInfoList(
+                  props.party.addresses,
+                  "address",
+                  "No address information provided"
+                )}
               </List>
             </Grid>
 
             <Grid item xs={4}>
-              <Typography>
+              <Typography variant="h6" component="h3">
                 <PhoneIcon />
                 Phone
               </Typography>
               <List>
-                {props.party["telephone-numbers"]?.map((telephone) => (
-                  <ListItem key={`${telephone.type}-${telephone.number}`}>
-                    <OSCALMetadataPartyTelephone telephone={telephone} />
-                  </ListItem>
-                ))}
+                {getPartyInfoList(
+                  props.party["telephone-numbers"],
+                  "telephone",
+                  "No telephone information provided"
+                )}
               </List>
             </Grid>
             <Grid item xs={4}>
-              <Typography>
+              <Typography variant="h6" component="h3">
                 <AlternateEmailIcon />
                 Email
               </Typography>
               <List>
-                {props.party["email-addresses"]?.map((email) => (
-                  <ListItem key={email}>
-                    <OSCALMetadataPartyEmail email={email} />
-                  </ListItem>
-                ))}
+                {getPartyInfoList(
+                  props.party["email-addresses"],
+                  "email",
+                  "No email information provided"
+                )}
               </List>
             </Grid>
           </Grid>
