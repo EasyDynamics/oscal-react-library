@@ -28,7 +28,7 @@ jobs:
           node-version: 16
           cache: "npm"
       - name: Setup pages
-        uses: actions/configure-pages@v1
+        uses: actions/configure-pages@v2
       - name: Globally update npm
         run: npm install -g npm@latest
       - name: Install dependencies
