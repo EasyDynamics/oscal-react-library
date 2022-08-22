@@ -65,6 +65,17 @@ describe("OSCALMetadata", () => {
     expect(screen.getByRole("link", { name: /\+18004444444/i })).toBeVisible();
   });
 
+  test(`displays telephone home number info`, () => {
+    const button = screen.getByRole("button", {
+      name: /contact/i,
+    });
+
+    button.click();
+
+    expect(screen.getByText("Phone")).toBeVisible();
+    expect(screen.getByRole("link", { name: /\+18007777777/i })).toBeVisible();
+  });
+
   test(`displays unknown type telephone number info`, () => {
     const button = screen.getByRole("button", {
       name: /contact/i,
@@ -73,11 +84,10 @@ describe("OSCALMetadata", () => {
     button.click();
 
     expect(screen.getByText("Phone")).toBeVisible();
-    expect(screen.getByTestId("HelpOutlineIcon")).toBeVisible();
     expect(screen.getByRole("link", { name: /\+1800666666/i })).toBeVisible();
   });
 
-  test(`displays address info`, () => {
+  test(`displays work address info`, () => {
     const button = screen.getByRole("button", {
       name: /contact/i,
     });
@@ -86,5 +96,27 @@ describe("OSCALMetadata", () => {
 
     expect(screen.getByText("Addresses")).toBeVisible();
     expect(screen.getByText(/0000 st, suite 3 city 0000 us/i)).toBeVisible();
+  });
+
+  test(`displays home address info`, () => {
+    const button = screen.getByRole("button", {
+      name: /contact/i,
+    });
+
+    button.click();
+
+    expect(screen.getByText("Addresses")).toBeVisible();
+    expect(screen.getByText(/1111 road st city 0000 us/i)).toBeVisible();
+  });
+
+  test(`displays unknown type address info`, () => {
+    const button = screen.getByRole("button", {
+      name: /contact/i,
+    });
+
+    button.click();
+
+    expect(screen.getByText("Addresses")).toBeVisible();
+    expect(screen.getByText(/2222 st city 0000 us/i)).toBeVisible();
   });
 });
