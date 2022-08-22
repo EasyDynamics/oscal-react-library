@@ -9,7 +9,10 @@ import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import DescriptionIcon from "@mui/icons-material/Description";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import StyledTooltip from "./OSCALStyledTooltip";
-import { getAbsoluteUrl, getURLMediaType } from "./oscal-utils/OSCALLinkUtils";
+import {
+  getAbsoluteUrl,
+  guessExtensionFromHref,
+} from "./oscal-utils/OSCALLinkUtils";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
@@ -88,7 +91,7 @@ export default function OSCALBackMatter(props) {
 
   const getMediaType = (rlink) =>
     rlink["media-type"] ||
-    getURLMediaType(getAbsoluteUrl(rlink.href, props.parentUrl));
+    guessExtensionFromHref(getAbsoluteUrl(rlink.href, props.parentUrl));
 
   const backMatterDisplay = (resource) => (
     <Grid item xs={3} key={resource.uuid}>
