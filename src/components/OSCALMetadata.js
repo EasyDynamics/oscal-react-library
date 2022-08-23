@@ -136,6 +136,12 @@ export function OSCALMetadataPartyDialog(props) {
     setOpen(false);
   };
 
+  const PartyInfoTypes = {
+    address: "address",
+    telephone: "telephone",
+    email: "email",
+  };
+
   const TYPE_MAPPING = (infoProps) => ({
     address: <OSCALMetadataPartyAddress address={infoProps} />,
     telephone: <OSCALMetadataPartyTelephone telephone={infoProps} />,
@@ -185,7 +191,7 @@ export function OSCALMetadataPartyDialog(props) {
               <List>
                 {getPartyInfoList(
                   props.party.addresses,
-                  "address",
+                  PartyInfoTypes.address,
                   "No address information provided"
                 )}
               </List>
@@ -199,7 +205,7 @@ export function OSCALMetadataPartyDialog(props) {
               <List>
                 {getPartyInfoList(
                   props.party["telephone-numbers"],
-                  "telephone",
+                  PartyInfoTypes.telephone,
                   "No telephone information provided"
                 )}
               </List>
@@ -212,7 +218,7 @@ export function OSCALMetadataPartyDialog(props) {
               <List>
                 {getPartyInfoList(
                   props.party["email-addresses"],
-                  "email",
+                  PartyInfoTypes.email,
                   "No email information provided"
                 )}
               </List>
