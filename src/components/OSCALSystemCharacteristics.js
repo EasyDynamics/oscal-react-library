@@ -1,73 +1,36 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import Chip from "@material-ui/core/Chip";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Chip from "@mui/material/Chip";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import StyledTooltip from "./OSCALStyledTooltip";
 import OSCALDiagram from "./OSCALDiagram";
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(2),
-    display: "flex",
-    flexDirection: "column",
-  },
-  OSCALSystemCharacteristicsInfo: {
-    "text-transform": "capitalize",
-    "& .MuiTextField-root": {
-      margin: theme.spacing(1),
-    },
-  },
-  // TODO - This is hacky
-  OSCALSystemCharacteristicsHeader: {
-    "& .MuiTypography-root": {
-      "font-size": "0.875rem",
-      color: "#0000008a",
-    },
-  },
-  OSCALSystemCharacteristicsStatus: {
-    "text-transform": "capitalize",
-  },
-}));
+import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 
 export default function OSCALSystemCharacteristics(props) {
-  const classes = useStyles();
-
   return (
-    <div className={classes.paper}>
+    <OSCALSection>
       <Card>
         <CardContent>
           <Grid container spacing={2}>
-            <Grid
-              item
-              xs={12}
-              className={classes.OSCALSystemCharacteristicsHeader}
-            >
-              <Typography>System Characteristics</Typography>
+            <Grid item xs={12}>
+              <OSCALSectionHeader>System Characteristics</OSCALSectionHeader>
             </Grid>
-            <Grid
-              item
-              xs={6}
-              className={classes.OSCALSystemCharacteristicsInfo}
-            >
+            <Grid item xs={6}>
               <Typography variant="h6">
                 {props.systemCharacteristics["system-name"]}
               </Typography>
             </Grid>
-            <Grid
-              item
-              xs={6}
-              className={classes.OSCALSystemCharacteristicsInfo}
-            >
+            <Grid item xs={6}>
               <TableContainer>
                 <Table size="small">
                   <TableBody>
@@ -83,11 +46,7 @@ export default function OSCALSystemCharacteristics(props) {
                 </Table>
               </TableContainer>
             </Grid>
-            <Grid
-              item
-              xs={2}
-              className={classes.OSCALSystemCharacteristicsInfo}
-            >
+            <Grid item xs={2}>
               <StyledTooltip title={props.systemCharacteristics.status.remarks}>
                 <TextField
                   disabled
@@ -100,11 +59,7 @@ export default function OSCALSystemCharacteristics(props) {
                 />
               </StyledTooltip>
             </Grid>
-            <Grid
-              item
-              xs={2}
-              className={classes.OSCALSystemCharacteristicsInfo}
-            >
+            <Grid item xs={2}>
               <TextField
                 disabled
                 id="security-sensitivity-level"
@@ -117,11 +72,7 @@ export default function OSCALSystemCharacteristics(props) {
                 fullWidth
               />
             </Grid>
-            <Grid
-              item
-              xs={2}
-              className={classes.OSCALSystemCharacteristicsInfo}
-            >
+            <Grid item xs={2}>
               <TextField
                 disabled
                 id="security-objective-confidentiality"
@@ -136,11 +87,7 @@ export default function OSCALSystemCharacteristics(props) {
                 fullWidth
               />
             </Grid>
-            <Grid
-              item
-              xs={2}
-              className={classes.OSCALSystemCharacteristicsInfo}
-            >
+            <Grid item xs={2}>
               <TextField
                 disabled
                 id="security-objective-integrity"
@@ -155,11 +102,7 @@ export default function OSCALSystemCharacteristics(props) {
                 fullWidth
               />
             </Grid>
-            <Grid
-              item
-              xs={2}
-              className={classes.OSCALSystemCharacteristicsInfo}
-            >
+            <Grid item xs={2}>
               <TextField
                 disabled
                 id="security-objective-availability"
@@ -204,6 +147,13 @@ export default function OSCALSystemCharacteristics(props) {
                               categorization["information-type-ids"].map(
                                 (infoId) => (
                                   <Chip
+                                    icon={
+                                      categorization.system.startsWith(
+                                        "http"
+                                      ) ? (
+                                        <OpenInNewIcon />
+                                      ) : null
+                                    }
                                     label={infoId}
                                     component="a"
                                     href={categorization.system}
@@ -308,6 +258,6 @@ export default function OSCALSystemCharacteristics(props) {
           </Grid>
         </CardContent>
       </Card>
-    </div>
+    </OSCALSection>
   );
 }

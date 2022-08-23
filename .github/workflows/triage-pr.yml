@@ -7,6 +7,7 @@ on:
     types:
       - opened
       - reopened
+      - ready_for_review
 
 env:
   DEFAULT_REVIEW_TEAM: "easygrc-reviewers"
@@ -45,7 +46,8 @@ jobs:
             const query = `query($owner:String!, $name:String!, $number:Int!) {
               repository(owner:$owner, name:$name) {
                 pullRequest(number:$number) {
-                  reviewDecision
+                  reviewDecision,
+                  isDraft
                 }
               }
             }`;
@@ -59,20 +61,27 @@ jobs:
             const decision = result.repository.pullRequest.reviewDecision;
             console.log(`Review Decision: ${decision}`);
             core.setOutput("review-decision", decision);
+            core.setOutput("is-draft", result.repository.pullRequest.isDraft);
       - name: Generate token from App
         # Only authenticate as the application if a review is still required. If the review
         # criteria have been met then there's not much point in requesting another review and
         # it will just generate unnecessary noise. Additionally, we really want to use the
         # app's elevated permissions as infrequently as possible.
-        if: steps.pr-reviews.outputs.review-decision == 'REVIEW_REQUIRED'
+        if: steps.pr-reviews.outputs.is-draft == 'false' && steps.pr-reviews.outputs.review-decision == 'REVIEW_REQUIRED'
         id: generate_token
-        uses: tibdex/github-app-token@586e1a624db6a5a4ac2c53daeeded60c5e3d50fe
+        # This maps to v1.6.0 https://github.com/tibdex/github-app-token/releases/tag/v1.6.0
+        uses: tibdex/github-app-token@f717b5ecd4534d3c4df4ce9b5c1c2214f0f7cd06
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.APP_PRIVATE_KEY }}
+          permissions: >-
+            {
+              "pull_requests": "write",
+              "members": "read"
+            }
       - name: Assign reviewers
         uses: actions/github-script@v6
-        if: steps.pr-reviews.outputs.review-decision == 'REVIEW_REQUIRED'
+        if: steps.pr-reviews.outputs.is-draft == 'false' && steps.pr-reviews.outputs.review-decision == 'REVIEW_REQUIRED'
         with:
           github-token: ${{ steps.generate_token.outputs.token }}
           script: |

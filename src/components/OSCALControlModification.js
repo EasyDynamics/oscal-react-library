@@ -1,21 +1,19 @@
 import React from "react";
-import Badge from "@material-ui/core/Badge";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import IconButton from "@material-ui/core/IconButton";
-import LayersIcon from "@material-ui/icons/Layers";
-import { makeStyles } from "@material-ui/core/styles";
-import { Typography } from "@material-ui/core";
+import { styled } from "@mui/material/styles";
+import Badge from "@mui/material/Badge";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import LayersIcon from "@mui/icons-material/Layers";
+import { Typography } from "@mui/material";
 import StyledTooltip from "./OSCALStyledTooltip";
 
-const useStyles = makeStyles(() => ({
-  OSCALControlModificationsButton: {
-    color: "#002867",
-  },
-}));
+const OSCALControlModificationsButton = styled(IconButton)(
+  ({ theme }) => `color: ${theme.palette.primary.main}`
+);
 
 /**
  * Create a typography html object for addsOrRemovesLabel
@@ -85,12 +83,10 @@ function isRelevantId(controlPartId, controlId, element, field) {
 function getModifications(controlPartId, controlId, modList, modText) {
   // Add everything with ids that match controlPartId
 
-  /* TODO: Differences in implementations of the OSCAL standard makes
-  /* this check needed; Certain implementations specify the control ID 
-  /* in the "by-id" field for top-level modifications, 
-  /* others leave "by-id" undefined. 
-  /* See if this can be cleaned up at some point if these differences are resolved.
-  */
+  // TODO: Some OSCAL standard implementations specify the control ID in
+  // the "by-id" field, others do not, which is what makes this check needed.
+  // If these implementation differences are resolved, this should be cleaned up.
+  // https://github.com/EasyDynamics/oscal-react-library/issues/498
   const controlParts = modList.filter((element) =>
     isRelevantId(controlPartId, controlId, element, "by-id")
   );
@@ -111,8 +107,6 @@ export default function OSCALControlModification(props) {
   if (!alter) {
     return null;
   }
-
-  const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
 
@@ -142,32 +136,28 @@ export default function OSCALControlModification(props) {
     modLength += len;
   }
 
-  // TODO(EGRC-407): Implement remove modifications
-  // if (alter.removes) { }
-
   // Display modifications if there are any
   if (!modLength) return null;
   return (
-    <span>
+    <>
       <StyledTooltip title="Modifications">
         <Badge
           anchorOrigin={{
             vertical: "top",
             horizontal: "right",
           }}
-          color="secondary"
+          color="info"
           badgeContent={modLength}
           overlap="circular"
         >
-          <IconButton
+          <OSCALControlModificationsButton
             variant="outlined"
             size="small"
-            className={classes.OSCALControlModificationsButton}
             aria-label={`${controlPartId} modifications`}
             onClick={handleClick}
           >
             <LayersIcon />
-          </IconButton>
+          </OSCALControlModificationsButton>
         </Badge>
       </StyledTooltip>
       <Dialog
@@ -186,6 +176,6 @@ export default function OSCALControlModification(props) {
           </Button>
         </DialogActions>
       </Dialog>
-    </span>
+    </>
   );
 }

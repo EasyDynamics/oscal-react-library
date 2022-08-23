@@ -1,17 +1,8 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import resolveLinkHref from "./oscal-utils/OSCALLinkUtils";
 
-const useStyles = makeStyles(() => ({
-  OSCALDiagramImg: {
-    maxWidth: "100%",
-  },
-}));
-
 export default function OSCALDiagram(props) {
-  const classes = useStyles(props);
-
   // Just grab the first rlink for now
   const link = props.diagram?.links[0];
   if (!link) {
@@ -36,7 +27,7 @@ export default function OSCALDiagram(props) {
       <img
         src={diagramUri}
         alt={props.diagram.caption}
-        className={classes.OSCALDiagramImg}
+        style={{ maxWidth: "100%" }}
       />
       <Typography variant="caption" display="block" align="center" gutterBottom>
         {props.diagram.caption}

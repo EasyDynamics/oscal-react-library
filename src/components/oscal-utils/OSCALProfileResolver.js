@@ -1,4 +1,4 @@
-import resolveLinkHref from "./OSCALLinkUtils";
+import resolveLinkHref, { fixJsonUrls } from "./OSCALLinkUtils";
 
 const OSCAL_MEDIA_TYPE_REGEX = /^application\/oscal.*\+json$/;
 /**
@@ -41,17 +41,13 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
 ) {
   let itemUrl = origItemUrl;
 
-  // TODO - this should be improved for other use cases
+  // TODO: This should be improved for other use cases.
+  // https://github.com/EasyDynamics/oscal-react-library/issues/505
   if (!origItemUrl.startsWith("http")) {
     itemUrl = `${parentUrl}/../${origItemUrl}`;
   }
-  // TODO - remove this when OSCAL Content has fixed their issue with source
-  if (itemUrl.includes("/content/nist.gov/")) {
-    itemUrl = itemUrl.replace("/content/nist.gov/", "/nist.gov/");
-  }
-  if (itemUrl.includes("/content/fedramp.gov/")) {
-    itemUrl = itemUrl.replace("/content/fedramp.gov/", "/fedramp.gov/");
-  }
+
+  itemUrl = fixJsonUrls(itemUrl);
   // Add our current itemUrl to the list of pending processes
   pendingProcesses.push(itemUrl);
   fetch(itemUrl)
@@ -64,7 +60,7 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
           inheritedOSCALObject.uuid = result.catalog.uuid;
           inheritedOSCALObject.type = "catalog";
           // Dig through catalog controls and add to profile.controls
-          result.catalog.groups.forEach((group) => {
+          result.catalog.groups?.forEach((group) => {
             resolvedControls.push(...group.controls);
           });
           if (result.catalog.controls) {
@@ -78,13 +74,13 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
           inheritedOSCALObject.inherited = [];
 
           modifications["set-parameters"].push(
-            ...(result.profile.modify["set-parameters"] ?? [])
+            ...(result.profile.modify?.["set-parameters"] ?? [])
           );
-          modifications.alters.push(...result.profile.modify.alters);
+          modifications.alters.push(...(result.profile.modify?.alters ?? []));
 
           result.profile.imports.forEach((profileImport) => {
             const importUrl = resolveLinkHref(
-              result.profile["back-matter"],
+              result.profile?.["back-matter"] ?? [],
               profileImport.href,
               null,
               OSCAL_MEDIA_TYPE_REGEX
@@ -94,7 +90,7 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
               modifications,
               importUrl,
               itemUrl,
-              result.profile["back-matter"],
+              result.profilea?.["back-matter"] ?? [],
               inheritedOSCALObject.inherited,
               onSuccess,
               onError,
@@ -139,13 +135,13 @@ export function OSCALResolveProfile(profile, parentUrl, onSuccess, onError) {
       profile.resolvedControls,
       profile.modifications,
       resolveLinkHref(
-        profile["back-matter"],
+        profile?.["back-matter"] ?? [],
         imp.href,
         parentUrl,
         OSCAL_MEDIA_TYPE_REGEX
       ),
       parentUrl,
-      profile["back-matter"],
+      profile?.["back-matter"] ?? [],
       inheritedProfilesAndCatalogs.inherited,
       () => {
         onSuccess(inheritedProfilesAndCatalogs);

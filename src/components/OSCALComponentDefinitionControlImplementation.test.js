@@ -1,12 +1,13 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import OSCALComponentDefinitionControlImplementation from "./OSCALComponentDefinitionControlImplementation";
-import getByTextIncludingChildern from "./oscal-utils/TestUtils";
+import getByTextIncludingChildren from "./oscal-utils/TestUtils";
 import { controlsData } from "../test-data/ControlsData";
 import {
   componentDefinitionControlImplementationTestData,
   componentDefinitionTestData,
 } from "../test-data/ComponentsData";
+import testOSCALControlParamLegend from "../common-tests/ControlParamLegend.test";
 
 test("OSCALComponentDefinitionControlImplementation displays component implementation description", () => {
   render(
@@ -42,8 +43,26 @@ test("OSCALComponentDefinitionControlImplementation displays component parameter
       controls={controlsData}
     />
   );
-  const resultByProse = getByTextIncludingChildern(
-    "Does something with < control 1 / parameter 1 label > and < control 1 / parameter 2 label >"
+  const nonplaceholder1 = getByTextIncludingChildren(/Does something with/i);
+  const placeholderText1 = getByTextIncludingChildren(
+    /< control 1 \/ parameter 1 label >/i
   );
-  expect(resultByProse).toBeVisible();
+  const nonplaceholder2 = getByTextIncludingChildren(/and/i);
+  const placeholderText2 = getByTextIncludingChildren(
+    /< control 1 \/ parameter 2 label >/i
+  );
+
+  expect(nonplaceholder1).toBeVisible();
+  expect(placeholderText1).toBeVisible();
+  expect(nonplaceholder2).toBeVisible();
+  expect(placeholderText2).toBeVisible();
 });
+
+testOSCALControlParamLegend(
+  "OSCALComponentDefinitionControlImplementation",
+  <OSCALComponentDefinitionControlImplementation
+    controlImplementations={componentDefinitionControlImplementationTestData}
+    components={componentDefinitionTestData.components}
+    controls={controlsData}
+  />
+);

@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import List from "@material-ui/core/List";
-import ListSubheader from "@material-ui/core/ListSubheader";
-import Skeleton from "@material-ui/lab/Skeleton";
-import CardContent from "@material-ui/core/CardContent";
-import { useLoaderStyles } from "./OSCALLoaderStyles";
+import Skeleton from "@mui/material/Skeleton";
+import CardContent from "@mui/material/CardContent";
+import Grid from "@mui/material/Grid";
+import { List, ListSubheader } from "@mui/material";
 import OSCALMetadata from "./OSCALMetadata";
+import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
 import OSCALControl from "./OSCALControl";
 import OSCALBackMatter from "./OSCALBackMatter";
 import { OSCALResolveProfile } from "./oscal-utils/OSCALProfileResolver";
 import OSCALProfileCatalogInheritance from "./OSCALProfileCatalogInheritance";
+import OSCALControlParamLegend from "./OSCALControlParamLegend";
 
 /**
  * Displays a given OSCAL Profile is an easily consumable format. According to NIST, a profile
@@ -23,7 +24,6 @@ export default function OSCALProfile(props) {
   const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] =
     useState({});
   const [isLoaded, setIsLoaded] = useState(false);
-  const classes = useLoaderStyles();
   const unmounted = useRef(false);
 
   const partialRestData = {
@@ -67,16 +67,21 @@ export default function OSCALProfile(props) {
   // resembling the content.
   const profileImports = (
     <List
-      className={classes.OSCALControlList}
       subheader={
-        <ListSubheader
-          className={classes.OSCALMetadataPartiesHeader}
-          component="div"
-          id="oscal-profile-importedControls"
-          disableSticky
-        >
-          Imported Controls
-        </ListSubheader>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <ListSubheader
+              component="div"
+              id="oscal-profile-importedControls"
+              disableSticky
+            >
+              Imported Controls
+            </ListSubheader>
+          </Grid>
+          <Grid item xs={6} align="right">
+            <OSCALControlParamLegend />
+          </Grid>
+        </Grid>
       }
     >
       {isLoaded ? (
@@ -84,8 +89,8 @@ export default function OSCALProfile(props) {
           <OSCALControl
             control={control}
             includeControlIds={includeControlIds}
-            modificationAlters={props.profile.modify.alters}
-            modificationSetParameters={props.profile.modify["set-parameters"]}
+            modificationAlters={props.profile.modify?.alters}
+            modificationSetParameters={props.profile.modify?.["set-parameters"]}
             restData={{
               profile: {
                 uuid: props.profile.uuid,
@@ -102,10 +107,10 @@ export default function OSCALProfile(props) {
             key="controls load 0"
           >
             <Skeleton variant="text" width="25em" height="3em" />
-            <Skeleton variant="circle" width="3em" height="3em" />
+            <Skeleton variant="circular" width="3em" height="3em" />
           </span>
           <Skeleton variant="text" width="10em" height="2.5em" />
-          <Skeleton variant="rect" width="100%" height={115} />
+          <Skeleton variant="rectangular" width="100%" height={115} />
           <Skeleton variant="text" width="6.5em" height="3.5em" />
         </CardContent>
       )}
@@ -114,7 +119,7 @@ export default function OSCALProfile(props) {
 
   // Display Metadata and BackMatter components at bottom of Profile
   return (
-    <div className={classes.paper}>
+    <OSCALDocumentRoot>
       <OSCALMetadata
         metadata={props.profile.metadata}
         isEditable={props.isEditable}
@@ -129,6 +134,6 @@ export default function OSCALProfile(props) {
         backMatter={props.profile["back-matter"]}
         parentUrl={props.parentUrl}
       />
-    </div>
+    </OSCALDocumentRoot>
   );
 }

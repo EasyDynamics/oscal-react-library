@@ -1,25 +1,23 @@
 import React from "react";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
-import Collapse from "@material-ui/core/Collapse";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-import FolderIcon from "@material-ui/icons/Folder";
-import { makeStyles } from "@material-ui/core/styles";
+import { styled } from "@mui/material/styles";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import Avatar from "@mui/material/Avatar";
+import Collapse from "@mui/material/Collapse";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import FolderIcon from "@mui/icons-material/Folder";
 import OSCALControl from "./OSCALControl";
+import OSCALControlParamLegend from "./OSCALControlParamLegend";
 
-const useStyles = makeStyles(() => ({
-  OSCALControlList: {
-    "padding-left": "2em",
-    "padding-right": "2em",
-  },
-}));
+export const OSCALControlList = styled(List)`
+  padding-left: 2em;
+  padding-right: 2em;
+`;
 
 export default function OSCALCatalogGroup(props) {
-  const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
@@ -43,7 +41,7 @@ export default function OSCALCatalogGroup(props) {
   };
 
   return (
-    <>
+    <div>
       <ListItem key={groupKey(props.group)} button onClick={handleClick}>
         <ListItemAvatar key={`${groupKey(props.group)}-avatar`}>
           <Avatar variant="rounded">
@@ -54,7 +52,10 @@ export default function OSCALCatalogGroup(props) {
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <List className={classes.OSCALControlList}>
+        <div align="right">
+          <OSCALControlParamLegend />
+        </div>
+        <OSCALControlList>
           {props.group.groups?.map((innerGroup) => (
             <OSCALCatalogGroup group={innerGroup} key={innerGroup.id} />
           ))}
@@ -65,8 +66,8 @@ export default function OSCALCatalogGroup(props) {
               key={`control-${control.id}`}
             />
           ))}
-        </List>
+        </OSCALControlList>
       </Collapse>
-    </>
+    </div>
   );
 }

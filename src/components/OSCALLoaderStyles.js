@@ -1,14 +1,12 @@
-import { createStyles, makeStyles } from "@material-ui/core/styles";
+import { styled } from "@mui/material/styles";
 
-const useLoaderStyles = makeStyles((theme) =>
-  createStyles({
-    paper: {
-      paddingLeft: theme.spacing(2),
-      display: "flex",
-      flexDirection: "column",
-    },
-  })
+const OSCALDocumentRoot = styled("div")(
+  ({ theme }) => `
+    padding-left: ${theme.spacing(2)};
+    display: flex;
+    flex-direction: column;
+`
 );
 
 // eslint-disable-next-line import/prefer-default-export
-export { useLoaderStyles };
+export { OSCALDocumentRoot };

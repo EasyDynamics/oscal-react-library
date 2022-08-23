@@ -1,49 +1,39 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Chip from "@material-ui/core/Chip";
-import Grid from "@material-ui/core/Grid";
-import { Typography } from "@material-ui/core";
-import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
-import DescriptionIcon from "@material-ui/icons/Description";
+import { styled } from "@mui/material/styles";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Chip from "@mui/material/Chip";
+import Grid from "@mui/material/Grid";
+import { Typography } from "@mui/material";
+import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
+import DescriptionIcon from "@mui/icons-material/Description";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getAbsoluteUrl } from "./oscal-utils/OSCALLinkUtils";
+import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
+import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
-// TODO: Temporary fix for missing media type (https://github.com/GSA/fedramp-automation/issues/103)
-// Uses file extension instead
+export const OSCALBackMatterCard = styled(Card)(
+  ({ theme }) => `
+    margin-top: ${theme.spacing(2)};
+    display: flex;
+    flex-direction: column;
+`
+);
+
+// TODO: Remove workaround for missing media type
+// https://github.com/EasyDynamics/oscal-react-library/issues/512
 const getURLMediaType = (url) => {
   const lastUrlPath = url.split("//").pop().split("/").pop();
   return lastUrlPath.match(/\.[A-Za-z]{3,4}($|\?)/) || "Unknown";
 };
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(2),
-    display: "flex",
-    flexDirection: "column",
-  },
-  OSCALBackMatterInfo: {
-    "text-transform": "capitalize",
-    "& .MuiTextField-root": {
-      margin: theme.spacing(1),
-    },
-  },
-  // TODO - This is hacky
-  OSCALBackMatterHeader: {
-    "& .MuiTypography-root": {
-      "font-size": "0.875rem",
-      color: "#0000008a",
-    },
-  },
-}));
 
 function TitleDisplay(props) {
   const title = props.resource.title || "No Title";
   const color = props.resource.title ? "initial" : "error";
   return (
     <Typography color={color} variant="subtitle1">
-      {title}
+      <OSCALMarkupLine>{title}</OSCALMarkupLine>
     </Typography>
   );
 }
@@ -59,7 +49,13 @@ function DescriptionDisplay(props) {
     );
   }
   return (
-    <StyledTooltip title={props.resource.description}>
+    <StyledTooltip
+      title={
+        <OSCALMarkupMultiLine>
+          {props.resource.description}
+        </OSCALMarkupMultiLine>
+      }
+    >
       <DescriptionIcon
         color="primary"
         fontSize="small"
@@ -80,7 +76,9 @@ function CitationDisplay(props) {
     );
   }
   return (
-    <StyledTooltip title={props.resource.citation.text}>
+    <StyledTooltip
+      title={<OSCALMarkupLine>{props.resource.citation.text}</OSCALMarkupLine>}
+    >
       <FormatQuoteIcon
         color="primary"
         fontSize="small"
@@ -94,7 +92,6 @@ export default function OSCALBackMatter(props) {
   if (!props.backMatter) {
     return null;
   }
-  const classes = useStyles(props);
 
   const getMediaType = (rlink) =>
     rlink["media-type"] ||
@@ -102,7 +99,7 @@ export default function OSCALBackMatter(props) {
 
   const backMatterDisplay = (resource) => (
     <Grid item xs={3} key={resource.uuid}>
-      <Card>
+      <OSCALBackMatterCard>
         <CardContent>
           <Grid container spacing={0}>
             <Grid item xs={10}>
@@ -120,10 +117,19 @@ export default function OSCALBackMatter(props) {
               {resource.rlinks &&
                 resource.rlinks.map((rlink) => (
                   <Chip
+                    icon={
+                      getAbsoluteUrl(rlink.href, props.parentUrl).startsWith(
+                        "http"
+                      ) ? (
+                        <OpenInNewIcon />
+                      ) : null
+                    }
                     key={rlink.href}
                     label={getMediaType(rlink)}
                     component="a"
+                    role="button"
                     href={getAbsoluteUrl(rlink.href, props.parentUrl)}
+                    target="_blank"
                     variant="outlined"
                     clickable
                   />
@@ -131,27 +137,29 @@ export default function OSCALBackMatter(props) {
             </Typography>
           </Grid>
         </CardContent>
-      </Card>
+      </OSCALBackMatterCard>
     </Grid>
   );
 
   return (
-    <Card>
-      <CardContent>
-        <Grid container spacing={2}>
-          <Grid item xs={12} className={classes.OSCALBackMatterHeader}>
-            <Typography>Back Matter</Typography>
+    <OSCALSection>
+      <Card>
+        <CardContent>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <OSCALSectionHeader>Back Matter</OSCALSectionHeader>
+            </Grid>
+            <Grid item xs={7}>
+              <Typography variant="body1">Resources</Typography>
+            </Grid>
           </Grid>
-          <Grid item xs={7} className={classes.OSCALBackMatterInfo}>
-            <Typography variant="h6">Resources</Typography>
+          <Grid container spacing={2}>
+            {props.backMatter.resources.map((resource) =>
+              backMatterDisplay(resource)
+            )}
           </Grid>
-        </Grid>
-        <Grid container spacing={2}>
-          {props.backMatter.resources.map((resource) =>
-            backMatterDisplay(resource)
-          )}
-        </Grid>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </OSCALSection>
   );
 }

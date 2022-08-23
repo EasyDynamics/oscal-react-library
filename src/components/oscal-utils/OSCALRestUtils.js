@@ -37,7 +37,7 @@ export const oscalObjectTypes = {
     restPath: "profiles",
   },
   ssp: {
-    name: "SSP",
+    name: "System Security Plan",
     defaultUrl:
       "https://raw.githubusercontent.com/EasyDynamics/oscal-demo-content/main/system-security-plans/ssp-example.json",
     defaultUuid: "cff8385f-108e-40a5-8f7a-82f3dc0eaba8",
@@ -45,6 +45,26 @@ export const oscalObjectTypes = {
     restPath: "system-security-plans",
   },
 };
+
+/**
+ * Populates a map of oscal object types to oscal objects retrieved from a get request.
+ *
+ * @param {string} backendUrl base url of server to fetch from
+ * @param {Object} oscalObjectType Object that contains information on an oscalObject
+ * @param {(any) => void} handleResult Function to map a fetched result to the json root name of an oscal object
+ */
+export function fetchAllResourcesOfType(
+  backendUrl,
+  oscalObjectType,
+  handleResult
+) {
+  fetch(`${backendUrl}/${oscalObjectType.restPath}`)
+    .then((response) => {
+      if (!response.ok) throw new Error(response.status);
+      else return response.json();
+    })
+    .then(handleResult);
+}
 
 export function getOscalObjectTypeFromJsonRootName(jsonRootName) {
   return Object.keys(oscalObjectTypes).find(

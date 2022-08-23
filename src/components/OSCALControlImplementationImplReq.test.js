@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import OSCALControlImplementation from "./OSCALControlImplementation";
-import getByTextIncludingChildern from "./oscal-utils/TestUtils";
+import getByTextIncludingChildren from "./oscal-utils/TestUtils";
 import { controlImplTestData, exampleControl } from "../test-data/ControlsData";
 import {
   exampleComponents,
@@ -10,6 +10,7 @@ import {
 } from "../test-data/ComponentsData";
 import { profileModifyTestData } from "../test-data/ModificationsData";
 import { sspRestData } from "../test-data/SystemData";
+import testOSCALControlParamLegend from "../common-tests/ControlParamLegend.test";
 
 const controlsTestData = [exampleControl];
 
@@ -39,10 +40,19 @@ export default function testOSCALControlImplementationImplReq(
 
   test(`${parentElementName} displays component parameters in control prose`, () => {
     renderer();
-    const result = getByTextIncludingChildern(
-      "Does something with control 1 / component 1 / parameter 1 value and control 1 / component 1 / parameter 2 value"
+    const nonplaceholder1 = getByTextIncludingChildren(/does something with/i);
+    const placeholderText1 = getByTextIncludingChildren(
+      /control 1 \/ component 1 \/ parameter 1 value/i
     );
-    expect(result).toBeVisible();
+    const nonplaceholder2 = getByTextIncludingChildren(/and/i);
+    const placeholderText2 = getByTextIncludingChildren(
+      /control 1 \/ component 1 \/ parameter 2 value/i
+    );
+
+    expect(nonplaceholder1).toBeVisible();
+    expect(placeholderText1).toBeVisible();
+    expect(nonplaceholder2).toBeVisible();
+    expect(placeholderText2).toBeVisible();
   });
 
   test(`${parentElementName} displays component implementation description`, async () => {
@@ -50,7 +60,7 @@ export default function testOSCALControlImplementationImplReq(
 
     await userEvent.hover(
       screen.getByRole("link", {
-        name: "Component 1 description of implementing control 1",
+        name: "a.",
       })
     );
     expect(
@@ -84,4 +94,15 @@ export default function testOSCALControlImplementationImplReq(
 testOSCALControlImplementationImplReq(
   "OSCALControlImplementationImplReq",
   controlImplementationImplReqRenderer
+);
+
+testOSCALControlParamLegend(
+  "OSCALComponentControlImplementationImplReq",
+  <OSCALControlImplementation
+    controlImplementation={controlImplTestData}
+    components={exampleComponents}
+    controls={controlsTestData}
+    modifications={profileModifyTestData}
+    partialRestData={sspRestData}
+  />
 );

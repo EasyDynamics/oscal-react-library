@@ -1,9 +1,10 @@
 import React, { useRef, useState } from "react";
-import Typography from "@material-ui/core/Typography";
-import { Grid, TextField } from "@material-ui/core";
+import Typography from "@mui/material/Typography";
+import { Grid, TextField } from "@mui/material";
 import OSCALEditableFieldActions, {
   getElementLabel,
 } from "./OSCALEditableFieldActions";
+import { OSCALMarkupLine } from "./OSCALMarkupProse";
 
 function textFieldWithEditableActions(
   props,
@@ -15,20 +16,31 @@ function textFieldWithEditableActions(
     return (
       <>
         <Grid item xs={props.size} className={props.className}>
-          <Typography>
-            <TextField
-              fullWidth
-              inputProps={{
-                "data-testid": `textField-${getElementLabel(
-                  props.editedField
-                )}`,
-              }}
-              inputRef={reference}
-              size={props.textFieldSize}
-              defaultValue={props.value}
-              variant={props.textFieldVariant}
-            />
-          </Typography>
+          <TextField
+            label={props.fieldName}
+            fullWidth
+            inputProps={{
+              "data-testid": `textField-${getElementLabel(props.editedField)}`,
+            }}
+            inputRef={reference}
+            size={props.textFieldSize}
+            defaultValue={props.value}
+            variant={props.textFieldVariant}
+            onKeyDown={(event) => {
+              if (event.key === "Escape") {
+                setInEditState(false);
+              } else if (event.key === "Enter") {
+                event.preventDefault();
+                props.onFieldSave(
+                  props.appendToLastFieldInPath,
+                  props.partialRestData,
+                  props.editedField,
+                  reference.current.value
+                );
+                setInEditState(false);
+              }
+            }}
+          />
         </Grid>
         <Grid item>
           <OSCALEditableFieldActions
@@ -49,7 +61,7 @@ function textFieldWithEditableActions(
   return (
     <>
       <Typography display="inline" variant={props.typographyVariant}>
-        {props.value}
+        <OSCALMarkupLine>{props.value}</OSCALMarkupLine>
       </Typography>
       <OSCALEditableFieldActions
         editedField={props.editedField}

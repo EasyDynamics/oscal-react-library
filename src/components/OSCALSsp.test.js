@@ -7,6 +7,7 @@ import testOSCALSystemImplementation from "./OSCALSystemImplementation.test";
 import testOSCALMetadata from "./OSCALMetadata.test";
 import { sspTestData } from "../test-data/SystemData";
 import testOSCALEditableFieldActions from "./OSCALEditableFieldActions.test";
+import testOSCALEditableTextField from "./OSCALEditableTextField.test";
 import testOSCALDiagram from "./OSCALDiagram.test";
 
 test("OSCALSsp loads", () => {
@@ -19,7 +20,12 @@ function sspRenderer() {
 
 function sspRendererRestMode() {
   render(
-    <OSCALSsp system-security-plan={sspTestData} isEditable parentUrl="./" />
+    <OSCALSsp
+      system-security-plan={sspTestData}
+      isEditable
+      parentUrl="./"
+      onFieldSave={() => {}}
+    />
   );
 }
 
@@ -32,3 +38,5 @@ testOSCALMetadata("OSCALSsp", sspRenderer);
 testOSCALEditableFieldActions("OSCALSsp", sspRendererRestMode);
 
 testOSCALDiagram("OSCALSsp", sspRenderer);
+
+testOSCALEditableTextField("OSCALSsp", sspRendererRestMode);

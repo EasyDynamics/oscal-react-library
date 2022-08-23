@@ -1,14 +1,13 @@
-import React from "react";
-import List from "@material-ui/core/List";
-import ListSubheader from "@material-ui/core/ListSubheader";
-import { useLoaderStyles } from "./OSCALLoaderStyles";
+import React, { useEffect } from "react";
+import List from "@mui/material/List";
+import ListSubheader from "@mui/material/ListSubheader";
+import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
 import OSCALMetadata from "./OSCALMetadata";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALBackMatter from "./OSCALBackMatter";
 
 export default function OSCALCatalog(props) {
-  const classes = useLoaderStyles();
-  props.onResolutionComplete();
+  useEffect(props.onResolutionComplete);
 
   const partialRestData = {
     catalog: {
@@ -17,7 +16,7 @@ export default function OSCALCatalog(props) {
   };
 
   return (
-    <div className={classes.paper}>
+    <OSCALDocumentRoot>
       <OSCALMetadata
         metadata={props.catalog.metadata}
         isEditable={props.isEditable}
@@ -43,6 +42,6 @@ export default function OSCALCatalog(props) {
         backMatter={props.catalog["back-matter"]}
         parentUrl={props.parentUrl}
       />
-    </div>
+    </OSCALDocumentRoot>
   );
 }
