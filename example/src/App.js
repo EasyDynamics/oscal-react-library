@@ -107,7 +107,10 @@ function App() {
   const location = useLocation();
   useEffect(() => {
     if (process.env.REACT_APP_GOOGLE_ANALYTICS) {
-      ReactGA.send(location.pathname + location.search);
+      ReactGA.send({
+        hitType: "pageview",
+        page: location.pathname + location.search,
+      });
     }
   }, [location]);
 
