@@ -13,8 +13,10 @@ export default function resolveLinkHref(
   parentUrl,
   mediaTypeRegex
 ) {
-  const fooBarBaz = !href.startsWith("#")
-    ? href
-    : getUriFromBackMatterByHref(backMatter, href, mediaTypeRegex).href;
-  return getAbsoluteUrl(fooBarBaz, parentUrl);
+  return getAbsoluteUrl(
+    !href.startsWith("#")
+      ? href
+      : getUriFromBackMatterByHref(backMatter, href, mediaTypeRegex).href,
+    parentUrl
+  );
 }
