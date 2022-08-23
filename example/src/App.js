@@ -12,7 +12,7 @@ import GitHubIcon from "@material-ui/icons/GitHub";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 import {
   Navigate,
   Route,
@@ -87,7 +87,7 @@ function App() {
   const location = useLocation();
   useEffect(() => {
     if (process.env.REACT_APP_GOOGLE_ANALYTICS) {
-      ReactGA.pageview(location.pathname + location.search);
+      ReactGA.send(location.pathname + location.search);
     }
   }, [location]);
   return (
