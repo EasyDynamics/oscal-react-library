@@ -52,6 +52,10 @@ const LogoImage = styled("img")`
   margin-right: 1em;
 `;
 
+function getBackEndUrl(urlString) {
+  return (!urlString) ? "" : new URL(urlString, window.location.href).toString();
+}
+
 function App() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -61,7 +65,7 @@ function App() {
     // be different).
     !!process.env.REACT_APP_REST_BASE_URL
   );
-  const [backendUrl] = useState(process.env.REACT_APP_REST_BASE_URL);
+  const [backendUrl] = useState(getBackEndUrl(process.env.REACT_APP_REST_BASE_URL));
   const [hasDefaultUrl, setHasDefaultUrl] = useState(false);
 
   useEffect(() => {
