@@ -5,6 +5,7 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
+import ContactPageIcon from "@mui/icons-material/ContactPage";
 import DialogTitle from "@mui/material/DialogTitle";
 import Link from "@mui/material/Link";
 import ListSubheader from "@mui/material/ListSubheader";
@@ -168,7 +169,8 @@ export function OSCALMetadataPartyDialog(props) {
 
   return (
     <CardActions>
-      <Button size="small" onClick={handleOpen}>
+      <Button size="small" variant="outlined" onClick={handleOpen}>
+        <ContactPageIcon />
         Contact
       </Button>
       <Dialog
@@ -181,6 +183,7 @@ export function OSCALMetadataPartyDialog(props) {
         fullWidth
       >
         <DialogTitle id="scroll-dialog-title">{props.party.name}</DialogTitle>
+        <DialogContent>{props.partyRolesText}</DialogContent>
         <DialogContent>
           <Grid container spacing={1}>
             <Grid item xs={4}>
@@ -246,14 +249,15 @@ export function OSCALMetadataParty(props) {
             </Avatar>
           </Grid>
           <Grid item>
-            <Typography>
-              {props.party.name}
-              {props.partyRolesText}
-            </Typography>
+            <Typography>{props.party.name}</Typography>
+            <Typography variant="subtitle2">{props.partyRolesText}</Typography>
+            <OSCALMetadataPartyDialog
+              party={props.party}
+              partyRolesText={props.partyRolesText}
+            />
           </Grid>
         </Grid>
       </CardContent>
-      <OSCALMetadataPartyDialog party={props.party} />
     </Card>
   );
 }
