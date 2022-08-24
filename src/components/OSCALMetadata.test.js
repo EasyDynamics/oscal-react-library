@@ -93,7 +93,7 @@ describe("OSCALMetadata", () => {
     });
 
     button.click();
-    expect(screen.getByText("Addresses")).toBeVisible();
+    expect(screen.getByText("Address")).toBeVisible();
     expect(screen.getByText(/0000 stsuite 3city, state 0000us/i)).toBeVisible();
   });
 
@@ -104,7 +104,7 @@ describe("OSCALMetadata", () => {
 
     button.click();
 
-    expect(screen.getByText("Addresses")).toBeVisible();
+    expect(screen.getByText("Address")).toBeVisible();
     expect(screen.getByText(/1111 road stcity, state 0000us/i)).toBeVisible();
   });
 
@@ -115,7 +115,7 @@ describe("OSCALMetadata", () => {
 
     button.click();
 
-    expect(screen.getByText("Addresses")).toBeVisible();
+    expect(screen.getByText("Address")).toBeVisible();
     expect(screen.getByText(/2222 stcity, state 0000us/i)).toBeVisible();
   });
 });

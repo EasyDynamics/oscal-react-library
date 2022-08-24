@@ -11,7 +11,7 @@ import Link from "@mui/material/Link";
 import ListSubheader from "@mui/material/ListSubheader";
 import Card from "@mui/material/Card";
 import MapIcon from "@mui/icons-material/Map";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import EmailIcon from "@mui/icons-material/Email";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import CardContent from "@mui/material/CardContent";
@@ -32,6 +32,11 @@ export const OSCALMetadataPartiesHeader = styled(ListSubheader)(
   background-color: ${theme.palette.background.paper};
 `
 );
+
+const OSCALMetadataPartiesInfoHeader = styled(Typography)`
+  display: flex;
+  align-items: center;
+`;
 
 const OSCALMetadataLabel = styled(Typography)(({ theme }) => ({
   textAlign: "right",
@@ -126,6 +131,15 @@ export function OSCALMetadataPartyTelephone(props) {
   );
 }
 
+function OSCALMetadataPartyContactTypeHeader(props) {
+  return (
+    <OSCALMetadataPartiesInfoHeader variant="h6" component="h3">
+      {props.icon}
+      {props.title}
+    </OSCALMetadataPartiesInfoHeader>
+  );
+}
+
 export function OSCALMetadataPartyDialog(props) {
   const [open, setOpen] = React.useState(false);
 
@@ -187,10 +201,10 @@ export function OSCALMetadataPartyDialog(props) {
         <DialogContent>
           <Grid container spacing={1}>
             <Grid item xs={4}>
-              <Typography variant="h6" component="h3">
-                <MapIcon />
-                Addresses
-              </Typography>
+              <OSCALMetadataPartyContactTypeHeader
+                icon={<MapIcon fontSize="small" />}
+                title="Address"
+              />
               <List>
                 {getPartyInfoList(
                   props.party.addresses,
@@ -199,12 +213,11 @@ export function OSCALMetadataPartyDialog(props) {
                 )}
               </List>
             </Grid>
-
             <Grid item xs={4}>
-              <Typography variant="h6" component="h3">
-                <PhoneIcon />
-                Phone
-              </Typography>
+              <OSCALMetadataPartyContactTypeHeader
+                icon={<PhoneIcon fontSize="small" />}
+                title="Phone"
+              />
               <List>
                 {getPartyInfoList(
                   props.party["telephone-numbers"],
@@ -214,10 +227,10 @@ export function OSCALMetadataPartyDialog(props) {
               </List>
             </Grid>
             <Grid item xs={4}>
-              <Typography variant="h6" component="h3">
-                <AlternateEmailIcon />
-                Email
-              </Typography>
+              <OSCALMetadataPartyContactTypeHeader
+                icon={<EmailIcon fontSize="small" />}
+                title="Email"
+              />
               <List>
                 {getPartyInfoList(
                   props.party["email-addresses"],
