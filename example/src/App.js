@@ -82,8 +82,9 @@ function App() {
     // be different).
     !!process.env.REACT_APP_REST_BASE_URL
   );
-  const [backendUrl] = useState(getBackEndUrl(
-    process.env.REACT_APP_REST_BASE_URL));
+  const [backendUrl] = useState(
+    getBackEndUrl(process.env.REACT_APP_REST_BASE_URL)
+  );
   const [hasDefaultUrl, setHasDefaultUrl] = useState(false);
 
   useEffect(() => {
