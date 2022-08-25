@@ -4,11 +4,11 @@ changelog:
     labels:
       - chore
       - dependencies
-    authors:
+      - spike
   categories:
     - title: New Features
       labels:
-        - enchancement
+        - enhancement
     - title: Bug fixes
       labels:
         - bug
