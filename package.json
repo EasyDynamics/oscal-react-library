@@ -106,7 +106,8 @@
     "webpack": "^5.74.0"
   },
   "overrides": {
-    "react-refresh": "0.11.0"
+    "react-refresh": "0.11.0",
+    "tough-cookie": "4.0.0"
   },
   "files": [
     "dist"
