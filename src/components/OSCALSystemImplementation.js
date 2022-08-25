@@ -11,6 +11,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
+import OSCALInventoryItem from "./OSCALInventoryItem";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
@@ -111,6 +112,23 @@ export default function OSCALSystemImplementation(props) {
                 </Table>
               </TableContainer>
             </Grid>
+          </Grid>
+          <Grid container spacing={2} style={{ paddingTop: "2em" }}>
+            <Grid item xs={12}>
+              <Typography variant="subtitle1" gutterBottom component="div">
+                Inventory Items
+              </Typography>
+            </Grid>
+            {Object.entries(props.systemImplementation["inventory-items"]).map(
+              ([key, inventoryItem]) => (
+                <OSCALInventoryItem
+                  key={key}
+                  inventoryItem={inventoryItem}
+                  parties={props.parties}
+                  components={props.components}
+                />
+              )
+            )}
           </Grid>
         </CardContent>
       </Card>
