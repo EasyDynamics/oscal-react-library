@@ -6,4 +6,4 @@ updates:
     schedule:
       interval: daily
     reviewers:
-      - "EasyDynamics/easygrc-reviewers"
+      - "EasyDynamics/oscal-editor-reviewers"
