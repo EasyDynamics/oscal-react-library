@@ -16,8 +16,12 @@ const ImplementedComponentsTable = styled(TableContainer)(
 );
 
 export default function OSCALImplementedComponents(props) {
-  const getComponent = (compUuid) =>
-    props.components?.find((component) => component.uuid === compUuid);
+  function getComponent(compUuid) {
+    if (Array.isArray(props.components)) {
+      return props.components?.find((component) => component.uuid === compUuid);
+    }
+    return props.components?.uuid === compUuid ? props.components : null;
+  }
 
   return (
     <ImplementedComponentsTable>

@@ -22,11 +22,12 @@ const inventoryItems = [
         value: "asset-id-inventory-item",
       },
     ],
-    "responsible-parties": {
-      "asset-administrator": {
+    "responsible-parties": [
+      {
+        "role-id": "asset-administrator",
         "party-uuids": ["party-1"],
       },
-    },
+    ],
     "implemented-components": [
       {
         "component-uuid": "component-1",
