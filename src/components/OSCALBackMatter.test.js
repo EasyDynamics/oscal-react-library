@@ -3,10 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { within } from "@testing-library/dom";
 import OSCALBackMatter from "./OSCALBackMatter";
-import {
-  parentUrlTestData,
-  revFourCatalog,
-} from "../test-data/Urls";
+import { parentUrlTestData, revFourCatalog } from "../test-data/Urls";
 import {
   backMatterTestData,
   exampleBackMatterWithoutMediaTypeAndUnknownExtension,

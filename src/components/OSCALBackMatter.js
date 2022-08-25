@@ -91,7 +91,12 @@ export default function OSCALBackMatter(props) {
 
   const getMediaType = (rlink) =>
     rlink["media-type"] ||
-    guessExtensionFromHref((rlink.href));
+    guessExtensionFromHref(
+      getAbsoluteUrl(
+        rlink.href,
+        props.parentUrl.startsWith(".") ? null : props.parentUrl
+      )
+    );
 
   const backMatterDisplay = (resource) => (
     <Grid item xs={3} key={resource.uuid}>
