@@ -17,7 +17,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import CssBaseline from "@mui/material/CssBaseline";
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 import {
   Route,
   Routes,
@@ -130,7 +130,10 @@ function App() {
   const location = useLocation();
   useEffect(() => {
     if (process.env.REACT_APP_GOOGLE_ANALYTICS) {
-      ReactGA.pageview(location.pathname + location.search);
+      ReactGA.send({
+        hitType: "pageview",
+        page: location.pathname + location.search,
+      });
     }
   }, [location]);
 

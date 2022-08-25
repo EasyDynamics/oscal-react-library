@@ -41,10 +41,7 @@ jobs:
           # Lint YAML files
           yamllint --format github --config-file .yaml-lint.yml .
   build_and_test:
-    strategy:
-      matrix:
-        node: [14, 16]
-    name: Build and test (on NodeJS ${{ matrix.node }})
+    name: Build and test (on NodeJS 16)
     runs-on: ubuntu-20.04
     defaults:
       run:
@@ -58,7 +55,7 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 16
           cache: "npm"
       - name: Globally update npm
         run: npm install -g npm@latest

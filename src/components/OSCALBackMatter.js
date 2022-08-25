@@ -9,7 +9,10 @@ import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import DescriptionIcon from "@mui/icons-material/Description";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import StyledTooltip from "./OSCALStyledTooltip";
-import { getAbsoluteUrl } from "./oscal-utils/OSCALLinkUtils";
+import {
+  getAbsoluteUrl,
+  guessExtensionFromHref,
+} from "./oscal-utils/OSCALLinkUtils";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
@@ -20,13 +23,6 @@ export const OSCALBackMatterCard = styled(Card)(
     flex-direction: column;
 `
 );
-
-// TODO: Remove workaround for missing media type
-// https://github.com/EasyDynamics/oscal-react-library/issues/512
-const getURLMediaType = (url) => {
-  const lastUrlPath = url.split("//").pop().split("/").pop();
-  return lastUrlPath.match(/\.[A-Za-z]{3,4}($|\?)/) || "Unknown";
-};
 
 function TitleDisplay(props) {
   const title = props.resource.title || "No Title";
@@ -94,7 +90,8 @@ export default function OSCALBackMatter(props) {
   }
 
   const getMediaType = (rlink) =>
-    rlink["media-type"] || getURLMediaType(rlink.href);
+    rlink["media-type"] ||
+    guessExtensionFromHref((rlink.href));
 
   const backMatterDisplay = (resource) => (
     <Grid item xs={3} key={resource.uuid}>

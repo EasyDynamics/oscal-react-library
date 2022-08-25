@@ -3,8 +3,15 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { within } from "@testing-library/dom";
 import OSCALBackMatter from "./OSCALBackMatter";
-import { parentUrlTestData, revFourCatalog } from "../test-data/Urls";
-import { backMatterTestData } from "../test-data/BackMatterData";
+import {
+  parentUrlTestData,
+  revFourCatalog,
+} from "../test-data/Urls";
+import {
+  backMatterTestData,
+  exampleBackMatterWithoutMediaTypeAndUnknownExtension,
+  exampleBackMatterWithoutMediaType,
+} from "../test-data/BackMatterData";
 
 function backMatterRenderer() {
   render(
@@ -62,6 +69,32 @@ export default function testOSCALBackMatter(parentElementName, renderer) {
     });
 
     within(button).getByTestId("OpenInNewIcon");
+  });
+
+  test(`${parentElementName} renders valid media type extension`, async () => {
+    render(
+      <OSCALBackMatter
+        backMatter={exampleBackMatterWithoutMediaType}
+        parentUrl={parentUrlTestData}
+      />
+    );
+    const button = screen.getByRole("button", {
+      name: "PNG",
+    });
+    expect(button.getAttribute("href"));
+  });
+
+  test(`${parentElementName} renders "Unknown" media type extension`, async () => {
+    render(
+      <OSCALBackMatter
+        backMatter={exampleBackMatterWithoutMediaTypeAndUnknownExtension}
+        parentUrl={parentUrlTestData}
+      />
+    );
+    const button = screen.getByRole("button", {
+      name: "Unknown",
+    });
+    expect(button.getAttribute("href"));
   });
 }
 
