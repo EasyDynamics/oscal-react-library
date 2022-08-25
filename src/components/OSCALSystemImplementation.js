@@ -115,9 +115,7 @@ export default function OSCALSystemImplementation(props) {
           </Grid>
           <Grid container spacing={2} style={{ paddingTop: "2em" }}>
             <Grid item xs={12}>
-              <Typography variant="subtitle1" gutterBottom component="div">
-                Inventory Items
-              </Typography>
+              <OSCALSectionHeader>Inventory Items</OSCALSectionHeader>
             </Grid>
             {Object.entries(props.systemImplementation["inventory-items"]).map(
               ([key, inventoryItem]) => (
