@@ -5,11 +5,10 @@ changelog:
       - chore
       - dependencies
     authors:
-      - dependabot[bot]
   categories:
-    - title: Fixed Bugs
-      labels:
-        - bug
     - title: New Features
       labels:
         - enchancement
+    - title: Bug fixes
+      labels:
+        - bug
