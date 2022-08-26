@@ -26,7 +26,11 @@ export default function OSCALImplementedComponents(props) {
           {props.implementedComponents &&
             Object.entries(props.implementedComponents).map(([key, comp]) => (
               <TableRow key={key}>
-                <TableCell component="th" scope="row" aria-label={comp["component-uuid"] + " implemented component"}>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  aria-label={`${comp["component-uuid"]} implemented component`}
+                >
                   {getComponent(comp["component-uuid"])?.title}
                 </TableCell>
                 <TableCell align="right">

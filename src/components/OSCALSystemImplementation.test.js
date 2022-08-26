@@ -41,21 +41,27 @@ export default function testOSCALSystemImplementation(
 
   test(`${parentElementName} shows component status`, () => {
     renderer();
-    const component = screen.getByLabelText("An example component.").closest("tr");
+    const component = screen
+      .getByLabelText("An example component.")
+      .closest("tr");
     const result = within(component).getByText("operational");
     expect(result).toBeVisible();
   });
 
   test(`${parentElementName} shows component type`, () => {
     renderer();
-    const component = screen.getByLabelText("An example component.").closest("tr");
+    const component = screen
+      .getByLabelText("An example component.")
+      .closest("tr");
     const result = within(component).getByText("software");
     expect(result).toBeVisible();
   });
 
   test(`${parentElementName} shows component version`, () => {
     renderer();
-    const component = screen.getByLabelText("An example component.").closest("tr");
+    const component = screen
+      .getByLabelText("An example component.")
+      .closest("tr");
     const propNameResult = within(component).getByText("version");
     expect(propNameResult).toBeVisible();
     const propValueResult = within(component).getByText("1.1");
