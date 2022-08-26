@@ -1,30 +1,29 @@
-import React from "react";
-import { styled } from "@mui/material/styles";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
+import BusinessIcon from "@mui/icons-material/Business";
+import ContactPageIcon from "@mui/icons-material/ContactPage";
+import EmailIcon from "@mui/icons-material/Email";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import HomeIcon from "@mui/icons-material/Home";
+import MapIcon from "@mui/icons-material/Map";
+import PhoneIcon from "@mui/icons-material/Phone";
+import SmartphoneIcon from "@mui/icons-material/Smartphone";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardHeader from "@mui/material/CardHeader";
+import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import ContactPageIcon from "@mui/icons-material/ContactPage";
 import DialogTitle from "@mui/material/DialogTitle";
+import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
-import ListSubheader from "@mui/material/ListSubheader";
-import Card from "@mui/material/Card";
-import MapIcon from "@mui/icons-material/Map";
-import EmailIcon from "@mui/icons-material/Email";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import CardContent from "@mui/material/CardContent";
-import Avatar from "@mui/material/Avatar";
-import GroupIcon from "@mui/icons-material/Group";
-import PhoneIcon from "@mui/icons-material/Phone";
-import CardActions from "@mui/material/CardActions";
-import Button from "@mui/material/Button";
-import HomeIcon from "@mui/icons-material/Home";
-import BusinessIcon from "@mui/icons-material/Business";
-import SmartphoneIcon from "@mui/icons-material/Smartphone";
-import Dialog from "@mui/material/Dialog";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import ListSubheader from "@mui/material/ListSubheader";
+import Paper from "@mui/material/Paper";
+import { styled } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+import React from "react";
 import OSCALEditableTextField from "./OSCALEditableTextField";
 
 export const OSCALMetadataPartiesHeader = styled(ListSubheader)(
@@ -43,7 +42,7 @@ const OSCALMetadataLabel = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const OSCALMetadataTitle = styled(Grid)`
+const OSCALMetadataTitle = styled("div")`
   height: 56px;
 `;
 
@@ -55,11 +54,16 @@ const OSCALMetadataAdditional = styled(Paper)(
   ({ theme }) => `padding: ${theme.spacing(1)};`
 );
 
-const OSCALMetadataPartiesCard = styled(Paper)(({ theme }) => ({
+const OSCALMetadataPartiesCardHolder = styled(Grid)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   position: "relative",
   overflow: "auto",
-  maxHeight: "18em",
+  maxHeight: "26em",
+  paddingBottom: "1em",
+  paddingRight: ".5em",
+  paddingTop: ".5em",
+  display: "flex",
+  direction: "row",
 }));
 
 // Returns a string with a locality-sensitive representation of this date
@@ -147,16 +151,6 @@ function OSCALMetadataPartyContactTypeHeader(props) {
 }
 
 export function OSCALMetadataPartyDialog(props) {
-  const [open, setOpen] = React.useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const PartyInfoTypes = {
     address: "address",
     telephone: "telephone",
@@ -188,95 +182,102 @@ export function OSCALMetadataPartyDialog(props) {
   };
 
   return (
-    <CardActions>
-      <Button size="small" variant="outlined" onClick={handleOpen}>
-        <ContactPageIcon />
-        Contact
-      </Button>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        scroll="paper"
-        aria-labelledby="scroll-dialog-title"
-        aria-describedby="scroll-dialog-description"
-        maxWidth="md"
-        fullWidth
-      >
-        <DialogTitle id="scroll-dialog-title">{props.party.name}</DialogTitle>
-        <DialogContent>{props.partyRolesText}</DialogContent>
-        <DialogContent>
-          <Grid container spacing={1}>
-            <Grid item xs={4}>
-              <OSCALMetadataPartyContactTypeHeader
-                icon={<MapIcon fontSize="small" />}
-                title="Address"
-              />
-              <List>
-                {getPartyInfoList(
-                  props.party.addresses,
-                  PartyInfoTypes.address,
-                  "No address information provided"
-                )}
-              </List>
-            </Grid>
-            <Grid item xs={4}>
-              <OSCALMetadataPartyContactTypeHeader
-                icon={<PhoneIcon fontSize="small" />}
-                title="Phone"
-              />
-              <List>
-                {getPartyInfoList(
-                  props.party["telephone-numbers"],
-                  PartyInfoTypes.telephone,
-                  "No telephone information provided"
-                )}
-              </List>
-            </Grid>
-            <Grid item xs={4}>
-              <OSCALMetadataPartyContactTypeHeader
-                icon={<EmailIcon fontSize="small" />}
-                title="Email"
-              />
-              <List>
-                {getPartyInfoList(
-                  props.party["email-addresses"],
-                  PartyInfoTypes.email,
-                  "No email information provided"
-                )}
-              </List>
-            </Grid>
+    <Dialog
+      open={props.open}
+      onClose={props.handleClose}
+      scroll="paper"
+      aria-labelledby="scroll-dialog-title"
+      aria-describedby="scroll-dialog-description"
+      maxWidth="md"
+      fullWidth
+    >
+      <DialogTitle id="scroll-dialog-title">
+        {props.party.name}
+        <Typography variant="body2">{props.partyRolesText}</Typography>
+      </DialogTitle>
+      <DialogContent>
+        <Grid container spacing={1}>
+          <Grid item xs={4}>
+            <OSCALMetadataPartyContactTypeHeader
+              icon={<MapIcon fontSize="small" />}
+              title="Address"
+            />
+            <List>
+              {getPartyInfoList(
+                props.party.addresses,
+                PartyInfoTypes.address,
+                "No address information provided"
+              )}
+            </List>
           </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </CardActions>
+          <Grid item xs={4}>
+            <OSCALMetadataPartyContactTypeHeader
+              icon={<PhoneIcon fontSize="small" />}
+              title="Phone"
+            />
+            <List>
+              {getPartyInfoList(
+                props.party["telephone-numbers"],
+                PartyInfoTypes.telephone,
+                "No telephone information provided"
+              )}
+            </List>
+          </Grid>
+          <Grid item xs={4}>
+            <OSCALMetadataPartyContactTypeHeader
+              icon={<EmailIcon fontSize="small" />}
+              title="Email"
+            />
+            <List>
+              {getPartyInfoList(
+                props.party["email-addresses"],
+                PartyInfoTypes.email,
+                "No email information provided"
+              )}
+            </List>
+          </Grid>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={props.handleClose} color="primary">
+          Close
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
 
 export function OSCALMetadataParty(props) {
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <Card>
-      <CardContent>
-        <Grid container spacing={2}>
-          <Grid item>
-            <Avatar>
-              {props.party.type === "organization" ? <GroupIcon /> : null}
-            </Avatar>
-          </Grid>
-          <Grid item>
-            <Typography>{props.party.name}</Typography>
-            <Typography variant="subtitle2">{props.partyRolesText}</Typography>
-            <OSCALMetadataPartyDialog
-              party={props.party}
-              partyRolesText={props.partyRolesText}
-            />
-          </Grid>
-        </Grid>
-      </CardContent>
+      <CardHeader
+        avatar={<Avatar>{props.party.name?.substring(0, 1)}</Avatar>}
+        title={props.party.name}
+        subheader={props.partyRolesText}
+      />
+      <CardActions>
+        <Button size="small" variant="outlined" onClick={handleOpen}>
+          <ContactPageIcon />
+          Contact
+        </Button>
+        <OSCALMetadataPartyDialog
+          open={open}
+          handleOpen={handleOpen}
+          handleClose={handleClose}
+          party={props.party}
+          partyRolesText={props.partyRolesText}
+        />
+      </CardActions>
     </Card>
   );
 }
@@ -333,21 +334,25 @@ export default function OSCALMetadata(props) {
           />
         </OSCALMetadataTitle>
       </Grid>
-      <Grid item xs={12}>
-        <Grid container spacing={3}>
-          <Grid item xs={8}>
-            <OSCALMetadataPartiesCard>
-              <OSCALMetadataPartiesHeader>Parties</OSCALMetadataPartiesHeader>
-              {props.metadata.parties?.map((party) => (
+      <Grid container spacing={1}>
+        <Grid component={Paper} item xs={8}>
+          <Grid item xs={12}>
+            <OSCALMetadataPartiesHeader>Parties</OSCALMetadataPartiesHeader>
+          </Grid>
+          <OSCALMetadataPartiesCardHolder container spacing={1} wrap="wrap">
+            {props.metadata.parties?.map((party) => (
+              <Grid item xs={12} md={4} key={party.uuid}>
                 <OSCALMetadataParty
                   key={party.uuid}
                   party={party}
                   partyRolesText={getPartyRolesText(party)}
                 />
-              ))}
-            </OSCALMetadataPartiesCard>
-          </Grid>
-          <Grid item xs={4}>
+              </Grid>
+            ))}
+          </OSCALMetadataPartiesCardHolder>
+        </Grid>
+        <Grid item md={3} xs={12}>
+          <Grid item xs={12}>
             <OSCALMetadataAdditional>
               <Grid container direction="row" alignItems="center">
                 <OSCALMetadataKey item>
