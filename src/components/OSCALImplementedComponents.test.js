@@ -1,9 +1,7 @@
 import React from "react";
 import { render, screen, within } from "@testing-library/react";
 import OSCALImplementedComponents from "./OSCALImplementedComponents";
-import {
-  implementedComponentsRolesTestData,
-} from "../test-data/CommonData";
+import { implementedComponentsRolesTestData } from "../test-data/CommonData";
 import { exampleComponents } from "../test-data/ComponentsData";
 
 function implementedComponentsRenderer() {

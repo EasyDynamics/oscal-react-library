@@ -2,10 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import OSCALInventoryItem from "./OSCALInventoryItem";
 import { exampleComponents } from "../test-data/ComponentsData";
-import {
-  exampleParties,
-  inventoryItemTestData,
-} from "../test-data/CommonData";
+import { exampleParties, inventoryItemTestData } from "../test-data/CommonData";
 
 function inventoryItemRenderer() {
   render(
@@ -17,10 +14,7 @@ function inventoryItemRenderer() {
   );
 }
 
-export default function testOSCALInventoryItem(
-  parentElementName,
-  renderer
-) {
+export default function testOSCALInventoryItem(parentElementName, renderer) {
   test(`${parentElementName} shows description`, () => {
     renderer();
     const result = screen.getByLabelText("An example set of inventory items.");
@@ -53,8 +47,5 @@ export default function testOSCALInventoryItem(
 }
 
 if (!require.main) {
-  testOSCALInventoryItem(
-    "OSCALSystemImplementation",
-    inventoryItemRenderer
-  );
+  testOSCALInventoryItem("OSCALSystemImplementation", inventoryItemRenderer);
 }
