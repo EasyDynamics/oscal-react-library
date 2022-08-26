@@ -101,12 +101,10 @@ function getAddressIcon(contactType) {
 function TextWithIcon(props) {
   const { icon, text } = props;
   return (
-    <Grid container spacing={1}>
-      <Grid item>{icon}</Grid>
-      <Grid item>
-        <Typography>{text}</Typography>
-      </Grid>
-    </Grid>
+    <Stack direction="row" gap={1} alignItems="start">
+      {icon}
+      <Typography>{text}</Typography>
+    </Stack>
   );
 }
 
@@ -144,10 +142,12 @@ export function OSCALMetadataPartyTelephone(props) {
 
 function OSCALMetadataPartyContactTypeHeader(props) {
   return (
-    <OSCALMetadataPartiesInfoHeader variant="h6" component="h3">
+    <Stack direction="row" alignItems="center" gap={1}>
       {props.icon}
-      {props.title}
-    </OSCALMetadataPartiesInfoHeader>
+      <OSCALMetadataPartiesInfoHeader variant="h6" component="h3">
+        {props.title}
+      </OSCALMetadataPartiesInfoHeader>
+    </Stack>
   );
 }
 
