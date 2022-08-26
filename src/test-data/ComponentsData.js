@@ -28,6 +28,7 @@ export const exampleComponents = [
   {
     uuid: "component-1",
     title: "Component 1 Title",
+    type: "Component 1 Type",
   },
 ];
 

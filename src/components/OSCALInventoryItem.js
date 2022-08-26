@@ -18,7 +18,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     color: theme.palette.common.white,
   },
   textAlign: "left",
-  "min-width": "10em",
+  minWidth: "10em",
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({

@@ -23,7 +23,7 @@ const SmallTableCell = styled(TableCell)`
 
 const ComponentTableCell = styled(TableCell)`
   text-align: left;
-  minwidth: 20em;
+  min-width: 20em;
 `;
 
 const OSCALSystemImplementationSubDataHeader = styled(TableCell)`
