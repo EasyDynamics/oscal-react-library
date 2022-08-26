@@ -16,12 +16,8 @@ const ImplementedComponentsTable = styled(TableContainer)(
 );
 
 export default function OSCALImplementedComponents(props) {
-  function getComponent(compUuid) {
-    if (Array.isArray(props.components)) {
-      return props.components?.find((component) => component.uuid === compUuid);
-    }
-    return props.components?.uuid === compUuid ? props.components : null;
-  }
+  const getComponent = (compUuid) =>
+    props.components?.find((component) => component.uuid === compUuid);
 
   return (
     <ImplementedComponentsTable>
@@ -30,7 +26,7 @@ export default function OSCALImplementedComponents(props) {
           {props.implementedComponents &&
             Object.entries(props.implementedComponents).map(([key, comp]) => (
               <TableRow key={key}>
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" aria-label={comp["component-uuid"] + " implemented component"}>
                   {getComponent(comp["component-uuid"])?.title}
                 </TableCell>
                 <TableCell align="right">

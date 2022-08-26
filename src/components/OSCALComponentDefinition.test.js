@@ -28,7 +28,7 @@ function testOSCALComponentDefinitionComponent(parentElementName, renderer) {
 
   test(`${parentElementName} shows component description`, async () => {
     renderer();
-    await userEvent.hover(screen.getByText("Example Component"));
+    await userEvent.hover(screen.getByLabelText("An example component."));
     expect(
       await screen.findByText("An example component.")
     ).toBeInTheDocument();

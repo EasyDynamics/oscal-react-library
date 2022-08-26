@@ -54,33 +54,34 @@ const users = {
 export const systemImplementationTestData = {
   remarks,
   users,
-  components: {
-    "component-1": {
+  components: [
+    {
+      uuid: "component-1",
+      type,
       title,
       description,
-      status,
-      type,
       props: [
         {
           name: "version",
           value: "1.1",
         },
       ],
+      status,
       "responsible-roles": responsibleRolesTestData,
     },
-  },
+  ],
   "inventory-items": inventoryItems,
 };
 
 export const exampleSystemImplementation = {
   remarks,
   users,
-  components: {
-    "component-1": {
+  components: [
+    {
+      uuid: "component-1",
+      type,
       title,
       description,
-      status,
-      type,
       props: [
         {
           name: "version",
@@ -91,9 +92,10 @@ export const exampleSystemImplementation = {
           value: "20210712",
         },
       ],
+      status,
       "responsible-roles": responsibleRolesTestData,
     },
-  },
+  ],
   "inventory-items": inventoryItems,
 };
 
