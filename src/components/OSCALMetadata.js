@@ -93,6 +93,18 @@ function getAddressIcon(contactType) {
   return getIconOfType(ADDRESS_ICON_MAPPING, contactType);
 }
 
+function TextWithIcon(props) {
+  const { icon, text } = props;
+  return (
+    <Grid container spacing={1}>
+      <Grid item>{icon}</Grid>
+      <Grid item>
+        <Typography>{text}</Typography>
+      </Grid>
+    </Grid>
+  );
+}
+
 export function OSCALMetadataPartyAddress(props) {
   const { address } = props;
   const addrString = [
@@ -103,14 +115,7 @@ export function OSCALMetadataPartyAddress(props) {
     .filter((line) => line)
     .flatMap((item) => [item, <br key={item} />]);
 
-  return (
-    <Grid container spacing={1}>
-      <Grid item>{getAddressIcon(address.type)}</Grid>
-      <Grid item>
-        <Typography>{addrString}</Typography>
-      </Grid>
-    </Grid>
-  );
+  return <TextWithIcon icon={getAddressIcon(address.type)} text={addrString} />;
 }
 
 export function OSCALMetadataPartyEmail(props) {
@@ -123,11 +128,12 @@ export function OSCALMetadataPartyEmail(props) {
 
 export function OSCALMetadataPartyTelephone(props) {
   const { telephone } = props;
+
   return (
-    <Typography>
-      {getPhoneIcon(telephone.type)}
-      <Link href={`tel:${telephone.number}`}>{telephone.number}</Link>
-    </Typography>
+    <TextWithIcon
+      icon={getPhoneIcon(telephone.type)}
+      text={<Link href={`tel:${telephone.number}`}>{telephone.number}</Link>}
+    />
   );
 }
 
