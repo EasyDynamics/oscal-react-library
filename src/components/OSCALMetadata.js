@@ -21,6 +21,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListSubheader from "@mui/material/ListSubheader";
 import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import React from "react";
@@ -192,10 +193,15 @@ export function OSCALMetadataPartyDialog(props) {
       fullWidth
     >
       <DialogTitle id="scroll-dialog-title">
-        {props.party.name}
-        <Typography variant="body2">{props.partyRolesText}</Typography>
+        <Stack direction="row" alignItems="center" gap={1}>
+          {props.avatar}
+          <Stack direction="column">
+            {props.party.name}
+            <Typography variant="body2">{props.partyRolesText}</Typography>
+          </Stack>
+        </Stack>
       </DialogTitle>
-      <DialogContent>
+      <DialogContent dividers>
         <Grid container spacing={1}>
           <Grid item xs={4}>
             <OSCALMetadataPartyContactTypeHeader
@@ -258,10 +264,41 @@ export function OSCALMetadataParty(props) {
     setOpen(false);
   };
 
+  const avatarColor = (name) => {
+    // This implementation hashes the given string to create a
+    // color string. This is based of the example algorithm given
+    // in the MUI documentation and adapted to our use case.
+    let hash = 0;
+    for (let i = 0; i < name.length; i += 1) {
+      // eslint-disable-next-line no-bitwise
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    let color = "#";
+    for (let i = 0; i < 3; i += 1) {
+      // eslint-disable-next-line no-bitwise
+      const value = (hash >> (i * 8)) & 0xff;
+      color += `00${value.toString(16)}`.slice(-2);
+    }
+    return color;
+  };
+  const avatarValue = (name) =>
+    name
+      ?.split(" ")
+      .map((str) => str.substring(0, 1))
+      .join("")
+      .substring(0, 2);
+
+  const avatar = (
+    <Avatar sx={{ bgcolor: avatarColor(props.party.name) }}>
+      {avatarValue(props.party.name)}
+    </Avatar>
+  );
+
   return (
     <Card>
       <CardHeader
-        avatar={<Avatar>{props.party.name?.substring(0, 1)}</Avatar>}
+        avatar={avatar}
         title={props.party.name}
         subheader={props.partyRolesText}
       />
@@ -276,6 +313,7 @@ export function OSCALMetadataParty(props) {
           handleClose={handleClose}
           party={props.party}
           partyRolesText={props.partyRolesText}
+          avatar={avatar}
         />
       </CardActions>
     </Card>
