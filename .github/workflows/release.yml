@@ -72,7 +72,7 @@ jobs:
       # Increment the version to the next minor release
       # We install to update the example app's lock file to reference
       # the new version of the library.
-      - name: Bump version 
+      - name: Bump version
         run: |
           npm version $NPM_RELEASE_TYPE
           npm install
@@ -106,6 +106,7 @@ jobs:
         with:
           generate_release_notes: true
           tag_name: v${{ env.PKG_VERSION }}
+          body_path: .github/release.yml
           files:
             example/oscal-viewer.zip
           permissions: >-
