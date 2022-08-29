@@ -74,11 +74,11 @@ For more details about OSCAL Viewer, please refer to the [example (OSCAL Viewer)
 ### Google Analytics
 
 The OSCAL Viewer example application includes an optional integration for Google Analytics. Google
-Analytics is enabled only when `REACT_APP_GOOGLE_ANALYTICS` is set to a Google Analytics Univeral
-Analytics identifier when `npm run build` is run. For example:
+Analytics is enabled only when `REACT_APP_GOOGLE_ANALYTICS` is set to a Google Analytics GA4
+identifier when `npm run build` is run. For example:
 
 ```bash
-export REACT_APP_GOOGLE_ANALYTICS="UA-XXXXXXXX-X"`
+export REACT_APP_GOOGLE_ANALYTICS="G-XXXXXXXXXX"`
 npm run build
 ```
 

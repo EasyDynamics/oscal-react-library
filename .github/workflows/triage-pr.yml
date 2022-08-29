@@ -10,7 +10,7 @@ on:
       - ready_for_review
 
 env:
-  DEFAULT_REVIEW_TEAM: "easygrc-reviewers"
+  DEFAULT_REVIEW_TEAM: "oscal-editor-reviewers"
 
 jobs:
   assignReviewers:
