@@ -112,7 +112,16 @@ function AuthorizedPrivilegesTable(props) {
         <TableBody>
           {props.authorizedPrivileges?.map((privilege) => (
             <TableRow key={privilege.title}>
-              <TableCell>{privilege.title}</TableCell>
+              <TableCell>
+                <StyledTooltip
+                  title={privilege.description ? privilege.description : ""}
+                >
+                  <Typography>{privilege.title}</Typography>
+                </StyledTooltip>
+              </TableCell>
+              <TableCell>
+                {privilege["functions-performed"]?.join(", ")}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
