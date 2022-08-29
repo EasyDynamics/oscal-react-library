@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALProperties from "./OSCALProperties";
-import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
+import OSCALResponsibleParties from "./OSCALResponsibleParties";
 import OSCALImplementedComponents from "./OSCALImplementedComponents";
 
 const StyledHeaderTableCell = styled(TableCell)(({ theme }) => ({
@@ -65,8 +65,8 @@ export default function OSCALInventoryItems(props) {
                       <OSCALProperties properties={inventoryItem.props} />
                     </TableCell>
                     <TableCell>
-                      <OSCALResponsibleRoles
-                        responsibleRoles={inventoryItem["responsible-parties"]}
+                      <OSCALResponsibleParties
+                        responsibleParties={inventoryItem["responsible-parties"]}
                         parties={props.parties}
                       />
                     </TableCell>

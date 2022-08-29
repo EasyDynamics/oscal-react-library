@@ -38,6 +38,13 @@ export const responsibleRolesTestData = [
   },
 ];
 
+export const responsiblePartiesTestData = [
+  {
+    "party-uuids": ["party-1"],
+    "role-id": "provider",
+  },
+];
+
 export const inventoryItemsTestData = [
   {
     uuid: "inventory-item",
