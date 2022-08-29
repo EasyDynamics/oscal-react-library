@@ -13,7 +13,7 @@ import TableRow from "@mui/material/TableRow";
 import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
-import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
+import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 const SmallTableCell = styled(TableCell)`
   text-align: right;
@@ -133,7 +133,6 @@ function OSCALSystemImplementationUsers(props) {
             <TableRow>
               <TableCell>Title</TableCell>
               <TableCell>Short Name</TableCell>
-              <TableCell>Description</TableCell>
               <TableCell>Properties</TableCell>
               <TableCell>Authorized Privileges</TableCell>
             </TableRow>
@@ -142,14 +141,13 @@ function OSCALSystemImplementationUsers(props) {
             {props.users.map((user) => (
               <TableRow key={`key-${user.uuid}`}>
                 <TableCell>
-                  <OSCALMarkupLine>{user.title}</OSCALMarkupLine>
+                  <StyledTooltip
+                    title={user.description ? user.description : ""}
+                  >
+                    <Typography>{user.title}</Typography>
+                  </StyledTooltip>
                 </TableCell>
                 <TableCell>{user["short-name"]}</TableCell>
-                <TableCell>
-                  <OSCALMarkupMultiLine>
-                    {user.description}
-                  </OSCALMarkupMultiLine>
-                </TableCell>
                 <TableCell>
                   <PropertiesTable list={user.props} />
                 </TableCell>

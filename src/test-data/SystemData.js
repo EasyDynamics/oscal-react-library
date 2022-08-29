@@ -39,17 +39,17 @@ const remarks = "Example system implementation remarks.";
 
 const users = [
   {
-    "user-1": {
-      uuid: "ca7fad69-a4ef-4e45-8213-9e51b7fdc193",
-      title: "User 1",
-      "role-ids": ["asset-administrator"],
-      annotations: [
-        {
-          name: "type",
-          value: "internal",
-        },
-      ],
-    },
+    uuid: "ca7fad69-a4ef-4e45-8213-9e51b7fdc193",
+    title: "User 1",
+    description: "A system user",
+    "role-ids": ["asset-administrator"],
+    "authorized-privileges": [
+      {
+        title: "privilege title",
+        description: "privilege description",
+        "functions-preformed": ["read", "write"],
+      },
+    ],
   },
 ];
 

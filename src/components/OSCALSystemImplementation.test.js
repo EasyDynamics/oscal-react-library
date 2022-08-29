@@ -15,6 +15,11 @@ describe("SystemImplementation", () => {
     );
   });
 
+  test("shows Components section title", () => {
+    const result = screen.getByText("Components");
+    expect(result).toBeVisible();
+  });
+
   test(`shows remarks`, () => {
     const result = screen.getByText("Example system implementation remarks.");
     expect(result).toBeVisible();
@@ -50,5 +55,35 @@ describe("SystemImplementation", () => {
     expect(propNameResult).toBeVisible();
     const propValueResult = within(component).getByText("1.1");
     expect(propValueResult).toBeVisible();
+  });
+
+  test("shows Users section title", () => {
+    const result = screen.getByText("Users");
+    expect(result).toBeVisible();
+  });
+
+  test("shows Title column", () => {
+    const result = screen.getByText("Title");
+    expect(result).toBeVisible();
+  });
+
+  test("shows Authorized Privileges column", () => {
+    const result = screen.getByText("Authorized Privileges");
+    expect(result).toBeVisible();
+  });
+
+  test("shows name of a user listed", () => {
+    const result = screen.getByText("User 1");
+    expect(result).toBeVisible();
+  });
+
+  test("shows name of a privilege listed", () => {
+    const result = screen.getByText("privilege title");
+    expect(result).toBeVisible();
+  });
+
+  test("shows name of a user listed", async () => {
+    await userEvent.hover(screen.getByText("User 1"));
+    expect(await screen.findByText("A system user")).toBeInTheDocument();
   });
 });
