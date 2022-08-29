@@ -105,6 +105,22 @@ function OSCALSystemImplementationComponents(props) {
   );
 }
 
+function FunctionsPreformedTable(props) {
+  return (
+    <TableContainer>
+      <Table size="small">
+        <TableBody>
+          {props.functions?.map((func) => (
+            <TableRow key={func}>
+              <TableCell>{func}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}
+
 function AuthorizedPrivilegesTable(props) {
   return (
     <TableContainer>
@@ -116,12 +132,30 @@ function AuthorizedPrivilegesTable(props) {
                 <StyledTooltip
                   title={privilege.description ? privilege.description : ""}
                 >
-                  <Typography>{privilege.title}</Typography>
+                  <Typography variant="body2">{privilege.title}</Typography>
                 </StyledTooltip>
               </TableCell>
               <TableCell>
-                {privilege["functions-performed"]?.join(", ")}
+                <FunctionsPreformedTable
+                  functions={privilege["functions-performed"]}
+                />
               </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}
+
+function RoleIdTable(props) {
+  return (
+    <TableContainer>
+      <Table size="small">
+        <TableBody>
+          {props.roleIds?.map((roleId) => (
+            <TableRow key={roleId}>
+              <TableCell>{roleId}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -143,6 +177,7 @@ function OSCALSystemImplementationUsers(props) {
               <TableCell>Title</TableCell>
               <TableCell>Short Name</TableCell>
               <TableCell>Properties</TableCell>
+              <TableCell>Roll ids</TableCell>
               <TableCell>Authorized Privileges</TableCell>
             </TableRow>
           </TableHead>
@@ -153,12 +188,15 @@ function OSCALSystemImplementationUsers(props) {
                   <StyledTooltip
                     title={user.description ? user.description : ""}
                   >
-                    <Typography>{user.title}</Typography>
+                    <Typography variant="body2">{user.title}</Typography>
                   </StyledTooltip>
                 </TableCell>
                 <TableCell>{user["short-name"]}</TableCell>
                 <TableCell>
                   <PropertiesTable list={user.props} />
+                </TableCell>
+                <TableCell>
+                  <RoleIdTable roleIds={user["role-ids"]} />
                 </TableCell>
                 <TableCell>
                   <AuthorizedPrivilegesTable
