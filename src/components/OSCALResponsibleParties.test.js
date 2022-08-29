@@ -15,7 +15,10 @@ function responsiblePartiesRenderer() {
   );
 }
 
-export default function testOSCALResponsibleParties(parentElementName, renderer) {
+export default function testOSCALResponsibleParties(
+  parentElementName,
+  renderer
+) {
   test(`${parentElementName} shows component parties`, () => {
     renderer();
     const partyTypeResult = screen.getByText("provider");
@@ -29,5 +32,8 @@ export default function testOSCALResponsibleParties(parentElementName, renderer)
 }
 
 if (!require.main) {
-  testOSCALResponsibleParties("OSCALResponsibleParties", responsiblePartiesRenderer);
+  testOSCALResponsibleParties(
+    "OSCALResponsibleParties",
+    responsiblePartiesRenderer
+  );
 }

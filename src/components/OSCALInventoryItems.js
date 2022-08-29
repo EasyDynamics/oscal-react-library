@@ -66,7 +66,9 @@ export default function OSCALInventoryItems(props) {
                     </TableCell>
                     <TableCell>
                       <OSCALResponsibleParties
-                        responsibleParties={inventoryItem["responsible-parties"]}
+                        responsibleParties={
+                          inventoryItem["responsible-parties"]
+                        }
                         parties={props.parties}
                       />
                     </TableCell>
