@@ -17,7 +17,7 @@ function inventoryItemRenderer() {
 export default function testOSCALInventoryItem(parentElementName, renderer) {
   test(`${parentElementName} shows description`, () => {
     renderer();
-    const result = screen.getByLabelText("An example set of inventory items.");
+    const result = screen.getByText("An example set of inventory items.");
     expect(result).toBeVisible();
   });
 
