@@ -8,7 +8,6 @@ import {
 } from "@testing-library/react";
 import { OSCALProfileLoader } from "./OSCALLoader";
 import OSCALProfile from "./OSCALProfile";
-import testOSCALMetadata from "./OSCALMetadata.test";
 import testOSCALBackMatter from "./OSCALBackMatter.test";
 import { parentUrlTestData } from "../test-data/Urls";
 import profileTestData from "../test-data/ProfileData";
@@ -50,8 +49,6 @@ function testOSCALProfile(parentElementName, renderer) {
     expect(await screen.findByText("at least every 3 years")).toBeVisible();
   });
 }
-
-testOSCALMetadata("OSCALProfile", profileRenderer);
 
 testOSCALProfile("OSCALProfile", profileRenderer);
 
