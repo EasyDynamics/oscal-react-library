@@ -106,7 +106,6 @@ jobs:
         with:
           generate_release_notes: true
           tag_name: v${{ env.PKG_VERSION }}
-          body_path: .github/release.yml
           files:
             example/oscal-viewer.zip
           permissions: >-
