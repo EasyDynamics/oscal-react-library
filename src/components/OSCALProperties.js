@@ -23,10 +23,16 @@ export default function OSCALProperties(props) {
           {props.properties &&
             Object.entries(props.properties).map(([key, prop]) => (
               <TableRow key={key}>
-                <TableCell component="th" scope="row">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  key={key + " " + prop.name}
+                >
                   {prop.name}
                 </TableCell>
-                <TableCell align="right">{prop.value}</TableCell>
+                <TableCell align="right" key={key + " " + prop.name + " value"}>
+                  {prop.value}
+                </TableCell>
               </TableRow>
             ))}
         </TableBody>

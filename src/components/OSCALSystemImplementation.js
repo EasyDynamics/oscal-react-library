@@ -6,31 +6,15 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
-import OSCALInventoryItem from "./OSCALInventoryItem";
+import OSCALInventoryItems from "./OSCALInventoryItems";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
-
-const StyledHeaderTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.common.white,
-  },
-  textAlign: "left",
-  minWidth: "10em",
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  // Use hover color for even numbered rows
-  "&:nth-of-type(even)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-}));
 
 const SmallTableCell = styled(TableCell)`
   text-align: right;
@@ -129,47 +113,11 @@ export default function OSCALSystemImplementation(props) {
               </TableContainer>
             </Grid>
           </Grid>
-          <Grid container spacing={2} style={{ paddingTop: "2em" }}>
-            <Grid item xs={12}>
-              <OSCALSectionHeader>Inventory Items</OSCALSectionHeader>
-            </Grid>
-            <Grid item xs={12}>
-              <TableContainer sx={{ maxHeight: "50em" }}>
-                <Table
-                  aria-label="Inventory Items"
-                  sx={{ height: "max-content" }}
-                >
-                  <TableHead>
-                    <TableRow>
-                      <StyledHeaderTableCell>Item</StyledHeaderTableCell>
-                      <StyledHeaderTableCell>Properties</StyledHeaderTableCell>
-                      <StyledHeaderTableCell>
-                        Responsible Parties
-                      </StyledHeaderTableCell>
-                      <StyledHeaderTableCell>
-                        Implemented Components
-                      </StyledHeaderTableCell>
-                      <StyledHeaderTableCell>Remarks</StyledHeaderTableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <StyledTableRow>
-                      {Object.entries(
-                        props.systemImplementation["inventory-items"]
-                      ).map(([key, inventoryItem]) => (
-                        <OSCALInventoryItem
-                          key={key}
-                          inventoryItem={inventoryItem}
-                          parties={props.parties}
-                          components={props.components}
-                        />
-                      ))}
-                    </StyledTableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Grid>
-          </Grid>
+          <OSCALInventoryItems
+            inventoryItems={props.systemImplementation["inventory-items"]}
+            parties={props.parties}
+            components={props.components}
+          />
         </CardContent>
       </Card>
     </OSCALSection>
