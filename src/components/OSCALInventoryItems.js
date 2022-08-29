@@ -1,7 +1,14 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import { Grid, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
+import {
+  Grid,
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import { OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALProperties from "./OSCALProperties";
 import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
@@ -10,7 +17,7 @@ import OSCALImplementedComponents from "./OSCALImplementedComponents";
 const StyledHeaderTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.primary.main,
-    color: theme.palette.common.white
+    color: theme.palette.common.white,
   },
   textAlign: "left",
   minWidth: "10em",
@@ -29,19 +36,23 @@ export default function OSCALInventoryItems(props) {
   }
 
   return (
-    <Grid container spacing={2} style={{ paddingTop: "2em"  }}>
+    <Grid container spacing={2} style={{ paddingTop: "2em" }}>
       <Grid item xs={12}>
         <OSCALSectionHeader>Inventory Items</OSCALSectionHeader>
       </Grid>
       <Grid item xs={12}>
         <TableContainer sx={{ maxHeight: "50em" }}>
-          <Table aria-label={"Inventory Items"} sx={{ height: "max-content" }}>
+          <Table aria-label="Inventory Items" sx={{ height: "max-content" }}>
             <TableHead>
               <TableRow>
                 <StyledHeaderTableCell>Item</StyledHeaderTableCell>
                 <StyledHeaderTableCell>Properties</StyledHeaderTableCell>
-                <StyledHeaderTableCell>Responsible Parties</StyledHeaderTableCell>
-                <StyledHeaderTableCell>Implemented Components</StyledHeaderTableCell>
+                <StyledHeaderTableCell>
+                  Responsible Parties
+                </StyledHeaderTableCell>
+                <StyledHeaderTableCell>
+                  Implemented Components
+                </StyledHeaderTableCell>
                 <StyledHeaderTableCell>Remarks</StyledHeaderTableCell>
               </TableRow>
             </TableHead>
@@ -51,9 +62,7 @@ export default function OSCALInventoryItems(props) {
                   <StyledTableRow key={key}>
                     <TableCell>{inventoryItem.description}</TableCell>
                     <TableCell>
-                      <OSCALProperties
-                        properties={inventoryItem.props}
-                      />
+                      <OSCALProperties properties={inventoryItem.props} />
                     </TableCell>
                     <TableCell>
                       <OSCALResponsibleRoles
@@ -63,7 +72,9 @@ export default function OSCALInventoryItems(props) {
                     </TableCell>
                     <TableCell>
                       <OSCALImplementedComponents
-                        implementedComponents={inventoryItem["implemented-components"]}
+                        implementedComponents={
+                          inventoryItem["implemented-components"]
+                        }
                         components={props.components}
                       />
                     </TableCell>

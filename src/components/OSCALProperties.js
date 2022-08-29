@@ -26,11 +26,11 @@ export default function OSCALProperties(props) {
                 <TableCell
                   component="th"
                   scope="row"
-                  key={key + " " + prop.name}
+                  key={`${key} ${prop.name}`}
                 >
                   {prop.name}
                 </TableCell>
-                <TableCell align="right" key={key + " " + prop.name + " value"}>
+                <TableCell align="right" key={`${key} ${prop.name} value`}>
                   {prop.value}
                 </TableCell>
               </TableRow>

@@ -2,7 +2,10 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import OSCALInventoryItems from "./OSCALInventoryItems";
 import { exampleComponents } from "../test-data/ComponentsData";
-import { exampleParties, inventoryItemsTestData } from "../test-data/CommonData";
+import {
+  exampleParties,
+  inventoryItemsTestData,
+} from "../test-data/CommonData";
 
 function inventoryItemsRenderer() {
   render(
