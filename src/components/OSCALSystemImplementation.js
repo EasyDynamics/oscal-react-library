@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
@@ -33,7 +33,25 @@ const OSCALSystemImplementationSubDataHeader = styled(TableCell)`
 
 const OSCALSystemImplementationTableTitle = styled(Typography)`
   flex: 1 1 100%;
+  padding-top: 1em;
+  padding-bottom: 1em;
 `;
+
+const StyledHeaderTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.common.white,
+  },
+  textAlign: "left",
+  minWidth: "10em",
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  // Use hover color for even numbered rows
+  "&:nth-of-type(even)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+}));
 
 function PropertiesTable(props) {
   return (
@@ -63,20 +81,20 @@ function OSCALSystemImplementationComponents(props) {
       <OSCALSystemImplementationTableTitle variant="h6" id="tableTitle">
         Components
       </OSCALSystemImplementationTableTitle>
-      <TableContainer>
-        <Table aria-label="Components">
+      <TableContainer sx={{ maxHeight: "25em" }}>
+        <Table aria-label="Components" sx={{ height: "max-content" }}>
           <TableHead>
             <TableRow>
-              <TableCell>Component</TableCell>
-              <TableCell>Type</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Properties</TableCell>
-              <TableCell>Responsible Roles</TableCell>
+              <StyledHeaderTableCell>Component</StyledHeaderTableCell>
+              <StyledHeaderTableCell>Type</StyledHeaderTableCell>
+              <StyledHeaderTableCell>Status</StyledHeaderTableCell>
+              <StyledHeaderTableCell>Properties</StyledHeaderTableCell>
+              <StyledHeaderTableCell>Responsible Roles</StyledHeaderTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {props.components.map((component) => (
-              <TableRow key={component.uuid}>
+              <StyledTableRow key={component.uuid}>
                 <ComponentTableCell component="th" scope="row">
                   <StyledTooltip title={component.description}>
                     <Typography>{component.title}</Typography>
@@ -93,7 +111,7 @@ function OSCALSystemImplementationComponents(props) {
                     parties={props.parties}
                   />
                 </TableCell>
-              </TableRow>
+              </StyledTableRow>
             ))}
           </TableBody>
         </Table>
@@ -167,20 +185,22 @@ function OSCALSystemImplementationUsers(props) {
       <OSCALSystemImplementationTableTitle variant="h6" id="tableTitle">
         Users
       </OSCALSystemImplementationTableTitle>
-      <TableContainer>
-        <Table aria-label="Components">
+      <TableContainer sx={{ maxHeight: "25em" }}>
+        <Table aria-label="Components" sx={{ height: "max-content" }}>
           <TableHead>
             <TableRow>
-              <TableCell>Title</TableCell>
-              <TableCell>Short Name</TableCell>
-              <TableCell>Properties</TableCell>
-              <TableCell>Roll ids</TableCell>
-              <TableCell>Authorized Privileges</TableCell>
+              <StyledHeaderTableCell>Title</StyledHeaderTableCell>
+              <StyledHeaderTableCell>Short Name</StyledHeaderTableCell>
+              <StyledHeaderTableCell>Properties</StyledHeaderTableCell>
+              <StyledHeaderTableCell>Roll IDs</StyledHeaderTableCell>
+              <StyledHeaderTableCell>
+                Authorized Privileges
+              </StyledHeaderTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {props.users.map((user) => (
-              <TableRow key={user.uuid}>
+              <StyledTableRow key={user.uuid}>
                 <TableCell>
                   <StyledTooltip
                     title={user.description ? user.description : ""}
@@ -200,7 +220,7 @@ function OSCALSystemImplementationUsers(props) {
                     authorizedPrivileges={user["authorized-privileges"]}
                   />
                 </TableCell>
-              </TableRow>
+              </StyledTableRow>
             ))}
           </TableBody>
         </Table>
@@ -272,23 +292,25 @@ function OSCALInventoryItems(props) {
   return (
     <>
       <OSCALSystemImplementationTableTitle variant="h6" id="tableTitle">
-        inventory Items
+        Inventory Items
       </OSCALSystemImplementationTableTitle>
 
-      <TableContainer sx={{ maxHeight: "50em" }}>
+      <TableContainer sx={{ maxHeight: "25em" }}>
         <Table aria-label="Inventory Items" sx={{ height: "max-content" }}>
           <TableHead>
             <TableRow>
-              <TableCell>Item</TableCell>
-              <TableCell>Properties</TableCell>
-              <TableCell>Responsible Parties</TableCell>
-              <TableCell>Implemented Components</TableCell>
-              <TableCell>Remarks</TableCell>
+              <StyledHeaderTableCell>Item</StyledHeaderTableCell>
+              <StyledHeaderTableCell>Properties</StyledHeaderTableCell>
+              <StyledHeaderTableCell>Responsible Parties</StyledHeaderTableCell>
+              <StyledHeaderTableCell>
+                Implemented Components
+              </StyledHeaderTableCell>
+              <StyledHeaderTableCell>Remarks</StyledHeaderTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {props.inventoryItems.map((inventoryItem) => (
-              <TableRow key={inventoryItem.uuid}>
+              <StyledTableRow key={inventoryItem.uuid}>
                 <TableCell>{inventoryItem.description}</TableCell>
                 <TableCell>
                   <PropertiesTable list={inventoryItem.props} />
@@ -308,7 +330,7 @@ function OSCALInventoryItems(props) {
                   />
                 </TableCell>
                 <TableCell>{inventoryItem.remarks}</TableCell>
-              </TableRow>
+              </StyledTableRow>
             ))}
           </TableBody>
         </Table>
