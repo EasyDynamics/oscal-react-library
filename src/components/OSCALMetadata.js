@@ -43,7 +43,7 @@ const OSCALMetadataLabel = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const OSCALMetadataTitle = styled("div")`
+const OSCALMetadataTitle = styled(Grid)`
   height: 56px;
 `;
 
