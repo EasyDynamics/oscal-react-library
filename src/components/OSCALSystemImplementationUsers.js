@@ -14,7 +14,7 @@ const SmallTableCell = styled(TableCell)`
   padding: 0.75em 0.75em;
 `;
 
-const OSCALAssessmentImplementationTableTitle = styled(Typography)`
+const OSCALSystemImplementationTableTitle = styled(Typography)`
   flex: 1 1 100%;
   padding-top: 1em;
   padding-bottom: 1em;
@@ -120,12 +120,12 @@ function RoleIdTable(props) {
   );
 }
 
-export default function OSCALAssessmentImplementationUsers(props) {
+export default function OSCALSystemImplementationUsers(props) {
   return (
     <>
-      <OSCALAssessmentImplementationTableTitle variant="h6" id="tableTitle">
+      <OSCALSystemImplementationTableTitle variant="h6" id="tableTitle">
         Users
-      </OSCALAssessmentImplementationTableTitle>
+      </OSCALSystemImplementationTableTitle>
       <TableContainer sx={{ maxHeight: "25em" }}>
         <Table aria-label="Components" sx={{ height: "max-content" }}>
           <TableHead>

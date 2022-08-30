@@ -4,12 +4,12 @@ import {
   inventoryItemsTestData,
   componentsTestData,
 } from "../test-data/SystemData";
-import OSCALAssessmentImplementationInventoryItems from "./OSCALAssessmentImplementationInventoryItems";
+import OSCALSystemImplementationInventoryItems from "./OSCALSystemImplementationInventoryItems";
 
-describe("OSCALAssessmentImplementationInventoryItems", () => {
+describe("OSCALSystemImplementationInventoryItems", () => {
   beforeEach(() => {
     render(
-      <OSCALAssessmentImplementationInventoryItems
+      <OSCALSystemImplementationInventoryItems
         inventoryItems={inventoryItemsTestData}
         parties={responsiblePartiesTestData}
         components={componentsTestData}

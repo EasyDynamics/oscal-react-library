@@ -1,11 +1,11 @@
 import React, { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { usersTestData } from "../test-data/SystemData";
-import OSCALAssessmentImplementationUsers from "./OSCALAssessmentImplementationUsers";
+import OSCALSystemImplementationUsers from "./OSCALSystemImplementationUsers";
 
-describe("OSCALAssessmentImplementationUsers", () => {
+describe("OSCALSystemImplementationUsers", () => {
   beforeEach(() => {
-    render(<OSCALAssessmentImplementationUsers users={usersTestData} />);
+    render(<OSCALSystemImplementationUsers users={usersTestData} />);
   });
 
   test("shows 'Users' section title", () => {

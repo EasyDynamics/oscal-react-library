@@ -20,7 +20,7 @@ const ComponentTableCell = styled(TableCell)`
   minwidth: 20em;
 `;
 
-const OSCALAssessmentImplementationTableTitle = styled(Typography)`
+const OSCALSystemImplementationTableTitle = styled(Typography)`
   flex: 1 1 100%;
   padding-top: 1em;
   padding-bottom: 1em;
@@ -67,12 +67,12 @@ function PropertiesTable(props) {
   );
 }
 
-export default function OSCALAssessmentImplementationComponents(props) {
+export default function OSCALSystemImplementationComponents(props) {
   return (
     <>
-      <OSCALAssessmentImplementationTableTitle variant="h6" id="tableTitle">
+      <OSCALSystemImplementationTableTitle variant="h6" id="tableTitle">
         Components
-      </OSCALAssessmentImplementationTableTitle>
+      </OSCALSystemImplementationTableTitle>
       <TableContainer sx={{ maxHeight: "25em" }}>
         <Table aria-label="Components" sx={{ height: "max-content" }}>
           <TableHead>

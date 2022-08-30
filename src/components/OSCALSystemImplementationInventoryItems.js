@@ -13,7 +13,7 @@ const SmallTableCell = styled(TableCell)`
   padding: 0.75em 0.75em;
 `;
 
-const OSCALAssessmentImplementationTableTitle = styled(Typography)`
+const OSCALSystemImplementationTableTitle = styled(Typography)`
   flex: 1 1 100%;
   padding-top: 1em;
   padding-bottom: 1em;
@@ -115,7 +115,7 @@ function ImplementedComponents(props) {
   );
 }
 
-export default function OSCALOSCALAssessmentImplementationTableTitleInventoryItems(
+export default function OSCALOSCALSystemImplementationTableTitleInventoryItems(
   props
 ) {
   if (!props.inventoryItems) {
@@ -124,9 +124,9 @@ export default function OSCALOSCALAssessmentImplementationTableTitleInventoryIte
 
   return (
     <>
-      <OSCALAssessmentImplementationTableTitle variant="h6" id="tableTitle">
+      <OSCALSystemImplementationTableTitle variant="h6" id="tableTitle">
         Inventory Items
-      </OSCALAssessmentImplementationTableTitle>
+      </OSCALSystemImplementationTableTitle>
 
       <TableContainer sx={{ maxHeight: "25em" }}>
         <Table aria-label="Inventory Items" sx={{ height: "max-content" }}>

@@ -2,12 +2,12 @@ import React, { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { responsiblePartiesTestData } from "../test-data/CommonData";
 import { componentsTestData } from "../test-data/SystemData";
-import OSCALAssessmentImplementationComponents from "./OSCALAssessmentImplementationComponents";
+import OSCALSystemImplementationComponents from "./OSCALSystemImplementationComponents";
 
-describe("OSCALAssessmentImplementationComponents", () => {
+describe("OSCALSystemImplementationComponents", () => {
   beforeEach(() => {
     render(
-      <OSCALAssessmentImplementationComponents
+      <OSCALSystemImplementationComponents
         components={componentsTestData}
         parties={responsiblePartiesTestData}
       />
