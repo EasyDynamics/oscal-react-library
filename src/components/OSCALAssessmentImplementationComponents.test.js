@@ -51,20 +51,3 @@ describe("OSCALAssessmentImplementationComponents", () => {
     expect(propValueResult).toBeVisible();
   });
 });
-/*
-<OSCALAssessmentImplementationUsers
-  users={props.systemImplementation.users}
-/>
-</Grid>
-<Grid item xs={12}>
-  <OSCALAssessmentImplementationComponents
-    components={props.systemImplementation.components}
-    parties={props.parties}
-  />
-</Grid>
-<Grid item xs={12}>
-  <OSCALAssessmentImplementationInventoryItems
-    inventoryItems={props.systemImplementation["inventory-items"]}
-    parties={props.parties}
-    components={props.components}
-  /> */
