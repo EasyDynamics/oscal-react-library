@@ -54,8 +54,8 @@ const LogoImage = styled("img")`
 
 function getBackEndUrl(urlString) {
   // If given something falsey, we need to also return something falsey.
-  // Then ensures that we don't accidentally for the application to always be
-  // in editor/REST-mode.
+  // This ensures that we don't accidentally force the application
+  // to always be in editor/REST mode by creating a URL.
   if (!urlString) {
     return null;
   }
