@@ -47,7 +47,7 @@ const users = [
       {
         title: "privilege title",
         description: "privilege description",
-        "functions-preformed": ["read", "write"],
+        "functions-performed": ["reading function", "writing function"],
       },
     ],
   },

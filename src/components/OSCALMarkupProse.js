@@ -21,27 +21,23 @@ const baseComponents = {
  * @returns a React element from the markdown
  */
 export function OSCALMarkupMultiLine(props) {
+  const { paragraphComponent, ...otherProps } = props;
   return (
     <ReactMarkdown
+      {...otherProps}
       components={{
         ...baseComponents,
-        p: props.paragraphComponent ?? "p",
+        p: paragraphComponent ?? "p",
       }}
-    >
-      {props.children}
-    </ReactMarkdown>
+    />
   );
 }
 
 export function OSCALMarkupLine(props) {
   return (
     <ReactMarkdown
-      components={{
-        ...baseComponents,
-        p: React.Fragment,
-      }}
-    >
-      {props.children}
-    </ReactMarkdown>
+      {...props}
+      components={{ ...baseComponents, p: React.Fragment }}
+    />
   );
 }

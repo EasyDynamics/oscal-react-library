@@ -86,4 +86,31 @@ describe("SystemImplementation", () => {
     await userEvent.hover(screen.getByText("User 1"));
     expect(await screen.findByText("A system user")).toBeInTheDocument();
   });
+
+  test("shows role id", () => {
+    const result = screen.getByText("asset-administrator");
+    expect(result).toBeVisible();
+  });
+
+  test("shows authorized privilege title", () => {
+    const result = screen.getByText("privilege title");
+    expect(result).toBeVisible();
+  });
+
+  test("shows authorized privilege description", async () => {
+    await userEvent.hover(screen.getByText("privilege title"));
+    expect(
+      await screen.findByText("privilege description")
+    ).toBeInTheDocument();
+  });
+
+  test("shows read function preformed", () => {
+    const result = screen.getByText("reading function");
+    expect(result).toBeVisible();
+  });
+
+  test("shows write function preformed", () => {
+    const result = screen.getByText("writing function");
+    expect(result).toBeVisible();
+  });
 });

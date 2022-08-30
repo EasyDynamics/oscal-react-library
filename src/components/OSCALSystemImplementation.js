@@ -80,7 +80,7 @@ function OSCALSystemImplementationComponents(props) {
               <TableRow key={key}>
                 <ComponentTableCell component="th" scope="row">
                   <StyledTooltip title={component.description}>
-                    <Typography variant="body2">{component.title}</Typography>
+                    <Typography>{component.title}</Typography>
                   </StyledTooltip>
                 </ComponentTableCell>
                 <TableCell>{component.type}</TableCell>
@@ -132,7 +132,7 @@ function AuthorizedPrivilegesTable(props) {
                 <StyledTooltip
                   title={privilege.description ? privilege.description : ""}
                 >
-                  <Typography variant="body2">{privilege.title}</Typography>
+                  <Typography>{privilege.title}</Typography>
                 </StyledTooltip>
               </TableCell>
               <TableCell>
@@ -188,7 +188,7 @@ function OSCALSystemImplementationUsers(props) {
                   <StyledTooltip
                     title={user.description ? user.description : ""}
                   >
-                    <Typography variant="body2">{user.title}</Typography>
+                    <Typography>{user.title}</Typography>
                   </StyledTooltip>
                 </TableCell>
                 <TableCell>{user["short-name"]}</TableCell>
