@@ -40,18 +40,17 @@ function PropertiesTable(props) {
     <TableContainer>
       <Table size="small">
         <TableBody>
-          {props.list &&
-            props.list.map((property) => (
-              <TableRow key={property.name}>
-                <OSCALSystemImplementationSubDataHeader
-                  component="th"
-                  scope="row"
-                >
-                  {property.name}
-                </OSCALSystemImplementationSubDataHeader>
-                <SmallTableCell>{property.value}</SmallTableCell>
-              </TableRow>
-            ))}
+          {props.list?.map((property) => (
+            <TableRow key={property.name}>
+              <OSCALSystemImplementationSubDataHeader
+                component="th"
+                scope="row"
+              >
+                {property.name}
+              </OSCALSystemImplementationSubDataHeader>
+              <SmallTableCell>{property.value}</SmallTableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>
@@ -84,9 +83,7 @@ function OSCALSystemImplementationComponents(props) {
                   </StyledTooltip>
                 </ComponentTableCell>
                 <TableCell>{component.type}</TableCell>
-                <TableCell>
-                  {component.status && component.status.state}
-                </TableCell>
+                <TableCell>{component.status?.state}</TableCell>
                 <TableCell>
                   <PropertiesTable list={component.props} />
                 </TableCell>
@@ -247,21 +244,20 @@ function ImplementedComponents(props) {
     <TableContainer>
       <Table size="small">
         <TableBody>
-          {props.implementedComponents &&
-            props.implementedComponents.map((comp) => (
-              <TableRow key={comp["component-uuid"]}>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  aria-label={`${comp["component-uuid"]} implemented component`}
-                >
-                  {getComponent(comp["component-uuid"])?.title}
-                </TableCell>
-                <TableCell align="right">
-                  {getComponent(comp["component-uuid"])?.type}
-                </TableCell>
-              </TableRow>
-            ))}
+          {props.implementedComponents?.map((comp) => (
+            <TableRow key={comp["component-uuid"]}>
+              <TableCell
+                component="th"
+                scope="row"
+                aria-label={`${comp["component-uuid"]} implemented component`}
+              >
+                {getComponent(comp["component-uuid"])?.title}
+              </TableCell>
+              <TableCell align="right">
+                {getComponent(comp["component-uuid"])?.type}
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>
