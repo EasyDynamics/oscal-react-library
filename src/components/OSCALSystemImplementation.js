@@ -77,7 +77,7 @@ function OSCALSystemImplementationComponents(props) {
           </TableHead>
           <TableBody>
             {props.components.map((component) => (
-              <TableRow key={`key:${component.uuid}`}>
+              <TableRow key={component.uuid}>
                 <ComponentTableCell component="th" scope="row">
                   <StyledTooltip title={component.description}>
                     <Typography>{component.title}</Typography>
@@ -183,7 +183,7 @@ function OSCALSystemImplementationUsers(props) {
           </TableHead>
           <TableBody>
             {props.users.map((user) => (
-              <TableRow key={`key-${user.uuid}`}>
+              <TableRow key={user.uuid}>
                 <TableCell>
                   <StyledTooltip
                     title={user.description ? user.description : ""}
@@ -203,6 +203,115 @@ function OSCALSystemImplementationUsers(props) {
                     authorizedPrivileges={user["authorized-privileges"]}
                   />
                 </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
+  );
+}
+
+function OSCALResponsibleParties(props) {
+  const getPartyName = (partyUuid) =>
+    props.parties?.find((party) => party.uuid === partyUuid)?.name;
+
+  return (
+    <TableContainer>
+      <Table size="small">
+        <TableBody>
+          {props.responsibleParties?.map((party) => (
+            <TableRow key={party["role-id"]}>
+              <TableCell component="th" scope="row">
+                {party["role-id"]}
+              </TableCell>
+              <TableCell align="right">
+                {party["party-uuids"] &&
+                  party["party-uuids"].map((partyUuid) =>
+                    getPartyName(partyUuid)
+                  )}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}
+
+function ImplementedComponents(props) {
+  const getComponent = (compUuid) =>
+    props.components?.find((component) => component.uuid === compUuid);
+
+  return (
+    <TableContainer>
+      <Table size="small">
+        <TableBody>
+          {props.implementedComponents &&
+            props.implementedComponents.map((comp) => (
+              <TableRow key={comp["component-uuid"]}>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  aria-label={`${comp["component-uuid"]} implemented component`}
+                >
+                  {getComponent(comp["component-uuid"])?.title}
+                </TableCell>
+                <TableCell align="right">
+                  {getComponent(comp["component-uuid"])?.type}
+                </TableCell>
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}
+
+function OSCALInventoryItems(props) {
+  if (!props.inventoryItems) {
+    return null;
+  }
+
+  return (
+    <>
+      <OSCALSystemImplementationTableTitle variant="h6" id="tableTitle">
+        inventory Items
+      </OSCALSystemImplementationTableTitle>
+
+      <TableContainer sx={{ maxHeight: "50em" }}>
+        <Table aria-label="Inventory Items" sx={{ height: "max-content" }}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Item</TableCell>
+              <TableCell>Properties</TableCell>
+              <TableCell>Responsible Parties</TableCell>
+              <TableCell>Implemented Components</TableCell>
+              <TableCell>Remarks</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {props.inventoryItems.map((inventoryItem) => (
+              <TableRow key={inventoryItem.uuid}>
+                <TableCell>{inventoryItem.description}</TableCell>
+                <TableCell>
+                  <PropertiesTable list={inventoryItem.props} />
+                </TableCell>
+                <TableCell>
+                  <OSCALResponsibleParties
+                    responsibleParties={inventoryItem["responsible-parties"]}
+                    parties={props.parties}
+                  />
+                </TableCell>
+                <TableCell>
+                  <ImplementedComponents
+                    implementedComponents={
+                      inventoryItem["implemented-components"]
+                    }
+                    components={props.components}
+                  />
+                </TableCell>
+                <TableCell>{inventoryItem.remarks}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -239,6 +348,13 @@ export default function OSCALSystemImplementation(props) {
               <OSCALSystemImplementationComponents
                 components={props.systemImplementation.components}
                 parties={props.parties}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <OSCALInventoryItems
+                inventoryItems={props.systemImplementation["inventory-items"]}
+                parties={props.parties}
+                components={props.components}
               />
             </Grid>
           </Grid>

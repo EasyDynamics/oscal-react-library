@@ -80,3 +80,17 @@ export const responsibleRolesTestData = [
     "role-id": "provider",
   },
 ];
+
+export const responsiblePartiesTestData = [
+  {
+    "party-uuids": ["party-1"],
+    "role-id": "provider",
+  },
+];
+
+export const implementedComponentsRolesTestData = [
+  {
+    "component-uuid": "component-1",
+    remarks: "An example component.",
+  },
+];

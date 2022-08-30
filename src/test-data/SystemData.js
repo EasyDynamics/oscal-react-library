@@ -12,26 +12,31 @@ const status = {
   state: "operational",
 };
 const type = "software";
+
 const inventoryItems = [
   {
-    uuid: "inventory-item-1",
-    description: "An inventory item.",
+    uuid: "inventory-item",
+    description: "An example set of inventory items.",
     props: [
       {
-        name: "asset-id",
-        value: "asset-id-inventory-item",
+        name: "item-1",
+        value: "An example item.",
+        remarks: "This is an example item.",
       },
     ],
-    "responsible-parties": {
-      "asset-administrator": {
+    "responsible-parties": [
+      {
+        "role-id": "provider",
         "party-uuids": ["party-1"],
       },
-    },
+    ],
     "implemented-components": [
       {
         "component-uuid": "component-1",
+        remarks: "This is an example component.",
       },
     ],
+    remarks: "Additional information about this item.",
   },
 ];
 
@@ -59,11 +64,13 @@ export const systemImplementationTestData = {
   components: [
     {
       title,
+      uuid: "59e0b795-9554-4fb0-8c84-e8321900565d",
       description,
       status,
       type,
       props: [
         {
+          uuid: "64cf9ab2-eca8-4865-9e7a-da181bedc8fb",
           name: "version",
           value: "1.1",
         },
