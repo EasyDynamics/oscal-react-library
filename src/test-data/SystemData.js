@@ -13,7 +13,7 @@ const status = {
 };
 const type = "software";
 
-const inventoryItems = [
+export const inventoryItemsTestData = [
   {
     uuid: "inventory-item",
     description: "An example set of inventory items.",
@@ -40,9 +40,7 @@ const inventoryItems = [
   },
 ];
 
-const remarks = "Example system implementation remarks.";
-
-const users = [
+export const usersTestData = [
   {
     uuid: "ca7fad69-a4ef-4e45-8213-9e51b7fdc193",
     title: "User 1",
@@ -58,52 +56,58 @@ const users = [
   },
 ];
 
+export const componentsTestData = [
+  {
+    title,
+    uuid: "component-1",
+    description,
+    status,
+    type,
+    props: [
+      {
+        uuid: "prop-1",
+        name: "version",
+        value: "1.1",
+      },
+    ],
+    "responsible-roles": responsibleRolesTestData,
+  },
+];
+
+const remarks = "Example system implementation remarks.";
+
 export const systemImplementationTestData = {
   remarks,
-  users,
-  components: [
-    {
-      title,
-      uuid: "59e0b795-9554-4fb0-8c84-e8321900565d",
-      description,
-      status,
-      type,
-      props: [
-        {
-          uuid: "64cf9ab2-eca8-4865-9e7a-da181bedc8fb",
-          name: "version",
-          value: "1.1",
-        },
-      ],
-      "responsible-roles": responsibleRolesTestData,
-    },
-  ],
-  "inventory-items": inventoryItems,
+  users: usersTestData,
+  components: componentsTestData,
+  "inventory-items": inventoryItemsTestData,
 };
 
 export const exampleSystemImplementation = {
   remarks,
-  users,
-  components: {
-    "component-1": {
-      title,
-      description,
-      status,
-      type,
-      props: [
-        {
-          name: "version",
-          value: "1.1",
-        },
-        {
-          name: "last-modified-date",
-          value: "20210712",
-        },
-      ],
-      "responsible-roles": responsibleRolesTestData,
+  users: usersTestData,
+  components: [
+    {
+      "component-1": {
+        title,
+        description,
+        status,
+        type,
+        props: [
+          {
+            name: "version",
+            value: "1.1",
+          },
+          {
+            name: "last-modified-date",
+            value: "20210712",
+          },
+        ],
+        "responsible-roles": responsibleRolesTestData,
+      },
     },
-  },
-  "inventory-items": inventoryItems,
+  ],
+  "inventory-items": inventoryItemsTestData,
 };
 
 export const systemCharacteristicsTestData = {
