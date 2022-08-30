@@ -56,8 +56,8 @@ const users = [
 export const systemImplementationTestData = {
   remarks,
   users,
-  components: {
-    "component-1": {
+  components: [
+    {
       title,
       description,
       status,
@@ -70,7 +70,7 @@ export const systemImplementationTestData = {
       ],
       "responsible-roles": responsibleRolesTestData,
     },
-  },
+  ],
   "inventory-items": inventoryItems,
 };
 

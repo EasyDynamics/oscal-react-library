@@ -76,8 +76,8 @@ function OSCALSystemImplementationComponents(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.entries(props.components).map(([key, component]) => (
-              <TableRow key={key}>
+            {props.components.map((component) => (
+              <TableRow key={`key:${component.uuid}`}>
                 <ComponentTableCell component="th" scope="row">
                   <StyledTooltip title={component.description}>
                     <Typography>{component.title}</Typography>
