@@ -49,23 +49,21 @@ function ImplementedComponents(props) {
             // the lookup for each component only once
             ?.map((comp) => ({
               uuid: comp["component-uuid"],
-              component: getComponent(comp["component-uuid"])
+              component: getComponent(comp["component-uuid"]),
             }))
-            // `comp` is probably not the best thing here but i dunno
+            // `comp` is probably not the best solution here
             ?.map((comp) => (
-            <TableRow key={comp.uuid}>
-              <TableCell
-                component="th"
-                scope="row"
-                aria-label={`${comp.uuid} implemented component`}
-              >
-                {comp.component?.title}
-              </TableCell>
-              <TableCell align="right">
-                {comp.component?.type}
-              </TableCell>
-            </TableRow>
-          ))}
+              <TableRow key={comp.uuid}>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  aria-label={`${comp.uuid} implemented component`}
+                >
+                  {comp.component?.title}
+                </TableCell>
+                <TableCell align="right">{comp.component?.type}</TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </TableContainer>

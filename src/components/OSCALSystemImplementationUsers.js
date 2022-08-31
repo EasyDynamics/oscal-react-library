@@ -38,9 +38,7 @@ function AuthorizedPrivilegesTable(props) {
           {props.authorizedPrivileges?.map((privilege) => (
             <TableRow key={privilege.title}>
               <TableCell>
-                <StyledTooltip
-                  title={privilege.description ?? ""}
-                >
+                <StyledTooltip title={privilege.description ?? ""}>
                   <Typography>{privilege.title}</Typography>
                 </StyledTooltip>
               </TableCell>
@@ -96,9 +94,7 @@ export default function OSCALSystemImplementationUsers(props) {
             {props.users.map((user) => (
               <StyledTableRow key={user.uuid}>
                 <TableCell>
-                  <StyledTooltip
-                    title={user.description ?? ""}
-                  >
+                  <StyledTooltip title={user.description ?? ""}>
                     <Typography>{user.title}</Typography>
                   </StyledTooltip>
                 </TableCell>
