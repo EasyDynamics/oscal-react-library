@@ -18,7 +18,7 @@ describe("OSCALSystemImplementationInventoryItems", () => {
   });
 
   test(`shows description`, () => {
-    const result = screen.getByText("An example set of inventory items.");
+    const result = screen.getByText("An example inventory item.");
     expect(result).toBeVisible();
   });
 
@@ -27,13 +27,13 @@ describe("OSCALSystemImplementationInventoryItems", () => {
     expect(result).toBeVisible();
   });
 
-  test(`shows prop item name`, async () => {
-    const result = screen.getByText("item-1");
+  test(`shows prop name`, async () => {
+    const result = screen.getByText("prop-1");
     expect(result).toBeVisible();
   });
 
-  test(`shows prop item value`, async () => {
-    const result = screen.getByText("An example item.");
+  test(`shows prop value`, async () => {
+    const result = screen.getByText("An example property.");
     expect(result).toBeVisible();
   });
 

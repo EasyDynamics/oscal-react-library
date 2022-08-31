@@ -36,12 +36,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const OSCALPropertiesSubDataHeader = styled(TableCell)`
-  text-transform: capitalize;
-  white-space: nowrap;
-  padding: 0.75em 0.75em;
-`;
-
 function PropertiesTable(props) {
   return (
     <TableContainer>
@@ -49,9 +43,9 @@ function PropertiesTable(props) {
         <TableBody>
           {props.list?.map((property) => (
             <TableRow key={property.name}>
-              <OSCALPropertiesSubDataHeader component="th" scope="row">
+              <TableCell component="th" scope="row">
                 {property.name}
-              </OSCALPropertiesSubDataHeader>
+              </TableCell>
               <SmallTableCell>{property.value}</SmallTableCell>
             </TableRow>
           ))}

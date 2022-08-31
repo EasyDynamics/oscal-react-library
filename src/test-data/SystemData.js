@@ -6,22 +6,20 @@ import {
 import { localReferenceDiagram } from "./DiagramData";
 import { backMatterTestData } from "./BackMatterData";
 
-const title = "Example Component";
-const description = "An example component.";
-const status = {
-  state: "operational",
-};
-const type = "software";
-
 export const inventoryItemsTestData = [
   {
     uuid: "inventory-item",
-    description: "An example set of inventory items.",
+    description: "An example inventory item.",
     props: [
       {
-        name: "item-1",
-        value: "An example item.",
-        remarks: "This is an example item.",
+        name: "prop-1",
+        value: "An example property.",
+        remarks: "This is an example property.",
+      },
+      {
+        name: "prop-2",
+        value: "Another example property.",
+        remarks: "This is another example property.",
       },
     ],
     "responsible-parties": [
@@ -42,9 +40,16 @@ export const inventoryItemsTestData = [
 
 export const usersTestData = [
   {
-    uuid: "ca7fad69-a4ef-4e45-8213-9e51b7fdc193",
+    uuid: "user-1",
     title: "User 1",
+    "short-name": "u1",
     description: "A system user",
+    props: [
+      {
+        name: "type",
+        value: "internal",
+      },
+    ],
     "role-ids": ["asset-administrator"],
     "authorized-privileges": [
       {
@@ -58,16 +63,23 @@ export const usersTestData = [
 
 export const componentsTestData = [
   {
-    title,
+    title: "Example Component",
     uuid: "component-1",
-    description,
-    status,
-    type,
+    description: "An example component.",
+    status: {
+      state: "operational",
+    },
+    type: "software",
     props: [
       {
         uuid: "prop-1",
         name: "version",
         value: "1.1",
+      },
+      {
+        uuid: "prop-2",
+        name: "last-modified-date",
+        value: "20210712",
       },
     ],
     "responsible-roles": responsibleRolesTestData,
@@ -80,33 +92,6 @@ export const systemImplementationTestData = {
   remarks,
   users: usersTestData,
   components: componentsTestData,
-  "inventory-items": inventoryItemsTestData,
-};
-
-export const exampleSystemImplementation = {
-  remarks,
-  users: usersTestData,
-  components: [
-    {
-      "component-1": {
-        title,
-        description,
-        status,
-        type,
-        props: [
-          {
-            name: "version",
-            value: "1.1",
-          },
-          {
-            name: "last-modified-date",
-            value: "20210712",
-          },
-        ],
-        "responsible-roles": responsibleRolesTestData,
-      },
-    },
-  ],
   "inventory-items": inventoryItemsTestData,
 };
 
