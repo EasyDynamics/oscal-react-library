@@ -11,6 +11,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
+import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 const OSCALStatementEditing = styled(Grid)`
   ${(props) =>
@@ -168,7 +169,7 @@ function getTextSegment(text, key) {
   }
   return (
     <Typography component="span" key={key}>
-      {text}
+      <OSCALMarkupLine>{text}</OSCALMarkupLine>
     </Typography>
   );
 }
@@ -228,7 +229,7 @@ function getParameterLabelSegment(
     );
     paramSegment = styledParamLabel(
       `param-label-key-${key}`,
-      parameterLabelText
+      <OSCALMarkupLine>{parameterLabelText}</OSCALMarkupLine>
     );
   }
 
@@ -335,7 +336,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
             index
           );
         })
-    : props.prose;
+    : getTextSegment(props.prose, 0);
 
   if (!props.isImplemented) {
     return (
@@ -384,6 +385,12 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   // https://github.com/EasyDynamics/oscal-react-library/issues/499
   const statementByComponentDescription =
     statementByComponent?.description || null;
+  const statementByComponentDescriptionMarkup =
+    statementByComponentDescription ? (
+      <OSCALMarkupMultiLine>
+        {statementByComponentDescription}
+      </OSCALMarkupMultiLine>
+    ) : null;
   const statementByComponentDescriptionRef = useRef(
     statementByComponentDescription
   );
@@ -436,8 +443,6 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
       }
       if (isEditingStatement) {
         // We're currently editing this statement, so build param input
-        // TODO: Populate implementationSetParameters with values from statementByComponent or empties.
-        // https://github.com/EasyDynamics/oscal-react-library/issues/503
         const setParameter = statementByComponent?.["set-parameters"]?.find(
           (element) => element["param-id"] === segment
         ) ?? { "param-id": segment };
@@ -474,7 +479,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     <OSCALStatementEditing container spacing={2}>
       <Grid item xs={11}>
         <StyledTooltip
-          title={statementByComponentDescription ?? props.componentId}
+          title={statementByComponentDescriptionMarkup ?? props.componentId}
         >
           <Link underline="hover" href={`#${props.label}`}>
             {props.label}

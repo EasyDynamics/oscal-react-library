@@ -130,3 +130,35 @@ export const exampleBackMatterWithMediaType = {
     },
   ],
 };
+
+export const exampleBackMatterWithoutMediaType = {
+  resources: [
+    {
+      uuid,
+      title,
+      citation,
+      description,
+      rlinks: [
+        {
+          href: diagram,
+        },
+      ],
+    },
+  ],
+};
+
+export const exampleBackMatterWithoutMediaTypeAndUnknownExtension = {
+  resources: [
+    {
+      uuid,
+      title,
+      citation,
+      description,
+      rlinks: [
+        {
+          href: "unknown/unknown-filetype",
+        },
+      ],
+    },
+  ],
+};

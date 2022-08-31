@@ -42,6 +42,16 @@ const EditorSplit = styled(Split)`
   }
 `;
 
+/**
+ * Returns url parameter provided by the browser url, if it exists. If the url
+ * parameter exists, we want to override the default viewer url.
+ *
+ * @returns The url parameter of the browser url, or null if it doesn't exist
+ */
+export function getRequestedUrl() {
+  return new URLSearchParams(window.location.search).get("url");
+}
+
 export default function OSCALLoader(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isResolutionComplete, setIsResolutionComplete] = useState(false);
@@ -58,9 +68,11 @@ export default function OSCALLoader(props) {
   const oscalObjectUuid = useParams()?.id ?? "";
   const buildOscalUrl = (uuid) =>
     `${props.backendUrl}/${props.oscalObjectType.restPath}/${uuid}`;
-  const [oscalUrl, setOscalUrl] = useState(
-    props.isRestMode ? null : props.oscalUrl || props.oscalObjectType.defaultUrl
-  );
+  const determineDefaultOscalUrl = () =>
+    (props.isRestMode ? null : getRequestedUrl()) ||
+    props.oscalObjectType.defaultUrl;
+
+  const [oscalUrl, setOscalUrl] = useState(determineDefaultOscalUrl());
 
   const loadOscalData = (newOscalUrl) => {
     if (!newOscalUrl) {
@@ -150,7 +162,7 @@ export default function OSCALLoader(props) {
   };
 
   useEffect(() => {
-    handleReload();
+    handleReload(!props.isRestMode);
   }, [oscalUrl]);
 
   const handleRestPut = (jsonString) => {
@@ -216,10 +228,7 @@ export default function OSCALLoader(props) {
       setIsResolutionComplete(true);
       setHasDefaultUrl(false);
     } else {
-      setOscalUrl(props.oscalObjectType.defaultUrl);
-      loadOscalData(props.oscalObjectType.defaultUrl);
-      setIsLoaded(false);
-      setIsResolutionComplete(false);
+      setOscalUrl(determineDefaultOscalUrl());
       setHasDefaultUrl(true);
     }
   }, [props.isRestMode]);
@@ -322,18 +331,7 @@ export default function OSCALLoader(props) {
   );
 }
 
-/**
- * Returns url parameter provided by the browser url, if it exists. If the url
- * parameter exists, we want to override the default viewer url.
- *
- * @returns The url parameter of the browser url, or null if it doesn't exist
- */
-export function getRequestedUrl() {
-  return new URLSearchParams(window.location.search).get("url");
-}
-
 export function OSCALCatalogLoader(props) {
-  const { id } = useParams();
   const oscalObjectType = restUtils.oscalObjectTypes.catalog;
   const renderer = (
     isRestMode,
@@ -374,8 +372,6 @@ export function OSCALCatalogLoader(props) {
   return (
     <OSCALLoader
       oscalObjectType={oscalObjectType}
-      oscalObjectUuid={id}
-      oscalUrl={getRequestedUrl()}
       renderer={renderer}
       renderForm={props.renderForm}
       backendUrl={props.backendUrl}
@@ -385,7 +381,6 @@ export function OSCALCatalogLoader(props) {
 }
 
 export function OSCALSSPLoader(props) {
-  const { id } = useParams();
   const oscalObjectType = restUtils.oscalObjectTypes.ssp;
   const renderer = (
     isRestMode,
@@ -427,8 +422,6 @@ export function OSCALSSPLoader(props) {
   return (
     <OSCALLoader
       oscalObjectType={oscalObjectType}
-      oscalObjectUuid={id}
-      oscalUrl={getRequestedUrl()}
       renderer={renderer}
       renderForm={props.renderForm}
       backendUrl={props.backendUrl}
@@ -438,7 +431,6 @@ export function OSCALSSPLoader(props) {
 }
 
 export function OSCALComponentLoader(props) {
-  const { id } = useParams();
   const oscalObjectType = restUtils.oscalObjectTypes.component;
   const renderer = (
     isRestMode,
@@ -479,8 +471,6 @@ export function OSCALComponentLoader(props) {
   return (
     <OSCALLoader
       oscalObjectType={oscalObjectType}
-      oscalObjectUuid={id}
-      oscalUrl={getRequestedUrl()}
       renderer={renderer}
       renderForm={props.renderForm}
       backendUrl={props.backendUrl}
@@ -490,7 +480,6 @@ export function OSCALComponentLoader(props) {
 }
 
 export function OSCALProfileLoader(props) {
-  const { id } = useParams();
   const oscalObjectType = restUtils.oscalObjectTypes.profile;
   const renderer = (
     isRestMode,
@@ -531,8 +520,6 @@ export function OSCALProfileLoader(props) {
   return (
     <OSCALLoader
       oscalObjectType={oscalObjectType}
-      oscalObjectUuid={id}
-      oscalUrl={getRequestedUrl()}
       renderer={renderer}
       renderForm={props.renderForm}
       backendUrl={props.backendUrl}

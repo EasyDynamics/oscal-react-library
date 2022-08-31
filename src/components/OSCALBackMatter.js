@@ -7,9 +7,14 @@ import Grid from "@mui/material/Grid";
 import { Typography } from "@mui/material";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import DescriptionIcon from "@mui/icons-material/Description";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import StyledTooltip from "./OSCALStyledTooltip";
-import { getAbsoluteUrl } from "./oscal-utils/OSCALLinkUtils";
+import {
+  getAbsoluteUrl,
+  guessExtensionFromHref,
+} from "./oscal-utils/OSCALLinkUtils";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
+import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 export const OSCALBackMatterCard = styled(Card)(
   ({ theme }) => `
@@ -19,19 +24,12 @@ export const OSCALBackMatterCard = styled(Card)(
 `
 );
 
-// TODO: Remove workaround for missing media type
-// https://github.com/EasyDynamics/oscal-react-library/issues/512
-const getURLMediaType = (url) => {
-  const lastUrlPath = url.split("//").pop().split("/").pop();
-  return lastUrlPath.match(/\.[A-Za-z]{3,4}($|\?)/) || "Unknown";
-};
-
 function TitleDisplay(props) {
   const title = props.resource.title || "No Title";
   const color = props.resource.title ? "initial" : "error";
   return (
     <Typography color={color} variant="subtitle1">
-      {title}
+      <OSCALMarkupLine>{title}</OSCALMarkupLine>
     </Typography>
   );
 }
@@ -47,7 +45,13 @@ function DescriptionDisplay(props) {
     );
   }
   return (
-    <StyledTooltip title={props.resource.description}>
+    <StyledTooltip
+      title={
+        <OSCALMarkupMultiLine>
+          {props.resource.description}
+        </OSCALMarkupMultiLine>
+      }
+    >
       <DescriptionIcon
         color="primary"
         fontSize="small"
@@ -68,7 +72,9 @@ function CitationDisplay(props) {
     );
   }
   return (
-    <StyledTooltip title={props.resource.citation.text}>
+    <StyledTooltip
+      title={<OSCALMarkupLine>{props.resource.citation.text}</OSCALMarkupLine>}
+    >
       <FormatQuoteIcon
         color="primary"
         fontSize="small"
@@ -85,7 +91,7 @@ export default function OSCALBackMatter(props) {
 
   const getMediaType = (rlink) =>
     rlink["media-type"] ||
-    getURLMediaType(getAbsoluteUrl(rlink.href, props.parentUrl));
+    guessExtensionFromHref(getAbsoluteUrl(rlink.href, props.parentUrl));
 
   const backMatterDisplay = (resource) => (
     <Grid item xs={3} key={resource.uuid}>
@@ -107,11 +113,19 @@ export default function OSCALBackMatter(props) {
               {resource.rlinks &&
                 resource.rlinks.map((rlink) => (
                   <Chip
+                    icon={
+                      getAbsoluteUrl(rlink.href, props.parentUrl).startsWith(
+                        "http"
+                      ) ? (
+                        <OpenInNewIcon />
+                      ) : null
+                    }
                     key={rlink.href}
                     label={getMediaType(rlink)}
                     component="a"
                     role="button"
                     href={getAbsoluteUrl(rlink.href, props.parentUrl)}
+                    target="_blank"
                     variant="outlined"
                     clickable
                   />

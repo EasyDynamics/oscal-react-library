@@ -49,13 +49,8 @@ export function getStatementByComponent(
   statementId: string,
   componentId: string
 ) {
-  // TODO: Remove underscore replacement when OSCAL example content is fixed
-  // https://github.com/EasyDynamics/oscal-react-library/issues/511
-  // Locate matching statement to statementId
   const foundStatement = implReqStatements?.find(
-    (statement: any) =>
-      statement["statement-id"] === statementId ||
-      statement["statement-id"] === statementId.replace("_", "")
+    (statement: any) => statement["statement-id"] === statementId
   );
   // Error checking: Exit function when statement or it's by-components are not found
   if (!foundStatement || !foundStatement["by-components"]) {

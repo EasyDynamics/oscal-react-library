@@ -28,6 +28,29 @@ export const exampleModificationSetParameters = [
   },
 ];
 
+export const exampleModificationSetParametersDecimal = [
+  {
+    "param-id": "control-1.1_prm_1",
+    constraints: [
+      {
+        description: "some constraint",
+      },
+    ],
+  },
+  {
+    "param-id": "control-1.1_prm_2",
+    constraints: [
+      {
+        description: "another constraint",
+      },
+    ],
+  },
+  {
+    "param-id": "control-1.1_prm_3",
+    values: ["param 3 value"],
+  },
+];
+
 export const exampleModificationAlters = [
   {
     "control-id": "control-1",
@@ -69,6 +92,11 @@ const exampleModificationAltersSmt = [
 
 export const profileModifyTestData = {
   "set-parameters": exampleModificationSetParameters,
+  alters: exampleModificationAltersTopLevel,
+};
+
+export const profileModifyDecSmtTestData = {
+  "set-parameters": exampleModificationSetParametersDecimal,
   alters: exampleModificationAltersTopLevel,
 };
 

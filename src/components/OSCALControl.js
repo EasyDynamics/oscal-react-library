@@ -70,41 +70,40 @@ export default function OSCALControl(props) {
             </Typography>
           </Grid>
         </Grid>
-        {props.control.parts &&
-          props.control.parts.map((part, index) => (
-            <OSCALControlPart
-              part={part}
-              control={props.control}
-              controlId={props.control.id}
-              parameters={props.control.params}
-              implementedRequirement={props.implementedRequirement}
-              componentId={props.componentId}
-              modificationAlters={props.modificationAlters}
-              modificationSetParameters={props.modificationSetParameters}
-              key={part.id ?? `part-${index}`}
-              isEditable={props.isEditable}
-              onRestSuccess={props.onRestSuccess}
-              onRestError={props.onRestError}
-              partialRestData={props.partialRestData}
-            />
-          ))}
-        {props.control.controls &&
-          props.control.controls.map((control) => (
-            <OSCALControl
-              control={control}
-              parameters={control.params}
-              includeControlIds={props.includeControlIds}
-              modificationAlters={props.modificationAlters}
-              modificationSetParameters={props.modificationSetParameters}
-              childLevel={(props?.childLevel ?? 0) + 1}
-              key={control.id}
-              implementedRequirement={props.implementedRequirement}
-              isEditable={props.isEditable}
-              onRestSuccess={props.onRestSuccess}
-              onRestError={props.onRestError}
-              partialRestData={props.partialRestData}
-            />
-          ))}
+        {props.control.parts?.map((part, index) => (
+          <OSCALControlPart
+            componentId={props.componentId}
+            control={props.control}
+            controlId={props.control.id}
+            implementedRequirement={props.implementedRequirement}
+            isEditable={props.isEditable}
+            key={part.id ?? `part-${index}`}
+            modificationAlters={props.modificationAlters}
+            modificationSetParameters={props.modificationSetParameters}
+            onRestError={props.onRestError}
+            onRestSuccess={props.onRestSuccess}
+            parameters={props.control.params}
+            part={part}
+            partialRestData={props.partialRestData}
+          />
+        ))}
+        {props.control.controls?.map((control) => (
+          <OSCALControl
+            childLevel={(props?.childLevel ?? 0) + 1}
+            componentId={props.componentId}
+            control={control}
+            implementedRequirement={props.implementedRequirement}
+            includeControlIds={props.includeControlIds}
+            isEditable={props.isEditable}
+            key={control.id}
+            modificationAlters={props.modificationAlters}
+            modificationSetParameters={props.modificationSetParameters}
+            onRestError={props.onRestError}
+            onRestSuccess={props.onRestSuccess}
+            parameters={control.params}
+            partialRestData={props.partialRestData}
+          />
+        ))}
       </CardContent>
     </OSCALControlCard>
   );

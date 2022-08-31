@@ -110,6 +110,13 @@ export const componentsTestData = [
   },
 ];
 
+export const componentsDecimalTestData = [
+  {
+    uuid: "component-1.1",
+    title: "Component 1.1 Title",
+  },
+];
+
 export const exampleComponentDefinitionComponent = {
   uuid: "b036a6ac-6cff-4066-92bc-74ddfd9ad6fa",
   type: "software",
