@@ -26,10 +26,7 @@ function OSCALResponsibleParties(props) {
                 {party["role-id"]}
               </TableCell>
               <TableCell align="right">
-                {party["party-uuids"] &&
-                  party["party-uuids"].map((partyUuid) =>
-                    getPartyName(partyUuid)
-                  )}
+                {party["party-uuids"]?.map(getPartyName)}
               </TableCell>
             </TableRow>
           ))}
@@ -47,17 +44,25 @@ function ImplementedComponents(props) {
     <TableContainer>
       <Table size="small">
         <TableBody>
-          {props.implementedComponents?.map((comp) => (
-            <TableRow key={comp["component-uuid"]}>
+          {props.implementedComponents
+            // This custom object lets us store the UUID while also performing
+            // the lookup for each component only once
+            ?.map((comp) => ({
+              uuid: comp["component-uuid"],
+              component: getComponent(comp["component-uuid"])
+            }))
+            // `comp` is probably not the best thing here but i dunno
+            ?.map((comp) => (
+            <TableRow key={comp.uuid}>
               <TableCell
                 component="th"
                 scope="row"
-                aria-label={`${comp["component-uuid"]} implemented component`}
+                aria-label={`${comp.uuid} implemented component`}
               >
-                {getComponent(comp["component-uuid"])?.title}
+                {comp.component?.title}
               </TableCell>
               <TableCell align="right">
-                {getComponent(comp["component-uuid"])?.type}
+                {comp.component?.type}
               </TableCell>
             </TableRow>
           ))}

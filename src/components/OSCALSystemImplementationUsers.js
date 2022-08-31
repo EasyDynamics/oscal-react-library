@@ -39,7 +39,7 @@ function AuthorizedPrivilegesTable(props) {
             <TableRow key={privilege.title}>
               <TableCell>
                 <StyledTooltip
-                  title={privilege.description ? privilege.description : ""}
+                  title={privilege.description ?? ""}
                 >
                   <Typography>{privilege.title}</Typography>
                 </StyledTooltip>
@@ -97,7 +97,7 @@ export default function OSCALSystemImplementationUsers(props) {
               <StyledTableRow key={user.uuid}>
                 <TableCell>
                   <StyledTooltip
-                    title={user.description ? user.description : ""}
+                    title={user.description ?? ""}
                   >
                     <Typography>{user.title}</Typography>
                   </StyledTooltip>
