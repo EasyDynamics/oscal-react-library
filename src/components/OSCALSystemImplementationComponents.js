@@ -1,65 +1,20 @@
 import React from "react";
-import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import StyledTooltip from "./OSCALStyledTooltip";
 import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
-
-const SmallTableCell = styled(TableCell)`
-  text-align: right;
-  padding: 0.75em 0.75em;
-`;
-
-const ComponentTableCell = styled(TableCell)`
-  text-align: left;
-  minwidth: 20em;
-`;
-
-const OSCALSystemImplementationTableTitle = styled(Typography)`
-  flex: 1 1 100%;
-  padding-top: 1em;
-  padding-bottom: 1em;
-`;
-
-const StyledHeaderTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.common.white,
-  },
-  textAlign: "left",
-  minWidth: "10em",
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  // Use hover color for even numbered rows
-  "&:nth-of-type(even)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-}));
-
-function PropertiesTable(props) {
-  return (
-    <TableContainer>
-      <Table size="small">
-        <TableBody>
-          {props.list?.map((property) => (
-            <TableRow key={property.name}>
-              <TableCell component="th" scope="row">
-                {property.name}
-              </TableCell>
-              <SmallTableCell>{property.value}</SmallTableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
-}
+import {
+  OSCALSystemImplementationTableTitle,
+  StyledHeaderTableCell,
+  StyledTableRow,
+  ComponentTableCell,
+} from "./OSCALSystemImplementationTableStyles";
+import PropertiesTable from "./OSCALSystemImplementationPropertiesTable";
 
 export default function OSCALSystemImplementationComponents(props) {
   return (
