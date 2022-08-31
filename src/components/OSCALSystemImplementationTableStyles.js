@@ -2,6 +2,7 @@ import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
+import TableHead from "@mui/material/TableHead";
 
 export const SmallTableCell = styled(TableCell)`
   text-align: right;
@@ -27,6 +28,11 @@ export const StyledHeaderTableCell = styled(TableCell)(({ theme }) => ({
   textAlign: "left",
   minWidth: "10em",
 }));
+
+export const StyledTableHead = styled(TableHead)`
+  position: sticky;
+  top: 0;
+`;
 
 export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   // Use hover color for even numbered rows

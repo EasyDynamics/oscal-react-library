@@ -3,12 +3,12 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import {
   OSCALSystemImplementationTableTitle,
   StyledHeaderTableCell,
   StyledTableRow,
+  StyledTableHead,
 } from "./OSCALSystemImplementationTableStyles";
 import PropertiesTable from "./OSCALSystemImplementationPropertiesTable";
 
@@ -85,7 +85,7 @@ export default function OSCALOSCALSystemImplementationTableTitleInventoryItems(
 
       <TableContainer sx={{ maxHeight: "25em" }}>
         <Table aria-label="Inventory Items" sx={{ height: "max-content" }}>
-          <TableHead>
+          <StyledTableHead>
             <TableRow>
               <StyledHeaderTableCell>Item</StyledHeaderTableCell>
               <StyledHeaderTableCell>Properties</StyledHeaderTableCell>
@@ -95,7 +95,7 @@ export default function OSCALOSCALSystemImplementationTableTitleInventoryItems(
               </StyledHeaderTableCell>
               <StyledHeaderTableCell>Remarks</StyledHeaderTableCell>
             </TableRow>
-          </TableHead>
+          </StyledTableHead>
           <TableBody>
             {props.inventoryItems.map((inventoryItem) => (
               <StyledTableRow key={inventoryItem.uuid}>

@@ -4,13 +4,13 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import StyledTooltip from "./OSCALStyledTooltip";
 import {
   OSCALSystemImplementationTableTitle,
   StyledHeaderTableCell,
   StyledTableRow,
+  StyledTableHead,
 } from "./OSCALSystemImplementationTableStyles";
 import PropertiesTable from "./OSCALSystemImplementationPropertiesTable";
 
@@ -79,17 +79,17 @@ export default function OSCALSystemImplementationUsers(props) {
       </OSCALSystemImplementationTableTitle>
       <TableContainer sx={{ maxHeight: "25em" }}>
         <Table aria-label="Components" sx={{ height: "max-content" }}>
-          <TableHead>
+          <StyledTableHead>
             <TableRow>
               <StyledHeaderTableCell>Title</StyledHeaderTableCell>
               <StyledHeaderTableCell>Short Name</StyledHeaderTableCell>
               <StyledHeaderTableCell>Properties</StyledHeaderTableCell>
-              <StyledHeaderTableCell>Roll IDs</StyledHeaderTableCell>
+              <StyledHeaderTableCell>Role IDs</StyledHeaderTableCell>
               <StyledHeaderTableCell>
                 Authorized Privileges
               </StyledHeaderTableCell>
             </TableRow>
-          </TableHead>
+          </StyledTableHead>
           <TableBody>
             {props.users.map((user) => (
               <StyledTableRow key={user.uuid}>
