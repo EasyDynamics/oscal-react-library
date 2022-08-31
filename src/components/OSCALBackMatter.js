@@ -113,13 +113,7 @@ export default function OSCALBackMatter(props) {
               {resource.rlinks &&
                 resource.rlinks.map((rlink) => (
                   <Chip
-                    icon={
-                      getAbsoluteUrl(rlink.href, props.parentUrl).startsWith(
-                        "http"
-                      ) ? (
-                        <OpenInNewIcon />
-                      ) : null
-                    }
+                    icon={<OpenInNewIcon />}
                     key={rlink.href}
                     label={getMediaType(rlink)}
                     component="a"
