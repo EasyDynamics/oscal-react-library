@@ -6,18 +6,17 @@ import {
   responsibleRolesTestData,
 } from "../test-data/CommonData";
 
-function responsibleRolesRenderer() {
-  render(
-    <OSCALResponsibleRoles
-      responsibleRoles={responsibleRolesTestData}
-      parties={metadataTestData.parties}
-    />
-  );
-}
+describe("OSCALResponsibleRoles", () => {
+  beforeEach(() => {
+    render(
+      <OSCALResponsibleRoles
+        responsibleRoles={responsibleRolesTestData}
+        parties={metadataTestData.parties}
+      />
+    );
+  });
 
-export default function testOSCALResponsibleRoles(parentElementName, renderer) {
-  test(`${parentElementName} shows component roles`, () => {
-    renderer();
+  test(`shows component roles`, () => {
     const roleTypeResult = screen.getByText("provider");
     expect(roleTypeResult).toBeVisible();
 
@@ -26,8 +25,4 @@ export default function testOSCALResponsibleRoles(parentElementName, renderer) {
     );
     expect(rolePartyResult).toBeVisible();
   });
-}
-
-if (!require.main) {
-  testOSCALResponsibleRoles("OSCALResponsibleRoles", responsibleRolesRenderer);
-}
+});

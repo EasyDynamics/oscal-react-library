@@ -3,7 +3,6 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { OSCALComponentLoader } from "./OSCALLoader";
 import OSCALComponentDefinition from "./OSCALComponentDefinition";
-import testOSCALResponsibleRoles from "./OSCALResponsibleRoles.test";
 import { componentDefinitionTestData } from "../test-data/ComponentsData";
 
 test("OSCALComponentDefinition loads", () => {
@@ -35,11 +34,6 @@ function testOSCALComponentDefinitionComponent(parentElementName, renderer) {
 }
 
 testOSCALComponentDefinitionComponent(
-  "OSCALComponentDefinition",
-  componentDefinitionRenderer
-);
-
-testOSCALResponsibleRoles(
   "OSCALComponentDefinition",
   componentDefinitionRenderer
 );
