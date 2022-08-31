@@ -91,12 +91,7 @@ export default function OSCALBackMatter(props) {
 
   const getMediaType = (rlink) =>
     rlink["media-type"] ||
-    guessExtensionFromHref(
-      getAbsoluteUrl(
-        rlink.href,
-        props.parentUrl.startsWith(".") ? null : props.parentUrl
-      )
-    );
+    guessExtensionFromHref(getAbsoluteUrl(rlink.href, props.parentUrl));
 
   const backMatterDisplay = (resource) => (
     <Grid item xs={3} key={resource.uuid}>
@@ -123,10 +118,7 @@ export default function OSCALBackMatter(props) {
                     label={getMediaType(rlink)}
                     component="a"
                     role="button"
-                    href={getAbsoluteUrl(
-                      rlink.href,
-                      props.parentUrl.startsWith(".") ? null : props.parentUrl
-                    )}
+                    href={getAbsoluteUrl(rlink.href, props.parentUrl)}
                     target="_blank"
                     variant="outlined"
                     clickable

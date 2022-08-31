@@ -1,7 +1,12 @@
 import getUriFromBackMatterByHref from "./OSCALBackMatterUtils";
 
 export function getAbsoluteUrl(href, parentUrl) {
-  if (href.startsWith("https://") || href.startsWith("http://") || !parentUrl) {
+  if (
+    href.startsWith("https://") ||
+    href.startsWith("http://") ||
+    !parentUrl ||
+    parentUrl.startsWith(".")
+  ) {
     return href;
   }
   return new URL(href, parentUrl).toString();
