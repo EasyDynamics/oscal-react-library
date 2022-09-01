@@ -82,7 +82,7 @@ export default function OSCALOSCALSystemImplementationTableTitleInventoryItems(
     <>
       <OSCALSystemImplementationTableTitle variant="h6" id="tableTitle">
         <OSCALAnchorLinkHeader
-          title={"Inventory Items"}
+          title="Inventory Items"
           style={{ "padding-top": "1em", "padding-bottom": "1em" }}
         />
       </OSCALSystemImplementationTableTitle>

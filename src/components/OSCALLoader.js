@@ -240,11 +240,9 @@ export default function OSCALLoader(props) {
     // TODO: Handle GET, when the hash hasn't changed & initial navigation to page.
     // This outputs a 404 error at this point in the console & doesn't take the user
     // to the desired section of page based on hash.
-    const hash = window.location.hash;
-    console.log(hash);
+    const { hash } = window.location;
     // Determine a hash exists and grab it
     const hashStr = hash && document.getElementById(hash.substring(1));
-    console.log(hashStr);
     if (hashStr) {
       hashStr.scrollIntoView({ behavior: "smooth" });
     }

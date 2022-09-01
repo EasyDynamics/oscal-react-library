@@ -77,7 +77,7 @@ export default function OSCALSystemImplementationUsers(props) {
     <>
       <OSCALSystemImplementationTableTitle variant="h6" id="tableTitle">
         <OSCALAnchorLinkHeader
-          title={"Users"}
+          title="Users"
           style={{ "padding-top": "1em", "padding-bottom": "1em" }}
         />
       </OSCALSystemImplementationTableTitle>

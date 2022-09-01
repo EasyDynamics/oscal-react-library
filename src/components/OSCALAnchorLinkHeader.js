@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Stack from "@mui/material/Stack";
 import LinkIcon from "@mui/icons-material/Link";
 import { Link } from "react-router-dom";
-import Fade from '@mui/material/Fade';
+import Fade from "@mui/material/Fade";
 
 export default function OSCALAnchorLinkHeader(props) {
   const [hover, setHover] = useState(false);
@@ -13,13 +13,11 @@ export default function OSCALAnchorLinkHeader(props) {
     setHover(false);
   };
 
-  const editString = (str) => {
-    return str.replaceAll(" ", "-").toLowerCase();
-  }
+  const editString = (str) => str.replaceAll(" ", "-").toLowerCase();
 
   return (
     <Stack
-      direction={"row"}
+      direction="row"
       gap={1}
       alignItems="start"
       onMouseEnter={onEnter}

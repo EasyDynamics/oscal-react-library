@@ -187,7 +187,7 @@ export default function OSCALSystemCharacteristics(props) {
             <Grid item xs={12}>
               <Typography variant="subtitle1" gutterBottom component="div">
                 <OSCALAnchorLinkHeader
-                  title={"Authorization Boundary"}
+                  title="Authorization Boundary"
                   style={{ "padding-top": "1em", "padding-bottom": "1em" }}
                 />
               </Typography>
@@ -215,7 +215,7 @@ export default function OSCALSystemCharacteristics(props) {
             <Grid item xs={12}>
               <Typography variant="subtitle1" gutterBottom component="div">
                 <OSCALAnchorLinkHeader
-                  title={"Network Architecture"}
+                  title="Network Architecture"
                   style={{ "padding-top": "1em", "padding-bottom": "1em" }}
                 />
               </Typography>
@@ -243,7 +243,7 @@ export default function OSCALSystemCharacteristics(props) {
             <Grid item xs={12}>
               <Typography variant="subtitle1" gutterBottom component="div">
                 <OSCALAnchorLinkHeader
-                  title={"Data Flow"}
+                  title="Data Flow"
                   style={{ "padding-top": "1em", "padding-bottom": "1em" }}
                 />
               </Typography>

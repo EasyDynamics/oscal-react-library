@@ -143,8 +143,8 @@ export default function OSCALBackMatter(props) {
             <Grid item xs={7}>
               <Typography variant="body1">
                 <OSCALAnchorLinkHeader
-                    title={"Resources"}
-                    style={{ "padding-top": "1em", "padding-bottom": "1em" }}
+                  title="Resources"
+                  style={{ "padding-top": "1em", "padding-bottom": "1em" }}
                 />
               </Typography>
             </Grid>

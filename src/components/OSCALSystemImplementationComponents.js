@@ -22,7 +22,7 @@ export default function OSCALSystemImplementationComponents(props) {
     <>
       <OSCALSystemImplementationTableTitle variant="h6" id="tableTitle">
         <OSCALAnchorLinkHeader
-          title={"Components"}
+          title="Components"
           style={{ "padding-top": "1em", "padding-bottom": "1em" }}
         />
       </OSCALSystemImplementationTableTitle>
