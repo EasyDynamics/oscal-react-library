@@ -15,6 +15,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import StyledTooltip from "./OSCALStyledTooltip";
 import OSCALDiagram from "./OSCALDiagram";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 
 export default function OSCALSystemCharacteristics(props) {
   return (
@@ -185,7 +186,10 @@ export default function OSCALSystemCharacteristics(props) {
             </Grid>
             <Grid item xs={12}>
               <Typography variant="subtitle1" gutterBottom component="div">
-                Authorization Boundary
+                <OSCALAnchorLinkHeader
+                  title={"Authorization Boundary"}
+                  style={{ "padding-top": "1em", "padding-bottom": "1em" }}
+                />
               </Typography>
               <Typography variant="body2">
                 {
@@ -210,7 +214,10 @@ export default function OSCALSystemCharacteristics(props) {
             </Grid>
             <Grid item xs={12}>
               <Typography variant="subtitle1" gutterBottom component="div">
-                Network Architecture
+                <OSCALAnchorLinkHeader
+                  title={"Network Architecture"}
+                  style={{ "padding-top": "1em", "padding-bottom": "1em" }}
+                />
               </Typography>
               <Typography variant="body2">
                 {
@@ -235,7 +242,10 @@ export default function OSCALSystemCharacteristics(props) {
             </Grid>
             <Grid item xs={12}>
               <Typography variant="subtitle1" gutterBottom component="div">
-                Data Flow
+                <OSCALAnchorLinkHeader
+                  title={"Data Flow"}
+                  style={{ "padding-top": "1em", "padding-bottom": "1em" }}
+                />
               </Typography>
               <Typography variant="body2">
                 {props.systemCharacteristics?.["data-flow"]?.description}

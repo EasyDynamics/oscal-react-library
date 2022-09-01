@@ -140,7 +140,9 @@ export default function OSCALLoader(props) {
   };
 
   const handleUrlChange = (value) => {
-    setOscalUrl(value);
+    let tempValue;
+    if (value.contains("#")) tempValue = value.split("#").pop();
+    setOscalUrl(tempValue);
   };
 
   const handleUuidChange = (objectUuid) => {
@@ -232,6 +234,21 @@ export default function OSCALLoader(props) {
       setHasDefaultUrl(true);
     }
   }, [props.isRestMode]);
+
+  // Handle anchor link change in window url
+  useEffect(() => {
+    // TODO: Handle GET, when the hash hasn't changed & initial navigation to page.
+    // This outputs a 404 error at this point in the console & doesn't take the user
+    // to the desired section of page based on hash.
+    const hash = window.location.hash;
+    console.log(hash);
+    // Determine a hash exists and grab it
+    const hashStr = hash && document.getElementById(hash.substring(1));
+    console.log(hashStr);
+    if (hashStr) {
+      hashStr.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [window.location.hash]);
 
   let form;
   if (props.renderForm && hasDefaultUrl) {

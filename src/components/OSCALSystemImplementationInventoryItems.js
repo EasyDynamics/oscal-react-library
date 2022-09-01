@@ -10,6 +10,7 @@ import {
   StyledTableRow,
   StyledTableHead,
 } from "./OSCALSystemImplementationTableStyles";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import PropertiesTable from "./OSCALSystemImplementationPropertiesTable";
 
 function OSCALResponsibleParties(props) {
@@ -80,7 +81,10 @@ export default function OSCALOSCALSystemImplementationTableTitleInventoryItems(
   return (
     <>
       <OSCALSystemImplementationTableTitle variant="h6" id="tableTitle">
-        Inventory Items
+        <OSCALAnchorLinkHeader
+          title={"Inventory Items"}
+          style={{ "padding-top": "1em", "padding-bottom": "1em" }}
+        />
       </OSCALSystemImplementationTableTitle>
 
       <TableContainer sx={{ maxHeight: "25em" }}>

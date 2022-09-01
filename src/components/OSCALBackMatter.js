@@ -15,6 +15,7 @@ import {
 } from "./oscal-utils/OSCALLinkUtils";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 
 export const OSCALBackMatterCard = styled(Card)(
   ({ theme }) => `
@@ -140,7 +141,12 @@ export default function OSCALBackMatter(props) {
               <OSCALSectionHeader>Back Matter</OSCALSectionHeader>
             </Grid>
             <Grid item xs={7}>
-              <Typography variant="body1">Resources</Typography>
+              <Typography variant="body1">
+                <OSCALAnchorLinkHeader
+                    title={"Resources"}
+                    style={{ "padding-top": "1em", "padding-bottom": "1em" }}
+                />
+              </Typography>
             </Grid>
           </Grid>
           <Grid container spacing={2}>
