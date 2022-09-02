@@ -5,6 +5,7 @@ import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
 import OSCALMetadata from "./OSCALMetadata";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALBackMatter from "./OSCALBackMatter";
+import OSCALCatalogGroups from "./OSCALCatalogGroups";
 
 export default function OSCALCatalog(props) {
   useEffect(props.onResolutionComplete);
@@ -23,21 +24,9 @@ export default function OSCALCatalog(props) {
         onFieldSave={props.onFieldSave}
         partialRestData={partialRestData}
       />
-      <List
-        subheader={
-          <ListSubheader
-            component="div"
-            disableSticky
-            id="nested-list-subheader"
-          >
-            Control Groups
-          </ListSubheader>
-        }
-      >
-        {props.catalog.groups.map((group) => (
-          <OSCALCatalogGroup group={group} key={group.id} />
-        ))}
-      </List>
+
+      <OSCALCatalogGroups groups={props.catalog.groups} />
+
       <OSCALBackMatter
         backMatter={props.catalog["back-matter"]}
         parentUrl={props.parentUrl}

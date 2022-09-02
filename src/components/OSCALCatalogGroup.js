@@ -1,9 +1,9 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
 import List from "@mui/material/List";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
@@ -19,6 +19,8 @@ export const OSCALControlList = styled(List)`
 `;
 
 export default function OSCALCatalogGroup(props) {
+
+
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
