@@ -1,11 +1,8 @@
 import React, { useEffect } from "react";
-import List from "@mui/material/List";
-import ListSubheader from "@mui/material/ListSubheader";
-import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
-import OSCALMetadata from "./OSCALMetadata";
-import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALBackMatter from "./OSCALBackMatter";
 import OSCALCatalogGroups from "./OSCALCatalogGroups";
+import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
+import OSCALMetadata from "./OSCALMetadata";
 
 export default function OSCALCatalog(props) {
   useEffect(props.onResolutionComplete);

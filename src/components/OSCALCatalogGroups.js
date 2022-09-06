@@ -1,11 +1,9 @@
 import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
 import List from "@mui/material/List";
-import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
+import { styled } from "@mui/material/styles";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import React from "react";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
@@ -27,11 +25,7 @@ function TabPanel(props) {
       aria-labelledby={`vertical-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
