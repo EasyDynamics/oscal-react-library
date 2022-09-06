@@ -5,6 +5,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
@@ -52,9 +53,9 @@ export default function OSCALCatalogGroup(props) {
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <div align="right">
+        <Box display="flex" justifyContent="flex-end">
           <OSCALControlParamLegend />
-        </div>
+        </Box>
         <OSCALControlList>
           {props.group.groups?.map((innerGroup) => (
             <OSCALCatalogGroup group={innerGroup} key={innerGroup.id} />
