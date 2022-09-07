@@ -48,7 +48,6 @@ function OSCALCatalogControlListItem(props) {
 
   return (
     <CollapseableListItem
-      key={control.id}
       itemText={`${control.id.toUpperCase()} ${control.title}`}
     >
       <OSCALControl
@@ -60,31 +59,31 @@ function OSCALCatalogControlListItem(props) {
   );
 }
 
-function OSCALCatalogGroupList(props) {
-  // Groups may not necessarily have an ID (it is not required per the spec);
-  // therefore, we need to be able to come up with a semi-constant ID. All
-  // groups will have a title. We can (poorly) hash that hopefully that will
-  // be good enough.
-  const groupKey = (group) => {
-    if (group.id) {
-      return group.id;
-    }
-    let hash = 7;
-    // eslint-disable-next-line no-restricted-syntax
-    for (const char of group.title) {
-      hash = 31 * hash + char.charCodeAt(0);
-    }
-    return hash;
-  };
+// Groups may not necessarily have an ID (it is not required per the spec);
+// therefore, we need to be able to come up with a semi-constant ID. All
+// groups will have a title. We can (poorly) hash that hopefully that will
+// be good enough.
+const groupKey = (group) => {
+  if (group.id) {
+    return group.id;
+  }
+  let hash = 7;
+  // eslint-disable-next-line no-restricted-syntax
+  for (const char of group.title) {
+    hash = 31 * hash + char.charCodeAt(0);
+  }
+  return hash;
+};
 
+function OSCALCatalogGroupList(props) {
   return (
-    <CollapseableListItem
-      key={groupKey(props.group)}
-      itemText={props.group.title}
-    >
+    <CollapseableListItem itemText={props.group.title}>
       <OSCALControlList>
         {props.group.groups?.map((innerGroup) => (
-          <OSCALCatalogGroupList group={innerGroup} key={innerGroup.id} />
+          <OSCALCatalogGroupList
+            group={innerGroup}
+            key={groupKey(innerGroup)}
+          />
         ))}
         {props.group.controls?.map((control) => (
           <OSCALCatalogControlListItem control={control} key={control.id} />
@@ -102,7 +101,10 @@ export default function OSCALCatalogGroup(props) {
       </Box>
       <OSCALControlList>
         {props.group.groups?.map((innerGroup) => (
-          <OSCALCatalogGroupList group={innerGroup} key={innerGroup.id} />
+          <OSCALCatalogGroupList
+            group={innerGroup}
+            key={groupKey(innerGroup)}
+          />
         ))}
         {props.group.controls?.map((control) => (
           <OSCALCatalogControlListItem control={control} key={control.id} />
