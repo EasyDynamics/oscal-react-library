@@ -9,7 +9,7 @@ import Tabs from "@mui/material/Tabs";
 import PropTypes from "prop-types";
 import React from "react";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
-import OSCALCatalogGroup from "./OSCALCatalogGroup";
+import OSCALCatalogGroup, { getGroupKey } from "./OSCALCatalogGroup";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -83,7 +83,7 @@ export default function OSCALCatalogGroups(props) {
             </Grid>
             <Grid item sm={10}>
               {props.groups?.map((group, index) => (
-                <TabPanel key={group.title} value={value} index={index}>
+                <TabPanel key={getGroupKey(group)} value={value} index={index}>
                   <OSCALCatalogGroup group={group} />
                 </TabPanel>
               ))}
