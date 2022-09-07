@@ -1,7 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
-import testOSCALControlParamLegend from "../common-tests/ControlParamLegend.test";
 
 const testGroup = {
   id: "parent-group",
@@ -9,33 +8,75 @@ const testGroup = {
   title: "Parent Group",
   groups: [
     {
-      id: "ac",
+      id: "child-group",
       class: "family",
       title: "Access Control",
-      controls: [{ id: "ac-1" }],
+      groups: [
+        {
+          id: "child-child-group",
+          title: "Sub Access Control",
+          controls: [
+            { id: "control-id", title: "Access Control Policy and Procedures" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "sibling-group",
+      class: "family",
+      title: "Sibling Title",
+      controls: [{ id: "control2-id", title: "Audit Events" }],
     },
   ],
 };
 
-test("OSCALCatalog displays control groups", () => {
-  render(<OSCALCatalogGroup group={testGroup} />);
-  const parentGroup = screen.getByText("Parent Group");
-  fireEvent.click(parentGroup);
-  const result = screen.getByText("Access Control");
-  expect(result).toBeVisible();
-});
+describe("OSCALCatalogGroup", () => {
+  beforeEach(() => {
+    render(<OSCALCatalogGroup group={testGroup} />);
+  });
 
-test("OSCALCatalog displays nested control groups", () => {
-  render(<OSCALCatalogGroup group={testGroup} />);
-  const parentGroup = screen.getByText("Parent Group");
-  fireEvent.click(parentGroup);
-  const childGroup = screen.getByText("Access Control");
-  fireEvent.click(childGroup);
-  const control = screen.getByText("ac-1");
-  expect(control).toBeVisible();
-});
+  test("displays param legend", () => {
+    const placeholderBox = screen.getByLabelText("legend-placeholder-label");
+    expect(placeholderBox).toBeVisible();
+    const placeholderBoxLabel = screen.getByText("Placeholder");
+    expect(placeholderBoxLabel).toBeVisible();
 
-testOSCALControlParamLegend(
-  "OSCALCatalogGroup",
-  <OSCALCatalogGroup group={testGroup} />
-);
+    const valueBox = screen.getByLabelText("legend-value-label");
+    expect(valueBox).toBeVisible();
+    const valueBoxLabel = screen.getByText("Value");
+    expect(valueBoxLabel).toBeVisible();
+  });
+
+  test("displays nested groups", () => {
+    const expand1 = screen.getByText("Access Control");
+    fireEvent.click(expand1);
+
+    const expand2 = screen.getByText("Sub Access Control");
+    fireEvent.click(expand2);
+
+    const expand3 = screen.getByText(
+      "CONTROL-ID Access Control Policy and Procedures"
+    );
+    fireEvent.click(expand3);
+
+    const result = screen.getByRole("heading", {
+      text: "access control policy and procedures",
+    });
+
+    expect(result).toBeVisible();
+  });
+
+  test("displays sibling control group", () => {
+    const expand1 = screen.getByText("Sibling Title");
+    fireEvent.click(expand1);
+
+    const expand2 = screen.getByText("CONTROL2-ID Audit Events");
+    fireEvent.click(expand2);
+
+    const result = screen.getByRole("heading", {
+      text: "audit events",
+    });
+
+    expect(result).toBeVisible();
+  });
+});

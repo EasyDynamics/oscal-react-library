@@ -11,7 +11,6 @@ import OSCALProfile from "./OSCALProfile";
 import testOSCALBackMatter from "./OSCALBackMatter.test";
 import { parentUrlTestData } from "../test-data/Urls";
 import profileTestData from "../test-data/ProfileData";
-import testOSCALControlParamLegend from "../common-tests/ControlParamLegend.test";
 
 test("OSCALProfile loads", () => {
   render(<OSCALProfileLoader />);
@@ -53,12 +52,3 @@ function testOSCALProfile(parentElementName, renderer) {
 testOSCALProfile("OSCALProfile", profileRenderer);
 
 testOSCALBackMatter("OSCALProfile", profileRenderer);
-
-testOSCALControlParamLegend(
-  "OSCALProfile",
-  <OSCALProfile
-    profile={profileTestData}
-    parentUrl={parentUrlTestData}
-    onResolutionComplete={() => {}}
-  />
-);
