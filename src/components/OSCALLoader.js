@@ -163,13 +163,13 @@ export default function OSCALLoader(props) {
     }
   };
 
-  const handleHash  = (hash) => {
+  const handleHash = (hash) => {
     // Determine a hash exists and grab it
     const elementWithHash = hash && document.getElementById(hash.substring(1));
     if (elementWithHash) {
       elementWithHash.scrollIntoView({ behavior: "smooth" });
     }
-  }
+  };
 
   useEffect(() => {
     handleReload(!props.isRestMode);
