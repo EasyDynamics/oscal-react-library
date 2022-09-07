@@ -87,7 +87,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^14.4.3",
-    "concurrently": "^7.3.0",
+    "concurrently": "^7.4.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.23.0",
     "eslint-config-airbnb": "^19.0.4",
