@@ -13,8 +13,8 @@ export default function OSCALAnchorLinkHeader(props) {
     setHover(false);
   };
 
-  const editString = (str) => str.replaceAll(" ", "-").toLowerCase();
-
+  const editString = (str) => str.props?.children.replaceAll(" ", "-")?.toLowerCase() || str.replaceAll(" ", "-").toLowerCase();
+  console.log(props.title);
   return (
     <Stack
       direction="row"
@@ -26,7 +26,7 @@ export default function OSCALAnchorLinkHeader(props) {
     >
       {props.title}
       {hover && (
-        <Link to={{ hash: `#${editString(props.title)}` }}>
+        <Link to={{ hash: `#${props.value || editString(props.title)}` }}>
           <Fade in={hover}>
             <LinkIcon
               sx={[

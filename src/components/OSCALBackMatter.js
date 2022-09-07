@@ -19,7 +19,7 @@ import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 
 export const OSCALBackMatterCard = styled(Card)(
   ({ theme }) => `
-    margin-top: ${theme.spacing(2)};
+    margin-top: ${theme.spacing(1)};
     display: flex;
     flex-direction: column;
 `
@@ -141,15 +141,14 @@ export default function OSCALBackMatter(props) {
               <OSCALSectionHeader>Back Matter</OSCALSectionHeader>
             </Grid>
             <Grid item xs={7}>
-              <Typography variant="body1">
-                <OSCALAnchorLinkHeader
-                  title="Resources"
-                  style={{ "padding-top": "1em", "padding-bottom": "1em" }}
-                />
-              </Typography>
+              <OSCALAnchorLinkHeader
+                title={<Typography variant="body1">Resources</Typography>}
+                value="resources"
+                style={{ "padding-top": "1em", "padding-bottom": "1em" }}
+              />
             </Grid>
           </Grid>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} padding={1}>
             {props.backMatter.resources.map((resource) =>
               backMatterDisplay(resource)
             )}

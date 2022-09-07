@@ -140,9 +140,7 @@ export default function OSCALLoader(props) {
   };
 
   const handleUrlChange = (value) => {
-    let tempValue;
-    if (value.contains("#")) tempValue = value.split("#").pop();
-    setOscalUrl(tempValue);
+    setOscalUrl(value);
   };
 
   const handleUuidChange = (objectUuid) => {
