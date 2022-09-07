@@ -163,6 +163,14 @@ export default function OSCALLoader(props) {
     }
   };
 
+  const handleHash  = (hash) => {
+    // Determine a hash exists and grab it
+    const elementWithHash = hash && document.getElementById(hash.substring(1));
+    if (elementWithHash) {
+      elementWithHash.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
   useEffect(() => {
     handleReload(!props.isRestMode);
   }, [oscalUrl]);
@@ -221,7 +229,7 @@ export default function OSCALLoader(props) {
         "",
         "",
         `/${props.oscalObjectType.jsonRootName}/${
-          props.isRestMode ? `${oscalObjectUuid}` : ""
+          props.isRestMode ? `${oscalObjectUuid}${window.location.hash}` : ""
         }`
       );
     } else if (props.isRestMode) {
@@ -237,15 +245,7 @@ export default function OSCALLoader(props) {
 
   // Handle anchor link change in window url
   useEffect(() => {
-    // TODO: Handle GET, when the hash hasn't changed & initial navigation to page.
-    // This outputs a 404 error at this point in the console & doesn't take the user
-    // to the desired section of page based on hash.
-    const { hash } = window.location;
-    // Determine a hash exists and grab it
-    const elementWithHash = hash && document.getElementById(hash.substring(1));
-    if (elementWithHash) {
-      elementWithHash.scrollIntoView({ behavior: "smooth" });
-    }
+    handleHash(window.location.hash);
   }, [window.location.hash]);
 
   let form;
@@ -272,6 +272,9 @@ export default function OSCALLoader(props) {
       </Grid>
     );
   } else if (oscalUrl) {
+    if (window.location.hash) {
+      handleHash(window.location.hash);
+    }
     result = props.isRestMode ? (
       <Grid container pt={3}>
         <EditorToolbar>
