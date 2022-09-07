@@ -186,10 +186,7 @@ export default function OSCALSystemCharacteristics(props) {
             </Grid>
             <Grid item xs={12}>
               <Typography variant="subtitle1" gutterBottom component="div">
-                <OSCALAnchorLinkHeader
-                  title="Authorization Boundary"
-                  style={{ "padding-top": "1em", "padding-bottom": "1em" }}
-                />
+                <OSCALAnchorLinkHeader title="Authorization Boundary" />
               </Typography>
               <Typography variant="body2">
                 {
@@ -214,10 +211,7 @@ export default function OSCALSystemCharacteristics(props) {
             </Grid>
             <Grid item xs={12}>
               <Typography variant="subtitle1" gutterBottom component="div">
-                <OSCALAnchorLinkHeader
-                  title="Network Architecture"
-                  style={{ "padding-top": "1em", "padding-bottom": "1em" }}
-                />
+                <OSCALAnchorLinkHeader title="Network Architecture" />
               </Typography>
               <Typography variant="body2">
                 {
@@ -242,10 +236,7 @@ export default function OSCALSystemCharacteristics(props) {
             </Grid>
             <Grid item xs={12}>
               <Typography variant="subtitle1" gutterBottom component="div">
-                <OSCALAnchorLinkHeader
-                  title="Data Flow"
-                  style={{ "padding-top": "1em", "padding-bottom": "1em" }}
-                />
+                <OSCALAnchorLinkHeader title="Data Flow" />
               </Typography>
               <Typography variant="body2">
                 {props.systemCharacteristics?.["data-flow"]?.description}

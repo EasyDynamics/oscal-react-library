@@ -144,11 +144,10 @@ export default function OSCALBackMatter(props) {
               <OSCALAnchorLinkHeader
                 title={<Typography variant="body1">Resources</Typography>}
                 value="resources"
-                style={{ "padding-top": "1em", "padding-bottom": "1em" }}
               />
             </Grid>
           </Grid>
-          <Grid container spacing={2} padding={1}>
+          <Grid container spacing={2} padding={2}>
             {props.backMatter.resources.map((resource) =>
               backMatterDisplay(resource)
             )}
