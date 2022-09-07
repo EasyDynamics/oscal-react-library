@@ -76,10 +76,7 @@ export default function OSCALSystemImplementationUsers(props) {
   return (
     <>
       <OSCALSystemImplementationTableTitle variant="h6" id="tableTitle">
-        <OSCALAnchorLinkHeader
-          title="Users"
-          style={{ "padding-top": "1em", "padding-bottom": "1em" }}
-        />
+        <OSCALAnchorLinkHeader title="Users" />
       </OSCALSystemImplementationTableTitle>
       <TableContainer sx={{ maxHeight: "25em" }}>
         <Table aria-label="Components" sx={{ height: "max-content" }}>

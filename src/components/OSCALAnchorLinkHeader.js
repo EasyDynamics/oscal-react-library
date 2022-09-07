@@ -25,12 +25,18 @@ export default function OSCALAnchorLinkHeader(props) {
       id={editString(props.title)}
     >
       {props.title}
-      {!hover ? (
-        ""
-      ) : (
+      {hover && (
         <Link to={{ hash: `#${editString(props.title)}` }}>
           <Fade in={hover}>
-            <LinkIcon />
+            <LinkIcon
+              sx={[
+                (theme) => ({
+                  width: "0.75em",
+                  height: "0.75em",
+                  color: theme.palette.grey[500],
+                }),
+              ]}
+            />
           </Fade>
         </Link>
       )}

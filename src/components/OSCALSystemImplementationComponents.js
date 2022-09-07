@@ -21,10 +21,7 @@ export default function OSCALSystemImplementationComponents(props) {
   return (
     <>
       <OSCALSystemImplementationTableTitle variant="h6" id="tableTitle">
-        <OSCALAnchorLinkHeader
-          title="Components"
-          style={{ "padding-top": "1em", "padding-bottom": "1em" }}
-        />
+        <OSCALAnchorLinkHeader title="Components" />
       </OSCALSystemImplementationTableTitle>
       <TableContainer sx={{ maxHeight: "25em" }}>
         <Table aria-label="Components" sx={{ height: "max-content" }}>

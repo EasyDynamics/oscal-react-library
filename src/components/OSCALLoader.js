@@ -242,9 +242,9 @@ export default function OSCALLoader(props) {
     // to the desired section of page based on hash.
     const { hash } = window.location;
     // Determine a hash exists and grab it
-    const hashStr = hash && document.getElementById(hash.substring(1));
-    if (hashStr) {
-      hashStr.scrollIntoView({ behavior: "smooth" });
+    const elementWithHash = hash && document.getElementById(hash.substring(1));
+    if (elementWithHash) {
+      elementWithHash.scrollIntoView({ behavior: "smooth" });
     }
   }, [window.location.hash]);
 
