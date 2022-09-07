@@ -92,7 +92,7 @@ export default function OSCALControlPart(props) {
             componentId={props.componentId}
             modificationAlters={props.modificationAlters}
             modificationSetParameters={props.modificationSetParameters}
-            key={part.id ? part.id : part.name}
+            key={part.id ?? part.name}
             isEditable={props.isEditable}
             onRestSuccess={props.onRestSuccess}
             onRestError={props.onRestError}

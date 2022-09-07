@@ -65,7 +65,7 @@ export default function OSCALCatalogGroups(props) {
   return (
     <OSCALSection>
       <OSCALSectionHeader>Control Groups</OSCALSectionHeader>
-      <Paper sx={{ flexGrow: 1, bgcolor: "background.paper", display: "flex" }}>
+      <Paper sx={{ flexGrow: 1, display: "flex" }}>
         <ComponentTabs
           onChange={handleChange}
           orientation="vertical"

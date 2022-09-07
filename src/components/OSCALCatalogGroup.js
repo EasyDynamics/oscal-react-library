@@ -18,37 +18,79 @@ export const OSCALControlList = styled(List)`
   padding-right: 2em;
 `;
 
-function OSCALCatalogGroupControl(props) {
+function CollapseableListItem(props) {
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
     setOpen(!open);
   };
 
-  const { control } = props;
-
   return (
     <div>
       <ListItem button onClick={handleClick}>
-        <ListItemAvatar key={`${control.id}-avatar`}>
+        <ListItemAvatar>
           <Avatar variant="rounded">
             <FolderIcon />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText
-          primary={`${control.id.toUpperCase()} ${control.title}`}
-        />
+        <ListItemText primary={props.itemText} />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
-
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <OSCALControl
-          control={control}
-          childLevel={0}
-          key={`control-${control.id}`}
-        />
+        {props.children}
       </Collapse>
     </div>
+  );
+}
+
+function OSCALCatalogControlListItem(props) {
+  const { control } = props;
+
+  return (
+    <CollapseableListItem
+      key={control.id}
+      itemText={`${control.id.toUpperCase()} ${control.title}`}
+    >
+      <OSCALControl
+        control={control}
+        childLevel={0}
+        key={`control-${control.id}`}
+      />
+    </CollapseableListItem>
+  );
+}
+
+function OSCALCatalogGroupList(props) {
+  // Groups may not necessarily have an ID (it is not required per the spec);
+  // therefore, we need to be able to come up with a semi-constant ID. All
+  // groups will have a title. We can (poorly) hash that hopefully that will
+  // be good enough.
+  const groupKey = (group) => {
+    if (group.id) {
+      return group.id;
+    }
+    let hash = 7;
+    // eslint-disable-next-line no-restricted-syntax
+    for (const char of group.title) {
+      hash = 31 * hash + char.charCodeAt(0);
+    }
+    return hash;
+  };
+
+  return (
+    <CollapseableListItem
+      key={groupKey(props.group)}
+      itemText={props.group.title}
+    >
+      <OSCALControlList>
+        {props.group.groups?.map((innerGroup) => (
+          <OSCALCatalogGroupList group={innerGroup} key={innerGroup.id} />
+        ))}
+        {props.group.controls?.map((control) => (
+          <OSCALCatalogControlListItem control={control} key={control.id} />
+        ))}
+      </OSCALControlList>
+    </CollapseableListItem>
   );
 }
 
@@ -60,10 +102,10 @@ export default function OSCALCatalogGroup(props) {
       </Box>
       <OSCALControlList>
         {props.group.groups?.map((innerGroup) => (
-          <OSCALCatalogGroup group={innerGroup} key={innerGroup.id} />
+          <OSCALCatalogGroupList group={innerGroup} key={innerGroup.id} />
         ))}
         {props.group.controls?.map((control) => (
-          <OSCALCatalogGroupControl control={control} key={control.id} />
+          <OSCALCatalogControlListItem control={control} key={control.id} />
         ))}
       </OSCALControlList>
     </div>
