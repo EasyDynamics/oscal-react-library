@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALCatalogGroup, { getGroupKey } from "./OSCALCatalogGroup";
+import OSCALControlParamLegend from "./OSCALControlParamLegend";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -62,8 +63,13 @@ export default function OSCALCatalogGroups(props) {
       <Card>
         <CardContent>
           <Grid container>
-            <Grid item sm={12}>
+            <Grid item sm={9}>
               <OSCALSectionHeader>Control Groups</OSCALSectionHeader>
+            </Grid>
+            <Grid item sm={3}>
+              <Box display="flex" justifyContent="flex-end">
+                <OSCALControlParamLegend />
+              </Box>
             </Grid>
             <Grid item sm={2}>
               <ComponentTabs
