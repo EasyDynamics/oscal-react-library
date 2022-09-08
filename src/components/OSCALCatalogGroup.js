@@ -1,12 +1,9 @@
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import FolderIcon from "@mui/icons-material/Folder";
-import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 import React from "react";
@@ -34,6 +31,13 @@ export const OSCALControlList = styled(List)`
   padding-right: 2em;
 `;
 
+const StyledListItem = styled(ListItem)(({ theme }) => ({
+  borderRadius: "0.5em",
+  marginBottom: "1em",
+  marginTop: "1em",
+  backgroundColor: theme.palette.grey[50],
+}));
+
 function CollapseableListItem(props) {
   const [open, setOpen] = React.useState(false);
 
@@ -43,15 +47,10 @@ function CollapseableListItem(props) {
 
   return (
     <div>
-      <ListItem button onClick={handleClick}>
-        <ListItemAvatar>
-          <Avatar variant="rounded">
-            <FolderIcon />
-          </Avatar>
-        </ListItemAvatar>
+      <StyledListItem button onClick={handleClick}>
         <ListItemText primary={props.itemText} />
         {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItem>
+      </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         {props.children}
       </Collapse>
@@ -66,7 +65,12 @@ function OSCALCatalogControlListItem(props) {
     <CollapseableListItem
       itemText={`${control.id.toUpperCase()} ${control.title}`}
     >
-      <OSCALControl control={control} childLevel={0} key={control.id} />
+      <OSCALControl
+        showInList
+        control={control}
+        childLevel={0}
+        key={control.id}
+      />
     </CollapseableListItem>
   );
 }
