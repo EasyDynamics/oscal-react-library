@@ -54,7 +54,7 @@ export default function OSCALControlGuidance(props) {
       >
         <DialogTitle id="scroll-dialog-title">
           {" "}
-          {`${props.id.toUpperCase()} ${props.title} `} Guidance
+          {`${props.id.toUpperCase()} ${props.title} Guidance`}
         </DialogTitle>
         <DialogContent dividers>
           <DialogContentText
