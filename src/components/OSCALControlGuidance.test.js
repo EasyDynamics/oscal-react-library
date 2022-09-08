@@ -7,7 +7,7 @@ test("OSCALCatalog displays control guidance", async () => {
   const prose = "Access control policy";
   const id = "AC-1";
   const title = "Sample Title";
-  render(<OSCALControlGuidance prose={prose} id={id} title={title}/>);
+  render(<OSCALControlGuidance prose={prose} id={id} title={title} />);
   await userEvent.click(screen.getByRole("button"));
   const result = screen.getByText("Access control policy");
   expect(result).toBeVisible();
