@@ -38,10 +38,10 @@ const ComponentTabs = styled(Tabs)(
 `
 );
 
-function a11yProps(index) {
+function a11yProps(index, title) {
   return {
     id: `vertical-tab-${index}`,
-    "aria-controls": `vertical-tabpanel-${index}`,
+    "aria-controls": `vertical-tabpanel-${title}`,
   };
 }
 
@@ -76,7 +76,7 @@ export default function OSCALCatalogGroups(props) {
                   <Tab
                     key={group.title}
                     label={group.title}
-                    {...a11yProps(index)}
+                    {...a11yProps(index, group.title)}
                   />
                 ))}
               </ComponentTabs>
