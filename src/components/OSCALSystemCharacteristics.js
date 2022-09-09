@@ -25,9 +25,18 @@ export default function OSCALSystemCharacteristics(props) {
             <Grid item xs={12}>
               <OSCALSectionHeader>System Characteristics</OSCALSectionHeader>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <Typography variant="h6">
                 {props.systemCharacteristics["system-name"]}
+                {/* Render the system's short name in parentheses next to the name,
+                but only if the short name exists. */}
+                {props.systemCharacteristics["system-name-short"] &&
+                  " (" + props.systemCharacteristics["system-name-short"] + ")"}
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography variant="body2">
+                {props.systemCharacteristics["description"]}
               </Typography>
             </Grid>
             <Grid item xs={6}>
