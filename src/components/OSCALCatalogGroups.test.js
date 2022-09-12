@@ -1,38 +1,43 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import OSCALCatalogGroup from "./OSCALCatalogGroup";
+import OSCALCatalogGroups from "./OSCALCatalogGroups";
 
-const testGroup = {
-  id: "parent-group",
-  class: "family",
-  title: "Parent Group",
-  groups: [
-    {
-      id: "child-group",
-      class: "family",
-      title: "Access Control",
-      groups: [
-        {
-          id: "child-child-group",
-          title: "Sub Access Control",
-          controls: [
-            { id: "control-id", title: "Access Control Policy and Procedures" },
-          ],
-        },
-      ],
-    },
-    {
-      id: "sibling-group",
-      class: "family",
-      title: "Sibling Title",
-      controls: [{ id: "control2-id", title: "Audit Events" }],
-    },
-  ],
-};
+const testGroups = [
+  {
+    id: "parent-group",
+    class: "family",
+    title: "Parent Group",
+    groups: [
+      {
+        id: "child-group",
+        class: "family",
+        title: "Access Control",
+        groups: [
+          {
+            id: "child-child-group",
+            title: "Sub Access Control",
+            controls: [
+              {
+                id: "control-id",
+                title: "Access Control Policy and Procedures",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "sibling-group",
+        class: "family",
+        title: "Sibling Title",
+        controls: [{ id: "control2-id", title: "Audit Events" }],
+      },
+    ],
+  },
+];
 
 describe("OSCALCatalogGroup", () => {
   beforeEach(() => {
-    render(<OSCALCatalogGroup group={testGroup} />);
+    render(<OSCALCatalogGroups groups={testGroups} />);
   });
 
   test("displays param legend", () => {
