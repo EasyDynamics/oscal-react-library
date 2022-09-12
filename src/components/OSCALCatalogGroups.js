@@ -36,8 +36,16 @@ function TabPanel(props) {
 const ComponentTabs = styled(Tabs)(
   ({ theme }) => `
   border-right: 1px solid ${theme.palette.divider};
+  backgroundColor: ${theme.palette.grey.A700};
 `
 );
+
+const ComponentTab = styled(Tab)(({ theme }) => ({
+  borderRadius: "0.5em",
+  marginBottom: "0.5em",
+  backgroundColor: theme.palette.grey[50],
+  textTransform: "none",
+}));
 
 function a11yProps(index, title) {
   return {
@@ -71,7 +79,7 @@ export default function OSCALCatalogGroups(props) {
                 <OSCALControlParamLegend />
               </Box>
             </Grid>
-            <Grid item sm={2}>
+            <Grid item sm={2.5}>
               <ComponentTabs
                 onChange={handleChange}
                 orientation="vertical"
@@ -79,15 +87,15 @@ export default function OSCALCatalogGroups(props) {
                 value={value}
               >
                 {props.groups?.map((group, index) => (
-                  <Tab
-                    key={group.title}
+                  <ComponentTab
+                    key={getGroupKey(group)}
                     label={group.title}
                     {...a11yProps(index, group.title)}
                   />
                 ))}
               </ComponentTabs>
             </Grid>
-            <Grid item sm={10}>
+            <Grid item sm={8.5}>
               {props.groups?.map((group, index) => (
                 <TabPanel key={getGroupKey(group)} value={value} index={index}>
                   <OSCALCatalogGroup group={group} />

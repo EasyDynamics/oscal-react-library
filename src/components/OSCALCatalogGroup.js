@@ -1,6 +1,5 @@
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Collapse from "@mui/material/Collapse";
 import List from "@mui/material/List";
@@ -41,7 +40,7 @@ const StyledListItemPaper = styled(Paper)`
   border-radius: 0.5em;
 `;
 
-const StyledControlDescriptionWrapper = styled('div')`
+const StyledControlDescriptionWrapper = styled("div")`
   padding: 1em;
 `;
 
