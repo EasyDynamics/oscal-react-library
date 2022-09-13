@@ -36,7 +36,12 @@ function TabPanel(props) {
 const ComponentTabs = styled(Tabs)(
   ({ theme }) => `
   border-right: 1px solid ${theme.palette.divider};
-  backgroundColor: ${theme.palette.grey.A700};
+`
+);
+
+const TabPanelList = styled(Grid)(
+  ({ theme }) => `
+  border-left: 1px solid ${theme.palette.divider};
 `
 );
 
@@ -95,13 +100,13 @@ export default function OSCALCatalogGroups(props) {
                 ))}
               </ComponentTabs>
             </Grid>
-            <Grid item sm={8.5}>
+            <TabPanelList item sm={8.5}>
               {props.groups?.map((group, index) => (
                 <TabPanel key={group.title} value={value} index={index}>
                   <OSCALCatalogGroup group={group} />
                 </TabPanel>
               ))}
-            </Grid>
+            </TabPanelList>
           </Grid>
         </CardContent>
       </Card>
