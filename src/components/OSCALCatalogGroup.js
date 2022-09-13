@@ -9,22 +9,6 @@ import { styled } from "@mui/material/styles";
 import React from "react";
 import OSCALControl from "./OSCALControl";
 
-// Groups may not necessarily have an ID (it is not required per the spec);
-// therefore, we need to be able to come up with a semi-constant ID. All
-// groups will have a title. We can (poorly) hash that hopefully that will
-// be good enough.
-export function getGroupKey(group) {
-  if (group.id) {
-    return group.id;
-  }
-  let hash = 7;
-  // eslint-disable-next-line no-restricted-syntax
-  for (const char of group.title) {
-    hash = 31 * hash + char.charCodeAt(0);
-  }
-  return hash;
-}
-
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
   padding-right: 2em;
@@ -88,10 +72,7 @@ function OSCALCatalogGroupList(props) {
     <CollapseableListItem itemText={props.group.title}>
       <OSCALControlList>
         {props.group.groups?.map((innerGroup) => (
-          <OSCALCatalogGroupList
-            group={innerGroup}
-            key={getGroupKey(innerGroup)}
-          />
+          <OSCALCatalogGroupList group={innerGroup} key={innerGroup.title} />
         ))}
         {props.group.controls?.map((control) => (
           <OSCALCatalogControlListItem control={control} key={control.id} />
@@ -105,10 +86,7 @@ export default function OSCALCatalogGroup(props) {
   return (
     <OSCALControlList>
       {props.group.groups?.map((innerGroup) => (
-        <OSCALCatalogGroupList
-          group={innerGroup}
-          key={getGroupKey(innerGroup)}
-        />
+        <OSCALCatalogGroupList group={innerGroup} key={innerGroup.title} />
       ))}
       {props.group.controls?.map((control) => (
         <OSCALCatalogControlListItem control={control} key={control.id} />
