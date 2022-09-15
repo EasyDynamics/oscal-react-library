@@ -24,7 +24,13 @@ export default function OSCALSystemCharacteristics(props) {
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <OSCALSectionHeader>System Characteristics</OSCALSectionHeader>
+              <OSCALAnchorLinkHeader
+                title={
+                  <OSCALSectionHeader>
+                    System Characteristics
+                  </OSCALSectionHeader>
+                }
+              />
             </Grid>
             <Grid item xs={6}>
               <Typography variant="h6">

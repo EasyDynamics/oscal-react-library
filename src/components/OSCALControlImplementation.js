@@ -8,6 +8,7 @@ import OSCALControlImplementationImplReq from "./OSCALControlImplementationImplR
 import OSCALControlImplementationAdd from "./OSCALControlImplementationAdd";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 
 /**
  * Creates the control implementation by setting up the header and outer grid elements
@@ -29,7 +30,13 @@ export default function OSCALControlImplementation(props) {
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <OSCALSectionHeader>Control Implementation</OSCALSectionHeader>
+              <OSCALAnchorLinkHeader
+                title={
+                  <OSCALSectionHeader>
+                    Control Implementation
+                  </OSCALSectionHeader>
+                }
+              />
             </Grid>
             <Grid item xs={6} align="right">
               <OSCALControlParamLegend />

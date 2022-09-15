@@ -4,6 +4,7 @@ import { TreeItem, TreeView } from "@mui/lab";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { Grid, IconButton, List, Paper, ListSubheader } from "@mui/material";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 
 const CatalogInheritancePaper = styled(Paper)(
   ({ theme }) => `
@@ -60,7 +61,10 @@ export default function OSCALProfileCatalogInheritance(props) {
         <List
           subheader={
             <ListSubheader component="div" id="oscal-metadata-parties">
-              Profiles/Catalog Inheritance
+              <OSCALAnchorLinkHeader
+                title="Profiles/Catalog Inheritance"
+                value="profile-catalog-inheritance"
+              />
             </ListSubheader>
           }
         >

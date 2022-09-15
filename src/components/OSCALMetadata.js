@@ -26,6 +26,7 @@ import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import React from "react";
 import OSCALEditableTextField from "./OSCALEditableTextField";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 
 export const OSCALMetadataPartiesHeader = styled(ListSubheader)(
   ({ theme }) => `
@@ -380,7 +381,9 @@ export default function OSCALMetadata(props) {
       <Grid container spacing={1}>
         <Grid component={Paper} item xs={8}>
           <Grid item xs={12}>
-            <OSCALMetadataPartiesHeader>Parties</OSCALMetadataPartiesHeader>
+            <OSCALMetadataPartiesHeader>
+              <OSCALAnchorLinkHeader title="Parties" />
+            </OSCALMetadataPartiesHeader>
           </Grid>
           <OSCALMetadataPartiesCardHolder container spacing={1} wrap="wrap">
             {props.metadata.parties?.map((party) => (
