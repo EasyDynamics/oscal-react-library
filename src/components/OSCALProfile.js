@@ -10,6 +10,7 @@ import OSCALBackMatter from "./OSCALBackMatter";
 import { OSCALResolveProfile } from "./oscal-utils/OSCALProfileResolver";
 import OSCALProfileCatalogInheritance from "./OSCALProfileCatalogInheritance";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 
 /**
  * Displays a given OSCAL Profile is an easily consumable format. According to NIST, a profile
@@ -75,7 +76,7 @@ export default function OSCALProfile(props) {
               id="oscal-profile-importedControls"
               disableSticky
             >
-              Imported Controls
+              <OSCALAnchorLinkHeader title="Imported Controls" />
             </ListSubheader>
           </Grid>
           <Grid item xs={6} align="right">

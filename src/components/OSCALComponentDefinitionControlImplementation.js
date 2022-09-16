@@ -6,6 +6,7 @@ import { List, ListItem, ListItemText } from "@mui/material";
 import OSCALControlImplementationImplReq from "./OSCALControlImplementationImplReq";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 
 export default function OSCALComponentDefinitionControlImplementation(props) {
   return (
@@ -14,7 +15,13 @@ export default function OSCALComponentDefinitionControlImplementation(props) {
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <OSCALSectionHeader>Control Implementations</OSCALSectionHeader>
+              <OSCALAnchorLinkHeader
+                title={
+                  <OSCALSectionHeader>
+                    Control Implementations
+                  </OSCALSectionHeader>
+                }
+              />
             </Grid>
             <Grid item xs={6} align="right">
               <OSCALControlParamLegend />
