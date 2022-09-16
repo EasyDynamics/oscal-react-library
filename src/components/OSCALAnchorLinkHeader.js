@@ -24,7 +24,7 @@ export default function OSCALAnchorLinkHeader(props) {
       alignItems="start"
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
-      id={editString(props.title)}
+      id={props.value || editString(props.title)}
     >
       {props.title}
       {hover && (

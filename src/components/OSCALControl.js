@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import OSCALControlPart from "./OSCALControlPart";
 import OSCALControlModification from "./OSCALControlModification";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 
 // TODO: This is probably 800-53 specific and it should be made more
 // generic to allow the library to work with other frameworks.
@@ -58,16 +59,21 @@ export default function OSCALControl(props) {
       <CardContent>
         <Grid container spacing={1}>
           <Grid item xs={12}>
-            <Typography
-              variant="h6"
-              component="h2"
-              style={props.childLevel ? { fontSize: "1.1rem" } : undefined}
-            >
-              <span style={{ textTransform: "uppercase" }}>
-                {props.control.id}
-              </span>{" "}
-              {props.control.title} {modificationDisplay}
-            </Typography>
+            <OSCALAnchorLinkHeader
+              title={
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  style={props.childLevel ? { fontSize: "1.1rem" } : undefined}
+                >
+                  <span style={{ textTransform: "uppercase" }}>
+                    {props.control.id}
+                  </span>{" "}
+                  {props.control.title} {modificationDisplay}
+                </Typography>
+              }
+              value={props.control.id}
+            />
           </Grid>
         </Grid>
         {props.control.parts?.map((part, index) => (
