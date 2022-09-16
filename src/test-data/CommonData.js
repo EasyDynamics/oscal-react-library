@@ -54,14 +54,17 @@ export const profileCatalogInheritanceData = {
     {
       title: "Example Catalog",
       type: "catalog",
+      uuid: "0988f548-8ece-41b8-b098-dc340e02c344",
     },
     {
       title: "Example Inherited Profile",
       type: "profile",
+      uuid: "8f204564-3e62-406b-a138-03888c6bcd08",
       inherited: [
         {
           title: "Nested Inherited Catalog",
           type: "catalog",
+          uuid: "09dc20e1-85a2-4a06-9f82-1eee6104e12f",
         },
       ],
     },
