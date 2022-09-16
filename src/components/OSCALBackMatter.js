@@ -138,7 +138,9 @@ export default function OSCALBackMatter(props) {
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <OSCALSectionHeader>Back Matter</OSCALSectionHeader>
+              <OSCALAnchorLinkHeader
+                title={<OSCALSectionHeader>Back Matter</OSCALSectionHeader>}
+              />
             </Grid>
             <Grid item xs={7}>
               <OSCALAnchorLinkHeader
