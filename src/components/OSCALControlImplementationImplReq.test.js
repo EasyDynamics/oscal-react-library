@@ -10,7 +10,6 @@ import {
 } from "../test-data/ComponentsData";
 import { profileModifyTestData } from "../test-data/ModificationsData";
 import { sspRestData } from "../test-data/SystemData";
-import testOSCALControlParamLegend from "../common-tests/ControlParamLegend.test";
 
 const controlsTestData = [exampleControl];
 
@@ -94,15 +93,4 @@ export default function testOSCALControlImplementationImplReq(
 testOSCALControlImplementationImplReq(
   "OSCALControlImplementationImplReq",
   controlImplementationImplReqRenderer
-);
-
-testOSCALControlParamLegend(
-  "OSCALComponentControlImplementationImplReq",
-  <OSCALControlImplementation
-    controlImplementation={controlImplTestData}
-    components={exampleComponents}
-    controls={controlsTestData}
-    modifications={profileModifyTestData}
-    partialRestData={sspRestData}
-  />
 );
