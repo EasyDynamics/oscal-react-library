@@ -382,7 +382,7 @@ export default function OSCALMetadata(props) {
         <Grid component={Paper} item xs={8}>
           <Grid item xs={12}>
             <OSCALMetadataPartiesHeader>
-              <OSCALAnchorLinkHeader title="Parties" />
+              <OSCALAnchorLinkHeader>Parties</OSCALAnchorLinkHeader>
             </OSCALMetadataPartiesHeader>
           </Grid>
           <OSCALMetadataPartiesCardHolder container spacing={1} wrap="wrap">

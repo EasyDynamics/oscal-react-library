@@ -81,7 +81,7 @@ export default function OSCALOSCALSystemImplementationTableTitleInventoryItems(
   return (
     <>
       <OSCALSystemImplementationTableTitle variant="h6" id="tableTitle">
-        <OSCALAnchorLinkHeader title="Inventory Items" />
+        <OSCALAnchorLinkHeader>Inventory Items</OSCALAnchorLinkHeader>
       </OSCALSystemImplementationTableTitle>
 
       <TableContainer sx={{ maxHeight: "25em" }}>

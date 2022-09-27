@@ -76,7 +76,7 @@ export default function OSCALProfile(props) {
               id="oscal-profile-importedControls"
               disableSticky
             >
-              <OSCALAnchorLinkHeader title="Imported Controls" />
+              <OSCALAnchorLinkHeader>Imported Controls</OSCALAnchorLinkHeader>
             </ListSubheader>
           </Grid>
           <Grid item xs={6} align="right">

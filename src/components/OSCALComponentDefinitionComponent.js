@@ -21,9 +21,9 @@ export default function OSCALComponentDefinitionComponent(props) {
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <OSCALAnchorLinkHeader
-                title={<OSCALSectionHeader>Components</OSCALSectionHeader>}
-              />
+              <OSCALAnchorLinkHeader>
+                <OSCALSectionHeader>Components</OSCALSectionHeader>
+              </OSCALAnchorLinkHeader>
             </Grid>
             <Grid item xs={12}>
               <TableContainer>

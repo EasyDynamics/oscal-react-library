@@ -24,12 +24,12 @@ export default function OSCALAnchorLinkHeader(props) {
       alignItems="start"
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
-      id={props.value || editString(props.title)}
+      id={props.value || editString(props.children)}
     >
-      {props.title}
+      {props.children}
       {hover && (
-        // Navigate to a specified hash or use the title text
-        <Link to={{ hash: `#${props.value || editString(props.title)}` }}>
+        // Navigate to a specified hash or use the child text
+        <Link to={{ hash: `#${props.value || editString(props.children)}` }}>
           <Fade in={hover}>
             <LinkIcon
               sx={[

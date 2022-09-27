@@ -24,13 +24,9 @@ export default function OSCALSystemCharacteristics(props) {
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <OSCALAnchorLinkHeader
-                title={
-                  <OSCALSectionHeader>
-                    System Characteristics
-                  </OSCALSectionHeader>
-                }
-              />
+              <OSCALAnchorLinkHeader>
+                <OSCALSectionHeader>System Characteristics</OSCALSectionHeader>
+              </OSCALAnchorLinkHeader>
             </Grid>
             <Grid item xs={12}>
               <Typography variant="h6">
@@ -203,7 +199,9 @@ export default function OSCALSystemCharacteristics(props) {
             </Grid>
             <Grid item xs={12}>
               <Typography variant="subtitle1" gutterBottom component="div">
-                <OSCALAnchorLinkHeader title="Authorization Boundary" />
+                <OSCALAnchorLinkHeader>
+                  Authorization Boundary
+                </OSCALAnchorLinkHeader>
               </Typography>
               <Typography variant="body2">
                 {
@@ -228,7 +226,9 @@ export default function OSCALSystemCharacteristics(props) {
             </Grid>
             <Grid item xs={12}>
               <Typography variant="subtitle1" gutterBottom component="div">
-                <OSCALAnchorLinkHeader title="Network Architecture" />
+                <OSCALAnchorLinkHeader>
+                  Network Architecture
+                </OSCALAnchorLinkHeader>
               </Typography>
               <Typography variant="body2">
                 {
@@ -253,7 +253,7 @@ export default function OSCALSystemCharacteristics(props) {
             </Grid>
             <Grid item xs={12}>
               <Typography variant="subtitle1" gutterBottom component="div">
-                <OSCALAnchorLinkHeader title="Data Flow" />
+                <OSCALAnchorLinkHeader>Data Flow</OSCALAnchorLinkHeader>
               </Typography>
               <Typography variant="body2">
                 {props.systemCharacteristics?.["data-flow"]?.description}

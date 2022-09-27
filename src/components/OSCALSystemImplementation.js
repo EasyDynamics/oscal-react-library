@@ -21,11 +21,9 @@ export default function OSCALSystemImplementation(props) {
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <OSCALAnchorLinkHeader
-                title={
-                  <OSCALSectionHeader>System Implementation</OSCALSectionHeader>
-                }
-              />
+              <OSCALAnchorLinkHeader>
+                <OSCALSectionHeader>System Implementation</OSCALSectionHeader>
+              </OSCALAnchorLinkHeader>
             </Grid>
             <Grid item xs={12}>
               <OSCALMarkupMultiLine paragraphComponent={Typography}>

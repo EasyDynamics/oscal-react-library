@@ -30,13 +30,9 @@ export default function OSCALControlImplementation(props) {
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <OSCALAnchorLinkHeader
-                title={
-                  <OSCALSectionHeader>
-                    Control Implementation
-                  </OSCALSectionHeader>
-                }
-              />
+              <OSCALAnchorLinkHeader>
+                <OSCALSectionHeader>Control Implementation</OSCALSectionHeader>
+              </OSCALAnchorLinkHeader>
             </Grid>
             <Grid item xs={6} align="right">
               <OSCALControlParamLegend />

@@ -102,21 +102,18 @@ export default function OSCALControl(props) {
       <CardContent>
         <Grid container spacing={1}>
           <Grid item xs={12}>
-            <OSCALAnchorLinkHeader
-              title={
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  style={props.childLevel ? { fontSize: "1.1rem" } : undefined}
-                >
-                  <span style={{ textTransform: "uppercase" }}>
-                    {props.control.id}
-                  </span>{" "}
-                  {props.control.title} {modificationDisplay}
-                </Typography>
-              }
-              value={props.control.id}
-            />
+            <OSCALAnchorLinkHeader value={props.control.id}>
+              <Typography
+                variant="h6"
+                component="h2"
+                style={props.childLevel ? { fontSize: "1.1rem" } : undefined}
+              >
+                <span style={{ textTransform: "uppercase" }}>
+                  {props.control.id}
+                </span>{" "}
+                {props.control.title} {modificationDisplay}
+              </Typography>
+            </OSCALAnchorLinkHeader>
           </Grid>
         </Grid>
         <ControlsList {...props} />
