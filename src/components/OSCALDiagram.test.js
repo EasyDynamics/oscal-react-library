@@ -12,7 +12,7 @@ function diagramRenderer(testData) {
     <OSCALDiagram
       diagram={testData}
       backMatter={backMatterTestData}
-      parentUrl="./"
+      parentUrl="https://example.com"
     />
   );
 }
@@ -36,7 +36,7 @@ if (!require.main) {
     "OSCALDiagram",
     diagramRenderer,
     localReferenceDiagram,
-    ".//../diagram.png"
+    "https://example.com/diagram.png"
   );
   testOSCALDiagram(
     "OSCALDiagram",

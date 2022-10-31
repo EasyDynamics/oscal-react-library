@@ -1,4 +1,4 @@
-import resolveLinkHref, { fixJsonUrls } from "./OSCALLinkUtils";
+import resolveLinkHref from "./OSCALLinkUtils";
 
 const OSCAL_MEDIA_TYPE_REGEX = /^application\/oscal.*\+json$/;
 /**
@@ -39,15 +39,8 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
   onError,
   pendingProcesses // tracks state of recursive calls
 ) {
-  let itemUrl = origItemUrl;
+  const itemUrl = new URL(origItemUrl, parentUrl).toString();
 
-  // TODO: This should be improved for other use cases.
-  // https://github.com/EasyDynamics/oscal-react-library/issues/505
-  if (!origItemUrl.startsWith("http")) {
-    itemUrl = `${parentUrl}/../${origItemUrl}`;
-  }
-
-  itemUrl = fixJsonUrls(itemUrl);
   // Add our current itemUrl to the list of pending processes
   pendingProcesses.push(itemUrl);
   fetch(itemUrl)
@@ -79,8 +72,9 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
           modifications.alters.push(...(result.profile.modify?.alters ?? []));
 
           result.profile.imports.forEach((profileImport) => {
+            const profileBackMatter = result.profile?.["back-matter"] ?? [];
             const importUrl = resolveLinkHref(
-              result.profile?.["back-matter"] ?? [],
+              profileBackMatter,
               profileImport.href,
               null,
               OSCAL_MEDIA_TYPE_REGEX
@@ -90,7 +84,7 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
               modifications,
               importUrl,
               itemUrl,
-              result.profilea?.["back-matter"] ?? [],
+              profileBackMatter,
               inheritedOSCALObject.inherited,
               onSuccess,
               onError,

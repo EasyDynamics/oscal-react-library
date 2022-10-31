@@ -52,6 +52,27 @@ const LogoImage = styled("img")`
   margin-right: 1em;
 `;
 
+function getBackEndUrl(urlString) {
+  // If given something falsey, we need to also return something falsey.
+  // This ensures that we don't accidentally force the application
+  // to always be in editor/REST mode by creating a URL.
+  if (!urlString) {
+    return null;
+  }
+  // Because the URL may be a relative path and various application logic
+  // assumes that it will always be an absolute URL, it is easiest to just
+  // handle converting the potentially relative URL to an absolute URL and
+  // explicitly use the current origin as the base.
+  try {
+    return new URL(urlString, window.location.href).toString();
+  } catch (err) {
+    // If the given URL is invalid, for some reason, fallback to just using
+    // the provided value. This may result in more predictable errors
+    // elsewhere.
+    return urlString;
+  }
+}
+
 function App() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -61,7 +82,9 @@ function App() {
     // be different).
     !!process.env.REACT_APP_REST_BASE_URL
   );
-  const [backendUrl] = useState(process.env.REACT_APP_REST_BASE_URL);
+  const [backendUrl] = useState(
+    getBackEndUrl(process.env.REACT_APP_REST_BASE_URL)
+  );
   const [hasDefaultUrl, setHasDefaultUrl] = useState(false);
 
   useEffect(() => {

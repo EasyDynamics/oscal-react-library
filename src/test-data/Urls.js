@@ -1,7 +1,4 @@
 /* The following URLs are all of the URLs used in testing and in the stories. */
-export const backMatterTestUrl =
-  "https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev4/json/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json/../NIST_SP-800-53_rev4_catalog.json";
-
 export const componentDefinitionUrl =
   "https://raw.githubusercontent.com/EasyDynamics/oscal-content/5ef5b3709045ba3aab1473813c13436e886d6185/examples/component-definition/json/example-component.json";
 

@@ -303,7 +303,12 @@ export function OSCALMetadataParty(props) {
         subheader={props.partyRolesText}
       />
       <CardActions>
-        <Button size="small" variant="outlined" onClick={handleOpen}>
+        <Button
+          size="small"
+          variant="outlined"
+          onClick={handleOpen}
+          aria-label={`${props.party.name} contact button`}
+        >
           <ContactPageIcon />
           Contact
         </Button>

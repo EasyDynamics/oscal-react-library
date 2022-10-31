@@ -90,6 +90,7 @@ export default function OSCALSsp(props) {
       <OSCALSystemImplementation
         systemImplementation={ssp["system-implementation"]}
         parties={sspParties}
+        components={ssp["system-implementation"].components}
       />
       {controlImpl}
       <OSCALBackMatter

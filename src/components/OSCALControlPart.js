@@ -32,7 +32,13 @@ export default function OSCALControlPart(props) {
   }
 
   if (props.part.name === "guidance") {
-    return <OSCALControlGuidance prose={props.part.prose} />;
+    return (
+      <OSCALControlGuidance
+        prose={props.part.prose}
+        id={props.control.id}
+        title={props.control.title}
+      />
+    );
   }
 
   let modificationDisplay;
@@ -92,7 +98,7 @@ export default function OSCALControlPart(props) {
             componentId={props.componentId}
             modificationAlters={props.modificationAlters}
             modificationSetParameters={props.modificationSetParameters}
-            key={part.id}
+            key={part.id ?? part.name}
             isEditable={props.isEditable}
             onRestSuccess={props.onRestSuccess}
             onRestError={props.onRestError}
