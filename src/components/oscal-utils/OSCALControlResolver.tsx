@@ -1,9 +1,9 @@
 export default function getControlOrSubControl(
-  resolvedControls: any,
-  controlId: any
+  resolvedControls: any[],
+  controlId: string
 ) {
-  const findControlById = (controls: any, desiredId: any) =>
-    controls?.find((control: any) => control.id === desiredId);
+  const findControlById = (controls: any[], desiredId: string) =>
+    controls?.find((control) => control.id === desiredId);
 
   // Try to find control at root level of the resolved controls
   const control = findControlById(resolvedControls, controlId);
@@ -13,7 +13,7 @@ export default function getControlOrSubControl(
 
   // If the control isn't at the root level, it may be a subcontrol of it's parent;
   // so for example, "ac-2.3" may be a child of "ac-2"
-  const isSubControl = (testControlId: any) => testControlId.includes(".");
+  const isSubControl = (testControlId: string) => testControlId.includes(".");
   if (isSubControl(controlId)) {
     const parentControlId = controlId.split(".")[0];
     const parentControl = findControlById(resolvedControls, parentControlId);
@@ -45,12 +45,12 @@ export default function getControlOrSubControl(
  * @returns Returns the by-component object when a statement is found
  */
 export function getStatementByComponent(
-  implReqStatements: any,
+  implReqStatements: any[],
   statementId: string,
   componentId: string
 ) {
   const foundStatement = implReqStatements?.find(
-    (statement: any) => statement["statement-id"] === statementId
+    (statement) => statement["statement-id"] === statementId
   );
   // Error checking: Exit function when statement or it's by-components are not found
   if (!foundStatement || !foundStatement["by-components"]) {

@@ -16,7 +16,7 @@ export default function resolveLinkHref(
   backMatter: any,
   href: string,
   parentUrl: string,
-  mediaTypeRegex: RegExp,
+  mediaTypeRegex: RegExp
 ): string {
   return getAbsoluteUrl(
     !href.startsWith("#")
