@@ -161,6 +161,25 @@ export default function OSCALLoader(props) {
     }
   };
 
+  const determineHashControlType = (hash) =>
+    // NOTE: Control groupings will contain two letters, followed by a "-" and a positive integer
+    /^[a-z]*/.test(hash.substring(1, 3)) &&
+    hash.substring(3, 4) === "-" &&
+    hash.substring(4) > 0;
+  const scrollToElementWithHash = (hash, isControl) => {
+    // Ensure hash exists and grab element associated
+    const elementWithHash = hash && document.getElementById(hash.substring(1));
+
+    // Locate the element with the provided hash and scroll to the item
+    if (elementWithHash) {
+      elementWithHash.scrollIntoView({ behavior: "smooth" });
+      // If control is found, open collapsable item
+      if (isControl) {
+        elementWithHash.click();
+      }
+    }
+  };
+
   const handleHash = (hash) => {
     // Ensure hash exists and determine if the element with the hash is a control grouping
     const controlGroupingTab =
@@ -176,29 +195,6 @@ export default function OSCALLoader(props) {
     }
 
     scrollToElementWithHash(hash, isControl);
-  };
-
-  const scrollToElementWithHash = (hash, isControl) => {
-    // Ensure hash exists and grab element associated
-    let elementWithHash = hash && document.getElementById(hash.substring(1));
-
-    // Locate the element with the provided hash and scroll to the item
-    if (elementWithHash) {
-      elementWithHash.scrollIntoView({ behavior: "smooth" });
-      // If control is found, open collapsable item
-      if (isControl) {
-        elementWithHash.click();
-      }
-    }
-  };
-
-  const determineHashControlType = (hash) => {
-    // NOTE: Control groupings will contain two letters, followed by a "-" and a positive integer
-    return (
-      /^[a-z]*/.test(hash.substring(1, 3)) &&
-      hash.substring(3, 4) === "-" &&
-      hash.substring(4) > 0
-    );
   };
 
   useEffect(() => {

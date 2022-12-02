@@ -93,7 +93,7 @@ export default function OSCALCatalogGroups(props) {
                 variant="scrollable"
                 value={value}
               >
-                {props.groups?.map((group, index) => (
+                {props.groups?.map((group) => (
                   <ComponentTab
                     key={group.title}
                     label={group.title}
@@ -104,7 +104,12 @@ export default function OSCALCatalogGroups(props) {
             </Grid>
             <TabPanelList item sm={8.5}>
               {props.groups?.map((group, index) => (
-                <TabPanel key={group.title} groupId={group.id} value={value} index={index}>
+                <TabPanel
+                  key={group.title}
+                  groupId={group.id}
+                  value={value}
+                  index={index}
+                >
                   <OSCALCatalogGroup group={group} />
                 </TabPanel>
               ))}
