@@ -21,7 +21,7 @@ export default function OSCALAnchorLinkHeader(props) {
     <Stack
       direction="row"
       gap={1}
-      alignItems="start"
+      alignItems="center"
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
       id={props.value || editString(props.children)}

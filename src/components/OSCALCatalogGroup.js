@@ -8,6 +8,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 import React from "react";
 import OSCALControl from "./OSCALControl";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -55,7 +56,11 @@ function OSCALCatalogControlListItem(props) {
 
   return (
     <CollapseableListItem
-      itemText={`${control.id.toUpperCase()} ${control.title}`}
+      itemText={
+        <OSCALAnchorLinkHeader value={`${control.id.toLowerCase()}`}>
+          {`${control.id.toUpperCase()} ${control.title}`}
+        </OSCALAnchorLinkHeader>
+      }
     >
       <OSCALControl
         showInList

@@ -11,6 +11,7 @@ import React from "react";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -18,14 +19,13 @@ export const OSCALControlList = styled(List)`
 `;
 
 function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
+  const { children, groupId, value, index, ...other } = props;
   return (
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`vertical-tabpanel-${index}`}
-      aria-labelledby={`vertical-tab-${index}`}
+      id={`vertical-tabpanel-${groupId}`}
+      aria-labelledby={`vertical-tabpanel-${groupId}`}
       {...other}
     >
       {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
@@ -52,10 +52,10 @@ const ComponentTab = styled(Tab)(({ theme }) => ({
   textTransform: "none",
 }));
 
-function a11yProps(index, title) {
+function a11yProps(groupId) {
   return {
-    id: `vertical-tab-${index}`,
-    "aria-controls": `vertical-tabpanel-${title}`,
+    id: `vertical-tab-${groupId}`,
+    "aria-controls": `vertical-tab-${groupId}`,
   };
 }
 
@@ -77,7 +77,9 @@ export default function OSCALCatalogGroups(props) {
         <CardContent>
           <Grid container>
             <Grid item sm={9}>
-              <OSCALSectionHeader>Control Groups</OSCALSectionHeader>
+              <OSCALAnchorLinkHeader>
+                <OSCALSectionHeader>Control Groups</OSCALSectionHeader>
+              </OSCALAnchorLinkHeader>
             </Grid>
             <Grid item sm={3}>
               <Box display="flex" justifyContent="flex-end">
@@ -95,14 +97,14 @@ export default function OSCALCatalogGroups(props) {
                   <ComponentTab
                     key={group.title}
                     label={group.title}
-                    {...a11yProps(index, group.title)}
+                    {...a11yProps(group.id)}
                   />
                 ))}
               </ComponentTabs>
             </Grid>
             <TabPanelList item sm={8.5}>
               {props.groups?.map((group, index) => (
-                <TabPanel key={group.title} value={value} index={index}>
+                <TabPanel key={group.title} groupId={group.id} value={value} index={index}>
                   <OSCALCatalogGroup group={group} />
                 </TabPanel>
               ))}
