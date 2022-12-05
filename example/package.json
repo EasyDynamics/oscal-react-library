@@ -22,7 +22,7 @@
     "react-ga4": "^1.4.1",
     "react-router-dom": "file:../node_modules/react-router-dom",
     "react-scripts": "file:../node_modules/react-scripts",
-    "web-vitals": "^3.0.4"
+    "web-vitals": "^3.1.0"
   },
   "devDependencies": {
     "@babel/plugin-syntax-object-rest-spread": "^7.8.3",
