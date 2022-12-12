@@ -383,6 +383,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   // resulted in a React error of: "Rendered more hooks than during the previous
   // render." This should be investigated further.
   // https://github.com/EasyDynamics/oscal-react-library/issues/499
+  /* eslint-disable react-hooks/rules-of-hooks */
   const statementByComponentDescription =
     statementByComponent?.description || null;
   const statementByComponentDescriptionMarkup =
@@ -400,6 +401,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
       setParametersRefs[parameter.id] = useRef();
     });
   }
+  /* eslint-enable react-hooks/rules-of-hooks */
 
   if (!statementByComponent && !isEditingStatement) {
     // We don't have a by component implementation, but we're not editing, so just display param labels
