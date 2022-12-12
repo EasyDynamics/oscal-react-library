@@ -51,12 +51,6 @@
     "react-scripts": "react-scripts",
     "build-all-and-watch": "concurrently \"npm run start\" \"cd example && npm run start\""
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
