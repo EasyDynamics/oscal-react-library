@@ -99,16 +99,15 @@ function getModifications(controlPartId, controlId, modList, modText) {
 }
 
 export default function OSCALControlModification(props) {
+  const [open, setOpen] = React.useState(false);
+
   // Finds the control-id within alters and matches it with a resolved control
   const alter = props.modificationAlters?.find(
     (element) => element["control-id"] === props.controlId
   );
-
   if (!alter) {
     return null;
   }
-
-  const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
     setOpen(!open);
