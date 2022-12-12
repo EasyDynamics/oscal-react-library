@@ -34,7 +34,7 @@ export default function OSCALComponentDefinition(props) {
         props.onResolutionComplete();
       }
     );
-  }, []);
+  }, [props.componentDefinition, props.parentUrl, props.onResolutionComplete]);
   // Throw error to OSCALLoader
   if (error) {
     return props.onError(error);
