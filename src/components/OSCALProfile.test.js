@@ -32,7 +32,7 @@ function testOSCALProfile(parentElementName, renderer) {
     act(() => {
       renderer();
     });
-    const result = await waitFor(() => screen.getByText("ac-1"), {
+    const result = await screen.findByText("ac-1", {
       timeout: 5000,
     });
     expect(result).toBeVisible();
@@ -40,8 +40,8 @@ function testOSCALProfile(parentElementName, renderer) {
 
   test(`${parentElementName} displays parameter constraints`, async () => {
     renderer();
-    const result = await waitFor(
-      () => screen.getAllByText("< organization-defined frequency >"),
+    const result = await screen.findAllByText(
+      "< organization-defined frequency >",
       { timeout: 5000 }
     );
     fireEvent.mouseOver(result[0]);
