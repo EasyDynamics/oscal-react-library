@@ -31,20 +31,9 @@
       "react/destructuring-assignment": [0],
       "react/jsx-props-no-spreading": "off",
       "prettier/prettier": "error",
+      "import/no-extraneous-dependencies": ["error", {"packageDir": ["./", "./example"]}],
       "import/no-anonymous-default-export": "off",
-      "no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_", "caughtErrorsIgnorePattern": "^_" }],
-
-      "import/no-extraneous-dependencies": "off",
-      "jest/valid-expect": "off",
-      "jest/no-identical-title": "off",
-      "react-hooks/exhaustive-deps": "off",
-      "react-hooks/rules-of-hooks": "off",
-      "testing-library/await-async-query": "off",
-      "testing-library/no-render-in-setup": "off",
-      "testing-library/no-unnecessary-act": "off",
-      "testing-library/no-node-access": "off",
-      "testing-library/no-wait-for-multiple-assertions": "off",
-      "testing-library/render-result-naming-convention": "off"
+      "no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_", "caughtErrorsIgnorePattern": "^_" }]
     },
     "overrides": [
         {
