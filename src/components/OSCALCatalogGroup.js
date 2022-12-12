@@ -3,7 +3,7 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import Paper from "@mui/material/Paper";
 import Collapse from "@mui/material/Collapse";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 import React from "react";
@@ -14,7 +14,7 @@ export const OSCALControlList = styled(List)`
   padding-right: 2em;
 `;
 
-const StyledListItem = styled(ListItem)(({ theme }) => ({
+const StyledListItem = styled(ListItemButton)(({ theme }) => ({
   borderRadius: "0.5em",
   marginBottom: "1em",
   backgroundColor: theme.palette.grey[50],
@@ -37,7 +37,7 @@ function CollapseableListItem(props) {
 
   return (
     <StyledListItemPaper>
-      <StyledListItem button onClick={handleClick}>
+      <StyledListItem onClick={handleClick}>
         <ListItemText primary={props.itemText} />
         {open ? <ExpandLess /> : <ExpandMore />}
       </StyledListItem>
