@@ -32,6 +32,7 @@
       "react/jsx-props-no-spreading": "off",
       "prettier/prettier": "error",
       "import/no-extraneous-dependencies": ["error", {"packageDir": ["./", "./example"]}],
+      "import/no-anonymous-default-export": "off",
       "no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_", "caughtErrorsIgnorePattern": "^_" }]
     },
     "overrides": [
