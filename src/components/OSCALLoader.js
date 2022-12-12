@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  useLayoutEffect,
+} from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { styled } from "@mui/material/styles";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -66,36 +72,44 @@ export default function OSCALLoader(props) {
   // an error and to ensure.
   const [reloadCount, setReloadCount] = useState(0);
   const oscalObjectUuid = useParams()?.id ?? "";
-  const buildOscalUrl = (uuid) =>
-    `${props.backendUrl}/${props.oscalObjectType.restPath}/${uuid}`;
-  const determineDefaultOscalUrl = () =>
-    (props.isRestMode ? null : getRequestedUrl()) ||
-    props.oscalObjectType.defaultUrl;
+  const buildOscalUrl = useCallback(
+    (uuid) => `${props.backendUrl}/${props.oscalObjectType.restPath}/${uuid}`,
+    [props.backendUrl, props.oscalObjectType]
+  );
+  const determineDefaultOscalUrl = useCallback(
+    () =>
+      (props.isRestMode ? null : getRequestedUrl()) ||
+      props.oscalObjectType.defaultUrl,
+    [props.isRestMode, props.oscalObjectType.defaultUrl]
+  );
 
   const [oscalUrl, setOscalUrl] = useState(determineDefaultOscalUrl());
 
-  const loadOscalData = (newOscalUrl) => {
-    if (!newOscalUrl) {
-      setIsLoaded(true);
-      return;
-    }
-    fetch(newOscalUrl)
-      .then((response) => {
-        if (!response.ok) throw new Error(response.status);
-        else return response.json();
-      }, handleError)
-      .then((result) => {
-        if (!unmounted.current) {
-          // TODO: Currently data is passed to components through modifying objects.
-          // This approach should be revisited.
-          // https://github.com/EasyDynamics/oscal-react-library/issues/297
-          /* eslint no-param-reassign: "error" */
-          result.oscalSource = JSON.stringify(result, null, "\t");
-          setOscalData(result);
-          setIsLoaded(true);
-        }
-      }, handleError);
-  };
+  const loadOscalData = useCallback(
+    (newOscalUrl) => {
+      if (!newOscalUrl) {
+        setIsLoaded(true);
+        return;
+      }
+      fetch(newOscalUrl)
+        .then((response) => {
+          if (!response.ok) throw new Error(response.status);
+          else return response.json();
+        }, handleError)
+        .then((result) => {
+          if (!unmounted.current) {
+            // TODO: Currently data is passed to components through modifying objects.
+            // This approach should be revisited.
+            // https://github.com/EasyDynamics/oscal-react-library/issues/297
+            /* eslint no-param-reassign: "error" */
+            result.oscalSource = JSON.stringify(result, null, "\t");
+            setOscalData(result);
+            setIsLoaded(true);
+          }
+        }, handleError);
+    },
+    [setIsLoaded, handleError]
+  );
 
   const handleFieldSave = (
     appendToLastFieldInPath,
@@ -143,27 +157,33 @@ export default function OSCALLoader(props) {
     setOscalUrl(value);
   };
 
-  const handleUuidChange = (objectUuid) => {
-    const newOscalUrl = buildOscalUrl(objectUuid);
-    setOscalUrl(newOscalUrl);
-    setIsLoaded(false);
-    setIsResolutionComplete(false);
-    loadOscalData(newOscalUrl);
-  };
-
-  const handleReload = (isForced) => {
-    // Only reload if we're done loading
-    if (isForced || (isLoaded && isResolutionComplete)) {
+  const handleUuidChange = useCallback(
+    (objectUuid) => {
+      const newOscalUrl = buildOscalUrl(objectUuid);
+      setOscalUrl(newOscalUrl);
       setIsLoaded(false);
       setIsResolutionComplete(false);
-      setReloadCount((current) => current + 1);
-      loadOscalData(oscalUrl);
-    }
-  };
+      loadOscalData(newOscalUrl);
+    },
+    [setOscalUrl, buildOscalUrl, loadOscalData]
+  );
+
+  const handleReload = useCallback(
+    (isForced) => {
+      // Only reload if we're done loading
+      if (isForced || (isLoaded && isResolutionComplete)) {
+        setIsLoaded(false);
+        setIsResolutionComplete(false);
+        setReloadCount((current) => current + 1);
+        loadOscalData(oscalUrl);
+      }
+    },
+    [isLoaded, isResolutionComplete, loadOscalData, oscalUrl]
+  );
 
   useEffect(() => {
     handleReload(!props.isRestMode);
-  }, [oscalUrl]);
+  }, [oscalUrl, handleReload, props.isRestMode]);
 
   const handleRestPut = (jsonString) => {
     restUtils.performRequest(
@@ -197,7 +217,7 @@ export default function OSCALLoader(props) {
     if (oscalObjectUuid) {
       handleUuidChange(oscalObjectUuid);
     }
-  }, [oscalObjectUuid]);
+  }, [oscalObjectUuid, handleUuidChange]);
 
   // Note: the empty deps array [] means
   // this useEffect will run once
@@ -231,7 +251,12 @@ export default function OSCALLoader(props) {
       setOscalUrl(determineDefaultOscalUrl());
       setHasDefaultUrl(true);
     }
-  }, [props.isRestMode]);
+  }, [
+    determineDefaultOscalUrl,
+    oscalObjectUuid,
+    props.isRestMode,
+    props.oscalObjectType.jsonRootName,
+  ]);
 
   let form;
   if (props.renderForm && hasDefaultUrl) {
