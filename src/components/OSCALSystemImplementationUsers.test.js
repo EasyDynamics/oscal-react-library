@@ -23,11 +23,6 @@ describe("OSCALSystemImplementationUsers", () => {
     expect(result).toBeVisible();
   });
 
-  test("shows name of a user listed", () => {
-    const result = screen.getByText("User 1");
-    expect(result).toBeVisible();
-  });
-
   test("shows name of a privilege listed", () => {
     const result = screen.getByText("privilege title");
     expect(result).toBeVisible();
