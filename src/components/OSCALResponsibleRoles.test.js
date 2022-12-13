@@ -7,16 +7,14 @@ import {
 } from "../test-data/CommonData";
 
 describe("OSCALResponsibleRoles", () => {
-  beforeEach(() => {
+  test(`shows component roles`, () => {
     render(
       <OSCALResponsibleRoles
         responsibleRoles={responsibleRolesTestData}
         parties={metadataTestData.parties}
       />
     );
-  });
 
-  test(`shows component roles`, () => {
     const roleTypeResult = screen.getByText("provider");
     expect(roleTypeResult).toBeVisible();
 
