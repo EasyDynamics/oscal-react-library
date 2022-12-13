@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  render,
-  screen,
-  fireEvent,
-  act,
-  waitFor,
-} from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { OSCALProfileLoader } from "./OSCALLoader";
 import OSCALProfile from "./OSCALProfile";
 import testOSCALBackMatter from "./OSCALBackMatter.test";
@@ -29,9 +23,7 @@ function profileRenderer() {
 function testOSCALProfile(parentElementName, renderer) {
   jest.setTimeout(6000);
   test(`${parentElementName} displays controls`, async () => {
-    act(() => {
-      renderer();
-    });
+    renderer();
     const result = await screen.findByText("ac-1", {
       timeout: 5000,
     });
