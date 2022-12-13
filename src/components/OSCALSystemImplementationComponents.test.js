@@ -5,26 +5,35 @@ import { componentsTestData } from "../test-data/SystemData";
 import OSCALSystemImplementationComponents from "./OSCALSystemImplementationComponents";
 
 describe("OSCALSystemImplementationComponents", () => {
-  beforeEach(() => {
+  test("shows Components section title", () => {
     render(
       <OSCALSystemImplementationComponents
         components={componentsTestData}
         parties={responsiblePartiesTestData}
       />
     );
-  });
-
-  test("shows Components section title", () => {
     const result = screen.getByText("Components");
     expect(result).toBeVisible();
   });
 
   test(`shows component title`, () => {
+    render(
+      <OSCALSystemImplementationComponents
+        components={componentsTestData}
+        parties={responsiblePartiesTestData}
+      />
+    );
     const result = screen.getByText("Example Component");
     expect(result).toBeVisible();
   });
 
   test(`shows component description`, async () => {
+    render(
+      <OSCALSystemImplementationComponents
+        components={componentsTestData}
+        parties={responsiblePartiesTestData}
+      />
+    );
     await userEvent.hover(screen.getByText("Example Component"));
     expect(
       await screen.findByText("An example component.")
@@ -32,18 +41,36 @@ describe("OSCALSystemImplementationComponents", () => {
   });
 
   test(`shows component status`, () => {
+    render(
+      <OSCALSystemImplementationComponents
+        components={componentsTestData}
+        parties={responsiblePartiesTestData}
+      />
+    );
     const component = screen.getByText("Example Component").closest("tr");
     const result = within(component).getByText("operational");
     expect(result).toBeVisible();
   });
 
   test(`shows component type`, () => {
+    render(
+      <OSCALSystemImplementationComponents
+        components={componentsTestData}
+        parties={responsiblePartiesTestData}
+      />
+    );
     const component = screen.getByText("Example Component").closest("tr");
     const result = within(component).getByText("software");
     expect(result).toBeVisible();
   });
 
   test(`shows component version`, () => {
+    render(
+      <OSCALSystemImplementationComponents
+        components={componentsTestData}
+        parties={responsiblePartiesTestData}
+      />
+    );
     const component = screen.getByText("Example Component").closest("tr");
     const propNameResult = within(component).getByText("version");
     expect(propNameResult).toBeVisible();
