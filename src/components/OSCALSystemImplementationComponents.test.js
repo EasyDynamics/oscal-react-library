@@ -47,8 +47,17 @@ describe("OSCALSystemImplementationComponents", () => {
         parties={responsiblePartiesTestData}
       />
     );
-    const component = screen.getByText("Example Component").closest("tr");
-    const result = within(component).getByText("operational");
+    // Grab example party row beneath heading row
+    const exampleResponsiblePartiesRow = screen.getAllByRole("row")[1];
+
+    const component = within(exampleResponsiblePartiesRow).getByText(
+      "Example Component"
+    );
+    expect(component).toBeVisible();
+
+    const result = within(exampleResponsiblePartiesRow).getByText(
+      "operational"
+    );
     expect(result).toBeVisible();
   });
 
@@ -59,8 +68,15 @@ describe("OSCALSystemImplementationComponents", () => {
         parties={responsiblePartiesTestData}
       />
     );
-    const component = screen.getByText("Example Component").closest("tr");
-    const result = within(component).getByText("software");
+    // Grab example party row beneath heading row
+    const exampleResponsiblePartiesRow = screen.getAllByRole("row")[1];
+
+    const component = within(exampleResponsiblePartiesRow).getByText(
+      "Example Component"
+    );
+    expect(component).toBeVisible();
+
+    const result = within(exampleResponsiblePartiesRow).getByText("software");
     expect(result).toBeVisible();
   });
 
@@ -71,10 +87,21 @@ describe("OSCALSystemImplementationComponents", () => {
         parties={responsiblePartiesTestData}
       />
     );
-    const component = screen.getByText("Example Component").closest("tr");
-    const propNameResult = within(component).getByText("version");
+    // Grab example party row beneath heading row
+    const exampleResponsiblePartiesRow = screen.getAllByRole("row")[1];
+
+    const component = within(exampleResponsiblePartiesRow).getByText(
+      "Example Component"
+    );
+    expect(component).toBeVisible();
+
+    const propNameResult = within(exampleResponsiblePartiesRow).getByText(
+      "version"
+    );
     expect(propNameResult).toBeVisible();
-    const propValueResult = within(component).getByText("1.1");
+    const propValueResult = within(exampleResponsiblePartiesRow).getByText(
+      "1.1"
+    );
     expect(propValueResult).toBeVisible();
   });
 });

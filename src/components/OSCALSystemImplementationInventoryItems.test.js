@@ -55,8 +55,18 @@ describe("OSCALSystemImplementationInventoryItems", () => {
 
   test(`shows implemented component type`, () => {
     setup();
-    const component = screen.getByText("Example Component").closest("tr");
-    const result = within(component).getByText("software");
-    expect(result).toBeVisible();
+
+    // Grab example party row beneath heading row
+    const exampleResponsiblePartiesRow = screen.getAllByRole("row")[1];
+
+    const component = within(exampleResponsiblePartiesRow).getByText(
+      "Example Component"
+    );
+    expect(component).toBeVisible();
+
+    const propNameResult = within(exampleResponsiblePartiesRow).getByText(
+      "software"
+    );
+    expect(propNameResult).toBeVisible();
   });
 });

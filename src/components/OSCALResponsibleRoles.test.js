@@ -15,12 +15,14 @@ describe("OSCALResponsibleRoles", () => {
       />
     );
 
-    const roleTypeResult = screen.getByText("provider");
-    expect(roleTypeResult).toBeVisible();
+    const responsibleRolesRow = screen.getByRole("row");
 
-    const rolePartyResult = within(roleTypeResult.closest("tr")).getByText(
+    const rowHeader = within(responsibleRolesRow).getByRole("rowheader");
+    expect(rowHeader).toHaveTextContent("provider");
+
+    const rowData = within(responsibleRolesRow).getByText(
       "Some group of people"
     );
-    expect(rolePartyResult).toBeVisible();
+    expect(rowData).toBeVisible();
   });
 });
