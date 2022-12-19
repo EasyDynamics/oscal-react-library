@@ -1,6 +1,5 @@
 import { React } from "react";
 import {
-  act,
   render,
   screen,
   waitFor,
@@ -89,15 +88,13 @@ describe("OSCALJsonEditor", () => {
     const container = await screen.findByTestId("container");
     const saveButton = within(container).getByTestId("save-button");
 
-    act(() => {
-      fireEvent.click(saveButton);
-    });
+    fireEvent.click(saveButton);
 
     await waitFor(() => {
       expect(mockEditorRef.getValue).toBeCalledTimes(1);
-      expect(handleSave).toBeCalledTimes(1);
-      expect(handleSave).lastReturnedWith(oscalData);
     });
+    expect(handleSave).toBeCalledTimes(1);
+    expect(handleSave).lastReturnedWith(oscalData);
   });
 
   it("should replace original value after clicking cancel", async () => {
@@ -117,15 +114,13 @@ describe("OSCALJsonEditor", () => {
     const container = await screen.findByTestId("container");
     const cancelButton = within(container).getByTestId("cancel-button");
 
-    act(() => {
-      fireEvent.click(cancelButton);
-    });
+    fireEvent.click(cancelButton);
 
     await waitFor(() => {
       expect(mockEditorRef.setValue).toBeCalledTimes(1);
-      expect(mockEditorRef.setValue).toHaveBeenLastCalledWith(
-        oscalData.oscalSource
-      );
     });
+    expect(mockEditorRef.setValue).toHaveBeenLastCalledWith(
+      oscalData.oscalSource
+    );
   });
 });
