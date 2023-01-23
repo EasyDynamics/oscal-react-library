@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  render,
-  screen,
-  fireEvent,
-  act,
-  waitFor,
-} from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import { OSCALProfileLoader } from "./OSCALLoader";
 import OSCALProfile from "./OSCALProfile";
 import testOSCALBackMatter from "./OSCALBackMatter.test";
@@ -32,7 +26,7 @@ function testOSCALProfile(parentElementName, renderer) {
     act(() => {
       renderer();
     });
-    const result = await waitFor(() => screen.getByText("ac-1"), {
+    const result = await screen.findByText("ac-1", {
       timeout: 5000,
     });
     expect(result).toBeVisible();
@@ -40,8 +34,8 @@ function testOSCALProfile(parentElementName, renderer) {
 
   test(`${parentElementName} displays parameter constraints`, async () => {
     renderer();
-    const result = await waitFor(
-      () => screen.getAllByText("< organization-defined frequency >"),
+    const result = await screen.findAllByText(
+      "< organization-defined frequency >",
       { timeout: 5000 }
     );
     fireEvent.mouseOver(result[0]);
