@@ -14,4 +14,5 @@ export const Default = Template.bind({});
 
 Default.args = {
   prose: "This is some text about guidance.",
+  id: "ac-1",
 };
