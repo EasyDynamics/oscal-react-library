@@ -1,0 +1,36 @@
+name: Adds all issues to the project board
+
+on:
+  issues:
+    types:
+      - opened
+
+env:
+  PROJECT_ORG: "EasyDynamics"
+  PROJECT_ID: "2"
+
+jobs:
+  add-to-project:
+    name: Add issue to project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login as the automation app
+        # This Action generates a token from the GitHub App and provides it as
+        # an output. It _does_ register that token as a secret so that it will be
+        # filtered from log output automatically
+        id: generate-token
+        # This maps to v1.7.0 https://github.com/tibdex/github-app-token/releases/tag/v1.7.0
+        uses: tibdex/github-app-token@021a2405c7f990db57f5eae5397423dcc554159c
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+          permissions: >-
+            {
+              "issues": "read",
+              "organization_projects": "write",
+              "metadata": "read"
+            }
+      - uses: actions/add-to-project@main
+        with:
+          project-url: https://github.com/orgs/${{ env.PROJECT_ORG }}/projects/${{ env.PROJECT_ID }}
+          github-token: ${{ steps.generate-token.outputs.token }}
