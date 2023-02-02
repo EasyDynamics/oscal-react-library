@@ -36,11 +36,8 @@ const testGroups = [
 ];
 
 describe("OSCALCatalogGroup", () => {
-  beforeEach(() => {
-    render(<OSCALCatalogGroups groups={testGroups} />);
-  });
-
   test("displays param legend", () => {
+    render(<OSCALCatalogGroups groups={testGroups} />);
     const placeholderBox = screen.getByLabelText("legend-placeholder-label");
     expect(placeholderBox).toBeVisible();
     const placeholderBoxLabel = screen.getByText("Placeholder");
@@ -53,6 +50,7 @@ describe("OSCALCatalogGroup", () => {
   });
 
   test("displays nested groups", () => {
+    render(<OSCALCatalogGroups groups={testGroups} />);
     const expand1 = screen.getByText("Access Control");
     fireEvent.click(expand1);
 
@@ -66,6 +64,7 @@ describe("OSCALCatalogGroup", () => {
   });
 
   test("displays sibling control group", () => {
+    render(<OSCALCatalogGroups groups={testGroups} />);
     const expand1 = screen.getByText("Sibling Title");
     fireEvent.click(expand1);
 

@@ -46,7 +46,8 @@ const StyledTreeView = styled(TreeView)`
   max-width: ${drawerWidth};
 `;
 
-function createTree(backendUrl, handleClose) {
+function DocumentTree(props) {
+  const { backendUrl, handleClose } = props;
   const [oscalObjects, setOscalObjects] = useState({});
 
   useEffect(() => {
@@ -58,7 +59,7 @@ function createTree(backendUrl, handleClose) {
         }))
       )
     );
-  }, []);
+  }, [backendUrl]);
 
   return (
     <StyledTreeView
@@ -113,7 +114,10 @@ export default function OSCALDrawerSelector(props) {
         </IconButton>
       </DrawerHeader>
       <Divider />
-      {createTree(props.backendUrl, props.handleClose)}
+      <DocumentTree
+        backendUrl={props.backendUrl}
+        handleClose={props.handleClose}
+      />
       <Divider />
     </StyledDrawer>
   );

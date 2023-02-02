@@ -77,7 +77,7 @@ export default function testOSCALBackMatter(parentElementName, renderer) {
     const button = screen.getByRole("button", {
       name: "PNG",
     });
-    expect(button.getAttribute("href"));
+    expect(button.getAttribute("href")).toBeTruthy();
   });
 
   test(`${parentElementName} renders "Unknown" media type extension`, async () => {
@@ -90,7 +90,7 @@ export default function testOSCALBackMatter(parentElementName, renderer) {
     const button = screen.getByRole("button", {
       name: "Unknown",
     });
-    expect(button.getAttribute("href"));
+    expect(button.getAttribute("href")).toBeTruthy();
   });
 }
 

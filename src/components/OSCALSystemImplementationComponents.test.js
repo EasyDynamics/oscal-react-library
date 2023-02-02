@@ -5,26 +5,35 @@ import { componentsTestData } from "../test-data/SystemData";
 import OSCALSystemImplementationComponents from "./OSCALSystemImplementationComponents";
 
 describe("OSCALSystemImplementationComponents", () => {
-  beforeEach(() => {
+  test("shows Components section title", () => {
     render(
       <OSCALSystemImplementationComponents
         components={componentsTestData}
         parties={responsiblePartiesTestData}
       />
     );
-  });
-
-  test("shows Components section title", () => {
     const result = screen.getByText("Components");
     expect(result).toBeVisible();
   });
 
   test(`shows component title`, () => {
+    render(
+      <OSCALSystemImplementationComponents
+        components={componentsTestData}
+        parties={responsiblePartiesTestData}
+      />
+    );
     const result = screen.getByText("Example Component");
     expect(result).toBeVisible();
   });
 
   test(`shows component description`, async () => {
+    render(
+      <OSCALSystemImplementationComponents
+        components={componentsTestData}
+        parties={responsiblePartiesTestData}
+      />
+    );
     await userEvent.hover(screen.getByText("Example Component"));
     expect(
       await screen.findByText("An example component.")
@@ -32,22 +41,67 @@ describe("OSCALSystemImplementationComponents", () => {
   });
 
   test(`shows component status`, () => {
-    const component = screen.getByText("Example Component").closest("tr");
-    const result = within(component).getByText("operational");
+    render(
+      <OSCALSystemImplementationComponents
+        components={componentsTestData}
+        parties={responsiblePartiesTestData}
+      />
+    );
+    // Grab example party row beneath heading row
+    const exampleResponsiblePartiesRow = screen.getAllByRole("row")[1];
+
+    const component = within(exampleResponsiblePartiesRow).getByText(
+      "Example Component"
+    );
+    expect(component).toBeVisible();
+
+    const result = within(exampleResponsiblePartiesRow).getByText(
+      "operational"
+    );
     expect(result).toBeVisible();
   });
 
   test(`shows component type`, () => {
-    const component = screen.getByText("Example Component").closest("tr");
-    const result = within(component).getByText("software");
+    render(
+      <OSCALSystemImplementationComponents
+        components={componentsTestData}
+        parties={responsiblePartiesTestData}
+      />
+    );
+    // Grab example party row beneath heading row
+    const exampleResponsiblePartiesRow = screen.getAllByRole("row")[1];
+
+    const component = within(exampleResponsiblePartiesRow).getByText(
+      "Example Component"
+    );
+    expect(component).toBeVisible();
+
+    const result = within(exampleResponsiblePartiesRow).getByText("software");
     expect(result).toBeVisible();
   });
 
   test(`shows component version`, () => {
-    const component = screen.getByText("Example Component").closest("tr");
-    const propNameResult = within(component).getByText("version");
+    render(
+      <OSCALSystemImplementationComponents
+        components={componentsTestData}
+        parties={responsiblePartiesTestData}
+      />
+    );
+    // Grab example party row beneath heading row
+    const exampleResponsiblePartiesRow = screen.getAllByRole("row")[1];
+
+    const component = within(exampleResponsiblePartiesRow).getByText(
+      "Example Component"
+    );
+    expect(component).toBeVisible();
+
+    const propNameResult = within(exampleResponsiblePartiesRow).getByText(
+      "version"
+    );
     expect(propNameResult).toBeVisible();
-    const propValueResult = within(component).getByText("1.1");
+    const propValueResult = within(exampleResponsiblePartiesRow).getByText(
+      "1.1"
+    );
     expect(propValueResult).toBeVisible();
   });
 });

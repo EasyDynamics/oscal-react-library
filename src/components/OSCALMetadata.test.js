@@ -4,26 +4,26 @@ import OSCALMetadata from "./OSCALMetadata";
 import { metadataTestData } from "../test-data/CommonData";
 
 describe("OSCALMetadata", () => {
-  beforeEach(() => {
-    render(<OSCALMetadata metadata={metadataTestData} />);
-  });
-
   test(`displays title`, () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
     const result = screen.getByRole("heading", { name: "Test Title" });
     expect(result).toBeVisible();
   });
 
   test(`displays version`, () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
     const result = screen.getByText("Revision 5");
     expect(result).toBeVisible();
   });
 
   test(`displays parties`, () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
     const result = screen.getByText("Some group of people");
     expect(result).toBeVisible();
   });
 
   test(`displays Contact button`, () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
     const button = screen.getByRole("button", {
       name: /contact/i,
     });
@@ -32,6 +32,7 @@ describe("OSCALMetadata", () => {
   });
 
   test(`displays email contact info`, () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
     const button = screen.getByRole("button", {
       name: /contact/i,
     });
@@ -45,6 +46,7 @@ describe("OSCALMetadata", () => {
   });
 
   test(`displays telephone mobile number info`, () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
     const button = screen.getByRole("button", {
       name: /contact/i,
     });
@@ -55,6 +57,7 @@ describe("OSCALMetadata", () => {
   });
 
   test(`displays telephone office number info`, () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
     const button = screen.getByRole("button", {
       name: /contact/i,
     });
@@ -66,6 +69,7 @@ describe("OSCALMetadata", () => {
   });
 
   test(`displays telephone home number info`, () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
     const button = screen.getByRole("button", {
       name: /contact/i,
     });
@@ -77,6 +81,7 @@ describe("OSCALMetadata", () => {
   });
 
   test(`displays unknown type telephone number info`, () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
     const button = screen.getByRole("button", {
       name: /contact/i,
     });
@@ -88,6 +93,7 @@ describe("OSCALMetadata", () => {
   });
 
   test(`displays work address info`, () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
     const button = screen.getByRole("button", {
       name: /contact/i,
     });
@@ -98,6 +104,7 @@ describe("OSCALMetadata", () => {
   });
 
   test(`displays home address info`, () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
     const button = screen.getByRole("button", {
       name: /contact/i,
     });
@@ -109,6 +116,7 @@ describe("OSCALMetadata", () => {
   });
 
   test(`displays unknown type address info`, () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
     const button = screen.getByRole("button", {
       name: /contact/i,
     });
