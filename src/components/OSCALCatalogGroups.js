@@ -7,11 +7,12 @@ import { styled } from "@mui/material/styles";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useEffect } from "react";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import { determineHashControlType } from "./oscal-utils/OSCALLinkUtils";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -19,16 +20,16 @@ export const OSCALControlList = styled(List)`
 `;
 
 function TabPanel(props) {
-  const { children, groupId, value, index, ...other } = props;
+  const { children, groupId, value, ...other } = props;
   return (
     <div
       role="tabpanel"
-      hidden={value !== index}
+      hidden={value !== groupId}
       id={`vertical-tabpanel-${groupId}`}
       aria-labelledby={`vertical-tabpanel-${groupId}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === groupId && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -60,16 +61,39 @@ function a11yProps(groupId) {
 }
 
 TabPanel.propTypes = {
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
+  value: PropTypes.string.isRequired,
 };
 
 export default function OSCALCatalogGroups(props) {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(props?.groups[0]?.id);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  useEffect(() => {
+    const { hash } = window.location;
+
+    // Find catalog group
+    const controlGroupingTab = determineHashControlType(hash)
+      ? hash.substring(1, 3)
+      : null;
+
+    // Determine control exists within catalog group
+    const catalogControl = props?.groups
+      ?.find((group) => group.id === controlGroupingTab)
+      ?.controls?.find((control) => control.id === hash?.substring(1));
+
+    if (catalogControl) {
+      // Confirm catalog tab group can be grabbed
+      const elementWithHash =
+        hash && document.getElementById(`vertical-tab-${controlGroupingTab}`);
+
+      if (elementWithHash) {
+        setValue(controlGroupingTab);
+      }
+    }
+  }, [window.location.hash]);
 
   return (
     <OSCALSection>
@@ -98,6 +122,7 @@ export default function OSCALCatalogGroups(props) {
                     key={group.title}
                     label={group.title}
                     {...a11yProps(group.id)}
+                    value={group.id}
                   />
                 ))}
               </ComponentTabs>

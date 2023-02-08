@@ -29,7 +29,10 @@ export default function OSCALAnchorLinkHeader(props) {
       {props.children}
       {hover && (
         // Navigate to a specified hash or use the child text
-        <Link to={{ hash: `#${props.value || editString(props.children)}` }}>
+        <Link
+          reloadDocument
+          to={`#${props.value || editString(props.children)}`}
+        >
           <Fade in={hover}>
             <LinkIcon
               sx={[

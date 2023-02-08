@@ -6,9 +6,10 @@ import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
-import React from "react";
+import React, { useEffect } from "react";
 import OSCALControl from "./OSCALControl";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import { determineHashControlType } from "./oscal-utils/OSCALLinkUtils";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -35,6 +36,27 @@ function CollapseableListItem(props) {
   const handleClick = () => {
     setOpen(!open);
   };
+
+  useEffect(() => {
+    const { hash } = window.location;
+
+    // Ensure hash exists and grab element associated
+    const elementWithHash = hash && document.getElementById(hash.substring(1));
+
+    // Locate the element with the provided hash and scroll to the item
+    if (elementWithHash) {
+      elementWithHash.scrollIntoView({ behavior: "smooth" });
+
+      // Find control state and open collapsable item
+      const controlHash = determineHashControlType(hash)
+        ? hash.substring(1)
+        : null;
+
+      if (props.itemText?.props?.value === controlHash) {
+        setOpen(true);
+      }
+    }
+  }, [window.location.hash]);
 
   return (
     <StyledListItemPaper>

@@ -8,6 +8,7 @@ import Grid from "@mui/material/Grid";
 import CodeIcon from "@mui/icons-material/Code";
 import { useParams } from "react-router-dom";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
+import { determineHashControlType } from "./oscal-utils/OSCALLinkUtils";
 import { BasicError, ErrorThrower } from "./ErrorHandling";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
@@ -161,40 +162,28 @@ export default function OSCALLoader(props) {
     }
   };
 
-  const determineHashControlType = (hash) =>
-    // NOTE: Control groupings will contain two letters, followed by a "-" and a positive integer
-    /^[a-z]*/.test(hash.substring(1, 3)) &&
-    hash.substring(3, 4) === "-" &&
-    hash.substring(4) > 0;
-  const scrollToElementWithHash = (hash, isControl) => {
+  const scrollToElementWithHash = (hash) => {
     // Ensure hash exists and grab element associated
     const elementWithHash = hash && document.getElementById(hash.substring(1));
 
     // Locate the element with the provided hash and scroll to the item
     if (elementWithHash) {
       elementWithHash.scrollIntoView({ behavior: "smooth" });
-      // If control is found, open collapsable item
-      if (isControl) {
-        elementWithHash.click();
-      }
     }
   };
 
   const handleHash = (hash) => {
-    // Ensure hash exists and determine if the element with the hash is a control grouping
+    // Ensure hash exists and determine if a control grouping tab is found
     const controlGroupingTab =
       hash && determineHashControlType(hash)
         ? document.getElementById(`vertical-tab-${hash.substring(1, 3)}`)
         : null;
-    let isControl = false;
 
-    // Tab grouping check
-    if (controlGroupingTab) {
-      isControl = true;
-      controlGroupingTab.click();
+    // Scroll to Element if not within a control grouping
+    // NOTE: Control found in control grouping tabs are handled in Catalog Groups
+    if (!controlGroupingTab) {
+      scrollToElementWithHash(hash);
     }
-
-    scrollToElementWithHash(hash, isControl);
   };
 
   useEffect(() => {

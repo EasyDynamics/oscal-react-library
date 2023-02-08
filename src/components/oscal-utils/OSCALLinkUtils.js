@@ -61,3 +61,17 @@ export function guessExtensionFromHref(url) {
   }
   return detectedExtension;
 }
+
+/**
+ * Determines if a hash contains a control.
+ * NOTE: Control groupings will contain two letters, followed by a "-" and a positive integer
+ *
+ * @param hash A given hash (# followed by letters, numbers, or "-"s)
+ */
+export function determineHashControlType(hash) {
+  return (
+    /^[a-z]*/.test(hash.substring(1, 3)) &&
+    hash.substring(3, 4) === "-" &&
+    hash.substring(4) > 0
+  );
+}
