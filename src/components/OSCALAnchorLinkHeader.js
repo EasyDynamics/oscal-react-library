@@ -42,6 +42,9 @@ export default function OSCALAnchorLinkHeader(props) {
                   color: theme.palette.grey[500],
                 }),
               ]}
+              aria-label={`${
+                props.value || editString(props.children)
+              } anchor link`}
             />
           </Fade>
         </Link>
