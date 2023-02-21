@@ -8,7 +8,7 @@ import Grid from "@mui/material/Grid";
 import CodeIcon from "@mui/icons-material/Code";
 import { useParams } from "react-router-dom";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
-import { determineHashControlType } from "./oscal-utils/OSCALLinkUtils";
+import { determineControlGroupFromHash } from "./oscal-utils/OSCALLinkUtils";
 import { BasicError, ErrorThrower } from "./ErrorHandling";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
@@ -174,14 +174,11 @@ export default function OSCALLoader(props) {
 
   const handleHash = (hash) => {
     // Ensure hash exists and determine if a control grouping tab is found
-    const controlGroupingTab =
-      hash && determineHashControlType(hash)
-        ? document.getElementById(`vertical-tab-${hash.substring(1, 3)}`)
-        : null;
+    const controlGroupingHash = determineControlGroupFromHash(hash);
 
     // Scroll to Element if not within a control grouping
     // NOTE: Control found in control grouping tabs are handled in Catalog Groups
-    if (!controlGroupingTab) {
+    if (!controlGroupingHash) {
       scrollToElementWithHash(hash);
     }
   };

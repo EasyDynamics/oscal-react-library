@@ -9,7 +9,7 @@ import { styled } from "@mui/material/styles";
 import React, { useEffect } from "react";
 import OSCALControl from "./OSCALControl";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
-import { determineHashControlType } from "./oscal-utils/OSCALLinkUtils";
+import { determineControlGroupFromHash } from "./oscal-utils/OSCALLinkUtils";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -32,28 +32,32 @@ const StyledControlDescriptionWrapper = styled("div")`
 
 function CollapseableListItem(props) {
   const [open, setOpen] = React.useState(false);
+  const [listItemOpened, setListItemOpened] = React.useState(false);
 
   const handleClick = () => {
     setOpen(!open);
   };
 
   useEffect(() => {
-    const { hash } = window.location;
+    console.log(props);
+    if (!listItemOpened) {
+      const { hash } = window.location;
+      // Ensure hash exists and grab element associated
+      const controlHash = hash?.substring(1);
+      const controlGroupingHash = determineControlGroupFromHash(controlHash);
+      // Locate the element with the provided hash and scroll to the item
+      if (controlGroupingHash) {
+        // Find control list state and open collapsable item
+        if (controlHash.includes(props.itemText?.props?.value)) {
+          setOpen(true);
+        }
+        // Wait for list item to be found, accomidate for collapsable list transition
+        // setTimeout(findListItemElement(controlHash), 5000);
 
-    // Ensure hash exists and grab element associated
-    const elementWithHash = hash && document.getElementById(hash.substring(1));
-
-    // Locate the element with the provided hash and scroll to the item
-    if (elementWithHash) {
-      elementWithHash.scrollIntoView({ behavior: "smooth" });
-
-      // Find control state and open collapsable item
-      const controlHash = determineHashControlType(hash)
-        ? hash.substring(1)
-        : null;
-
-      if (props.itemText?.props?.value === controlHash) {
-        setOpen(true);
+        const elementWithHash = document.getElementById(controlHash);
+        if (elementWithHash) {
+          elementWithHash.scrollIntoView({ behavior: "smooth" });
+        }
       }
     }
   }, [window.location.hash]);
@@ -64,9 +68,24 @@ function CollapseableListItem(props) {
         <ListItemText primary={props.itemText} />
         {open ? <ExpandLess /> : <ExpandMore />}
       </StyledListItem>
-      <Collapse in={open} timeout="auto" unmountOnExit>
+      <Collapse
+        in={open}
+        timeout="auto"
+        onEntered={() => {
+          setListItemOpened(true);
+          console.log("opened");
+        }}
+        unmountOnExit
+      >
         <StyledControlDescriptionWrapper>
           {props.children}
+          <OSCALControl
+            showInList
+            control={props.control}
+            childLevel={0}
+            key={props.control?.id}
+            listItemOpened={listItemOpened}
+          />
         </StyledControlDescriptionWrapper>
       </Collapse>
     </StyledListItemPaper>
@@ -83,14 +102,8 @@ function OSCALCatalogControlListItem(props) {
           {`${control.id.toUpperCase()} ${control.title}`}
         </OSCALAnchorLinkHeader>
       }
-    >
-      <OSCALControl
-        showInList
-        control={control}
-        childLevel={0}
-        key={control.id}
-      />
-    </CollapseableListItem>
+      control={control}
+    />
   );
 }
 

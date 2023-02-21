@@ -12,7 +12,7 @@ import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
-import { determineHashControlType } from "./oscal-utils/OSCALLinkUtils";
+import { determineControlGroupFromHash } from "./oscal-utils/OSCALLinkUtils";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -74,23 +74,25 @@ export default function OSCALCatalogGroups(props) {
   useEffect(() => {
     const { hash } = window.location;
 
-    // Find catalog group
-    const controlGroupingTab = determineHashControlType(hash)
-      ? hash.substring(1, 3)
-      : null;
-
-    // Determine control exists within catalog group
-    const catalogControl = props?.groups
-      ?.find((group) => group.id === controlGroupingTab)
-      ?.controls?.find((control) => control.id === hash?.substring(1));
+    // Find catalog group hash
+    const controlGroupingHash = determineControlGroupFromHash(hash);
+    // Determine higher-level control or sub-control exists within catalog group
+    const catalogControl =
+      props?.groups
+        ?.find((group) => group.id === controlGroupingHash)
+        ?.controls?.find((control) => control.id === hash?.substring(1)) ||
+      props?.groups
+        ?.find((group) => group.id === controlGroupingHash)
+        ?.controls?.find((control) => hash?.substring(1)?.includes(control.id))
+        ?.controls?.find((subcontrol) => subcontrol.id === hash?.substring(1));
 
     if (catalogControl) {
       // Confirm catalog tab group can be grabbed
       const elementWithHash =
-        hash && document.getElementById(`vertical-tab-${controlGroupingTab}`);
+        hash && document.getElementById(`vertical-tab-${controlGroupingHash}`);
 
       if (elementWithHash) {
-        setValue(controlGroupingTab);
+        setValue(controlGroupingHash);
       }
     }
   }, [window.location.hash]);

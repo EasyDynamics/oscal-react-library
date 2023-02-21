@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -74,6 +74,17 @@ function ControlsList(props) {
 }
 
 export default function OSCALControl(props) {
+  useEffect(() => {
+    if (props.listItemOpened) {
+      const { hash } = window.location;
+      // Smooth scroll to control if element is found
+      const elementWithHash = document.getElementById(hash?.substring(1));
+      if (elementWithHash) {
+        elementWithHash.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [props.listItemOpened]);
+
   if (
     !props.control ||
     (props.includeControlIds &&

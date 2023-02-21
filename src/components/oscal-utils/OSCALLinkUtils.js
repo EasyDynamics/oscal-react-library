@@ -63,15 +63,20 @@ export function guessExtensionFromHref(url) {
 }
 
 /**
- * Determines if a hash contains a control.
+ * Finds if a hash contains a control group.
  * NOTE: Control groupings will contain two letters, followed by a "-" and a positive integer
  *
- * @param hash A given hash (# followed by letters, numbers, or "-"s)
+ * @param hash A given hash.
+ * @returns A string providing the control group.
  */
-export function determineHashControlType(hash) {
-  return (
-    /^[a-z]*/.test(hash.substring(1, 3)) &&
-    hash.substring(3, 4) === "-" &&
-    hash.substring(4) > 0
+export function determineControlGroupFromHash(hash) {
+  // Create array from all tab control grouping elements
+  const controlGroupList = Array.from(
+    document.querySelectorAll('[id^="vertical-tab-"]')
   );
+  // Grab group id if found
+  return controlGroupList
+    ?.find((group) => hash.includes(group.id.split("vertical-tab-").pop()))
+    ?.id?.split("vertical-tab-")
+    ?.pop();
 }
