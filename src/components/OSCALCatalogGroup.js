@@ -6,7 +6,7 @@ import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import OSCALControl from "./OSCALControl";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import { determineControlGroupFromHash } from "./oscal-utils/OSCALLinkUtils";
@@ -38,8 +38,7 @@ function CollapseableListItem(props) {
     setOpen(!open);
   };
 
-  useEffect(() => {
-    console.log(props);
+  const handleHash = useCallback(() => {
     if (!listItemOpened) {
       const { hash } = window.location;
       // Ensure hash exists and grab element associated
@@ -51,16 +50,17 @@ function CollapseableListItem(props) {
         if (controlHash.includes(props.itemText?.props?.value)) {
           setOpen(true);
         }
-        // Wait for list item to be found, accomidate for collapsable list transition
-        // setTimeout(findListItemElement(controlHash), 5000);
-
         const elementWithHash = document.getElementById(controlHash);
         if (elementWithHash) {
           elementWithHash.scrollIntoView({ behavior: "smooth" });
         }
       }
     }
-  }, [window.location.hash]);
+  }, [window.location.hash, listItemOpened, props.itemText?.props?.value]);
+
+  useEffect(() => {
+    handleHash();
+  }, [handleHash]);
 
   return (
     <StyledListItemPaper>
@@ -71,10 +71,7 @@ function CollapseableListItem(props) {
       <Collapse
         in={open}
         timeout="auto"
-        onEntered={() => {
-          setListItemOpened(true);
-          console.log("opened");
-        }}
+        onEntered={() => setListItemOpened(true)}
         unmountOnExit
       >
         <StyledControlDescriptionWrapper>

@@ -7,7 +7,7 @@ import { styled } from "@mui/material/styles";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import PropTypes from "prop-types";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
@@ -71,7 +71,7 @@ export default function OSCALCatalogGroups(props) {
     setValue(newValue);
   };
 
-  useEffect(() => {
+  const handleHash = useCallback(() => {
     const { hash } = window.location;
 
     // Find catalog group hash
@@ -96,6 +96,10 @@ export default function OSCALCatalogGroups(props) {
       }
     }
   }, [window.location.hash]);
+
+  useEffect(() => {
+    handleHash();
+  }, [handleHash]);
 
   return (
     <OSCALSection>

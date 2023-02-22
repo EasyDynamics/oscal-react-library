@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  useLayoutEffect,
+} from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { styled } from "@mui/material/styles";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -255,10 +261,14 @@ export default function OSCALLoader(props) {
     }
   }, [props.isRestMode]);
 
+  const handleUrlHashChange = useCallback(() => {
+    handleHash(window.location.hash);
+  }, [window.location.hash, handleHash]);
+
   // Handle anchor link change in window url
   useEffect(() => {
-    handleHash(window.location.hash);
-  }, [window.location.hash]);
+    handleUrlHashChange();
+  }, [handleUrlHashChange]);
 
   let form;
   if (props.renderForm && hasDefaultUrl) {
