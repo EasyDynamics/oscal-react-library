@@ -9,7 +9,7 @@ import { styled } from "@mui/material/styles";
 import React, { useCallback, useEffect } from "react";
 import OSCALControl from "./OSCALControl";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
-import { determineControlGroupFromHash } from "./oscal-utils/OSCALLinkUtils";
+import { determineControlGroupFromFragment } from "./oscal-utils/OSCALLinkUtils";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -38,29 +38,30 @@ function CollapseableListItem(props) {
     setOpen(!open);
   };
 
-  const handleHash = useCallback(() => {
+  const handleFragment = useCallback(() => {
     if (!listItemOpened) {
       const { hash } = window.location;
-      // Ensure hash exists and grab element associated
-      const controlHash = hash?.substring(1);
-      const controlGroupingHash = determineControlGroupFromHash(controlHash);
-      // Locate the element with the provided hash and scroll to the item
-      if (controlGroupingHash) {
+      // Ensure fragment exists and grab element associated
+      const controlFragment = hash?.substring(1);
+      const controlGroupingFragment =
+        determineControlGroupFromFragment(controlFragment);
+      // Locate the element with the provided fragment and scroll to the item
+      if (controlGroupingFragment) {
         // Find control list state and open collapsable item
-        if (controlHash.includes(props.itemText?.props?.value)) {
+        if (controlFragment.includes(props.itemText?.props?.value)) {
           setOpen(true);
         }
-        const elementWithHash = document.getElementById(controlHash);
-        if (elementWithHash) {
-          elementWithHash.scrollIntoView({ behavior: "smooth" });
+        const elementWithFragment = document.getElementById(controlFragment);
+        if (elementWithFragment) {
+          elementWithFragment.scrollIntoView({ behavior: "smooth" });
         }
       }
     }
   }, [window.location.hash, listItemOpened, props.itemText?.props?.value]);
 
   useEffect(() => {
-    handleHash();
-  }, [handleHash]);
+    handleFragment();
+  }, [handleFragment]);
 
   return (
     <StyledListItemPaper>

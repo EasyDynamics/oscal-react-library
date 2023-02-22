@@ -14,7 +14,7 @@ import Grid from "@mui/material/Grid";
 import CodeIcon from "@mui/icons-material/Code";
 import { useParams } from "react-router-dom";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
-import { determineControlGroupFromHash } from "./oscal-utils/OSCALLinkUtils";
+import { determineControlGroupFromFragment } from "./oscal-utils/OSCALLinkUtils";
 import { BasicError, ErrorThrower } from "./ErrorHandling";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
@@ -168,24 +168,25 @@ export default function OSCALLoader(props) {
     }
   };
 
-  const scrollToElementWithHash = (hash) => {
-    // Ensure hash exists and grab element associated
-    const elementWithHash = hash && document.getElementById(hash.substring(1));
+  const scrollToElementWithFragment = (frag) => {
+    // Ensure fragment exists and grab element associated
+    const elementWithFragment =
+      frag && document.getElementById(frag.substring(1));
 
-    // Locate the element with the provided hash and scroll to the item
-    if (elementWithHash) {
-      elementWithHash.scrollIntoView({ behavior: "smooth" });
+    // Locate the element with the provided fragment and scroll to the item
+    if (elementWithFragment) {
+      elementWithFragment.scrollIntoView({ behavior: "smooth" });
     }
   };
 
-  const handleHash = (hash) => {
-    // Ensure hash exists and determine if a control grouping tab is found
-    const controlGroupingHash = determineControlGroupFromHash(hash);
+  const handleFragment = (frag) => {
+    // Ensure fragment exists and determine if a control grouping tab is found
+    const controlGroupingFragment = determineControlGroupFromFragment(frag);
 
     // Scroll to Element if not within a control grouping
     // NOTE: Control found in control grouping tabs are handled in Catalog Groups
-    if (!controlGroupingHash) {
-      scrollToElementWithHash(hash);
+    if (!controlGroupingFragment) {
+      scrollToElementWithFragment(frag);
     }
   };
 
@@ -261,14 +262,14 @@ export default function OSCALLoader(props) {
     }
   }, [props.isRestMode]);
 
-  const handleUrlHashChange = useCallback(() => {
-    handleHash(window.location.hash);
-  }, [window.location.hash, handleHash]);
+  const handleUrlFragmentChange = useCallback(() => {
+    handleFragment(window.location.hash);
+  }, [window.location.hash, handleFragment]);
 
   // Handle anchor link change in window url
   useEffect(() => {
-    handleUrlHashChange();
-  }, [handleUrlHashChange]);
+    handleUrlFragmentChange();
+  }, [handleUrlFragmentChange]);
 
   let form;
   if (props.renderForm && hasDefaultUrl) {
@@ -295,7 +296,7 @@ export default function OSCALLoader(props) {
     );
   } else if (oscalUrl) {
     if (window.location.hash) {
-      handleHash(window.location.hash);
+      handleFragment(window.location.hash);
     }
     result = props.isRestMode ? (
       <Grid container pt={3}>

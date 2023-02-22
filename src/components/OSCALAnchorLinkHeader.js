@@ -28,7 +28,7 @@ export default function OSCALAnchorLinkHeader(props) {
     >
       {props.children}
       {hover && (
-        // Navigate to a specified hash or use the child text
+        // Navigate to a specified fragment or use the child text
         <Link
           reloadDocument
           to={`#${props.value || editString(props.children)}`}

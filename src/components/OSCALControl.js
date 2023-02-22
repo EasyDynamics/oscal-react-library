@@ -78,9 +78,9 @@ export default function OSCALControl(props) {
     if (props.listItemOpened) {
       const { hash } = window.location;
       // Smooth scroll to control if element is found
-      const elementWithHash = document.getElementById(hash?.substring(1));
-      if (elementWithHash) {
-        elementWithHash.scrollIntoView({ behavior: "smooth" });
+      const elementWithFragment = document.getElementById(hash?.substring(1));
+      if (elementWithFragment) {
+        elementWithFragment.scrollIntoView({ behavior: "smooth" });
       }
     }
   }, [props.listItemOpened]);

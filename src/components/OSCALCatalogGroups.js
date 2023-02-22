@@ -12,7 +12,7 @@ import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
-import { determineControlGroupFromHash } from "./oscal-utils/OSCALLinkUtils";
+import { determineControlGroupFromFragment } from "./oscal-utils/OSCALLinkUtils";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -71,35 +71,36 @@ export default function OSCALCatalogGroups(props) {
     setValue(newValue);
   };
 
-  const handleHash = useCallback(() => {
+  const handleFragment = useCallback(() => {
     const { hash } = window.location;
 
-    // Find catalog group hash
-    const controlGroupingHash = determineControlGroupFromHash(hash);
+    // Find catalog group fragment
+    const controlGroupingFragment = determineControlGroupFromFragment(hash);
     // Determine higher-level control or sub-control exists within catalog group
     const catalogControl =
       props?.groups
-        ?.find((group) => group.id === controlGroupingHash)
+        ?.find((group) => group.id === controlGroupingFragment)
         ?.controls?.find((control) => control.id === hash?.substring(1)) ||
       props?.groups
-        ?.find((group) => group.id === controlGroupingHash)
+        ?.find((group) => group.id === controlGroupingFragment)
         ?.controls?.find((control) => hash?.substring(1)?.includes(control.id))
         ?.controls?.find((subcontrol) => subcontrol.id === hash?.substring(1));
 
     if (catalogControl) {
       // Confirm catalog tab group can be grabbed
-      const elementWithHash =
-        hash && document.getElementById(`vertical-tab-${controlGroupingHash}`);
+      const elementWithFragment =
+        hash &&
+        document.getElementById(`vertical-tab-${controlGroupingFragment}`);
 
-      if (elementWithHash) {
-        setValue(controlGroupingHash);
+      if (elementWithFragment) {
+        setValue(controlGroupingFragment);
       }
     }
-  }, [window.location.hash]);
+  }, [window.location.hash, props?.groups]);
 
   useEffect(() => {
-    handleHash();
-  }, [handleHash]);
+    handleFragment();
+  }, [handleFragment]);
 
   return (
     <OSCALSection>
