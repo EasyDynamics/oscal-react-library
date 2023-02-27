@@ -152,6 +152,7 @@ function OSCALMetadataPartyContactTypeHeader(props) {
 }
 
 export function OSCALMetadataPartyDialog(props) {
+  console.log(props.partyRolesText);
   const PartyInfoTypes = {
     address: "address",
     telephone: "telephone",
@@ -197,7 +198,13 @@ export function OSCALMetadataPartyDialog(props) {
           {props.avatar}
           <Stack direction="column">
             {props.party.name}
-            <Typography variant="body2">{props.partyRolesText}</Typography>
+            {props.partyRolesText.map((role) => (
+              <Typography>
+                {`${role.title} ${
+                  role.description ? ` - ${role.description}` : ""
+                }`}
+              </Typography>
+            ))}
           </Stack>
         </Stack>
       </DialogTitle>
@@ -300,7 +307,7 @@ export function OSCALMetadataParty(props) {
       <CardHeader
         avatar={avatar}
         title={props.party.name}
-        subheader={props.partyRolesText}
+        subheader={props.partyRolesText.map((role) => role.title).join(", ")}
       />
       <CardActions>
         <Button
@@ -330,7 +337,7 @@ export default function OSCALMetadata(props) {
     return null;
   }
   const getRoleLabel = (roleId) =>
-    props.metadata.roles.find((role) => role.id === roleId)?.title;
+    props.metadata.roles.find((role) => role.id === roleId);
 
   const getPartyRolesText = (party) =>
     props.metadata["responsible-parties"]
@@ -339,9 +346,7 @@ export default function OSCALMetadata(props) {
       )
       .map((item) => item["role-id"])
       .map(getRoleLabel)
-      // Remove empty/falsey items from the list
-      .filter((item) => item)
-      .join(", ");
+      .filter((item) => item);
 
   return (
     <Grid container>
