@@ -324,7 +324,7 @@ export function OSCALMetadataParty(props) {
           aria-label={`${props.party.name} contact button`}
         >
           <ContactPageIcon />
-          Contact
+          Details
         </Button>
         <OSCALMetadataPartyDialog
           open={open}
