@@ -198,7 +198,7 @@ export function OSCALMetadataPartyDialog(props) {
           {props.avatar}
           <Stack direction="column">
             {props.party.name}
-            {props.partyRolesText.map((role) => (
+            {props.partyRolesText?.map((role) => (
               <StyledTooltip
                 title={
                   role.description ? (
