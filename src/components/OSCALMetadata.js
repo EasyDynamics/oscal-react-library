@@ -26,6 +26,7 @@ import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import React from "react";
 import OSCALEditableTextField from "./OSCALEditableTextField";
+import StyledTooltip from "./OSCALStyledTooltip";
 
 export const OSCALMetadataPartiesHeader = styled(ListSubheader)(
   ({ theme }) => `
@@ -152,7 +153,6 @@ function OSCALMetadataPartyContactTypeHeader(props) {
 }
 
 export function OSCALMetadataPartyDialog(props) {
-  console.log(props.partyRolesText);
   const PartyInfoTypes = {
     address: "address",
     telephone: "telephone",
@@ -199,11 +199,18 @@ export function OSCALMetadataPartyDialog(props) {
           <Stack direction="column">
             {props.party.name}
             {props.partyRolesText.map((role) => (
-              <Typography>
-                {`${role.title} ${
-                  role.description ? ` - ${role.description}` : ""
-                }`}
-              </Typography>
+              <StyledTooltip
+                title={
+                  role.description ? (
+                    <Typography> {role.description} </Typography>
+                  ) : (
+                    ""
+                  )
+                }
+                key={role.title}
+              >
+                <Typography> {role.title} </Typography>
+              </StyledTooltip>
             ))}
           </Stack>
         </Stack>
@@ -307,7 +314,7 @@ export function OSCALMetadataParty(props) {
       <CardHeader
         avatar={avatar}
         title={props.party.name}
-        subheader={props.partyRolesText.map((role) => role.title).join(", ")}
+        subheader={props.partyRolesText?.map((role) => role.title).join(", ")}
       />
       <CardActions>
         <Button
