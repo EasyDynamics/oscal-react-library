@@ -440,7 +440,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     .map((segment, index) => {
       if (index % 2 === 0) {
         // This is not a parameter placeholder
-        return getProseSegment(segment, index.toString());
+        return getTextSegment(segment, index.toString());
       }
       if (isEditingStatement) {
         // We're currently editing this statement, so build param input
