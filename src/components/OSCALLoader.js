@@ -168,10 +168,10 @@ export default function OSCALLoader(props) {
     }
   };
 
-  const scrollToElementWithFragment = (frag) => {
+  const scrollToElementWithFragment = (fragment) => {
     // Ensure fragment exists and grab element associated
     const elementWithFragment =
-      frag && document.getElementById(frag.substring(1));
+      fragment && document.getElementById(fragment.substring(1));
 
     // Locate the element with the provided fragment and scroll to the item
     if (elementWithFragment) {
@@ -179,14 +179,14 @@ export default function OSCALLoader(props) {
     }
   };
 
-  const handleFragment = (frag) => {
+  const handleFragment = (fragment) => {
     // Ensure fragment exists and determine if a control grouping tab is found
-    const controlGroupingFragment = determineControlGroupFromFragment(frag);
+    const controlGroupingFragment = determineControlGroupFromFragment(fragment);
 
     // Scroll to Element if not within a control grouping
     // NOTE: Control found in control grouping tabs are handled in Catalog Groups
     if (!controlGroupingFragment) {
-      scrollToElementWithFragment(frag);
+      scrollToElementWithFragment(fragment);
     }
   };
 

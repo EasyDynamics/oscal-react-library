@@ -63,20 +63,19 @@ export function guessExtensionFromHref(url) {
 }
 
 /**
- * Finds if a fragment contains a control group.
- * NOTE: Control groupings will contain two letters, followed by a "-" and a positive integer
+ * Finds if a fragment contains a control group by searching the control tabs.
  *
- * @param frag A given fragment.
- * @returns A string providing the control group.
+ * @param fragment A given fragment.
+ * @returns A string providing the control group id.
  */
-export function determineControlGroupFromFragment(frag) {
+export function determineControlGroupFromFragment(fragment) {
   // Create array from all tab control grouping elements
   const controlGroupList = Array.from(
     document.querySelectorAll('[id^="vertical-tab-"]')
   );
   // Grab group id if found
   return controlGroupList
-    ?.find((group) => frag.includes(group.id.split("vertical-tab-").pop()))
+    ?.find((group) => fragment.includes(group.id.split("vertical-tab-").pop()))
     ?.id?.split("vertical-tab-")
     ?.pop();
 }
