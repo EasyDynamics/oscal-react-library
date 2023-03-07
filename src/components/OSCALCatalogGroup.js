@@ -8,6 +8,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 import React from "react";
 import OSCALControl from "./OSCALControl";
+import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -52,11 +53,12 @@ function CollapseableListItem(props) {
 
 function OSCALCatalogControlListItem(props) {
   const { control } = props;
-
-  return (
-    <CollapseableListItem
-      itemText={`${control.id.toUpperCase()} ${control.title}`}
-    >
+  // Determine if control is withdrawn
+  const withdrawn = isWithdrawn(control);
+  const itemText = `${control.id.toUpperCase()} ${control.title}`;
+  // Make collapsible item when not a withdrawn control
+  return !withdrawn ? (
+    <CollapseableListItem itemText={itemText}>
       <OSCALControl
         showInList
         control={control}
@@ -64,6 +66,16 @@ function OSCALCatalogControlListItem(props) {
         key={control.id}
       />
     </CollapseableListItem>
+  ) : (
+    <StyledListItemPaper>
+      <StyledListItem>
+        <ListItemText
+          primary={itemText}
+          withdrawn={withdrawn}
+          style={{ textDecoration: "line-through", color: "#d4d4d4" }}
+        />
+      </StyledListItem>
+    </StyledListItemPaper>
   );
 }
 
