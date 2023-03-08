@@ -334,15 +334,41 @@ export function OSCALMetadataParty(props) {
 }
 
 export function OSCALMetadataRole(props) {
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    if (props.role.description) {
+      setOpen(true);
+    }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <Card>
       <CardHeader
         title={props.role.title}
         avatar={<MetadataAvatar text={props.role.title.toUpperCase()} />}
-        subheader={
-          <OSCALMarkupMultiLine>{props.role.description}</OSCALMarkupMultiLine>
-        }
+        onClick={handleOpen}
       />
+      <CardActions>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          scroll="paper"
+          maxWidth="md"
+          fullWidth
+        >
+          <DialogTitle>{props.role.title}</DialogTitle>
+          <DialogContent dividers>
+            <OSCALMarkupMultiLine>
+              {props.role.description}
+            </OSCALMarkupMultiLine>
+          </DialogContent>
+        </Dialog>
+      </CardActions>
     </Card>
   );
 }

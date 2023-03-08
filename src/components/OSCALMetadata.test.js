@@ -140,8 +140,11 @@ describe("OSCALMetadata", () => {
   test(`displays role description`, () => {
     render(<OSCALMetadata metadata={metadataTestData} />);
 
-    const role1 = screen.getByText("Creates documents");
+    const role1 = screen.getByText("Document creator");
+    role1.click();
 
-    expect(role1).toBeVisible();
+    const description = screen.getByText("Creates documents");
+
+    expect(description).toBeVisible();
   });
 });
