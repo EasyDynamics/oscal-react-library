@@ -126,4 +126,22 @@ describe("OSCALMetadata", () => {
     expect(screen.getByText("Address")).toBeVisible();
     expect(screen.getByText(/2222 stcity, state 0000us/i)).toBeVisible();
   });
+
+  test(`displays role title`, () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
+
+    const role1 = screen.getByText("Document creator");
+    const role2 = screen.getByText("Contact");
+
+    expect(role1).toBeVisible();
+    expect(role2).toBeVisible();
+  });
+
+  test(`displays role description`, () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
+
+    const role1 = screen.getByText("Creates documents");
+
+    expect(role1).toBeVisible();
+  });
 });
