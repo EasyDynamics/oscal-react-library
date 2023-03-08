@@ -401,18 +401,6 @@ export default function OSCALMetadata(props) {
       <Grid container spacing={1}>
         <Grid component={Paper} item xs={8}>
           <Grid item xs={12}>
-            <OSCALMetadataPartiesHeader>Roles</OSCALMetadataPartiesHeader>
-          </Grid>
-          <OSCALMetadataPartiesCardHolder container spacing={1} wrap="wrap">
-            {props.metadata.roles?.map((role) => (
-              <Grid item xs={12} md={4} key={role.id}>
-                <OSCALMetadataRole key={role.id} role={role} />
-              </Grid>
-            ))}
-          </OSCALMetadataPartiesCardHolder>
-        </Grid>
-        <Grid component={Paper} item xs={8}>
-          <Grid item xs={12}>
             <OSCALMetadataPartiesHeader>Parties</OSCALMetadataPartiesHeader>
           </Grid>
           <OSCALMetadataPartiesCardHolder container spacing={1} wrap="wrap">
@@ -427,7 +415,6 @@ export default function OSCALMetadata(props) {
             ))}
           </OSCALMetadataPartiesCardHolder>
         </Grid>
-
         <Grid item md={3} xs={12}>
           <Grid item xs={12}>
             <OSCALMetadataAdditional>
@@ -496,6 +483,18 @@ export default function OSCALMetadata(props) {
               </Grid>
             </OSCALMetadataAdditional>
           </Grid>
+        </Grid>
+        <Grid component={Paper} item xs={8}>
+          <Grid item xs={12}>
+            <OSCALMetadataPartiesHeader>Roles</OSCALMetadataPartiesHeader>
+          </Grid>
+          <OSCALMetadataPartiesCardHolder container spacing={1} wrap="wrap">
+            {props.metadata.roles?.map((role) => (
+              <Grid item xs={12} md={4} key={role.id}>
+                <OSCALMetadataRole key={role.id} role={role} />
+              </Grid>
+            ))}
+          </OSCALMetadataPartiesCardHolder>
         </Grid>
       </Grid>
     </Grid>
