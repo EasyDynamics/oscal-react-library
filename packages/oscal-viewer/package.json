@@ -1,0 +1,50 @@
+{
+  "name": "@easydynamics/oscal-viewer",
+  "homepage": ".",
+  "version": "0.5.2-0",
+  "private": "true",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EasyDynamics/oscal-react-library.git",
+    "directory": "packages/oscal-viewer"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "@easydynamics/oscal-react-library": "*",
+    "@mui/icons-material": "^5.11.11",
+    "@mui/material": "^5.11.12",
+    "history": "^5.3.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-ga4": "^1.4.1",
+    "react-router-dom": "^6.8.2",
+    "react-scripts": "^5.0.1",
+    "web-vitals": "^3.1.1"
+  },
+  "devDependencies": {
+    "@babel/plugin-syntax-object-rest-spread": "^7.8.3",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^12.1.5",
+    "@testing-library/user-event": "^14.4.3"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "files": [
+    "build"
+  ],
+  "jest": {
+    "transformIgnorePatterns": [
+      "(?!(/node_modules/(react-markdown|vfile|vfile-message|unist-.*|unified|bail|is-plain-obj|trough|remark-.*|mdast-util-.*|micromark.*|decode-named-character-reference|character-entities|property-information|hast-util-whitespace|space-separated-tokens|comma-separated-tokens|pretty-bytes|trim-lines)/))(/node_modules/.+.(js|jsx|mjs|cjs|ts|tsx)$)",
+      "^.+.module.(css|sass|scss)$"
+    ]
+  }
+}
