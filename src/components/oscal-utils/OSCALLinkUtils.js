@@ -29,8 +29,8 @@ export default function resolveLinkHref(
 /**
  * A helper function for guessExtensionFromHref
  *
- * @param url A given href.
- * @returns A string providing a valid or blank extension type.
+ * @param {string} url A given href
+ * @returns {string} A valid or blank extension type
  */
 function getFileExtension(url) {
   try {
@@ -42,10 +42,10 @@ function getFileExtension(url) {
 
 /**
  * Guesses an extension type based on a provided href, and provides
- * "Unkown" when an invalid.
+ * "Unkown" when an invalid
  *
- * @param url A given href.
- * @returns A string providing a valid or "Unknown" extension type.
+ * @param {string} url A given href
+ * @returns {string} A valid or "Unknown" extension type
  */
 export function guessExtensionFromHref(url) {
   const fallbackFileExtension = "Unknown";
@@ -63,10 +63,10 @@ export function guessExtensionFromHref(url) {
 }
 
 /**
- * Finds if a fragment contains a control group by searching the control tabs.
+ * Finds if a fragment contains a control group by searching the control tabs
  *
- * @param fragment A given fragment.
- * @returns A string providing the control group id.
+ * @param {string} fragment A given fragment
+ * @returns {string} The control group id
  */
 export function determineControlGroupFromFragment(fragment) {
   // Create array from all tab control grouping elements
