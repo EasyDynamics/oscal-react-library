@@ -65,10 +65,10 @@ TabPanel.propTypes = {
 };
 
 export default function OSCALCatalogGroups(props) {
-  const [value, setValue] = React.useState(props?.groups[0]?.id);
+  const [openTab, setOpenTab] = React.useState(props?.groups[0]?.id);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setOpenTab(newValue);
   };
 
   const handleFragment = useCallback(() => {
@@ -93,7 +93,7 @@ export default function OSCALCatalogGroups(props) {
         document.getElementById(`vertical-tab-${controlGroupingFragment}`);
 
       if (elementWithFragment) {
-        setValue(controlGroupingFragment);
+        setOpenTab(controlGroupingFragment);
       }
     }
   }, [window.location.hash, props?.groups]);
@@ -122,7 +122,7 @@ export default function OSCALCatalogGroups(props) {
                 onChange={handleChange}
                 orientation="vertical"
                 variant="scrollable"
-                value={value}
+                value={openTab}
               >
                 {props.groups?.map((group) => (
                   <ComponentTab
@@ -139,7 +139,7 @@ export default function OSCALCatalogGroups(props) {
                 <TabPanel
                   key={group.title}
                   groupId={group.id}
-                  value={value}
+                  value={openTab}
                   index={index}
                 >
                   <OSCALCatalogGroup group={group} />
