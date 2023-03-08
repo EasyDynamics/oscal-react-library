@@ -6,6 +6,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import MapIcon from "@mui/icons-material/Map";
 import PhoneIcon from "@mui/icons-material/Phone";
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
+import { CardActionArea, CardContent } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -333,6 +334,38 @@ export function OSCALMetadataParty(props) {
   );
 }
 
+function OSCALRoleCardWithDescription(props) {
+  return (
+    <CardActionArea onClick={props.handleOpen}>
+      <OSCALRoleCardContent role={props.role} />
+      <CardActions>
+        <Dialog
+          open={props.open}
+          onClose={props.handleClose}
+          scroll="paper"
+          maxWidth="md"
+          fullWidth
+        >
+          <DialogTitle>{props.role.title}</DialogTitle>
+          <DialogContent dividers>
+            <OSCALMarkupMultiLine>
+              {props.role.description}
+            </OSCALMarkupMultiLine>
+          </DialogContent>
+        </Dialog>
+      </CardActions>
+    </CardActionArea>
+  );
+}
+
+function OSCALRoleCardContent(props) {
+  return (
+    <CardContent>
+      <Typography>{props.role.title}</Typography>
+    </CardContent>
+  );
+}
+
 export function OSCALMetadataRole(props) {
   const [open, setOpen] = React.useState(false);
 
@@ -348,27 +381,16 @@ export function OSCALMetadataRole(props) {
 
   return (
     <Card>
-      <CardHeader
-        title={props.role.title}
-        avatar={<MetadataAvatar text={props.role.title.toUpperCase()} />}
-        onClick={handleOpen}
-      />
-      <CardActions>
-        <Dialog
+      {props.role.description ? (
+        <OSCALRoleCardWithDescription
+          role={props.role}
           open={open}
-          onClose={handleClose}
-          scroll="paper"
-          maxWidth="md"
-          fullWidth
-        >
-          <DialogTitle>{props.role.title}</DialogTitle>
-          <DialogContent dividers>
-            <OSCALMarkupMultiLine>
-              {props.role.description}
-            </OSCALMarkupMultiLine>
-          </DialogContent>
-        </Dialog>
-      </CardActions>
+          handleOpen={handleOpen}
+          handleClose={handleClose}
+        />
+      ) : (
+        <OSCALRoleCardContent role={props.role} />
+      )}
     </Card>
   );
 }
