@@ -169,11 +169,27 @@ function getTextSegment(text, key) {
   }
   return (
     <Typography component="span" key={key}>
-      <OSCALMarkupMultiLine>{text}</OSCALMarkupMultiLine>
+      <OSCALMarkupLine>{text}</OSCALMarkupLine>
     </Typography>
   );
 }
 
+/**
+ * Builds the display of a segment of non-placeholder text within prose
+ * @param {String} text
+ * @param {String} key
+ * @returns the text segment component
+ */
+function getMultiTextSegment(text, key) {
+  if (!text) {
+    return null;
+  }
+  return (
+    <Typography component="span" key={key}>
+      <OSCALMarkupMultiLine>{text}</OSCALMarkupMultiLine>
+    </Typography>
+  );
+}
 /**
  * Wraps a placeholder display in a styled tooltip
  * @param {Object} props
@@ -325,6 +341,10 @@ export function OSCALReplacedProseWithParameterLabel(props) {
         .split(RegExp(prosePlaceholderRegexpString, "g"))
         .map((segment, index) => {
           if (index % 2 === 0) {
+            if(segment.includes("\n"))
+            {
+             return getMultiTextSegment(segment, index);
+            }
             return getTextSegment(segment, index);
           }
           return getParameterLabelSegment(
@@ -439,6 +459,10 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     .map((segment, index) => {
       if (index % 2 === 0) {
         // This is not a parameter placeholder
+        if(segment.includes("\n"))
+        {
+         return getMultiTextSegment(segment, index.toString());
+        }
         return getTextSegment(segment, index.toString());
       }
       if (isEditingStatement) {
