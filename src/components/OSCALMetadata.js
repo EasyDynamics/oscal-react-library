@@ -26,7 +26,6 @@ import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import React from "react";
 import OSCALEditableTextField from "./OSCALEditableTextField";
-import StyledTooltip from "./OSCALStyledTooltip";
 import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 export const OSCALMetadataPartiesHeader = styled(ListSubheader)(
