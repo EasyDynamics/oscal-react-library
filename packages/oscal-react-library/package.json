@@ -14,6 +14,7 @@
     "node": ">=10"
   },
   "dependencies": {
+    "@babel/runtime": "^7.21.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@monaco-editor/react": "^4.4.6",
@@ -27,29 +28,21 @@
     "react-error-boundary": "^3.1.4",
     "react-markdown": "^8.0.5",
     "react-router-dom": "^6.8.2",
-    "react-scripts": "^5.0.1",
     "react-split": "^2.0.14",
     "uuid": "^9.0.0",
     "web-vitals": "^3.1.1"
   },
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
   "scripts": {
-    "start": "microbundle-crl watch --no-compress --format modern,cjs --jsxFragment React.Fragment",
-    "build": "microbundle-crl --no-compress --format modern,cjs --jsxFragment React.Fragment",
-    "prepare": "run-s build",
-    "test": "react-scripts test",
-    "predeploy": "cd example && npm ci && npm run build",
-    "eject": "react-scripts eject",
+    "build": "rollup --bundleConfigAsCjs --config",
+    "test": "jest",
     "lint": "eslint --ext .js,.json -c .eslintrc.json .",
     "lint:fix": "npm run lint -- --fix",
-    "format": "prettier --write src/**/*.js",
-    "deploy": "gh-pages -d oscal-react-library/build",
-    "build-library-and-run-example": "npm ci && cd example && npm ci && npm start",
-    "build-and-run-example": "cd example && npm ci && npm start",
-    "run-example": "cd example && npm start",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "react-scripts": "react-scripts",
-    "build-all-and-watch": "concurrently \"npm run start\" \"cd example && npm run start\""
+    "build-storybook": "build-storybook"
   },
   "browserslist": {
     "production": [
@@ -64,10 +57,11 @@
     ]
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.19.1",
-    "@babel/plugin-proposal-logical-assignment-operators": "^7.20.7",
-    "@babel/plugin-syntax-jsx": "^7.18.6",
     "@babel/preset-react": "^7.18.6",
+    "@babel/plugin-transform-runtime": "^7.21.0",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
     "@storybook/addon-actions": "^6.5.16",
     "@storybook/addon-docs": "^6.5.16",
     "@storybook/addon-essentials": "^6.5.16",
@@ -81,6 +75,8 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^14.4.3",
+    "@types/jest": "^29.4.0",
+    "@types/react": "^17.0.14",
     "concurrently": "^7.6.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.35.0",
@@ -94,14 +90,14 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.2",
     "gh-pages": "^5.0.0",
-    "lerna": "^6.5.1",
-    "microbundle-crl": "^0.13.11",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.8.4",
-    "webpack": "^5.75.0"
-  },
-  "overrides": {
-    "react-refresh": "0.11.0"
+    "rollup": "^3.18.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-typescript2": "^0.34.1",
+    "ts-jest": "^29.0.5",
+    "typescript": "^4.9.5"
   },
   "files": [
     "dist"
@@ -111,8 +107,5 @@
       "(?!(/node_modules/(react-markdown|vfile|vfile-message|unist-.*|unified|bail|is-plain-obj|trough|remark-.*|mdast-util-.*|micromark.*|decode-named-character-reference|character-entities|property-information|hast-util-whitespace|space-separated-tokens|comma-separated-tokens|pretty-bytes|trim-lines)/))(/node_modules/.+.(js|jsx|mjs|cjs|ts|tsx)$)",
       "^.+.module.(css|sass|scss)$"
     ]
-  },
-  "workspaces": [
-    "packages/*"
-  ]
+  }
 }
