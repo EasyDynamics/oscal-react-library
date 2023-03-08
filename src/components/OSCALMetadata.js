@@ -267,17 +267,7 @@ export function OSCALMetadataPartyDialog(props) {
   );
 }
 
-export function OSCALMetadataParty(props) {
-  const [open, setOpen] = React.useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+function MetadataAvatar(props) {
   const avatarColor = (name) => {
     // This implementation hashes the given string to create a
     // color string. This is based of the example algorithm given
@@ -296,6 +286,7 @@ export function OSCALMetadataParty(props) {
     }
     return color;
   };
+
   const avatarValue = (name) =>
     name
       ?.split(" ")
@@ -303,11 +294,25 @@ export function OSCALMetadataParty(props) {
       .join("")
       .substring(0, 2);
 
-  const avatar = (
-    <Avatar sx={{ bgcolor: avatarColor(props.party.name) }}>
-      {avatarValue(props.party.name)}
+  return (
+    <Avatar sx={{ bgcolor: avatarColor(props.text) }}>
+      {avatarValue(props.text)}
     </Avatar>
   );
+}
+
+export function OSCALMetadataParty(props) {
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const avatar = <MetadataAvatar text={props.party.name} />;
 
   return (
     <Card>
@@ -335,6 +340,18 @@ export function OSCALMetadataParty(props) {
           avatar={avatar}
         />
       </CardActions>
+    </Card>
+  );
+}
+
+export function OSCALMetadataRole(props) {
+  return (
+    <Card>
+      <CardHeader
+        title={props.role.title}
+        avatar={<MetadataAvatar text={props.role.title.toUpperCase()} />}
+        subheader={props.role.description}
+      />
     </Card>
   );
 }
@@ -371,15 +388,15 @@ export default function OSCALMetadata(props) {
             partialRestData={
               props.isEditable
                 ? {
-                    [Object.keys(props.partialRestData)[0]]: {
-                      uuid: props.partialRestData[
-                        Object.keys(props.partialRestData)[0]
-                      ].uuid,
-                      metadata: {
-                        title: props.metadata.title,
-                      },
+                  [Object.keys(props.partialRestData)[0]]: {
+                    uuid: props.partialRestData[
+                      Object.keys(props.partialRestData)[0]
+                    ].uuid,
+                    metadata: {
+                      title: props.metadata.title,
                     },
-                  }
+                  },
+                }
                 : null
             }
             size={6}
@@ -390,6 +407,18 @@ export default function OSCALMetadata(props) {
         </OSCALMetadataTitle>
       </Grid>
       <Grid container spacing={1}>
+        <Grid component={Paper} item xs={8}>
+          <Grid item xs={12}>
+            <OSCALMetadataPartiesHeader>Roles</OSCALMetadataPartiesHeader>
+          </Grid>
+          <OSCALMetadataPartiesCardHolder container spacing={1} wrap="wrap">
+            {props.metadata.roles?.map((role) => (
+              <Grid item xs={12} md={4} key={role.id}>
+                <OSCALMetadataRole key={role.id} role={role} />
+              </Grid>
+            ))}
+          </OSCALMetadataPartiesCardHolder>
+        </Grid>
         <Grid component={Paper} item xs={8}>
           <Grid item xs={12}>
             <OSCALMetadataPartiesHeader>Parties</OSCALMetadataPartiesHeader>
@@ -406,6 +435,7 @@ export default function OSCALMetadata(props) {
             ))}
           </OSCALMetadataPartiesCardHolder>
         </Grid>
+
         <Grid item md={3} xs={12}>
           <Grid item xs={12}>
             <OSCALMetadataAdditional>
@@ -421,25 +451,25 @@ export default function OSCALMetadata(props) {
                   editedField={
                     props.isEditable
                       ? [
-                          Object.keys(props.partialRestData)[0],
-                          "metadata",
-                          "version",
-                        ]
+                        Object.keys(props.partialRestData)[0],
+                        "metadata",
+                        "version",
+                      ]
                       : null
                   }
                   onFieldSave={props.onFieldSave}
                   partialRestData={
                     props.isEditable
                       ? {
-                          [Object.keys(props.partialRestData)[0]]: {
-                            uuid: props.partialRestData[
-                              Object.keys(props.partialRestData)[0]
-                            ].uuid,
-                            metadata: {
-                              version: props.metadata.version,
-                            },
+                        [Object.keys(props.partialRestData)[0]]: {
+                          uuid: props.partialRestData[
+                            Object.keys(props.partialRestData)[0]
+                          ].uuid,
+                          metadata: {
+                            version: props.metadata.version,
                           },
-                        }
+                        },
+                      }
                       : null
                   }
                   size={4}
