@@ -341,9 +341,8 @@ export function OSCALReplacedProseWithParameterLabel(props) {
         .split(RegExp(prosePlaceholderRegexpString, "g"))
         .map((segment, index) => {
           if (index % 2 === 0) {
-            if(segment.includes("\n"))
-            {
-             return getMultiTextSegment(segment, index);
+            if (segment.includes("\n")) {
+              return getMultiTextSegment(segment, index);
             }
             return getTextSegment(segment, index);
           }
@@ -459,9 +458,8 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
     .map((segment, index) => {
       if (index % 2 === 0) {
         // This is not a parameter placeholder
-        if(segment.includes("\n"))
-        {
-         return getMultiTextSegment(segment, index.toString());
+        if (segment.includes("\n")) {
+          return getMultiTextSegment(segment, index.toString());
         }
         return getTextSegment(segment, index.toString());
       }
