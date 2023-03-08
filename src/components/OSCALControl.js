@@ -75,14 +75,13 @@ function ControlsList(props) {
 
 export default function OSCALControl(props) {
   const handleListItemOpened = useCallback(() => {
-    if (props.listItemOpened) {
-      const { hash } = window.location;
-      // Smooth scroll to control if element is found
-      const elementWithFragment = document.getElementById(hash?.substring(1));
-      if (elementWithFragment) {
-        elementWithFragment.scrollIntoView({ behavior: "smooth" });
-      }
+    if (!props.listItemOpened) {
+      return;
     }
+    const { hash } = window.location;
+    // Smooth scroll to control if element is found
+    const elementWithFragment = document.getElementById(hash?.substring(1));
+    elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
   }, [props.listItemOpened]);
 
   useEffect(() => {

@@ -39,24 +39,24 @@ function CollapseableListItem(props) {
   };
 
   const handleFragment = useCallback(() => {
-    if (!listItemOpened) {
-      const { hash } = window.location;
-      // Ensure fragment exists and grab element associated
-      const controlFragment = hash?.substring(1);
-      const controlGroupingFragment =
-        determineControlGroupFromFragment(controlFragment);
-      // Locate the element with the provided fragment and scroll to the item
-      if (controlGroupingFragment) {
-        // Find control list state and open collapsable item
-        if (controlFragment.includes(props.itemText?.props?.value)) {
-          setOpen(true);
-        }
-        const elementWithFragment = document.getElementById(controlFragment);
-        if (elementWithFragment) {
-          elementWithFragment.scrollIntoView({ behavior: "smooth" });
-        }
-      }
+    if (listItemOpened) {
+      return;
     }
+    const { hash } = window.location;
+    // Ensure fragment exists and grab element associated
+    const controlFragment = hash?.substring(1);
+    const controlGroupingFragment =
+      determineControlGroupFromFragment(controlFragment);
+    // Locate the element with the provided fragment and scroll to the item
+    if (!controlGroupingFragment) {
+      return;
+    }
+    // Find control list state and open collapsable item
+    if (controlFragment.includes(props.itemText?.props?.value)) {
+      setOpen(true);
+    }
+    const elementWithFragment = document.getElementById(controlFragment);
+    elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
   }, [window.location.hash, listItemOpened, props.itemText?.props?.value]);
 
   useEffect(() => {

@@ -73,7 +73,6 @@ export default function OSCALCatalogGroups(props) {
 
   const handleFragment = useCallback(() => {
     const { hash } = window.location;
-
     // Find catalog group fragment
     const controlGroupingFragment = determineControlGroupFromFragment(hash);
     // Determine higher-level control or sub-control exists within catalog group
@@ -85,16 +84,15 @@ export default function OSCALCatalogGroups(props) {
         ?.find((group) => group.id === controlGroupingFragment)
         ?.controls?.find((control) => hash?.substring(1)?.includes(control.id))
         ?.controls?.find((subcontrol) => subcontrol.id === hash?.substring(1));
-
-    if (catalogControl) {
-      // Confirm catalog tab group can be grabbed
-      const elementWithFragment =
-        hash &&
-        document.getElementById(`vertical-tab-${controlGroupingFragment}`);
-
-      if (elementWithFragment) {
-        setOpenTab(controlGroupingFragment);
-      }
+    if (!catalogControl) {
+      return;
+    }
+    // Confirm catalog tab group can be grabbed
+    const elementWithFragment =
+      hash &&
+      document.getElementById(`vertical-tab-${controlGroupingFragment}`);
+    if (elementWithFragment) {
+      setOpenTab(controlGroupingFragment);
     }
   }, [window.location.hash, props?.groups]);
 

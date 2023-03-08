@@ -172,17 +172,13 @@ export default function OSCALLoader(props) {
     // Ensure fragment exists and grab element associated
     const elementWithFragment =
       fragment && document.getElementById(fragment.substring(1));
-
     // Locate the element with the provided fragment and scroll to the item
-    if (elementWithFragment) {
-      elementWithFragment.scrollIntoView({ behavior: "smooth" });
-    }
+    elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
   };
 
   const handleFragment = (fragment) => {
     // Ensure fragment exists and determine if a control grouping tab is found
     const controlGroupingFragment = determineControlGroupFromFragment(fragment);
-
     // Scroll to Element if not within a control grouping
     // NOTE: Control found in control grouping tabs are handled in Catalog Groups
     if (!controlGroupingFragment) {
