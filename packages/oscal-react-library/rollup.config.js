@@ -7,6 +7,8 @@ import postcss from "rollup-plugin-postcss";
 
 const packageJson = require("./package.json");
 
+const EXTENSIONS = [".js", ".jsx", ".ts", ".tsx"];
+
 export default {
   input: ["src/index.ts"],
   output: [
@@ -23,16 +25,19 @@ export default {
   ],
   plugins: [
     peerDepsExternal(),
-    resolve(),
     babel({
       babelHelpers: "runtime",
-      presets: ["@babel/preset-react"],
-      extensions: [".js", ".ts", ".jsx", ".tsx"],
-      plugins: ["@babel/plugin-transform-runtime"],
+      extensions: EXTENSIONS,
+      exclude: "**/node_modules/**",
     }),
     commonjs(),
-    typescript(),
+    resolve({ preferBuiltins: false, extensions: EXTENSIONS }),
+    typescript({
+      tsconfigOverride: {
+        exclude: ["**/stories.*"],
+      },
+    }),
     postcss(),
   ],
-  external: ["react", "react-dom", /@babel\/runtime/],
+  external: ["react", "react-dom", "react-markdown", /@babel\/runtime/],
 };
