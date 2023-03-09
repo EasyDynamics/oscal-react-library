@@ -25,7 +25,7 @@ export default function matchingProp(props, filter) {
 
   return props.find(
     (prop) =>
-      namespaceOf(prop.ns) === namespaceOf(filter.ns) &&
+      namespaceOf(prop.ns) === ns &&
       prop.name === filter.name &&
       (!filter.value || prop.value === filter.value) &&
       (!filter.filter || filter.filter(prop.value))
