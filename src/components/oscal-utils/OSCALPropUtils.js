@@ -39,7 +39,7 @@ export function namespaceOf(ns) {
  *
  * @param {Array.<object>} props the list of properties to check
  * @param {PropertyFilter} filter attributes to match against
- * @return {object} the matching property
+ * @returns {object} the matching property
  */
 export default function matchingProp(props, filter) {
   if ((!filter.value && !filter.filter) || (filter.value && filter.filter)) {
