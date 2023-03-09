@@ -21,7 +21,8 @@ const OSCALControlCard = styled(Card, {
   margin-right: ${(props) => (props.childLevel > 0 ? "1.5em" : "0")};
   ${(props) => props.childLevel > 0 && "background-color: #fffcf0;"}
   ${(props) =>
-    props.withdrawn && `text-decoration: line-through; color: ${props.theme.palette.grey[400]};`}
+    props.withdrawn &&
+    `text-decoration: line-through; color: ${props.theme.palette.grey[400]};`}
 `;
 
 function ControlsList(props) {

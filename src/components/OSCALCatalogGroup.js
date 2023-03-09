@@ -73,10 +73,7 @@ function OSCALCatalogControlListItem(props) {
   ) : (
     <StyledListItemPaper>
       <StyledListItem>
-        <StyledListItemText
-          primary={itemText}
-          withdrawn={withdrawn}
-        />
+        <StyledListItemText primary={itemText} withdrawn={withdrawn} />
       </StyledListItem>
     </StyledListItemPaper>
   );
