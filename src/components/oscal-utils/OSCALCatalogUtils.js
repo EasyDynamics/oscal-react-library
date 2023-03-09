@@ -1,3 +1,5 @@
+import matchingProp from "./OSCALPropUtils";
+
 /**
  * Determines if a control is withdrawn.
  *
@@ -9,7 +11,9 @@
  * @returns a boolean describing whether the control is withdrawn
  */
 export default function isWithdrawn(control) {
-  return control?.props?.find(
-    (prop) => prop.name === "status" && prop.value === "withdrawn"
-  );
+  // By default controls are *not* withdrawn
+  if (!control.props) {
+    return false;
+  }
+  return !!matchingProp(control.props, { name: "status", value: "withdrawn" });
 }
