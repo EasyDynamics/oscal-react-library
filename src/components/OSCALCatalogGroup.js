@@ -25,6 +25,11 @@ const StyledListItemPaper = styled(Paper)`
   border-radius: 0.5em;
 `;
 
+const StyledListItemText = styled(ListItemText)(({ theme }) => ({
+  textDecoration: "line-through",
+  color: theme.palette.grey[400],
+}));
+
 const StyledControlDescriptionWrapper = styled("div")`
   padding: 1em;
 `;
@@ -53,10 +58,9 @@ function CollapseableListItem(props) {
 
 function OSCALCatalogControlListItem(props) {
   const { control } = props;
-  // Determine if control is withdrawn
   const withdrawn = isWithdrawn(control);
   const itemText = `${control.id.toUpperCase()} ${control.title}`;
-  // Make collapsible item when not a withdrawn control
+
   return !withdrawn ? (
     <CollapseableListItem itemText={itemText}>
       <OSCALControl
@@ -69,10 +73,9 @@ function OSCALCatalogControlListItem(props) {
   ) : (
     <StyledListItemPaper>
       <StyledListItem>
-        <ListItemText
+        <StyledListItemText
           primary={itemText}
           withdrawn={withdrawn}
-          style={{ textDecoration: "line-through", color: "#d4d4d4" }}
         />
       </StyledListItem>
     </StyledListItemPaper>
