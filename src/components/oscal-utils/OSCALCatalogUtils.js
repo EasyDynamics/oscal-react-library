@@ -3,8 +3,8 @@ import matchingProp from "./OSCALPropUtils";
 /**
  * Determines if a control is withdrawn.
  *
- * @param {object} control
- * @returns a boolean describing whether the control is withdrawn
+ * @param {object} control A catalog control
+ * @returns {boolean} true if control is withdrawn
  */
 export default function isWithdrawn(control) {
   // By default controls are *not* withdrawn
