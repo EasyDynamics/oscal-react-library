@@ -1,12 +1,10 @@
 import BusinessIcon from "@mui/icons-material/Business";
-import ContactPageIcon from "@mui/icons-material/ContactPage";
 import EmailIcon from "@mui/icons-material/Email";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import HomeIcon from "@mui/icons-material/Home";
 import MapIcon from "@mui/icons-material/Map";
 import PhoneIcon from "@mui/icons-material/Phone";
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
-import { CardActionArea, CardContent } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -26,6 +24,7 @@ import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import React from "react";
+import InfoIcon from "@mui/icons-material/Info";
 import OSCALEditableTextField from "./OSCALEditableTextField";
 import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
@@ -316,9 +315,9 @@ export function OSCALMetadataParty(props) {
           size="small"
           variant="outlined"
           onClick={handleOpen}
-          aria-label={`${props.party.name} contact button`}
+          aria-label={`${props.party.name} details button`}
         >
-          <ContactPageIcon />
+          <InfoIcon />
           Details
         </Button>
         <OSCALMetadataPartyDialog
@@ -334,45 +333,11 @@ export function OSCALMetadataParty(props) {
   );
 }
 
-function OSCALRoleCardWithDescription(props) {
-  return (
-    <CardActionArea onClick={props.handleOpen}>
-      <OSCALRoleCardContent role={props.role} />
-      <CardActions>
-        <Dialog
-          open={props.open}
-          onClose={props.handleClose}
-          scroll="paper"
-          maxWidth="md"
-          fullWidth
-        >
-          <DialogTitle>{props.role.title}</DialogTitle>
-          <DialogContent dividers>
-            <OSCALMarkupMultiLine>
-              {props.role.description}
-            </OSCALMarkupMultiLine>
-          </DialogContent>
-        </Dialog>
-      </CardActions>
-    </CardActionArea>
-  );
-}
-
-function OSCALRoleCardContent(props) {
-  return (
-    <CardContent>
-      <Typography>{props.role.title}</Typography>
-    </CardContent>
-  );
-}
-
 export function OSCALMetadataRole(props) {
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
-    if (props.role.description) {
-      setOpen(true);
-    }
+    setOpen(true);
   };
 
   const handleClose = () => {
@@ -381,16 +346,32 @@ export function OSCALMetadataRole(props) {
 
   return (
     <Card>
-      {props.role.description ? (
-        <OSCALRoleCardWithDescription
-          role={props.role}
+      <CardHeader subheader={props.role.title} />
+      <CardActions>
+        <Button
+          size="small"
+          variant="outlined"
+          onClick={handleOpen}
+          aria-label={`${props.role.title} details button`}
+        >
+          <InfoIcon />
+          Details
+        </Button>
+        <Dialog
           open={open}
-          handleOpen={handleOpen}
-          handleClose={handleClose}
-        />
-      ) : (
-        <OSCALRoleCardContent role={props.role} />
-      )}
+          onClose={handleClose}
+          scroll="paper"
+          maxWidth="md"
+          fullWidth
+        >
+          <DialogTitle>{props.role.title}</DialogTitle>
+          <DialogContent dividers>
+            <OSCALMarkupMultiLine>
+              {props.role?.description}
+            </OSCALMarkupMultiLine>
+          </DialogContent>
+        </Dialog>
+      </CardActions>
     </Card>
   );
 }

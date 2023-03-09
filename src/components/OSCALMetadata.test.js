@@ -25,7 +25,7 @@ describe("OSCALMetadata", () => {
   test(`displays Contact button`, () => {
     render(<OSCALMetadata metadata={metadataTestData} />);
     const button = screen.getByRole("button", {
-      name: /contact/i,
+      name: /some group of people details button/i,
     });
 
     expect(button).toBeVisible();
@@ -34,7 +34,7 @@ describe("OSCALMetadata", () => {
   test(`displays email contact info`, () => {
     render(<OSCALMetadata metadata={metadataTestData} />);
     const button = screen.getByRole("button", {
-      name: /contact/i,
+      name: /some group of people details button/i,
     });
 
     button.click();
@@ -48,7 +48,7 @@ describe("OSCALMetadata", () => {
   test(`displays telephone mobile number info`, () => {
     render(<OSCALMetadata metadata={metadataTestData} />);
     const button = screen.getByRole("button", {
-      name: /contact/i,
+      name: /some group of people details button/i,
     });
     button.click();
 
@@ -59,7 +59,7 @@ describe("OSCALMetadata", () => {
   test(`displays telephone office number info`, () => {
     render(<OSCALMetadata metadata={metadataTestData} />);
     const button = screen.getByRole("button", {
-      name: /contact/i,
+      name: /some group of people details button/i,
     });
 
     button.click();
@@ -71,7 +71,7 @@ describe("OSCALMetadata", () => {
   test(`displays telephone home number info`, () => {
     render(<OSCALMetadata metadata={metadataTestData} />);
     const button = screen.getByRole("button", {
-      name: /contact/i,
+      name: /some group of people details button/i,
     });
 
     button.click();
@@ -83,7 +83,7 @@ describe("OSCALMetadata", () => {
   test(`displays unknown type telephone number info`, () => {
     render(<OSCALMetadata metadata={metadataTestData} />);
     const button = screen.getByRole("button", {
-      name: /contact/i,
+      name: /some group of people details button/i,
     });
 
     button.click();
@@ -95,7 +95,7 @@ describe("OSCALMetadata", () => {
   test(`displays work address info`, () => {
     render(<OSCALMetadata metadata={metadataTestData} />);
     const button = screen.getByRole("button", {
-      name: /contact/i,
+      name: /some group of people details button/i,
     });
 
     button.click();
@@ -106,7 +106,7 @@ describe("OSCALMetadata", () => {
   test(`displays home address info`, () => {
     render(<OSCALMetadata metadata={metadataTestData} />);
     const button = screen.getByRole("button", {
-      name: /contact/i,
+      name: /some group of people details button/i,
     });
 
     button.click();
@@ -117,8 +117,9 @@ describe("OSCALMetadata", () => {
 
   test(`displays unknown type address info`, () => {
     render(<OSCALMetadata metadata={metadataTestData} />);
+
     const button = screen.getByRole("button", {
-      name: /contact/i,
+      name: /some group of people details button/i,
     });
 
     button.click();
@@ -137,14 +138,18 @@ describe("OSCALMetadata", () => {
     expect(role2).toBeVisible();
   });
 
-  test(`displays role description`, () => {
+  test(`displays role dialog box`, () => {
     render(<OSCALMetadata metadata={metadataTestData} />);
 
-    const role1 = screen.getByText("Document creator");
-    role1.click();
+    const button = screen.getByRole("button", {
+      name: /document creator details button/i,
+    });
+    button.click();
 
+    const title = screen.getByRole("heading", { name: /document creator/i });
     const description = screen.getByText("Creates documents");
 
+    expect(title).toBeVisible();
     expect(description).toBeVisible();
   });
 });
