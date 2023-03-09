@@ -25,7 +25,7 @@ const StyledListItemPaper = styled(Paper)`
   border-radius: 0.5em;
 `;
 
-const StyledListItemText = styled(ListItemText)(({ theme }) => ({
+const WithdrawnListItemText = styled(ListItemText)(({ theme }) => ({
   textDecoration: "line-through",
   color: theme.palette.grey[400],
 }));
@@ -73,7 +73,7 @@ function OSCALCatalogControlListItem(props) {
   ) : (
     <StyledListItemPaper>
       <StyledListItem>
-        <StyledListItemText primary={itemText} withdrawn={withdrawn} />
+        <WithdrawnListItemText primary={itemText} withdrawn={withdrawn} />
       </StyledListItem>
     </StyledListItemPaper>
   );

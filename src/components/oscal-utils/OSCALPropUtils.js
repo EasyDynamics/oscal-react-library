@@ -18,14 +18,13 @@ export function namespaceOf(ns) {
  * @param filter the attributes to match against
  */
 export default function matchingProp(props, filter) {
-  const ns = namespaceOf(filter.ns);
   if ((!filter.value && !filter.filter) || (filter.value && filter.filter)) {
     throw new Error("Exactly one of filter or value must be specified");
   }
 
   return props.find(
     (prop) =>
-      namespaceOf(prop.ns) === ns &&
+      namespaceOf(prop.ns) === namespaceOf(filter.ns) &&
       prop.name === filter.name &&
       (!filter.value || prop.value === filter.value) &&
       (!filter.filter || filter.filter(prop.value))
