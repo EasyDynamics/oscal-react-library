@@ -26,7 +26,7 @@ jobs:
       - name: Install depdendencies
         run: npm ci
       - name: Publish to NPM
-        run: npm publish --access public
+        run: npx lerna publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Reconfigure Node.js for GitHub Packages publish
@@ -34,6 +34,6 @@ jobs:
         with:
           registry-url: 'https://npm.pkg.github.com'
       - name: Publish to GitHub Packages
-        run: npm publish
+        run: npx lerna publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

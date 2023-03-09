@@ -27,7 +27,7 @@ jobs:
       - name: Globally update npm
         run: npm install -g npm@latest
       - name: Install dependencies
-        run: npm ci && cd example && npm ci && cd ..
+        run: npm ci
       - name: Install lint dependencies
         run: |
           npm install -g markdownlint-cli
@@ -35,7 +35,7 @@ jobs:
       - name: Lint code base
         run: |
           # Run built-in JavaScript/JSON linting
-          npm run lint
+          npx lerna run lint
           # Lint markdown files
           markdownlint '**/*.md' --ignore node_modules --ignore example/node_modules
           # Lint YAML files
@@ -60,51 +60,51 @@ jobs:
       - name: Globally update npm
         run: npm install -g npm@latest
       - name: Install dependencies
-        run: npm ci && cd example && npm ci && cd ..
+        run: npm ci
       - name: Build library
-        run: npm run build
+        run: npx lerna run build
       - name: Run tests
-        run: |
-          FULL_OUTPUT="$(mktemp -t output.XXXXXXXXXXXXXX)"
-          MATCHES="$(mktemp -t matches.XXXXXXXXXXXXXX)"
-          npm run test -- --ci --watchAll=false 2>&1 | tee "$FULL_OUTPUT"
-          grep --group-separator='~' -A 4 "Console" "$FULL_OUTPUT" > "$MATCHES" || true
+        run: npx lerna run test
+        # - name: Run tests
+        #   run: |
+        #     FULL_OUTPUT="$(mktemp -t output.XXXXXXXXXXXXXX)"
+        #     MATCHES="$(mktemp -t matches.XXXXXXXXXXXXXX)"
+        #     npm run test -- --ci --watchAll=false 2>&1 | tee "$FULL_OUTPUT"
+        #     grep --group-separator='~' -A 4 "Console" "$FULL_OUTPUT" > "$MATCHES" || true
 
-          echo '## React Library' >> $GITHUB_STEP_SUMMARY
-          if [ -s "$MATCHES" ]; then
-            cat "$MATCHES" | while read -d'~' -r match; do
-              echo '```' >> $GITHUB_STEP_SUMMARY
-              echo "$match" >> $GITHUB_STEP_SUMMARY
-              echo '```' >> $GITHUB_STEP_SUMMARY
-              echo '' >> $GITHUB_STEP_SUMMARY
-            done
-          else
-            echo 'No warnings found in `/src`' >> $GITHUB_STEP_SUMMARY
-          fi
-      - name: Run example app tests
-        run: |
-          cd example
-          FULL_OUTPUT="$(mktemp -t output.XXXXXXXXXXXXXX)"
-          MATCHES="$(mktemp -t matches.XXXXXXXXXXXXXX)"
-          npm run test -- --ci --watchAll=false 2>&1 | tee "$FULL_OUTPUT"
-          grep --group-separator='~' -A 4 "Console" "$FULL_OUTPUT" > "$MATCHES" || true
+        #     echo '## React Library' >> $GITHUB_STEP_SUMMARY
+        #     if [ -s "$MATCHES" ]; then
+        #       cat "$MATCHES" | while read -d'~' -r match; do
+        #         echo '```' >> $GITHUB_STEP_SUMMARY
+        #         echo "$match" >> $GITHUB_STEP_SUMMARY
+        #         echo '```' >> $GITHUB_STEP_SUMMARY
+        #         echo '' >> $GITHUB_STEP_SUMMARY
+        #       done
+        #     else
+        #       echo 'No warnings found in `/src`' >> $GITHUB_STEP_SUMMARY
+        #     fi
+        # - name: Run example app tests
+        #   run: |
+        #     cd example
+        #     FULL_OUTPUT="$(mktemp -t output.XXXXXXXXXXXXXX)"
+        #     MATCHES="$(mktemp -t matches.XXXXXXXXXXXXXX)"
+        #     npm run test -- --ci --watchAll=false 2>&1 | tee "$FULL_OUTPUT"
+        #     grep --group-separator='~' -A 4 "Console" "$FULL_OUTPUT" > "$MATCHES" || true
 
-          echo '## Viewer Application' >> $GITHUB_STEP_SUMMARY
-          if [ -s "$MATCHES" ]; then
-            cat "$MATCHES" | while read -d'~' -r match; do
-              echo '```' >> $GITHUB_STEP_SUMMARY
-              echo "$match" >> $GITHUB_STEP_SUMMARY
-              echo '```' >> $GITHUB_STEP_SUMMARY
-              echo '' >> $GITHUB_STEP_SUMMARY
-            done
-          else
-            echo 'No warnings found in `/example`' >> $GITHUB_STEP_SUMMARY
-          fi
-          cd ..
-      - name: Build application
-        run: npm run predeploy
+        #     echo '## Viewer Application' >> $GITHUB_STEP_SUMMARY
+        #     if [ -s "$MATCHES" ]; then
+        #       cat "$MATCHES" | while read -d'~' -r match; do
+        #         echo '```' >> $GITHUB_STEP_SUMMARY
+        #         echo "$match" >> $GITHUB_STEP_SUMMARY
+        #         echo '```' >> $GITHUB_STEP_SUMMARY
+        #         echo '' >> $GITHUB_STEP_SUMMARY
+        #       done
+        #     else
+        #       echo 'No warnings found in `/example`' >> $GITHUB_STEP_SUMMARY
+        #     fi
+        #     cd ..
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
         with:
           name: oscal-viewer
-          path: example/build
+          path: packages/oscal-viewer/build
