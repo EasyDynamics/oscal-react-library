@@ -25,6 +25,11 @@ export default {
   ],
   plugins: [
     peerDepsExternal(),
+    typescript({
+      tsconfigOverride: {
+        exclude: ["**/stories.*"],
+      },
+    }),
     babel({
       babelHelpers: "runtime",
       extensions: EXTENSIONS,
@@ -32,11 +37,6 @@ export default {
     }),
     commonjs(),
     resolve({ preferBuiltins: false, extensions: EXTENSIONS }),
-    typescript({
-      tsconfigOverride: {
-        exclude: ["**/stories.*"],
-      },
-    }),
     postcss(),
   ],
   external: ["react", "react-dom", "react-markdown", /@babel\/runtime/],
