@@ -353,6 +353,7 @@ export function OSCALMetadataRole(props) {
           variant="outlined"
           onClick={handleOpen}
           aria-label={`${props.role.title} details button`}
+          disabled={!props.role?.description}
         >
           <InfoIcon />
           Details
