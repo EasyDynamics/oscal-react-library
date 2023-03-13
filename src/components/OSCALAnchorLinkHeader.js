@@ -17,6 +17,8 @@ export default function OSCALAnchorLinkHeader(props) {
     str.props?.children.replaceAll(" ", "-")?.toLowerCase() ||
     str.replaceAll(" ", "-").toLowerCase();
 
+  const linkId = props.value || editString(props.children);
+
   return (
     <Stack
       direction="row"
@@ -24,15 +26,12 @@ export default function OSCALAnchorLinkHeader(props) {
       alignItems="center"
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
-      id={props.value || editString(props.children)}
+      id={linkId}
     >
       {props.children}
       {hover && (
         // Navigate to a specified fragment or use the child text
-        <Link
-          reloadDocument
-          to={`#${props.value || editString(props.children)}`}
-        >
+        <Link reloadDocument to={`#${linkId}`}>
           <Fade in={hover}>
             <LinkIcon
               sx={[
@@ -42,9 +41,7 @@ export default function OSCALAnchorLinkHeader(props) {
                   color: theme.palette.grey[500],
                 }),
               ]}
-              aria-label={`${
-                props.value || editString(props.children)
-              } anchor link`}
+              aria-label={`${linkId} anchor link`}
             />
           </Fade>
         </Link>

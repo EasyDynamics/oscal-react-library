@@ -52,12 +52,12 @@ function CollapseableListItem(props) {
       return;
     }
     // Find control list state and open collapsable item
-    if (controlFragment.includes(props.itemText?.props?.value)) {
+    if (controlFragment.includes(props.control?.id)) {
       setOpen(true);
     }
     const elementWithFragment = document.getElementById(controlFragment);
     elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
-  }, [window.location.hash, listItemOpened, props.itemText?.props?.value]);
+  }, [window.location.hash, listItemOpened, props.control?.id]);
 
   useEffect(() => {
     handleFragment();
