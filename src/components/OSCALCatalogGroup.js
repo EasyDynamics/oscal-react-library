@@ -7,6 +7,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 import React, { useCallback, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import OSCALControl from "./OSCALControl";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import { determineControlGroupFromFragment } from "./oscal-utils/OSCALLinkUtils";
@@ -34,6 +35,8 @@ function CollapseableListItem(props) {
   const [open, setOpen] = React.useState(false);
   const [listItemOpened, setListItemOpened] = React.useState(false);
 
+  const location = useLocation();
+
   const handleClick = () => {
     setOpen(!open);
   };
@@ -42,9 +45,9 @@ function CollapseableListItem(props) {
     if (listItemOpened) {
       return;
     }
-    const { hash } = window.location;
-    // Ensure fragment exists and grab element associated
-    const controlFragment = hash?.substring(1);
+    // Grab fragment identifier following hash character if fragment exists in location
+    const controlFragment =
+      location.hash !== "" ? location.hash.substring(1) : null;
     const controlGroupingFragment =
       determineControlGroupFromFragment(controlFragment);
     // Locate the element with the provided fragment and scroll to the item
@@ -57,7 +60,7 @@ function CollapseableListItem(props) {
     }
     const elementWithFragment = document.getElementById(controlFragment);
     elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
-  }, [window.location.hash, listItemOpened, props.control?.id]);
+  }, [location.hash, listItemOpened, props.control?.id]);
 
   useEffect(() => {
     handleFragment();

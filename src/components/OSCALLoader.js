@@ -5,6 +5,7 @@ import React, {
   useRef,
   useLayoutEffect,
 } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { styled } from "@mui/material/styles";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -12,7 +13,6 @@ import Split from "react-split";
 import { Box, Fab } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import CodeIcon from "@mui/icons-material/Code";
-import { useParams } from "react-router-dom";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
 import { determineControlGroupFromFragment } from "./oscal-utils/OSCALLinkUtils";
 import { BasicError, ErrorThrower } from "./ErrorHandling";
@@ -78,6 +78,7 @@ export default function OSCALLoader(props) {
   const determineDefaultOscalUrl = () =>
     (props.isRestMode ? null : getRequestedUrl()) ||
     props.oscalObjectType.defaultUrl;
+  const location = useLocation();
 
   const [oscalUrl, setOscalUrl] = useState(determineDefaultOscalUrl());
 
@@ -176,15 +177,17 @@ export default function OSCALLoader(props) {
     elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
   };
 
-  const handleFragment = (fragment) => {
+  const handleFragment = useCallback(() => {
     // Ensure fragment exists and determine if a control grouping tab is found
-    const controlGroupingFragment = determineControlGroupFromFragment(fragment);
+    const controlGroupingFragment = determineControlGroupFromFragment(
+      location.hash
+    );
     // Scroll to Element if not within a control grouping
     // NOTE: Control found in control grouping tabs are handled in Catalog Groups
     if (!controlGroupingFragment) {
-      scrollToElementWithFragment(fragment);
+      scrollToElementWithFragment(location.hash);
     }
-  };
+  }, [location.hash]);
 
   useEffect(() => {
     handleReload(!props.isRestMode);
@@ -244,7 +247,7 @@ export default function OSCALLoader(props) {
         "",
         "",
         `/${props.oscalObjectType.jsonRootName}/${
-          props.isRestMode ? `${oscalObjectUuid}${window.location.hash}` : ""
+          props.isRestMode ? `${oscalObjectUuid}${location.hash}` : ""
         }`
       );
     } else if (props.isRestMode) {
@@ -258,14 +261,10 @@ export default function OSCALLoader(props) {
     }
   }, [props.isRestMode]);
 
-  const handleUrlFragmentChange = useCallback(() => {
-    handleFragment(window.location.hash);
-  }, [window.location.hash, handleFragment]);
-
   // Handle anchor link change in window url
   useEffect(() => {
-    handleUrlFragmentChange();
-  }, [handleUrlFragmentChange]);
+    handleFragment();
+  }, [handleFragment]);
 
   let form;
   if (props.renderForm && hasDefaultUrl) {
@@ -291,9 +290,6 @@ export default function OSCALLoader(props) {
       </Grid>
     );
   } else if (oscalUrl) {
-    if (window.location.hash) {
-      handleFragment(window.location.hash);
-    }
     result = props.isRestMode ? (
       <Grid container pt={3}>
         <EditorToolbar>

@@ -8,6 +8,7 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import PropTypes from "prop-types";
 import React, { useCallback, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
@@ -67,34 +68,39 @@ TabPanel.propTypes = {
 export default function OSCALCatalogGroups(props) {
   const [openTab, setOpenTab] = React.useState(props?.groups[0]?.id);
 
+  const location = useLocation();
+
   const handleChange = (event, newValue) => {
     setOpenTab(newValue);
   };
 
   const handleFragment = useCallback(() => {
-    const { hash } = window.location;
+    // Grab fragment identifier following hash character if fragment exists in location
+    const controlFragment =
+      location.hash !== "" ? location.hash.substring(1) : null;
     // Find catalog group fragment
-    const controlGroupingFragment = determineControlGroupFromFragment(hash);
+    const controlGroupingFragment =
+      determineControlGroupFromFragment(controlFragment);
     // Determine higher-level control or sub-control exists within catalog group
     const catalogControl =
       props?.groups
         ?.find((group) => group.id === controlGroupingFragment)
-        ?.controls?.find((control) => control.id === hash?.substring(1)) ||
+        ?.controls?.find((control) => control.id === controlFragment) ||
       props?.groups
         ?.find((group) => group.id === controlGroupingFragment)
-        ?.controls?.find((control) => hash?.substring(1)?.includes(control.id))
-        ?.controls?.find((subcontrol) => subcontrol.id === hash?.substring(1));
+        ?.controls?.find((control) => controlFragment?.includes(control.id))
+        ?.controls?.find((subcontrol) => subcontrol.id === controlFragment);
     if (!catalogControl) {
       return;
     }
     // Confirm catalog tab group can be grabbed
-    const elementWithFragment =
-      hash &&
-      document.getElementById(`vertical-tab-${controlGroupingFragment}`);
+    const elementWithFragment = document.getElementById(
+      `vertical-tab-${controlGroupingFragment}`
+    );
     if (elementWithFragment) {
       setOpenTab(controlGroupingFragment);
     }
-  }, [window.location.hash, props?.groups]);
+  }, [location.hash, props?.groups]);
 
   useEffect(() => {
     handleFragment();

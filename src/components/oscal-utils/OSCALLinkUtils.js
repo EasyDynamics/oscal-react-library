@@ -69,6 +69,9 @@ export function guessExtensionFromHref(url) {
  * @returns {string} The control group id
  */
 export function determineControlGroupFromFragment(fragment) {
+  if (fragment === null || fragment === "") {
+    return null;
+  }
   // Create array from all tab control grouping elements
   const controlGroupList = Array.from(
     document.querySelectorAll('[id^="vertical-tab-"]')
