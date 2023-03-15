@@ -8,14 +8,7 @@ import Grid from "@mui/material/Grid";
 import OSCALControlPart from "./OSCALControlPart";
 import OSCALControlModification from "./OSCALControlModification";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
-
-// TODO: This is probably 800-53 specific and it should be made more
-// generic to allow the library to work with other frameworks.
-// https://github.com/EasyDynamics/oscal-react-library/issues/504
-const isWithdrawn = (control) =>
-  control?.props?.find(
-    (prop) => prop.name === "status" && prop.value === "withdrawn"
-  );
+import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
 
 const OSCALControlCard = styled(Card, {
   // https://github.com/mui/material-ui/blob/c34935814b81870ca325099cdf41a1025a85d4b5/packages/mui-system/src/createStyled.js#L56
@@ -30,7 +23,8 @@ const OSCALControlCard = styled(Card, {
   margin-right: ${(props) => (props.childLevel > 0 ? "1.5em" : "0")};
   ${(props) => props.childLevel > 0 && "background-color: #fffcf0;"}
   ${(props) =>
-    props.withdrawn && `text-decoration: line-through; color: #d4d4d4;`}
+    props.withdrawn &&
+    `text-decoration: line-through; color: ${props.theme.palette.grey[400]};`}
 `;
 
 function ControlsList(props) {

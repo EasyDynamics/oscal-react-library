@@ -6,7 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { OSCALMarkupLine } from "./OSCALMarkupProse";
+import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 const OSCALControlGuidanceButton = styled(Button)(
   ({ theme }) => `
@@ -43,7 +43,7 @@ export default function OSCALControlGuidance(props) {
         size="small"
         onClick={handleClick}
       >
-        Read Guidance
+        Read Discussion
       </OSCALControlGuidanceButton>
       <Dialog
         open={open}
@@ -53,7 +53,7 @@ export default function OSCALControlGuidance(props) {
         aria-describedby="scroll-dialog-description"
       >
         <DialogTitle id="scroll-dialog-title">
-          {`${props.id.toUpperCase()} ${props.title} Guidance`}
+          {`${props.id.toUpperCase()} ${props.title} Discussion`}
         </DialogTitle>
         <DialogContent dividers>
           <DialogContentText
@@ -61,7 +61,7 @@ export default function OSCALControlGuidance(props) {
             ref={descriptionElementRef}
             tabIndex={-1}
           >
-            <OSCALMarkupLine>{props.prose}</OSCALMarkupLine>
+            <OSCALMarkupMultiLine>{props.prose}</OSCALMarkupMultiLine>
           </DialogContentText>
         </DialogContent>
         <DialogActions>

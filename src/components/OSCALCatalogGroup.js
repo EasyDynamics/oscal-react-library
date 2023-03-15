@@ -11,6 +11,7 @@ import { useLocation } from "react-router-dom";
 import OSCALControl from "./OSCALControl";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import { determineControlGroupFromFragment } from "./oscal-utils/OSCALLinkUtils";
+import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -26,6 +27,11 @@ const StyledListItem = styled(ListItemButton)(({ theme }) => ({
 const StyledListItemPaper = styled(Paper)`
   border-radius: 0.5em;
 `;
+
+const WithdrawnListItemText = styled(ListItemText)(({ theme }) => ({
+  textDecoration: "line-through",
+  color: theme.palette.grey[400],
+}));
 
 const StyledControlDescriptionWrapper = styled("div")`
   padding: 1em;
@@ -95,16 +101,30 @@ function CollapseableListItem(props) {
 
 function OSCALCatalogControlListItem(props) {
   const { control } = props;
+  const withdrawn = isWithdrawn(control);
+  const itemText = `${control.id.toUpperCase()} ${control.title}`;
 
-  return (
+  return !withdrawn ? (
     <CollapseableListItem
       itemText={
         <OSCALAnchorLinkHeader value={`${control.id.toLowerCase()}`}>
           {`${control.id.toUpperCase()} ${control.title}`}
         </OSCALAnchorLinkHeader>
       }
-      control={control}
-    />
+    >
+      <OSCALControl
+        showInList
+        control={control}
+        childLevel={0}
+        key={control.id}
+      />
+    </CollapseableListItem>
+  ) : (
+    <StyledListItemPaper>
+      <StyledListItem>
+        <WithdrawnListItemText primary={itemText} withdrawn={withdrawn} />
+      </StyledListItem>
+    </StyledListItemPaper>
   );
 }
 

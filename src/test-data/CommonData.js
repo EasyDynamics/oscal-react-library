@@ -49,6 +49,18 @@ export const exampleParties = [
   },
 ];
 
+export const exampleRoles = [
+  {
+    id: "creator",
+    title: "Document creator",
+    description: "Creates documents",
+  },
+  {
+    id: "contact",
+    title: "Contact",
+  },
+];
+
 export const profileCatalogInheritanceData = {
   inherited: [
     {
@@ -74,6 +86,7 @@ export const profileCatalogInheritanceData = {
 export const metadataTestData = {
   title: "Test Title",
   parties: exampleParties,
+  roles: exampleRoles,
   version: "Revision 5",
 };
 
