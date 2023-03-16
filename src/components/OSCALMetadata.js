@@ -181,7 +181,6 @@ function MetadataAvatar(props) {
   );
 }
 
-
 export function OSCALMetadataParty(props) {
   const PartyInfoTypes = {
     address: "address",
@@ -314,7 +313,7 @@ function OSCALMetadataCard(props) {
           size="small"
           variant="outlined"
           onClick={handleOpen}
-          aria-label={`${title} details button`}
+          aria-label={`${title ?? subheader} details button`}
           disabled={disabled}
         >
           <InfoIcon />
