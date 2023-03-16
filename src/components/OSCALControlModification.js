@@ -42,6 +42,22 @@ function getAlterAddsOrRemovesDisplay(addsElements, addsLabel, controlPartId) {
         Name: {item.name}, Value: {item.value}
       </Typography>
     ));
+  let removedTypographies = null;
+  if (addsLabel === "Removes ") {
+    removedTypographies = addsElements
+      .flatMap((elt) => elt ?? [])
+      .map((y) => (
+        <Typography
+          color="textSecondary"
+          paragraph
+          variant="body1"
+          key={y.id}
+          style={{ textDecorationLine: "line-through" }}
+        >
+          Attribute: {Object.keys(y)[0]}, Value: {Object.values(y)[0]}
+        </Typography>
+      ));
+  }
 
   const labelTypograhy = <Typography variant="h6">{addsLabel}</Typography>;
 
@@ -49,6 +65,7 @@ function getAlterAddsOrRemovesDisplay(addsElements, addsLabel, controlPartId) {
     <DialogContent dividers>
       {labelTypograhy}
       {typographies}
+      {removedTypographies}
     </DialogContent>
   );
 }
@@ -120,7 +137,7 @@ export default function OSCALControlModification(props) {
   const controlPartId = props.controlPartId ?? props.controlId;
 
   let addsDisplay = null;
-  const removesDisplay = null;
+  let removesDisplay = null;
   let len;
   let modLength = 0;
 
@@ -134,7 +151,16 @@ export default function OSCALControlModification(props) {
     );
     modLength += len;
   }
-
+  // Get all remove modifications
+  if (alter.removes) {
+    [removesDisplay, len] = getModifications(
+      controlPartId,
+      props.controlId,
+      alter.removes,
+      "Removes "
+    );
+    modLength += len;
+  }
   // Display modifications if there are any
   if (!modLength) return null;
   return (
