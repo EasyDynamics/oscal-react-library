@@ -2,6 +2,7 @@ import BusinessIcon from "@mui/icons-material/Business";
 import EmailIcon from "@mui/icons-material/Email";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import HomeIcon from "@mui/icons-material/Home";
+import InfoIcon from "@mui/icons-material/Info";
 import MapIcon from "@mui/icons-material/Map";
 import PhoneIcon from "@mui/icons-material/Phone";
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
@@ -11,7 +12,6 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardHeader from "@mui/material/CardHeader";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Grid from "@mui/material/Grid";
@@ -19,15 +19,13 @@ import Link from "@mui/material/Link";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListSubheader from "@mui/material/ListSubheader";
-import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import React from "react";
-import InfoIcon from "@mui/icons-material/Info";
+import { OSCALSection } from "../styles/CommonPageStyles";
 import OSCALEditableTextField from "./OSCALEditableTextField";
 import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
-import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 
 export const OSCALMetadataSectionHeader = styled(ListSubheader)(
   ({ theme }) => `
@@ -149,7 +147,42 @@ function OSCALMetadataPartyContactTypeHeader(props) {
   );
 }
 
-export function OSCALMetadataPartyDialog(props) {
+function MetadataAvatar(props) {
+  const avatarColor = (name) => {
+    // This implementation hashes the given string to create a
+    // color string. This is based of the example algorithm given
+    // in the MUI documentation and adapted to our use case.
+    let hash = 0;
+    for (let i = 0; i < name.length; i += 1) {
+      // eslint-disable-next-line no-bitwise
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    let color = "#";
+    for (let i = 0; i < 3; i += 1) {
+      // eslint-disable-next-line no-bitwise
+      const value = (hash >> (i * 8)) & 0xff;
+      color += `00${value.toString(16)}`.slice(-2);
+    }
+    return color;
+  };
+
+  const avatarValue = (name) =>
+    name
+      ?.split(" ")
+      .map((str) => str.substring(0, 1))
+      .join("")
+      .substring(0, 2);
+
+  return (
+    <Avatar sx={{ bgcolor: avatarColor(props.text) }}>
+      {avatarValue(props.text)}
+    </Avatar>
+  );
+}
+
+
+export function OSCALMetadataParty(props) {
   const PartyInfoTypes = {
     address: "address",
     telephone: "telephone",
@@ -180,19 +213,17 @@ export function OSCALMetadataPartyDialog(props) {
     ));
   };
 
+  const avatar = <MetadataAvatar text={props.party.name} />;
+
   return (
-    <Dialog
-      open={props.open}
-      onClose={props.handleClose}
-      scroll="paper"
-      aria-labelledby="scroll-dialog-title"
-      aria-describedby="scroll-dialog-description"
-      maxWidth="md"
-      fullWidth
+    <OSCALMetadataCard
+      title={props.party.name}
+      subheader={props.partyRolesText?.map((role) => role.title).join(", ")}
+      avatar={avatar}
     >
       <DialogTitle id="scroll-dialog-title">
         <Stack direction="row" alignItems="center" gap={1}>
-          {props.avatar}
+          {avatar}
           <Stack direction="column">
             {props.party.name}
             {props.partyRolesText?.map((role) => (
@@ -244,93 +275,27 @@ export function OSCALMetadataPartyDialog(props) {
           </Grid>
         </Grid>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={props.handleClose} color="primary">
-          Close
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-}
-
-function MetadataAvatar(props) {
-  const avatarColor = (name) => {
-    // This implementation hashes the given string to create a
-    // color string. This is based of the example algorithm given
-    // in the MUI documentation and adapted to our use case.
-    let hash = 0;
-    for (let i = 0; i < name.length; i += 1) {
-      // eslint-disable-next-line no-bitwise
-      hash = name.charCodeAt(i) + ((hash << 5) - hash);
-    }
-
-    let color = "#";
-    for (let i = 0; i < 3; i += 1) {
-      // eslint-disable-next-line no-bitwise
-      const value = (hash >> (i * 8)) & 0xff;
-      color += `00${value.toString(16)}`.slice(-2);
-    }
-    return color;
-  };
-
-  const avatarValue = (name) =>
-    name
-      ?.split(" ")
-      .map((str) => str.substring(0, 1))
-      .join("")
-      .substring(0, 2);
-
-  return (
-    <Avatar sx={{ bgcolor: avatarColor(props.text) }}>
-      {avatarValue(props.text)}
-    </Avatar>
-  );
-}
-
-export function OSCALMetadataParty(props) {
-  const [open, setOpen] = React.useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const avatar = <MetadataAvatar text={props.party.name} />;
-
-  return (
-    <Card>
-      <CardHeader
-        avatar={avatar}
-        title={props.party.name}
-        subheader={props.partyRolesText?.map((role) => role.title).join(", ")}
-      />
-      <CardActions>
-        <Button
-          size="small"
-          variant="outlined"
-          onClick={handleOpen}
-          aria-label={`${props.party.name} details button`}
-        >
-          <InfoIcon />
-          Details
-        </Button>
-        <OSCALMetadataPartyDialog
-          open={open}
-          handleOpen={handleOpen}
-          handleClose={handleClose}
-          party={props.party}
-          partyRolesText={props.partyRolesText}
-          avatar={avatar}
-        />
-      </CardActions>
-    </Card>
+    </OSCALMetadataCard>
   );
 }
 
 export function OSCALMetadataRole(props) {
+  return (
+    <OSCALMetadataCard
+      subheader={props.role.title}
+      disabled={!props.role.description}
+    >
+      <DialogTitle>{props.role.title}</DialogTitle>
+      <DialogContent dividers>
+        <OSCALMarkupMultiLine>{props.role?.description}</OSCALMarkupMultiLine>
+      </DialogContent>
+    </OSCALMetadataCard>
+  );
+}
+
+function OSCALMetadataCard(props) {
+  const { title, subheader, avatar, disabled, children } = props;
+
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -343,14 +308,14 @@ export function OSCALMetadataRole(props) {
 
   return (
     <Card>
-      <CardHeader subheader={props.role.title} />
+      <CardHeader title={title} subheader={subheader} avatar={avatar} />
       <CardActions>
         <Button
           size="small"
           variant="outlined"
           onClick={handleOpen}
-          aria-label={`${props.role.title} details button`}
-          disabled={!props.role?.description}
+          aria-label={`${title} details button`}
+          disabled={disabled}
         >
           <InfoIcon />
           Details
@@ -359,15 +324,12 @@ export function OSCALMetadataRole(props) {
           open={open}
           onClose={handleClose}
           scroll="paper"
+          aria-labelledby="scroll-dialog-title"
+          aria-describedby="scroll-dialog-description"
           maxWidth="md"
           fullWidth
         >
-          <DialogTitle>{props.role.title}</DialogTitle>
-          <DialogContent dividers>
-            <OSCALMarkupMultiLine>
-              {props.role?.description}
-            </OSCALMarkupMultiLine>
-          </DialogContent>
+          {children}
         </Dialog>
       </CardActions>
     </Card>
