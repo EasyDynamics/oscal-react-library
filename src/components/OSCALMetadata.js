@@ -27,14 +27,15 @@ import React from "react";
 import InfoIcon from "@mui/icons-material/Info";
 import OSCALEditableTextField from "./OSCALEditableTextField";
 import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
+import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 
-export const OSCALMetadataPartiesHeader = styled(ListSubheader)(
+export const OSCALMetadataSectionHeader = styled(ListSubheader)(
   ({ theme }) => `
   background-color: ${theme.palette.background.paper};
 `
 );
 
-const OSCALMetadataPartiesInfoHeader = styled(Typography)`
+const OSCALMetadataSectionInfoHeader = styled(Typography)`
   display: flex;
   align-items: center;
 `;
@@ -52,11 +53,7 @@ const OSCALMetadataKey = styled(Grid)(
   ({ theme }) => `margin-left: ${theme.spacing(1)};`
 );
 
-const OSCALMetadataAdditional = styled(Paper)(
-  ({ theme }) => `padding: ${theme.spacing(1)};`
-);
-
-const OSCALMetadataPartiesCardHolder = styled(Grid)(({ theme }) => ({
+const OSCALMetadataSectionCardHolder = styled(Grid)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   position: "relative",
   overflow: "auto",
@@ -145,9 +142,9 @@ function OSCALMetadataPartyContactTypeHeader(props) {
   return (
     <Stack direction="row" alignItems="center" gap={1}>
       {props.icon}
-      <OSCALMetadataPartiesInfoHeader variant="h6" component="h3">
+      <OSCALMetadataSectionInfoHeader variant="h6" component="h3">
         {props.title}
-      </OSCALMetadataPartiesInfoHeader>
+      </OSCALMetadataSectionInfoHeader>
     </Stack>
   );
 }
@@ -377,10 +374,84 @@ export function OSCALMetadataRole(props) {
   );
 }
 
-export default function OSCALMetadata(props) {
-  if (!props.metadata) {
-    return null;
-  }
+function OSCALMetadataAdditional(props) {
+  return (
+    <Grid>
+      <Grid container>
+        <OSCALMetadataKey item>
+          <OSCALMetadataLabel variant="body2">Version:</OSCALMetadataLabel>
+        </OSCALMetadataKey>
+        <OSCALEditableTextField
+          fieldName="Version"
+          canEdit={props.isEditable}
+          editedField={
+            props.isEditable
+              ? [Object.keys(props.partialRestData)[0], "metadata", "version"]
+              : null
+          }
+          onFieldSave={props.onFieldSave}
+          partialRestData={
+            props.isEditable
+              ? {
+                  [Object.keys(props.partialRestData)[0]]: {
+                    uuid: props.partialRestData[
+                      Object.keys(props.partialRestData)[0]
+                    ].uuid,
+                    metadata: {
+                      version: props.metadata.version,
+                    },
+                  },
+                }
+              : null
+          }
+          size={4}
+          textFieldSize="small"
+          typographyVariant="body2"
+          value={props.metadata.version}
+        />
+      </Grid>
+      <Grid container spacing={1} direction="row" alignItems="center">
+        <OSCALMetadataKey item>
+          <OSCALMetadataLabel variant="body2">
+            Last Modified:
+          </OSCALMetadataLabel>
+        </OSCALMetadataKey>
+        <Grid item>
+          <Typography variant="body2">
+            {formatDate(props.metadata["last-modified"])}
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid container spacing={1} direction="row" alignItems="center">
+        <OSCALMetadataKey item>
+          <OSCALMetadataLabel variant="body2">
+            OSCAL Version:
+          </OSCALMetadataLabel>
+        </OSCALMetadataKey>
+        <Grid item>
+          <Typography variant="body2">
+            {props.metadata["oscal-version"]}
+          </Typography>
+        </Grid>
+      </Grid>
+    </Grid>
+  );
+}
+
+function OSCALMetadataRoles(props) {
+  const { roles } = props;
+  const cards = roles.map((role) => (
+    <Grid item xs={12} md={4} key={role.id}>
+      <OSCALMetadataRole role={role} />
+    </Grid>
+  ));
+
+  return <OSCALMetadataFieldArea title="Roles">{cards}</OSCALMetadataFieldArea>;
+}
+
+function OSCALMetadataParties(props) {
+  const { parties } = props;
+
   const getRoleLabel = (roleId) =>
     props.metadata.roles.find((role) => role.id === roleId);
 
@@ -393,8 +464,41 @@ export default function OSCALMetadata(props) {
       .map(getRoleLabel)
       .filter((item) => item);
 
+  const cards = parties.map((party) => (
+    <Grid item xs={12} md={4} key={party.uuid}>
+      <OSCALMetadataParty
+        party={party}
+        partyRolesText={getPartyRolesText(party)}
+      />
+    </Grid>
+  ));
+
   return (
-    <Grid container>
+    <OSCALMetadataFieldArea title="Parties">{cards}</OSCALMetadataFieldArea>
+  );
+}
+
+function OSCALMetadataFieldArea(props) {
+  const { title, children } = props;
+  return (
+    <Grid container alignItems="stretch">
+      <Grid item xs={12}>
+        <OSCALMetadataSectionHeader>{title}</OSCALMetadataSectionHeader>
+      </Grid>
+      <OSCALMetadataSectionCardHolder container spacing={1} wrap="wrap">
+        {children}
+      </OSCALMetadataSectionCardHolder>
+    </Grid>
+  );
+}
+
+export default function OSCALMetadata(props) {
+  if (!props.metadata) {
+    return null;
+  }
+
+  return (
+    <OSCALSection>
       <Grid item xs={12}>
         <OSCALMetadataTitle container direction="row" alignItems="center">
           <OSCALEditableTextField
@@ -427,105 +531,21 @@ export default function OSCALMetadata(props) {
           />
         </OSCALMetadataTitle>
       </Grid>
-      <Grid container spacing={1}>
-        <Grid component={Paper} item xs={8}>
-          <Grid item xs={12}>
-            <OSCALMetadataPartiesHeader>Parties</OSCALMetadataPartiesHeader>
+      <Card>
+        <Grid container spacing={1}>
+          <Grid item md={3} xs={12}>
+            <Grid item xs={12} />
           </Grid>
-          <OSCALMetadataPartiesCardHolder container spacing={1} wrap="wrap">
-            {props.metadata.parties?.map((party) => (
-              <Grid item xs={12} md={4} key={party.uuid}>
-                <OSCALMetadataParty
-                  key={party.uuid}
-                  party={party}
-                  partyRolesText={getPartyRolesText(party)}
-                />
-              </Grid>
-            ))}
-          </OSCALMetadataPartiesCardHolder>
+          <OSCALMetadataSectionCardHolder title="Metadata">
+            <OSCALMetadataAdditional metadata={props.metadata} />
+          </OSCALMetadataSectionCardHolder>
+          <OSCALMetadataParties
+            parties={props.metadata?.parties}
+            metadata={props.metadata}
+          />
+          <OSCALMetadataRoles roles={props.metadata?.roles} />
         </Grid>
-        <Grid item md={3} xs={12}>
-          <Grid item xs={12}>
-            <OSCALMetadataAdditional>
-              <Grid container direction="row" alignItems="center">
-                <OSCALMetadataKey item>
-                  <OSCALMetadataLabel variant="body2">
-                    Version:
-                  </OSCALMetadataLabel>
-                </OSCALMetadataKey>
-                <OSCALEditableTextField
-                  fieldName="Version"
-                  canEdit={props.isEditable}
-                  editedField={
-                    props.isEditable
-                      ? [
-                          Object.keys(props.partialRestData)[0],
-                          "metadata",
-                          "version",
-                        ]
-                      : null
-                  }
-                  onFieldSave={props.onFieldSave}
-                  partialRestData={
-                    props.isEditable
-                      ? {
-                          [Object.keys(props.partialRestData)[0]]: {
-                            uuid: props.partialRestData[
-                              Object.keys(props.partialRestData)[0]
-                            ].uuid,
-                            metadata: {
-                              version: props.metadata.version,
-                            },
-                          },
-                        }
-                      : null
-                  }
-                  size={4}
-                  textFieldSize="small"
-                  typographyVariant="body2"
-                  value={props.metadata.version}
-                />
-              </Grid>
-              <Grid container spacing={1} direction="row" alignItems="center">
-                <OSCALMetadataKey item>
-                  <OSCALMetadataLabel variant="body2">
-                    Last Modified:
-                  </OSCALMetadataLabel>
-                </OSCALMetadataKey>
-                <Grid item>
-                  <Typography variant="body2">
-                    {formatDate(props.metadata["last-modified"])}
-                  </Typography>
-                </Grid>
-              </Grid>
-              <Grid container spacing={1} direction="row" alignItems="center">
-                <OSCALMetadataKey item>
-                  <OSCALMetadataLabel variant="body2">
-                    OSCAL Version:
-                  </OSCALMetadataLabel>
-                </OSCALMetadataKey>
-                <Grid item>
-                  <Typography variant="body2">
-                    {props.metadata["oscal-version"]}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </OSCALMetadataAdditional>
-          </Grid>
-        </Grid>
-        <Grid component={Paper} item xs={8}>
-          <Grid item xs={12}>
-            <OSCALMetadataPartiesHeader>Roles</OSCALMetadataPartiesHeader>
-          </Grid>
-          <OSCALMetadataPartiesCardHolder container spacing={1} wrap="wrap">
-            {props.metadata.roles?.map((role) => (
-              <Grid item xs={12} md={4} key={role.id}>
-                <OSCALMetadataRole key={role.id} role={role} />
-              </Grid>
-            ))}
-          </OSCALMetadataPartiesCardHolder>
-        </Grid>
-      </Grid>
-    </Grid>
+      </Card>
+    </OSCALSection>
   );
 }
