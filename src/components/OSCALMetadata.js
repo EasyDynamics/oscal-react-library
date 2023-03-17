@@ -1,5 +1,6 @@
 import BusinessIcon from "@mui/icons-material/Business";
 import EmailIcon from "@mui/icons-material/Email";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import HomeIcon from "@mui/icons-material/Home";
 import InfoIcon from "@mui/icons-material/Info";
@@ -7,6 +8,9 @@ import MapIcon from "@mui/icons-material/Map";
 import PhoneIcon from "@mui/icons-material/Phone";
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
 import { CardContent } from "@mui/material";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -19,7 +23,6 @@ import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListSubheader from "@mui/material/ListSubheader";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
@@ -27,12 +30,6 @@ import React from "react";
 import { OSCALSection } from "../styles/CommonPageStyles";
 import OSCALEditableTextField from "./OSCALEditableTextField";
 import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
-
-export const OSCALMetadataSectionHeader = styled(ListSubheader)(
-  ({ theme }) => `
-  background-color: ${theme.palette.background.paper};
-`
-);
 
 const OSCALMetadataSectionInfoHeader = styled(Typography)`
   display: flex;
@@ -443,14 +440,16 @@ function OSCALMetadataParties(props) {
 function OSCALMetadataFieldArea(props) {
   const { title, children } = props;
   return (
-    <Grid container>
-      <Grid item xs={12}>
-        <OSCALMetadataSectionHeader>{title}</OSCALMetadataSectionHeader>
-      </Grid>
-      <OSCALMetadataSectionCardHolder container spacing={1} wrap="wrap">
-        {children}
-      </OSCALMetadataSectionCardHolder>
-    </Grid>
+    <Accordion>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <Typography>{title}</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <OSCALMetadataSectionCardHolder container spacing={1} wrap="wrap">
+          {children}
+        </OSCALMetadataSectionCardHolder>
+      </AccordionDetails>
+    </Accordion>
   );
 }
 
