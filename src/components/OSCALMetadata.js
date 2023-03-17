@@ -6,6 +6,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import MapIcon from "@mui/icons-material/Map";
 import PhoneIcon from "@mui/icons-material/Phone";
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
+import { CardContent } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -47,10 +48,6 @@ const OSCALMetadataTitle = styled(Grid)`
   height: 56px;
 `;
 
-const OSCALMetadataKey = styled(Grid)(
-  ({ theme }) => `margin-left: ${theme.spacing(1)};`
-);
-
 const OSCALMetadataSectionCardHolder = styled(Grid)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   position: "relative",
@@ -64,7 +61,12 @@ const OSCALMetadataSectionCardHolder = styled(Grid)(({ theme }) => ({
 }));
 
 // Returns a string with a locality-sensitive representation of this date
-const formatDate = (isoDate) => new Date(isoDate).toLocaleString();
+function formatDate(isoDate) {
+  if (!isoDate) {
+    return isoDate;
+  }
+  return new Date(isoDate).toLocaleString();
+}
 
 const TELEPHONE_ICON_MAPPING = {
   home: <HomeIcon />,
@@ -335,31 +337,42 @@ function OSCALMetadataCard(props) {
   );
 }
 
-function OSCALMetadataAdditional(props) {
+function OSCALMetadataBasicDataItem(props) {
+  const { title, data } = props;
+
   return (
-    <Grid>
-      <Grid container>
-        <OSCALMetadataKey item>
-          <OSCALMetadataLabel variant="body2">Version:</OSCALMetadataLabel>
-        </OSCALMetadataKey>
+    <Stack direction="row" spacing={1}>
+      <OSCALMetadataLabel variant="body2">{title}</OSCALMetadataLabel>
+      <Typography variant="body2">{data}</Typography>
+    </Stack>
+  );
+}
+
+function OSCALMetadataBasicData(props) {
+  const { metadata, isEditable, partialRestData, onFieldSave } = props;
+
+  return (
+    <Stack direction="row" spacing={4}>
+      <Stack direction="row" spacing={1}>
+        <OSCALMetadataLabel variant="body2">
+          Document Version:
+        </OSCALMetadataLabel>
         <OSCALEditableTextField
           fieldName="Version"
-          canEdit={props.isEditable}
+          canEdit={isEditable}
           editedField={
-            props.isEditable
-              ? [Object.keys(props.partialRestData)[0], "metadata", "version"]
+            isEditable
+              ? [Object.keys(partialRestData)[0], "metadata", "version"]
               : null
           }
-          onFieldSave={props.onFieldSave}
+          onFieldSave={onFieldSave}
           partialRestData={
-            props.isEditable
+            isEditable
               ? {
-                  [Object.keys(props.partialRestData)[0]]: {
-                    uuid: props.partialRestData[
-                      Object.keys(props.partialRestData)[0]
-                    ].uuid,
+                  [Object.keys(partialRestData)[0]]: {
+                    uuid: partialRestData[Object.keys(partialRestData)[0]].uuid,
                     metadata: {
-                      version: props.metadata.version,
+                      version: metadata.version,
                     },
                   },
                 }
@@ -368,34 +381,22 @@ function OSCALMetadataAdditional(props) {
           size={4}
           textFieldSize="small"
           typographyVariant="body2"
-          value={props.metadata.version}
+          value={metadata.version}
         />
-      </Grid>
-      <Grid container spacing={1} direction="row" alignItems="center">
-        <OSCALMetadataKey item>
-          <OSCALMetadataLabel variant="body2">
-            Last Modified:
-          </OSCALMetadataLabel>
-        </OSCALMetadataKey>
-        <Grid item>
-          <Typography variant="body2">
-            {formatDate(props.metadata["last-modified"])}
-          </Typography>
-        </Grid>
-      </Grid>
-      <Grid container spacing={1} direction="row" alignItems="center">
-        <OSCALMetadataKey item>
-          <OSCALMetadataLabel variant="body2">
-            OSCAL Version:
-          </OSCALMetadataLabel>
-        </OSCALMetadataKey>
-        <Grid item>
-          <Typography variant="body2">
-            {props.metadata["oscal-version"]}
-          </Typography>
-        </Grid>
-      </Grid>
-    </Grid>
+      </Stack>
+      <OSCALMetadataBasicDataItem
+        title="OSCAL Version:"
+        data={metadata["oscal-version"]}
+      />
+      <OSCALMetadataBasicDataItem
+        title="Last Modified:"
+        data={formatDate(metadata["last-modified"])}
+      />
+      <OSCALMetadataBasicDataItem
+        title="Published Date:"
+        data={formatDate(metadata.published) ?? "Not published"}
+      />
+    </Stack>
   );
 }
 
@@ -442,7 +443,7 @@ function OSCALMetadataParties(props) {
 function OSCALMetadataFieldArea(props) {
   const { title, children } = props;
   return (
-    <Grid container alignItems="stretch">
+    <Grid container>
       <Grid item xs={12}>
         <OSCALMetadataSectionHeader>{title}</OSCALMetadataSectionHeader>
       </Grid>
@@ -460,7 +461,7 @@ export default function OSCALMetadata(props) {
 
   return (
     <OSCALSection>
-      <Grid item xs={12}>
+      <Stack>
         <OSCALMetadataTitle container direction="row" alignItems="center">
           <OSCALEditableTextField
             fieldName="Title"
@@ -491,21 +492,25 @@ export default function OSCALMetadata(props) {
             value={props.metadata.title}
           />
         </OSCALMetadataTitle>
-      </Grid>
+      </Stack>
       <Card>
-        <Grid container spacing={1}>
-          <Grid item md={3} xs={12}>
-            <Grid item xs={12} />
-          </Grid>
-          <OSCALMetadataSectionCardHolder title="Metadata">
-            <OSCALMetadataAdditional metadata={props.metadata} />
-          </OSCALMetadataSectionCardHolder>
-          <OSCALMetadataParties
-            parties={props.metadata?.parties}
-            metadata={props.metadata}
-          />
-          <OSCALMetadataRoles roles={props.metadata?.roles} />
-        </Grid>
+        <CardContent>
+          <Stack>
+            <OSCALMetadataSectionCardHolder title="Metadata">
+              <OSCALMetadataBasicData
+                metadata={props.metadata}
+                isEditable={props.isEditable}
+                partialRestData={props.partialRestData}
+                onFieldSave={props.onFieldSave}
+              />
+            </OSCALMetadataSectionCardHolder>
+            <OSCALMetadataParties
+              parties={props.metadata?.parties}
+              metadata={props.metadata}
+            />
+            <OSCALMetadataRoles roles={props.metadata?.roles} />
+          </Stack>
+        </CardContent>
       </Card>
     </OSCALSection>
   );
