@@ -47,6 +47,10 @@ const OSCALMetadataLabel = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
+const OSCALMetadataCardTitleFallbackText = styled(Typography)(({ theme }) => ({
+  color: theme.palette.text.secondary,
+}));
+
 const OSCALMetadataTitle = styled(Grid)`
   height: 56px;
 `;
@@ -347,7 +351,13 @@ function OSCALMetadataCard(props) {
     setOpen(false);
   };
 
-  const cardTitle = title ?? "Not Specified";
+  const cardTitle = title ? (
+    <OSCALMarkupLine>{title}</OSCALMarkupLine>
+  ) : (
+    <OSCALMetadataCardTitleFallbackText>
+      Not Specified
+    </OSCALMetadataCardTitleFallbackText>
+  );
 
   return (
     <>
@@ -357,7 +367,7 @@ function OSCALMetadataCard(props) {
           size="small"
           variant="outlined"
           onClick={handleOpen}
-          aria-label={`${cardTitle ?? subheader} details button`}
+          aria-label={`${title ?? subheader} details button`}
           disabled={disabled}
           startIcon={<InfoIcon />}
         >
