@@ -349,8 +349,29 @@ export function OSCALReplacedProseWithParameterLabel(props) {
       </NotImplementedStatement>
     );
   }
+
+  const { controlId } = props.modificationDisplay.props;
+  const { controlPartId } = props.modificationDisplay.props;
+  const alter =
+    props.modificationDisplay.props.modificationAlters?.find(
+      (item) => item["control-id"] === controlId
+    ) ?? [];
+  const remove = alter.removes ?? [];
+  const statementIds =
+    remove.find((object) => object["by-id"] === controlPartId) ?? [];
+
+  if (statementIds.length === 0) {
+    return (
+      <Typography>
+        {props.label}
+        {prose}
+        {props.modificationDisplay}
+      </Typography>
+    );
+  }
+
   return (
-    <Typography>
+    <Typography style={{ textDecorationLine: "line-through" }}>
       {props.label}
       {prose}
       {props.modificationDisplay}

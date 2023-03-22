@@ -19,7 +19,7 @@ const OSCALControlModificationsButton = styled(IconButton)(
  * Create a typography html object for addsOrRemovesLabel
  *
  * @param {Object} addsElements add or remove object to map into html
- * @param {String} addsRemovesLabel string variable
+ * @param {String} addsRemovesLabel string variable, this variable should "Adds " or "Removes "
  * @param {String} controlPartId Control part ID to match
  * @returns html object
  */
@@ -56,7 +56,6 @@ function getAlterAddsOrRemovesDisplay(
           paragraph
           variant="body1"
           key={item.id}
-          style={{ textDecorationLine: "line-through" }}
         >
           Attribute: {Object.keys.length > 0 ? Object.keys(item)[0] : ""},
           Value: {Object.values.length > 0 ? Object.values(item)[0] : ""}

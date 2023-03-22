@@ -58,10 +58,22 @@ export default function OSCALProfile(props) {
     };
   }, []);
 
+  let includeAll = false;
+  const includeAllControls = props.profile.imports.map(
+    (imp) => imp["include-all"]
+  );
+
+  if (includeAllControls.length > 0 && includeAllControls[0] !== undefined) {
+    includeAll = true;
+  }
   // Flatten controls and IDs into single key, value structure
   const includeControlIds = props.profile.imports
     .flatMap((imp) => imp["include-controls"])
     .flatMap((includeControl) => includeControl["with-ids"]);
+
+  const excludeControlIds = props.profile.imports
+    .flatMap((imp) => imp["exclude-controls"] ?? [])
+    .flatMap((excludeControl) => excludeControl["with-ids"] ?? []);
 
   // Import resolved controls when loaded. When loading, display a basic skeleton placeholder
   // resembling the content.
@@ -87,7 +99,9 @@ export default function OSCALProfile(props) {
       {isLoaded ? (
         props.profile.resolvedControls.map((control) => (
           <OSCALControl
+            includeAll={includeAll}
             control={control}
+            excludeControlIds={excludeControlIds}
             includeControlIds={includeControlIds}
             modificationAlters={props.profile.modify?.alters}
             modificationSetParameters={props.profile.modify?.["set-parameters"]}
