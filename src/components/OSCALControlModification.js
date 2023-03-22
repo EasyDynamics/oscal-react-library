@@ -19,11 +19,15 @@ const OSCALControlModificationsButton = styled(IconButton)(
  * Create a typography html object for addsOrRemovesLabel
  *
  * @param {Object} addsElements add or remove object to map into html
- * @param {String} addsLabel boolean variable, true if adding
+ * @param {String} addsRemovesLabel string variable
  * @param {String} controlPartId Control part ID to match
  * @returns html object
  */
-function getAlterAddsOrRemovesDisplay(addsElements, addsLabel, controlPartId) {
+function getAlterAddsOrRemovesDisplay(
+  addsElements,
+  addsRemovesLabel,
+  controlPartId
+) {
   if (!addsElements?.length) {
     return null;
   }
@@ -43,23 +47,26 @@ function getAlterAddsOrRemovesDisplay(addsElements, addsLabel, controlPartId) {
       </Typography>
     ));
   let removedTypographies = null;
-  if (addsLabel === "Removes ") {
+  if (addsRemovesLabel === "Removes ") {
     removedTypographies = addsElements
-      .flatMap((elt) => elt ?? [])
-      .map((y) => (
+      .flatMap((element) => element ?? [])
+      .map((item) => (
         <Typography
           color="textSecondary"
           paragraph
           variant="body1"
-          key={y.id}
+          key={item.id}
           style={{ textDecorationLine: "line-through" }}
         >
-          Attribute: {Object.keys(y)[0]}, Value: {Object.values(y)[0]}
+          Attribute: {Object.keys.length > 0 ? Object.keys(item)[0] : ""},
+          Value: {Object.values.length > 0 ? Object.values(item)[0] : ""}
         </Typography>
       ));
   }
 
-  const labelTypograhy = <Typography variant="h6">{addsLabel}</Typography>;
+  const labelTypograhy = (
+    <Typography variant="h6">{addsRemovesLabel}</Typography>
+  );
 
   return (
     <DialogContent dividers>
