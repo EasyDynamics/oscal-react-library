@@ -357,7 +357,7 @@ function OSCALMetadataCard(props) {
           size="small"
           variant="outlined"
           onClick={handleOpen}
-          aria-label={`${title ?? subheader} details button`}
+          aria-label={`${cardTitle ?? subheader} details button`}
           disabled={disabled}
           startIcon={<InfoIcon />}
         >
@@ -573,16 +573,7 @@ export function OSCALMetadataLocation(props) {
   );
 
   return (
-    <OSCALMetadataCard
-      title={
-        location.title ? (
-          <OSCALMarkupLine>{location.title}</OSCALMarkupLine>
-        ) : (
-          "Not Specified"
-        )
-      }
-      avatar={avatar}
-    >
+    <OSCALMetadataCard title={location.title} avatar={avatar}>
       <DialogTitle>
         <OSCALMarkupLine>{location.title}</OSCALMarkupLine>
       </DialogTitle>

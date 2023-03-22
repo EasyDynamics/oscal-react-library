@@ -202,3 +202,82 @@ describe("OSCAL metadata roles", () => {
     expect(description).toBeVisible();
   });
 });
+
+describe("OSCAL metadata locations", () => {
+  test("display location titles", () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
+
+    const expand = screen.getByText("Locations");
+    fireEvent.click(expand);
+
+    const location1 = screen.getByText("Example Location");
+    const location2 = screen.getByText("Not Specified");
+
+    expect(location1).toBeVisible();
+    expect(location2).toBeVisible();
+  });
+
+  test("display location address", () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
+
+    const expand = screen.getByText("Locations");
+    fireEvent.click(expand);
+
+    const button = screen.getByRole("button", {
+      name: /Example Location details button/i,
+    });
+    button.click();
+
+    expect(screen.getByText("Address")).toBeVisible();
+    expect(screen.getByText(/0000 stsuite 3city, state 0000us/i)).toBeVisible();
+  });
+
+  test(`display telephone office number info`, () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
+
+    const expand = screen.getByText("Locations");
+    fireEvent.click(expand);
+
+    const button = screen.getByRole("button", {
+      name: /Example Location details button/i,
+    });
+    button.click();
+
+    expect(screen.getByText("Phone")).toBeVisible();
+    expect(screen.getByRole("link", { name: /\+18004444444/i })).toBeVisible();
+  });
+
+  test(`display email contact info`, () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
+
+    const expand = screen.getByText("Locations");
+    fireEvent.click(expand);
+
+    const button = screen.getByRole("button", {
+      name: /Example Location details button/i,
+    });
+    button.click();
+
+    expect(screen.getByText("Email")).toBeVisible();
+    expect(
+      screen.getByRole("link", { name: /owners@email\.org/i })
+    ).toBeVisible();
+  });
+
+  test(`display url list`, () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
+
+    const expand = screen.getByText("Locations");
+    fireEvent.click(expand);
+
+    const button = screen.getByRole("button", {
+      name: /Example Location details button/i,
+    });
+    button.click();
+
+    expect(screen.getByText("URLs")).toBeVisible();
+    expect(
+      screen.getByRole("link", { name: /www\.website\.com/i })
+    ).toBeVisible();
+  });
+});
