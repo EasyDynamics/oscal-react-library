@@ -28,11 +28,11 @@ import PersonIcon from "@mui/icons-material/Person";
 import WorkIcon from "@mui/icons-material/Work";
 import GroupIcon from "@mui/icons-material/Group";
 import PlaceIcon from "@mui/icons-material/Place";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import React from "react";
-import { Work } from "@mui/icons-material";
 import { OSCALSection } from "../styles/CommonPageStyles";
 import OSCALEditableTextField from "./OSCALEditableTextField";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
@@ -60,7 +60,6 @@ const OSCALMetadataSectionCardHolder = styled(Grid)(({ theme }) => ({
   paddingRight: ".5em",
   paddingTop: ".5em",
   display: "flex",
-  direction: "row",
 }));
 
 // Returns a string with a locality-sensitive representation of this date
@@ -100,26 +99,42 @@ function getAddressIcon(contactType) {
 }
 
 function TextWithIcon(props) {
-  const { icon, text } = props;
+  const { icon, children } = props;
+
   return (
     <Stack direction="row" gap={1} alignItems="start">
       {icon}
-      <Typography>{text}</Typography>
+      <Typography>{children}</Typography>
     </Stack>
   );
 }
 
 export function OSCALMetadataAddress(props) {
+  const tryFormatAddress = (address) => {
+    const lines = address["addr-lines"] ?? [];
+    const cityAndState = [address.city, address.state]
+      .filter((it) => it)
+      .join(", ");
+    const line = [cityAndState, address["postal-code"]]
+      .filter((it) => it)
+      .join(" ");
+    const allLines = [...lines, line, address.country].filter((it) => it);
+    return allLines;
+  };
   const { address } = props;
-  const addrString = [
-    ...address["addr-lines"],
-    `${address.city}, ${address.state} ${address["postal-code"]}`,
-    address.country,
-  ]
-    .filter((line) => line)
-    .flatMap((item) => [item, <br key={item} />]);
 
-  return <TextWithIcon icon={getAddressIcon(address.type)} text={addrString} />;
+  const addr = tryFormatAddress(address);
+  const formatted = addr.flatMap((it, index) => [it, <br key={index} />]);
+
+  return addr.length ? (
+    <TextWithIcon icon={getAddressIcon(address.type)} key={address}>
+      {formatted}
+    </TextWithIcon>
+  ) : (
+    <TextWithIcon icon={<ErrorOutlineIcon />} key={address}>
+      <Typography variant="body2">Address cannot be formatted</Typography>
+    </TextWithIcon>
+  );
 }
 
 export function OSCALMetadataEmail(props) {
@@ -134,10 +149,9 @@ export function OSCALMetadataTelephone(props) {
   const { telephone } = props;
 
   return (
-    <TextWithIcon
-      icon={getPhoneIcon(telephone.type)}
-      text={<Link href={`tel:${telephone.number}`}>{telephone.number}</Link>}
-    />
+    <TextWithIcon icon={getPhoneIcon(telephone.type)}>
+      <Link href={`tel:${telephone.number}`}>{telephone.number}</Link>
+    </TextWithIcon>
   );
 }
 
@@ -333,9 +347,11 @@ function OSCALMetadataCard(props) {
     setOpen(false);
   };
 
+  const cardTitle = title ?? "Not Specified";
+
   return (
-    <Card>
-      <CardHeader title={title} subheader={subheader} avatar={avatar} />
+    <>
+      <CardHeader title={cardTitle} subheader={subheader} avatar={avatar} />
       <CardActions>
         <Button
           size="small"
@@ -359,7 +375,7 @@ function OSCALMetadataCard(props) {
           {children}
         </Dialog>
       </CardActions>
-    </Card>
+    </>
   );
 }
 
@@ -429,7 +445,7 @@ function OSCALMetadataBasicData(props) {
 function OSCALMetadataRoles(props) {
   const { roles } = props;
   const cards = roles?.map((role) => (
-    <Grid item xs={12} md={4} key={role.id}>
+    <Grid item xs={12} md={4} key={role.id} component={Card}>
       <OSCALMetadataRole role={role} />
     </Grid>
   ));
@@ -453,7 +469,7 @@ function OSCALMetadataParties(props) {
       .filter((item) => item);
 
   const cards = parties?.map((party) => (
-    <Grid item xs={12} md={4} key={party.uuid}>
+    <Grid item xs={12} md={4} key={party.uuid} component={Card}>
       <OSCALMetadataParty
         party={party}
         partyRolesText={getPartyRolesText(party)}
@@ -470,7 +486,7 @@ function OSCALMetadataLocations(props) {
   const { locations } = props;
 
   const cards = locations?.map((location) => (
-    <Grid item xs={12} md={4} key={location.uuid}>
+    <Grid item xs={12} md={4} key={location.uuid} component={Card}>
       <OSCALMetadataLocation location={location} />
     </Grid>
   ));
@@ -487,9 +503,11 @@ function OSCALMetadataLocationUrls(props) {
       <OSCALMetadataContactTypeHeader title="URLs" />
       {urls?.length ? (
         urls.map((url) => (
-          <Link href={url} key={url} target="_blank" rel="noreferrer">
-            <TextWithIcon icon={<OpenInNewIcon />} text={url} />
-          </Link>
+          <TextWithIcon key={url} icon={<OpenInNewIcon />}>
+            <Link href={url} target="_blank" rel="noreferrer">
+              {url}
+            </Link>
+          </TextWithIcon>
         ))
       ) : (
         <Typography>So sad! No URLs.</Typography>
@@ -556,7 +574,13 @@ export function OSCALMetadataLocation(props) {
 
   return (
     <OSCALMetadataCard
-      title={<OSCALMarkupLine>{location.title}</OSCALMarkupLine>}
+      title={
+        location.title ? (
+          <OSCALMarkupLine>{location.title}</OSCALMarkupLine>
+        ) : (
+          "Not Specified"
+        )
+      }
       avatar={avatar}
     >
       <DialogTitle>
@@ -577,9 +601,9 @@ function OSCALMetadataFieldArea(props) {
         <Typography>{title}</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <OSCALMetadataSectionCardHolder container spacing={1} wrap="wrap">
+        <Grid container alignItems="stretch">
           {children}
-        </OSCALMetadataSectionCardHolder>
+        </Grid>
       </AccordionDetails>
     </Accordion>
   );
