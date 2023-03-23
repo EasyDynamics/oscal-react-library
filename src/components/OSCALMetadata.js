@@ -520,7 +520,7 @@ function OSCALMetadataLocationUrls(props) {
           </TextWithIcon>
         ))
       ) : (
-        <Typography>So sad! No URLs.</Typography>
+        <Typography>No URL specified</Typography>
       )}
     </Stack>
   );
