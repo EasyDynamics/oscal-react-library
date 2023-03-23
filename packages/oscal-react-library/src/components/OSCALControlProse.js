@@ -169,7 +169,11 @@ function getTextSegment(text, key) {
   }
   return (
     <Typography component="span" key={key}>
-      <OSCALMarkupLine>{text}</OSCALMarkupLine>
+      {text.includes("\n") ? (
+        <OSCALMarkupMultiLine>{text}</OSCALMarkupMultiLine>
+      ) : (
+        <OSCALMarkupLine>{text}</OSCALMarkupLine>
+      )}
     </Typography>
   );
 }
@@ -241,7 +245,6 @@ function getParameterLabelSegment(
   if (!constraintsDisplay) {
     return paramSegment;
   }
-
   return (
     <SegmentTooltipWrapper
       constraintsDisplay={constraintsDisplay}
@@ -321,7 +324,6 @@ export function OSCALReplacedProseWithParameterLabel(props) {
   if (!props.prose) {
     return null;
   }
-
   const prose = props.parameters
     ? props.prose
         .split(RegExp(prosePlaceholderRegexpString, "g"))
