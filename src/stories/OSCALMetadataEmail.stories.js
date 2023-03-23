@@ -1,15 +1,15 @@
 import React from "react";
-import { OSCALMetadataPartyEmail } from "../components/OSCALMetadata";
+import { OSCALMetadataEmail } from "../components/OSCALMetadata";
 
 import { exampleParties } from "../test-data/CommonData";
 
 export default {
   title: "Components/Metadata Party Email",
-  component: OSCALMetadataPartyEmail,
+  component: OSCALMetadataEmail,
 };
 
 function Template(args) {
-  return <OSCALMetadataPartyEmail {...args} />;
+  return <OSCALMetadataEmail {...args} />;
 }
 
 export const Default = Template.bind({});

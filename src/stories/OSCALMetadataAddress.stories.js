@@ -1,15 +1,15 @@
 import React from "react";
-import { OSCALMetadataPartyAddress } from "../components/OSCALMetadata";
+import { OSCALMetadataAddress } from "../components/OSCALMetadata";
 
 import { exampleParties } from "../test-data/CommonData";
 
 export default {
   title: "Components/Metadata Party Address",
-  component: OSCALMetadataPartyAddress,
+  component: OSCALMetadataAddress,
 };
 
 function Template(args) {
-  return <OSCALMetadataPartyAddress {...args} />;
+  return <OSCALMetadataAddress {...args} />;
 }
 
 export const Home = Template.bind({});
