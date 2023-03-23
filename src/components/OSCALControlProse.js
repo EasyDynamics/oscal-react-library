@@ -350,6 +350,16 @@ export function OSCALReplacedProseWithParameterLabel(props) {
     );
   }
 
+  if (props.modificationDisplay === undefined) {
+    return (
+      <Typography>
+        {props.label}
+        {prose}
+        {props.modificationDisplay}
+      </Typography>
+    );
+  }
+
   const { controlId } = props.modificationDisplay.props;
   const { controlPartId } = props.modificationDisplay.props;
   const alter =
