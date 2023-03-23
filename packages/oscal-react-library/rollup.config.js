@@ -24,7 +24,9 @@ export default {
     },
   ],
   plugins: [
+    resolve({ preferBuiltins: false, extensions: EXTENSIONS }),
     peerDepsExternal(),
+    postcss(),
     typescript({
       tsconfigOverride: {
         exclude: ["**/stories.*"],
@@ -36,8 +38,6 @@ export default {
       exclude: "**/node_modules/**",
     }),
     commonjs(),
-    resolve({ preferBuiltins: false, extensions: EXTENSIONS }),
-    postcss(),
   ],
   external: ["react", "react-dom", "react-markdown", /@babel\/runtime/],
 };

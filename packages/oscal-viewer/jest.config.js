@@ -3,7 +3,7 @@ module.exports = {
   roots: ["src"],
   moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
   transform: {
-    "^.+\\.tsx?$": "ts-jest",
+    "^.+\\.[jt]sx?$": "ts-jest",
   },
   testMatch: ["**/*.test.(ts|tsx|js|jsx)"],
   // preset: "ts-jest",
