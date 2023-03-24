@@ -17,3 +17,9 @@ export const Default = Template.bind({});
 Default.args = {
   location: exampleLocations[0],
 };
+
+export const Minimum = Template.bind({});
+
+Minimum.args = {
+  location: exampleLocations[1],
+};
