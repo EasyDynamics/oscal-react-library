@@ -53,7 +53,7 @@ export default function OSCALControlGuidance(props) {
         aria-describedby="scroll-dialog-description"
       >
         <DialogTitle id="scroll-dialog-title">
-          {`${props.id.toUpperCase()} ${props.title} Discussion`}
+          {`${props.label ?? props.id.toUpperCase()} ${props.title} Discussion`}
         </DialogTitle>
         <DialogContent dividers>
           <DialogContentText

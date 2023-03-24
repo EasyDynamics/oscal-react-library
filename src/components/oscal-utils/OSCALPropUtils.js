@@ -34,6 +34,10 @@ export function namespaceOf(ns) {
  * @property {PropertyFilterValueMatcher} filter - a function to match the value against
  */
 
+export function propWithName(props, name, ns) {
+  return matchingProp(props, { name, ns, filter: () => true });
+}
+
 /**
  * Returns the first matching property in the given list.
  *

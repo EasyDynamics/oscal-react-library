@@ -6,6 +6,7 @@ import {
   OSCALReplacedProseWithByComponentParameterValue,
   OSCALReplacedProseWithParameterLabel,
 } from "./OSCALControlProse";
+import { propWithName } from "./oscal-utils/OSCALPropUtils";
 
 const OSCALControlPartWrapper = styled("div", {
   shouldForwardProp: (prop) =>
@@ -13,12 +14,6 @@ const OSCALControlPartWrapper = styled("div", {
 })`
   padding-left: ${(props) => (props.partName !== "statement" ? "2em" : "0")};
 `;
-
-// TODO: This is probably 800-53 specific and it should be made more
-// generic to allow the library to work with other frameworks.
-// https://github.com/EasyDynamics/oscal-react-library/issues/504
-const getPartLabel = (props) =>
-  props?.find((property) => property.name === "label")?.value;
 
 export default function OSCALControlPart(props) {
   // Don't display assessment if we're displaying a control implementation
@@ -31,12 +26,15 @@ export default function OSCALControlPart(props) {
     return null;
   }
 
+  const label = propWithName(props.part.props, "label")?.value;
+
   if (props.part.name === "guidance") {
     return (
       <OSCALControlGuidance
         prose={props.part.prose}
         id={props.control.id}
         title={props.control.title}
+        label={label}
       />
     );
   }
@@ -51,8 +49,6 @@ export default function OSCALControlPart(props) {
       />
     );
   }
-
-  const label = getPartLabel(props.part.props);
 
   let replacedProse;
   if (props.implementedRequirement) {
