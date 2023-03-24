@@ -526,7 +526,7 @@ function OSCALMetadataLocationUrls(props) {
   );
 }
 
-function OSCALMetadataLocationContent(props) {
+export function OSCALMetadataLocationContent(props) {
   const { location } = props;
 
   return (
