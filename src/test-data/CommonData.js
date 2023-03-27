@@ -123,6 +123,12 @@ export const metadataTestData = {
   roles: exampleRoles,
   locations: exampleLocations,
   version: "Revision 5",
+  props: [
+    {
+      name: "keywords",
+      value: "Keyword_1, Keyword_2,Keyword_3",
+    },
+  ],
 };
 
 export const responsibleRolesTestData = [

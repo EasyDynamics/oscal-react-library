@@ -281,3 +281,20 @@ describe("OSCAL metadata locations", () => {
     ).toBeVisible();
   });
 });
+
+describe("OSCAL metadata keywords", () => {
+  test("display keyword chips", () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
+
+    const expand = screen.getByText("Keywords");
+    fireEvent.click(expand);
+
+    const keyword1 = screen.getByText("Keyword_1");
+    const keyword2 = screen.getByText("Keyword_2");
+    const keyword3 = screen.getByText("Keyword_3");
+
+    expect(keyword1).toBeVisible();
+    expect(keyword2).toBeVisible();
+    expect(keyword3).toBeVisible();
+  });
+});
