@@ -32,9 +32,11 @@ import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import React from "react";
+import React, { useCallback, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { OSCALSection } from "../styles/CommonPageStyles";
 import OSCALEditableTextField from "./OSCALEditableTextField";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 const OSCALMetadataSectionInfoHeader = styled(Typography)`
@@ -596,10 +598,34 @@ export function OSCALMetadataLocation(props) {
 
 function OSCALMetadataFieldArea(props) {
   const { title, children } = props;
+  const location = useLocation();
+
+  const [expand, setExpand] = React.useState(false);
+
+  const handleExpand = () => {
+    setExpand(!expand);
+  };
+
+  const handleFragment = useCallback(() => {
+    // Grab fragment identifier following hash character if fragment exists in location
+    const controlFragment =
+      location.hash !== "" ? location.hash.substring(1) : null;
+    // Expand metadata accordion section if control fragment matches title
+    if (controlFragment === title.toLowerCase()) {
+      setExpand(true);
+    }
+  }, [location.hash]);
+
+  useEffect(() => {
+    handleFragment();
+  }, [handleFragment]);
+
   return (
-    <Accordion>
+    <Accordion expanded={expand} onChange={handleExpand}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>{title}</Typography>
+        <OSCALAnchorLinkHeader>
+          <Typography>{title}</Typography>
+        </OSCALAnchorLinkHeader>
       </AccordionSummary>
       <AccordionDetails>
         <Grid container alignItems="stretch">
