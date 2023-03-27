@@ -46,6 +46,9 @@ export function propWithName(props, name, ns) {
  * @returns {object} the matching property
  */
 export default function matchingProp(props, filter) {
+  if (!props || !filter) {
+    return undefined;
+  }
   if ((!filter.value && !filter.filter) || (filter.value && filter.filter)) {
     throw new Error("Exactly one of filter or value must be specified");
   }
