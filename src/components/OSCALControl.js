@@ -4,6 +4,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
+import OSCALControlLabel from "./OSCALControlLabel";
 import OSCALControlPart from "./OSCALControlPart";
 import OSCALControlModification from "./OSCALControlModification";
 import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
@@ -103,9 +104,11 @@ export default function OSCALControl(props) {
               component="h2"
               style={props.childLevel ? { fontSize: "1.1rem" } : undefined}
             >
-              <span style={{ textTransform: label ? "" : "uppercase" }}>
-                {label ?? props.control.id}
-              </span>{" "}
+              <OSCALControlLabel
+                component="span"
+                label={label}
+                id={props.control.id}
+              />{" "}
               {props.control.title} {modificationDisplay}
             </Typography>
           </Grid>

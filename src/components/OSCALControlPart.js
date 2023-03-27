@@ -26,7 +26,8 @@ export default function OSCALControlPart(props) {
     return null;
   }
 
-  const label = propWithName(props.part.props, "label")?.value;
+  const partLabel = propWithName(props.part?.props, "label")?.value;
+  const controlLabel = propWithName(props.control?.props, "label")?.value;
 
   if (props.part.name === "guidance") {
     return (
@@ -34,7 +35,7 @@ export default function OSCALControlPart(props) {
         prose={props.part.prose}
         id={props.control.id}
         title={props.control.title}
-        label={label}
+        label={controlLabel}
       />
     );
   }
@@ -54,7 +55,7 @@ export default function OSCALControlPart(props) {
   if (props.implementedRequirement) {
     replacedProse = (
       <OSCALReplacedProseWithByComponentParameterValue
-        label={label}
+        label={partLabel}
         prose={props.part.prose}
         parameters={props.parameters}
         implementedRequirement={props.implementedRequirement}
@@ -71,7 +72,7 @@ export default function OSCALControlPart(props) {
   } else {
     replacedProse = (
       <OSCALReplacedProseWithParameterLabel
-        label={label}
+        label={partLabel}
         prose={props.part.prose}
         parameters={props.parameters}
         modificationSetParameters={props.modificationSetParameters}
