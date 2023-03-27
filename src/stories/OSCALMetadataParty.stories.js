@@ -16,5 +16,5 @@ export const Default = Template.bind({});
 
 Default.args = {
   party: exampleParties[0],
-  partyRolesText: "Example party role text",
+  partyRolesText: ["Example party role text"],
 };

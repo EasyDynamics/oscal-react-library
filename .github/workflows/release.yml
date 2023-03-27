@@ -97,7 +97,7 @@ jobs:
       - name: Push release commit to develop main
         run: |
           git add ./{,example/}package{,-lock}.json
-          git commit -m "Release v${{ env.PKG_VERSION }}"
+          git commit -m "chore(release): v${{ env.PKG_VERSION }}"
           git push origin develop
           git push origin develop:main
 
@@ -125,5 +125,5 @@ jobs:
           npm version prepatch
           cd ..
           git add ./{,example/}package{,-lock}.json
-          git commit -m "Start work on v$(npm pkg get version | tr -d '"')"
+          git commit -m "chore(release): start work on v$(npm pkg get version | tr -d '"')"
           git push origin develop
