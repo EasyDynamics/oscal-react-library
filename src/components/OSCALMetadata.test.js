@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
 import { keywordValuesList, metadataTestData } from "../test-data/CommonData";
-import OSCALMetadata, { OSCALMetadataKeywords } from "./OSCALMetadata";
+import OSCALMetadata from "./OSCALMetadata";
 
 describe("OSCALMetadata", () => {
   test(`displays title`, () => {

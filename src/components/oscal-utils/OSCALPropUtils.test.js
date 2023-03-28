@@ -21,6 +21,7 @@ const testProps = {
     },
   ],
 };
+
 describe("OSCAL Prop Utils", () => {
   it("gets correct value using default namespace", () => {
     // GIVEN
