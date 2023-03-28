@@ -117,18 +117,41 @@ export const profileCatalogInheritanceData = {
   ],
 };
 
+export const keywordValuesList = {
+  basic: [
+    {
+      name: "keywords",
+      value: "Keyword_1, Keyword_2,Keyword_3",
+    },
+  ],
+  emptyProps: [],
+  emptyValue: [
+    {
+      name: "keywords",
+      value: "",
+    },
+  ],
+  oneKeyWord: [
+    {
+      name: "keywords",
+      value: "Keyword_1",
+    },
+  ],
+  setns: [
+    {
+      name: "keywords",
+      value: "Keyword_1",
+      ns: "https://test.easydynamics.com/ns/oscal",
+    },
+  ],
+};
+
 export const metadataTestData = {
   title: "Test Title",
   parties: exampleParties,
   roles: exampleRoles,
   locations: exampleLocations,
   version: "Revision 5",
-  props: [
-    {
-      name: "keywords",
-      value: "Keyword_1, Keyword_2,Keyword_3",
-    },
-  ],
 };
 
 export const responsibleRolesTestData = [

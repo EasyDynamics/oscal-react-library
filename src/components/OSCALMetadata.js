@@ -615,11 +615,12 @@ function OSCALMetadataFieldArea(props) {
 
 export function OSCALMetadataKeyword(props) {
   const { keyword } = props;
+  const text = keyword.trim();
 
-  return <Chip label={keyword.trim()} size="small" />;
+  return text && <Chip label={text} size="small" role="chip" />;
 }
 
-function OSCALMetadataKeywords(props) {
+export function OSCALMetadataKeywords(props) {
   const { keywords } = props;
 
   const chips = (keywords ?? "")
