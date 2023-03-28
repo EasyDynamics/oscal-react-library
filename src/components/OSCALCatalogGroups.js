@@ -8,7 +8,6 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import PropTypes from "prop-types";
 import React, { useCallback, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
@@ -68,16 +67,13 @@ TabPanel.propTypes = {
 export default function OSCALCatalogGroups(props) {
   const [openTab, setOpenTab] = React.useState(props?.groups[0]?.id);
 
-  const location = useLocation();
-
   const handleChange = (event, newValue) => {
     setOpenTab(newValue);
   };
 
   const handleFragment = useCallback(() => {
     // Grab fragment identifier following hash character if fragment exists in location
-    const controlFragment =
-      location.hash !== "" ? location.hash.substring(1) : null;
+    const controlFragment = props.urlFragment !== "" ? props.urlFragment : null;
     // Find catalog group fragment
     const controlGroupingFragment =
       determineControlGroupFromFragment(controlFragment);
@@ -100,7 +96,7 @@ export default function OSCALCatalogGroups(props) {
     if (elementWithFragment) {
       setOpenTab(controlGroupingFragment);
     }
-  }, [location.hash, props?.groups]);
+  }, [props.urlFragment, props?.groups]);
 
   useEffect(() => {
     handleFragment();
@@ -146,7 +142,10 @@ export default function OSCALCatalogGroups(props) {
                   value={openTab}
                   index={index}
                 >
-                  <OSCALCatalogGroup group={group} />
+                  <OSCALCatalogGroup
+                    group={group}
+                    urlFragment={props.urlFragment}
+                  />
                 </TabPanel>
               ))}
             </TabPanelList>

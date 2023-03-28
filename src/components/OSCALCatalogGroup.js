@@ -7,7 +7,6 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 import React, { useCallback, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import OSCALControl from "./OSCALControl";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import { determineControlGroupFromFragment } from "./oscal-utils/OSCALLinkUtils";
@@ -41,8 +40,6 @@ function CollapseableListItem(props) {
   const [open, setOpen] = React.useState(false);
   const [listItemOpened, setListItemOpened] = React.useState(false);
 
-  const location = useLocation();
-
   const handleClick = () => {
     setOpen(!open);
   };
@@ -52,8 +49,7 @@ function CollapseableListItem(props) {
       return;
     }
     // Grab fragment identifier following hash character if fragment exists in location
-    const controlFragment =
-      location.hash !== "" ? location.hash.substring(1) : null;
+    const controlFragment = props.urlFragment !== "" ? props.urlFragment : null;
     const controlGroupingFragment =
       determineControlGroupFromFragment(controlFragment);
     // Locate the element with the provided fragment and scroll to the item
@@ -61,12 +57,12 @@ function CollapseableListItem(props) {
       return;
     }
     // Find control list state and open collapsable item
-    if (controlFragment.includes(props.control?.id)) {
+    if (controlFragment.includes(props.controlId)) {
       setOpen(true);
     }
     const elementWithFragment = document.getElementById(controlFragment);
     elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
-  }, [location.hash, listItemOpened, props.control?.id]);
+  }, [props.urlFragment, listItemOpened, props.controlId]);
 
   useEffect(() => {
     handleFragment();
@@ -92,6 +88,7 @@ function CollapseableListItem(props) {
             childLevel={0}
             key={props.control?.id}
             listItemOpened={listItemOpened}
+            urlFragment={props.urlFragment}
           />
         </StyledControlDescriptionWrapper>
       </Collapse>
@@ -111,12 +108,15 @@ function OSCALCatalogControlListItem(props) {
           {`${control.id.toUpperCase()} ${control.title}`}
         </OSCALAnchorLinkHeader>
       }
+      controlId={control?.id}
+      urlFragment={props.urlFragment}
     >
       <OSCALControl
         showInList
         control={control}
         childLevel={0}
         key={control.id}
+        urlFragment={props.urlFragment}
       />
     </CollapseableListItem>
   ) : (
@@ -130,13 +130,25 @@ function OSCALCatalogControlListItem(props) {
 
 function OSCALCatalogGroupList(props) {
   return (
-    <CollapseableListItem itemText={props.group.title}>
+    <CollapseableListItem
+      itemText={props.group.title}
+      controlId={props.control?.id}
+      urlFragment={props.urlFragment}
+    >
       <OSCALControlList>
         {props.group.groups?.map((innerGroup) => (
-          <OSCALCatalogGroupList group={innerGroup} key={innerGroup.title} />
+          <OSCALCatalogGroupList
+            group={innerGroup}
+            key={innerGroup.title}
+            urlFragment={props.urlFragment}
+          />
         ))}
         {props.group.controls?.map((control) => (
-          <OSCALCatalogControlListItem control={control} key={control.id} />
+          <OSCALCatalogControlListItem
+            control={control}
+            key={control.id}
+            urlFragment={props.urlFragment}
+          />
         ))}
       </OSCALControlList>
     </CollapseableListItem>
@@ -147,10 +159,18 @@ export default function OSCALCatalogGroup(props) {
   return (
     <OSCALControlList>
       {props.group.groups?.map((innerGroup) => (
-        <OSCALCatalogGroupList group={innerGroup} key={innerGroup.title} />
+        <OSCALCatalogGroupList
+          group={innerGroup}
+          key={innerGroup.title}
+          urlFragment={props.urlFragment}
+        />
       ))}
       {props.group.controls?.map((control) => (
-        <OSCALCatalogControlListItem control={control} key={control.id} />
+        <OSCALCatalogControlListItem
+          control={control}
+          key={control.id}
+          urlFragment={props.urlFragment}
+        />
       ))}
     </OSCALControlList>
   );

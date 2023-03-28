@@ -86,6 +86,7 @@ function App() {
     getBackEndUrl(process.env.REACT_APP_REST_BASE_URL)
   );
   const [hasDefaultUrl, setHasDefaultUrl] = useState(false);
+  const [urlFragment, setUrlFragment] = useState(null);
 
   useEffect(() => {
     const currentUrl = window.location.href;
@@ -135,6 +136,7 @@ function App() {
         page: location.pathname + location.search,
       });
     }
+    setUrlFragment(location.hash !== "" ? location.hash.substring(1) : null);
   }, [location]);
 
   const oscalObjectTypes = [
@@ -185,6 +187,7 @@ function App() {
     hasDefaultUrl,
     setHasDefaultUrl,
     backendUrl,
+    urlFragment,
   };
 
   const navRoutes = (

@@ -33,7 +33,6 @@ import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import React, { useCallback, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import { OSCALSection } from "../styles/CommonPageStyles";
 import OSCALEditableTextField from "./OSCALEditableTextField";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
@@ -462,7 +461,11 @@ function OSCALMetadataRoles(props) {
     </Grid>
   ));
 
-  return <OSCALMetadataFieldArea title="Roles">{cards}</OSCALMetadataFieldArea>;
+  return (
+    <OSCALMetadataFieldArea title="Roles" urlFragment={props.urlFragment}>
+      {cards}
+    </OSCALMetadataFieldArea>
+  );
 }
 
 function OSCALMetadataParties(props) {
@@ -490,7 +493,9 @@ function OSCALMetadataParties(props) {
   ));
 
   return (
-    <OSCALMetadataFieldArea title="Parties">{cards}</OSCALMetadataFieldArea>
+    <OSCALMetadataFieldArea title="Parties" urlFragment={props.urlFragment}>
+      {cards}
+    </OSCALMetadataFieldArea>
   );
 }
 
@@ -504,7 +509,9 @@ function OSCALMetadataLocations(props) {
   ));
 
   return (
-    <OSCALMetadataFieldArea title="Locations">{cards}</OSCALMetadataFieldArea>
+    <OSCALMetadataFieldArea title="Locations" urlFragment={props.urlFragment}>
+      {cards}
+    </OSCALMetadataFieldArea>
   );
 }
 
@@ -598,7 +605,6 @@ export function OSCALMetadataLocation(props) {
 
 function OSCALMetadataFieldArea(props) {
   const { title, children } = props;
-  const location = useLocation();
 
   const [expand, setExpand] = React.useState(false);
 
@@ -608,13 +614,12 @@ function OSCALMetadataFieldArea(props) {
 
   const handleFragment = useCallback(() => {
     // Grab fragment identifier following hash character if fragment exists in location
-    const controlFragment =
-      location.hash !== "" ? location.hash.substring(1) : null;
+    const controlFragment = props.urlFragment !== "" ? props.urlFragment : null;
     // Expand metadata accordion section if control fragment matches title
     if (controlFragment === title.toLowerCase()) {
       setExpand(true);
     }
-  }, [location.hash]);
+  }, [props.urlFragment, title]);
 
   useEffect(() => {
     handleFragment();

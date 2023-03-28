@@ -126,6 +126,7 @@ export default function OSCALProfile(props) {
         isEditable={props.isEditable}
         onFieldSave={props.onFieldSave}
         partialRestData={partialRestData}
+        urlFragment={props.urlFragment}
       />
       <OSCALProfileCatalogInheritance
         inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}

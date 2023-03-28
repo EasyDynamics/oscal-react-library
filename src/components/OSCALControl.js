@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -69,19 +68,18 @@ function ControlsList(props) {
 }
 
 export default function OSCALControl(props) {
-  const fragment = useLocation().hash;
-
   const handleListItemOpened = useCallback(() => {
     if (!props.listItemOpened) {
       return;
     }
+    const fragment = props.urlFragment;
     if (fragment === "" || fragment === null) {
       return;
     }
     // Smooth scroll to control if element is found with fragment identifier
-    const elementWithFragment = document.getElementById(fragment.substring(1));
+    const elementWithFragment = document.getElementById(fragment);
     elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
-  }, [props.listItemOpened, fragment]);
+  }, [props.listItemOpened, props.urlFragment]);
 
   useEffect(() => {
     handleListItemOpened();
