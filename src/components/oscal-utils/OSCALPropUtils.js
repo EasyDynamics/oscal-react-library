@@ -35,13 +35,31 @@ export function namespaceOf(ns) {
  */
 
 /**
- * Returns the first matching property in the given list.
+ * Returns the first prop with a matching name attribute.
+ *
+ * This is useful to look up the value of a specific prop under a namespace.
+ * To check whether a property has a specific value, prefer {@link matchingProp}.
+ *
+ * @param {Array.<object>} props - the list of properties to check
+ * @param {string} name - the name of the property to search for
+ * @param {string} [ns] - the namespace to search in
+ */
+export function propWithName(props, name, ns) {
+  return matchingProp(props, { name, ns, filter: () => true });
+}
+
+/**
+ * Returns the first property in the given list with the correct name and
+ * a value that matches the filter.
  *
  * @param {Array.<object>} props the list of properties to check
  * @param {PropertyFilter} filter attributes to match against
  * @returns {object} the matching property
  */
 export default function matchingProp(props, filter) {
+  if (!props || !filter) {
+    return undefined;
+  }
   if ((!filter.value && !filter.filter) || (filter.value && filter.filter)) {
     throw new Error("Exactly one of filter or value must be specified");
   }

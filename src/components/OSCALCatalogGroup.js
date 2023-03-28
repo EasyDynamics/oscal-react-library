@@ -11,6 +11,8 @@ import OSCALControl from "./OSCALControl";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import { determineControlGroupFromFragment } from "./oscal-utils/OSCALLinkUtils";
 import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
+import OSCALControlLabel from "./OSCALControlLabel";
+import { propWithName } from "./oscal-utils/OSCALPropUtils";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -99,7 +101,16 @@ function CollapseableListItem(props) {
 function OSCALCatalogControlListItem(props) {
   const { control } = props;
   const withdrawn = isWithdrawn(control);
-  const itemText = `${control.id.toUpperCase()} ${control.title}`;
+  const itemText = (
+    <>
+      <OSCALControlLabel
+        label={propWithName(control.props, "label")?.value}
+        id={control.id}
+        component="span"
+      />
+      {control.title}
+    </>
+  );
 
   return !withdrawn ? (
     <CollapseableListItem

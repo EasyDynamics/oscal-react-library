@@ -343,16 +343,14 @@ export function OSCALReplacedProseWithParameterLabel(props) {
   if (!props.isImplemented) {
     return (
       <NotImplementedStatement>
-        {props.label}
-        {prose}
+        {props.label} {prose}
         {props.modificationDisplay}
       </NotImplementedStatement>
     );
   }
   return (
     <Typography>
-      {props.label}
-      {prose}
+      {props.label} {prose}
       {props.modificationDisplay}
     </Typography>
   );
@@ -488,7 +486,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
           <Link underline="hover" href={`#${props.label}`}>
             {props.label}
           </Link>
-        </StyledTooltip>
+        </StyledTooltip>{" "}
         {proseDisplay}
         {props.modificationDisplay}
       </Grid>
