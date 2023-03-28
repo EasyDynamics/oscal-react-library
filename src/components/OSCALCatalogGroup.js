@@ -102,23 +102,19 @@ function OSCALCatalogControlListItem(props) {
   const { control } = props;
   const withdrawn = isWithdrawn(control);
   const itemText = (
-    <>
+    <OSCALAnchorLinkHeader value={`${control.id.toLowerCase()}`}>
       <OSCALControlLabel
         label={propWithName(control.props, "label")?.value}
         id={control.id}
         component="span"
       />
       {control.title}
-    </>
+    </OSCALAnchorLinkHeader>
   );
 
   return !withdrawn ? (
     <CollapseableListItem
-      itemText={
-        <OSCALAnchorLinkHeader value={`${control.id.toLowerCase()}`}>
-          {`${control.id.toUpperCase()} ${control.title}`}
-        </OSCALAnchorLinkHeader>
-      }
+      itemText={itemText}
       controlId={control?.id}
       urlFragment={props.urlFragment}
     >
