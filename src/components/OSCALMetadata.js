@@ -456,7 +456,7 @@ function OSCALMetadataBasicData(props) {
         </Stack>
       </Grid>
       <Grid item xs={1}>
-        <OSCALMetadataRemarks remarks={props.metadata?.remarks} />
+        <OSCALMetadataRemarks remarks={metadata?.remarks} />
       </Grid>
     </Grid>
   );
