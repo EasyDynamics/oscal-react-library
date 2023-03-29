@@ -39,9 +39,16 @@ const StyledControlDescriptionWrapper = styled("div")`
 `;
 
 function CollapsibleListItem(props) {
-  const { urlFragment, control, itemText, children, listItemOpened, setListItemOpened } =
-    props;
+  const {
+    urlFragment,
+    control,
+    itemText,
+    children,
+    listItemOpened,
+    setListItemOpened,
+  } = props;
   const [open, setOpen] = React.useState(false);
+  const [itemNavigatedTo, setItemNavigatedTo] = React.useState(false);
 
   const handleClick = () => {
     setOpen(!open);
@@ -49,6 +56,7 @@ function CollapsibleListItem(props) {
 
   const handleFragment = useCallback(() => {
     if (listItemOpened) {
+      setItemNavigatedTo(true);
       return;
     }
     // Grab fragment identifier following hash character if fragment exists in location
@@ -91,6 +99,7 @@ function CollapsibleListItem(props) {
             childLevel={0}
             key={control?.id}
             listItemOpened={listItemOpened}
+            itemNavigatedTo={itemNavigatedTo}
             urlFragment={urlFragment}
           />
         </StyledControlDescriptionWrapper>
