@@ -15,6 +15,17 @@ describe("OSCALMetadata", () => {
     const result = screen.getByText("Revision 5");
     expect(result).toBeVisible();
   });
+
+  test("displays remarks", () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
+
+    const button = screen.getByText("Remarks");
+    fireEvent.click(button);
+
+    const remarks = screen.getByText("This is test data");
+
+    expect(remarks).toBeVisible();
+  });
 });
 
 describe("OSCAL metadata parties", () => {

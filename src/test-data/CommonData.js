@@ -152,6 +152,7 @@ export const metadataTestData = {
   roles: exampleRoles,
   locations: exampleLocations,
   version: "Revision 5",
+  remarks: "This is test data",
 };
 
 export const responsibleRolesTestData = [
