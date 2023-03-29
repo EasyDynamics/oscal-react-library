@@ -632,33 +632,6 @@ export function OSCALMetadataKeywords(props) {
   );
 }
 
-export function OSCALMetadataRemarks(props) {
-  const [open, setOpen] = React.useState(false);
-  const { remarks } = props;
-
-  const handleClick = () => {
-    setOpen(!open);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <div>
-      <Button onClick={handleClick} variant="outlined" size="small">
-        Remarks
-      </Button>
-      <Dialog open={open} onClose={handleClose} scroll="paper">
-        <DialogTitle>Metadata Remarks</DialogTitle>
-        <DialogContent dividers>
-          <OSCALMarkupMultiLine>{remarks}</OSCALMarkupMultiLine>
-        </DialogContent>
-      </Dialog>
-    </div>
-  );
-}
-
 export default function OSCALMetadata(props) {
   if (!props.metadata) {
     return null;
