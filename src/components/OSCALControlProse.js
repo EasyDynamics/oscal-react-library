@@ -360,8 +360,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
     );
   }
 
-  const { controlId } = props.modificationDisplay.props;
-  const { controlPartId } = props.modificationDisplay.props;
+  const { controlId, controlpartId } = props.modificationDisplay.props;
   const alter =
     props.modificationDisplay.props.modificationAlters?.find(
       (item) => item["control-id"] === controlId
