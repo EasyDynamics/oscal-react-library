@@ -361,15 +361,13 @@ export function OSCALReplacedProseWithParameterLabel(props) {
   }
 
   const { controlId, controlpartId } = props.modificationDisplay.props;
-  const alter =
-    props.modificationDisplay.props.modificationAlters?.find(
-      (item) => item["control-id"] === controlId
-    ) ?? [];
-  const remove = alter.removes ?? [];
-  const statementIds =
-    remove.find((object) => object["by-id"] === controlPartId) ?? [];
+  const statementIds = props.modificationDisplay.props.modificationAlters
+    ?.find((item) => item["control-id"] === controlId)
+    ?.removes
+    ?.find((object) => object["by-id"] === controlPartId);
 
-  if (statementIds.length === 0) {
+
+  if (!statementIds?.length) {
     return (
       <Typography>
         {props.label}
