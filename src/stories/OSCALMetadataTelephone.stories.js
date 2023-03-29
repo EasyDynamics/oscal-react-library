@@ -1,15 +1,15 @@
 import React from "react";
-import { OSCALMetadataPartyTelephone } from "../components/OSCALMetadata";
+import { OSCALMetadataTelephone } from "../components/OSCALMetadata";
 
 import { exampleParties } from "../test-data/CommonData";
 
 export default {
   title: "Components/Metadata Party Telephone",
-  component: OSCALMetadataPartyTelephone,
+  component: OSCALMetadataTelephone,
 };
 
 function Template(args) {
-  return <OSCALMetadataPartyTelephone {...args} />;
+  return <OSCALMetadataTelephone {...args} />;
 }
 
 export const Mobile = Template.bind({});

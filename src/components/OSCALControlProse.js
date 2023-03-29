@@ -343,8 +343,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
   if (!props.isImplemented) {
     return (
       <NotImplementedStatement>
-        {props.label}
-        {prose}
+        {props.label} {prose}
         {props.modificationDisplay}
       </NotImplementedStatement>
     );
@@ -359,18 +358,15 @@ export function OSCALReplacedProseWithParameterLabel(props) {
     );
   }
 
-  const { controlId, controlpartId } = props.modificationDisplay.props;
+  const { controlId, controlPartId } = props.modificationDisplay.props;
   const statementIds = props.modificationDisplay.props.modificationAlters
     ?.find((item) => item["control-id"] === controlId)
-    ?.removes
-    ?.find((object) => object["by-id"] === controlPartId);
-
+    ?.removes?.find((object) => object["by-id"] === controlPartId);
 
   if (!statementIds?.length) {
     return (
       <Typography>
-        {props.label}
-        {prose}
+        {props.label} {prose}
         {props.modificationDisplay}
       </Typography>
     );
@@ -378,8 +374,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
 
   return (
     <Typography style={{ textDecorationLine: "line-through" }}>
-      {props.label}
-      {prose}
+      {props.label} {prose}
       {props.modificationDisplay}
     </Typography>
   );
@@ -515,7 +510,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
           <Link underline="hover" href={`#${props.label}`}>
             {props.label}
           </Link>
-        </StyledTooltip>
+        </StyledTooltip>{" "}
         {proseDisplay}
         {props.modificationDisplay}
       </Grid>

@@ -13,7 +13,7 @@ permissions:
 jobs:
   lint:
     name: Lint the code base
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -42,7 +42,7 @@ jobs:
           yamllint --format github --config-file .yaml-lint.yml .
   build_and_test:
     name: Build and test (on NodeJS 16)
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     defaults:
       run:
         # setting the shell to bash will enable fail-fast behavior

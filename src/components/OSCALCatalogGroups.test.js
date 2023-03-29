@@ -35,6 +35,22 @@ const testGroups = [
   },
 ];
 
+function getTextByChildren(text) {
+  function result(_content, node) {
+    const hasText = (checkNode) => checkNode.textContent === text;
+    const nodeHasText = hasText(node);
+    // This is necessary because we are providing a query function to override how
+    // text search is performed.
+    // eslint-disable-next-line testing-library/no-node-access
+    const childrenDontHaveText = Array.from(node.children).every(
+      (child) => !hasText(child)
+    );
+
+    return nodeHasText && childrenDontHaveText;
+  }
+  return result;
+}
+
 describe("OSCALCatalogGroup", () => {
   test("displays param legend", () => {
     render(<OSCALCatalogGroups groups={testGroups} />);
@@ -58,7 +74,7 @@ describe("OSCALCatalogGroup", () => {
     fireEvent.click(expand2);
 
     const expand3 = screen.getByText(
-      "CONTROL-ID Access Control Policy and Procedures"
+      getTextByChildren("control-id Access Control Policy and Procedures")
     );
     fireEvent.click(expand3);
   });
@@ -68,7 +84,9 @@ describe("OSCALCatalogGroup", () => {
     const expand1 = screen.getByText("Sibling Title");
     fireEvent.click(expand1);
 
-    const expand2 = screen.getByText("CONTROL2-ID Audit Events");
+    const expand2 = screen.getByText(
+      getTextByChildren("control2-id Audit Events")
+    );
     fireEvent.click(expand2);
   });
 });

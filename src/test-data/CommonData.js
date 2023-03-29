@@ -49,6 +49,52 @@ export const exampleParties = [
   },
 ];
 
+export const exampleRoles = [
+  {
+    id: "creator",
+    title: "Document creator",
+    description: "Creates documents",
+  },
+  {
+    id: "contact",
+    title: "Contact",
+  },
+];
+
+export const exampleLocations = [
+  {
+    uuid: "54e8923b-56d2-46f1-bb97-9c6f734d9d9e",
+    title: "Example Location",
+    address: {
+      type: "work",
+      "addr-lines": ["0000 St", "Suite 3"],
+      city: "City",
+      state: "State",
+      "postal-code": "0000",
+      country: "US",
+    },
+    "email-addresses": ["owners@email.org"],
+    "telephone-numbers": [
+      {
+        type: "office",
+        number: "+18004444444",
+      },
+    ],
+    urls: ["https://www.website.com/"],
+    links: [
+      {
+        href: "https://www.website.com/",
+        text: "Website",
+      },
+    ],
+    remarks: "Test remarks",
+  },
+  {
+    uuid: "6c01ae87-5410-41af-87cd-3253dd7ccfc7",
+    address: {},
+  },
+];
+
 export const profileCatalogInheritanceData = {
   inherited: [
     {
@@ -74,6 +120,8 @@ export const profileCatalogInheritanceData = {
 export const metadataTestData = {
   title: "Test Title",
   parties: exampleParties,
+  roles: exampleRoles,
+  locations: exampleLocations,
   version: "Revision 5",
 };
 
