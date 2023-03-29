@@ -406,59 +406,51 @@ function OSCALMetadataBasicData(props) {
   const { metadata, isEditable, partialRestData, onFieldSave } = props;
 
   return (
-    <Grid container>
-      <Grid item xs={11}>
-        <Stack direction="row" spacing={4}>
-          <Stack direction="row" spacing={1}>
-            <OSCALMetadataLabel variant="body2">
-              Document Version:
-            </OSCALMetadataLabel>
-            <OSCALEditableTextField
-              fieldName="Version"
-              canEdit={isEditable}
-              editedField={
-                isEditable
-                  ? [Object.keys(partialRestData)[0], "metadata", "version"]
-                  : null
-              }
-              onFieldSave={onFieldSave}
-              partialRestData={
-                isEditable
-                  ? {
-                      [Object.keys(partialRestData)[0]]: {
-                        uuid: partialRestData[Object.keys(partialRestData)[0]]
-                          .uuid,
-                        metadata: {
-                          version: metadata.version,
-                        },
-                      },
-                    }
-                  : null
-              }
-              size={4}
-              textFieldSize="small"
-              typographyVariant="body2"
-              value={metadata.version}
-            />
-          </Stack>
-          <OSCALMetadataBasicDataItem
-            title="OSCAL Version:"
-            data={metadata["oscal-version"]}
-          />
-          <OSCALMetadataBasicDataItem
-            title="Last Modified:"
-            data={formatDate(metadata["last-modified"])}
-          />
-          <OSCALMetadataBasicDataItem
-            title="Published Date:"
-            data={formatDate(metadata.published) ?? "Not published"}
-          />
-        </Stack>
-      </Grid>
-      <Grid item xs={1}>
-        <OSCALMetadataRemarks remarks={metadata?.remarks} />
-      </Grid>
-    </Grid>
+    <Stack direction="row" spacing={4}>
+      <Stack direction="row" spacing={1}>
+        <OSCALMetadataLabel variant="body2">
+          Document Version:
+        </OSCALMetadataLabel>
+        <OSCALEditableTextField
+          fieldName="Version"
+          canEdit={isEditable}
+          editedField={
+            isEditable
+              ? [Object.keys(partialRestData)[0], "metadata", "version"]
+              : null
+          }
+          onFieldSave={onFieldSave}
+          partialRestData={
+            isEditable
+              ? {
+                  [Object.keys(partialRestData)[0]]: {
+                    uuid: partialRestData[Object.keys(partialRestData)[0]].uuid,
+                    metadata: {
+                      version: metadata.version,
+                    },
+                  },
+                }
+              : null
+          }
+          size={4}
+          textFieldSize="small"
+          typographyVariant="body2"
+          value={metadata.version}
+        />
+      </Stack>
+      <OSCALMetadataBasicDataItem
+        title="OSCAL Version:"
+        data={metadata["oscal-version"]}
+      />
+      <OSCALMetadataBasicDataItem
+        title="Last Modified:"
+        data={formatDate(metadata["last-modified"])}
+      />
+      <OSCALMetadataBasicDataItem
+        title="Published Date:"
+        data={formatDate(metadata.published) ?? "Not published"}
+      />
+    </Stack>
   );
 }
 
@@ -717,6 +709,9 @@ export default function OSCALMetadata(props) {
                 onFieldSave={props.onFieldSave}
               />
             </OSCALMetadataSection>
+            <OSCALMarkupMultiLine>
+              {props.metadata?.remarks}
+            </OSCALMarkupMultiLine>
             <OSCALMetadataKeywords
               keywords={propWithName(props.metadata.props, "keywords")?.value}
             />

@@ -18,12 +18,7 @@ describe("OSCALMetadata", () => {
 
   test("displays remarks", () => {
     render(<OSCALMetadata metadata={metadataTestData} />);
-
-    const button = screen.getByText("Remarks");
-    fireEvent.click(button);
-
     const remarks = screen.getByText("This is test data");
-
     expect(remarks).toBeVisible();
   });
 });
