@@ -58,14 +58,11 @@ export default function OSCALProfile(props) {
     };
   }, []);
 
-  let includeAll = false;
-  const includeAllControls = props.profile.imports.map(
-    (imp) => imp["include-all"]
-  );
+  const includeAllControls = props.profile.imports
+    .map((imp) => imp["include-all"])
+    .filter((include) => include);
 
-  if (includeAllControls.length > 0 && includeAllControls[0] !== undefined) {
-    includeAll = true;
-  }
+  const includeAll = includeAllControls.length > 0;
   // Flatten controls and IDs into single key, value structure
   const includeControlIds = props.profile.imports
     .flatMap((imp) => imp["include-controls"])
