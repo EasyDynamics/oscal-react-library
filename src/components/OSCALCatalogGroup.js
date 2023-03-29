@@ -39,9 +39,9 @@ const StyledControlDescriptionWrapper = styled("div")`
 `;
 
 function CollapsibleListItem(props) {
-  const { urlFragment, control, itemText, children } = props;
+  const { urlFragment, control, itemText, children, listItemOpened, setListItemOpened } =
+    props;
   const [open, setOpen] = React.useState(false);
-  const [listItemOpened, setListItemOpened] = React.useState(false);
 
   const handleClick = () => {
     setOpen(!open);
@@ -59,7 +59,7 @@ function CollapsibleListItem(props) {
     if (!controlGroupingFragment) {
       return;
     }
-    // Find control list state and open collapsable item
+    // Find control list state and open collapsible item
     if (controlFragment.includes(control.id)) {
       setOpen(true);
     }
@@ -100,7 +100,12 @@ function CollapsibleListItem(props) {
 }
 
 function OSCALCatalogControlListItem(props) {
-  const { control, urlFragment } = props;
+  const {
+    control,
+    urlFragment,
+    controlListItemOpened,
+    setControlListItemOpened,
+  } = props;
   const withdrawn = isWithdrawn(control);
   const itemText = (
     <OSCALAnchorLinkHeader value={`${control.id.toLowerCase()}`}>
@@ -118,6 +123,8 @@ function OSCALCatalogControlListItem(props) {
       itemText={itemText}
       control={control}
       urlFragment={urlFragment}
+      listItemOpened={controlListItemOpened}
+      setListItemOpened={setControlListItemOpened}
     >
       <OSCALControl
         showInList
@@ -137,12 +144,20 @@ function OSCALCatalogControlListItem(props) {
 }
 
 function OSCALCatalogGroupList(props) {
-  const { group, control, urlFragment } = props;
+  const {
+    group,
+    control,
+    urlFragment,
+    controlListItemOpened,
+    setControlListItemOpened,
+  } = props;
   return (
     <CollapsibleListItem
       itemText={group.title}
       control={control}
       urlFragment={urlFragment}
+      listItemOpened={controlListItemOpened}
+      setListItemOpened={setControlListItemOpened}
     >
       <OSCALControlList>
         {group.groups?.map((innerGroup) => (
@@ -150,6 +165,8 @@ function OSCALCatalogGroupList(props) {
             group={innerGroup}
             key={innerGroup.title}
             urlFragment={urlFragment}
+            controlListItemOpened={controlListItemOpened}
+            setControlListItemOpened={setControlListItemOpened}
           />
         ))}
         {group.controls?.map((groupControl) => (
@@ -157,6 +174,8 @@ function OSCALCatalogGroupList(props) {
             control={groupControl}
             key={groupControl.id}
             urlFragment={urlFragment}
+            controlListItemOpened={controlListItemOpened}
+            setControlListItemOpened={setControlListItemOpened}
           />
         ))}
       </OSCALControlList>
@@ -165,7 +184,12 @@ function OSCALCatalogGroupList(props) {
 }
 
 export default function OSCALCatalogGroup(props) {
-  const { group, urlFragment } = props;
+  const {
+    group,
+    urlFragment,
+    controlListItemOpened,
+    setControlListItemOpened,
+  } = props;
   return (
     <OSCALControlList>
       {group.groups?.map((innerGroup) => (
@@ -173,6 +197,8 @@ export default function OSCALCatalogGroup(props) {
           group={innerGroup}
           key={innerGroup.title}
           urlFragment={urlFragment}
+          controlListItemOpened={controlListItemOpened}
+          setControlListItemOpened={setControlListItemOpened}
         />
       ))}
       {group.controls?.map((control) => (
@@ -180,6 +206,8 @@ export default function OSCALCatalogGroup(props) {
           control={control}
           key={control.id}
           urlFragment={urlFragment}
+          controlListItemOpened={controlListItemOpened}
+          setControlListItemOpened={setControlListItemOpened}
         />
       ))}
     </OSCALControlList>
