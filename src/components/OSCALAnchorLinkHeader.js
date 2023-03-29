@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Fade from "@mui/material/Fade";
 
 export default function OSCALAnchorLinkHeader(props) {
+  const { children, value } = props;
   const [hover, setHover] = useState(false);
   const onEnter = () => {
     setHover(true);
@@ -17,7 +18,7 @@ export default function OSCALAnchorLinkHeader(props) {
     str.props?.children.replaceAll(" ", "-")?.toLowerCase() ||
     str.replaceAll(" ", "-").toLowerCase();
 
-  const linkId = props.value || editString(props.children);
+  const linkId = value || editString(children);
 
   return (
     <Stack
@@ -28,7 +29,7 @@ export default function OSCALAnchorLinkHeader(props) {
       onMouseLeave={onLeave}
       id={linkId}
     >
-      {props.children}
+      {children}
       {hover && (
         // Navigate to a specified fragment or use the child text
         <Link reloadDocument to={`#${linkId}`}>

@@ -70,65 +70,74 @@ function ControlsList(props) {
 }
 
 export default function OSCALControl(props) {
+  const {
+    listItemOpened,
+    urlFragment,
+    control,
+    includeControlIds,
+    modificationAlters,
+    showInList,
+    childLevel,
+  } = props;
+
   const handleListItemOpened = useCallback(() => {
-    if (!props.listItemOpened) {
+    if (!listItemOpened) {
       return;
     }
-    const fragment = props.urlFragment;
+    const fragment = urlFragment;
     if (fragment === "" || fragment === null) {
       return;
     }
     // Smooth scroll to control if element is found with fragment identifier
     const elementWithFragment = document.getElementById(fragment);
     elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
-  }, [props.listItemOpened, props.urlFragment]);
+  }, [listItemOpened, urlFragment]);
 
   useEffect(() => {
     handleListItemOpened();
   }, [handleListItemOpened]);
 
   if (
-    !props.control ||
-    (props.includeControlIds &&
-      !props.includeControlIds.includes(props.control.id))
+    !control ||
+    (includeControlIds && !includeControlIds.includes(control.id))
   ) {
     return null;
   }
 
   let modificationDisplay;
-  if (props.modificationAlters) {
+  if (modificationAlters) {
     modificationDisplay = (
       <OSCALControlModification
-        modificationAlters={props.modificationAlters}
-        controlId={props.control.id}
+        modificationAlters={modificationAlters}
+        controlId={control.id}
       />
     );
   }
 
-  const label = propWithName(props.control.props, "label")?.value;
+  const label = propWithName(control.props, "label")?.value;
 
-  return props.showInList ? (
+  return showInList ? (
     <ControlsList {...props} />
   ) : (
     <OSCALControlCard
-      childLevel={props.childLevel ?? 0}
-      withdrawn={isWithdrawn(props.control)}
+      childLevel={childLevel ?? 0}
+      withdrawn={isWithdrawn(control)}
     >
       <CardContent>
         <Grid container spacing={1}>
           <Grid item xs={12}>
-            <OSCALAnchorLinkHeader value={props.control.id}>
+            <OSCALAnchorLinkHeader value={control.id}>
               <Typography
                 variant="h6"
                 component="h2"
-                style={props.childLevel ? { fontSize: "1.1rem" } : undefined}
+                style={childLevel ? { fontSize: "1.1rem" } : undefined}
               >
                 <OSCALControlLabel
                   component="span"
                   label={label}
-                  id={props.control.id}
+                  id={control.id}
                 />{" "}
-                {props.control.title} {modificationDisplay}
+                {control.title} {modificationDisplay}
               </Typography>
             </OSCALAnchorLinkHeader>
           </Grid>

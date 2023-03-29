@@ -38,7 +38,8 @@ const StyledControlDescriptionWrapper = styled("div")`
   padding: 1em;
 `;
 
-function CollapseableListItem(props) {
+function CollapsibleListItem(props) {
+  const { urlFragment, control, itemText, children } = props;
   const [open, setOpen] = React.useState(false);
   const [listItemOpened, setListItemOpened] = React.useState(false);
 
@@ -51,7 +52,7 @@ function CollapseableListItem(props) {
       return;
     }
     // Grab fragment identifier following hash character if fragment exists in location
-    const controlFragment = props.urlFragment !== "" ? props.urlFragment : null;
+    const controlFragment = urlFragment !== "" ? props.urlFragment : null;
     const controlGroupingFragment =
       determineControlGroupFromFragment(controlFragment);
     // Locate the element with the provided fragment and scroll to the item
@@ -59,12 +60,12 @@ function CollapseableListItem(props) {
       return;
     }
     // Find control list state and open collapsable item
-    if (controlFragment.includes(props.controlId)) {
+    if (controlFragment.includes(control.id)) {
       setOpen(true);
     }
     const elementWithFragment = document.getElementById(controlFragment);
     elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
-  }, [props.urlFragment, listItemOpened, props.controlId]);
+  }, [urlFragment, listItemOpened, control?.id]);
 
   useEffect(() => {
     handleFragment();
@@ -73,7 +74,7 @@ function CollapseableListItem(props) {
   return (
     <StyledListItemPaper>
       <StyledListItem onClick={handleClick}>
-        <ListItemText primary={props.itemText} />
+        <ListItemText primary={itemText} />
         {open ? <ExpandLess /> : <ExpandMore />}
       </StyledListItem>
       <Collapse
@@ -83,14 +84,14 @@ function CollapseableListItem(props) {
         unmountOnExit
       >
         <StyledControlDescriptionWrapper>
-          {props.children}
+          {children}
           <OSCALControl
             showInList
-            control={props.control}
+            control={control}
             childLevel={0}
-            key={props.control?.id}
+            key={control?.id}
             listItemOpened={listItemOpened}
-            urlFragment={props.urlFragment}
+            urlFragment={urlFragment}
           />
         </StyledControlDescriptionWrapper>
       </Collapse>
@@ -99,7 +100,7 @@ function CollapseableListItem(props) {
 }
 
 function OSCALCatalogControlListItem(props) {
-  const { control } = props;
+  const { control, urlFragment } = props;
   const withdrawn = isWithdrawn(control);
   const itemText = (
     <OSCALAnchorLinkHeader value={`${control.id.toLowerCase()}`}>
@@ -113,19 +114,19 @@ function OSCALCatalogControlListItem(props) {
   );
 
   return !withdrawn ? (
-    <CollapseableListItem
+    <CollapsibleListItem
       itemText={itemText}
-      controlId={control?.id}
-      urlFragment={props.urlFragment}
+      control={control}
+      urlFragment={urlFragment}
     >
       <OSCALControl
         showInList
         control={control}
         childLevel={0}
         key={control.id}
-        urlFragment={props.urlFragment}
+        urlFragment={urlFragment}
       />
-    </CollapseableListItem>
+    </CollapsibleListItem>
   ) : (
     <StyledListItemPaper>
       <StyledListItem>
@@ -136,47 +137,49 @@ function OSCALCatalogControlListItem(props) {
 }
 
 function OSCALCatalogGroupList(props) {
+  const { group, control, urlFragment } = props;
   return (
-    <CollapseableListItem
-      itemText={props.group.title}
-      controlId={props.control?.id}
-      urlFragment={props.urlFragment}
+    <CollapsibleListItem
+      itemText={group.title}
+      control={control}
+      urlFragment={urlFragment}
     >
       <OSCALControlList>
-        {props.group.groups?.map((innerGroup) => (
+        {group.groups?.map((innerGroup) => (
           <OSCALCatalogGroupList
             group={innerGroup}
             key={innerGroup.title}
-            urlFragment={props.urlFragment}
+            urlFragment={urlFragment}
           />
         ))}
-        {props.group.controls?.map((control) => (
+        {group.controls?.map((groupControl) => (
           <OSCALCatalogControlListItem
-            control={control}
-            key={control.id}
-            urlFragment={props.urlFragment}
+            control={groupControl}
+            key={groupControl.id}
+            urlFragment={urlFragment}
           />
         ))}
       </OSCALControlList>
-    </CollapseableListItem>
+    </CollapsibleListItem>
   );
 }
 
 export default function OSCALCatalogGroup(props) {
+  const { group, urlFragment } = props;
   return (
     <OSCALControlList>
-      {props.group.groups?.map((innerGroup) => (
+      {group.groups?.map((innerGroup) => (
         <OSCALCatalogGroupList
           group={innerGroup}
           key={innerGroup.title}
-          urlFragment={props.urlFragment}
+          urlFragment={urlFragment}
         />
       ))}
-      {props.group.controls?.map((control) => (
+      {group.controls?.map((control) => (
         <OSCALCatalogControlListItem
           control={control}
           key={control.id}
-          urlFragment={props.urlFragment}
+          urlFragment={urlFragment}
         />
       ))}
     </OSCALControlList>

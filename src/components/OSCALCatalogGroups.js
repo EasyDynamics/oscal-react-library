@@ -65,7 +65,8 @@ TabPanel.propTypes = {
 };
 
 export default function OSCALCatalogGroups(props) {
-  const [openTab, setOpenTab] = React.useState(props?.groups[0]?.id);
+  const { groups, urlFragment } = props;
+  const [openTab, setOpenTab] = React.useState(groups[0]?.id);
 
   const handleChange = (event, newValue) => {
     setOpenTab(newValue);
@@ -73,16 +74,16 @@ export default function OSCALCatalogGroups(props) {
 
   const handleFragment = useCallback(() => {
     // Grab fragment identifier following hash character if fragment exists in location
-    const controlFragment = props.urlFragment !== "" ? props.urlFragment : null;
+    const controlFragment = urlFragment !== "" ? urlFragment : null;
     // Find catalog group fragment
     const controlGroupingFragment =
       determineControlGroupFromFragment(controlFragment);
     // Determine higher-level control or sub-control exists within catalog group
     const catalogControl =
-      props?.groups
+      groups
         ?.find((group) => group.id === controlGroupingFragment)
         ?.controls?.find((control) => control.id === controlFragment) ||
-      props?.groups
+      groups
         ?.find((group) => group.id === controlGroupingFragment)
         ?.controls?.find((control) => controlFragment?.includes(control.id))
         ?.controls?.find((subcontrol) => subcontrol.id === controlFragment);
@@ -96,7 +97,7 @@ export default function OSCALCatalogGroups(props) {
     if (elementWithFragment) {
       setOpenTab(controlGroupingFragment);
     }
-  }, [props.urlFragment, props?.groups]);
+  }, [urlFragment, groups]);
 
   useEffect(() => {
     handleFragment();
@@ -124,7 +125,7 @@ export default function OSCALCatalogGroups(props) {
                 variant="scrollable"
                 value={openTab}
               >
-                {props.groups?.map((group) => (
+                {groups?.map((group) => (
                   <ComponentTab
                     key={group.title}
                     label={group.title}
@@ -135,17 +136,14 @@ export default function OSCALCatalogGroups(props) {
               </ComponentTabs>
             </Grid>
             <TabPanelList item sm={8.5}>
-              {props.groups?.map((group, index) => (
+              {groups?.map((group, index) => (
                 <TabPanel
                   key={group.title}
                   groupId={group.id}
                   value={openTab}
                   index={index}
                 >
-                  <OSCALCatalogGroup
-                    group={group}
-                    urlFragment={props.urlFragment}
-                  />
+                  <OSCALCatalogGroup group={group} urlFragment={urlFragment} />
                 </TabPanel>
               ))}
             </TabPanelList>

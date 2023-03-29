@@ -604,7 +604,7 @@ export function OSCALMetadataLocation(props) {
 }
 
 function OSCALMetadataFieldArea(props) {
-  const { title, children } = props;
+  const { title, children, urlFragment } = props;
 
   const [expand, setExpand] = React.useState(false);
 
@@ -614,12 +614,12 @@ function OSCALMetadataFieldArea(props) {
 
   const handleFragment = useCallback(() => {
     // Grab fragment identifier following hash character if fragment exists in location
-    const controlFragment = props.urlFragment !== "" ? props.urlFragment : null;
+    const controlFragment = urlFragment !== "" ? urlFragment : null;
     // Expand metadata accordion section if control fragment matches title
     if (controlFragment === title.toLowerCase()) {
       setExpand(true);
     }
-  }, [props.urlFragment, title]);
+  }, [urlFragment, title]);
 
   useEffect(() => {
     handleFragment();
