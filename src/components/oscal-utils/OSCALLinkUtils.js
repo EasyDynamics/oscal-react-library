@@ -1,4 +1,4 @@
-import getUriFromBackMatterByHref from "./OSCALBackMatterUtils";
+import BackMatterLookup from "./OSCALBackMatterUtils";
 
 export function getAbsoluteUrl(href, parentUrl) {
   if (
@@ -16,14 +16,11 @@ export default function resolveLinkHref(
   backMatter,
   href,
   parentUrl,
-  mediaTypeRegex
+  mediaType,
+  preferBase64 = false
 ) {
-  return getAbsoluteUrl(
-    !href.startsWith("#")
-      ? href
-      : getUriFromBackMatterByHref(backMatter, href, mediaTypeRegex).href,
-    parentUrl
-  );
+  const lookup = new BackMatterLookup(backMatter, preferBase64);
+  return getAbsoluteUrl(lookup.resolve(href, mediaType).uri, parentUrl);
 }
 
 /**
