@@ -379,13 +379,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
     ?.find((item) => item["control-id"] === controlId)
     ?.removes?.find((object) => object["by-item-name"] === controlPartId);
 
-  if (
-    (removeByIds !== null && removeByIds !== undefined) ||
-    (removeByNames !== null && removeByNames !== undefined) ||
-    (removeByNS !== null && removeByNS !== undefined) ||
-    (removeByClass !== null && removeByClass !== undefined) ||
-    (removeByItemNames !== null && removeByItemNames !== undefined)
-  ) {
+  if (removeByIds || removeByNames || removeByNS || removeByClass || removeByItemNames) {
     return (
       <OSCALControlProseRemove>
         {props.label} {prose}
