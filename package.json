@@ -4,9 +4,6 @@
   "workspaces": [
     "packages/*"
   ],
-  "scripts": {
-    "test": "jest"
-  },
   "devDependencies": {
     "@types/node": "^18.15.5",
     "jest": "^29.5.0",

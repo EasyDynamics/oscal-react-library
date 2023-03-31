@@ -54,14 +54,26 @@ export interface PropertyFilter {
  *
  * TODO: Replace this with the actual OSCAL type once we have that type information.
  */
-interface PropBasic  {
+interface Prop  {
   ns?: string;
   name: string;
   value: string;
   class?: string;
+  remarks?: string;
+  uuid?: string;
 }
 
-export default function matchingProp(props: PropBasic[], filter: PropertyFilter): PropBasic | undefined {
+/**
+* Returns the first prop with a matching name attribute.
+*
+* This is useful to look up the value of a specific prop under a namespace.
+* To check whether a property has a specific value, prefer {@link matchingProp}.
+*/
+export function propWithName(props: Prop[], name: string, ns: string | undefined): Prop | undefined {
+ return matchingProp(props, { name, ns, filter: () => true });
+}
+
+export default function matchingProp(props: Prop[], filter: PropertyFilter): Prop | undefined {
   if ((!filter.value && !filter.filter) || (filter.value && filter.filter)) {
     throw new Error("Exactly one of filter or value must be specified");
   }

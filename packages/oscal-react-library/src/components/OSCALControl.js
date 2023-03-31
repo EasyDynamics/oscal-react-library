@@ -4,9 +4,11 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
+import OSCALControlLabel from "./OSCALControlLabel";
 import OSCALControlPart from "./OSCALControlPart";
 import OSCALControlModification from "./OSCALControlModification";
 import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
+import { propWithName } from "./oscal-utils/OSCALPropUtils";
 
 const OSCALControlCard = styled(Card, {
   // https://github.com/mui/material-ui/blob/c34935814b81870ca325099cdf41a1025a85d4b5/packages/mui-system/src/createStyled.js#L56
@@ -68,9 +70,17 @@ function ControlsList(props) {
 
 export default function OSCALControl(props) {
   if (
+    !props.includeAll &&
+    (!props.control ||
+      (props.includeControlIds &&
+        !props.includeControlIds.includes(props.control.id)))
+  ) {
+    return null;
+  }
+  if (
     !props.control ||
-    (props.includeControlIds &&
-      !props.includeControlIds.includes(props.control.id))
+    (props.excludeControlIds &&
+      props.excludeControlIds.includes(props.control.id))
   ) {
     return null;
   }
@@ -84,6 +94,8 @@ export default function OSCALControl(props) {
       />
     );
   }
+
+  const label = propWithName(props.control.props, "label")?.value;
 
   return props.showInList ? (
     <ControlsList {...props} />
@@ -100,9 +112,11 @@ export default function OSCALControl(props) {
               component="h2"
               style={props.childLevel ? { fontSize: "1.1rem" } : undefined}
             >
-              <span style={{ textTransform: "uppercase" }}>
-                {props.control.id}
-              </span>{" "}
+              <OSCALControlLabel
+                component="span"
+                label={label}
+                id={props.control.id}
+              />{" "}
               {props.control.title} {modificationDisplay}
             </Typography>
           </Grid>
