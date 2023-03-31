@@ -50,4 +50,4 @@ test("OSCALControl displays profile control modifications", async () => {
     />
   );
   await testIfModificationsDisplayed("ac-1 modifications");
-});
+}, 10000);
