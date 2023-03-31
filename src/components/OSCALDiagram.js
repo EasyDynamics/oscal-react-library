@@ -15,7 +15,7 @@ export default function OSCALDiagram(props) {
       props.backMatter,
       link.href,
       props.parentUrl.startsWith(".") ? null : props.parentUrl,
-      "image/png",
+      /^image\//,
       false
     );
   } catch (err) {

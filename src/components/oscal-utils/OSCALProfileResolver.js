@@ -1,6 +1,6 @@
 import resolveLinkHref from "./OSCALLinkUtils";
 
-const OSCAL_MEDIA_TYPE = "application/oscal.catalog+json";
+const OSCAL_MEDIA_TYPE = /^application\/oscal.*\+json$/;
 /**
  * Profiles are brought in through different methods in OSCAL models.
  *

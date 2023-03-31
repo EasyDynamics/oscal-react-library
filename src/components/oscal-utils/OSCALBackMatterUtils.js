@@ -12,7 +12,7 @@ export default class BackMatterLookup {
 
   /**
    * @param uuid {string}
-   * @param mediaType {?string}
+   * @param mediaType {?RegExp}
    *
    * @returns ResolvedUri {string} or undefined
    */
@@ -27,7 +27,7 @@ export default class BackMatterLookup {
         if (!mediaType || !rlinkMediaType) {
           return true;
         }
-        return rlinkMediaType === mediaType;
+        return mediaType.test(rlinkMediaType);
       });
 
       if (rlink) {
@@ -43,6 +43,10 @@ export default class BackMatterLookup {
     // is plain text. This will cause a whole mess that we'd really rather avoid.
     // In the future, this may throw an error.
     if (!base64?.["media-type"]) {
+      return undefined;
+    }
+
+    if (mediaType && !mediaType.test(base64["media-type"])) {
       return undefined;
     }
 
