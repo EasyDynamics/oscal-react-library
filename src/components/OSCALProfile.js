@@ -65,8 +65,8 @@ export default function OSCALProfile(props) {
   const includeAll = includeAllControls.length > 0;
   // Flatten controls and IDs into single key, value structure
   const includeControlIds = props.profile.imports
-    .flatMap((imp) => imp["include-controls"])
-    .flatMap((includeControl) => includeControl["with-ids"]);
+    .flatMap((imp) => imp["include-controls"] ?? [])
+    .flatMap((includeControl) => includeControl["with-ids"] ?? []);
 
   const excludeControlIds = props.profile.imports
     .flatMap((imp) => imp["exclude-controls"] ?? [])

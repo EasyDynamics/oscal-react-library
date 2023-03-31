@@ -18,23 +18,23 @@ const OSCALControlModificationsButton = styled(IconButton)(
 /**
  * Create a typography html object for addsOrRemovesLabel
  *
- * @param {Object} addsElements add or remove object to map into html
+ * @param {Object} addsRemovesElements add or remove object to map into html
  * @param {String} addsRemovesLabel string variable, this variable should "Adds " or "Removes "
  * @param {String} controlPartId Control part ID to match
  * @returns html object
  */
 function getAlterAddsOrRemovesDisplay(
-  addsElements,
+  addsRemovesElements,
   addsRemovesLabel,
   controlPartId
 ) {
-  if (!addsElements?.length) {
+  if (!addsRemovesElements?.length) {
     return null;
   }
 
   // Handle adds; however, the parts attribute is ignored for
   // now due to parsing complications.
-  const typographies = addsElements
+  const typographies = addsRemovesElements
     .flatMap((element) => element.props ?? [])
     .map((item) => (
       <Typography
@@ -48,7 +48,7 @@ function getAlterAddsOrRemovesDisplay(
     ));
   let removedTypographies = null;
   if (addsRemovesLabel === "Removes ") {
-    removedTypographies = addsElements
+    removedTypographies = addsRemovesElements
       .flatMap((element) => element ?? [])
       .map((item) => (
         <Typography
