@@ -625,6 +625,7 @@ export function OSCALMetadataKeywords(props) {
 
   const chips = (keywords ?? "")
     .split(",")
+    .map((keyword) => keyword.trim())
     .map((keyword) => <OSCALMetadataKeyword key={keyword} keyword={keyword} />);
 
   return (
@@ -683,7 +684,7 @@ export default function OSCALMetadata(props) {
               />
             </OSCALMetadataSection>
             <OSCALMarkupMultiLine>
-              {props.metadata?.remarks}
+              {props.metadata.remarks}
             </OSCALMarkupMultiLine>
             <OSCALMetadataKeywords
               keywords={propWithName(props.metadata.props, "keywords")?.value}
