@@ -66,7 +66,7 @@ TabPanel.propTypes = {
 export default function OSCALCatalogGroups(props) {
   const { groups, urlFragment } = props;
   const [openTab, setOpenTab] = React.useState(groups[0]?.id);
-  const [controlListItemOpened, setControlListItemOpened] =
+  const [isControlListItemOpened, setIsControlListItemOpened] =
     React.useState(false);
 
   const handleChange = (event, newValue) => {
@@ -75,7 +75,7 @@ export default function OSCALCatalogGroups(props) {
 
   const handleFragment = useCallback(() => {
     // Initially set item opened to false for new fragment to be handled
-    setControlListItemOpened(false);
+    setIsControlListItemOpened(false);
     // Ensure fragment exists and split by groupings
     if (!urlFragment || urlFragment === "") {
       return;
@@ -152,8 +152,8 @@ export default function OSCALCatalogGroups(props) {
                   <OSCALCatalogGroup
                     group={group}
                     urlFragment={urlFragment}
-                    controlListItemOpened={controlListItemOpened}
-                    setControlListItemOpened={setControlListItemOpened}
+                    isControlListItemOpened={isControlListItemOpened}
+                    setIsControlListItemOpened={setIsControlListItemOpened}
                   />
                 </TabPanel>
               ))}

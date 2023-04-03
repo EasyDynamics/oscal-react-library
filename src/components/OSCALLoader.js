@@ -240,18 +240,11 @@ export default function OSCALLoader(props) {
       setIsLoaded(true);
       setIsResolutionComplete(true);
       setHasDefaultUrl(true);
+      const fragment = props.urlFragment ? `#${props.urlFragment}` : "";
+      const document = props.isRestMode ? oscalObjectUuid : "";
+      const path = `/${props.oscalObjectType.jsonRootName}/${document}${fragment}`;
       // Handle uuid displaying in url depending on REST mode
-      window.history.pushState(
-        "",
-        "",
-        `/${props.oscalObjectType.jsonRootName}/${
-          props.isRestMode
-            ? `${oscalObjectUuid}${
-                props.urlFragment ? `#${props.urlFragment}` : ""
-              }`
-            : ""
-        }`
-      );
+      window.history.pushState("", "", path);
     } else if (props.isRestMode) {
       setOscalUrl(null);
       setIsLoaded(true);

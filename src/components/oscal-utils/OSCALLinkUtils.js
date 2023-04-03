@@ -80,7 +80,7 @@ export function determineControlGroupFromFragment(fragment) {
   return controlGroupList
     ?.find(
       (group) =>
-        fragment.split("/")[0] === group.id.split("vertical-tab-").pop()
+        fragment.split("/")?.[0] === group.id.split("vertical-tab-").pop()
     )
     ?.id?.split("vertical-tab-")
     ?.pop();
@@ -106,7 +106,7 @@ export function appendToFragmentPrefix(fragmentPrefix, controlId) {
  * @returns {string} fragmentSuffix with a removed control
  */
 export function shiftFragmentSuffix(fragmentSuffix) {
-  return fragmentSuffix && fragmentSuffix != ""
+  return fragmentSuffix && fragmentSuffix !== ""
     ? `${fragmentSuffix.substring(fragmentSuffix.indexOf("/") + 1)}`
     : null;
 }

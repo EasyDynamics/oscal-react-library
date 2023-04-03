@@ -6,19 +6,21 @@ import Fade from "@mui/material/Fade";
 
 export default function OSCALAnchorLinkHeader(props) {
   const { children, value } = props;
-  const [hover, setHover] = useState(false);
+  const [isHover, setIsHover] = useState(false);
   const onEnter = () => {
-    setHover(true);
+    setIsHover(true);
   };
   const onLeave = () => {
-    setHover(false);
+    setIsHover(false);
   };
 
-  const editString = (str) =>
-    str.props?.children.replaceAll(" ", "-")?.toLowerCase() ||
-    str.replaceAll(" ", "-").toLowerCase();
+  const conformLinkIdText = (linkText) =>
+    !linkText
+      ? ""
+      : linkText?.props?.children.replaceAll(" ", "-")?.toLowerCase() ||
+        linkText.replaceAll(" ", "-")?.toLowerCase();
 
-  const linkId = value || editString(children);
+  const linkId = value || conformLinkIdText(children);
 
   return (
     <Stack
@@ -30,10 +32,10 @@ export default function OSCALAnchorLinkHeader(props) {
       id={linkId}
     >
       {children}
-      {hover && (
+      {isHover && (
         // Navigate to a specified fragment or use the child text
-        <Link reloadDocument to={`#${linkId}`}>
-          <Fade in={hover}>
+        <Link to={`#${linkId}`}>
+          <Fade in={isHover}>
             <LinkIcon
               sx={[
                 (theme) => ({

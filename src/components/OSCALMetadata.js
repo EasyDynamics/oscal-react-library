@@ -606,10 +606,10 @@ export function OSCALMetadataLocation(props) {
 function OSCALMetadataFieldArea(props) {
   const { title, children, urlFragment } = props;
 
-  const [expand, setExpand] = React.useState(false);
+  const [isExpanded, setIsExpanded] = React.useState(false);
 
   const handleExpand = () => {
-    setExpand(!expand);
+    setIsExpanded(!isExpanded);
   };
 
   const handleFragment = useCallback(() => {
@@ -617,7 +617,7 @@ function OSCALMetadataFieldArea(props) {
     const controlFragment = urlFragment !== "" ? urlFragment : null;
     // Expand metadata accordion section if control fragment matches title
     if (controlFragment === title.toLowerCase()) {
-      setExpand(true);
+      setIsExpanded(true);
     }
   }, [urlFragment, title]);
 
@@ -626,7 +626,7 @@ function OSCALMetadataFieldArea(props) {
   }, [handleFragment]);
 
   return (
-    <Accordion expanded={expand} onChange={handleExpand}>
+    <Accordion expanded={isExpanded} onChange={handleExpand}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <OSCALAnchorLinkHeader>
           <Typography>{title}</Typography>
