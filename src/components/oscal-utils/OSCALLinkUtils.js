@@ -78,7 +78,35 @@ export function determineControlGroupFromFragment(fragment) {
   );
   // Grab group id if found
   return controlGroupList
-    ?.find((group) => fragment.includes(group.id.split("vertical-tab-").pop()))
+    ?.find(
+      (group) =>
+        fragment.split("/")[0] === group.id.split("vertical-tab-").pop()
+    )
     ?.id?.split("vertical-tab-")
     ?.pop();
+}
+
+/**
+ * Add (push) a control/sub-control to fragmentPrefix.
+ *
+ * @param {string} fragmentPrefix The beginning of a fragment
+ * @param {string} controlId The identification for a control
+ * @returns {string} fragmentPrefix with an added control
+ */
+export function appendToFragmentPrefix(fragmentPrefix, controlId) {
+  return fragmentPrefix && fragmentPrefix !== ""
+    ? `${fragmentPrefix}/${controlId}`
+    : controlId;
+}
+
+/**
+ * Remove (shift) a grouping from a fragmentSuffix.
+ *
+ * @param {string} fragmentSuffix The end of a fragment
+ * @returns {string} fragmentSuffix with a removed control
+ */
+export function shiftFragmentSuffix(fragmentSuffix) {
+  return fragmentSuffix && fragmentSuffix != ""
+    ? `${fragmentSuffix.substring(fragmentSuffix.indexOf("/") + 1)}`
+    : null;
 }

@@ -12,7 +12,6 @@ import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
-import { determineControlGroupFromFragment } from "./oscal-utils/OSCALLinkUtils";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -77,29 +76,32 @@ export default function OSCALCatalogGroups(props) {
   const handleFragment = useCallback(() => {
     // Initially set item opened to false for new fragment to be handled
     setControlListItemOpened(false);
-    // Grab fragment identifier following hash character if fragment exists in location
-    const controlFragment = urlFragment !== "" ? urlFragment : null;
-    // Find catalog group fragment
-    const controlGroupingFragment =
-      determineControlGroupFromFragment(controlFragment);
-    // Determine higher-level control or sub-control exists within catalog group
-    const catalogControl =
-      groups
-        ?.find((group) => group.id === controlGroupingFragment)
-        ?.controls?.find((control) => control.id === controlFragment) ||
-      groups
-        ?.find((group) => group.id === controlGroupingFragment)
-        ?.controls?.find((control) => controlFragment?.includes(control.id))
-        ?.controls?.find((subcontrol) => subcontrol.id === controlFragment);
-    if (!catalogControl) {
+    // Ensure fragment exists and split by groupings
+    if (!urlFragment || urlFragment === "") {
+      return;
+    }
+    const controlLayers = urlFragment.split("/");
+    const rootLayer = controlLayers[0];
+    // Ensure catalog tab grouping exists
+    let upperLayer = groups?.find((group) => group.id === rootLayer);
+    if (!upperLayer) {
+      return;
+    }
+    // Ensure lowest/deepest control exists
+    for (let i = 1; i < controlLayers.length && upperLayer; i += 1) {
+      upperLayer = upperLayer?.controls?.find(
+        (control) => control.id === controlLayers[i]
+      );
+    }
+    if (!upperLayer) {
       return;
     }
     // Confirm catalog tab group can be grabbed
     const elementWithFragment = document.getElementById(
-      `vertical-tab-${controlGroupingFragment}`
+      `vertical-tab-${rootLayer}`
     );
     if (elementWithFragment) {
-      setOpenTab(controlGroupingFragment);
+      setOpenTab(rootLayer);
     }
   }, [urlFragment, groups]);
 
