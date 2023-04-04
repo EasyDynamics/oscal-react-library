@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -100,7 +100,7 @@ export default function OSCALControl(props) {
     childLevel,
   } = props;
 
-  const handleListItemOpened = useCallback(() => {
+  useEffect(() => {
     if (!listItemOpened || isItemNavigatedTo) {
       return;
     }
@@ -112,10 +112,6 @@ export default function OSCALControl(props) {
     const elementWithFragment = document.getElementById(fragment);
     elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
   }, [listItemOpened, isItemNavigatedTo, urlFragment]);
-
-  useEffect(() => {
-    handleListItemOpened();
-  }, [handleListItemOpened]);
 
   if (
     !control ||

@@ -7,7 +7,7 @@ import { styled } from "@mui/material/styles";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import PropTypes from "prop-types";
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
@@ -74,7 +74,7 @@ export default function OSCALCatalogGroups(props) {
     setOpenTab(newValue);
   };
 
-  const handleFragment = useCallback(() => {
+  useEffect(() => {
     // Initially set item opened to false for new fragment to be handled
     setIsControlListItemOpened(false);
     // Ensure fragment exists and split by groupings
@@ -108,10 +108,6 @@ export default function OSCALCatalogGroups(props) {
       setOpenTab(rootLayer);
     }
   }, [urlFragment, groups]);
-
-  useEffect(() => {
-    handleFragment();
-  }, [handleFragment]);
 
   return (
     <OSCALSection>

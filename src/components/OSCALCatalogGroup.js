@@ -6,7 +6,7 @@ import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import OSCALControl from "./OSCALControl";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
@@ -60,7 +60,7 @@ function CollapsibleListItem(props) {
     setIsOpen(!isOpen);
   };
 
-  const handleFragment = useCallback(() => {
+  useEffect(() => {
     if (listItemOpened) {
       isSetItemNavigatedTo(true);
       return;
@@ -77,10 +77,6 @@ function CollapsibleListItem(props) {
       elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
     }
   }, [urlFragment, fragmentSuffix, listItemOpened, control?.id]);
-
-  useEffect(() => {
-    handleFragment();
-  }, [handleFragment]);
 
   return (
     <StyledListItemPaper>

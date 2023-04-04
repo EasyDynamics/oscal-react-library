@@ -32,7 +32,7 @@ import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { OSCALSection } from "../styles/CommonPageStyles";
 import OSCALEditableTextField from "./OSCALEditableTextField";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
@@ -612,7 +612,7 @@ function OSCALMetadataFieldArea(props) {
     setIsExpanded(!isExpanded);
   };
 
-  const handleFragment = useCallback(() => {
+  useEffect(() => {
     // Grab fragment identifier following hash character if fragment exists in location
     const controlFragment = urlFragment !== "" ? urlFragment : null;
     // Expand metadata accordion section if control fragment matches title
@@ -620,10 +620,6 @@ function OSCALMetadataFieldArea(props) {
       setIsExpanded(true);
     }
   }, [urlFragment, title]);
-
-  useEffect(() => {
-    handleFragment();
-  }, [handleFragment]);
 
   return (
     <Accordion expanded={isExpanded} onChange={handleExpand}>
