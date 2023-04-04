@@ -12,6 +12,7 @@ import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import { conformLinkIdText } from "./oscal-utils/OSCALLinkUtils";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -83,7 +84,10 @@ export default function OSCALCatalogGroups(props) {
     const controlLayers = urlFragment.split("/");
     const rootLayer = controlLayers[0];
     // Ensure catalog tab grouping exists
-    let upperLayer = groups?.find((group) => group.id === rootLayer);
+    let upperLayer = groups?.find(
+      (group) =>
+        group?.id === rootLayer || conformLinkIdText(group?.title) === rootLayer
+    );
     if (!upperLayer) {
       return;
     }
@@ -135,8 +139,8 @@ export default function OSCALCatalogGroups(props) {
                   <ComponentTab
                     key={group.title}
                     label={group.title}
-                    {...a11yProps(group.id)}
-                    value={group.id}
+                    {...a11yProps(group.id ?? conformLinkIdText(group.title))}
+                    value={group.id ?? conformLinkIdText(group.title)}
                   />
                 ))}
               </ComponentTabs>
@@ -145,7 +149,7 @@ export default function OSCALCatalogGroups(props) {
               {groups?.map((group, index) => (
                 <TabPanel
                   key={group.title}
-                  groupId={group.id}
+                  groupId={group.id ?? conformLinkIdText(group.title)}
                   value={openTab}
                   index={index}
                 >

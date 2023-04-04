@@ -110,3 +110,17 @@ export function shiftFragmentSuffix(fragmentSuffix) {
     ? `${fragmentSuffix.substring(fragmentSuffix.indexOf("/") + 1)}`
     : null;
 }
+
+/**
+ * Transforms text to prepare as a fragment, by replacing slashes and spaces with hyphens and
+ * lowercasing all letters.
+ *
+ * @param {string} linkText Text to format
+ * @returns {string} Formatted text to work as a fragment
+ */
+export function conformLinkIdText(linkText) {
+  return !linkText
+    ? ""
+    : linkText?.props?.children.replace(/\\| |\//g, "-")?.toLowerCase() ||
+        linkText.replace(/\\| |\//g, "-")?.toLowerCase();
+}

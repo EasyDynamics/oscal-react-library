@@ -3,6 +3,7 @@ import Stack from "@mui/material/Stack";
 import LinkIcon from "@mui/icons-material/Link";
 import { Link } from "react-router-dom";
 import Fade from "@mui/material/Fade";
+import { conformLinkIdText } from "./oscal-utils/OSCALLinkUtils";
 
 export default function OSCALAnchorLinkHeader(props) {
   const { children, value } = props;
@@ -13,12 +14,6 @@ export default function OSCALAnchorLinkHeader(props) {
   const onLeave = () => {
     setIsHover(false);
   };
-
-  const conformLinkIdText = (linkText) =>
-    !linkText
-      ? ""
-      : linkText?.props?.children.replaceAll(" ", "-")?.toLowerCase() ||
-        linkText.replaceAll(" ", "-")?.toLowerCase();
 
   const linkId = value || conformLinkIdText(children);
 
@@ -34,7 +29,7 @@ export default function OSCALAnchorLinkHeader(props) {
       {children}
       {isHover && (
         // Navigate to a specified fragment or use the child text
-        <Link to={`#${linkId}`}>
+        <Link reloadDocument to={`#${linkId}`}>
           <Fade in={isHover}>
             <LinkIcon
               sx={[

@@ -15,6 +15,7 @@ import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import {
   appendToFragmentPrefix,
   shiftFragmentSuffix,
+  conformLinkIdText,
 } from "./oscal-utils/OSCALLinkUtils";
 
 export const OSCALControlList = styled(List)`
@@ -225,7 +226,7 @@ export default function OSCALCatalogGroup(props) {
   } = props;
   // Note: "fragmentPrefix" is specific to setting up a fragment in the url, by adding groupings;
   // while "fragmentSuffix" is specific to finding a control from a fragment, trimming found groups
-  const fragmentPrefix = group.id ?? "";
+  const fragmentPrefix = group.id ?? conformLinkIdText(group.title) ?? "";
   const fragmentSuffix = urlFragment
     ? `${urlFragment.substring(urlFragment.indexOf("/") + 1)}`
     : null;
