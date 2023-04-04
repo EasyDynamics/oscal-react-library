@@ -3,7 +3,14 @@ import Stack from "@mui/material/Stack";
 import LinkIcon from "@mui/icons-material/Link";
 import { Link } from "react-router-dom";
 import Fade from "@mui/material/Fade";
+import { styled } from "@mui/material/styles";
 import { conformLinkIdText } from "./oscal-utils/OSCALLinkUtils";
+
+const AnchorLinkIcon = styled(LinkIcon)(({ theme }) => ({
+  width: "0.75em",
+  height: "0.75em",
+  color: theme.palette.grey[500],
+}));
 
 export default function OSCALAnchorLinkHeader(props) {
   const { children, value } = props;
@@ -31,16 +38,7 @@ export default function OSCALAnchorLinkHeader(props) {
         // Navigate to a specified fragment or use the child text
         <Link reloadDocument to={`#${linkId}`}>
           <Fade in={isHover}>
-            <LinkIcon
-              sx={[
-                (theme) => ({
-                  width: "0.75em",
-                  height: "0.75em",
-                  color: theme.palette.grey[500],
-                }),
-              ]}
-              aria-label={`${linkId} anchor link`}
-            />
+            <AnchorLinkIcon aria-label={`${linkId} anchor link`} />
           </Fade>
         </Link>
       )}
