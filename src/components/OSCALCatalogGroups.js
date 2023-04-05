@@ -12,7 +12,10 @@ import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
-import { conformLinkIdText } from "./oscal-utils/OSCALLinkUtils";
+import {
+  conformLinkIdText,
+  isValidFragment,
+} from "./oscal-utils/OSCALLinkUtils";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -64,6 +67,24 @@ TabPanel.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
+function determineControlExists(groups, controlLayers, rootLayer) {
+  // Ensure catalog tab grouping exists
+  let upperLayer = groups?.find(
+    (group) =>
+      group?.id === rootLayer || conformLinkIdText(group?.title) === rootLayer
+  );
+  if (!upperLayer) {
+    return null;
+  }
+  // Ensure lowest/deepest control exists
+  for (let i = 1; i < controlLayers.length && upperLayer; i += 1) {
+    upperLayer = upperLayer?.controls?.find(
+      (control) => control.id === controlLayers[i]
+    );
+  }
+  return upperLayer;
+}
+
 export default function OSCALCatalogGroups(props) {
   const { groups, urlFragment } = props;
   const [openTab, setOpenTab] = React.useState(groups[0]?.id);
@@ -78,33 +99,17 @@ export default function OSCALCatalogGroups(props) {
     // Initially set item opened to false for new fragment to be handled
     setIsControlListItemOpened(false);
     // Ensure fragment exists and split by groupings
-    if (!urlFragment || urlFragment === "") {
+    if (!isValidFragment(urlFragment)) {
       return;
     }
+    // Break control groupings apart
     const controlLayers = urlFragment.split("/");
     const rootLayer = controlLayers[0];
-    // Ensure catalog tab grouping exists
-    let upperLayer = groups?.find(
-      (group) =>
-        group?.id === rootLayer || conformLinkIdText(group?.title) === rootLayer
-    );
-    if (!upperLayer) {
-      return;
-    }
-    // Ensure lowest/deepest control exists
-    for (let i = 1; i < controlLayers.length && upperLayer; i += 1) {
-      upperLayer = upperLayer?.controls?.find(
-        (control) => control.id === controlLayers[i]
-      );
-    }
-    if (!upperLayer) {
+    if (!determineControlExists(groups, controlLayers, rootLayer)) {
       return;
     }
     // Confirm catalog tab group can be grabbed
-    const elementWithFragment = document.getElementById(
-      `vertical-tab-${rootLayer}`
-    );
-    if (elementWithFragment) {
+    if (document.getElementById(`vertical-tab-${rootLayer}`)) {
       setOpenTab(rootLayer);
     }
   }, [urlFragment, groups]);

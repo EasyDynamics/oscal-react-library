@@ -124,3 +124,13 @@ export function conformLinkIdText(linkText) {
     : linkText?.props?.children.replace(/\\| |\//g, "-")?.toLowerCase() ||
         linkText.replace(/\\| |\//g, "-")?.toLowerCase();
 }
+
+/**
+ * Validate a fragment.
+ *
+ * @param {string} fragment A given fragment
+ * @returns {boolean} State of it being a valid fragment
+ */
+export function isValidFragment(fragment) {
+  return fragment && fragment !== "";
+}

@@ -37,6 +37,7 @@ import { OSCALSection } from "../styles/CommonPageStyles";
 import OSCALEditableTextField from "./OSCALEditableTextField";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
+import { isValidFragment } from "./oscal-utils/OSCALLinkUtils";
 
 const OSCALMetadataSectionInfoHeader = styled(Typography)`
   display: flex;
@@ -614,7 +615,7 @@ function OSCALMetadataFieldArea(props) {
 
   useEffect(() => {
     // Grab fragment identifier following hash character if fragment exists in location
-    const controlFragment = urlFragment !== "" ? urlFragment : null;
+    const controlFragment = isValidFragment(urlFragment) ? urlFragment : null;
     // Expand metadata accordion section if control fragment matches title
     if (controlFragment === title.toLowerCase()) {
       setIsExpanded(true);
