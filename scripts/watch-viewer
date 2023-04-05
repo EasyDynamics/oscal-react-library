@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+npx lerna exec --stream --include-dependencies --scope="@easydynamics/oscal-viewer" -- npm run build
+npx lerna exec --stream --include-dependencies --scope="@easydynamics/oscal-viewer" --parallel -- npm run watch

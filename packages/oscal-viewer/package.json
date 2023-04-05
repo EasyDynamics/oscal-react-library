@@ -11,6 +11,7 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
+    "watch": "craco start",
     "test": "craco test --watchAll=false",
     "eject": "craco eject"
   },

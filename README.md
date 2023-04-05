@@ -34,7 +34,7 @@ dependencies need to be installed initially with the command: `npm install`. Fro
 immediately run the application, use the following command:
 
 ```text
-npm run build-library-and-run-example
+./scripts/watch-viewer
 ```
 
 ### Testing
@@ -60,16 +60,10 @@ Once root dependencies are installed, build application dependencies and run OSC
 command:
 
 ```text
-npm run build-and-run-example
+./scripts/watch-viewer
 ```
 
-After application dependencies are installed, use:
-
-```text
-npm run run-example
-```
-
-For more details about OSCAL Viewer, please refer to the [example (OSCAL Viewer) README.md](/example/README.md).
+For more details about OSCAL Viewer, please refer to the [example (OSCAL Viewer) README.md](/packages/oscal-viewer/README.md).
 
 ### Google Analytics
 
@@ -79,7 +73,7 @@ identifier when `npm run build` is run. For example:
 
 ```bash
 export REACT_APP_GOOGLE_ANALYTICS="G-XXXXXXXXXX"`
-npm run build
+./scripts/build-all
 ```
 
 will produce an application build with Google Analytics tracking enabled. The only way to toggle
