@@ -1,7 +1,7 @@
-import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
+import React from "react";
+import { keywordValuesList, metadataTestData } from "../test-data/CommonData";
 import OSCALMetadata from "./OSCALMetadata";
-import { metadataTestData } from "../test-data/CommonData";
 
 describe("OSCALMetadata", () => {
   test(`displays title`, () => {
@@ -14,6 +14,12 @@ describe("OSCALMetadata", () => {
     render(<OSCALMetadata metadata={metadataTestData} />);
     const result = screen.getByText("Revision 5");
     expect(result).toBeVisible();
+  });
+
+  test("displays remarks", () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
+    const remarks = screen.getByText("This is test data");
+    expect(remarks).toBeVisible();
   });
 });
 
@@ -279,5 +285,80 @@ describe("OSCAL metadata locations", () => {
     expect(
       screen.getByRole("link", { name: /www\.website\.com/i })
     ).toBeVisible();
+  });
+});
+
+describe("OSCAL metadata keywords", () => {
+  test("display keyword chips", () => {
+    metadataTestData.props = keywordValuesList.basic;
+
+    render(<OSCALMetadata metadata={metadataTestData} />);
+
+    const expand = screen.getByText("Keywords");
+    fireEvent.click(expand);
+
+    const chips = screen.getAllByRole("chip");
+    const keyword1 = screen.getByText("Keyword_1");
+    const keyword2 = screen.getByText("Keyword_2");
+    const keyword3 = screen.getByText("Keyword_3");
+
+    expect(chips.length).toBe(3);
+    expect(keyword1).toBeVisible();
+    expect(keyword2).toBeVisible();
+    expect(keyword3).toBeVisible();
+  });
+
+  test("displays one keyword", () => {
+    metadataTestData.props = keywordValuesList.oneKeyWord;
+
+    render(<OSCALMetadata metadata={metadataTestData} />);
+
+    const expand = screen.getByText("Keywords");
+    fireEvent.click(expand);
+
+    const chips = screen.getAllByRole("chip");
+    const keyword1 = screen.getByText("Keyword_1");
+
+    expect(chips.length).toBe(1);
+    expect(keyword1).toBeVisible();
+  });
+
+  test("displays no keywords with empty props", () => {
+    metadataTestData.props = keywordValuesList.emptyProps;
+
+    render(<OSCALMetadata metadata={metadataTestData} />);
+
+    const expand = screen.getByText("Keywords");
+    fireEvent.click(expand);
+
+    const chips = screen.queryAllByRole("chip");
+
+    expect(chips.length).toBe(0);
+  });
+
+  test("displays no keywords with empty value", () => {
+    metadataTestData.props = keywordValuesList.emptyValue;
+
+    render(<OSCALMetadata metadata={metadataTestData} />);
+
+    const expand = screen.getByText("Keywords");
+    fireEvent.click(expand);
+
+    const chips = screen.queryAllByRole("chip");
+
+    expect(chips.length).toBe(0);
+  });
+
+  test("displays no keywords with different ns", () => {
+    metadataTestData.props = keywordValuesList.setns;
+
+    render(<OSCALMetadata metadata={metadataTestData} />);
+
+    const expand = screen.getByText("Keywords");
+    fireEvent.click(expand);
+
+    const chips = screen.queryAllByRole("chip");
+
+    expect(chips.length).toBe(0);
   });
 });

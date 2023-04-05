@@ -29,6 +29,10 @@ const NotImplementedStatement = styled(Typography)(
   ({ theme }) => `color: ${theme.palette.grey[400]};`
 );
 
+const OSCALControlProseRemove = styled(Typography)`
+  text-decoration: line-through;
+`;
+
 const prosePlaceholderRegexpString = "{{ insert: param, ([0-9a-zA-B-_.]*) }}";
 
 const ParamLabel = styled(Typography)(
@@ -348,6 +352,48 @@ export function OSCALReplacedProseWithParameterLabel(props) {
       </NotImplementedStatement>
     );
   }
+
+  if (props.modificationDisplay === undefined) {
+    return (
+      <Typography>
+        {props.label} {prose}
+        {props.modificationDisplay}
+      </Typography>
+    );
+  }
+
+  const { controlId, controlPartId } = props.modificationDisplay.props;
+  const removeByIds = props.modificationDisplay.props.modificationAlters
+    ?.find((item) => item["control-id"] === controlId)
+    ?.removes?.find((object) => object["by-id"] === controlPartId);
+  const removeByNames = props.modificationDisplay.props.modificationAlters
+    ?.find((item) => item["control-id"] === controlId)
+    ?.removes?.find((object) => object["by-name"] === controlPartId);
+  const removeByNS = props.modificationDisplay.props.modificationAlters
+    ?.find((item) => item["control-id"] === controlId)
+    ?.removes?.find((object) => object["by-ns"] === controlPartId);
+  const removeByClass = props.modificationDisplay.props.modificationAlters
+    ?.find((item) => item["control-id"] === controlId)
+    ?.removes?.find((object) => object["by-class"] === controlPartId);
+  const removeByItemNames = props.modificationDisplay.props.modificationAlters
+    ?.find((item) => item["control-id"] === controlId)
+    ?.removes?.find((object) => object["by-item-name"] === controlPartId);
+
+  if (
+    removeByIds ||
+    removeByNames ||
+    removeByNS ||
+    removeByClass ||
+    removeByItemNames
+  ) {
+    return (
+      <OSCALControlProseRemove>
+        {props.label} {prose}
+        {props.modificationDisplay}
+      </OSCALControlProseRemove>
+    );
+  }
+
   return (
     <Typography>
       {props.label} {prose}

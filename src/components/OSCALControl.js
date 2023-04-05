@@ -114,8 +114,17 @@ export default function OSCALControl(props) {
   }, [listItemOpened, isItemNavigatedTo, urlFragment]);
 
   if (
-    !control ||
-    (includeControlIds && !includeControlIds.includes(control.id))
+    !props.includeAll &&
+    (!props.control ||
+      (props.includeControlIds &&
+        !props.includeControlIds.includes(props.control.id)))
+  ) {
+    return null;
+  }
+  if (
+    !props.control ||
+    (props.excludeControlIds &&
+      props.excludeControlIds.includes(props.control.id))
   ) {
     return null;
   }

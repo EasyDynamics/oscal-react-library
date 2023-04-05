@@ -18,19 +18,23 @@ const OSCALControlModificationsButton = styled(IconButton)(
 /**
  * Create a typography html object for addsOrRemovesLabel
  *
- * @param {Object} addsElements add or remove object to map into html
- * @param {String} addsLabel boolean variable, true if adding
+ * @param {Object} addsRemovesElements add or remove object to map into html
+ * @param {String} addsRemovesLabel string variable, this variable should "Adds " or "Removes "
  * @param {String} controlPartId Control part ID to match
  * @returns html object
  */
-function getAlterAddsOrRemovesDisplay(addsElements, addsLabel, controlPartId) {
-  if (!addsElements?.length) {
+function getAlterAddsOrRemovesDisplay(
+  addsRemovesElements,
+  addsRemovesLabel,
+  controlPartId
+) {
+  if (!addsRemovesElements?.length) {
     return null;
   }
 
   // Handle adds; however, the parts attribute is ignored for
   // now due to parsing complications.
-  const typographies = addsElements
+  const typographies = addsRemovesElements
     .flatMap((element) => element.props ?? [])
     .map((item) => (
       <Typography
@@ -42,13 +46,32 @@ function getAlterAddsOrRemovesDisplay(addsElements, addsLabel, controlPartId) {
         Name: {item.name}, Value: {item.value}
       </Typography>
     ));
+  let removedTypographies = null;
+  if (addsRemovesLabel === "Removes ") {
+    removedTypographies = addsRemovesElements
+      .flatMap((element) => element ?? [])
+      .map((item) => (
+        <Typography
+          color="textSecondary"
+          paragraph
+          variant="body1"
+          key={item.id}
+        >
+          Attribute: {Object.keys.length > 0 ? Object.keys(item)[0] : ""},
+          Value: {Object.values.length > 0 ? Object.values(item)[0] : ""}
+        </Typography>
+      ));
+  }
 
-  const labelTypograhy = <Typography variant="h6">{addsLabel}</Typography>;
+  const labelTypograhy = (
+    <Typography variant="h6">{addsRemovesLabel}</Typography>
+  );
 
   return (
     <DialogContent dividers>
       {labelTypograhy}
       {typographies}
+      {removedTypographies}
     </DialogContent>
   );
 }
@@ -120,7 +143,7 @@ export default function OSCALControlModification(props) {
   const controlPartId = props.controlPartId ?? props.controlId;
 
   let addsDisplay = null;
-  const removesDisplay = null;
+  let removesDisplay = null;
   let len;
   let modLength = 0;
 
@@ -134,7 +157,16 @@ export default function OSCALControlModification(props) {
     );
     modLength += len;
   }
-
+  // Get all remove modifications
+  if (alter.removes) {
+    [removesDisplay, len] = getModifications(
+      controlPartId,
+      props.controlId,
+      alter.removes,
+      "Removes "
+    );
+    modLength += len;
+  }
   // Display modifications if there are any
   if (!modLength) return null;
   return (
