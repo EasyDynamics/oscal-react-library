@@ -16,7 +16,7 @@
     "eject": "craco eject"
   },
   "dependencies": {
-    "@easydynamics/oscal-react-library": "*",
+    "@easydynamics/oscal-react-library": "^0.5.2-0",
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.14",
     "history": "^5.3.0",

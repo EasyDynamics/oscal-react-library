@@ -12,6 +12,7 @@ const NIST_DEFAULT_NAMESPACE = "https://csrc.nist.gov/ns/oscal";
  */
 export function namespaceOf(ns: string | undefined) : string {
   return ns ?? NIST_DEFAULT_NAMESPACE;
+
 }
 
 export interface PropertyFilter {
