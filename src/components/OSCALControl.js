@@ -98,6 +98,8 @@ export default function OSCALControl(props) {
     modificationAlters,
     showInList,
     childLevel,
+    includeAll,
+    excludeControlIds,
   } = props;
 
   useEffect(() => {
@@ -114,17 +116,14 @@ export default function OSCALControl(props) {
   }, [listItemOpened, isItemNavigatedTo, urlFragment]);
 
   if (
-    !props.includeAll &&
-    (!props.control ||
-      (props.includeControlIds &&
-        !props.includeControlIds.includes(props.control.id)))
+    !includeAll &&
+    (!control || (includeControlIds && !includeControlIds.includes(control.id)))
   ) {
     return null;
   }
   if (
-    !props.control ||
-    (props.excludeControlIds &&
-      props.excludeControlIds.includes(props.control.id))
+    !control ||
+    (excludeControlIds && excludeControlIds.includes(control.id))
   ) {
     return null;
   }
