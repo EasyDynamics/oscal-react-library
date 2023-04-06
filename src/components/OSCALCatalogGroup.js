@@ -46,7 +46,6 @@ function CollapsibleListItem(props) {
   const {
     urlFragment,
     control,
-    group,
     itemText,
     children,
     fragmentSuffix,
@@ -69,12 +68,11 @@ function CollapsibleListItem(props) {
     if (!urlFragment) {
       return;
     }
-    const listId = control?.id ?? group?.id ?? conformLinkIdText(group?.title);
-    // Find control/group list state and open collapsible item
-    const currentList = fragmentSuffix.split("/")[0];
-    if (currentList === listId) {
+    // Find control list state and open collapsible item
+    const currentControl = fragmentSuffix.split("/")[0];
+    if (currentControl === control?.id) {
       setIsOpen(true);
-      const elementWithFragment = document.getElementById(listId);
+      const elementWithFragment = document.getElementById(control.id);
       elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
     }
   }, [
@@ -83,8 +81,6 @@ function CollapsibleListItem(props) {
     listItemOpened,
     isSetListItemNavigatedTo,
     control?.id,
-    group?.id,
-    group?.title,
   ]);
 
   return (
@@ -96,7 +92,7 @@ function CollapsibleListItem(props) {
       <Collapse
         in={isOpen}
         timeout="auto"
-        onEntered={() => !group && setListItemOpened(true)}
+        onEntered={() => setListItemOpened(true)}
         unmountOnExit
       >
         <StyledControlDescriptionWrapper>
@@ -141,7 +137,6 @@ function OSCALCatalogControlListItem(props) {
       fragmentSuffix={shiftFragmentSuffix(fragmentSuffix)}
       listItemOpened={isControlListItemOpened}
       setListItemOpened={setIsControlListItemOpened}
-      isListItemNavigatedTo={isListItemNavigatedTo}
       isSetListItemNavigatedTo={isSetListItemNavigatedTo}
     >
       <OSCALControl
@@ -175,31 +170,16 @@ function OSCALCatalogGroupList(props) {
     isControlListItemOpened,
     setIsControlListItemOpened,
   } = props;
-  const [isListItemNavigatedTo, isSetListItemNavigatedTo] =
-    React.useState(false);
-  const itemText = (
-    <OSCALAnchorLinkHeader
-      value={appendToFragmentPrefix(
-        fragmentPrefix,
-        group.id ?? conformLinkIdText(group.title)
-      ).toLowerCase()}
-    >
-      {group.title}
-    </OSCALAnchorLinkHeader>
-  );
 
   return (
     <CollapsibleListItem
-      itemText={itemText}
+      itemText={group.title}
       control={control}
-      group={group}
-      id={group.id ?? conformLinkIdText(group.title)}
       urlFragment={urlFragment}
+      fragmentPrefix={fragmentPrefix}
       fragmentSuffix={fragmentSuffix}
       listItemOpened={isControlListItemOpened}
       setListItemOpened={setIsControlListItemOpened}
-      isListItemNavigatedTo={isListItemNavigatedTo}
-      isSetListItemNavigatedTo={isSetListItemNavigatedTo}
     >
       <OSCALControlList>
         {group.groups?.map((innerGroup) => (
@@ -207,10 +187,7 @@ function OSCALCatalogGroupList(props) {
             group={innerGroup}
             key={innerGroup.title}
             urlFragment={urlFragment}
-            fragmentPrefix={appendToFragmentPrefix(
-              fragmentPrefix,
-              group.id ?? conformLinkIdText(group.title)
-            )}
+            fragmentPrefix={appendToFragmentPrefix(fragmentPrefix, innerGroup)}
             fragmentSuffix={shiftFragmentSuffix(fragmentSuffix)}
             isControlListItemOpened={isControlListItemOpened}
             setIsControlListItemOpened={setIsControlListItemOpened}
@@ -223,7 +200,7 @@ function OSCALCatalogGroupList(props) {
             urlFragment={urlFragment}
             fragmentPrefix={appendToFragmentPrefix(
               fragmentPrefix,
-              group.id ?? conformLinkIdText(group.title)
+              groupControl
             )}
             fragmentSuffix={shiftFragmentSuffix(fragmentSuffix)}
             isControlListItemOpened={isControlListItemOpened}
@@ -256,7 +233,7 @@ export default function OSCALCatalogGroup(props) {
           group={innerGroup}
           key={innerGroup.title}
           urlFragment={urlFragment}
-          fragmentPrefix={fragmentPrefix}
+          fragmentPrefix={appendToFragmentPrefix(fragmentPrefix, innerGroup)}
           fragmentSuffix={fragmentSuffix}
           isControlListItemOpened={isControlListItemOpened}
           setIsControlListItemOpened={setIsControlListItemOpened}
