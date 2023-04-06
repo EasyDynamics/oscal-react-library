@@ -628,7 +628,7 @@ function OSCALMetadataFieldArea(props) {
     <Accordion expanded={isExpanded} onChange={handleExpand}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <OSCALAnchorLinkHeader>
-          <Typography sx={{ width: "33%", flexShrink: 0 }}>{title}</Typography>
+          <Typography>{title}</Typography>
         </OSCALAnchorLinkHeader>
         <Typography sx={{ color: "text.secondary" }}>{summary}</Typography>
       </AccordionSummary>
