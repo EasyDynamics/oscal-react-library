@@ -66,7 +66,7 @@ export function guessExtensionFromHref(url) {
  * @returns {string} The control group id
  */
 export function determineControlGroupFromFragment(fragment) {
-  if (fragment === null || fragment === "" || fragment === undefined) {
+  if (fragment) {
     return null;
   }
   // Create array from all tab control grouping elements
@@ -91,9 +91,7 @@ export function determineControlGroupFromFragment(fragment) {
  * @returns {string} fragmentPrefix with an added control
  */
 export function appendToFragmentPrefix(fragmentPrefix, controlId) {
-  return fragmentPrefix && fragmentPrefix !== ""
-    ? `${fragmentPrefix}/${controlId}`
-    : controlId;
+  return fragmentPrefix ? `${fragmentPrefix}/${controlId}` : controlId;
 }
 
 /**
@@ -103,7 +101,7 @@ export function appendToFragmentPrefix(fragmentPrefix, controlId) {
  * @returns {string} fragmentSuffix with a removed control
  */
 export function shiftFragmentSuffix(fragmentSuffix) {
-  return fragmentSuffix && fragmentSuffix !== ""
+  return fragmentSuffix
     ? `${fragmentSuffix.substring(fragmentSuffix.indexOf("/") + 1)}`
     : null;
 }
@@ -120,14 +118,4 @@ export function conformLinkIdText(linkText) {
     ? ""
     : linkText?.props?.children.replace(/\\| |\//g, "-")?.toLowerCase() ||
         linkText.replace(/\\| |\//g, "-")?.toLowerCase();
-}
-
-/**
- * Validate a fragment.
- *
- * @param {string} fragment A given fragment
- * @returns {boolean} State of it being a valid fragment
- */
-export function isValidFragment(fragment) {
-  return fragment && fragment !== "";
 }

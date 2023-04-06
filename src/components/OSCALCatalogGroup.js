@@ -16,7 +16,6 @@ import {
   appendToFragmentPrefix,
   shiftFragmentSuffix,
   conformLinkIdText,
-  isValidFragment,
 } from "./oscal-utils/OSCALLinkUtils";
 
 export const OSCALControlList = styled(List)`
@@ -66,7 +65,7 @@ function CollapsibleListItem(props) {
       return;
     }
     // Ensure fragment exists and split by groupings
-    if (!isValidFragment(urlFragment)) {
+    if (!urlFragment) {
       return;
     }
     // Find control list state and open collapsible item

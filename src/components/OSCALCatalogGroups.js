@@ -12,10 +12,7 @@ import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
-import {
-  conformLinkIdText,
-  isValidFragment,
-} from "./oscal-utils/OSCALLinkUtils";
+import { conformLinkIdText } from "./oscal-utils/OSCALLinkUtils";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -67,6 +64,15 @@ TabPanel.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
+/**
+ * Validates if the lowest control provided in an decending list (controlLayers) can be found
+ * within the provided groups.
+ *
+ * @param {*} groups The control groupings
+ * @param {*} controlLayers An decending list of groups/controls
+ * @param {*} rootLayer The top most layer
+ * @returns This returns the lowest found control or null if not
+ */
 function determineControlExists(groups, controlLayers, rootLayer) {
   // Ensure catalog tab grouping exists
   let upperLayer = groups?.find(
@@ -99,7 +105,7 @@ export default function OSCALCatalogGroups(props) {
     // Initially set item opened to false for new fragment to be handled
     setIsControlListItemOpened(false);
     // Ensure fragment exists and split by groupings
-    if (!isValidFragment(urlFragment)) {
+    if (!urlFragment) {
       return;
     }
     // Break control groupings apart

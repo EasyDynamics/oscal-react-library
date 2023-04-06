@@ -39,7 +39,6 @@ import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import OSCALEditableTextField from "./OSCALEditableTextField";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
-import { isValidFragment } from "./oscal-utils/OSCALLinkUtils";
 
 const OSCALMetadataSectionInfoHeader = styled(Typography)`
   display: flex;
@@ -612,12 +611,12 @@ function OSCALMetadataFieldArea(props) {
   const [isExpanded, setIsExpanded] = React.useState(false);
 
   const handleExpand = () => {
-    setIsExpanded(!isExpanded);
+    setIsExpanded((isCurrentlyExpanded) => !isCurrentlyExpanded);
   };
 
   useEffect(() => {
     // Grab fragment identifier following hash character if fragment exists in location
-    const controlFragment = isValidFragment(urlFragment) ? urlFragment : null;
+    const controlFragment = urlFragment || null;
     // Expand metadata accordion section if control fragment matches title
     if (controlFragment === title.toLowerCase()) {
       setIsExpanded(true);

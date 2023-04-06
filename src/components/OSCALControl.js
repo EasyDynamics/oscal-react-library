@@ -106,12 +106,11 @@ export default function OSCALControl(props) {
     if (!listItemOpened || isItemNavigatedTo) {
       return;
     }
-    const fragment = urlFragment;
-    if (fragment === "" || fragment === null) {
+    if (!urlFragment) {
       return;
     }
     // Smooth scroll to control if element is found with fragment identifier
-    const elementWithFragment = document.getElementById(fragment);
+    const elementWithFragment = document.getElementById(urlFragment);
     elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
   }, [listItemOpened, isItemNavigatedTo, urlFragment]);
 
