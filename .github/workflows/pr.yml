@@ -37,7 +37,7 @@ jobs:
           # Run built-in JavaScript/JSON linting
           npx lerna run lint
           # Lint markdown files
-          markdownlint '**/*.md' --ignore node_modules --ignore example/node_modules
+          markdownlint '**/*.md'
           # Lint YAML files
           yamllint --format github --config-file .yaml-lint.yml .
   build_and_test:
