@@ -36,7 +36,7 @@ export default function OSCALAnchorLinkHeader(props) {
       {children}
       {isHover && (
         // Navigate to a specified fragment or use the child text
-        <Link reloadDocument to={`#${linkId}`}>
+        <Link to={`#${linkId}`}>
           <Fade in={isHover}>
             <AnchorLinkIcon aria-label={`${linkId} anchor link`} />
           </Fade>

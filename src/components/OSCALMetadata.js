@@ -457,7 +457,7 @@ function OSCALMetadataBasicData(props) {
 }
 
 function OSCALMetadataRoles(props) {
-  const { roles } = props;
+  const { roles, urlFragment } = props;
   const cards = roles?.map((role) => (
     <Grid item xs={12} md={4} key={role.id} component={Card}>
       <OSCALMetadataRole role={role} />
@@ -465,14 +465,14 @@ function OSCALMetadataRoles(props) {
   ));
 
   return (
-    <OSCALMetadataFieldArea title="Roles" urlFragment={props.urlFragment}>
+    <OSCALMetadataFieldArea title="Roles" urlFragment={urlFragment}>
       {cards}
     </OSCALMetadataFieldArea>
   );
 }
 
 function OSCALMetadataParties(props) {
-  const { parties } = props;
+  const { parties, urlFragment } = props;
 
   const getRoleLabel = (roleId) =>
     props.metadata.roles.find((role) => role.id === roleId);
@@ -496,14 +496,14 @@ function OSCALMetadataParties(props) {
   ));
 
   return (
-    <OSCALMetadataFieldArea title="Parties" urlFragment={props.urlFragment}>
+    <OSCALMetadataFieldArea title="Parties" urlFragment={urlFragment}>
       {cards}
     </OSCALMetadataFieldArea>
   );
 }
 
 function OSCALMetadataLocations(props) {
-  const { locations } = props;
+  const { locations, urlFragment } = props;
 
   const cards = locations?.map((location) => (
     <Grid item xs={12} md={4} key={location.uuid} component={Card}>
@@ -512,7 +512,7 @@ function OSCALMetadataLocations(props) {
   ));
 
   return (
-    <OSCALMetadataFieldArea title="Locations" urlFragment={props.urlFragment}>
+    <OSCALMetadataFieldArea title="Locations" urlFragment={urlFragment}>
       {cards}
     </OSCALMetadataFieldArea>
   );
@@ -649,7 +649,7 @@ export function OSCALMetadataKeyword(props) {
 }
 
 export function OSCALMetadataKeywords(props) {
-  const { keywords } = props;
+  const { keywords, urlFragment } = props;
 
   const chips = (keywords ?? "")
     .split(",")
@@ -657,7 +657,9 @@ export function OSCALMetadataKeywords(props) {
     .map((keyword) => <OSCALMetadataKeyword key={keyword} keyword={keyword} />);
 
   return (
-    <OSCALMetadataFieldArea title="Keywords">{chips}</OSCALMetadataFieldArea>
+    <OSCALMetadataFieldArea title="Keywords" urlFragment={urlFragment}>
+      {chips}
+    </OSCALMetadataFieldArea>
   );
 }
 
@@ -716,13 +718,21 @@ export default function OSCALMetadata(props) {
             </OSCALMarkupMultiLine>
             <OSCALMetadataKeywords
               keywords={propWithName(props.metadata.props, "keywords")?.value}
+              urlFragment={props.urlFragment}
             />
             <OSCALMetadataParties
               parties={props.metadata?.parties}
               metadata={props.metadata}
+              urlFragment={props.urlFragment}
             />
-            <OSCALMetadataRoles roles={props.metadata?.roles} />
-            <OSCALMetadataLocations locations={props.metadata?.locations} />
+            <OSCALMetadataRoles
+              roles={props.metadata?.roles}
+              urlFragment={props.urlFragment}
+            />
+            <OSCALMetadataLocations
+              locations={props.metadata?.locations}
+              urlFragment={props.urlFragment}
+            />
           </Stack>
         </CardContent>
       </Card>
