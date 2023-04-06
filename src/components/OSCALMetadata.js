@@ -33,10 +33,11 @@ import ListItem from "@mui/material/ListItem";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import React from "react";
+import React, { useEffect } from "react";
 import { OSCALSection } from "../styles/CommonPageStyles";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import OSCALEditableTextField from "./OSCALEditableTextField";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 const OSCALMetadataSectionInfoHeader = styled(Typography)`
@@ -455,18 +456,22 @@ function OSCALMetadataBasicData(props) {
 }
 
 function OSCALMetadataRoles(props) {
-  const { roles } = props;
+  const { roles, urlFragment } = props;
   const cards = roles?.map((role) => (
     <Grid item xs={12} md={4} key={role.id} component={Card}>
       <OSCALMetadataRole role={role} />
     </Grid>
   ));
 
-  return <OSCALMetadataFieldArea title="Roles">{cards}</OSCALMetadataFieldArea>;
+  return (
+    <OSCALMetadataFieldArea title="Roles" urlFragment={urlFragment}>
+      {cards}
+    </OSCALMetadataFieldArea>
+  );
 }
 
 function OSCALMetadataParties(props) {
-  const { parties } = props;
+  const { parties, urlFragment } = props;
 
   const getRoleLabel = (roleId) =>
     props.metadata.roles.find((role) => role.id === roleId);
@@ -490,12 +495,14 @@ function OSCALMetadataParties(props) {
   ));
 
   return (
-    <OSCALMetadataFieldArea title="Parties">{cards}</OSCALMetadataFieldArea>
+    <OSCALMetadataFieldArea title="Parties" urlFragment={urlFragment}>
+      {cards}
+    </OSCALMetadataFieldArea>
   );
 }
 
 function OSCALMetadataLocations(props) {
-  const { locations } = props;
+  const { locations, urlFragment } = props;
 
   const cards = locations?.map((location) => (
     <Grid item xs={12} md={4} key={location.uuid} component={Card}>
@@ -504,7 +511,9 @@ function OSCALMetadataLocations(props) {
   ));
 
   return (
-    <OSCALMetadataFieldArea title="Locations">{cards}</OSCALMetadataFieldArea>
+    <OSCALMetadataFieldArea title="Locations" urlFragment={urlFragment}>
+      {cards}
+    </OSCALMetadataFieldArea>
   );
 }
 
@@ -597,11 +606,29 @@ export function OSCALMetadataLocation(props) {
 }
 
 function OSCALMetadataFieldArea(props) {
-  const { title, children, summary } = props;
+  const { title, children, summary, urlFragment } = props;
+
+  const [isExpanded, setIsExpanded] = React.useState(false);
+
+  const handleExpand = () => {
+    setIsExpanded((isCurrentlyExpanded) => !isCurrentlyExpanded);
+  };
+
+  useEffect(() => {
+    // Grab fragment identifier following hash character if fragment exists in location
+    const controlFragment = urlFragment || null;
+    // Expand metadata accordion section if control fragment matches title
+    if (controlFragment === title.toLowerCase()) {
+      setIsExpanded(true);
+    }
+  }, [urlFragment, title]);
+
   return (
-    <Accordion>
+    <Accordion expanded={isExpanded} onChange={handleExpand}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography sx={{ width: "33%", flexShrink: 0 }}>{title}</Typography>
+        <OSCALAnchorLinkHeader>
+          <Typography>{title}</Typography>
+        </OSCALAnchorLinkHeader>
         <Typography sx={{ color: "text.secondary" }}>{summary}</Typography>
       </AccordionSummary>
       <AccordionDetails>
@@ -621,7 +648,7 @@ export function OSCALMetadataKeyword(props) {
 }
 
 export function OSCALMetadataKeywords(props) {
-  const { keywords } = props;
+  const { keywords, urlFragment } = props;
 
   const chips = (keywords ?? "")
     .split(",")
@@ -629,7 +656,9 @@ export function OSCALMetadataKeywords(props) {
     .map((keyword) => <OSCALMetadataKeyword key={keyword} keyword={keyword} />);
 
   return (
-    <OSCALMetadataFieldArea title="Keywords">{chips}</OSCALMetadataFieldArea>
+    <OSCALMetadataFieldArea title="Keywords" urlFragment={urlFragment}>
+      {chips}
+    </OSCALMetadataFieldArea>
   );
 }
 
@@ -688,13 +717,21 @@ export default function OSCALMetadata(props) {
             </OSCALMarkupMultiLine>
             <OSCALMetadataKeywords
               keywords={propWithName(props.metadata.props, "keywords")?.value}
+              urlFragment={props.urlFragment}
             />
             <OSCALMetadataParties
               parties={props.metadata?.parties}
               metadata={props.metadata}
+              urlFragment={props.urlFragment}
             />
-            <OSCALMetadataRoles roles={props.metadata?.roles} />
-            <OSCALMetadataLocations locations={props.metadata?.locations} />
+            <OSCALMetadataRoles
+              roles={props.metadata?.roles}
+              urlFragment={props.urlFragment}
+            />
+            <OSCALMetadataLocations
+              locations={props.metadata?.locations}
+              urlFragment={props.urlFragment}
+            />
           </Stack>
         </CardContent>
       </Card>

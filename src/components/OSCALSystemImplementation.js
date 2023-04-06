@@ -8,6 +8,7 @@ import OSCALSystemImplementationComponents from "./OSCALSystemImplementationComp
 import OSCALSystemImplementationInventoryItems from "./OSCALSystemImplementationInventoryItems";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 
 export default function OSCALSystemImplementation(props) {
   if (!props.systemImplementation) {
@@ -20,7 +21,9 @@ export default function OSCALSystemImplementation(props) {
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <OSCALSectionHeader>System Implementation</OSCALSectionHeader>
+              <OSCALAnchorLinkHeader>
+                <OSCALSectionHeader>System Implementation</OSCALSectionHeader>
+              </OSCALAnchorLinkHeader>
             </Grid>
             <Grid item xs={12}>
               <OSCALMarkupMultiLine paragraphComponent={Typography}>

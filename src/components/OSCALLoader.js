@@ -1,4 +1,11 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  useLayoutEffect,
+} from "react";
+import { useParams } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { styled } from "@mui/material/styles";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -6,8 +13,8 @@ import Split from "react-split";
 import { Box, Fab } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import CodeIcon from "@mui/icons-material/Code";
-import { useParams } from "react-router-dom";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
+import { determineControlGroupFromFragment } from "./oscal-utils/OSCALLinkUtils";
 import { BasicError, ErrorThrower } from "./ErrorHandling";
 import OSCALSsp from "./OSCALSsp";
 import OSCALCatalog from "./OSCALCatalog";
@@ -161,6 +168,25 @@ export default function OSCALLoader(props) {
     }
   };
 
+  const scrollToElementWithFragment = (fragment) => {
+    // Ensure fragment exists and grab element associated
+    const elementWithFragment = fragment && document.getElementById(fragment);
+    // Locate the element with the provided fragment and scroll to the item
+    elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
+  };
+
+  const handleFragment = useCallback(() => {
+    // Ensure fragment exists and determine if a control grouping tab is found
+    const controlGroupingFragment = determineControlGroupFromFragment(
+      props.urlFragment
+    );
+    // Scroll to Element if not within a control grouping
+    // NOTE: Control found in control grouping tabs are handled in Catalog Groups
+    if (!controlGroupingFragment) {
+      scrollToElementWithFragment(props.urlFragment);
+    }
+  }, [props.urlFragment]);
+
   useEffect(() => {
     handleReload(!props.isRestMode);
   }, [oscalUrl]);
@@ -214,14 +240,11 @@ export default function OSCALLoader(props) {
       setIsLoaded(true);
       setIsResolutionComplete(true);
       setHasDefaultUrl(true);
+      const fragment = props.urlFragment ? `#${props.urlFragment}` : "";
+      const document = props.isRestMode ? oscalObjectUuid : "";
+      const path = `/${props.oscalObjectType.jsonRootName}/${document}${fragment}`;
       // Handle uuid displaying in url depending on REST mode
-      window.history.pushState(
-        "",
-        "",
-        `/${props.oscalObjectType.jsonRootName}/${
-          props.isRestMode ? `${oscalObjectUuid}` : ""
-        }`
-      );
+      window.history.pushState("", "", path);
     } else if (props.isRestMode) {
       setOscalUrl(null);
       setIsLoaded(true);
@@ -232,6 +255,11 @@ export default function OSCALLoader(props) {
       setHasDefaultUrl(true);
     }
   }, [props.isRestMode]);
+
+  // Handle anchor link change in window url
+  useEffect(() => {
+    handleFragment();
+  }, [handleFragment]);
 
   let form;
   if (props.renderForm && hasDefaultUrl) {
@@ -346,6 +374,7 @@ export function OSCALCatalogLoader(props) {
       catalog={oscalData[oscalObjectType.jsonRootName]}
       isEditable={isRestMode}
       parentUrl={oscalUrl}
+      urlFragment={props.urlFragment}
       onResolutionComplete={onResolutionComplete}
       onFieldSave={(
         appendToLastFieldInPath,
@@ -375,6 +404,7 @@ export function OSCALCatalogLoader(props) {
       renderer={renderer}
       renderForm={props.renderForm}
       backendUrl={props.backendUrl}
+      urlFragment={props.urlFragment}
       isRestMode={props.isRestMode}
     />
   );
@@ -425,6 +455,7 @@ export function OSCALSSPLoader(props) {
       renderer={renderer}
       renderForm={props.renderForm}
       backendUrl={props.backendUrl}
+      urlFragment={props.urlFragment}
       isRestMode={props.isRestMode}
     />
   );
@@ -474,6 +505,7 @@ export function OSCALComponentLoader(props) {
       renderer={renderer}
       renderForm={props.renderForm}
       backendUrl={props.backendUrl}
+      urlFragment={props.urlFragment}
       isRestMode={props.isRestMode}
     />
   );
@@ -523,6 +555,7 @@ export function OSCALProfileLoader(props) {
       renderer={renderer}
       renderForm={props.renderForm}
       backendUrl={props.backendUrl}
+      urlFragment={props.urlFragment}
       isRestMode={props.isRestMode}
     />
   );

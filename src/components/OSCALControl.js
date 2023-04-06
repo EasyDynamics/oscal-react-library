@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -7,8 +7,10 @@ import Grid from "@mui/material/Grid";
 import OSCALControlLabel from "./OSCALControlLabel";
 import OSCALControlPart from "./OSCALControlPart";
 import OSCALControlModification from "./OSCALControlModification";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
+import { appendToFragmentPrefix } from "./oscal-utils/OSCALLinkUtils";
 
 const OSCALControlCard = styled(Card, {
   // https://github.com/mui/material-ui/blob/c34935814b81870ca325099cdf41a1025a85d4b5/packages/mui-system/src/createStyled.js#L56
@@ -28,40 +30,57 @@ const OSCALControlCard = styled(Card, {
 `;
 
 function ControlsList(props) {
+  const {
+    control,
+    componentId,
+    implementedRequirement,
+    isEditable,
+    modificationAlters,
+    modificationSetParameters,
+    onRestError,
+    onRestSuccess,
+    partialRestData,
+    childLevel,
+    includeControlIds,
+    urlFragment,
+    fragmentPrefix,
+  } = props;
   return (
     <div>
-      {props.control.parts?.map((part, index) => (
+      {control.parts?.map((part, index) => (
         <OSCALControlPart
-          componentId={props.componentId}
-          control={props.control}
-          controlId={props.control.id}
-          implementedRequirement={props.implementedRequirement}
-          isEditable={props.isEditable}
+          componentId={componentId}
+          control={control}
+          controlId={control.id}
+          implementedRequirement={implementedRequirement}
+          isEditable={isEditable}
           key={part.id ?? `part-${index}`}
-          modificationAlters={props.modificationAlters}
-          modificationSetParameters={props.modificationSetParameters}
-          onRestError={props.onRestError}
-          onRestSuccess={props.onRestSuccess}
-          parameters={props.control.params}
+          modificationAlters={modificationAlters}
+          modificationSetParameters={modificationSetParameters}
+          onRestError={onRestError}
+          onRestSuccess={onRestSuccess}
+          parameters={control.params}
           part={part}
-          partialRestData={props.partialRestData}
+          partialRestData={partialRestData}
         />
       ))}
-      {props.control.controls?.map((control) => (
+      {control.controls?.map((listControl) => (
         <OSCALControl
-          childLevel={(props?.childLevel ?? 0) + 1}
-          componentId={props.componentId}
-          control={control}
-          implementedRequirement={props.implementedRequirement}
-          includeControlIds={props.includeControlIds}
-          isEditable={props.isEditable}
-          key={control.id}
-          modificationAlters={props.modificationAlters}
-          modificationSetParameters={props.modificationSetParameters}
-          onRestError={props.onRestError}
-          onRestSuccess={props.onRestSuccess}
-          parameters={control.params}
-          partialRestData={props.partialRestData}
+          childLevel={(childLevel ?? 0) + 1}
+          componentId={componentId}
+          control={listControl}
+          implementedRequirement={implementedRequirement}
+          includeControlIds={includeControlIds}
+          isEditable={isEditable}
+          key={listControl.id}
+          modificationAlters={modificationAlters}
+          modificationSetParameters={modificationSetParameters}
+          onRestError={onRestError}
+          onRestSuccess={onRestSuccess}
+          parameters={listControl.params}
+          partialRestData={partialRestData}
+          urlFragment={urlFragment}
+          fragmentPrefix={fragmentPrefix}
         />
       ))}
     </div>
@@ -69,56 +88,86 @@ function ControlsList(props) {
 }
 
 export default function OSCALControl(props) {
+  const {
+    listItemOpened,
+    isItemNavigatedTo,
+    urlFragment,
+    fragmentPrefix,
+    control,
+    includeControlIds,
+    modificationAlters,
+    showInList,
+    childLevel,
+    includeAll,
+    excludeControlIds,
+  } = props;
+
+  useEffect(() => {
+    if (!listItemOpened || isItemNavigatedTo) {
+      return;
+    }
+    if (!urlFragment) {
+      return;
+    }
+    // Smooth scroll to control if element is found with fragment identifier
+    const elementWithFragment = document.getElementById(urlFragment);
+    elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
+  }, [listItemOpened, isItemNavigatedTo, urlFragment]);
+
   if (
-    !props.includeAll &&
-    (!props.control ||
-      (props.includeControlIds &&
-        !props.includeControlIds.includes(props.control.id)))
+    !includeAll &&
+    (!control || (includeControlIds && !includeControlIds.includes(control.id)))
   ) {
     return null;
   }
   if (
-    !props.control ||
-    (props.excludeControlIds &&
-      props.excludeControlIds.includes(props.control.id))
+    !control ||
+    (excludeControlIds && excludeControlIds.includes(control.id))
   ) {
     return null;
   }
 
   let modificationDisplay;
-  if (props.modificationAlters) {
+  if (modificationAlters) {
     modificationDisplay = (
       <OSCALControlModification
-        modificationAlters={props.modificationAlters}
-        controlId={props.control.id}
+        modificationAlters={modificationAlters}
+        controlId={control.id}
       />
     );
   }
 
-  const label = propWithName(props.control.props, "label")?.value;
+  const label = propWithName(control.props, "label")?.value;
 
-  return props.showInList ? (
+  return showInList ? (
     <ControlsList {...props} />
   ) : (
     <OSCALControlCard
-      childLevel={props.childLevel ?? 0}
-      withdrawn={isWithdrawn(props.control)}
+      childLevel={childLevel ?? 0}
+      withdrawn={isWithdrawn(control)}
     >
       <CardContent>
         <Grid container spacing={1}>
           <Grid item xs={12}>
-            <Typography
-              variant="h6"
-              component="h2"
-              style={props.childLevel ? { fontSize: "1.1rem" } : undefined}
+            <OSCALAnchorLinkHeader
+              value={appendToFragmentPrefix(
+                fragmentPrefix,
+                control.id
+              ).toLowerCase()}
             >
-              <OSCALControlLabel
-                component="span"
-                label={label}
-                id={props.control.id}
-              />{" "}
-              {props.control.title} {modificationDisplay}
-            </Typography>
+              <Typography
+                variant="h6"
+                component="h2"
+                style={childLevel ? { fontSize: "1.1rem" } : undefined}
+              >
+                <OSCALControlLabel
+                  component="span"
+                  label={label}
+                  id={control.id}
+                />{" "}
+                {control.title} {modificationDisplay}
+              </Typography>
+            </OSCALAnchorLinkHeader>
           </Grid>
         </Grid>
         <ControlsList {...props} />

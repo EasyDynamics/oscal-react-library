@@ -26,8 +26,8 @@ export default function resolveLinkHref(
 /**
  * A helper function for guessExtensionFromHref
  *
- * @param url A given href.
- * @returns A string providing a valid or blank extension type.
+ * @param {string} url A given href
+ * @returns {string} A valid or blank extension type
  */
 function getFileExtension(url) {
   try {
@@ -39,10 +39,10 @@ function getFileExtension(url) {
 
 /**
  * Guesses an extension type based on a provided href, and provides
- * "Unkown" when an invalid.
+ * "Unkown" when an invalid
  *
- * @param url A given href.
- * @returns A string providing a valid or "Unknown" extension type.
+ * @param {string} url A given href
+ * @returns {string} A valid or "Unknown" extension type
  */
 export function guessExtensionFromHref(url) {
   const fallbackFileExtension = "Unknown";
@@ -57,4 +57,65 @@ export function guessExtensionFromHref(url) {
     return fallbackFileExtension;
   }
   return detectedExtension;
+}
+
+/**
+ * Finds if a fragment contains a control group by searching the control tabs
+ *
+ * @param {string} fragment A given fragment
+ * @returns {string} The control group id
+ */
+export function determineControlGroupFromFragment(fragment) {
+  if (fragment) {
+    return null;
+  }
+  // Create array from all tab control grouping elements
+  const controlGroupList = Array.from(
+    document.querySelectorAll('[id^="vertical-tab-"]')
+  );
+  // Grab group id if found
+  return controlGroupList
+    ?.find(
+      (group) =>
+        fragment.split("/")?.[0] === group.id.split("vertical-tab-").pop()
+    )
+    ?.id?.split("vertical-tab-")
+    ?.pop();
+}
+
+/**
+ * Add (push) a control/sub-control to fragmentPrefix.
+ *
+ * @param {string} fragmentPrefix The beginning of a fragment
+ * @param {string} controlId The identification for a control
+ * @returns {string} fragmentPrefix with an added control
+ */
+export function appendToFragmentPrefix(fragmentPrefix, controlId) {
+  return fragmentPrefix ? `${fragmentPrefix}/${controlId}` : controlId;
+}
+
+/**
+ * Remove (shift) a grouping from a fragmentSuffix.
+ *
+ * @param {string} fragmentSuffix The end of a fragment
+ * @returns {string} fragmentSuffix with a removed control
+ */
+export function shiftFragmentSuffix(fragmentSuffix) {
+  return fragmentSuffix
+    ? `${fragmentSuffix.substring(fragmentSuffix.indexOf("/") + 1)}`
+    : null;
+}
+
+/**
+ * Transforms text to prepare as a fragment, by replacing slashes and spaces with hyphens and
+ * lowercasing all letters.
+ *
+ * @param {string} linkText Text to format
+ * @returns {string} Formatted text to work as a fragment
+ */
+export function conformLinkIdText(linkText) {
+  return !linkText
+    ? ""
+    : linkText?.props?.children.replace(/\\| |\//g, "-")?.toLowerCase() ||
+        linkText.replace(/\\| |\//g, "-")?.toLowerCase();
 }

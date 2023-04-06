@@ -14,13 +14,14 @@ import {
   ComponentTableCell,
   StyledTableHead,
 } from "./OSCALSystemImplementationTableStyles";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import PropertiesTable from "./OSCALSystemImplementationPropertiesTable";
 
 export default function OSCALSystemImplementationComponents(props) {
   return (
     <>
       <OSCALSystemImplementationTableTitle variant="h6" id="tableTitle">
-        Components
+        <OSCALAnchorLinkHeader>Components</OSCALAnchorLinkHeader>
       </OSCALSystemImplementationTableTitle>
       <TableContainer sx={{ maxHeight: "25em" }}>
         <Table aria-label="Components" sx={{ height: "max-content" }}>

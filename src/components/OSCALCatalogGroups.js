@@ -7,10 +7,12 @@ import { styled } from "@mui/material/styles";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useEffect } from "react";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import { conformLinkIdText } from "./oscal-utils/OSCALLinkUtils";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -18,17 +20,16 @@ export const OSCALControlList = styled(List)`
 `;
 
 function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
+  const { children, groupId, value, ...other } = props;
   return (
     <div
       role="tabpanel"
-      hidden={value !== index}
-      id={`vertical-tabpanel-${index}`}
-      aria-labelledby={`vertical-tab-${index}`}
+      hidden={value !== groupId}
+      id={`vertical-tabpanel-${groupId}`}
+      aria-labelledby={`vertical-tabpanel-${groupId}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === groupId && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -52,24 +53,72 @@ const ComponentTab = styled(Tab)(({ theme }) => ({
   textTransform: "none",
 }));
 
-function a11yProps(index, title) {
+function a11yProps(groupId) {
   return {
-    id: `vertical-tab-${index}`,
-    "aria-controls": `vertical-tabpanel-${title}`,
+    id: `vertical-tab-${groupId}`,
+    "aria-controls": `vertical-tab-${groupId}`,
   };
 }
 
 TabPanel.propTypes = {
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
+  value: PropTypes.string.isRequired,
 };
 
+/**
+ * Validates if the lowest control provided in an decending list (controlLayers) can be found
+ * within the provided groups.
+ *
+ * @param {*} groups The control groupings
+ * @param {*} controlLayers An decending list of groups/controls
+ * @param {*} rootLayer The top most layer
+ * @returns This returns the lowest found control or null if not
+ */
+function determineControlExists(groups, controlLayers, rootLayer) {
+  // Ensure catalog tab grouping exists
+  let upperLayer = groups?.find(
+    (group) =>
+      group?.id === rootLayer || conformLinkIdText(group?.title) === rootLayer
+  );
+  if (!upperLayer) {
+    return null;
+  }
+  // Ensure lowest/deepest control exists
+  for (let i = 1; i < controlLayers.length && upperLayer; i += 1) {
+    upperLayer = upperLayer?.controls?.find(
+      (control) => control.id === controlLayers[i]
+    );
+  }
+  return upperLayer;
+}
+
 export default function OSCALCatalogGroups(props) {
-  const [value, setValue] = React.useState(0);
+  const { groups, urlFragment } = props;
+  const [openTab, setOpenTab] = React.useState(groups[0]?.id);
+  const [isControlListItemOpened, setIsControlListItemOpened] =
+    React.useState(false);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setOpenTab(newValue);
   };
+
+  useEffect(() => {
+    // Initially set item opened to false for new fragment to be handled
+    setIsControlListItemOpened(false);
+    // Ensure fragment exists and split by groupings
+    if (!urlFragment) {
+      return;
+    }
+    // Break control groupings apart
+    const controlLayers = urlFragment.split("/");
+    const rootLayer = controlLayers[0];
+    if (!determineControlExists(groups, controlLayers, rootLayer)) {
+      return;
+    }
+    // Confirm catalog tab group can be grabbed
+    if (document.getElementById(`vertical-tab-${rootLayer}`)) {
+      setOpenTab(rootLayer);
+    }
+  }, [urlFragment, groups]);
 
   return (
     <OSCALSection>
@@ -77,7 +126,9 @@ export default function OSCALCatalogGroups(props) {
         <CardContent>
           <Grid container>
             <Grid item sm={9}>
-              <OSCALSectionHeader>Control Groups</OSCALSectionHeader>
+              <OSCALAnchorLinkHeader>
+                <OSCALSectionHeader>Control Groups</OSCALSectionHeader>
+              </OSCALAnchorLinkHeader>
             </Grid>
             <Grid item sm={3}>
               <Box display="flex" justifyContent="flex-end">
@@ -89,21 +140,32 @@ export default function OSCALCatalogGroups(props) {
                 onChange={handleChange}
                 orientation="vertical"
                 variant="scrollable"
-                value={value}
+                value={openTab}
               >
-                {props.groups?.map((group, index) => (
+                {groups?.map((group) => (
                   <ComponentTab
                     key={group.title}
                     label={group.title}
-                    {...a11yProps(index, group.title)}
+                    {...a11yProps(group.id ?? conformLinkIdText(group.title))}
+                    value={group.id ?? conformLinkIdText(group.title)}
                   />
                 ))}
               </ComponentTabs>
             </Grid>
             <TabPanelList item sm={8.5}>
-              {props.groups?.map((group, index) => (
-                <TabPanel key={group.title} value={value} index={index}>
-                  <OSCALCatalogGroup group={group} />
+              {groups?.map((group, index) => (
+                <TabPanel
+                  key={group.title}
+                  groupId={group.id ?? conformLinkIdText(group.title)}
+                  value={openTab}
+                  index={index}
+                >
+                  <OSCALCatalogGroup
+                    group={group}
+                    urlFragment={urlFragment}
+                    isControlListItemOpened={isControlListItemOpened}
+                    setIsControlListItemOpened={setIsControlListItemOpened}
+                  />
                 </TabPanel>
               ))}
             </TabPanelList>

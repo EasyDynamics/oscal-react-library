@@ -12,13 +12,15 @@ import StyledTooltip from "./OSCALStyledTooltip";
 import {
   getAbsoluteUrl,
   guessExtensionFromHref,
+  conformLinkIdText,
 } from "./oscal-utils/OSCALLinkUtils";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 
 export const OSCALBackMatterCard = styled(Card)(
   ({ theme }) => `
-    margin-top: ${theme.spacing(2)};
+    margin-top: ${theme.spacing(1)};
     display: flex;
     flex-direction: column;
 `
@@ -28,9 +30,11 @@ function TitleDisplay(props) {
   const title = props.resource.title || "No Title";
   const color = props.resource.title ? "initial" : "error";
   return (
-    <Typography color={color} variant="subtitle1">
-      <OSCALMarkupLine>{title}</OSCALMarkupLine>
-    </Typography>
+    <OSCALAnchorLinkHeader value={`back-matter/${conformLinkIdText(title)}`}>
+      <Typography color={color} variant="subtitle1">
+        <OSCALMarkupLine>{title}</OSCALMarkupLine>
+      </Typography>
+    </OSCALAnchorLinkHeader>
   );
 }
 
@@ -137,13 +141,15 @@ export default function OSCALBackMatter(props) {
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <OSCALSectionHeader>Back Matter</OSCALSectionHeader>
+              <OSCALAnchorLinkHeader>
+                <OSCALSectionHeader>Back Matter</OSCALSectionHeader>
+              </OSCALAnchorLinkHeader>
             </Grid>
             <Grid item xs={7}>
               <Typography variant="body1">Resources</Typography>
             </Grid>
           </Grid>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} padding={2}>
             {props.backMatter.resources.map((resource) =>
               backMatterDisplay(resource)
             )}

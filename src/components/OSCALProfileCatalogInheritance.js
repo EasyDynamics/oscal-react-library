@@ -8,6 +8,7 @@ import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
 import CardContent from "@mui/material/CardContent";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 
 export default function OSCALProfileCatalogInheritance(props) {
   const documentLabel = (item) => (
@@ -26,7 +27,11 @@ export default function OSCALProfileCatalogInheritance(props) {
     <OSCALSection>
       <Card>
         <CardContent>
-          <OSCALSectionHeader>Profiles/Catalog Inheritance</OSCALSectionHeader>
+          <OSCALAnchorLinkHeader value="profile-catalog-inheritance">
+            <OSCALSectionHeader>
+              Profiles/Catalog Inheritance
+            </OSCALSectionHeader>
+          </OSCALAnchorLinkHeader>
           <TreeView
             defaultCollapseIcon={<ExpandMoreIcon />}
             defaultExpandIcon={<ChevronRightIcon />}

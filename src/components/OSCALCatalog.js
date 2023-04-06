@@ -5,28 +5,38 @@ import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
 import OSCALMetadata from "./OSCALMetadata";
 
 export default function OSCALCatalog(props) {
-  useEffect(props.onResolutionComplete);
+  const {
+    onResolutionComplete,
+    catalog,
+    isEditable,
+    onFieldSave,
+    urlFragment,
+    parentUrl,
+  } = props;
+
+  useEffect(onResolutionComplete);
 
   const partialRestData = {
     catalog: {
-      uuid: props.catalog.uuid,
+      uuid: catalog.uuid,
     },
   };
 
   return (
     <OSCALDocumentRoot>
       <OSCALMetadata
-        metadata={props.catalog.metadata}
-        isEditable={props.isEditable}
-        onFieldSave={props.onFieldSave}
+        metadata={catalog.metadata}
+        isEditable={isEditable}
+        onFieldSave={onFieldSave}
         partialRestData={partialRestData}
+        urlFragment={urlFragment}
       />
 
-      <OSCALCatalogGroups groups={props.catalog.groups} />
+      <OSCALCatalogGroups groups={catalog.groups} urlFragment={urlFragment} />
 
       <OSCALBackMatter
-        backMatter={props.catalog["back-matter"]}
-        parentUrl={props.parentUrl}
+        backMatter={catalog["back-matter"]}
+        parentUrl={parentUrl}
       />
     </OSCALDocumentRoot>
   );
