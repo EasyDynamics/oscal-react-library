@@ -1,6 +1,10 @@
 {
   "name": "root",
   "private": true,
+  "scripts": {
+    "lint": "lerna run lint",
+    "test": "lerna run test"
+  },
   "workspaces": [
     "packages/*"
   ],

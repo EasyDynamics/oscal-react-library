@@ -7,7 +7,8 @@ const config: Config = {
     "^.+\\.[tj]sx?$": "ts-jest",
     // For non-code files, use the file transform. This will just return the name of the
     // file, matching the behavior for these files in `react-scripts`.
-    "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)": "<rootDir>/tests/fileTransform.js",
+    "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)":
+      "<rootDir>/tests/fileTransform.js",
   },
   testMatch: ["**/*.test.(ts|tsx|js|jsx)"],
   testEnvironment: "jsdom",

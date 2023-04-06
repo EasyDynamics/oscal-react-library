@@ -32,12 +32,12 @@ export default {
         exclude: ["**/stories.*"],
       },
     }),
+    commonjs({ include: /node_modules/ }),
     babel({
-      babelHelpers: "runtime",
+      babelHelpers: "bundled",
       extensions: EXTENSIONS,
       exclude: "**/node_modules/**",
     }),
-    commonjs(),
   ],
-  external: ["react", "react-dom", "react-markdown", /@babel\/runtime/],
+  external: ["react", "react-dom", "react-markdown", /@mui\//],
 };

@@ -64,45 +64,7 @@ jobs:
       - name: Build library
         run: npx lerna run build
       - name: Run tests
-        run: npx lerna run test
-        # - name: Run tests
-        #   run: |
-        #     FULL_OUTPUT="$(mktemp -t output.XXXXXXXXXXXXXX)"
-        #     MATCHES="$(mktemp -t matches.XXXXXXXXXXXXXX)"
-        #     npm run test -- --ci --watchAll=false 2>&1 | tee "$FULL_OUTPUT"
-        #     grep --group-separator='~' -A 4 "Console" "$FULL_OUTPUT" > "$MATCHES" || true
-
-        #     echo '## React Library' >> $GITHUB_STEP_SUMMARY
-        #     if [ -s "$MATCHES" ]; then
-        #       cat "$MATCHES" | while read -d'~' -r match; do
-        #         echo '```' >> $GITHUB_STEP_SUMMARY
-        #         echo "$match" >> $GITHUB_STEP_SUMMARY
-        #         echo '```' >> $GITHUB_STEP_SUMMARY
-        #         echo '' >> $GITHUB_STEP_SUMMARY
-        #       done
-        #     else
-        #       echo 'No warnings found in `/src`' >> $GITHUB_STEP_SUMMARY
-        #     fi
-        # - name: Run example app tests
-        #   run: |
-        #     cd example
-        #     FULL_OUTPUT="$(mktemp -t output.XXXXXXXXXXXXXX)"
-        #     MATCHES="$(mktemp -t matches.XXXXXXXXXXXXXX)"
-        #     npm run test -- --ci --watchAll=false 2>&1 | tee "$FULL_OUTPUT"
-        #     grep --group-separator='~' -A 4 "Console" "$FULL_OUTPUT" > "$MATCHES" || true
-
-        #     echo '## Viewer Application' >> $GITHUB_STEP_SUMMARY
-        #     if [ -s "$MATCHES" ]; then
-        #       cat "$MATCHES" | while read -d'~' -r match; do
-        #         echo '```' >> $GITHUB_STEP_SUMMARY
-        #         echo "$match" >> $GITHUB_STEP_SUMMARY
-        #         echo '```' >> $GITHUB_STEP_SUMMARY
-        #         echo '' >> $GITHUB_STEP_SUMMARY
-        #       done
-        #     else
-        #       echo 'No warnings found in `/example`' >> $GITHUB_STEP_SUMMARY
-        #     fi
-        #     cd ..
+        run: npx lerna run test --scope="@easydynamics/oscal-react-library"
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
         with:

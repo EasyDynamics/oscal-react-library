@@ -10,7 +10,7 @@ const NIST_DEFAULT_NAMESPACE = "https://csrc.nist.gov/ns/oscal";
  * @param ns the namespace
  * @returns the given namespace or the the default namespace
  */
-export function namespaceOf(ns: string | undefined) : string {
+export function namespaceOf(ns: string | undefined): string {
   return ns ?? NIST_DEFAULT_NAMESPACE;
 }
 
@@ -54,7 +54,7 @@ export interface PropertyFilter {
  *
  * TODO: Replace this with the actual OSCAL type once we have that type information.
  */
-interface Prop  {
+interface Prop {
   ns?: string;
   name: string;
   value: string;
@@ -64,16 +64,23 @@ interface Prop  {
 }
 
 /**
-* Returns the first prop with a matching name attribute.
-*
-* This is useful to look up the value of a specific prop under a namespace.
-* To check whether a property has a specific value, prefer {@link matchingProp}.
-*/
-export function propWithName(props: Prop[] | undefined, name: string, ns: string | undefined): Prop | undefined {
- return matchingProp(props, { name, ns, filter: () => true });
+ * Returns the first prop with a matching name attribute.
+ *
+ * This is useful to look up the value of a specific prop under a namespace.
+ * To check whether a property has a specific value, prefer {@link matchingProp}.
+ */
+export function propWithName(
+  props: Prop[] | undefined,
+  name: string,
+  ns: string | undefined
+): Prop | undefined {
+  return matchingProp(props, { name, ns, filter: () => true });
 }
 
-export default function matchingProp(props: Prop[] | undefined, filter: PropertyFilter): Prop | undefined {
+export default function matchingProp(
+  props: Prop[] | undefined,
+  filter: PropertyFilter
+): Prop | undefined {
   if ((!filter.value && !filter.filter) || (filter.value && filter.filter)) {
     throw new Error("Exactly one of filter or value must be specified");
   }
