@@ -16,8 +16,8 @@ export const ComponentTableCell = styled(TableCell)`
 
 export const OSCALSystemImplementationTableTitle = styled(Typography)`
   flex: 1 1 100%;
-  padding-top: 1em;
-  padding-bottom: 1em;
+  padding-top: 1.5em;
+  padding-bottom: 1.5em;
 `;
 
 export const StyledHeaderTableCell = styled(TableCell)(({ theme }) => ({

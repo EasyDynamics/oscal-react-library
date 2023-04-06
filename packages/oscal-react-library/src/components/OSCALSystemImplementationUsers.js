@@ -12,6 +12,7 @@ import {
   StyledTableRow,
   StyledTableHead,
 } from "./OSCALSystemImplementationTableStyles";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import PropertiesTable from "./OSCALSystemImplementationPropertiesTable";
 
 function FunctionsPreformedTable(props) {
@@ -75,7 +76,7 @@ export default function OSCALSystemImplementationUsers(props) {
   return (
     <>
       <OSCALSystemImplementationTableTitle variant="h6" id="tableTitle">
-        Users
+        <OSCALAnchorLinkHeader>Users</OSCALAnchorLinkHeader>
       </OSCALSystemImplementationTableTitle>
       <TableContainer sx={{ maxHeight: "25em" }}>
         <Table aria-label="Components" sx={{ height: "max-content" }}>

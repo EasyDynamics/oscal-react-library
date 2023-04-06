@@ -6,11 +6,17 @@ import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
-import React from "react";
+import React, { useEffect } from "react";
 import OSCALControl from "./OSCALControl";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
 import OSCALControlLabel from "./OSCALControlLabel";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
+import {
+  appendToFragmentPrefix,
+  shiftFragmentSuffix,
+  conformLinkIdText,
+} from "./oscal-utils/OSCALLinkUtils";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -36,22 +42,61 @@ const StyledControlDescriptionWrapper = styled("div")`
   padding: 1em;
 `;
 
-function CollapseableListItem(props) {
-  const [open, setOpen] = React.useState(false);
+function CollapsibleListItem(props) {
+  const {
+    urlFragment,
+    control,
+    itemText,
+    children,
+    fragmentSuffix,
+    listItemOpened,
+    setListItemOpened,
+    isSetListItemNavigatedTo,
+  } = props;
+  const [isOpen, setIsOpen] = React.useState(false);
 
   const handleClick = () => {
-    setOpen(!open);
+    setIsOpen(!isOpen);
   };
+
+  useEffect(() => {
+    if (listItemOpened) {
+      isSetListItemNavigatedTo(true);
+      return;
+    }
+    // Ensure fragment exists and split by groupings
+    if (!urlFragment) {
+      return;
+    }
+    // Find control list state and open collapsible item
+    const currentControl = fragmentSuffix.split("/")[0];
+    if (currentControl === control?.id) {
+      setIsOpen(true);
+      const elementWithFragment = document.getElementById(control.id);
+      elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
+    }
+  }, [
+    urlFragment,
+    fragmentSuffix,
+    listItemOpened,
+    isSetListItemNavigatedTo,
+    control?.id,
+  ]);
 
   return (
     <StyledListItemPaper>
       <StyledListItem onClick={handleClick}>
-        <ListItemText primary={props.itemText} />
-        {open ? <ExpandLess /> : <ExpandMore />}
+        <ListItemText primary={itemText} />
+        {isOpen ? <ExpandLess /> : <ExpandMore />}
       </StyledListItem>
-      <Collapse in={open} timeout="auto" unmountOnExit>
+      <Collapse
+        in={isOpen}
+        timeout="auto"
+        onEntered={() => setListItemOpened(true)}
+        unmountOnExit
+      >
         <StyledControlDescriptionWrapper>
-          {props.children}
+          {children}
         </StyledControlDescriptionWrapper>
       </Collapse>
     </StyledListItemPaper>
@@ -59,28 +104,53 @@ function CollapseableListItem(props) {
 }
 
 function OSCALCatalogControlListItem(props) {
-  const { control } = props;
+  const {
+    control,
+    urlFragment,
+    fragmentPrefix,
+    fragmentSuffix,
+    isControlListItemOpened,
+    setIsControlListItemOpened,
+  } = props;
+  const [isListItemNavigatedTo, isSetListItemNavigatedTo] =
+    React.useState(false);
+
   const withdrawn = isWithdrawn(control);
   const itemText = (
-    <>
+    <OSCALAnchorLinkHeader
+      value={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}
+    >
       <OSCALControlLabel
         label={propWithName(control.props, "label")?.value}
         id={control.id}
         component="span"
       />
       {control.title}
-    </>
+    </OSCALAnchorLinkHeader>
   );
 
   return !withdrawn ? (
-    <CollapseableListItem itemText={itemText}>
+    <CollapsibleListItem
+      itemText={itemText}
+      control={control}
+      urlFragment={urlFragment}
+      fragmentSuffix={shiftFragmentSuffix(fragmentSuffix)}
+      listItemOpened={isControlListItemOpened}
+      setListItemOpened={setIsControlListItemOpened}
+      isSetListItemNavigatedTo={isSetListItemNavigatedTo}
+    >
       <OSCALControl
         showInList
         control={control}
         childLevel={0}
         key={control.id}
+        listItemOpened={isControlListItemOpened}
+        isItemNavigatedTo={isListItemNavigatedTo}
+        urlFragment={urlFragment}
+        fragmentPrefix={appendToFragmentPrefix(fragmentPrefix, control.id)}
+        fragmentSuffix={shiftFragmentSuffix(fragmentSuffix)}
       />
-    </CollapseableListItem>
+    </CollapsibleListItem>
   ) : (
     <StyledListItemPaper>
       <StyledListItem>
@@ -91,28 +161,94 @@ function OSCALCatalogControlListItem(props) {
 }
 
 function OSCALCatalogGroupList(props) {
+  const {
+    group,
+    control,
+    urlFragment,
+    fragmentPrefix,
+    fragmentSuffix,
+    isControlListItemOpened,
+    setIsControlListItemOpened,
+  } = props;
+
   return (
-    <CollapseableListItem itemText={props.group.title}>
+    <CollapsibleListItem
+      itemText={group.title}
+      control={control}
+      urlFragment={urlFragment}
+      fragmentPrefix={fragmentPrefix}
+      fragmentSuffix={fragmentSuffix}
+      listItemOpened={isControlListItemOpened}
+      setListItemOpened={setIsControlListItemOpened}
+    >
       <OSCALControlList>
-        {props.group.groups?.map((innerGroup) => (
-          <OSCALCatalogGroupList group={innerGroup} key={innerGroup.title} />
+        {group.groups?.map((innerGroup) => (
+          <OSCALCatalogGroupList
+            group={innerGroup}
+            key={innerGroup.title}
+            urlFragment={urlFragment}
+            fragmentPrefix={appendToFragmentPrefix(fragmentPrefix, innerGroup)}
+            fragmentSuffix={shiftFragmentSuffix(fragmentSuffix)}
+            isControlListItemOpened={isControlListItemOpened}
+            setIsControlListItemOpened={setIsControlListItemOpened}
+          />
         ))}
-        {props.group.controls?.map((control) => (
-          <OSCALCatalogControlListItem control={control} key={control.id} />
+        {group.controls?.map((groupControl) => (
+          <OSCALCatalogControlListItem
+            control={groupControl}
+            key={groupControl.id}
+            urlFragment={urlFragment}
+            fragmentPrefix={appendToFragmentPrefix(
+              fragmentPrefix,
+              groupControl
+            )}
+            fragmentSuffix={shiftFragmentSuffix(fragmentSuffix)}
+            isControlListItemOpened={isControlListItemOpened}
+            setIsControlListItemOpened={setIsControlListItemOpened}
+          />
         ))}
       </OSCALControlList>
-    </CollapseableListItem>
+    </CollapsibleListItem>
   );
 }
 
 export default function OSCALCatalogGroup(props) {
+  const {
+    group,
+    urlFragment,
+    isControlListItemOpened,
+    setIsControlListItemOpened,
+  } = props;
+  // Note: "fragmentPrefix" is specific to setting up a fragment in the url, by adding groupings;
+  // while "fragmentSuffix" is specific to finding a control from a fragment, trimming found groups
+  const fragmentPrefix = group.id ?? conformLinkIdText(group.title) ?? "";
+  const fragmentSuffix = urlFragment
+    ? `${urlFragment.substring(urlFragment.indexOf("/") + 1)}`
+    : null;
+
   return (
     <OSCALControlList>
-      {props.group.groups?.map((innerGroup) => (
-        <OSCALCatalogGroupList group={innerGroup} key={innerGroup.title} />
+      {group.groups?.map((innerGroup) => (
+        <OSCALCatalogGroupList
+          group={innerGroup}
+          key={innerGroup.title}
+          urlFragment={urlFragment}
+          fragmentPrefix={appendToFragmentPrefix(fragmentPrefix, innerGroup)}
+          fragmentSuffix={fragmentSuffix}
+          isControlListItemOpened={isControlListItemOpened}
+          setIsControlListItemOpened={setIsControlListItemOpened}
+        />
       ))}
-      {props.group.controls?.map((control) => (
-        <OSCALCatalogControlListItem control={control} key={control.id} />
+      {group.controls?.map((control) => (
+        <OSCALCatalogControlListItem
+          control={control}
+          key={control.id}
+          urlFragment={urlFragment}
+          fragmentPrefix={fragmentPrefix}
+          fragmentSuffix={urlFragment ?? null}
+          isControlListItemOpened={isControlListItemOpened}
+          setIsControlListItemOpened={setIsControlListItemOpened}
+        />
       ))}
     </OSCALControlList>
   );

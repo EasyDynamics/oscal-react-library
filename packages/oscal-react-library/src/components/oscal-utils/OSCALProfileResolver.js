@@ -1,6 +1,6 @@
 import resolveLinkHref from "./OSCALLinkUtils";
 
-const OSCAL_MEDIA_TYPE_REGEX = /^application\/oscal.*\+json$/;
+const OSCAL_MEDIA_TYPE = /^application\/oscal.*\+json$/;
 /**
  * Profiles are brought in through different methods in OSCAL models.
  *
@@ -77,7 +77,8 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
               profileBackMatter,
               profileImport.href,
               null,
-              OSCAL_MEDIA_TYPE_REGEX
+              OSCAL_MEDIA_TYPE,
+              false
             );
             OSCALResolveProfileOrCatalogUrlControls(
               resolvedControls,
@@ -132,7 +133,8 @@ export function OSCALResolveProfile(profile, parentUrl, onSuccess, onError) {
         profile?.["back-matter"] ?? [],
         imp.href,
         parentUrl,
-        OSCAL_MEDIA_TYPE_REGEX
+        OSCAL_MEDIA_TYPE,
+        false
       ),
       parentUrl,
       profile?.["back-matter"] ?? [],

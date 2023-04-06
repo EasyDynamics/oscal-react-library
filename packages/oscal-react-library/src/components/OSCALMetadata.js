@@ -1,40 +1,43 @@
 import BusinessIcon from "@mui/icons-material/Business";
 import EmailIcon from "@mui/icons-material/Email";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import GroupIcon from "@mui/icons-material/Group";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import HomeIcon from "@mui/icons-material/Home";
 import InfoIcon from "@mui/icons-material/Info";
 import MapIcon from "@mui/icons-material/Map";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import PersonIcon from "@mui/icons-material/Person";
 import PhoneIcon from "@mui/icons-material/Phone";
+import PlaceIcon from "@mui/icons-material/Place";
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
+import WorkIcon from "@mui/icons-material/Work";
 import { CardContent } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardHeader from "@mui/material/CardHeader";
+import Chip from "@mui/material/Chip";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import PersonIcon from "@mui/icons-material/Person";
-import WorkIcon from "@mui/icons-material/Work";
-import GroupIcon from "@mui/icons-material/Group";
-import PlaceIcon from "@mui/icons-material/Place";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import React from "react";
+import React, { useEffect } from "react";
 import { OSCALSection } from "../styles/CommonPageStyles";
+import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import OSCALEditableTextField from "./OSCALEditableTextField";
+import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 const OSCALMetadataSectionInfoHeader = styled(Typography)`
@@ -55,7 +58,7 @@ const OSCALMetadataTitle = styled(Grid)`
   height: 56px;
 `;
 
-const OSCALMetadataSectionCardHolder = styled(Grid)(({ theme }) => ({
+const OSCALMetadataSection = styled(Grid)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   position: "relative",
   overflow: "auto",
@@ -453,18 +456,22 @@ function OSCALMetadataBasicData(props) {
 }
 
 function OSCALMetadataRoles(props) {
-  const { roles } = props;
+  const { roles, urlFragment } = props;
   const cards = roles?.map((role) => (
     <Grid item xs={12} md={4} key={role.id} component={Card}>
       <OSCALMetadataRole role={role} />
     </Grid>
   ));
 
-  return <OSCALMetadataFieldArea title="Roles">{cards}</OSCALMetadataFieldArea>;
+  return (
+    <OSCALMetadataFieldArea title="Roles" urlFragment={urlFragment}>
+      {cards}
+    </OSCALMetadataFieldArea>
+  );
 }
 
 function OSCALMetadataParties(props) {
-  const { parties } = props;
+  const { parties, urlFragment } = props;
 
   const getRoleLabel = (roleId) =>
     props.metadata.roles.find((role) => role.id === roleId);
@@ -488,12 +495,14 @@ function OSCALMetadataParties(props) {
   ));
 
   return (
-    <OSCALMetadataFieldArea title="Parties">{cards}</OSCALMetadataFieldArea>
+    <OSCALMetadataFieldArea title="Parties" urlFragment={urlFragment}>
+      {cards}
+    </OSCALMetadataFieldArea>
   );
 }
 
 function OSCALMetadataLocations(props) {
-  const { locations } = props;
+  const { locations, urlFragment } = props;
 
   const cards = locations?.map((location) => (
     <Grid item xs={12} md={4} key={location.uuid} component={Card}>
@@ -502,7 +511,9 @@ function OSCALMetadataLocations(props) {
   ));
 
   return (
-    <OSCALMetadataFieldArea title="Locations">{cards}</OSCALMetadataFieldArea>
+    <OSCALMetadataFieldArea title="Locations" urlFragment={urlFragment}>
+      {cards}
+    </OSCALMetadataFieldArea>
   );
 }
 
@@ -595,11 +606,30 @@ export function OSCALMetadataLocation(props) {
 }
 
 function OSCALMetadataFieldArea(props) {
-  const { title, children } = props;
+  const { title, children, summary, urlFragment } = props;
+
+  const [isExpanded, setIsExpanded] = React.useState(false);
+
+  const handleExpand = () => {
+    setIsExpanded((isCurrentlyExpanded) => !isCurrentlyExpanded);
+  };
+
+  useEffect(() => {
+    // Grab fragment identifier following hash character if fragment exists in location
+    const controlFragment = urlFragment || null;
+    // Expand metadata accordion section if control fragment matches title
+    if (controlFragment === title.toLowerCase()) {
+      setIsExpanded(true);
+    }
+  }, [urlFragment, title]);
+
   return (
-    <Accordion>
+    <Accordion expanded={isExpanded} onChange={handleExpand}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>{title}</Typography>
+        <OSCALAnchorLinkHeader>
+          <Typography>{title}</Typography>
+        </OSCALAnchorLinkHeader>
+        <Typography sx={{ color: "text.secondary" }}>{summary}</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Grid container alignItems="stretch">
@@ -607,6 +637,28 @@ function OSCALMetadataFieldArea(props) {
         </Grid>
       </AccordionDetails>
     </Accordion>
+  );
+}
+
+export function OSCALMetadataKeyword(props) {
+  const { keyword } = props;
+  const text = keyword.trim();
+
+  return text && <Chip label={text} size="small" role="chip" />;
+}
+
+export function OSCALMetadataKeywords(props) {
+  const { keywords, urlFragment } = props;
+
+  const chips = (keywords ?? "")
+    .split(",")
+    .map((keyword) => keyword.trim())
+    .map((keyword) => <OSCALMetadataKeyword key={keyword} keyword={keyword} />);
+
+  return (
+    <OSCALMetadataFieldArea title="Keywords" urlFragment={urlFragment}>
+      {chips}
+    </OSCALMetadataFieldArea>
   );
 }
 
@@ -652,20 +704,34 @@ export default function OSCALMetadata(props) {
       <Card>
         <CardContent>
           <Stack>
-            <OSCALMetadataSectionCardHolder title="Metadata">
+            <OSCALMetadataSection>
               <OSCALMetadataBasicData
                 metadata={props.metadata}
                 isEditable={props.isEditable}
                 partialRestData={props.partialRestData}
                 onFieldSave={props.onFieldSave}
               />
-            </OSCALMetadataSectionCardHolder>
+            </OSCALMetadataSection>
+            <OSCALMarkupMultiLine>
+              {props.metadata.remarks}
+            </OSCALMarkupMultiLine>
+            <OSCALMetadataKeywords
+              keywords={propWithName(props.metadata.props, "keywords")?.value}
+              urlFragment={props.urlFragment}
+            />
             <OSCALMetadataParties
               parties={props.metadata?.parties}
               metadata={props.metadata}
+              urlFragment={props.urlFragment}
             />
-            <OSCALMetadataRoles roles={props.metadata?.roles} />
-            <OSCALMetadataLocations locations={props.metadata?.locations} />
+            <OSCALMetadataRoles
+              roles={props.metadata?.roles}
+              urlFragment={props.urlFragment}
+            />
+            <OSCALMetadataLocations
+              locations={props.metadata?.locations}
+              urlFragment={props.urlFragment}
+            />
           </Stack>
         </CardContent>
       </Card>
