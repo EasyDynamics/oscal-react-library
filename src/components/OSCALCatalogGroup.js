@@ -49,13 +49,12 @@ function CollapsibleListItem(props) {
     control,
     itemText,
     children,
-    fragmentPrefix,
     fragmentSuffix,
     listItemOpened,
     setListItemOpened,
+    isSetListItemNavigatedTo,
   } = props;
   const [isOpen, setIsOpen] = React.useState(false);
-  const [isItemNavigatedTo, isSetItemNavigatedTo] = React.useState(false);
 
   const handleClick = () => {
     setIsOpen(!isOpen);
@@ -63,7 +62,7 @@ function CollapsibleListItem(props) {
 
   useEffect(() => {
     if (listItemOpened) {
-      isSetItemNavigatedTo(true);
+      isSetListItemNavigatedTo(true);
       return;
     }
     // Ensure fragment exists and split by groupings
@@ -77,7 +76,13 @@ function CollapsibleListItem(props) {
       const elementWithFragment = document.getElementById(control.id);
       elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
     }
-  }, [urlFragment, fragmentSuffix, listItemOpened, control?.id]);
+  }, [
+    urlFragment,
+    fragmentSuffix,
+    listItemOpened,
+    isSetListItemNavigatedTo,
+    control?.id,
+  ]);
 
   return (
     <StyledListItemPaper>
@@ -93,16 +98,6 @@ function CollapsibleListItem(props) {
       >
         <StyledControlDescriptionWrapper>
           {children}
-          <OSCALControl
-            showInList
-            control={control}
-            childLevel={0}
-            key={control?.id}
-            listItemOpened={listItemOpened}
-            isItemNavigatedTo={isItemNavigatedTo}
-            urlFragment={urlFragment}
-            fragmentPrefix={fragmentPrefix}
-          />
         </StyledControlDescriptionWrapper>
       </Collapse>
     </StyledListItemPaper>
@@ -118,6 +113,8 @@ function OSCALCatalogControlListItem(props) {
     isControlListItemOpened,
     setIsControlListItemOpened,
   } = props;
+  const [isListItemNavigatedTo, isSetListItemNavigatedTo] =
+    React.useState(false);
 
   const withdrawn = isWithdrawn(control);
   const itemText = (
@@ -138,16 +135,18 @@ function OSCALCatalogControlListItem(props) {
       itemText={itemText}
       control={control}
       urlFragment={urlFragment}
-      fragmentPrefix={appendToFragmentPrefix(fragmentPrefix, control.id)}
       fragmentSuffix={shiftFragmentSuffix(fragmentSuffix)}
       listItemOpened={isControlListItemOpened}
       setListItemOpened={setIsControlListItemOpened}
+      isSetListItemNavigatedTo={isSetListItemNavigatedTo}
     >
       <OSCALControl
         showInList
         control={control}
         childLevel={0}
         key={control.id}
+        listItemOpened={isControlListItemOpened}
+        isItemNavigatedTo={isListItemNavigatedTo}
         urlFragment={urlFragment}
         fragmentPrefix={appendToFragmentPrefix(fragmentPrefix, control.id)}
         fragmentSuffix={shiftFragmentSuffix(fragmentSuffix)}
