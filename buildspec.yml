@@ -4,31 +4,21 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 16
+      nodejs: 18
     commands:
       - echo "Update NPM"
-      - npm install -g npm 
+      - npm install -g npm lerna
       - echo "Installing library npm packages"
       - npm ci
-      - echo "Installing sample app npm packages"
-      - cd example
-      - npm ci
-      - cd ..
   build:
     commands:
-      - echo "Build library"
-      - npm run build
+      - echo "Build all packages"
+      - lerna run build
       - echo "Testing library"
-      - npm run test -- --ci --watchAll=false
-      - echo "Testing sample application"
-      - cd example
-      - npm run test -- --ci --watchAll=false
-      - cd ..
-      - echo "Building sample application"
-      - npm run predeploy
+      - lerna run test --scope="@easydynamics/oscal-react-library"
 
 artifacts:
-  base-directory: ./example/build
+  base-directory: ./packages/oscal-viewer/build
   files:
     - '**/*'
   exclude-paths:
@@ -37,4 +27,4 @@ artifacts:
 cache:
   paths:
     - './node_modules/**/*'
-    - './example/node_modules/**/*'
+    - './packages/**/node_modules/**/*'
