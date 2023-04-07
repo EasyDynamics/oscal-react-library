@@ -12,7 +12,6 @@ import StyledTooltip from "./OSCALStyledTooltip";
 import {
   getAbsoluteUrl,
   guessExtensionFromHref,
-  conformLinkIdText,
 } from "./oscal-utils/OSCALLinkUtils";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
@@ -30,7 +29,9 @@ function TitleDisplay(props) {
   const title = props.resource.title || "No Title";
   const color = props.resource.title ? "initial" : "error";
   return (
-    <OSCALAnchorLinkHeader value={`back-matter/${conformLinkIdText(title)}`}>
+    <OSCALAnchorLinkHeader
+      value={`back-matter/resources/${props.resource.uuid}`}
+    >
       <Typography color={color} variant="subtitle1">
         <OSCALMarkupLine>{title}</OSCALMarkupLine>
       </Typography>
