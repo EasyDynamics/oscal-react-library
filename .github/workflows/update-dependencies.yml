@@ -44,8 +44,8 @@ jobs:
           ncu --deep --upgrade --filter "react* @testing-library/react" --target minor
           ncu --deep --upgrade --reject "react* @testing-library/react"
           # Upgrade packaes everyhwere (same as we just did but with lerna)
-          lerna exec --parallel ncu -- --deep --upgrade --filter "react* @testing-library/react" --target minor
-          lerna exec --parallel ncu -- --deep --upgrade --reject "react* @testing-library/react"
+          lerna exec --parallel ncu -- --deep --upgrade --filter "'react* @testing-library/react'" --target minor
+          lerna exec --parallel ncu -- --deep --upgrade --reject "'react* @testing-library/react'"
 
       - name: Install updated dependencies
         run: |-
