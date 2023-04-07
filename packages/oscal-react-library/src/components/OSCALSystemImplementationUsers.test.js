@@ -1,4 +1,5 @@
-import React, { render, screen } from "@testing-library/react";
+import React from "react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { usersTestData } from "../test-data/SystemData";
 import OSCALSystemImplementationUsers from "./OSCALSystemImplementationUsers";

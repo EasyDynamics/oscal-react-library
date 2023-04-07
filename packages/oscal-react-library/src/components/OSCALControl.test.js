@@ -42,14 +42,12 @@ test("OSCALControl displays statement modifications", async () => {
 });
 
 test("OSCALControl displays profile control modifications", async () => {
-  setTimeout(() => {
-    render(
-      <OSCALProfile
-        profile={profileTestData}
-        parentUrl={parentUrlTestData}
-        onResolutionComplete={() => {}}
-      />
-    );
-    testIfModificationsDisplayed("ac-1 modifications");
-  }, 30000);
-});
+  render(
+    <OSCALProfile
+      profile={profileTestData}
+      parentUrl={parentUrlTestData}
+      onResolutionComplete={() => {}}
+    />
+  );
+  await testIfModificationsDisplayed("ac-1 modifications");
+}, 30000);
