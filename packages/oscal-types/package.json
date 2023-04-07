@@ -10,7 +10,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EasyDynamics/oscal-react-library.git"
+    "url": "git+https://github.com/EasyDynamics/oscal-react-library.git",
+    "directory": "packages/oscal-types"
   },
   "author": "Easy Dynamics",
   "license": "MIT",
