@@ -165,7 +165,6 @@ function OSCALCatalogControlListItem(props) {
 function OSCALCatalogGroupList(props) {
   const {
     group,
-    control,
     urlFragment,
     fragmentPrefix,
     fragmentSuffix,
