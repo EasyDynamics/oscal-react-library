@@ -1,4 +1,4 @@
-import BackMatterLookup from "./OSCALBackMatterUtils";
+import { BackMatterLookup } from "./OSCALBackMatterUtils";
 
 export function getAbsoluteUrl(href, parentUrl) {
   if (
