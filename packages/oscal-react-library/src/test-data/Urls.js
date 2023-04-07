@@ -17,10 +17,8 @@ export const rev4LowBaselineProfileJson =
 export const sspTestExampleUrl =
   "https://raw.githubusercontent.com/usnistgov/oscal-content/master/examples/ssp/json/oscal_leveraged-example_ssp.json";
 
-export const systemCharacteristicsDescriptionUrl =
-  "https://ietf.org/rfc/rfc4122";
+export const systemCharacteristicsDescriptionUrl = "https://ietf.org/rfc/rfc4122";
 
-export const systemCharacteristicsInformationUrl =
-  "https://doi.org/10.6028/NIST.SP.800-60v2r1";
+export const systemCharacteristicsInformationUrl = "https://doi.org/10.6028/NIST.SP.800-60v2r1";
 
 export const urlParameterTestUrl = "https://www.easydynamics.com/";

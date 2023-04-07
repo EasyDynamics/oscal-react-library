@@ -30,22 +30,20 @@ export default function OSCALComponentDefinitionControlImplementation(props) {
                       {controlImpl.description}
                       <Grid item xs={12}>
                         <List>
-                          {controlImpl["implemented-requirements"].map(
-                            (implementedRequirement) => (
-                              <OSCALControlImplementationImplReq
-                                implementedRequirement={implementedRequirement}
-                                components={props.components}
-                                controls={props.controls}
-                                childLevel={0}
-                                key={implementedRequirement.uuid}
-                                modifications={controlImpl.modifications}
-                                isEditable={props.isEditable}
-                                onRestSuccess={props.onRestSuccess}
-                                onRestError={props.onRestError}
-                                partialRestData={props.partialRestData}
-                              />
-                            )
-                          )}
+                          {controlImpl["implemented-requirements"].map((implementedRequirement) => (
+                            <OSCALControlImplementationImplReq
+                              implementedRequirement={implementedRequirement}
+                              components={props.components}
+                              controls={props.controls}
+                              childLevel={0}
+                              key={implementedRequirement.uuid}
+                              modifications={controlImpl.modifications}
+                              isEditable={props.isEditable}
+                              onRestSuccess={props.onRestSuccess}
+                              onRestError={props.onRestError}
+                              partialRestData={props.partialRestData}
+                            />
+                          ))}
                         </List>
                       </Grid>
                     </ListItemText>

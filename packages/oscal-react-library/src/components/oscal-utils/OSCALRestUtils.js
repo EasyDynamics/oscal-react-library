@@ -53,11 +53,7 @@ export const oscalObjectTypes = {
  * @param {Object} oscalObjectType Object that contains information on an oscalObject
  * @param {(any) => void} handleResult Function to map a fetched result to the json root name of an oscal object
  */
-export function fetchAllResourcesOfType(
-  backendUrl,
-  oscalObjectType,
-  handleResult
-) {
+export function fetchAllResourcesOfType(backendUrl, oscalObjectType, handleResult) {
   fetch(`${backendUrl}/${oscalObjectType.restPath}`)
     .then((response) => {
       if (!response.ok) throw new Error(response.status);
@@ -67,9 +63,7 @@ export function fetchAllResourcesOfType(
 }
 
 export function getOscalObjectTypeFromJsonRootName(jsonRootName) {
-  return Object.keys(oscalObjectTypes).find(
-    (element) => element.jsonRootName === jsonRootName
-  );
+  return Object.keys(oscalObjectTypes).find((element) => element.jsonRootName === jsonRootName);
 }
 
 export function deepClone(obj) {
@@ -243,18 +237,13 @@ export function createOrUpdateSspControlImplementationImplementedRequirementStat
     implementationSetParameters
       .filter((element) => !!element)
       .forEach((implementationSetParameter) => {
-        const foundExistingSetParam = statementByComponent[
-          "set-parameters"
-        ].find(
-          (element) =>
-            element["param-id"] === implementationSetParameter["param-id"]
+        const foundExistingSetParam = statementByComponent["set-parameters"].find(
+          (element) => element["param-id"] === implementationSetParameter["param-id"]
         );
         if (foundExistingSetParam) {
           foundExistingSetParam.values = implementationSetParameter.values;
         } else {
-          statementByComponent["set-parameters"].push(
-            implementationSetParameter
-          );
+          statementByComponent["set-parameters"].push(implementationSetParameter);
         }
       });
   }

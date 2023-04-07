@@ -1,11 +1,4 @@
-import {
-  Divider,
-  Drawer,
-  IconButton,
-  Typography,
-  styled,
-  useTheme,
-} from "@mui/material";
+import { Divider, Drawer, IconButton, Typography, styled, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import TreeView from "@mui/lab/TreeView";
@@ -13,10 +6,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
 import { Link } from "react-router-dom";
-import {
-  oscalObjectTypes,
-  fetchAllResourcesOfType,
-} from "./oscal-utils/OSCALRestUtils";
+import { oscalObjectTypes, fetchAllResourcesOfType } from "./oscal-utils/OSCALRestUtils";
 import { OSCALMarkupLine } from "./OSCALMarkupProse";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -85,9 +75,7 @@ function DocumentTree(props) {
                     onClick={handleClose}
                   >
                     <Typography noWrap>
-                      <OSCALMarkupLine>
-                        {oscalObject.metadata.title}
-                      </OSCALMarkupLine>
+                      <OSCALMarkupLine>{oscalObject.metadata.title}</OSCALMarkupLine>
                     </Typography>
                   </Link>
                 }
@@ -106,18 +94,11 @@ export default function OSCALDrawerSelector(props) {
     <StyledDrawer variant="persistent" anchor="left" open={props.open}>
       <DrawerHeader>
         <IconButton onClick={props.handleClose}>
-          {theme.direction === "ltr" ? (
-            <ChevronLeftIcon />
-          ) : (
-            <ChevronRightIcon />
-          )}
+          {theme.direction === "ltr" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
         </IconButton>
       </DrawerHeader>
       <Divider />
-      <DocumentTree
-        backendUrl={props.backendUrl}
-        handleClose={props.handleClose}
-      />
+      <DocumentTree backendUrl={props.backendUrl} handleClose={props.handleClose} />
       <Divider />
     </StyledDrawer>
   );

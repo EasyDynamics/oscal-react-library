@@ -70,15 +70,10 @@ export function determineControlGroupFromFragment(fragment) {
     return null;
   }
   // Create array from all tab control grouping elements
-  const controlGroupList = Array.from(
-    document.querySelectorAll('[id^="vertical-tab-"]')
-  );
+  const controlGroupList = Array.from(document.querySelectorAll('[id^="vertical-tab-"]'));
   // Grab group id if found
   return controlGroupList
-    ?.find(
-      (group) =>
-        fragment.split("/")?.[0] === group.id.split("vertical-tab-").pop()
-    )
+    ?.find((group) => fragment.split("/")?.[0] === group.id.split("vertical-tab-").pop())
     ?.id?.split("vertical-tab-")
     ?.pop();
 }
@@ -101,9 +96,7 @@ export function appendToFragmentPrefix(fragmentPrefix, controlId) {
  * @returns {string} fragmentSuffix with a removed control
  */
 export function shiftFragmentSuffix(fragmentSuffix) {
-  return fragmentSuffix
-    ? `${fragmentSuffix.substring(fragmentSuffix.indexOf("/") + 1)}`
-    : null;
+  return fragmentSuffix ? `${fragmentSuffix.substring(fragmentSuffix.indexOf("/") + 1)}` : null;
 }
 
 /**

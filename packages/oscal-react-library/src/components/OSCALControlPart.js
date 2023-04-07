@@ -9,8 +9,7 @@ import {
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
 
 const OSCALControlPartWrapper = styled("div", {
-  shouldForwardProp: (prop) =>
-    !["partName", "ownerState", "theme", "sx", "as"].includes(prop),
+  shouldForwardProp: (prop) => !["partName", "ownerState", "theme", "sx", "as"].includes(prop),
 })`
   padding-left: ${(props) => (props.partName !== "statement" ? "2em" : "0")};
 `;
@@ -18,9 +17,7 @@ const OSCALControlPartWrapper = styled("div", {
 export default function OSCALControlPart(props) {
   // Don't display assessment if we're displaying a control implementation
   if (
-    (props.implementedRequirement ||
-      props.modificationSetParameters ||
-      props.modificationAlters) &&
+    (props.implementedRequirement || props.modificationSetParameters || props.modificationAlters) &&
     (props.part.name === "objective" || props.part.name === "assessment")
   ) {
     return null;

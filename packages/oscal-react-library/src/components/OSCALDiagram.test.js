@@ -2,10 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import OSCALDiagram from "./OSCALDiagram";
 import { backMatterTestData } from "../test-data/BackMatterData";
-import {
-  localReferenceDiagram,
-  uriReferenceDiagram,
-} from "../test-data/DiagramData";
+import { localReferenceDiagram, uriReferenceDiagram } from "../test-data/DiagramData";
 
 function diagramRenderer(testData) {
   render(
@@ -17,12 +14,7 @@ function diagramRenderer(testData) {
   );
 }
 
-export default function testOSCALDiagram(
-  parentElementName,
-  renderer,
-  testData,
-  expectedSrc
-) {
+export default function testOSCALDiagram(parentElementName, renderer, testData, expectedSrc) {
   test(`${parentElementName} displays diagram`, () => {
     renderer(testData);
     const result = screen.getByAltText("Authorization Boundary Diagram");

@@ -1,8 +1,5 @@
 import { metadataTestData, responsibleRolesTestData } from "./CommonData";
-import {
-  systemCharacteristicsDescriptionUrl,
-  systemCharacteristicsInformationUrl,
-} from "./Urls";
+import { systemCharacteristicsDescriptionUrl, systemCharacteristicsInformationUrl } from "./Urls";
 import { localReferenceDiagram } from "./DiagramData";
 import { backMatterTestData } from "./BackMatterData";
 
@@ -136,8 +133,7 @@ export const systemCharacteristicsTestData = {
   },
   status: {
     state: "other",
-    remarks:
-      "This is an example, and is not intended to be implemented as a system",
+    remarks: "This is an example, and is not intended to be implemented as a system",
   },
   props: [
     {

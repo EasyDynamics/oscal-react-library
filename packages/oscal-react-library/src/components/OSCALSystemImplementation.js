@@ -31,9 +31,7 @@ export default function OSCALSystemImplementation(props) {
               </OSCALMarkupMultiLine>
             </Grid>
             <Grid item xs={12}>
-              <OSCALSystemImplementationUsers
-                users={props.systemImplementation.users}
-              />
+              <OSCALSystemImplementationUsers users={props.systemImplementation.users} />
             </Grid>
             <Grid item xs={12}>
               <OSCALSystemImplementationComponents

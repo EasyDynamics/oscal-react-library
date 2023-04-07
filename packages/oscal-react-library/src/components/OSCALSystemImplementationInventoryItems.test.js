@@ -1,10 +1,7 @@
 import React from "react";
 import { render, screen, within } from "@testing-library/react";
 import { responsiblePartiesTestData } from "../test-data/CommonData";
-import {
-  inventoryItemsTestData,
-  componentsTestData,
-} from "../test-data/SystemData";
+import { inventoryItemsTestData, componentsTestData } from "../test-data/SystemData";
 import OSCALSystemImplementationInventoryItems from "./OSCALSystemImplementationInventoryItems";
 
 const setup = () => {
@@ -60,14 +57,10 @@ describe("OSCALSystemImplementationInventoryItems", () => {
     // Grab example party row beneath heading row
     const exampleResponsiblePartiesRow = screen.getAllByRole("row")[1];
 
-    const component = within(exampleResponsiblePartiesRow).getByText(
-      "Example Component"
-    );
+    const component = within(exampleResponsiblePartiesRow).getByText("Example Component");
     expect(component).toBeVisible();
 
-    const propNameResult = within(exampleResponsiblePartiesRow).getByText(
-      "software"
-    );
+    const propNameResult = within(exampleResponsiblePartiesRow).getByText("software");
     expect(propNameResult).toBeVisible();
   });
 });

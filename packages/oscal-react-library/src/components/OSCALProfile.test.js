@@ -32,10 +32,9 @@ function testOSCALProfile(parentElementName, renderer) {
 
   test(`${parentElementName} displays parameter constraints`, async () => {
     renderer();
-    const result = await screen.findAllByText(
-      "< organization-defined frequency >",
-      { timeout: 5000 }
-    );
+    const result = await screen.findAllByText("< organization-defined frequency >", {
+      timeout: 5000,
+    });
     fireEvent.mouseOver(result[0]);
     expect(await screen.findByText("at least every 3 years")).toBeVisible();
   });

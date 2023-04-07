@@ -25,11 +25,7 @@ export default function OSCALDiagram(props) {
 
   return (
     <>
-      <img
-        src={diagramUri}
-        alt={props.diagram.caption}
-        style={{ maxWidth: "100%" }}
-      />
+      <img src={diagramUri} alt={props.diagram.caption} style={{ maxWidth: "100%" }} />
       <Typography variant="caption" display="block" align="center" gutterBottom>
         {props.diagram.caption}
       </Typography>

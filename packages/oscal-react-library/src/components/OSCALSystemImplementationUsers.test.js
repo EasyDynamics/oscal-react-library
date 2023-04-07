@@ -44,9 +44,7 @@ describe("OSCALSystemImplementationUsers", () => {
   test("shows 'Authorized Privileges' description", async () => {
     render(<OSCALSystemImplementationUsers users={usersTestData} />);
     await userEvent.hover(screen.getByText("privilege title"));
-    expect(
-      await screen.findByText("privilege description")
-    ).toBeInTheDocument();
+    expect(await screen.findByText("privilege description")).toBeInTheDocument();
   });
 
   test("shows read function preformed", () => {

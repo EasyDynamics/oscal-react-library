@@ -75,13 +75,7 @@ function CollapsibleListItem(props) {
       const elementWithFragment = document.getElementById(control.id);
       elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
     }
-  }, [
-    urlFragment,
-    fragmentSuffix,
-    listItemOpened,
-    isSetListItemNavigatedTo,
-    control?.id,
-  ]);
+  }, [urlFragment, fragmentSuffix, listItemOpened, isSetListItemNavigatedTo, control?.id]);
 
   return (
     <StyledListItemPaper>
@@ -89,15 +83,8 @@ function CollapsibleListItem(props) {
         <ListItemText primary={itemText} />
         {isOpen ? <ExpandLess /> : <ExpandMore />}
       </StyledListItem>
-      <Collapse
-        in={isOpen}
-        timeout="auto"
-        onEntered={() => setListItemOpened(true)}
-        unmountOnExit
-      >
-        <StyledControlDescriptionWrapper>
-          {children}
-        </StyledControlDescriptionWrapper>
+      <Collapse in={isOpen} timeout="auto" onEntered={() => setListItemOpened(true)} unmountOnExit>
+        <StyledControlDescriptionWrapper>{children}</StyledControlDescriptionWrapper>
       </Collapse>
     </StyledListItemPaper>
   );
@@ -112,14 +99,11 @@ function OSCALCatalogControlListItem(props) {
     isControlListItemOpened,
     setIsControlListItemOpened,
   } = props;
-  const [isListItemNavigatedTo, isSetListItemNavigatedTo] =
-    React.useState(false);
+  const [isListItemNavigatedTo, isSetListItemNavigatedTo] = React.useState(false);
 
   const withdrawn = isWithdrawn(control);
   const itemText = (
-    <OSCALAnchorLinkHeader
-      value={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}
-    >
+    <OSCALAnchorLinkHeader value={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}>
       <OSCALControlLabel
         label={propWithName(control.props, "label")?.value}
         id={control.id}
@@ -198,10 +182,7 @@ function OSCALCatalogGroupList(props) {
             control={groupControl}
             key={groupControl.id}
             urlFragment={urlFragment}
-            fragmentPrefix={appendToFragmentPrefix(
-              fragmentPrefix,
-              groupControl
-            )}
+            fragmentPrefix={appendToFragmentPrefix(fragmentPrefix, groupControl)}
             fragmentSuffix={shiftFragmentSuffix(fragmentSuffix)}
             isControlListItemOpened={isControlListItemOpened}
             setIsControlListItemOpened={setIsControlListItemOpened}
@@ -213,12 +194,7 @@ function OSCALCatalogGroupList(props) {
 }
 
 export default function OSCALCatalogGroup(props) {
-  const {
-    group,
-    urlFragment,
-    isControlListItemOpened,
-    setIsControlListItemOpened,
-  } = props;
+  const { group, urlFragment, isControlListItemOpened, setIsControlListItemOpened } = props;
   // Note: "fragmentPrefix" is specific to setting up a fragment in the url, by adding groupings;
   // while "fragmentSuffix" is specific to finding a control from a fragment, trimming found groups
   const fragmentPrefix = group.id ?? conformLinkIdText(group.title) ?? "";

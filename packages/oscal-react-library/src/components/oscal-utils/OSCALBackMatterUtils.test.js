@@ -117,10 +117,7 @@ describe("BackMatterLookup", () => {
   test("handles base64 resource without mediaType", () => {
     const lookup = new BackMatterLookup(backMatter);
 
-    const resource = lookup.resolve(
-      base64ResourceNoMediaType.uri,
-      mediaTypeRegex
-    );
+    const resource = lookup.resolve(base64ResourceNoMediaType.uri, mediaTypeRegex);
 
     expect(resource).toBeUndefined();
   });
@@ -136,10 +133,7 @@ describe("BackMatterLookup", () => {
   test("handles base64 resource with wrong media type", () => {
     const lookup = new BackMatterLookup(backMatter);
 
-    const resource = lookup.resolve(
-      base64ResourceWrongMediaType.uri,
-      mediaTypeRegex
-    );
+    const resource = lookup.resolve(base64ResourceWrongMediaType.uri, mediaTypeRegex);
 
     expect(resource).toBeUndefined();
   });

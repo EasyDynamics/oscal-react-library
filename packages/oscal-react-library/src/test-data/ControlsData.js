@@ -215,8 +215,7 @@ export const controlImplWithDecSmtTestData = {
             {
               "component-uuid": "component-1.1",
               uuid: "a74681b2-fbcb-46eb-90fd-0d55aa74ac7b",
-              description:
-                "Component 1.1 description of implementing control 1",
+              description: "Component 1.1 description of implementing control 1",
               "set-parameters": [
                 {
                   "param-id": "control-1.1_prm_1",

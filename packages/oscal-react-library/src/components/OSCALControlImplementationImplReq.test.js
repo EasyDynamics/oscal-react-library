@@ -4,10 +4,7 @@ import userEvent from "@testing-library/user-event";
 import OSCALControlImplementation from "./OSCALControlImplementation";
 import getByTextIncludingChildren from "./oscal-utils/TestUtils";
 import { controlImplTestData, exampleControl } from "../test-data/ControlsData";
-import {
-  exampleComponents,
-  componentsTestData,
-} from "../test-data/ComponentsData";
+import { exampleComponents, componentsTestData } from "../test-data/ComponentsData";
 import { profileModifyTestData } from "../test-data/ModificationsData";
 import { sspRestData } from "../test-data/SystemData";
 
@@ -27,10 +24,7 @@ function controlImplementationImplReqRenderer() {
   );
 }
 
-export default function testOSCALControlImplementationImplReq(
-  parentElementName,
-  renderer
-) {
+export default function testOSCALControlImplementationImplReq(parentElementName, renderer) {
   test(`${parentElementName} displays control ID`, () => {
     renderer();
     const result = screen.getByText("control-1");
@@ -63,9 +57,7 @@ export default function testOSCALControlImplementationImplReq(
       })
     );
     expect(
-      await screen.findByText(
-        "Component 1 description of implementing control 1"
-      )
+      await screen.findByText("Component 1 description of implementing control 1")
     ).toBeInTheDocument();
   });
 
@@ -84,9 +76,7 @@ export default function testOSCALControlImplementationImplReq(
         timeout: 10000,
       })
     ).toBeInTheDocument();
-    await expect(() => screen.findByRole("button")).rejects.toThrow(
-      'Unable to find role="button"'
-    );
+    await expect(() => screen.findByRole("button")).rejects.toThrow('Unable to find role="button"');
   });
 }
 

@@ -10,8 +10,7 @@ import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
 export default function OSCALComponentDefinition(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] =
-    useState({});
+  const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] = useState({});
 
   const partialRestData = {
     "component-definition": {
@@ -45,20 +44,18 @@ export default function OSCALComponentDefinition(props) {
   if (!isLoaded) {
     controlImpl = null;
   } else {
-    controlImpl = Object.entries(props.componentDefinition.components).map(
-      ([key, component]) => (
-        <OSCALComponentDefinitionControlImplementation
-          controlImplementations={component["control-implementations"]}
-          components={props.componentDefinition.components}
-          controls={props.componentDefinition.resolvedControls}
-          key={key}
-          isEditable={props.isEditable}
-          onRestSuccess={props.onRestSuccess}
-          onRestError={props.onRestError}
-          partialRestData={partialRestData}
-        />
-      )
-    );
+    controlImpl = Object.entries(props.componentDefinition.components).map(([key, component]) => (
+      <OSCALComponentDefinitionControlImplementation
+        controlImplementations={component["control-implementations"]}
+        components={props.componentDefinition.components}
+        controls={props.componentDefinition.resolvedControls}
+        key={key}
+        isEditable={props.isEditable}
+        onRestSuccess={props.onRestSuccess}
+        onRestError={props.onRestError}
+        partialRestData={partialRestData}
+      />
+    ));
   }
 
   return (
@@ -70,18 +67,14 @@ export default function OSCALComponentDefinition(props) {
         partialRestData={partialRestData}
         urlFragment={props.urlFragment}
       />
-      <OSCALProfileCatalogInheritance
-        inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}
-      />
-      {Object.entries(props.componentDefinition.components).map(
-        ([key, component]) => (
-          <OSCALComponentDefinitionComponent
-            component={component}
-            parties={props.componentDefinition.metadata.parties}
-            key={key}
-          />
-        )
-      )}
+      <OSCALProfileCatalogInheritance inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs} />
+      {Object.entries(props.componentDefinition.components).map(([key, component]) => (
+        <OSCALComponentDefinitionComponent
+          component={component}
+          parties={props.componentDefinition.metadata.parties}
+          key={key}
+        />
+      ))}
       {controlImpl}
       <OSCALBackMatter
         backMatter={props.componentDefinition["back-matter"]}
