@@ -40,17 +40,17 @@ jobs:
         run: |-
           # Only allow minor/patch versions of react (and tightly-couple packages) and
           # upgrade all others to the newest version available.
+          # Upgrade packages in the root
           ncu --deep --upgrade --filter "react* @testing-library/react" --target minor
           ncu --deep --upgrade --reject "react* @testing-library/react"
+          # Upgrade packaes everyhwere (same as we just did but with lerna)
+          lerna exec --parallel ncu -- --deep --upgrade --filter "react* @testing-library/react" --target minor
+          lerna exec --parallel ncu -- --deep --upgrade --reject "react* @testing-library/react"
 
       - name: Install updated dependencies
         run: |-
           npm install
           npm update
-          cd example
-          npm install
-          npm update
-          cd ..
 
       - name: Login as the automation app
         # This Action generates a token from the GitHub App and provides it as

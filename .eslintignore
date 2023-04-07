@@ -1,8 +1,0 @@
-## uncomment this to disable linting 
-##src/**/*.js
-
-build/
-dist/
-node_modules/
-.snapshots/
-*.min.js

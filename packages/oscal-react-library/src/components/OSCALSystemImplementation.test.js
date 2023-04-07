@@ -1,4 +1,5 @@
-import React, { render, screen } from "@testing-library/react";
+import React from "react";
+import { render, screen } from "@testing-library/react";
 import { metadataTestData } from "../test-data/CommonData";
 import { systemImplementationTestData } from "../test-data/SystemData";
 import OSCALSystemImplementation from "./OSCALSystemImplementation";

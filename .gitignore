@@ -37,7 +37,7 @@ yarn-error.log*
 /coverage
 
 # production
-/build
+build/
 
 # Compiled Java class files
 *.class

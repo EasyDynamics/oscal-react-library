@@ -2,14 +2,6 @@
 name: Create a New Release
 on:
   workflow_dispatch:
-    inputs:
-      release-type:
-        description: >-
-          The type of release; either a new feature (minor version) or bug fix
-          (patch version)
-        required: true
-        type: choice
-        options: [feature, bug]
 
 concurrency: package-repo-release
 
@@ -45,16 +37,7 @@ jobs:
           node-version: "lts/*"
           cache: npm
 
-      - name: Set release type to patch
-        if: ${{ github.event.inputs.release-type == 'bug' }}
-        run:
-          echo 'NPM_RELEASE_TYPE=patch' >> $GITHUB_ENV
-      - name: Set release type to minor
-        if: ${{ github.event.inputs.release-type == 'feature' }}
-        run:
-          echo 'NPM_RELEASE_TYPE=minor' >> $GITHUB_ENV
-
-      - name: Update Npm
+      - name: Update NPM
         run: npm install -g npm@latest
 
       - name: Set Up Git User Info
@@ -74,32 +57,20 @@ jobs:
       # the new version of the library.
       - name: Bump version
         run: |
-          npm version $NPM_RELEASE_TYPE
-          npm install
-          cd example
-          npm version $NPM_RELEASE_TYPE
-          npm install
-          cd ..
+          npx lerna version --conventional-commits --yes --no-tag-git-version --no-push -m "chore(release): bump version"
+          git push origin develop:main
+          git push origin develop:develop
 
       - name: Build OSCAL Viewer
         run: |
-          npm ci
-          cd example
-          npm ci
-          npm run build
-          zip -r oscal-viewer.zip ./build/
+          npx lerna run build
+          zip -r oscal-viewer.zip packages/oscal-viewer/build/
 
       # Output the new package version to environment variable
       - name: Get Package Version
         run: |
           echo "PKG_VERSION=$(npm pkg get version | tr -d '"')" >> $GITHUB_ENV
-
-      - name: Push release commit to develop main
-        run: |
-          git add ./{,example/}package{,-lock}.json
-          git commit -m "chore(release): v${{ env.PKG_VERSION }}"
-          git push origin develop
-          git push origin develop:main
+        working-directory: packages/oscal-react-library
 
       - name: Create a GitHub Release
         uses: softprops/action-gh-release@v1
@@ -112,18 +83,3 @@ jobs:
             {
               "contents": "write"
             }
-
-      # Commit the new version and push changes to main
-      # And push a new prepatch version to develop. We assume prepatch
-      # because we're going into develop and devs can always change this if
-      # needed. But this means we push "x.y.(z+1)-0" instead of "x.(y+1).0-0".
-      # This _does not_ get pushed to main
-      - name: Start work on the next version
-        run: |
-          npm version prepatch
-          cd example
-          npm version prepatch
-          cd ..
-          git add ./{,example/}package{,-lock}.json
-          git commit -m "chore(release): start work on v$(npm pkg get version | tr -d '"')"
-          git push origin develop

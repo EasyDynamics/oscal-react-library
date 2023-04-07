@@ -1,0 +1,12 @@
+## uncomment this to disable linting 
+##src/**/*.js
+
+build/
+dist/
+node_modules/
+.snapshots/
+*.min.js
+
+# These files must be CommonJS and won't meet the linting requirements
+rollup.config.js
+tests/fileTransform.js
