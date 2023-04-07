@@ -6,7 +6,9 @@
   "types": "./lib/index.d.ts",
   "private": "false",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "echo 'This package has no tests'",
+    "lint": "echo 'This package is not linted'"
   },
   "repository": {
     "type": "git",
