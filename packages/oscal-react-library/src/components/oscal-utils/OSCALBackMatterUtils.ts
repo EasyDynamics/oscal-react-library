@@ -22,7 +22,23 @@ export interface ResourceLinkQuery {
    * @param uri - the URI reference to lookup
    * @param mediaType - the preferred media ty
    */
-  resolve: (uri: string, mediaType?: RegExp) => ResolvedUri | undefined;
+  resolve: (
+    uri: string,
+    mediaType?: RegExp | string
+  ) => ResolvedUri | undefined;
+}
+
+function mediaTypeMatches(
+  test: string | undefined,
+  matcher: string | RegExp | undefined
+): boolean {
+  if (!test || !matcher) {
+    return true;
+  }
+  if (matcher instanceof RegExp) {
+    return matcher.test(test);
+  }
+  return test === matcher;
 }
 
 export class BackMatterLookup implements ResourceLinkQuery {
@@ -40,20 +56,16 @@ export class BackMatterLookup implements ResourceLinkQuery {
 
   private resolveUuid(
     uuid: string,
-    mediaType?: RegExp
+    mediaType?: RegExp | string
   ): ResolvedUri | undefined {
     const resource = this.backMatter.resources?.find(
       (resource) => resource.uuid === uuid
     );
 
     if (!this.preferBase64) {
-      const rlink = resource?.rlinks?.find((item) => {
-        const rlinkMediaType = item["media-type"];
-        if (!mediaType || !rlinkMediaType) {
-          return true;
-        }
-        return mediaType.test(rlinkMediaType);
-      });
+      const rlink = resource?.rlinks?.find((item) =>
+        mediaTypeMatches(item["media-type"], mediaType)
+      );
 
       if (rlink) {
         return {
@@ -70,12 +82,20 @@ export class BackMatterLookup implements ResourceLinkQuery {
       return undefined;
     }
 
-    if (!base64?.value) {
+    if (!mediaTypeMatches(base64["media-type"], mediaType)) {
       console.error(
-        `Resource ${uuid} does not have a value, so a URL cannot be constructed`
+        `Resource ${uuid} base64 media type does not match ${mediaType?.toString()}`
       );
       return undefined;
     }
+
+    if (base64["media-type"])
+      if (!base64?.value) {
+        console.error(
+          `Resource ${uuid} does not have a value, so a URL cannot be constructed`
+        );
+        return undefined;
+      }
 
     return {
       uri: `data:${base64["media-type"]};base64,${base64.value.replace(
@@ -86,7 +106,7 @@ export class BackMatterLookup implements ResourceLinkQuery {
     };
   }
 
-  public resolve(uri: string, mediaType?: RegExp) {
+  public resolve(uri: string, mediaType?: RegExp | string) {
     if (uri.startsWith("#")) {
       return this.resolveUuid(uri.slice(1), mediaType);
     }

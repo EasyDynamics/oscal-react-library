@@ -1,50 +1,56 @@
+import type { BackMatter } from "@easydynamics/oscal-types";
 import { BackMatterLookup } from "./OSCALBackMatterUtils";
 
-export function getAbsoluteUrl(href, parentUrl) {
+export function getAbsoluteUrl(
+  href: string | undefined,
+  parentUrl: string
+): string | undefined {
   if (
-    href.startsWith("https://") ||
-    href.startsWith("http://") ||
+    href?.startsWith("https://") ||
+    href?.startsWith("http://") ||
     !parentUrl ||
     parentUrl.startsWith(".")
   ) {
     return href;
   }
-  return new URL(href, parentUrl).toString();
+  return new URL(href ?? "", parentUrl).toString();
 }
 
 export default function resolveLinkHref(
-  backMatter,
-  href,
-  parentUrl,
-  mediaType,
+  backMatter: BackMatter,
+  href: string,
+  parentUrl: string,
+  mediaType: RegExp,
   preferBase64 = false
 ) {
   const lookup = new BackMatterLookup(backMatter, preferBase64);
-  return getAbsoluteUrl(lookup.resolve(href, mediaType).uri, parentUrl);
+  return getAbsoluteUrl(lookup?.resolve(href, mediaType)?.uri, parentUrl);
 }
 
 /**
  * A helper function for guessExtensionFromHref
  *
- * @param {string} url A given href
- * @returns {string} A valid or blank extension type
+ * @param url A given href
+ * @returns A valid or blank extension type
  */
-function getFileExtension(url) {
+function getFileExtension(url: string): string {
   try {
-    return new URL(url).pathname.split("/").pop().split(".").pop();
-  } catch {
+    // This will throw a TypeError if `url` is not a valid URL.
+    const validUrl = new URL(url);
+    return validUrl?.pathname.split("/").pop()?.split(".").pop() ?? "";
+  } catch (err) {
     return "";
   }
 }
 
 /**
  * Guesses an extension type based on a provided href, and provides
- * "Unkown" when an invalid
+ * "Unknown" when an invalid
  *
- * @param {string} url A given href
- * @returns {string} A valid or "Unknown" extension type
+ * @param url A given href
+ * @returns A valid or "Unknown" extension type
  */
-export function guessExtensionFromHref(url) {
+export function guessExtensionFromHref(url: string): "Unknown" | string {
   const fallbackFileExtension = "Unknown";
   // TODO: Use an HTTP HEAD request to attempt to get a `Content-Type` header for the underlying
   // document. (https://github.com/EasyDynamics/oscal-react-library/issues/580)
@@ -62,12 +68,14 @@ export function guessExtensionFromHref(url) {
 /**
  * Finds if a fragment contains a control group by searching the control tabs
  *
- * @param {string} fragment A given fragment
- * @returns {string} The control group id
+ * @param fragment A given fragment
+ * @returns The control group id
  */
-export function determineControlGroupFromFragment(fragment) {
+export function determineControlGroupFromFragment(
+  fragment: string
+): string | undefined {
   if (fragment) {
-    return null;
+    return undefined;
   }
   // Create array from all tab control grouping elements
   const controlGroupList = Array.from(
@@ -86,24 +94,29 @@ export function determineControlGroupFromFragment(fragment) {
 /**
  * Add (push) a control/sub-control to fragmentPrefix.
  *
- * @param {string} fragmentPrefix The beginning of a fragment
- * @param {string} controlId The identification for a control
- * @returns {string} fragmentPrefix with an added control
+ * @param fragmentPrefix The beginning of a fragment
+ * @param controlId The identification for a control
+ * @returns fragmentPrefix with an added control
  */
-export function appendToFragmentPrefix(fragmentPrefix, controlId) {
+export function appendToFragmentPrefix(
+  fragmentPrefix: string,
+  controlId: string
+): string {
   return fragmentPrefix ? `${fragmentPrefix}/${controlId}` : controlId;
 }
 
 /**
  * Remove (shift) a grouping from a fragmentSuffix.
  *
- * @param {string} fragmentSuffix The end of a fragment
- * @returns {string} fragmentSuffix with a removed control
+ * @param fragmentSuffix The end of a fragment
+ * @returns fragmentSuffix with a removed control
  */
-export function shiftFragmentSuffix(fragmentSuffix) {
+export function shiftFragmentSuffix(
+  fragmentSuffix: string
+): string | undefined {
   return fragmentSuffix
     ? `${fragmentSuffix.substring(fragmentSuffix.indexOf("/") + 1)}`
-    : null;
+    : undefined;
 }
 
 /**
@@ -113,7 +126,7 @@ export function shiftFragmentSuffix(fragmentSuffix) {
  * @param {string} linkText Text to format
  * @returns {string} Formatted text to work as a fragment
  */
-export function conformLinkIdText(linkText) {
+export function conformLinkIdText(linkText: any): string {
   return !linkText
     ? ""
     : linkText?.props?.children.replace(/\\| |\//g, "-")?.toLowerCase() ||

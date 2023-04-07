@@ -39,7 +39,7 @@ describe("guessExtensionFromHref", () => {
 
   it("gets NIST SP.800-97 Publication", async () => {
     expect(
-      guessExtensionFromHref(`"https://doi.org/10.6028/NIST.SP.800-97"`)
+      guessExtensionFromHref("https://doi.org/10.6028/NIST.SP.800-97")
     ).toEqual("Unknown");
   });
 
