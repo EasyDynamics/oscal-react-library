@@ -115,7 +115,7 @@ export function shiftFragmentSuffix(fragmentSuffix) {
  */
 export function conformLinkIdText(linkText) {
   return !linkText
-    ? ""
-    : linkText?.props?.children.replace(/\\| |\//g, "-")?.toLowerCase() ||
-        linkText.replace(/\\| |\//g, "-")?.toLowerCase();
+    ? null
+    : linkText?.props?.children?.replace(/\\| |\//g, "-")?.toLowerCase() ||
+        linkText?.replace(/\\| |\//g, "-")?.toLowerCase();
 }
