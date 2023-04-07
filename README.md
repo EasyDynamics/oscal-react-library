@@ -34,7 +34,7 @@ dependencies need to be installed initially with the command: `npm ci`. From her
 (See "OSCAL Viewer → Running") or components can be tested (See "Testing"). To automate local installation and
 immediately run the application, use the following command:
 
-```text
+```bash
 ./scripts/watch-viewer
 ```
 
@@ -62,7 +62,7 @@ The OSCAL Viewer example application allows developers to sample the various OSC
 Once root dependencies are installed, build application dependencies and run OSCAL Viewer with the following
 command:
 
-```text
+```bash
 ./scripts/watch-viewer
 ```
 
@@ -77,7 +77,7 @@ identifier when `npm run build` is run. For example:
 
 ```bash
 export REACT_APP_GOOGLE_ANALYTICS="G-XXXXXXXXXX"`
-./scripts/build-all
+npm run build
 ```
 
 will produce an application build with Google Analytics tracking enabled. The only way to toggle
@@ -89,8 +89,9 @@ To enabled experimental features that make REST calls defined in
 [`oscal-rest`](https://github.com/EasyDynamics/oscal-rest) to a backend service, add a `.env.local` file in
 the root of the example project with a variable of `REACT_APP_REST_BASE_URL` pointing to the REST service, i.e.
 
-```text
+```bash
 REACT_APP_REST_BASE_URL=http://localhost:8080/oscal/v1
+npm run build
 ```
 
 ## Contributing
