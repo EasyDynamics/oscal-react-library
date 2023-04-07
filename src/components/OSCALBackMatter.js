@@ -30,7 +30,7 @@ function TitleDisplay(props) {
   const color = props.resource.title ? "initial" : "error";
   return (
     <OSCALAnchorLinkHeader
-      value={`back-matter/resources/${props.resource.uuid}`}
+      value={`${props.resource.uuid}`}
     >
       <Typography color={color} variant="subtitle1">
         <OSCALMarkupLine>{title}</OSCALMarkupLine>
