@@ -15,9 +15,7 @@ import { appendToFragmentPrefix } from "./oscal-utils/OSCALLinkUtils";
 const OSCALControlCard = styled(Card, {
   // https://github.com/mui/material-ui/blob/c34935814b81870ca325099cdf41a1025a85d4b5/packages/mui-system/src/createStyled.js#L56
   shouldForwardProp: (prop) =>
-    !["childLevel", "withdrawn", "ownerState", "theme", "sx", "as"].includes(
-      prop
-    ),
+    !["childLevel", "withdrawn", "ownerState", "theme", "sx", "as"].includes(prop),
 })`
   margin-top: 1em;
   margin-bottom: 1em;
@@ -25,8 +23,7 @@ const OSCALControlCard = styled(Card, {
   margin-right: ${(props) => (props.childLevel > 0 ? "1.5em" : "0")};
   ${(props) => props.childLevel > 0 && "background-color: #fffcf0;"}
   ${(props) =>
-    props.withdrawn &&
-    `text-decoration: line-through; color: ${props.theme.palette.grey[400]};`}
+    props.withdrawn && `text-decoration: line-through; color: ${props.theme.palette.grey[400]};`}
 `;
 
 function ControlsList(props) {
@@ -114,26 +111,17 @@ export default function OSCALControl(props) {
     elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
   }, [listItemOpened, isItemNavigatedTo, urlFragment]);
 
-  if (
-    !includeAll &&
-    (!control || (includeControlIds && !includeControlIds.includes(control.id)))
-  ) {
+  if (!includeAll && (!control || (includeControlIds && !includeControlIds.includes(control.id)))) {
     return null;
   }
-  if (
-    !control ||
-    (excludeControlIds && excludeControlIds.includes(control.id))
-  ) {
+  if (!control || (excludeControlIds && excludeControlIds.includes(control.id))) {
     return null;
   }
 
   let modificationDisplay;
   if (modificationAlters) {
     modificationDisplay = (
-      <OSCALControlModification
-        modificationAlters={modificationAlters}
-        controlId={control.id}
-      />
+      <OSCALControlModification modificationAlters={modificationAlters} controlId={control.id} />
     );
   }
 
@@ -142,30 +130,20 @@ export default function OSCALControl(props) {
   return showInList ? (
     <ControlsList {...props} />
   ) : (
-    <OSCALControlCard
-      childLevel={childLevel ?? 0}
-      withdrawn={isWithdrawn(control)}
-    >
+    <OSCALControlCard childLevel={childLevel ?? 0} withdrawn={isWithdrawn(control)}>
       <CardContent>
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <OSCALAnchorLinkHeader
-              value={appendToFragmentPrefix(
-                fragmentPrefix,
-                control.id
-              ).toLowerCase()}
+              value={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}
             >
               <Typography
                 variant="h6"
                 component="h2"
                 style={childLevel ? { fontSize: "1.1rem" } : undefined}
               >
-                <OSCALControlLabel
-                  component="span"
-                  label={label}
-                  id={control.id}
-                />{" "}
-                {control.title} {modificationDisplay}
+                <OSCALControlLabel component="span" label={label} id={control.id} /> {control.title}{" "}
+                {modificationDisplay}
               </Typography>
             </OSCALAnchorLinkHeader>
           </Grid>

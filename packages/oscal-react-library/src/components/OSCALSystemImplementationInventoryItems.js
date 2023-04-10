@@ -26,9 +26,7 @@ function OSCALResponsibleParties(props) {
               <TableCell component="th" scope="row">
                 {party["role-id"]}
               </TableCell>
-              <TableCell align="right">
-                {party["party-uuids"]?.map(getPartyName)}
-              </TableCell>
+              <TableCell align="right">{party["party-uuids"]?.map(getPartyName)}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -71,9 +69,7 @@ function ImplementedComponents(props) {
   );
 }
 
-export default function OSCALOSCALSystemImplementationTableTitleInventoryItems(
-  props
-) {
+export default function OSCALOSCALSystemImplementationTableTitleInventoryItems(props) {
   if (!props.inventoryItems) {
     return null;
   }
@@ -91,9 +87,7 @@ export default function OSCALOSCALSystemImplementationTableTitleInventoryItems(
               <StyledHeaderTableCell>Item</StyledHeaderTableCell>
               <StyledHeaderTableCell>Properties</StyledHeaderTableCell>
               <StyledHeaderTableCell>Responsible Parties</StyledHeaderTableCell>
-              <StyledHeaderTableCell>
-                Implemented Components
-              </StyledHeaderTableCell>
+              <StyledHeaderTableCell>Implemented Components</StyledHeaderTableCell>
               <StyledHeaderTableCell>Remarks</StyledHeaderTableCell>
             </TableRow>
           </StyledTableHead>
@@ -112,9 +106,7 @@ export default function OSCALOSCALSystemImplementationTableTitleInventoryItems(
                 </TableCell>
                 <TableCell>
                   <ImplementedComponents
-                    implementedComponents={
-                      inventoryItem["implemented-components"]
-                    }
+                    implementedComponents={inventoryItem["implemented-components"]}
                     components={props.components}
                   />
                 </TableCell>

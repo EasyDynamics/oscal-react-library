@@ -22,16 +22,10 @@ export interface ResourceLinkQuery {
    * @param uri - the URI reference to lookup
    * @param mediaType - the preferred media ty
    */
-  resolve: (
-    uri: string,
-    mediaType?: RegExp | string
-  ) => ResolvedUri | undefined;
+  resolve: (uri: string, mediaType?: RegExp | string) => ResolvedUri | undefined;
 }
 
-function mediaTypeMatches(
-  test: string | undefined,
-  matcher: string | RegExp | undefined
-): boolean {
+function mediaTypeMatches(test: string | undefined, matcher: string | RegExp | undefined): boolean {
   if (!test || !matcher) {
     return true;
   }
@@ -54,13 +48,8 @@ export class BackMatterLookup implements ResourceLinkQuery {
     this.preferBase64 = preferBase64 ?? false;
   }
 
-  private resolveUuid(
-    uuid: string,
-    mediaType?: RegExp | string
-  ): ResolvedUri | undefined {
-    const resource = this.backMatter.resources?.find(
-      (resource) => resource.uuid === uuid
-    );
+  private resolveUuid(uuid: string, mediaType?: RegExp | string): ResolvedUri | undefined {
+    const resource = this.backMatter.resources?.find((resource) => resource.uuid === uuid);
 
     if (!this.preferBase64) {
       const rlink = resource?.rlinks?.find((item) =>
@@ -83,25 +72,18 @@ export class BackMatterLookup implements ResourceLinkQuery {
     }
 
     if (!mediaTypeMatches(base64["media-type"], mediaType)) {
-      console.error(
-        `Resource ${uuid} base64 media type does not match ${mediaType?.toString()}`
-      );
+      console.error(`Resource ${uuid} base64 media type does not match ${mediaType?.toString()}`);
       return undefined;
     }
 
     if (base64["media-type"])
       if (!base64?.value) {
-        console.error(
-          `Resource ${uuid} does not have a value, so a URL cannot be constructed`
-        );
+        console.error(`Resource ${uuid} does not have a value, so a URL cannot be constructed`);
         return undefined;
       }
 
     return {
-      uri: `data:${base64["media-type"]};base64,${base64.value.replace(
-        "\n",
-        ""
-      )}`,
+      uri: `data:${base64["media-type"]};base64,${base64.value.replace("\n", "")}`,
       mediaType: base64["media-type"],
     };
   }

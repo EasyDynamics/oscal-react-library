@@ -18,12 +18,7 @@ function sspRenderer() {
 
 function sspRendererRestMode() {
   render(
-    <OSCALSsp
-      system-security-plan={sspTestData}
-      isEditable
-      parentUrl="./"
-      onFieldSave={() => {}}
-    />
+    <OSCALSsp system-security-plan={sspTestData} isEditable parentUrl="./" onFieldSave={() => {}} />
   );
 }
 

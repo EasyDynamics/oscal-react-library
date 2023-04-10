@@ -41,11 +41,7 @@ export default function getControlOrSubControl(resolvedControls, controlId) {
  * @param {string} componentId Id of a component
  * @returns Returns the by-component object when a statement is found
  */
-export function getStatementByComponent(
-  implReqStatements,
-  statementId,
-  componentId
-) {
+export function getStatementByComponent(implReqStatements, statementId, componentId) {
   const foundStatement = implReqStatements?.find(
     (statement) => statement["statement-id"] === statementId
   );

@@ -60,9 +60,7 @@ describe("OSCAL metadata parties", () => {
     button.click();
 
     expect(screen.getByText("Email")).toBeVisible();
-    expect(
-      screen.getByRole("link", { name: /owners@email\.org/i })
-    ).toBeVisible();
+    expect(screen.getByRole("link", { name: /owners@email\.org/i })).toBeVisible();
   });
 
   test(`displays telephone mobile number info`, () => {
@@ -265,9 +263,7 @@ describe("OSCAL metadata locations", () => {
     button.click();
 
     expect(screen.getByText("Email")).toBeVisible();
-    expect(
-      screen.getByRole("link", { name: /owners@email\.org/i })
-    ).toBeVisible();
+    expect(screen.getByRole("link", { name: /owners@email\.org/i })).toBeVisible();
   });
 
   test(`display url list`, () => {
@@ -282,9 +278,7 @@ describe("OSCAL metadata locations", () => {
     button.click();
 
     expect(screen.getByText("URLs")).toBeVisible();
-    expect(
-      screen.getByRole("link", { name: /www\.website\.com/i })
-    ).toBeVisible();
+    expect(screen.getByRole("link", { name: /www\.website\.com/i })).toBeVisible();
   });
 });
 

@@ -52,12 +52,7 @@ export default function OSCALJsonEditor(props) {
         />
       </Grid>
       <Grid item>
-        <ButtonGrid
-          container
-          spacing={2}
-          justifyContent="flex-end"
-          data-testid="button-grid"
-        >
+        <ButtonGrid container spacing={2} justifyContent="flex-end" data-testid="button-grid">
           <Grid item>
             <Button
               onClick={() => {

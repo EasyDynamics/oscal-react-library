@@ -31,9 +31,7 @@ export default function OSCALResponsibleRoles(props) {
                 </TableCell>
                 <TableCell align="right">
                   {role["party-uuids"] &&
-                    role["party-uuids"].map((partyUuid) =>
-                      getPartyName(partyUuid)
-                    )}
+                    role["party-uuids"].map((partyUuid) => getPartyName(partyUuid))}
                 </TableCell>
               </TableRow>
             ))}

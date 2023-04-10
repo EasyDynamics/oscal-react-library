@@ -1,10 +1,7 @@
 import type { BackMatter } from "@easydynamics/oscal-types";
 import { BackMatterLookup } from "./OSCALBackMatterUtils";
 
-export function getAbsoluteUrl(
-  href: string | undefined,
-  parentUrl: string
-): string | undefined {
+export function getAbsoluteUrl(href: string | undefined, parentUrl: string): string | undefined {
   if (
     href?.startsWith("https://") ||
     href?.startsWith("http://") ||
@@ -71,22 +68,15 @@ export function guessExtensionFromHref(url: string): "Unknown" | string {
  * @param fragment A given fragment
  * @returns The control group id
  */
-export function determineControlGroupFromFragment(
-  fragment: string
-): string | undefined {
+export function determineControlGroupFromFragment(fragment: string): string | undefined {
   if (fragment) {
     return undefined;
   }
   // Create array from all tab control grouping elements
-  const controlGroupList = Array.from(
-    document.querySelectorAll('[id^="vertical-tab-"]')
-  );
+  const controlGroupList = Array.from(document.querySelectorAll('[id^="vertical-tab-"]'));
   // Grab group id if found
   return controlGroupList
-    ?.find(
-      (group) =>
-        fragment.split("/")?.[0] === group.id.split("vertical-tab-").pop()
-    )
+    ?.find((group) => fragment.split("/")?.[0] === group.id.split("vertical-tab-").pop())
     ?.id?.split("vertical-tab-")
     ?.pop();
 }
@@ -98,10 +88,7 @@ export function determineControlGroupFromFragment(
  * @param controlId The identification for a control
  * @returns fragmentPrefix with an added control
  */
-export function appendToFragmentPrefix(
-  fragmentPrefix: string,
-  controlId: string
-): string {
+export function appendToFragmentPrefix(fragmentPrefix: string, controlId: string): string {
   return fragmentPrefix ? `${fragmentPrefix}/${controlId}` : controlId;
 }
 
@@ -111,9 +98,7 @@ export function appendToFragmentPrefix(
  * @param fragmentSuffix The end of a fragment
  * @returns fragmentSuffix with a removed control
  */
-export function shiftFragmentSuffix(
-  fragmentSuffix: string
-): string | undefined {
+export function shiftFragmentSuffix(fragmentSuffix: string): string | undefined {
   return fragmentSuffix
     ? `${fragmentSuffix.substring(fragmentSuffix.indexOf("/") + 1)}`
     : undefined;

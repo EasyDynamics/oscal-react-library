@@ -1,9 +1,6 @@
 import React from "react";
 import OSCALEditableTextField from "../components/OSCALEditableTextField";
-import {
-  testModifiableMetadata,
-  textFieldEditModeMetadata,
-} from "../test-data/MetadataData";
+import { testModifiableMetadata, textFieldEditModeMetadata } from "../test-data/MetadataData";
 
 export default {
   title: "Components/Editable Text Field",

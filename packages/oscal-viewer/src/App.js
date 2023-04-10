@@ -1,10 +1,5 @@
 import "./App.css";
-import {
-  styled,
-  createTheme,
-  ThemeProvider,
-  StyledEngineProvider,
-} from "@mui/material/styles";
+import { styled, createTheme, ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 import React, { createElement, useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
@@ -18,12 +13,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import CssBaseline from "@mui/material/CssBaseline";
 import ReactGA from "react-ga4";
-import {
-  Route,
-  Routes,
-  Link as RouterLink,
-  useLocation,
-} from "react-router-dom";
+import { Route, Routes, Link as RouterLink, useLocation } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -44,9 +34,7 @@ const appTheme = createTheme({
   },
 });
 
-const OpenNavButton = styled(IconButton)(
-  ({ theme }) => `margin-right: ${theme.spacing(2)}`
-);
+const OpenNavButton = styled(IconButton)(({ theme }) => `margin-right: ${theme.spacing(2)}`);
 const LogoImage = styled("img")`
   width: 150px;
   margin-right: 1em;
@@ -82,9 +70,7 @@ function App() {
     // be different).
     !!process.env.REACT_APP_REST_BASE_URL
   );
-  const [backendUrl] = useState(
-    getBackEndUrl(process.env.REACT_APP_REST_BASE_URL)
-  );
+  const [backendUrl] = useState(getBackEndUrl(process.env.REACT_APP_REST_BASE_URL));
   const [hasDefaultUrl, setHasDefaultUrl] = useState(false);
   const [urlFragment, setUrlFragment] = useState(null);
 
@@ -93,18 +79,12 @@ function App() {
     // Open the drawer when in REST mode and no uuid is present.
     // Note: The lowest subdirectory of the url is extracted to see if
     // it contains a uuid.
-    if (
-      isRestMode &&
-      currentUrl.substring(currentUrl.lastIndexOf("/") + 1) === ""
-    ) {
+    if (isRestMode && currentUrl.substring(currentUrl.lastIndexOf("/") + 1) === "") {
       setIsDrawerOpen(true);
     }
   }, [isRestMode]);
 
-  const appType = React.useMemo(
-    () => (isRestMode ? "Editor" : "Viewer"),
-    [isRestMode]
-  );
+  const appType = React.useMemo(() => (isRestMode ? "Editor" : "Viewer"), [isRestMode]);
   useEffect(() => {
     document.title = `OSCAL ${appType}`;
   }, [appType]);
@@ -195,10 +175,7 @@ function App() {
       {/* Default index will open up the Catalog */}
       <Route
         index
-        element={createElement(
-          oscalObjectTypes[0].loaderElement,
-          oscalObjectLoaderProps
-        )}
+        element={createElement(oscalObjectTypes[0].loaderElement, oscalObjectLoaderProps)}
       />
       {oscalObjectTypes.map((oscalObjectType) => (
         <Route path={oscalObjectType.pathName} key={oscalObjectType.pathName}>
@@ -206,10 +183,7 @@ function App() {
             <Route
               path={path}
               key={path}
-              element={createElement(
-                oscalObjectType.loaderElement,
-                oscalObjectLoaderProps
-              )}
+              element={createElement(oscalObjectType.loaderElement, oscalObjectLoaderProps)}
             />
           ))}
         </Route>
@@ -232,32 +206,16 @@ function App() {
       open={Boolean(anchorEl)}
       onClose={handleAppNavClose}
     >
-      <MenuItem
-        onClick={handleAppNavClose}
-        component={RouterLink}
-        to="/catalog/"
-      >
+      <MenuItem onClick={handleAppNavClose} component={RouterLink} to="/catalog/">
         {`Catalog ${appType}`}
       </MenuItem>
-      <MenuItem
-        onClick={handleAppNavClose}
-        component={RouterLink}
-        to="/profile/"
-      >
+      <MenuItem onClick={handleAppNavClose} component={RouterLink} to="/profile/">
         {`Profile ${appType}`}
       </MenuItem>
-      <MenuItem
-        onClick={handleAppNavClose}
-        component={RouterLink}
-        to="/component-definition/"
-      >
+      <MenuItem onClick={handleAppNavClose} component={RouterLink} to="/component-definition/">
         {`Component ${appType}`}
       </MenuItem>
-      <MenuItem
-        onClick={handleAppNavClose}
-        component={RouterLink}
-        to="/system-security-plan/"
-      >
+      <MenuItem onClick={handleAppNavClose} component={RouterLink} to="/system-security-plan/">
         {`System Security Plan ${appType}`}
       </MenuItem>
     </Menu>
@@ -300,10 +258,7 @@ function App() {
                 <Grid item md={4}>
                   <Grid container alignItems="center" justifyContent="center">
                     <Grid item align="center">
-                      <Typography
-                        variant="body2"
-                        sx={{ color: "white", fontStyle: "italic" }}
-                      >
+                      <Typography variant="body2" sx={{ color: "white", fontStyle: "italic" }}>
                         Powered by
                       </Typography>
                     </Grid>

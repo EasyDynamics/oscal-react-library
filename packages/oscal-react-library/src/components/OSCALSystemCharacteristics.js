@@ -40,9 +40,7 @@ export default function OSCALSystemCharacteristics(props) {
               </Typography>
             </Grid>
             <Grid item xs={6}>
-              <Typography variant="body2">
-                {props.systemCharacteristics.description}
-              </Typography>
+              <Typography variant="body2">{props.systemCharacteristics.description}</Typography>
             </Grid>
             <Grid item xs={6}>
               <TableContainer>
@@ -78,9 +76,7 @@ export default function OSCALSystemCharacteristics(props) {
                 disabled
                 id="security-sensitivity-level"
                 label="sensitivity-level"
-                defaultValue={
-                  props.systemCharacteristics["security-sensitivity-level"]
-                }
+                defaultValue={props.systemCharacteristics["security-sensitivity-level"]}
                 variant="outlined"
                 margin="dense"
                 fullWidth
@@ -144,102 +140,83 @@ export default function OSCALSystemCharacteristics(props) {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {props.systemCharacteristics["system-information"][
-                      "information-types"
-                    ].map((informationType) => (
-                      <TableRow key={informationType.uuid}>
-                        <TableCell component="th" scope="row">
-                          <StyledTooltip title={informationType.description}>
-                            <Typography variant="body2">
-                              {informationType.title}
-                            </Typography>
-                          </StyledTooltip>
-                        </TableCell>
-                        <TableCell>
-                          {informationType.categorizations?.map(
-                            (categorization) =>
-                              categorization["information-type-ids"].map(
-                                (infoId) => (
-                                  <Chip
-                                    icon={
-                                      categorization.system.startsWith(
-                                        "http"
-                                      ) ? (
-                                        <OpenInNewIcon />
-                                      ) : null
-                                    }
-                                    label={infoId}
-                                    component="a"
-                                    href={categorization.system}
-                                    clickable
-                                    variant="outlined"
-                                    key={infoId}
-                                  />
-                                )
-                              )
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {informationType["confidentiality-impact"] &&
-                            informationType["confidentiality-impact"].base}
-                        </TableCell>
-                        <TableCell>
-                          {informationType["integrity-impact"] &&
-                            informationType["integrity-impact"].base}
-                        </TableCell>
-                        <TableCell>
-                          {informationType["availability-impact"] &&
-                            informationType["availability-impact"].base}
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    {props.systemCharacteristics["system-information"]["information-types"].map(
+                      (informationType) => (
+                        <TableRow key={informationType.uuid}>
+                          <TableCell component="th" scope="row">
+                            <StyledTooltip title={informationType.description}>
+                              <Typography variant="body2">{informationType.title}</Typography>
+                            </StyledTooltip>
+                          </TableCell>
+                          <TableCell>
+                            {informationType.categorizations?.map((categorization) =>
+                              categorization["information-type-ids"].map((infoId) => (
+                                <Chip
+                                  icon={
+                                    categorization.system.startsWith("http") ? (
+                                      <OpenInNewIcon />
+                                    ) : null
+                                  }
+                                  label={infoId}
+                                  component="a"
+                                  href={categorization.system}
+                                  clickable
+                                  variant="outlined"
+                                  key={infoId}
+                                />
+                              ))
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            {informationType["confidentiality-impact"] &&
+                              informationType["confidentiality-impact"].base}
+                          </TableCell>
+                          <TableCell>
+                            {informationType["integrity-impact"] &&
+                              informationType["integrity-impact"].base}
+                          </TableCell>
+                          <TableCell>
+                            {informationType["availability-impact"] &&
+                              informationType["availability-impact"].base}
+                          </TableCell>
+                        </TableRow>
+                      )
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>
             </Grid>
             <Grid item xs={12}>
               <Typography variant="subtitle1" gutterBottom component="div">
-                <OSCALAnchorLinkHeader>
-                  Authorization Boundary
-                </OSCALAnchorLinkHeader>
+                <OSCALAnchorLinkHeader>Authorization Boundary</OSCALAnchorLinkHeader>
               </Typography>
               <Typography variant="body2">
-                {
-                  props.systemCharacteristics?.["authorization-boundary"]
-                    ?.description
-                }
+                {props.systemCharacteristics?.["authorization-boundary"]?.description}
               </Typography>
               <Grid container spacing={2} justifyContent="center">
-                {props.systemCharacteristics?.[
-                  "authorization-boundary"
-                ]?.diagrams?.map((diagram) => (
-                  <Grid item xs={6} key={diagram.uuid}>
-                    <OSCALDiagram
-                      diagram={diagram}
-                      backMatter={props.backMatter}
-                      parentUrl={props.parentUrl}
-                      mediaTypeRegex={/^image\//}
-                    />
-                  </Grid>
-                ))}
+                {props.systemCharacteristics?.["authorization-boundary"]?.diagrams?.map(
+                  (diagram) => (
+                    <Grid item xs={6} key={diagram.uuid}>
+                      <OSCALDiagram
+                        diagram={diagram}
+                        backMatter={props.backMatter}
+                        parentUrl={props.parentUrl}
+                        mediaTypeRegex={/^image\//}
+                      />
+                    </Grid>
+                  )
+                )}
               </Grid>
             </Grid>
             <Grid item xs={12}>
               <Typography variant="subtitle1" gutterBottom component="div">
-                <OSCALAnchorLinkHeader>
-                  Network Architecture
-                </OSCALAnchorLinkHeader>
+                <OSCALAnchorLinkHeader>Network Architecture</OSCALAnchorLinkHeader>
               </Typography>
               <Typography variant="body2">
-                {
-                  props.systemCharacteristics?.["network-architecture"]
-                    ?.description
-                }
+                {props.systemCharacteristics?.["network-architecture"]?.description}
               </Typography>
               <Grid container spacing={2} justifyContent="center">
-                {props.systemCharacteristics?.[
-                  "network-architecture"
-                ]?.diagrams?.map((diagram) => (
+                {props.systemCharacteristics?.["network-architecture"]?.diagrams?.map((diagram) => (
                   <Grid item xs={6} key={diagram.uuid}>
                     <OSCALDiagram
                       diagram={diagram}
@@ -259,18 +236,16 @@ export default function OSCALSystemCharacteristics(props) {
                 {props.systemCharacteristics?.["data-flow"]?.description}
               </Typography>
               <Grid container spacing={2} justifyContent="center">
-                {props.systemCharacteristics?.["data-flow"]?.diagrams?.map(
-                  (diagram) => (
-                    <Grid item xs={6} key={diagram.uuid}>
-                      <OSCALDiagram
-                        diagram={diagram}
-                        backMatter={props.backMatter}
-                        parentUrl={props.parentUrl}
-                        mediaTypeRegex={/^image\//}
-                      />
-                    </Grid>
-                  )
-                )}
+                {props.systemCharacteristics?.["data-flow"]?.diagrams?.map((diagram) => (
+                  <Grid item xs={6} key={diagram.uuid}>
+                    <OSCALDiagram
+                      diagram={diagram}
+                      backMatter={props.backMatter}
+                      parentUrl={props.parentUrl}
+                      mediaTypeRegex={/^image\//}
+                    />
+                  </Grid>
+                ))}
               </Grid>
             </Grid>
           </Grid>

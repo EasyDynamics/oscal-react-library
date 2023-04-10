@@ -10,8 +10,7 @@ import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
 
 export default function OSCALSsp(props) {
   const [error, setError] = useState(null);
-  const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] =
-    useState({});
+  const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
   const unmounted = useRef(false);
 
@@ -80,9 +79,7 @@ export default function OSCALSsp(props) {
         partialRestData={partialRestData}
         urlFragment={props.urlFragment}
       />
-      <OSCALProfileCatalogInheritance
-        inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}
-      />
+      <OSCALProfileCatalogInheritance inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs} />
       <OSCALSystemCharacteristics
         systemCharacteristics={ssp["system-characteristics"]}
         backMatter={ssp["back-matter"]}
@@ -94,10 +91,7 @@ export default function OSCALSsp(props) {
         components={ssp["system-implementation"].components}
       />
       {controlImpl}
-      <OSCALBackMatter
-        backMatter={ssp["back-matter"]}
-        parentUrl={props.parentUrl}
-      />
+      <OSCALBackMatter backMatter={ssp["back-matter"]} parentUrl={props.parentUrl} />
     </OSCALDocumentRoot>
   );
 }

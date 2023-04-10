@@ -20,10 +20,7 @@ function OSCALControlImplementationAddRenderer() {
   );
 }
 
-export default function testOSCALControlImplementationAdd(
-  parentElementName,
-  renderer
-) {
+export default function testOSCALControlImplementationAdd(parentElementName, renderer) {
   test(`${parentElementName} displays the add button`, () => {
     renderer();
 

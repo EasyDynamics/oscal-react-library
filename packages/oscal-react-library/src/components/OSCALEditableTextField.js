@@ -1,17 +1,10 @@
 import React, { useRef, useState } from "react";
 import Typography from "@mui/material/Typography";
 import { Grid, TextField } from "@mui/material";
-import OSCALEditableFieldActions, {
-  getElementLabel,
-} from "./OSCALEditableFieldActions";
+import OSCALEditableFieldActions, { getElementLabel } from "./OSCALEditableFieldActions";
 import { OSCALMarkupLine } from "./OSCALMarkupProse";
 
-function textFieldWithEditableActions(
-  props,
-  reference,
-  inEditState,
-  setInEditState
-) {
+function textFieldWithEditableActions(props, reference, inEditState, setInEditState) {
   if (inEditState) {
     return (
       <>

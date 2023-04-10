@@ -39,11 +39,7 @@ export default function OSCALControlGuidance(props) {
 
   return (
     <>
-      <OSCALControlGuidanceButton
-        variant="outlined"
-        size="small"
-        onClick={handleClick}
-      >
+      <OSCALControlGuidanceButton variant="outlined" size="small" onClick={handleClick}>
         Read Discussion
       </OSCALControlGuidanceButton>
       <Dialog
@@ -54,11 +50,7 @@ export default function OSCALControlGuidance(props) {
         aria-describedby="scroll-dialog-description"
       >
         <DialogTitle id="scroll-dialog-title">
-          <OSCALControlLabel
-            id={props.id}
-            label={props.label}
-            component="span"
-          />
+          <OSCALControlLabel id={props.id} label={props.label} component="span" />
           {` ${props.title} Discussion`}
         </DialogTitle>
         <DialogContent dividers>

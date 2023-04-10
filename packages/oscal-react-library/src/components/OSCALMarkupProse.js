@@ -34,10 +34,5 @@ export function OSCALMarkupMultiLine(props) {
 }
 
 export function OSCALMarkupLine(props) {
-  return (
-    <ReactMarkdown
-      {...props}
-      components={{ ...baseComponents, p: React.Fragment }}
-    />
-  );
+  return <ReactMarkdown {...props} components={{ ...baseComponents, p: React.Fragment }} />;
 }

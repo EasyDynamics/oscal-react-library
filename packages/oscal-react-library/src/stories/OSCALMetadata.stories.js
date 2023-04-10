@@ -1,9 +1,6 @@
 import React from "react";
 import OSCALMetadata from "../components/OSCALMetadata";
-import {
-  exampleMetadata,
-  exampleMetadataWithPartiesAndRoles,
-} from "../test-data/MetadataData";
+import { exampleMetadata, exampleMetadataWithPartiesAndRoles } from "../test-data/MetadataData";
 
 export default {
   title: "Components/Metadata",

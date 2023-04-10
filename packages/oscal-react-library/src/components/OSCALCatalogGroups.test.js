@@ -42,9 +42,7 @@ function getTextByChildren(text) {
     // This is necessary because we are providing a query function to override how
     // text search is performed.
     // eslint-disable-next-line testing-library/no-node-access
-    const childrenDontHaveText = Array.from(node.children).every(
-      (child) => !hasText(child)
-    );
+    const childrenDontHaveText = Array.from(node.children).every((child) => !hasText(child));
 
     return nodeHasText && childrenDontHaveText;
   }
@@ -84,9 +82,7 @@ describe("OSCALCatalogGroup", () => {
     const expand1 = screen.getByText("Sibling Title");
     fireEvent.click(expand1);
 
-    const expand2 = screen.getByText(
-      getTextByChildren("control2-id Audit Events")
-    );
+    const expand2 = screen.getByText(getTextByChildren("control2-id Audit Events"));
     fireEvent.click(expand2);
   });
 });
