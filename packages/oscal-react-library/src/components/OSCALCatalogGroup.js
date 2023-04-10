@@ -76,13 +76,7 @@ function CollapsibleListItem(props) {
       const elementWithFragment = document.getElementById(listId);
       elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
     }
-  }, [
-    urlFragment,
-    fragmentSuffix,
-    listItemOpened,
-    isSetListItemNavigatedTo,
-    listId,
-  ]);
+  }, [urlFragment, fragmentSuffix, listItemOpened, isSetListItemNavigatedTo, listId]);
 
   return (
     <StyledListItemPaper>
@@ -96,9 +90,7 @@ function CollapsibleListItem(props) {
         onEntered={() => !group && setListItemOpened(true)}
         unmountOnExit
       >
-        <StyledControlDescriptionWrapper>
-          {children}
-        </StyledControlDescriptionWrapper>
+        <StyledControlDescriptionWrapper>{children}</StyledControlDescriptionWrapper>
       </Collapse>
     </StyledListItemPaper>
   );
@@ -113,8 +105,7 @@ function OSCALCatalogControlListItem(props) {
     isControlListItemOpened,
     setIsControlListItemOpened,
   } = props;
-  const [isListItemNavigatedTo, isSetListItemNavigatedTo] =
-    React.useState(false);
+  const [isListItemNavigatedTo, isSetListItemNavigatedTo] = React.useState(false);
   useEffect(() => {
     if (!isControlListItemOpened) {
       isSetListItemNavigatedTo(false);
@@ -174,8 +165,7 @@ function OSCALCatalogGroupList(props) {
     isControlListItemOpened,
     setIsControlListItemOpened,
   } = props;
-  const [isListItemNavigatedTo, isSetListItemNavigatedTo] =
-    React.useState(false);
+  const [isListItemNavigatedTo, isSetListItemNavigatedTo] = React.useState(false);
   const itemText = (
     <OSCALAnchorLinkHeader
       value={appendToFragmentPrefix(

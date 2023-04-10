@@ -84,13 +84,10 @@ function determineControlExists(groups, controlLayers, rootLayer) {
   // Ensure lowest/deepest control exists within controls/groups
   for (let i = 1; i < controlLayers.length && upperLayer; i += 1) {
     upperLayer =
-      upperLayer?.controls?.find(
-        (control) => control.id === controlLayers[i]
-      ) ||
+      upperLayer?.controls?.find((control) => control.id === controlLayers[i]) ||
       upperLayer?.groups?.find(
         (group) =>
-          group.id === controlLayers[i] ||
-          conformLinkIdText(group.title) === controlLayers[i]
+          group.id === controlLayers[i] || conformLinkIdText(group.title) === controlLayers[i]
       );
   }
   return upperLayer;
@@ -101,8 +98,7 @@ export default function OSCALCatalogGroups(props) {
   const [openTab, setOpenTab] = React.useState(
     groups[0]?.id ?? conformLinkIdText(groups[0]?.title)
   );
-  const [isControlListItemOpened, setIsControlListItemOpened] =
-    React.useState(false);
+  const [isControlListItemOpened, setIsControlListItemOpened] = React.useState(false);
 
   const handleChange = (event, newValue) => {
     setOpenTab(newValue);
