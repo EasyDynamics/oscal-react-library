@@ -14,7 +14,7 @@
     "watch": "craco start",
     "test": "craco test --watchAll=false",
     "eject": "craco eject",
-    "lint": "eslint --ext .js,.jsx,.tsx,.ts,.json",
+    "lint": "eslint --ext .js,.jsx,.tsx,.ts,.json -c .eslintrc.json .",
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {

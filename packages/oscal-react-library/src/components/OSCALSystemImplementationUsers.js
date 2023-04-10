@@ -44,9 +44,7 @@ function AuthorizedPrivilegesTable(props) {
                 </StyledTooltip>
               </TableCell>
               <TableCell>
-                <FunctionsPreformedTable
-                  functions={privilege["functions-performed"]}
-                />
+                <FunctionsPreformedTable functions={privilege["functions-performed"]} />
               </TableCell>
             </TableRow>
           ))}
@@ -86,9 +84,7 @@ export default function OSCALSystemImplementationUsers(props) {
               <StyledHeaderTableCell>Short Name</StyledHeaderTableCell>
               <StyledHeaderTableCell>Properties</StyledHeaderTableCell>
               <StyledHeaderTableCell>Role IDs</StyledHeaderTableCell>
-              <StyledHeaderTableCell>
-                Authorized Privileges
-              </StyledHeaderTableCell>
+              <StyledHeaderTableCell>Authorized Privileges</StyledHeaderTableCell>
             </TableRow>
           </StyledTableHead>
           <TableBody>
@@ -107,9 +103,7 @@ export default function OSCALSystemImplementationUsers(props) {
                   <RoleIdTable roleIds={user["role-ids"]} />
                 </TableCell>
                 <TableCell>
-                  <AuthorizedPrivilegesTable
-                    authorizedPrivileges={user["authorized-privileges"]}
-                  />
+                  <AuthorizedPrivilegesTable authorizedPrivileges={user["authorized-privileges"]} />
                 </TableCell>
               </StyledTableRow>
             ))}

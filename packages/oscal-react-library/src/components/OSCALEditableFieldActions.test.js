@@ -23,10 +23,7 @@ test("OSCALEditableFieldActions loads", () => {
   );
 });
 
-export default function testOSCALEditableFieldActions(
-  parentElementName,
-  renderer
-) {
+export default function testOSCALEditableFieldActions(parentElementName, renderer) {
   test(`${parentElementName} displays edit icon`, () => {
     renderer();
 
@@ -45,9 +42,7 @@ export default function testOSCALEditableFieldActions(
       })
       .click();
 
-    const textField = screen.getByTestId(
-      "textField-system-security-plan-metadata-title"
-    );
+    const textField = screen.getByTestId("textField-system-security-plan-metadata-title");
     expect(textField).toBeVisible();
   });
 

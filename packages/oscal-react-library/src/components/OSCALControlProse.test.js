@@ -24,9 +24,7 @@ const labelTestDataDecimal = "label-1.1";
 function proseParamLabelsRenderer() {
   render(
     <OSCALReplacedProseWithParameterLabel
-      implementedRequirement={
-        controlImplTestData["implemented-requirements"][0]
-      }
+      implementedRequirement={controlImplTestData["implemented-requirements"][0]}
       label={labelTestData}
       prose={controlProseTestData}
       parameters={exampleParams}
@@ -53,9 +51,7 @@ function proseParamValuesEditingRenderer() {
       label={labelTestData}
       prose={controlProseTestData}
       parameters={exampleParams}
-      implementedRequirement={
-        controlImplTestData["implemented-requirements"][0]
-      }
+      implementedRequirement={controlImplTestData["implemented-requirements"][0]}
       statementId="control-1_smt.a"
       componentId="component-1"
       modificationSetParameters={exampleModificationSetParameters}
@@ -76,13 +72,9 @@ function testOSCALControlProseEditing(parentElementName, renderer) {
 
     const descriptionTextField = screen.getByLabelText("Description");
     const paramValueTextField = screen.getByLabelText("control-1_prm_1");
-    expect(descriptionTextField.value).toBe(
-      "Component 1 description of implementing control 1"
-    );
+    expect(descriptionTextField.value).toBe("Component 1 description of implementing control 1");
 
-    expect(paramValueTextField.value).toBe(
-      "control 1 / component 1 / parameter 1 value"
-    );
+    expect(paramValueTextField.value).toBe("control 1 / component 1 / parameter 1 value");
   });
 
   test(`${parentElementName} handles edit with just description edit and keeps placeholders`, async () => {
@@ -106,9 +98,7 @@ function testOSCALControlProseEditing(parentElementName, renderer) {
     expect(descriptionTextField.value).toBe("Test Description");
 
     screen.getByLabelText("control-1_prm_1");
-    expect(paramValueTextField.value).toBe(
-      "control 1 / component 1 / parameter 1 value"
-    );
+    expect(paramValueTextField.value).toBe("control 1 / component 1 / parameter 1 value");
   });
 
   test(`${parentElementName} saves changes to controller name and description values`, async () => {
@@ -149,9 +139,7 @@ function proseDecimalParamValuesEditingRenderer() {
       label={labelTestDataDecimal}
       prose={controlProseDecimalTestData}
       parameters={exampleDecimalParams}
-      implementedRequirement={
-        controlImplWithDecSmtTestData["implemented-requirements"][0]
-      }
+      implementedRequirement={controlImplWithDecSmtTestData["implemented-requirements"][0]}
       statementId="control-1.1_smt.a"
       componentId="component-1.1"
       modificationSetParameters={exampleModificationSetParametersDecimal}
@@ -172,13 +160,9 @@ function testOSCALControlDecimalProseEditing(parentElementName, renderer) {
 
     const descriptionTextField = screen.getByLabelText("Description");
     const paramValueTextField = screen.getByLabelText("control-1.1_prm_1");
-    expect(descriptionTextField.value).toBe(
-      "Component 1.1 description of implementing control 1"
-    );
+    expect(descriptionTextField.value).toBe("Component 1.1 description of implementing control 1");
 
-    expect(paramValueTextField.value).toBe(
-      "control 1.1 / component 1.1 / parameter 1 value"
-    );
+    expect(paramValueTextField.value).toBe("control 1.1 / component 1.1 / parameter 1 value");
   });
 
   test(`${parentElementName} handles edit with just description edit and keeps placeholders`, async () => {
@@ -202,9 +186,7 @@ function testOSCALControlDecimalProseEditing(parentElementName, renderer) {
     expect(descriptionTextField.value).toBe("Test Description");
 
     screen.getByLabelText("control-1.1_prm_1");
-    expect(paramValueTextField.value).toBe(
-      "control 1.1 / component 1.1 / parameter 1 value"
-    );
+    expect(paramValueTextField.value).toBe("control 1.1 / component 1.1 / parameter 1 value");
   });
 
   test(`${parentElementName} saves changes to controller name and description values`, async () => {

@@ -76,17 +76,14 @@ TabPanel.propTypes = {
 function determineControlExists(groups, controlLayers, rootLayer) {
   // Ensure catalog tab grouping exists
   let upperLayer = groups?.find(
-    (group) =>
-      group?.id === rootLayer || conformLinkIdText(group?.title) === rootLayer
+    (group) => group?.id === rootLayer || conformLinkIdText(group?.title) === rootLayer
   );
   if (!upperLayer) {
     return null;
   }
   // Ensure lowest/deepest control exists
   for (let i = 1; i < controlLayers.length && upperLayer; i += 1) {
-    upperLayer = upperLayer?.controls?.find(
-      (control) => control.id === controlLayers[i]
-    );
+    upperLayer = upperLayer?.controls?.find((control) => control.id === controlLayers[i]);
   }
   return upperLayer;
 }
@@ -94,8 +91,7 @@ function determineControlExists(groups, controlLayers, rootLayer) {
 export default function OSCALCatalogGroups(props) {
   const { groups, urlFragment } = props;
   const [openTab, setOpenTab] = React.useState(groups[0]?.id);
-  const [isControlListItemOpened, setIsControlListItemOpened] =
-    React.useState(false);
+  const [isControlListItemOpened, setIsControlListItemOpened] = React.useState(false);
 
   const handleChange = (event, newValue) => {
     setOpenTab(newValue);

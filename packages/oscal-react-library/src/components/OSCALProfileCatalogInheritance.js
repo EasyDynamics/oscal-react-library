@@ -28,18 +28,14 @@ export default function OSCALProfileCatalogInheritance(props) {
       <Card>
         <CardContent>
           <OSCALAnchorLinkHeader value="profile-catalog-inheritance">
-            <OSCALSectionHeader>
-              Profiles/Catalog Inheritance
-            </OSCALSectionHeader>
+            <OSCALSectionHeader>Profiles/Catalog Inheritance</OSCALSectionHeader>
           </OSCALAnchorLinkHeader>
           <TreeView
             defaultCollapseIcon={<ExpandMoreIcon />}
             defaultExpandIcon={<ChevronRightIcon />}
             multiSelect
           >
-            {props.inheritedProfilesAndCatalogs.inherited?.map((item) =>
-              inheritedListItem(item)
-            )}
+            {props.inheritedProfilesAndCatalogs.inherited?.map((item) => inheritedListItem(item))}
           </TreeView>
         </CardContent>
       </Card>

@@ -39,17 +39,13 @@ export default function OSCALComponentDefinitionComponent(props) {
                     <TableRow key={props.component.uuid}>
                       <TableCell component="th" scope="row">
                         <StyledTooltip title={props.component.description}>
-                          <Typography variant="body2">
-                            {props.component.title}
-                          </Typography>
+                          <Typography variant="body2">{props.component.title}</Typography>
                         </StyledTooltip>
                       </TableCell>
                       <TableCell>{props.component.type}</TableCell>
                       <TableCell>
                         <OSCALResponsibleRoles
-                          responsibleRoles={
-                            props.component["responsible-roles"]
-                          }
+                          responsibleRoles={props.component["responsible-roles"]}
                           parties={props.parties}
                         />
                       </TableCell>

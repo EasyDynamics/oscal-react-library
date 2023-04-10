@@ -4,12 +4,7 @@ import OSCALResolveProfileOrCatalogUrlControls from "./OSCALProfileResolver";
  *
  * @see {@link https://pages.nist.gov/OSCAL/documentation/schema/implementation-layer/ssp/xml-schema/#global_import-profile}
  */
-export default function OSCALSspResolveProfile(
-  ssp,
-  parentUrl,
-  onSuccess,
-  onError
-) {
+export default function OSCALSspResolveProfile(ssp, parentUrl, onSuccess, onError) {
   if (!ssp["import-profile"]) {
     return;
   }

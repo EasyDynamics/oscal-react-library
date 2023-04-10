@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  render,
-  screen,
-  waitFor,
-  fireEvent,
-  within,
-} from "@testing-library/react";
+import { render, screen, waitFor, fireEvent, within } from "@testing-library/react";
 import OSCALJsonEditor from "./OSCALJsonEditor";
 
 const oscalData = {
@@ -32,11 +26,7 @@ jest.mock(
   () =>
     function Editor(props) {
       const fragment = (
-        <textarea
-          data-testid="mocked-editor"
-          onChange={jest.fn()}
-          value={props.value}
-        />
+        <textarea data-testid="mocked-editor" onChange={jest.fn()} value={props.value} />
       );
       return fragment;
     }
@@ -119,8 +109,6 @@ describe("OSCALJsonEditor", () => {
     await waitFor(() => {
       expect(mockEditorRef.setValue).toBeCalledTimes(1);
     });
-    expect(mockEditorRef.setValue).toHaveBeenLastCalledWith(
-      oscalData.oscalSource
-    );
+    expect(mockEditorRef.setValue).toHaveBeenLastCalledWith(oscalData.oscalSource);
   });
 });

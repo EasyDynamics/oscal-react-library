@@ -129,13 +129,7 @@ export function OSCALResolveProfile(profile, parentUrl, onSuccess, onError) {
     OSCALResolveProfileOrCatalogUrlControls(
       profile.resolvedControls,
       profile.modifications,
-      resolveLinkHref(
-        profile?.["back-matter"] ?? [],
-        imp.href,
-        parentUrl,
-        OSCAL_MEDIA_TYPE,
-        false
-      ),
+      resolveLinkHref(profile?.["back-matter"] ?? [], imp.href, parentUrl, OSCAL_MEDIA_TYPE, false),
       parentUrl,
       profile?.["back-matter"] ?? [],
       inheritedProfilesAndCatalogs.inherited,

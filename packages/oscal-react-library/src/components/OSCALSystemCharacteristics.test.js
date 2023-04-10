@@ -13,10 +13,7 @@ function systemCharacteristicsRenderer() {
   );
 }
 
-export default function testOSCALSystemCharacteristics(
-  parentElementName,
-  renderer
-) {
+export default function testOSCALSystemCharacteristics(parentElementName, renderer) {
   test(`${parentElementName} shows system name`, () => {
     renderer();
     const result = screen.getByRole("heading", { name: "Example System Name" });
@@ -55,8 +52,5 @@ export default function testOSCALSystemCharacteristics(
   });
 }
 if (!require.main) {
-  testOSCALSystemCharacteristics(
-    "OSCALSystemCharacteristics",
-    systemCharacteristicsRenderer
-  );
+  testOSCALSystemCharacteristics("OSCALSystemCharacteristics", systemCharacteristicsRenderer);
 }

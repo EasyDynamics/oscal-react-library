@@ -9,10 +9,7 @@ import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import DescriptionIcon from "@mui/icons-material/Description";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import StyledTooltip from "./OSCALStyledTooltip";
-import {
-  getAbsoluteUrl,
-  guessExtensionFromHref,
-} from "./oscal-utils/OSCALLinkUtils";
+import { getAbsoluteUrl, guessExtensionFromHref } from "./oscal-utils/OSCALLinkUtils";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
@@ -49,11 +46,7 @@ function DescriptionDisplay(props) {
   }
   return (
     <StyledTooltip
-      title={
-        <OSCALMarkupMultiLine>
-          {props.resource.description}
-        </OSCALMarkupMultiLine>
-      }
+      title={<OSCALMarkupMultiLine>{props.resource.description}</OSCALMarkupMultiLine>}
     >
       <DescriptionIcon
         color="primary"
@@ -75,9 +68,7 @@ function CitationDisplay(props) {
     );
   }
   return (
-    <StyledTooltip
-      title={<OSCALMarkupLine>{props.resource.citation.text}</OSCALMarkupLine>}
-    >
+    <StyledTooltip title={<OSCALMarkupLine>{props.resource.citation.text}</OSCALMarkupLine>}>
       <FormatQuoteIcon
         color="primary"
         fontSize="small"
@@ -93,8 +84,7 @@ export default function OSCALBackMatter(props) {
   }
 
   const getMediaType = (rlink) =>
-    rlink["media-type"] ||
-    guessExtensionFromHref(getAbsoluteUrl(rlink.href, props.parentUrl));
+    rlink["media-type"] || guessExtensionFromHref(getAbsoluteUrl(rlink.href, props.parentUrl));
 
   const backMatterDisplay = (resource) => (
     <Grid item xs={3} key={resource.uuid}>
@@ -149,9 +139,7 @@ export default function OSCALBackMatter(props) {
             </Grid>
           </Grid>
           <Grid container spacing={2} padding={2}>
-            {props.backMatter.resources.map((resource) =>
-              backMatterDisplay(resource)
-            )}
+            {props.backMatter.resources.map((resource) => backMatterDisplay(resource))}
           </Grid>
         </CardContent>
       </Card>
