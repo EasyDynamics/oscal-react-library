@@ -115,6 +115,11 @@ function OSCALCatalogControlListItem(props) {
   } = props;
   const [isListItemNavigatedTo, isSetListItemNavigatedTo] =
     React.useState(false);
+  useEffect(() => {
+    if (!isControlListItemOpened) {
+      isSetListItemNavigatedTo(false);
+    }
+  }, [isControlListItemOpened]);
 
   const withdrawn = isWithdrawn(control);
   const itemText = (

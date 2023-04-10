@@ -91,7 +91,7 @@ function determineControlExists(groups, controlLayers, rootLayer) {
       upperLayer?.groups?.find(
         (group) =>
           group.id === controlLayers[i] ||
-          conformLinkIdText(group.id) === controlLayers[i]
+          conformLinkIdText(group.title) === controlLayers[i]
       );
   }
   return upperLayer;
@@ -99,7 +99,9 @@ function determineControlExists(groups, controlLayers, rootLayer) {
 
 export default function OSCALCatalogGroups(props) {
   const { groups, urlFragment } = props;
-  const [openTab, setOpenTab] = React.useState(groups[0]?.id);
+  const [openTab, setOpenTab] = React.useState(
+    groups[0]?.id ?? conformLinkIdText(groups[0]?.title)
+  );
   const [isControlListItemOpened, setIsControlListItemOpened] =
     React.useState(false);
 
@@ -108,8 +110,6 @@ export default function OSCALCatalogGroups(props) {
   };
 
   useEffect(() => {
-    // Initially set item opened to false for new fragment to be handled
-    setIsControlListItemOpened(false);
     // Ensure fragment exists and split by groupings
     if (!urlFragment) {
       return;
@@ -123,6 +123,8 @@ export default function OSCALCatalogGroups(props) {
     // Confirm catalog tab group can be grabbed
     if (document.getElementById(`vertical-tab-${rootLayer}`)) {
       setOpenTab(rootLayer);
+      // Set sub-group/control layer beneath to false for new fragment to be handled
+      setIsControlListItemOpened(false);
     }
   }, [urlFragment, groups]);
 
