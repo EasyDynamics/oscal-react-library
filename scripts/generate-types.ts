@@ -314,7 +314,7 @@ async function buildFile(options: FileGenerationOptions) {
       name: 'OSCAL',
       file: 'complete'
     },
-  ]
+  ];
   const interfaceGenProps = oscalSchemas
     .map((def) =>
      ({
@@ -340,7 +340,7 @@ async function main() {
   if (args.length !== 2) {
     console.error("Usage: generate-types.ts <OSCAL-VERSION> <SCHEMA-DIR> <PACKAGE-PATH>")
   }
-  const schemaFile = args[0]
+  const schemaFile = args[0];
   const packagePath = args[1];
   const topLevelAttribute = "OSCAL";
 
