@@ -24,6 +24,7 @@
     "web-vitals": "^3.3.1"
   },
   "peerDependencies": {
+    "@easydynamics/oscal-types": "^1.0.4",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.11",

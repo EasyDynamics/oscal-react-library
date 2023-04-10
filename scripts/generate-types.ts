@@ -19,7 +19,7 @@ import { allUpperWordStyle, combineWords, splitIntoWords, utf16LegalizeCharacter
 import * as fs from 'fs';
 import * as path from 'path';
 import * as process from 'process';
-import { FetchingJSONSchemaStore, JSONSchemaInput, InputData, quicktype } from 'quicktype-core';
+import { JSONSchemaInput, InputData, quicktype } from 'quicktype-core';
 
 
 // These helpers are copied & pasted from the `quicktype-core` code base. They aren't exported
@@ -277,13 +277,18 @@ function r(name${stringAnnotation}) {
   }
 }
 
+type Schema = {
+  typeName: string;
+  schemaContent: string;
+}
 function generateInterfaces(
-  typeName: string,
-  schema: string,
+  schemas: Schema[],
 ) {
-  const schemaInput = new JSONSchemaInput(new FetchingJSONSchemaStore());
-  schemaInput.addSourceSync({ name: typeName, schema });
+  const schemaInput = new JSONSchemaInput(undefined);
   const inputData = new InputData();
+  for (const schema of schemas) {
+    schemaInput.addSource({ name: schema.typeName, schema: schema.schemaContent });
+  }
   inputData.addInput(schemaInput);
   return quicktype({
     inputData,
@@ -293,15 +298,36 @@ function generateInterfaces(
 }
 
 interface FileGenerationOptions {
-  readonly inputSchema: string;
+  readonly inputSchemaDirectory: string;
   readonly topLevelAttribute: string;
   readonly outputPath: string;
 }
 
 async function buildFile(options: FileGenerationOptions) {
-  const inputData = (fs.readFileSync(options.inputSchema)).toString('utf-8');
-  const topLevel = options.topLevelAttribute;
-  const result = generateInterfaces(topLevel, inputData);
+  // It theoretically would be possible to specify all the specific schemas here instead;
+  // however, doing that and emitting it to a single document currently results in a lot
+  // of duplicate types beign emitted (for example, one `Metadata` for each root document
+  // type). Instead, we'll use the complete schema. This generates a very large file but
+  // at least it makes things a little bit cleaner.
+  const oscalSchemas = [
+    {
+      name: 'OSCAL',
+      file: 'complete'
+    },
+  ]
+  const interfaceGenProps = oscalSchemas
+    .map((def) =>
+     ({
+       typeName: def.name,
+       schemaContent: fs.readFileSync(
+         path.join(
+           options.inputSchemaDirectory,
+           `oscal_${def.file}_schema.json`
+         )
+       ).toString('utf-8')
+     })
+    );
+  const result = generateInterfaces(interfaceGenProps);
   try {
     fs.writeFileSync(options.outputPath.toString(), (await result).lines.join('\n'));
   } catch (err) {
@@ -312,14 +338,14 @@ async function buildFile(options: FileGenerationOptions) {
 async function main() {
   const args = process.argv.slice(2);
   if (args.length !== 2) {
-    console.error("Usage: generate-types.ts <OSCAL-VERSION> <SCHEMA-FILE> <PACKAGE-PATH>")
+    console.error("Usage: generate-types.ts <OSCAL-VERSION> <SCHEMA-DIR> <PACKAGE-PATH>")
   }
   const schemaFile = args[0]
   const packagePath = args[1];
   const topLevelAttribute = "OSCAL";
 
   await buildFile({
-    inputSchema: schemaFile,
+    inputSchemaDirectory: schemaFile,
     outputPath: path.join(packagePath, 'oscal.ts'),
     topLevelAttribute,
   });
