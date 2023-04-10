@@ -22,8 +22,7 @@ import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
  */
 export default function OSCALProfile(props) {
   const [error, setError] = useState(null);
-  const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] =
-    useState({});
+  const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
   const unmounted = useRef(false);
 
@@ -80,11 +79,7 @@ export default function OSCALProfile(props) {
       subheader={
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <ListSubheader
-              component="div"
-              id="oscal-profile-importedControls"
-              disableSticky
-            >
+            <ListSubheader component="div" id="oscal-profile-importedControls" disableSticky>
               <OSCALAnchorLinkHeader>Imported Controls</OSCALAnchorLinkHeader>
             </ListSubheader>
           </Grid>
@@ -114,10 +109,7 @@ export default function OSCALProfile(props) {
         ))
       ) : (
         <CardContent key="skeleton-card">
-          <span
-            style={{ marginTop: 5, display: "flex", gap: "1em" }}
-            key="controls load 0"
-          >
+          <span style={{ marginTop: 5, display: "flex", gap: "1em" }} key="controls load 0">
             <Skeleton variant="text" width="25em" height="3em" />
             <Skeleton variant="circular" width="3em" height="3em" />
           </span>
@@ -139,14 +131,9 @@ export default function OSCALProfile(props) {
         partialRestData={partialRestData}
         urlFragment={props.urlFragment}
       />
-      <OSCALProfileCatalogInheritance
-        inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs}
-      />
+      <OSCALProfileCatalogInheritance inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs} />
       {profileImports}
-      <OSCALBackMatter
-        backMatter={props.profile["back-matter"]}
-        parentUrl={props.parentUrl}
-      />
+      <OSCALBackMatter backMatter={props.profile["back-matter"]} parentUrl={props.parentUrl} />
     </OSCALDocumentRoot>
   );
 }

@@ -18,8 +18,7 @@ import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
  * @returns The corresponding Control Implementation
  */
 export default function OSCALControlImplementation(props) {
-  const implementedRequirements =
-    props.controlImplementation["implemented-requirements"];
+  const implementedRequirements = props.controlImplementation["implemented-requirements"];
   const controlIds = implementedRequirements.map(
     (implementedControl) => implementedControl["control-id"]
   );

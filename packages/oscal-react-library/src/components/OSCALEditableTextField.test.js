@@ -21,10 +21,7 @@ test("OSCALEditableTextField loads", () => {
   );
 });
 
-export default function testOSCALEditableTextField(
-  parentElementName,
-  renderer
-) {
+export default function testOSCALEditableTextField(parentElementName, renderer) {
   test(`${parentElementName} displays default value as "Test Title"`, () => {
     renderer();
 
@@ -34,9 +31,7 @@ export default function testOSCALEditableTextField(
       })
       .click();
 
-    const textField = screen.getByTestId(
-      "textField-system-security-plan-metadata-title"
-    );
+    const textField = screen.getByTestId("textField-system-security-plan-metadata-title");
     expect(textField.value).toEqual("Test Title");
     expect(textField).toBeVisible();
   });
@@ -50,9 +45,7 @@ export default function testOSCALEditableTextField(
       })
       .click();
 
-    const textField = screen.getByTestId(
-      "textField-system-security-plan-metadata-title"
-    );
+    const textField = screen.getByTestId("textField-system-security-plan-metadata-title");
 
     fireEvent.keyDown(textField, {
       key: "Escape",
@@ -71,18 +64,14 @@ export default function testOSCALEditableTextField(
       })
       .click();
 
-    const textField = screen.getByTestId(
-      "textField-system-security-plan-metadata-title"
-    );
+    const textField = screen.getByTestId("textField-system-security-plan-metadata-title");
 
     fireEvent.keyPress(textField, {
       key: "Enter",
       keyCode: 13,
     });
 
-    const textFieldAfterEvent = screen.getByTestId(
-      "textField-system-security-plan-metadata-title"
-    );
+    const textFieldAfterEvent = screen.getByTestId("textField-system-security-plan-metadata-title");
 
     expect(textFieldAfterEvent.value).toEqual(textField.value);
   });
@@ -96,18 +85,14 @@ export default function testOSCALEditableTextField(
       })
       .click();
 
-    const textField = screen.getByTestId(
-      "textField-system-security-plan-metadata-title"
-    );
+    const textField = screen.getByTestId("textField-system-security-plan-metadata-title");
     fireEvent.change(textField, { target: { value: "New Test Title" } });
     fireEvent.keyPress(textField, {
       key: "Enter",
       keyCode: 13,
     });
 
-    const textFieldAfterEvent = screen.getByTestId(
-      "textField-system-security-plan-metadata-title"
-    );
+    const textFieldAfterEvent = screen.getByTestId("textField-system-security-plan-metadata-title");
     expect(textFieldAfterEvent.value).toEqual("New Test Title");
   });
 }

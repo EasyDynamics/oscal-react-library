@@ -17,9 +17,7 @@ export default class BackMatterLookup {
    * @returns ResolvedUri {string} or undefined
    */
   resolveUuid(uuid, mediaType) {
-    const resource = this.#backMatter.resources.find(
-      (item) => item.uuid === uuid
-    );
+    const resource = this.#backMatter.resources.find((item) => item.uuid === uuid);
 
     if (!this.#preferBase64) {
       const rlink = resource?.rlinks?.find((item) => {
@@ -55,10 +53,7 @@ export default class BackMatterLookup {
     }
 
     return {
-      uri: `data:${base64["media-type"]};base64,${base64.value.replace(
-        "\n",
-        ""
-      )}`,
+      uri: `data:${base64["media-type"]};base64,${base64.value.replace("\n", "")}`,
       mediaType: base64["media-type"],
     };
   }

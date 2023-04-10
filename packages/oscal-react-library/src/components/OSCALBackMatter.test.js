@@ -10,12 +10,7 @@ import {
 } from "../test-data/BackMatterData";
 
 function backMatterRenderer() {
-  render(
-    <OSCALBackMatter
-      backMatter={backMatterTestData}
-      parentUrl={parentUrlTestData}
-    />
-  );
+  render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
 }
 
 export default function testOSCALBackMatter(parentElementName, renderer) {
@@ -27,13 +22,9 @@ export default function testOSCALBackMatter(parentElementName, renderer) {
 
   test(`${parentElementName} displays resource description`, async () => {
     renderer();
-    const descriptionDisplay = screen.getByTitle(
-      "Resource Test Title-description"
-    );
+    const descriptionDisplay = screen.getByTitle("Resource Test Title-description");
     await userEvent.hover(descriptionDisplay);
-    expect(
-      await screen.findByText("This is a test description for resource")
-    ).toBeInTheDocument();
+    expect(await screen.findByText("This is a test description for resource")).toBeInTheDocument();
   });
 
   test(`${parentElementName} displays media-type`, async () => {

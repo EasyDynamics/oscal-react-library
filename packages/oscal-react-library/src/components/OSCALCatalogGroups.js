@@ -76,8 +76,7 @@ TabPanel.propTypes = {
 function determineControlExists(groups, controlLayers, rootLayer) {
   // Ensure catalog tab grouping exists
   let upperLayer = groups?.find(
-    (group) =>
-      group?.id === rootLayer || conformLinkIdText(group?.title) === rootLayer
+    (group) => group?.id === rootLayer || conformLinkIdText(group?.title) === rootLayer
   );
   if (!upperLayer) {
     return null;

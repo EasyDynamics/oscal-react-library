@@ -16,9 +16,7 @@ test("OSCALComponentDefinitionControlImplementation displays component implement
       controls={controlsData}
     />
   );
-  const result = screen.getByText(
-    "This is an example description for control implementation-1"
-  );
+  const result = screen.getByText("This is an example description for control implementation-1");
   expect(result).toBeVisible();
 });
 
@@ -43,13 +41,9 @@ test("OSCALComponentDefinitionControlImplementation displays component parameter
     />
   );
   const nonplaceholder1 = getByTextIncludingChildren(/Does something with/i);
-  const placeholderText1 = getByTextIncludingChildren(
-    /< control 1 \/ parameter 1 label >/i
-  );
+  const placeholderText1 = getByTextIncludingChildren(/< control 1 \/ parameter 1 label >/i);
   const nonplaceholder2 = getByTextIncludingChildren(/and/i);
-  const placeholderText2 = getByTextIncludingChildren(
-    /< control 1 \/ parameter 2 label >/i
-  );
+  const placeholderText2 = getByTextIncludingChildren(/< control 1 \/ parameter 2 label >/i);
 
   expect(nonplaceholder1).toBeVisible();
   expect(placeholderText1).toBeVisible();

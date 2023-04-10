@@ -123,9 +123,7 @@ function OSCALCatalogControlListItem(props) {
 
   const withdrawn = isWithdrawn(control);
   const itemText = (
-    <OSCALAnchorLinkHeader
-      value={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}
-    >
+    <OSCALAnchorLinkHeader value={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}>
       <OSCALControlLabel
         label={propWithName(control.props, "label")?.value}
         id={control.id}
@@ -240,12 +238,7 @@ function OSCALCatalogGroupList(props) {
 }
 
 export default function OSCALCatalogGroup(props) {
-  const {
-    group,
-    urlFragment,
-    isControlListItemOpened,
-    setIsControlListItemOpened,
-  } = props;
+  const { group, urlFragment, isControlListItemOpened, setIsControlListItemOpened } = props;
   // Note: "fragmentPrefix" is specific to setting up a fragment in the url, by adding groupings;
   // while "fragmentSuffix" is specific to finding a control from a fragment, trimming found groups
   const fragmentPrefix = group.id ?? conformLinkIdText(group.title) ?? "";

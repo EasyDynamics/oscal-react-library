@@ -119,12 +119,8 @@ function TextWithIcon(props) {
 export function OSCALMetadataAddress(props) {
   const tryFormatAddress = (address) => {
     const lines = address["addr-lines"] ?? [];
-    const cityAndState = [address.city, address.state]
-      .filter((it) => it)
-      .join(", ");
-    const line = [cityAndState, address["postal-code"]]
-      .filter((it) => it)
-      .join(" ");
+    const cityAndState = [address.city, address.state].filter((it) => it).join(", ");
+    const line = [cityAndState, address["postal-code"]].filter((it) => it).join(" ");
     const allLines = [...lines, line, address.country].filter((it) => it);
     return allLines;
   };
@@ -203,11 +199,7 @@ function MetadataAvatar(props) {
       .substring(0, 2)
       .toUpperCase();
 
-  return (
-    <Avatar sx={{ bgcolor: avatarColor(id) }}>
-      {avatarValue(text) ?? fallbackIcon}
-    </Avatar>
-  );
+  return <Avatar sx={{ bgcolor: avatarColor(id) }}>{avatarValue(text) ?? fallbackIcon}</Avatar>;
 }
 
 const MetadataInfoTypes = {
@@ -222,33 +214,22 @@ const TYPE_MAPPING = (infoProps) => ({
   email: <OSCALMetadataEmail email={infoProps} />,
 });
 
-const getMetadataInfoList = (
-  list,
-  infoType,
-  emptyMessage = "No information provided"
-) => {
+const getMetadataInfoList = (list, infoType, emptyMessage = "No information provided") => {
   if (!list?.length) {
     return <Typography> {emptyMessage} </Typography>;
   }
 
   return list.map((item) => (
-    <ListItem
-      key={infoType === "email" ? item : `${item?.type}--${item?.name}`}
-    >
+    <ListItem key={infoType === "email" ? item : `${item?.type}--${item?.name}`}>
       {TYPE_MAPPING(item)[infoType]}
     </ListItem>
   ));
 };
 
 export function OSCALMetadataParty(props) {
-  const fallbackIcon =
-    props.party?.type === "organziation" ? <GroupIcon /> : <PersonIcon />;
+  const fallbackIcon = props.party?.type === "organziation" ? <GroupIcon /> : <PersonIcon />;
   const avatar = (
-    <MetadataAvatar
-      id={props.party.uuid}
-      text={props.party.name}
-      fallbackIcon={fallbackIcon}
-    />
+    <MetadataAvatar id={props.party.uuid} text={props.party.name} fallbackIcon={fallbackIcon} />
   );
 
   return (
@@ -271,10 +252,7 @@ export function OSCALMetadataParty(props) {
       <DialogContent dividers>
         <Grid container spacing={1}>
           <Grid item xs={4}>
-            <OSCALMetadataContactTypeHeader
-              icon={<MapIcon fontSize="small" />}
-              title="Address"
-            />
+            <OSCALMetadataContactTypeHeader icon={<MapIcon fontSize="small" />} title="Address" />
             <List>
               {getMetadataInfoList(
                 props.party.addresses,
@@ -284,10 +262,7 @@ export function OSCALMetadataParty(props) {
             </List>
           </Grid>
           <Grid item xs={4}>
-            <OSCALMetadataContactTypeHeader
-              icon={<PhoneIcon fontSize="small" />}
-              title="Phone"
-            />
+            <OSCALMetadataContactTypeHeader icon={<PhoneIcon fontSize="small" />} title="Phone" />
             <List>
               {getMetadataInfoList(
                 props.party["telephone-numbers"],
@@ -297,10 +272,7 @@ export function OSCALMetadataParty(props) {
             </List>
           </Grid>
           <Grid item xs={4}>
-            <OSCALMetadataContactTypeHeader
-              icon={<EmailIcon fontSize="small" />}
-              title="Email"
-            />
+            <OSCALMetadataContactTypeHeader icon={<EmailIcon fontSize="small" />} title="Email" />
             <List>
               {getMetadataInfoList(
                 props.party["email-addresses"],
@@ -318,13 +290,7 @@ export function OSCALMetadataParty(props) {
 export function OSCALMetadataRole(props) {
   const { role } = props;
 
-  const avatar = (
-    <MetadataAvatar
-      id={role.id}
-      text={role.title}
-      fallbackIcon={<WorkIcon />}
-    />
-  );
+  const avatar = <MetadataAvatar id={role.id} text={role.title} fallbackIcon={<WorkIcon />} />;
 
   return (
     <OSCALMetadataCard
@@ -357,9 +323,7 @@ function OSCALMetadataCard(props) {
   const cardTitle = title ? (
     <OSCALMarkupLine>{title}</OSCALMarkupLine>
   ) : (
-    <OSCALMetadataCardTitleFallbackText>
-      Not Specified
-    </OSCALMetadataCardTitleFallbackText>
+    <OSCALMetadataCardTitleFallbackText>Not Specified</OSCALMetadataCardTitleFallbackText>
   );
 
   return (
@@ -409,17 +373,11 @@ function OSCALMetadataBasicData(props) {
   return (
     <Stack direction="row" spacing={4}>
       <Stack direction="row" spacing={1}>
-        <OSCALMetadataLabel variant="body2">
-          Document Version:
-        </OSCALMetadataLabel>
+        <OSCALMetadataLabel variant="body2">Document Version:</OSCALMetadataLabel>
         <OSCALEditableTextField
           fieldName="Version"
           canEdit={isEditable}
-          editedField={
-            isEditable
-              ? [Object.keys(partialRestData)[0], "metadata", "version"]
-              : null
-          }
+          editedField={isEditable ? [Object.keys(partialRestData)[0], "metadata", "version"] : null}
           onFieldSave={onFieldSave}
           partialRestData={
             isEditable
@@ -439,10 +397,7 @@ function OSCALMetadataBasicData(props) {
           value={metadata.version}
         />
       </Stack>
-      <OSCALMetadataBasicDataItem
-        title="OSCAL Version:"
-        data={metadata["oscal-version"]}
-      />
+      <OSCALMetadataBasicDataItem title="OSCAL Version:" data={metadata["oscal-version"]} />
       <OSCALMetadataBasicDataItem
         title="Last Modified:"
         data={formatDate(metadata["last-modified"])}
@@ -473,24 +428,18 @@ function OSCALMetadataRoles(props) {
 function OSCALMetadataParties(props) {
   const { parties, urlFragment } = props;
 
-  const getRoleLabel = (roleId) =>
-    props.metadata.roles.find((role) => role.id === roleId);
+  const getRoleLabel = (roleId) => props.metadata.roles.find((role) => role.id === roleId);
 
   const getPartyRolesText = (party) =>
     props.metadata["responsible-parties"]
-      ?.filter((responsibleParty) =>
-        responsibleParty["party-uuids"]?.includes(party.uuid)
-      )
+      ?.filter((responsibleParty) => responsibleParty["party-uuids"]?.includes(party.uuid))
       .map((item) => item["role-id"])
       .map(getRoleLabel)
       .filter((item) => item);
 
   const cards = parties?.map((party) => (
     <Grid item xs={12} md={4} key={party.uuid} component={Card}>
-      <OSCALMetadataParty
-        party={party}
-        partyRolesText={getPartyRolesText(party)}
-      />
+      <OSCALMetadataParty party={party} partyRolesText={getPartyRolesText(party)} />
     </Grid>
   ));
 
@@ -544,17 +493,11 @@ export function OSCALMetadataLocationContent(props) {
     <Stack spacing={2}>
       <Grid container>
         <Grid item xs={4}>
-          <OSCALMetadataContactTypeHeader
-            icon={<MapIcon fontSize="small" />}
-            title="Address"
-          />
+          <OSCALMetadataContactTypeHeader icon={<MapIcon fontSize="small" />} title="Address" />
           <OSCALMetadataAddress address={location.address} />
         </Grid>
         <Grid item xs={4}>
-          <OSCALMetadataContactTypeHeader
-            icon={<PhoneIcon fontSize="small" />}
-            title="Phone"
-          />
+          <OSCALMetadataContactTypeHeader icon={<PhoneIcon fontSize="small" />} title="Phone" />
           <List>
             {getMetadataInfoList(
               location["telephone-numbers"],
@@ -564,10 +507,7 @@ export function OSCALMetadataLocationContent(props) {
           </List>
         </Grid>
         <Grid item xs={4}>
-          <OSCALMetadataContactTypeHeader
-            icon={<EmailIcon fontSize="small" />}
-            title="Email"
-          />
+          <OSCALMetadataContactTypeHeader icon={<EmailIcon fontSize="small" />} title="Email" />
           <List>
             {getMetadataInfoList(
               location["email-addresses"],
@@ -586,11 +526,7 @@ export function OSCALMetadataLocation(props) {
   const { location } = props;
 
   const avatar = (
-    <MetadataAvatar
-      id={location.uuid}
-      text={location.title}
-      fallbackIcon={<PlaceIcon />}
-    />
+    <MetadataAvatar id={location.uuid} text={location.title} fallbackIcon={<PlaceIcon />} />
   );
 
   return (
@@ -675,18 +611,14 @@ export default function OSCALMetadata(props) {
             fieldName="Title"
             canEdit={props.isEditable}
             editedField={
-              props.isEditable
-                ? [Object.keys(props.partialRestData)[0], "metadata", "title"]
-                : null
+              props.isEditable ? [Object.keys(props.partialRestData)[0], "metadata", "title"] : null
             }
             onFieldSave={props.onFieldSave}
             partialRestData={
               props.isEditable
                 ? {
                     [Object.keys(props.partialRestData)[0]]: {
-                      uuid: props.partialRestData[
-                        Object.keys(props.partialRestData)[0]
-                      ].uuid,
+                      uuid: props.partialRestData[Object.keys(props.partialRestData)[0]].uuid,
                       metadata: {
                         title: props.metadata.title,
                       },
@@ -712,9 +644,7 @@ export default function OSCALMetadata(props) {
                 onFieldSave={props.onFieldSave}
               />
             </OSCALMetadataSection>
-            <OSCALMarkupMultiLine>
-              {props.metadata.remarks}
-            </OSCALMarkupMultiLine>
+            <OSCALMarkupMultiLine>{props.metadata.remarks}</OSCALMarkupMultiLine>
             <OSCALMetadataKeywords
               keywords={propWithName(props.metadata.props, "keywords")?.value}
               urlFragment={props.urlFragment}
@@ -724,10 +654,7 @@ export default function OSCALMetadata(props) {
               metadata={props.metadata}
               urlFragment={props.urlFragment}
             />
-            <OSCALMetadataRoles
-              roles={props.metadata?.roles}
-              urlFragment={props.urlFragment}
-            />
+            <OSCALMetadataRoles roles={props.metadata?.roles} urlFragment={props.urlFragment} />
             <OSCALMetadataLocations
               locations={props.metadata?.locations}
               urlFragment={props.urlFragment}

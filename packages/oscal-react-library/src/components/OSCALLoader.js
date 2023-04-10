@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useCallback,
-  useEffect,
-  useRef,
-  useLayoutEffect,
-} from "react";
+import React, { useState, useCallback, useEffect, useRef, useLayoutEffect } from "react";
 import { useParams } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { styled } from "@mui/material/styles";
@@ -73,11 +67,9 @@ export default function OSCALLoader(props) {
   // an error and to ensure.
   const [reloadCount, setReloadCount] = useState(0);
   const oscalObjectUuid = useParams()?.id ?? "";
-  const buildOscalUrl = (uuid) =>
-    `${props.backendUrl}/${props.oscalObjectType.restPath}/${uuid}`;
+  const buildOscalUrl = (uuid) => `${props.backendUrl}/${props.oscalObjectType.restPath}/${uuid}`;
   const determineDefaultOscalUrl = () =>
-    (props.isRestMode ? null : getRequestedUrl()) ||
-    props.oscalObjectType.defaultUrl;
+    (props.isRestMode ? null : getRequestedUrl()) || props.oscalObjectType.defaultUrl;
 
   const [oscalUrl, setOscalUrl] = useState(determineDefaultOscalUrl());
 
@@ -112,11 +104,7 @@ export default function OSCALLoader(props) {
     restUrlPath,
     oscalObjectType
   ) => {
-    const requestUrl = restUtils.buildRequestUrl(
-      partialRestData,
-      restUrlPath,
-      oscalObjectType
-    );
+    const requestUrl = restUtils.buildRequestUrl(partialRestData, restUrlPath, oscalObjectType);
 
     if (newValue) {
       restUtils.populatePartialRestData(
@@ -177,9 +165,7 @@ export default function OSCALLoader(props) {
 
   const handleFragment = useCallback(() => {
     // Ensure fragment exists and determine if a control grouping tab is found
-    const controlGroupingFragment = determineControlGroupFromFragment(
-      props.urlFragment
-    );
+    const controlGroupingFragment = determineControlGroupFromFragment(props.urlFragment);
     // Scroll to Element if not within a control grouping
     // NOTE: Control found in control grouping tabs are handled in Catalog Groups
     if (!controlGroupingFragment) {
@@ -305,10 +291,7 @@ export default function OSCALLoader(props) {
           sizes={editorIsVisible ? [34, 66] : [0, 100]}
         >
           <Box display={editorIsVisible ? "block" : "none"}>
-            <OSCALJsonEditor
-              value={oscalData.oscalSource}
-              onSave={handleRestPut}
-            />
+            <OSCALJsonEditor value={oscalData.oscalSource} onSave={handleRestPut} />
           </Box>
           <Box>
             {props.renderer(

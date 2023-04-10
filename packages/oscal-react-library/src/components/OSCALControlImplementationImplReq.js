@@ -12,9 +12,7 @@ import getControlOrSubControl from "./oscal-utils/OSCALControlResolver";
 const OSCALImplReqCard = styled(Card, {
   // https://github.com/mui/material-ui/blob/c34935814b81870ca325099cdf41a1025a85d4b5/packages/mui-system/src/createStyled.js#L56
   shouldForwardProp: (prop) =>
-    !["childLevel", "withdrawn", "ownerState", "theme", "sx", "as"].includes(
-      prop
-    ),
+    !["childLevel", "withdrawn", "ownerState", "theme", "sx", "as"].includes(prop),
 })`
   margin-top: 1em;
   margin-bottom: 1em;
@@ -130,11 +128,7 @@ export default function OSCALControlImplementationImplReq(props) {
             ))}
           </ComponentTabs>
           {Object.values(props.components).map((component, index) => (
-            <ComponentTabPanelScrollable
-              value={value}
-              index={index}
-              key={component.uuid}
-            >
+            <ComponentTabPanelScrollable value={value} index={index} key={component.uuid}>
               <OSCALControl
                 control={getControlOrSubControl(
                   props.controls,

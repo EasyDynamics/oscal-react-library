@@ -23,11 +23,7 @@ const OSCALControlModificationsButton = styled(IconButton)(
  * @param {String} controlPartId Control part ID to match
  * @returns html object
  */
-function getAlterAddsOrRemovesDisplay(
-  addsRemovesElements,
-  addsRemovesLabel,
-  controlPartId
-) {
+function getAlterAddsOrRemovesDisplay(addsRemovesElements, addsRemovesLabel, controlPartId) {
   if (!addsRemovesElements?.length) {
     return null;
   }
@@ -37,12 +33,7 @@ function getAlterAddsOrRemovesDisplay(
   const typographies = addsRemovesElements
     .flatMap((element) => element.props ?? [])
     .map((item) => (
-      <Typography
-        color="textSecondary"
-        paragraph
-        variant="body1"
-        key={controlPartId}
-      >
+      <Typography color="textSecondary" paragraph variant="body1" key={controlPartId}>
         Name: {item.name}, Value: {item.value}
       </Typography>
     ));
@@ -51,21 +42,14 @@ function getAlterAddsOrRemovesDisplay(
     removedTypographies = addsRemovesElements
       .flatMap((element) => element ?? [])
       .map((item) => (
-        <Typography
-          color="textSecondary"
-          paragraph
-          variant="body1"
-          key={item.id}
-        >
-          Attribute: {Object.keys.length > 0 ? Object.keys(item)[0] : ""},
-          Value: {Object.values.length > 0 ? Object.values(item)[0] : ""}
+        <Typography color="textSecondary" paragraph variant="body1" key={item.id}>
+          Attribute: {Object.keys.length > 0 ? Object.keys(item)[0] : ""}, Value:{" "}
+          {Object.values.length > 0 ? Object.values(item)[0] : ""}
         </Typography>
       ));
   }
 
-  const labelTypograhy = (
-    <Typography variant="h6">{addsRemovesLabel}</Typography>
-  );
+  const labelTypograhy = <Typography variant="h6">{addsRemovesLabel}</Typography>;
 
   return (
     <DialogContent dividers>
@@ -115,10 +99,7 @@ function getModifications(controlPartId, controlId, modList, modText) {
   );
 
   // return display & mod length
-  return [
-    getAlterAddsOrRemovesDisplay(controlParts, modText, controlPartId),
-    controlParts.length,
-  ];
+  return [getAlterAddsOrRemovesDisplay(controlParts, modText, controlPartId), controlParts.length];
 }
 
 export default function OSCALControlModification(props) {
@@ -149,12 +130,7 @@ export default function OSCALControlModification(props) {
 
   // Get all add modifications
   if (alter.adds) {
-    [addsDisplay, len] = getModifications(
-      controlPartId,
-      props.controlId,
-      alter.adds,
-      "Adds "
-    );
+    [addsDisplay, len] = getModifications(controlPartId, props.controlId, alter.adds, "Adds ");
     modLength += len;
   }
   // Get all remove modifications

@@ -10,11 +10,7 @@ test("OSCALComponentDefinition loads", () => {
 });
 
 function componentDefinitionRenderer() {
-  render(
-    <OSCALComponentDefinition
-      componentDefinition={componentDefinitionTestData}
-    />
-  );
+  render(<OSCALComponentDefinition componentDefinition={componentDefinitionTestData} />);
 }
 
 function testOSCALComponentDefinitionComponent(parentElementName, renderer) {
@@ -27,13 +23,8 @@ function testOSCALComponentDefinitionComponent(parentElementName, renderer) {
   test(`${parentElementName} shows component description`, async () => {
     renderer();
     await userEvent.hover(screen.getByText("Example Component"));
-    expect(
-      await screen.findByText("An example component.")
-    ).toBeInTheDocument();
+    expect(await screen.findByText("An example component.")).toBeInTheDocument();
   });
 }
 
-testOSCALComponentDefinitionComponent(
-  "OSCALComponentDefinition",
-  componentDefinitionRenderer
-);
+testOSCALComponentDefinitionComponent("OSCALComponentDefinition", componentDefinitionRenderer);

@@ -23,14 +23,9 @@ export default function OSCALControlImplementationAdd(props) {
   const [inEditState, setInEditState] = useState(false);
   const [newControl, setNewControl] = useState("");
 
-  const rootOscalObjectName = props.restData
-    ? Object.keys(props.restData)[0]
-    : null;
+  const rootOscalObjectName = props.restData ? Object.keys(props.restData)[0] : null;
   const editedFieldContents = [rootOscalObjectName, "control-implementation"];
-  const controlIdsAndTitles = getControlIdsAndTitles(
-    props.controls,
-    props.implementedControls
-  );
+  const controlIdsAndTitles = getControlIdsAndTitles(props.controls, props.implementedControls);
 
   return inEditState ? (
     <Grid container item xs={12} justifyContent="flex-end" alignItems="center">
@@ -46,9 +41,7 @@ export default function OSCALControlImplementationAdd(props) {
             setNewControl(event.target.textContent);
           }}
           options={Object.keys(controlIdsAndTitles)}
-          renderInput={(params) => (
-            <TextField {...params} label="Select Control" />
-          )}
+          renderInput={(params) => <TextField {...params} label="Select Control" />}
         />
       </Grid>
       <Grid item>

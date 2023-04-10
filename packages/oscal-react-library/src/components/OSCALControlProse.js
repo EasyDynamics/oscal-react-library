@@ -72,9 +72,7 @@ const styledParamValue = (keyValue, parameterValue) => (
  * @returns the parameter label
  */
 function getParameterLabelText(parameters, parameterId) {
-  const parameter = parameters.find(
-    (testParameter) => testParameter.id === parameterId
-  );
+  const parameter = parameters.find((testParameter) => testParameter.id === parameterId);
 
   if (!parameter) {
     return `< ${parameterId} >`;
@@ -95,17 +93,12 @@ function getParameterLabelText(parameters, parameterId) {
  * @param {String} parameterId
  * @returns the parameter label
  */
-function getParameterValue(
-  statementByComponent,
-  implReqSetParameters,
-  parameterId
-) {
+function getParameterValue(statementByComponent, implReqSetParameters, parameterId) {
   function parameterHasGivenId(parameterSetting) {
     return parameterSetting["param-id"] === parameterId;
   }
   // Locate set-parameters when found in the by-component
-  const setParameters =
-    statementByComponent?.["set-parameters"] || implReqSetParameters;
+  const setParameters = statementByComponent?.["set-parameters"] || implReqSetParameters;
   const foundParameterSetting = setParameters?.find(parameterHasGivenId);
 
   // Error checking: Exit function when parameter setting or it's values are not found
@@ -155,9 +148,9 @@ function getImplReqSetParameters(implReqStatements, componentId) {
   return (
     implReqStatements
       ?.find((statement) => statement["statement-id"].endsWith("_smt"))
-      ?.["by-components"]?.find(
-        (byComp) => byComp["component-uuid"] === componentId
-      )?.["set-parameters"] || null
+      ?.["by-components"]?.find((byComp) => byComp["component-uuid"] === componentId)?.[
+      "set-parameters"
+    ] || null
   );
 }
 
@@ -205,12 +198,7 @@ function SegmentTooltipWrapper(props) {
  * @param {String} key
  * @returns the parameter label segment component
  */
-function getParameterLabelSegment(
-  parameters,
-  parameterId,
-  modificationSetParameters,
-  key
-) {
+function getParameterLabelSegment(parameters, parameterId, modificationSetParameters, key) {
   let paramSegment;
   // First check for set-parameters in the profile/catalog
   let parameterValueText;
@@ -225,10 +213,7 @@ function getParameterLabelSegment(
     }
   }
   if (parameterValueText) {
-    paramSegment = styledParamValue(
-      `param-value-key-${key}`,
-      parameterValueText
-    );
+    paramSegment = styledParamValue(`param-value-key-${key}`, parameterValueText);
   } else {
     const parameterLabelText = getParameterLabelText(
       parameters,
@@ -241,10 +226,7 @@ function getParameterLabelSegment(
     );
   }
 
-  const constraintsDisplay = getConstraintsDisplay(
-    modificationSetParameters,
-    parameterId
-  );
+  const constraintsDisplay = getConstraintsDisplay(modificationSetParameters, parameterId);
 
   if (!constraintsDisplay) {
     return paramSegment;
@@ -277,15 +259,8 @@ function getParameterValueSegment(
   key,
   parameters
 ) {
-  const parameterValue = getParameterValue(
-    statementByComponent,
-    implReqSetParameters,
-    parameterId
-  );
-  const constraintsDisplay = getConstraintsDisplay(
-    modificationSetParameters,
-    parameterId
-  );
+  const parameterValue = getParameterValue(statementByComponent, implReqSetParameters, parameterId);
+  const constraintsDisplay = getConstraintsDisplay(modificationSetParameters, parameterId);
 
   const parameterLabelText = getParameterLabelText(
     parameters,
@@ -329,19 +304,17 @@ export function OSCALReplacedProseWithParameterLabel(props) {
     return null;
   }
   const prose = props.parameters
-    ? props.prose
-        .split(RegExp(prosePlaceholderRegexpString, "g"))
-        .map((segment, index) => {
-          if (index % 2 === 0) {
-            return getTextSegment(segment, index);
-          }
-          return getParameterLabelSegment(
-            props.parameters,
-            segment,
-            props.modificationSetParameters,
-            index
-          );
-        })
+    ? props.prose.split(RegExp(prosePlaceholderRegexpString, "g")).map((segment, index) => {
+        if (index % 2 === 0) {
+          return getTextSegment(segment, index);
+        }
+        return getParameterLabelSegment(
+          props.parameters,
+          segment,
+          props.modificationSetParameters,
+          index
+        );
+      })
     : getTextSegment(props.prose, 0);
 
   if (!props.isImplemented) {
@@ -379,13 +352,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
     ?.find((item) => item["control-id"] === controlId)
     ?.removes?.find((object) => object["by-item-name"] === controlPartId);
 
-  if (
-    removeByIds ||
-    removeByNames ||
-    removeByNS ||
-    removeByClass ||
-    removeByItemNames
-  ) {
+  if (removeByIds || removeByNames || removeByNS || removeByClass || removeByItemNames) {
     return (
       <OSCALControlProseRemove>
         {props.label} {prose}
@@ -430,17 +397,11 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   // render." This should be investigated further.
   // https://github.com/EasyDynamics/oscal-react-library/issues/499
   /* eslint-disable react-hooks/rules-of-hooks */
-  const statementByComponentDescription =
-    statementByComponent?.description || null;
-  const statementByComponentDescriptionMarkup =
-    statementByComponentDescription ? (
-      <OSCALMarkupMultiLine>
-        {statementByComponentDescription}
-      </OSCALMarkupMultiLine>
-    ) : null;
-  const statementByComponentDescriptionRef = useRef(
-    statementByComponentDescription
-  );
+  const statementByComponentDescription = statementByComponent?.description || null;
+  const statementByComponentDescriptionMarkup = statementByComponentDescription ? (
+    <OSCALMarkupMultiLine>{statementByComponentDescription}</OSCALMarkupMultiLine>
+  ) : null;
+  const statementByComponentDescriptionRef = useRef(statementByComponentDescription);
   const setParametersRefs = {};
   if (props.parameters?.length > 0) {
     props.parameters.forEach((parameter) => {
@@ -526,9 +487,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   return (
     <OSCALStatementEditing container spacing={2}>
       <Grid item xs={11}>
-        <StyledTooltip
-          title={statementByComponentDescriptionMarkup ?? props.componentId}
-        >
+        <StyledTooltip title={statementByComponentDescriptionMarkup ?? props.componentId}>
           <Link underline="hover" href={`#${props.label}`}>
             {props.label}
           </Link>
@@ -578,8 +537,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
                       props.componentId,
                       statementByComponentDescriptionRef.current.value,
                       Object.keys(setParametersRefs).map((setParameterId) => {
-                        const setParameterValue =
-                          setParametersRefs[setParameterId]?.current?.value;
+                        const setParameterValue = setParametersRefs[setParameterId]?.current?.value;
                         return setParameterValue
                           ? {
                               "param-id": setParameterId,

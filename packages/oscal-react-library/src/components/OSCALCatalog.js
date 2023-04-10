@@ -5,14 +5,7 @@ import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
 import OSCALMetadata from "./OSCALMetadata";
 
 export default function OSCALCatalog(props) {
-  const {
-    onResolutionComplete,
-    catalog,
-    isEditable,
-    onFieldSave,
-    urlFragment,
-    parentUrl,
-  } = props;
+  const { onResolutionComplete, catalog, isEditable, onFieldSave, urlFragment, parentUrl } = props;
 
   useEffect(onResolutionComplete);
 
@@ -34,10 +27,7 @@ export default function OSCALCatalog(props) {
 
       <OSCALCatalogGroups groups={catalog.groups} urlFragment={urlFragment} />
 
-      <OSCALBackMatter
-        backMatter={catalog["back-matter"]}
-        parentUrl={parentUrl}
-      />
+      <OSCALBackMatter backMatter={catalog["back-matter"]} parentUrl={parentUrl} />
     </OSCALDocumentRoot>
   );
 }

@@ -72,8 +72,7 @@ export const componentDefinitionTestData = {
         {
           uuid: "control-implementation-1",
           source: revFourCatalog,
-          description:
-            "This is an example description for control implementations",
+          description: "This is an example description for control implementations",
           "implemented-requirements": [
             {
               uuid: "implemented-requirements-1",
@@ -92,8 +91,7 @@ export const exampleComponentStories = [
     uuid: "b036a6ac-6cff-4066-92bc-74ddfd9ad6fa",
     type: "software",
     title: "test component 1",
-    description:
-      "This is a software component that implements basic authentication mechanisms.",
+    description: "This is a software component that implements basic authentication mechanisms.",
     "responsible-roles": [
       {
         "role-id": "supplier",
@@ -121,8 +119,7 @@ export const exampleComponentDefinitionComponent = {
   uuid: "b036a6ac-6cff-4066-92bc-74ddfd9ad6fa",
   type: "software",
   title: "test component 1",
-  description:
-    "This is a software component that implements basic authentication mechanisms.",
+  description: "This is a software component that implements basic authentication mechanisms.",
   "responsible-roles": [
     {
       "role-id": "supplier",
