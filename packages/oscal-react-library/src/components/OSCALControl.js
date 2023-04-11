@@ -97,10 +97,12 @@ export default function OSCALControl(props) {
     childLevel,
     includeAll,
     excludeControlIds,
+    previousHandledFragment,
+    setPreviousHandledFragment,
   } = props;
 
   useEffect(() => {
-    if (!listItemOpened || isItemNavigatedTo) {
+    if (!listItemOpened || isItemNavigatedTo || previousHandledFragment === urlFragment) {
       return;
     }
     if (!urlFragment) {
@@ -109,7 +111,7 @@ export default function OSCALControl(props) {
     // Smooth scroll to control if element is found with fragment identifier
     const elementWithFragment = document.getElementById(urlFragment);
     elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
-  }, [listItemOpened, isItemNavigatedTo, urlFragment]);
+  }, [listItemOpened, isItemNavigatedTo, urlFragment, previousHandledFragment, setPreviousHandledFragment]);
 
   if (!includeAll && (!control || (includeControlIds && !includeControlIds.includes(control.id)))) {
     return null;

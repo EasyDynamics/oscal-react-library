@@ -42,6 +42,25 @@ const StyledControlDescriptionWrapper = styled("div")`
   padding: 1em;
 `;
 
+/**
+ * Validates fragment and determines if top fragment item matches a list ID.
+ * 
+ * @param {*} urlFragment The 
+ * @param {*} previousHandledFragment The previous handled fragment
+ * @param {*} fragmentSuffix String with current item and sub items
+ * @param {*} listId The group/control ID
+ * @returns 
+ */
+function IsMatchingListItem(urlFragment, previousHandledFragment, fragmentSuffix, listId) {
+  // Ensure fragment exists and split by groupings
+  if (!urlFragment || previousHandledFragment === urlFragment) {
+    return;
+  }
+  // Determine if current control/group list state matches ID
+  const currentList = fragmentSuffix.split("/")[0];
+  return currentList === listId;
+}
+
 function CollapsibleListItem(props) {
   const {
     urlFragment,
@@ -53,6 +72,8 @@ function CollapsibleListItem(props) {
     listItemOpened,
     setListItemOpened,
     isSetListItemNavigatedTo,
+    previousHandledFragment,
+    setPreviousHandledFragment,
   } = props;
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -65,18 +86,25 @@ function CollapsibleListItem(props) {
       isSetListItemNavigatedTo(true);
       return;
     }
-    // Ensure fragment exists and split by groupings
-    if (!urlFragment) {
-      return;
-    }
-    // Find control/group list state and open collapsible item
-    const currentList = fragmentSuffix.split("/")[0];
-    if (currentList === listId) {
+
+    if (IsMatchingListItem(urlFragment, previousHandledFragment, fragmentSuffix, listId)) {
       setIsOpen(true);
-      const elementWithFragment = document.getElementById(listId);
-      elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
+
+      if (fragmentSuffix.split("/").length <= 1) {
+        const elementWithFragment = document.getElementById(urlFragment);
+        elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
+        setPreviousHandledFragment(urlFragment);
+      }
     }
-  }, [urlFragment, fragmentSuffix, listItemOpened, isSetListItemNavigatedTo, listId]);
+  }, [
+    urlFragment,
+    fragmentSuffix,
+    listItemOpened,
+    isSetListItemNavigatedTo,
+    listId,
+    previousHandledFragment,
+    setPreviousHandledFragment,
+  ]);
 
   return (
     <StyledListItemPaper>
@@ -96,6 +124,26 @@ function CollapsibleListItem(props) {
   );
 }
 
+function WithdrawnListItem(props) {
+  const { children, urlFragment, listId, fragmentSuffix, previousHandledFragment, setPreviousHandledFragment } = props;
+  useEffect(() => {
+    if (IsMatchingListItem(urlFragment, previousHandledFragment, fragmentSuffix, listId)) {
+      const elementWithFragment = document.getElementById(urlFragment);
+      elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
+
+      if (fragmentSuffix.split("/").length <= 1) {
+        setPreviousHandledFragment(urlFragment);
+      }
+    }
+  }, [urlFragment, listId, fragmentSuffix, previousHandledFragment, setPreviousHandledFragment]);
+
+  return (
+    <StyledListItemPaper>
+      <StyledListItem>{children}</StyledListItem>
+    </StyledListItemPaper>
+  );
+}
+
 function OSCALCatalogControlListItem(props) {
   const {
     control,
@@ -104,6 +152,8 @@ function OSCALCatalogControlListItem(props) {
     fragmentSuffix,
     isControlListItemOpened,
     setIsControlListItemOpened,
+    previousHandledFragment,
+    setPreviousHandledFragment,
   } = props;
   const [isListItemNavigatedTo, isSetListItemNavigatedTo] = React.useState(false);
   useEffect(() => {
@@ -124,7 +174,19 @@ function OSCALCatalogControlListItem(props) {
     </OSCALAnchorLinkHeader>
   );
 
-  return !withdrawn ? (
+  return withdrawn ? (
+    <WithdrawnListItem
+      primary={itemText}
+      withdrawn={withdrawn}
+      urlFragment={urlFragment}
+      listId={control?.id}
+      previousHandledFragment={previousHandledFragment}
+      setPreviousHandledFragment={setPreviousHandledFragment}
+      fragmentSuffix={shiftFragmentSuffix(fragmentSuffix)}
+    >
+      <WithdrawnListItemText primary={itemText} withdrawn={withdrawn} />
+    </WithdrawnListItem>
+  ) : (
     <CollapsibleListItem
       itemText={itemText}
       urlFragment={urlFragment}
@@ -134,6 +196,8 @@ function OSCALCatalogControlListItem(props) {
       listId={control?.id}
       isListItemNavigatedTo={isListItemNavigatedTo}
       isSetListItemNavigatedTo={isSetListItemNavigatedTo}
+      previousHandledFragment={previousHandledFragment}
+      setPreviousHandledFragment={setPreviousHandledFragment}
     >
       <OSCALControl
         showInList
@@ -145,14 +209,10 @@ function OSCALCatalogControlListItem(props) {
         urlFragment={urlFragment}
         fragmentPrefix={appendToFragmentPrefix(fragmentPrefix, control.id)}
         fragmentSuffix={shiftFragmentSuffix(fragmentSuffix)}
+        previousHandledFragment={previousHandledFragment}
+        setPreviousHandledFragment={setPreviousHandledFragment}
       />
     </CollapsibleListItem>
-  ) : (
-    <StyledListItemPaper>
-      <StyledListItem>
-        <WithdrawnListItemText primary={itemText} withdrawn={withdrawn} />
-      </StyledListItem>
-    </StyledListItemPaper>
   );
 }
 
@@ -164,6 +224,8 @@ function OSCALCatalogGroupList(props) {
     fragmentSuffix,
     isControlListItemOpened,
     setIsControlListItemOpened,
+    previousHandledFragment,
+    setPreviousHandledFragment,
   } = props;
   const [isListItemNavigatedTo, isSetListItemNavigatedTo] = React.useState(false);
   const itemText = (
@@ -192,6 +254,8 @@ function OSCALCatalogGroupList(props) {
       setListItemOpened={setIsControlListItemOpened}
       isListItemNavigatedTo={isListItemNavigatedTo}
       isSetListItemNavigatedTo={isSetListItemNavigatedTo}
+      previousHandledFragment={previousHandledFragment}
+      setPreviousHandledFragment={setPreviousHandledFragment}
     >
       <OSCALControlList>
         {group.groups?.map((innerGroup) => (
@@ -206,6 +270,8 @@ function OSCALCatalogGroupList(props) {
             fragmentSuffix={shiftFragmentSuffix(fragmentSuffix)}
             isControlListItemOpened={isControlListItemOpened}
             setIsControlListItemOpened={setIsControlListItemOpened}
+            previousHandledFragment={previousHandledFragment}
+            setPreviousHandledFragment={setPreviousHandledFragment}
           />
         ))}
         {group.controls?.map((groupControl) => (
@@ -220,6 +286,8 @@ function OSCALCatalogGroupList(props) {
             fragmentSuffix={fragmentSuffix}
             isControlListItemOpened={isControlListItemOpened}
             setIsControlListItemOpened={setIsControlListItemOpened}
+            previousHandledFragment={previousHandledFragment}
+            setPreviousHandledFragment={setPreviousHandledFragment}
           />
         ))}
       </OSCALControlList>
@@ -228,7 +296,14 @@ function OSCALCatalogGroupList(props) {
 }
 
 export default function OSCALCatalogGroup(props) {
-  const { group, urlFragment, isControlListItemOpened, setIsControlListItemOpened } = props;
+  const {
+    group,
+    urlFragment,
+    isControlListItemOpened,
+    setIsControlListItemOpened,
+    previousHandledFragment,
+    setPreviousHandledFragment,
+  } = props;
   // Note: "fragmentPrefix" is specific to setting up a fragment in the url, by adding groupings;
   // while "fragmentSuffix" is specific to finding a control from a fragment, trimming found groups
   const fragmentPrefix = group.id ?? conformLinkIdText(group.title) ?? "";
@@ -247,6 +322,8 @@ export default function OSCALCatalogGroup(props) {
           fragmentSuffix={fragmentSuffix}
           isControlListItemOpened={isControlListItemOpened}
           setIsControlListItemOpened={setIsControlListItemOpened}
+          previousHandledFragment={previousHandledFragment}
+          setPreviousHandledFragment={setPreviousHandledFragment}
         />
       ))}
       {group.controls?.map((control) => (
@@ -258,6 +335,8 @@ export default function OSCALCatalogGroup(props) {
           fragmentSuffix={urlFragment}
           isControlListItemOpened={isControlListItemOpened}
           setIsControlListItemOpened={setIsControlListItemOpened}
+          previousHandledFragment={previousHandledFragment}
+          setPreviousHandledFragment={setPreviousHandledFragment}
         />
       ))}
     </OSCALControlList>

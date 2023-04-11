@@ -99,14 +99,16 @@ export default function OSCALCatalogGroups(props) {
     groups[0]?.id ?? conformLinkIdText(groups[0]?.title)
   );
   const [isControlListItemOpened, setIsControlListItemOpened] = React.useState(false);
+  const [previousHandledFragment, setPreviousHandledFragment] = React.useState(null);
 
   const handleChange = (event, newValue) => {
     setOpenTab(newValue);
   };
 
   useEffect(() => {
+    console.log(previousHandledFragment + " " + urlFragment);
     // Ensure fragment exists and split by groupings
-    if (!urlFragment) {
+    if (!urlFragment || previousHandledFragment === urlFragment) {
       return;
     }
     // Break control groupings apart
@@ -117,11 +119,12 @@ export default function OSCALCatalogGroups(props) {
     }
     // Confirm catalog tab group can be grabbed
     if (document.getElementById(`vertical-tab-${rootLayer}`)) {
+      console.log("Heyo");
       setOpenTab(rootLayer);
       // Set sub-group/control layer beneath to false for new fragment to be handled
       setIsControlListItemOpened(false);
     }
-  }, [urlFragment, groups]);
+  }, [urlFragment, groups, previousHandledFragment]);
 
   return (
     <OSCALSection>
@@ -168,6 +171,8 @@ export default function OSCALCatalogGroups(props) {
                     urlFragment={urlFragment}
                     isControlListItemOpened={isControlListItemOpened}
                     setIsControlListItemOpened={setIsControlListItemOpened}
+                    previousHandledFragment={previousHandledFragment}
+                    setPreviousHandledFragment={setPreviousHandledFragment}
                   />
                 </TabPanel>
               ))}
