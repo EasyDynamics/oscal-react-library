@@ -44,12 +44,12 @@ const StyledControlDescriptionWrapper = styled("div")`
 
 /**
  * Validates fragment and determines if top fragment item matches a list ID.
- * 
- * @param {*} urlFragment The 
+ *
+ * @param {*} urlFragment The fragment currently being handled
  * @param {*} previousHandledFragment The previous handled fragment
  * @param {*} fragmentSuffix String with current item and sub items
  * @param {*} listId The group/control ID
- * @returns 
+ * @returns
  */
 function IsMatchingListItem(urlFragment, previousHandledFragment, fragmentSuffix, listId) {
   // Ensure fragment exists and split by groupings
@@ -125,7 +125,14 @@ function CollapsibleListItem(props) {
 }
 
 function WithdrawnListItem(props) {
-  const { children, urlFragment, listId, fragmentSuffix, previousHandledFragment, setPreviousHandledFragment } = props;
+  const {
+    children,
+    urlFragment,
+    listId,
+    fragmentSuffix,
+    previousHandledFragment,
+    setPreviousHandledFragment,
+  } = props;
   useEffect(() => {
     if (IsMatchingListItem(urlFragment, previousHandledFragment, fragmentSuffix, listId)) {
       const elementWithFragment = document.getElementById(urlFragment);

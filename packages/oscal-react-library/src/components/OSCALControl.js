@@ -111,7 +111,13 @@ export default function OSCALControl(props) {
     // Smooth scroll to control if element is found with fragment identifier
     const elementWithFragment = document.getElementById(urlFragment);
     elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
-  }, [listItemOpened, isItemNavigatedTo, urlFragment, previousHandledFragment, setPreviousHandledFragment]);
+  }, [
+    listItemOpened,
+    isItemNavigatedTo,
+    urlFragment,
+    previousHandledFragment,
+    setPreviousHandledFragment,
+  ]);
 
   if (!includeAll && (!control || (includeControlIds && !includeControlIds.includes(control.id)))) {
     return null;
