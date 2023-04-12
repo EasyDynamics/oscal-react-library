@@ -13,6 +13,7 @@ import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALMarkupLine } from "./OSCALMarkupProse";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import OSCALEditableTextField from "./OSCALEditableTextField";
+import { Resource, ResourceLink } from "@easydynamics/oscal-types";
 
 export const OSCALBackMatterCard = styled(Card)(
   ({ theme }) => `
@@ -22,7 +23,7 @@ export const OSCALBackMatterCard = styled(Card)(
 `
 );
 
-function TitleDisplay(props) {
+function TitleDisplay(props: any): any {
   const { children, uuid } = props;
   return (
     <OSCALAnchorLinkHeader value={uuid}>
@@ -31,7 +32,7 @@ function TitleDisplay(props) {
   );
 }
 
-function CitationDisplay(props) {
+function CitationDisplay(props: any): any {
   if (!props.resource?.citation?.text) {
     return (
       <FormatQuoteIcon
@@ -52,15 +53,16 @@ function CitationDisplay(props) {
   );
 }
 
-export default function OSCALBackMatter(props) {
+export default function OSCALBackMatter(props: any): any {
   if (!props.backMatter) {
     return null;
   }
 
-  const getMediaType = (rlink) =>
-    rlink["media-type"] || guessExtensionFromHref(getAbsoluteUrl(rlink.href, props.parentUrl));
+  const getMediaType = (rlink: ResourceLink) =>
+    rlink["media-type"] ||
+    guessExtensionFromHref(getAbsoluteUrl(rlink.href, props.parentUrl) ?? "");
 
-  const backMatterDisplay = (resource) => (
+  const backMatterDisplay = (resource: Resource) => (
     <Grid item xs={3} key={resource.uuid}>
       <OSCALBackMatterCard>
         <CardContent>
@@ -82,7 +84,6 @@ export default function OSCALBackMatter(props) {
                     props.isEditable
                       ? {
                           [Object.keys(props.partialRestData)[0]]: {
-                            uuid: props.partialRestData[Object.keys(props.partialRestData)[0]].uuid,
                             "back-matter": {
                               resources: props.backMatter.resources,
                             },
@@ -115,7 +116,6 @@ export default function OSCALBackMatter(props) {
               props.isEditable
                 ? {
                     [Object.keys(props.partialRestData)[0]]: {
-                      uuid: props.partialRestData[Object.keys(props.partialRestData)[0]].uuid,
                       "back-matter": {
                         resources: props.backMatter.resources,
                       },
@@ -127,7 +127,7 @@ export default function OSCALBackMatter(props) {
           />
           <Typography>
             {resource.rlinks &&
-              resource.rlinks.map((rlink) => (
+              resource.rlinks.map((rlink: ResourceLink) => (
                 <Chip
                   icon={<OpenInNewIcon />}
                   key={rlink.href}
@@ -161,7 +161,7 @@ export default function OSCALBackMatter(props) {
             </Grid>
           </Grid>
           <Grid container spacing={2} padding={2}>
-            {props.backMatter.resources.map((resource) => backMatterDisplay(resource))}
+            {props.backMatter.resources.map((resource: Resource) => backMatterDisplay(resource))}
           </Grid>
         </CardContent>
       </Card>

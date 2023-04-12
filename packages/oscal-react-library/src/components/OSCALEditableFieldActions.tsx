@@ -5,17 +5,29 @@ import SaveIcon from "@mui/icons-material/Save";
 import { IconButton } from "@mui/material";
 import StyledTooltip from "./OSCALStyledTooltip";
 
-export function getElementLabel(editedField) {
+export function getElementLabel(editedField: any): string {
   return editedField.toString().replace(/,/g, "-");
 }
 
-export function updateListItem(list, uuid, field, value) {
-  const updatedItem = list.find((item) => item.uuid === uuid);
+/**
+ * Updates an item in a json list.
+ *
+ * @example Updating resources[i].title
+ *
+ * @param list - List of json objects
+ * @param uuid - UUID of the object to update
+ * @param field - Field to update with new value
+ * @param value - New json/string value
+ *
+ * @returns the updated json list
+ */
+export function updateListItem(list: any, uuid: string, field: string, value: any): any {
+  const updatedItem = list.find((item: any) => item.uuid === uuid);
   updatedItem[field] = value;
   return list;
 }
 
-export default function OSCALEditableFieldActions(props) {
+export default function OSCALEditableFieldActions(props: any): any {
   return props.inEditState ? (
     <>
       <StyledTooltip title="Save">
