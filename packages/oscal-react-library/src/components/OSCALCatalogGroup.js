@@ -51,7 +51,7 @@ const StyledControlDescriptionWrapper = styled("div")`
  * @param {*} listId The group/control ID
  * @returns
  */
-function IsMatchingListItem(urlFragment, previousHandledFragment, fragmentSuffix, listId) {
+function isMatchingListItem(urlFragment, previousHandledFragment, fragmentSuffix, listId) {
   // Ensure fragment exists and split by groupings
   if (!urlFragment || previousHandledFragment === urlFragment) {
     return;
@@ -87,7 +87,7 @@ function CollapsibleListItem(props) {
       return;
     }
 
-    if (IsMatchingListItem(urlFragment, previousHandledFragment, fragmentSuffix, listId)) {
+    if (isMatchingListItem(urlFragment, previousHandledFragment, fragmentSuffix, listId)) {
       setIsOpen(true);
 
       if (fragmentSuffix.split("/").length <= 1) {
@@ -134,7 +134,7 @@ function WithdrawnListItem(props) {
     setPreviousHandledFragment,
   } = props;
   useEffect(() => {
-    if (IsMatchingListItem(urlFragment, previousHandledFragment, fragmentSuffix, listId)) {
+    if (isMatchingListItem(urlFragment, previousHandledFragment, fragmentSuffix, listId)) {
       const elementWithFragment = document.getElementById(urlFragment);
       elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
 
