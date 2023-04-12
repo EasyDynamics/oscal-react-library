@@ -1,3 +1,5 @@
+import type { Property } from "@easydynamics/oscal-types";
+
 /**
  * When a namespace is not specified for a property, the assumption is that the
  * namespace is default namespace.
@@ -50,37 +52,23 @@ export interface PropertyFilter {
 }
 
 /**
- * A basic type to represent an OSCAL property.
- *
- * TODO: Replace this with the actual OSCAL type once we have that type information.
- */
-interface Prop {
-  ns?: string;
-  name: string;
-  value: string;
-  class?: string;
-  remarks?: string;
-  uuid?: string;
-}
-
-/**
  * Returns the first prop with a matching name attribute.
  *
  * This is useful to look up the value of a specific prop under a namespace.
  * To check whether a property has a specific value, prefer {@link matchingProp}.
  */
 export function propWithName(
-  props: Prop[] | undefined,
+  props: Property[] | undefined,
   name: string,
   ns: string | undefined
-): Prop | undefined {
+): Property | undefined {
   return matchingProp(props, { name, ns, filter: () => true });
 }
 
 export default function matchingProp(
-  props: Prop[] | undefined,
+  props: Property[] | undefined,
   filter: PropertyFilter
-): Prop | undefined {
+): Property | undefined {
   if ((!filter.value && !filter.filter) || (filter.value && filter.filter)) {
     throw new Error("Exactly one of filter or value must be specified");
   }
