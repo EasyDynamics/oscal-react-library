@@ -29,9 +29,9 @@ export default function OSCALCatalog(props) {
 
       <OSCALBackMatter
         backMatter={catalog["back-matter"]}
-        parentUrl={props.parentUrl}
-        isEditable={props.isEditable}
-        onFieldSave={props.onFieldSave}
+        parentUrl={parentUrl}
+        isEditable={isEditable}
+        onFieldSave={onFieldSave}
         partialRestData={partialRestData}
       />
     </OSCALDocumentRoot>

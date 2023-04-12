@@ -6,12 +6,11 @@ import Chip from "@mui/material/Chip";
 import Grid from "@mui/material/Grid";
 import { Typography } from "@mui/material";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
-import DescriptionIcon from "@mui/icons-material/Description";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getAbsoluteUrl, guessExtensionFromHref } from "./oscal-utils/OSCALLinkUtils";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
-import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
+import { OSCALMarkupLine } from "./OSCALMarkupProse";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import OSCALEditableTextField from "./OSCALEditableTextField";
 
