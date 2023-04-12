@@ -13,6 +13,7 @@ import { getAbsoluteUrl, guessExtensionFromHref } from "./oscal-utils/OSCALLinkU
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import OSCALEditableTextField from "./OSCALEditableTextField";
 
 export const OSCALBackMatterCard = styled(Card)(
   ({ theme }) => `
@@ -23,37 +24,11 @@ export const OSCALBackMatterCard = styled(Card)(
 );
 
 function TitleDisplay(props) {
-  const title = props.resource.title || "No Title";
-  const color = props.resource.title ? "initial" : "error";
+  const { children, uuid } = props;
   return (
-    <OSCALAnchorLinkHeader value={props.resource.uuid}>
-      <Typography color={color} variant="subtitle1">
-        <OSCALMarkupLine>{title}</OSCALMarkupLine>
-      </Typography>
+    <OSCALAnchorLinkHeader value={uuid}>
+      <Typography variant="subtitle1">{children}</Typography>
     </OSCALAnchorLinkHeader>
-  );
-}
-
-function DescriptionDisplay(props) {
-  if (!props.resource?.description) {
-    return (
-      <DescriptionIcon
-        color="disabled"
-        fontSize="small"
-        titleAccess={`${props.resource.title}-description`}
-      />
-    );
-  }
-  return (
-    <StyledTooltip
-      title={<OSCALMarkupMultiLine>{props.resource.description}</OSCALMarkupMultiLine>}
-    >
-      <DescriptionIcon
-        color="primary"
-        fontSize="small"
-        titleAccess={`${props.resource.title}-description`}
-      />
-    </StyledTooltip>
   );
 }
 
@@ -91,34 +66,82 @@ export default function OSCALBackMatter(props) {
       <OSCALBackMatterCard>
         <CardContent>
           <Grid container spacing={0}>
-            <Grid item xs={10}>
-              <TitleDisplay resource={resource} />
+            <Grid item xs={11}>
+              <TitleDisplay uuid={resource.uuid}>
+                <OSCALEditableTextField
+                  fieldName="title"
+                  canEdit={props.isEditable}
+                  editedField={
+                    props.isEditable
+                      ? [Object.keys(props.partialRestData)[0], "back-matter", "resources"]
+                      : null
+                  }
+                  editedValue={props.backMatter.resources}
+                  editedValueId={resource.uuid}
+                  onFieldSave={props.onFieldSave}
+                  partialRestData={
+                    props.isEditable
+                      ? {
+                          [Object.keys(props.partialRestData)[0]]: {
+                            uuid: props.partialRestData[Object.keys(props.partialRestData)[0]].uuid,
+                            "back-matter": {
+                              resources: props.backMatter.resources,
+                            },
+                          },
+                        }
+                      : null
+                  }
+                  value={resource.title}
+                />
+              </TitleDisplay>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={1}>
               <Grid container spacing={0} justifyContent="flex-end">
-                <DescriptionDisplay resource={resource} />
                 <CitationDisplay resource={resource} />
               </Grid>
             </Grid>
           </Grid>
-          <Grid>
-            <Typography>
-              {resource.rlinks &&
-                resource.rlinks.map((rlink) => (
-                  <Chip
-                    icon={<OpenInNewIcon />}
-                    key={rlink.href}
-                    label={getMediaType(rlink)}
-                    component="a"
-                    role="button"
-                    href={getAbsoluteUrl(rlink.href, props.parentUrl)}
-                    target="_blank"
-                    variant="outlined"
-                    clickable
-                  />
-                ))}
-            </Typography>
-          </Grid>
+          <OSCALEditableTextField
+            fieldName="description"
+            canEdit={props.isEditable}
+            editedField={
+              props.isEditable
+                ? [Object.keys(props.partialRestData)[0], "back-matter", "resources"]
+                : null
+            }
+            editedValue={props.backMatter.resources}
+            editedValueId={resource.uuid}
+            onFieldSave={props.onFieldSave}
+            partialRestData={
+              props.isEditable
+                ? {
+                    [Object.keys(props.partialRestData)[0]]: {
+                      uuid: props.partialRestData[Object.keys(props.partialRestData)[0]].uuid,
+                      "back-matter": {
+                        resources: props.backMatter.resources,
+                      },
+                    },
+                  }
+                : null
+            }
+            value={resource.description}
+          />
+          <Typography>
+            {resource.rlinks &&
+              resource.rlinks.map((rlink) => (
+                <Chip
+                  icon={<OpenInNewIcon />}
+                  key={rlink.href}
+                  label={getMediaType(rlink)}
+                  component="a"
+                  role="button"
+                  href={getAbsoluteUrl(rlink.href, props.parentUrl)}
+                  target="_blank"
+                  variant="outlined"
+                  clickable
+                />
+              ))}
+          </Typography>
         </CardContent>
       </OSCALBackMatterCard>
     </Grid>

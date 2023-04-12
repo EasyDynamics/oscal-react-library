@@ -27,7 +27,13 @@ export default function OSCALCatalog(props) {
 
       <OSCALCatalogGroups groups={catalog.groups} urlFragment={urlFragment} />
 
-      <OSCALBackMatter backMatter={catalog["back-matter"]} parentUrl={parentUrl} />
+      <OSCALBackMatter
+        backMatter={catalog["back-matter"]}
+        parentUrl={props.parentUrl}
+        isEditable={props.isEditable}
+        onFieldSave={props.onFieldSave}
+        partialRestData={partialRestData}
+      />
     </OSCALDocumentRoot>
   );
 }

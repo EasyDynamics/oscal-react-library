@@ -149,7 +149,13 @@ export default function OSCALProfile(props) {
       />
       <OSCALProfileCatalogInheritance inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs} />
       {profileImports}
-      <OSCALBackMatter backMatter={props.profile["back-matter"]} parentUrl={props.parentUrl} />
+      <OSCALBackMatter
+        backMatter={props.profile["back-matter"]}
+        parentUrl={props.parentUrl}
+        isEditable={props.isEditable}
+        onFieldSave={props.onFieldSave}
+        partialRestData={partialRestData}
+      />
     </OSCALDocumentRoot>
   );
 }

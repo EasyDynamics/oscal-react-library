@@ -1,7 +1,10 @@
 import React, { useRef, useState } from "react";
 import Typography from "@mui/material/Typography";
 import { Grid, TextField } from "@mui/material";
-import OSCALEditableFieldActions, { getElementLabel } from "./OSCALEditableFieldActions";
+import OSCALEditableFieldActions, {
+  getElementLabel,
+  updateListItem,
+} from "./OSCALEditableFieldActions";
 import { OSCALMarkupLine } from "./OSCALMarkupProse";
 
 function textFieldWithEditableActions(props, reference, inEditState, setInEditState) {
@@ -28,7 +31,14 @@ function textFieldWithEditableActions(props, reference, inEditState, setInEditSt
                   props.appendToLastFieldInPath,
                   props.partialRestData,
                   props.editedField,
-                  reference.current.value
+                  props.editedValueId
+                    ? updateListItem(
+                        props.editedValue,
+                        props.editedValueId,
+                        props.fieldName,
+                        reference.current.value
+                      )
+                    : reference.current.value
                 );
                 setInEditState(false);
               }
@@ -40,6 +50,9 @@ function textFieldWithEditableActions(props, reference, inEditState, setInEditSt
             appendToLastFieldInPath={props.appendToLastFieldInPath}
             inEditState={inEditState}
             editedField={props.editedField}
+            editedValue={props.editedValue}
+            editedValueId={props.editedValueId}
+            fieldName={props.fieldName}
             setInEditState={setInEditState}
             onCancel={props.onCancel}
             onFieldSave={props.onFieldSave}

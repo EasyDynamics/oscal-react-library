@@ -9,6 +9,12 @@ export function getElementLabel(editedField) {
   return editedField.toString().replace(/,/g, "-");
 }
 
+export function updateListItem(list, uuid, field, value) {
+  const updatedItem = list.find((item) => item.uuid === uuid);
+  updatedItem[field] = value;
+  return list;
+}
+
 export default function OSCALEditableFieldActions(props) {
   return props.inEditState ? (
     <>
@@ -25,7 +31,14 @@ export default function OSCALEditableFieldActions(props) {
                 props.appendToLastFieldInPath,
                 props.partialRestData,
                 props.editedField,
-                props.reference.current.value
+                props.editedValueId
+                  ? updateListItem(
+                      props.editedValue,
+                      props.editedValueId,
+                      props.fieldName,
+                      props.reference.current.value
+                    )
+                  : props.reference.current.value
               );
             } else {
               props.onFieldSave();
