@@ -1,4 +1,5 @@
-import BackMatterLookup from "./OSCALBackMatterUtils";
+import type { BackMatter } from "@easydynamics/oscal-types";
+import { BackMatterLookup } from "./OSCALBackMatterUtils";
 
 const mediaTypeRegex = /^image\//;
 const mediaType = "image/png";
@@ -31,7 +32,7 @@ const base64ResourceWrongMediaType = {
   uri: "#efd827a3-8ff2-449a-bcde-b710fde34ff8",
 };
 
-const backMatter = {
+const backMatter: BackMatter = {
   resources: [
     {
       uuid: rlinkResource.uuid,
@@ -50,7 +51,7 @@ const backMatter = {
       },
     },
     {
-      uuid: base64ResourceNoMediaType,
+      uuid: base64ResourceNoMediaType.uuid,
       base64: {
         value: base64Value,
       },
@@ -58,6 +59,7 @@ const backMatter = {
     {
       uuid: base64ResourceNoValue.uuid,
       base64: {
+        value: "",
         "media-type": mediaType,
       },
     },
@@ -76,7 +78,7 @@ describe("BackMatterLookup", () => {
     const lookup = new BackMatterLookup(backMatter);
 
     expect(lookup).toBeInstanceOf(BackMatterLookup);
-    expect(lookup.resolve("", "")).toBeDefined();
+    expect(lookup.resolve("", new RegExp(""))).toBeDefined();
   });
 
   test("resolves valid rlink resource", () => {
@@ -84,8 +86,8 @@ describe("BackMatterLookup", () => {
 
     const resource = lookup.resolve(rlinkResource.uri, mediaTypeRegex);
 
-    expect(resource.mediaType).toBe(mediaType);
-    expect(resource.uri).toBe(rlinkResource.href);
+    expect(resource?.mediaType).toBe(mediaType);
+    expect(resource?.uri).toBe(rlinkResource.href);
   });
 
   test("doesn't return rlink when preferring base64", () => {
@@ -101,8 +103,8 @@ describe("BackMatterLookup", () => {
 
     const resource = lookup.resolve(rlinkResource.uuid, mediaTypeRegex);
 
-    expect(resource.mediaType).toBeUndefined();
-    expect(resource.uri).toBe(rlinkResource.uuid);
+    expect(resource?.mediaType).toBeUndefined();
+    expect(resource?.uri).toBe(rlinkResource.uuid);
   });
 
   test("resolves valid base64 resource", () => {
@@ -110,8 +112,8 @@ describe("BackMatterLookup", () => {
 
     const resource = lookup.resolve(base64Resource.uri, mediaTypeRegex);
 
-    expect(resource.mediaType).toBe(mediaType);
-    expect(resource.uri).toBe(`data:${mediaType};base64,${base64Value}`);
+    expect(resource?.mediaType).toBe(mediaType);
+    expect(resource?.uri).toBe(`data:${mediaType};base64,${base64Value}`);
   });
 
   test("handles base64 resource without mediaType", () => {

@@ -30,7 +30,7 @@ describe("guessExtensionFromHref", () => {
   });
 
   it("gets NIST SP.800-97 Publication", async () => {
-    expect(guessExtensionFromHref(`"https://doi.org/10.6028/NIST.SP.800-97"`)).toEqual("Unknown");
+    expect(guessExtensionFromHref("https://doi.org/10.6028/NIST.SP.800-97")).toEqual("Unknown");
   });
 
   it("gets US government configuration baseline", async () => {

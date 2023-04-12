@@ -16,6 +16,7 @@ import OSCALComponentDefinition from "./OSCALComponentDefinition";
 import OSCALProfile from "./OSCALProfile";
 import OSCALLoaderForm from "./OSCALLoaderForm";
 import OSCALJsonEditor from "./OSCALJsonEditor";
+import { Convert } from "@easydynamics/oscal-types";
 
 const EditorToolbar = styled(Box)(
   ({ theme }) => `
@@ -81,16 +82,16 @@ export default function OSCALLoader(props) {
     fetch(newOscalUrl)
       .then((response) => {
         if (!response.ok) throw new Error(response.status);
-        else return response.json();
+        else return response.text();
       }, handleError)
-      .then((result) => {
-        if (!unmounted.current) {
+      .then((result) => Convert.toOscal(result), handleError)
+      .then((oscalObj) => {
+        if (!unmounted.current && result) {
+          const source = Convert.oscalToJson(oscalObj);
           // TODO: Currently data is passed to components through modifying objects.
           // This approach should be revisited.
           // https://github.com/EasyDynamics/oscal-react-library/issues/297
-          /* eslint no-param-reassign: "error" */
-          result.oscalSource = JSON.stringify(result, null, "\t");
-          setOscalData(result);
+          setOscalData({ ...oscalObj, source });
           setIsLoaded(true);
         }
       }, handleError);
@@ -408,6 +409,7 @@ export function OSCALSSPLoader(props) {
       system-security-plan={oscalData[oscalObjectType.jsonRootName]}
       isEditable={isRestMode}
       parentUrl={oscalUrl}
+      urlFragment={props.urlFragment}
       onResolutionComplete={onResolutionComplete}
       onFieldSave={(
         appendToLastFieldInPath,
@@ -459,6 +461,7 @@ export function OSCALComponentLoader(props) {
       componentDefinition={oscalData[oscalObjectType.jsonRootName]}
       isEditable={isRestMode}
       parentUrl={oscalUrl}
+      urlFragment={props.urlFragment}
       onResolutionComplete={onResolutionComplete}
       onFieldSave={(
         appendToLastFieldInPath,
@@ -509,6 +512,7 @@ export function OSCALProfileLoader(props) {
       profile={oscalData[oscalObjectType.jsonRootName]}
       isEditable={isRestMode}
       parentUrl={oscalUrl}
+      urlFragment={props.urlFragment}
       onResolutionComplete={onResolutionComplete}
       onFieldSave={(
         appendToLastFieldInPath,
