@@ -409,6 +409,7 @@ export function OSCALSSPLoader(props) {
       system-security-plan={oscalData[oscalObjectType.jsonRootName]}
       isEditable={isRestMode}
       parentUrl={oscalUrl}
+      urlFragment={props.urlFragment}
       onResolutionComplete={onResolutionComplete}
       onFieldSave={(
         appendToLastFieldInPath,
@@ -460,6 +461,7 @@ export function OSCALComponentLoader(props) {
       componentDefinition={oscalData[oscalObjectType.jsonRootName]}
       isEditable={isRestMode}
       parentUrl={oscalUrl}
+      urlFragment={props.urlFragment}
       onResolutionComplete={onResolutionComplete}
       onFieldSave={(
         appendToLastFieldInPath,
@@ -510,6 +512,7 @@ export function OSCALProfileLoader(props) {
       profile={oscalData[oscalObjectType.jsonRootName]}
       isEditable={isRestMode}
       parentUrl={oscalUrl}
+      urlFragment={props.urlFragment}
       onResolutionComplete={onResolutionComplete}
       onFieldSave={(
         appendToLastFieldInPath,
