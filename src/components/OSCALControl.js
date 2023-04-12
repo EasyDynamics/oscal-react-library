@@ -70,10 +70,9 @@ function ControlsList(props) {
 
 export default function OSCALControl(props) {
   if (
-    !props.includeAll &&
-    (!props.control ||
-      (props.includeControlIds &&
-        !props.includeControlIds.includes(props.control.id)))
+    !props.control ||
+    (props.includeControlIds &&
+      !props.includeControlIds.includes(props.control.id))
   ) {
     return null;
   }
