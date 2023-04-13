@@ -39,14 +39,54 @@ function getAlterAddsOrRemovesDisplay(addsRemovesElements, addsRemovesLabel, con
     ));
   let removedTypographies = null;
   if (addsRemovesLabel === "Removes ") {
-    removedTypographies = addsRemovesElements
-      .flatMap((element) => element ?? [])
-      .map((item) => (
+    const removeByIds = addsRemovesElements
+      .map((element) => element["by-id"])
+      .filter((part) => part)
+      ?.map((item) => (
         <Typography color="textSecondary" paragraph variant="body1" key={item.id}>
-          Attribute: {Object.keys.length > 0 ? Object.keys(item)[0] : ""}, Value:{" "}
-          {Object.values.length > 0 ? Object.values(item)[0] : ""}
+          Attribute: {"by-id"}, Value: {item}
         </Typography>
       ));
+    const removeByClass = addsRemovesElements
+      .map((element) => element["by-class"])
+      .filter((part) => part)
+      ?.map((item) => (
+        <Typography color="textSecondary" paragraph variant="body1" key={item.id}>
+          Attribute: {"by-class"}, Value: {item}
+        </Typography>
+      ));
+    const removeByNs = addsRemovesElements
+      .map((element) => element["by-ns"])
+      .filter((part) => part)
+      ?.map((item) => (
+        <Typography color="textSecondary" paragraph variant="body1" key={item.id}>
+          Attribute: {"by-ns"}, Value: {item}
+        </Typography>
+      ));
+    const removeByName = addsRemovesElements
+      .map((element) => element["by-name"])
+      .filter((part) => part)
+      ?.map((item) => (
+        <Typography color="textSecondary" paragraph variant="body1" key={item.id}>
+          Attribute: {"by-name"}, Value: {item}
+        </Typography>
+      ));
+    const removeByItemName = addsRemovesElements
+      .map((element) => element["by-item-name"])
+      .filter((part) => part)
+      ?.map((item) => (
+        <Typography color="textSecondary" paragraph variant="body1" key={item.id}>
+          Attribute: {"by-item-name"}, Value: {item}
+        </Typography>
+      ));
+
+    removedTypographies = [
+      ...(removeByClass ?? []),
+      ...(removeByNs ?? []),
+      ...(removeByIds ?? []),
+      ...(removeByName ?? []),
+      ...(removeByItemName ?? []),
+    ];
   }
 
   const labelTypograhy = <Typography variant="h6">{addsRemovesLabel}</Typography>;
