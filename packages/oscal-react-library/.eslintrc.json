@@ -63,8 +63,11 @@
       {
         "devDependencies": [
           "**/*.test.js",
+          "**/*.test.tsx",
           "**/setupTests.js",
-          "**/TestUtils.js"
+          "**/TestUtils.js",
+          "jest.config.ts",
+          "rollup.config.js"
         ]
       }
     ],
