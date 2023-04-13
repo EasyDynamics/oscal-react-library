@@ -31,7 +31,7 @@ export function updateListItem(
   list: EditableListItem[],
   uuid: string,
   field: string,
-  value: EditableListItem
+  value: string
 ): EditableListItem[] {
   const updatedItem = list.find((item) => item.uuid === uuid);
 

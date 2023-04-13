@@ -6,8 +6,14 @@ import OSCALEditableFieldActions, {
   updateListItem,
 } from "./OSCALEditableFieldActions";
 import { OSCALMarkupLine } from "./OSCALMarkupProse";
+import { TypographyVariant } from "@mui/material";
 
-function textFieldWithEditableActions(props, reference, inEditState, setInEditState) {
+function textFieldWithEditableActions(
+  props: any,
+  reference: React.MutableRefObject<string>,
+  inEditState: boolean,
+  setInEditState: React.Dispatch<React.SetStateAction<boolean>>
+) {
   if (inEditState) {
     return (
       <>
@@ -36,9 +42,9 @@ function textFieldWithEditableActions(props, reference, inEditState, setInEditSt
                         props.editedValue,
                         props.editedValueId,
                         props.fieldName,
-                        reference.current.value
+                        reference.current
                       )
-                    : reference.current.value
+                    : reference.current
                 );
                 setInEditState(false);
               }
@@ -79,14 +85,38 @@ function textFieldWithEditableActions(props, reference, inEditState, setInEditSt
   );
 }
 
-export default function OSCALEditableTextField(props) {
+export interface EditableFieldProps {
+  isEditable?: boolean;
+  onFieldSave?: (...args: any[]) => void;
+  partialRestData?: any;
+}
+
+interface EditableTextFieldProps extends EditableFieldProps {
+  fieldName: string;
+  /**
+   * Whether the field is editable.
+   */
+  canEdit: boolean;
+  editedField: string[] | null;
+  /**
+   * The value that is edited?
+   */
+  editedValue?: any;
+  editedValueId?: string;
+  value?: string;
+  size?: number;
+  textFieldSize?: string;
+  typographyVariant?: TypographyVariant;
+}
+
+export default function OSCALEditableTextField(props: EditableTextFieldProps) {
   const reference = useRef("reference to text field");
-  const [inEditState, setInEditState] = useState(props.inEditState);
+  const [inEditState, setInEditState] = useState(false);
 
   return props.canEdit ? (
     textFieldWithEditableActions(props, reference, inEditState, setInEditState)
   ) : (
-    <Grid item className={props.className}>
+    <Grid item>
       <Typography variant={props.typographyVariant}>{props.value}</Typography>
     </Grid>
   );

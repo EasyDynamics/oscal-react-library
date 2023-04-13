@@ -12,7 +12,7 @@ import { getAbsoluteUrl, guessExtensionFromHref } from "./oscal-utils/OSCALLinkU
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALMarkupLine } from "./OSCALMarkupProse";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
-import OSCALEditableTextField from "./OSCALEditableTextField";
+import OSCALEditableTextField, { EditableFieldProps } from "./OSCALEditableTextField";
 import { Resource, ResourceLink, BackMatter } from "@easydynamics/oscal-types";
 import { ReactElement } from "react";
 
@@ -77,15 +77,10 @@ function getObjectRootKey(object: unknown): string {
   return keys[0];
 }
 
-interface EditableFieldProps {
-  isEditable?: boolean;
-  onFieldSave?: (...args: any[]) => void;
-  partialRestData?: Record<string, any>;
-}
-
 interface OSCALBackMatterProps extends EditableFieldProps {
   backMatter: BackMatter | undefined;
   parentUrl: string;
+  isEditable: boolean;
 }
 
 interface BackMatterResourceProps extends OSCALBackMatterProps {
