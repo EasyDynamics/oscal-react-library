@@ -85,8 +85,8 @@ export default function OSCALControlPart(props) {
       />
     );
   }
-
-  const { controlId, controlPartId } = modificationDisplay?.props;
+  const controlId = modificationDisplay?.props?.controlId ?? "";
+  const controlPartId = modificationDisplay?.props?.controlPartId ?? "";
   const removeByIds = modificationDisplay?.props?.modificationAlters
     ?.find((item) => item["control-id"] === controlId)
     ?.removes?.find((object) => object["by-id"] === controlPartId);
