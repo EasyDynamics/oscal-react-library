@@ -4,9 +4,15 @@ import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import { IconButton } from "@mui/material";
 import StyledTooltip from "./OSCALStyledTooltip";
+import { ReactElement } from "react-markdown/lib/react-markdown";
 
 export function getElementLabel(editedField: any): string {
   return editedField.toString().replace(/,/g, "-");
+}
+
+interface EditableListItem {
+  uuid: string;
+  [key: string]: any;
 }
 
 /**
@@ -21,13 +27,22 @@ export function getElementLabel(editedField: any): string {
  *
  * @returns the updated json list
  */
-export function updateListItem(list: any, uuid: string, field: string, value: any): any {
-  const updatedItem = list.find((item: any) => item.uuid === uuid);
-  updatedItem[field] = value;
+export function updateListItem(
+  list: EditableListItem[],
+  uuid: string,
+  field: string,
+  value: EditableListItem
+): EditableListItem[] {
+  const updatedItem = list.find((item) => item.uuid === uuid);
+
+  if (updatedItem) {
+    updatedItem[field] = value;
+  }
+
   return list;
 }
 
-export default function OSCALEditableFieldActions(props: any): any {
+export default function OSCALEditableFieldActions(props: any): ReactElement {
   return props.inEditState ? (
     <>
       <StyledTooltip title="Save">

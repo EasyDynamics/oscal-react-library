@@ -13,7 +13,8 @@ import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALMarkupLine } from "./OSCALMarkupProse";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import OSCALEditableTextField from "./OSCALEditableTextField";
-import { Resource, ResourceLink } from "@easydynamics/oscal-types";
+import { Resource, ResourceLink, BackMatter } from "@easydynamics/oscal-types";
+import { ReactElement } from "react";
 
 export const OSCALBackMatterCard = styled(Card)(
   ({ theme }) => `
@@ -23,7 +24,7 @@ export const OSCALBackMatterCard = styled(Card)(
 `
 );
 
-function TitleDisplay(props: any): any {
+function TitleDisplay(props: any): ReactElement {
   const { children, uuid } = props;
   return (
     <OSCALAnchorLinkHeader value={uuid}>
@@ -32,7 +33,7 @@ function TitleDisplay(props: any): any {
   );
 }
 
-function CitationDisplay(props: any): any {
+function CitationDisplay(props: any): ReactElement {
   if (!props.resource?.citation?.text) {
     return (
       <FormatQuoteIcon
@@ -53,14 +54,34 @@ function CitationDisplay(props: any): any {
   );
 }
 
-export default function OSCALBackMatter(props: any): any {
-  if (!props.backMatter) {
-    return null;
+function getObjectRootKey(object: any): string {
+  if (!object) {
+    return "";
   }
 
+  const keys = Object.keys(object);
+  if (keys.length !== 1) {
+    throw new Error(
+      `The given object does not have exactly one root key ${JSON.stringify(object)}`
+    );
+  }
+  return keys[0];
+}
+
+interface OSCALBackMatterProps {
+  backMatter: BackMatter | undefined;
+  parentUrl: string;
+  isEditable?: boolean;
+  onFieldSave?: (...args: any[]) => void;
+  partialRestData?: Record<string, any>;
+}
+
+export default function OSCALBackMatter(props: OSCALBackMatterProps): ReactElement {
   const getMediaType = (rlink: ResourceLink) =>
     rlink["media-type"] ||
     guessExtensionFromHref(getAbsoluteUrl(rlink.href, props.parentUrl) ?? "");
+
+  const objectKey = getObjectRootKey(props.partialRestData);
 
   const backMatterDisplay = (resource: Resource) => (
     <Grid item xs={3} key={resource.uuid}>
@@ -72,21 +93,15 @@ export default function OSCALBackMatter(props: any): any {
                 <OSCALEditableTextField
                   fieldName="title"
                   canEdit={props.isEditable}
-                  editedField={
-                    props.isEditable
-                      ? [Object.keys(props.partialRestData)[0], "back-matter", "resources"]
-                      : null
-                  }
-                  editedValue={props.backMatter.resources}
+                  editedField={props.isEditable ? [objectKey, "back-matter", "resources"] : null}
+                  editedValue={props.backMatter?.resources}
                   editedValueId={resource.uuid}
                   onFieldSave={props.onFieldSave}
                   partialRestData={
                     props.isEditable
                       ? {
-                          [Object.keys(props.partialRestData)[0]]: {
-                            "back-matter": {
-                              resources: props.backMatter.resources,
-                            },
+                          [objectKey]: {
+                            "back-matter": props.backMatter,
                           },
                         }
                       : null
@@ -104,21 +119,15 @@ export default function OSCALBackMatter(props: any): any {
           <OSCALEditableTextField
             fieldName="description"
             canEdit={props.isEditable}
-            editedField={
-              props.isEditable
-                ? [Object.keys(props.partialRestData)[0], "back-matter", "resources"]
-                : null
-            }
-            editedValue={props.backMatter.resources}
+            editedField={props.isEditable ? [objectKey, "back-matter", "resources"] : null}
+            editedValue={props.backMatter?.resources}
             editedValueId={resource.uuid}
             onFieldSave={props.onFieldSave}
             partialRestData={
               props.isEditable
                 ? {
-                    [Object.keys(props.partialRestData)[0]]: {
-                      "back-matter": {
-                        resources: props.backMatter.resources,
-                      },
+                    [objectKey]: {
+                      "back-matter": props.backMatter,
                     },
                   }
                 : null
@@ -126,20 +135,19 @@ export default function OSCALBackMatter(props: any): any {
             value={resource.description}
           />
           <Typography>
-            {resource.rlinks &&
-              resource.rlinks.map((rlink: ResourceLink) => (
-                <Chip
-                  icon={<OpenInNewIcon />}
-                  key={rlink.href}
-                  label={getMediaType(rlink)}
-                  component="a"
-                  role="button"
-                  href={getAbsoluteUrl(rlink.href, props.parentUrl)}
-                  target="_blank"
-                  variant="outlined"
-                  clickable
-                />
-              ))}
+            {resource.rlinks?.map((rlink) => (
+              <Chip
+                icon={<OpenInNewIcon />}
+                key={rlink.href}
+                label={getMediaType(rlink)}
+                component="a"
+                role="button"
+                href={getAbsoluteUrl(rlink.href, props.parentUrl)}
+                target="_blank"
+                variant="outlined"
+                clickable
+              />
+            ))}
           </Typography>
         </CardContent>
       </OSCALBackMatterCard>
@@ -161,7 +169,7 @@ export default function OSCALBackMatter(props: any): any {
             </Grid>
           </Grid>
           <Grid container spacing={2} padding={2}>
-            {props.backMatter.resources.map((resource: Resource) => backMatterDisplay(resource))}
+            {props.backMatter?.resources?.map((resource) => backMatterDisplay(resource))}
           </Grid>
         </CardContent>
       </Card>
