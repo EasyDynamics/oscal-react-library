@@ -86,12 +86,12 @@ export default function OSCALLoader(props) {
       }, handleError)
       .then((result) => Convert.toOscal(result), handleError)
       .then((oscalObj) => {
-        if (!unmounted.current && result) {
+        if (!unmounted.current) {
           const source = Convert.oscalToJson(oscalObj);
           // TODO: Currently data is passed to components through modifying objects.
           // This approach should be revisited.
           // https://github.com/EasyDynamics/oscal-react-library/issues/297
-          setOscalData({ ...oscalObj, source });
+          setOscalData({ ...oscalObj, oscalSource: source });
           setIsLoaded(true);
         }
       }, handleError);
