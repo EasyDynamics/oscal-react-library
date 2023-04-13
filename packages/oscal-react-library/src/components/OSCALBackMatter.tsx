@@ -24,7 +24,12 @@ export const OSCALBackMatterCard = styled(Card)(
 `
 );
 
-function TitleDisplay(props: any): ReactElement {
+interface TitleDisplayProps {
+  uuid: string;
+  children: any | any[];
+}
+
+function TitleDisplay(props: TitleDisplayProps): ReactElement {
   const { children, uuid } = props;
   return (
     <OSCALAnchorLinkHeader value={uuid}>
@@ -33,8 +38,12 @@ function TitleDisplay(props: any): ReactElement {
   );
 }
 
-function CitationDisplay(props: any): ReactElement {
-  if (!props.resource?.citation?.text) {
+interface CitationDisplayProps {
+  readonly resource: Resource;
+}
+
+function CitationDisplay(props: CitationDisplayProps): ReactElement {
+  if (!props.resource.citation?.text) {
     return (
       <FormatQuoteIcon
         color="disabled"
@@ -54,7 +63,7 @@ function CitationDisplay(props: any): ReactElement {
   );
 }
 
-function getObjectRootKey(object: any): string {
+function getObjectRootKey(object: unknown): string {
   if (!object) {
     return "";
   }
@@ -68,22 +77,31 @@ function getObjectRootKey(object: any): string {
   return keys[0];
 }
 
-interface OSCALBackMatterProps {
-  backMatter: BackMatter | undefined;
-  parentUrl: string;
+interface EditableFieldProps {
   isEditable?: boolean;
   onFieldSave?: (...args: any[]) => void;
   partialRestData?: Record<string, any>;
 }
 
-export default function OSCALBackMatter(props: OSCALBackMatterProps): ReactElement {
+interface OSCALBackMatterProps extends EditableFieldProps {
+  backMatter: BackMatter | undefined;
+  parentUrl: string;
+}
+
+interface BackMatterResourceProps extends OSCALBackMatterProps {
+  resource: Resource;
+}
+
+function BackMatterResource(props: BackMatterResourceProps) {
+  const { resource } = props;
+
   const getMediaType = (rlink: ResourceLink) =>
     rlink["media-type"] ||
     guessExtensionFromHref(getAbsoluteUrl(rlink.href, props.parentUrl) ?? "");
 
   const objectKey = getObjectRootKey(props.partialRestData);
 
-  const backMatterDisplay = (resource: Resource) => (
+  return (
     <Grid item xs={3} key={resource.uuid}>
       <OSCALBackMatterCard>
         <CardContent>
@@ -153,7 +171,9 @@ export default function OSCALBackMatter(props: OSCALBackMatterProps): ReactEleme
       </OSCALBackMatterCard>
     </Grid>
   );
+}
 
+export default function OSCALBackMatter(props: OSCALBackMatterProps): ReactElement {
   return (
     <OSCALSection>
       <Card>
@@ -169,7 +189,17 @@ export default function OSCALBackMatter(props: OSCALBackMatterProps): ReactEleme
             </Grid>
           </Grid>
           <Grid container spacing={2} padding={2}>
-            {props.backMatter?.resources?.map((resource) => backMatterDisplay(resource))}
+            {props.backMatter?.resources?.map((resource) => (
+              <BackMatterResource
+                key={resource.uuid}
+                backMatter={props.backMatter}
+                isEditable={props.isEditable}
+                onFieldSave={props.onFieldSave}
+                partialRestData={props.partialRestData}
+                resource={resource}
+                parentUrl={props.parentUrl}
+              />
+            ))}
           </Grid>
         </CardContent>
       </Card>

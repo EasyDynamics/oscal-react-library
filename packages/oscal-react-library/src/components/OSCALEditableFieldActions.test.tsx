@@ -23,7 +23,7 @@ test("OSCALEditableFieldActions loads", () => {
   );
 });
 
-export default function testOSCALEditableFieldActions(parentElementName: any, renderer: any) {
+export default function testOSCALEditableFieldActions(parentElementName: string, renderer: any) {
   test(`${parentElementName} displays edit icon`, () => {
     renderer();
 
