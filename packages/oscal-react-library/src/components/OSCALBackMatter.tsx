@@ -119,6 +119,7 @@ function BackMatterResource(props: BackMatterResourceProps) {
                     props.isEditable
                       ? {
                           [objectKey]: {
+                            uuid: props.partialRestData?.[objectKey].uuid,
                             "back-matter": props.backMatter,
                           },
                         }
@@ -145,6 +146,7 @@ function BackMatterResource(props: BackMatterResourceProps) {
               props.isEditable
                 ? {
                     [objectKey]: {
+                      uuid: props.partialRestData?.[objectKey].uuid,
                       "back-matter": props.backMatter,
                     },
                   }
