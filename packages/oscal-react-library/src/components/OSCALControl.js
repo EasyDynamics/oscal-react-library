@@ -95,7 +95,6 @@ export default function OSCALControl(props) {
     modificationAlters,
     showInList,
     childLevel,
-    includeAll,
     excludeControlIds,
   } = props;
 
@@ -111,7 +110,7 @@ export default function OSCALControl(props) {
     elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
   }, [listItemOpened, isItemNavigatedTo, urlFragment]);
 
-  if (!includeAll && (!control || (includeControlIds && !includeControlIds.includes(control.id)))) {
+  if (!control || (includeControlIds && !includeControlIds.includes(control.id))) {
     return null;
   }
   if (!control || (excludeControlIds && excludeControlIds.includes(control.id))) {
