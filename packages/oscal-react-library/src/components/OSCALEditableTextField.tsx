@@ -89,7 +89,7 @@ export interface EditableFieldProps {
   /**
    * True if in editor mode
    */
-  isEditable: boolean;
+  isEditable?: boolean;
   /**
    * Currently this is the handleFieldSave() function passed down from the OSCALLoader.
    * All of the funcionality of editing require this function.
