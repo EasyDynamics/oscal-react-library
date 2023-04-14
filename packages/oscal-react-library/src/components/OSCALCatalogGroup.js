@@ -71,7 +71,7 @@ function CollapsibleListItem(props) {
     fragmentSuffix,
     listItemOpened,
     setListItemOpened,
-    isSetListItemNavigatedTo,
+    setIsListItemNavigatedTo,
     previousHandledFragment,
     setPreviousHandledFragment,
   } = props;
@@ -83,7 +83,7 @@ function CollapsibleListItem(props) {
 
   useEffect(() => {
     if (listItemOpened) {
-      isSetListItemNavigatedTo(true);
+      setIsListItemNavigatedTo(true);
       return;
     }
 
@@ -100,7 +100,7 @@ function CollapsibleListItem(props) {
     urlFragment,
     fragmentSuffix,
     listItemOpened,
-    isSetListItemNavigatedTo,
+    setIsListItemNavigatedTo,
     listId,
     previousHandledFragment,
     setPreviousHandledFragment,
@@ -162,10 +162,10 @@ function OSCALCatalogControlListItem(props) {
     previousHandledFragment,
     setPreviousHandledFragment,
   } = props;
-  const [isListItemNavigatedTo, isSetListItemNavigatedTo] = React.useState(false);
+  const [isListItemNavigatedTo, setIsListItemNavigatedTo] = React.useState(false);
   useEffect(() => {
     if (!isControlListItemOpened) {
-      isSetListItemNavigatedTo(false);
+      setIsListItemNavigatedTo(false);
     }
   }, [isControlListItemOpened]);
 
@@ -202,7 +202,7 @@ function OSCALCatalogControlListItem(props) {
       setListItemOpened={setIsControlListItemOpened}
       listId={control?.id}
       isListItemNavigatedTo={isListItemNavigatedTo}
-      isSetListItemNavigatedTo={isSetListItemNavigatedTo}
+      setIsListItemNavigatedTo={setIsListItemNavigatedTo}
       previousHandledFragment={previousHandledFragment}
       setPreviousHandledFragment={setPreviousHandledFragment}
     >
@@ -234,7 +234,7 @@ function OSCALCatalogGroupList(props) {
     previousHandledFragment,
     setPreviousHandledFragment,
   } = props;
-  const [isListItemNavigatedTo, isSetListItemNavigatedTo] = React.useState(false);
+  const [isListItemNavigatedTo, setIsListItemNavigatedTo] = React.useState(false);
   const itemText = (
     <OSCALAnchorLinkHeader
       value={appendToFragmentPrefix(
@@ -260,7 +260,7 @@ function OSCALCatalogGroupList(props) {
       listItemOpened={isControlListItemOpened}
       setListItemOpened={setIsControlListItemOpened}
       isListItemNavigatedTo={isListItemNavigatedTo}
-      isSetListItemNavigatedTo={isSetListItemNavigatedTo}
+      setIsListItemNavigatedTo={setIsListItemNavigatedTo}
       previousHandledFragment={previousHandledFragment}
       setPreviousHandledFragment={setPreviousHandledFragment}
     >
