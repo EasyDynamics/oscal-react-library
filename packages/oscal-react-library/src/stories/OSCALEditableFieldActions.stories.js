@@ -15,13 +15,13 @@ export const Default = Template.bind({});
 export const InEditMode = Template.bind({});
 
 Default.args = {
-  canEdit: true,
+  isEditable: true,
   modifiableData: { edit: [false, () => {}] },
   editedField: ["storybook", "default"],
 };
 
 InEditMode.args = {
-  canEdit: true,
+  isEditable: true,
   modifiableData: { edit: [true, () => {}] },
   editedField: ["storybook", "edit-mode"],
 };

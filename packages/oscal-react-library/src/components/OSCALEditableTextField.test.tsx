@@ -10,7 +10,7 @@ describe("OSCALEditableTextField", () => {
   test(`displays default value as "Test Title"`, () => {
     render(
       <OSCALEditableTextField
-        canEdit
+        isEditable
         editedField={editedMetadataField}
         fieldName={fieldName}
         value={value}
@@ -31,7 +31,7 @@ describe("OSCALEditableTextField", () => {
   test(`remains same on ESC`, () => {
     render(
       <OSCALEditableTextField
-        canEdit
+        isEditable
         editedField={editedMetadataField}
         fieldName={fieldName}
         value={value}
@@ -57,7 +57,7 @@ describe("OSCALEditableTextField", () => {
   test(`remains same Enter`, () => {
     render(
       <OSCALEditableTextField
-        canEdit
+        isEditable
         editedField={editedMetadataField}
         fieldName={fieldName}
         value={value}
@@ -83,7 +83,7 @@ describe("OSCALEditableTextField", () => {
   test(`changes value on Enter`, () => {
     render(
       <OSCALEditableTextField
-        canEdit
+        isEditable
         editedField={editedMetadataField}
         fieldName={fieldName}
         value={value}
@@ -112,7 +112,7 @@ describe("OSCALEditableFieldActions", () => {
   test(`displays edit icon`, () => {
     render(
       <OSCALEditableTextField
-        canEdit
+        isEditable
         editedField={editedMetadataField}
         fieldName={fieldName}
         value={value}
@@ -129,7 +129,7 @@ describe("OSCALEditableFieldActions", () => {
   test(`displays edit tooltip on hover`, async () => {
     render(
       <OSCALEditableTextField
-        canEdit
+        isEditable
         editedField={editedMetadataField}
         fieldName={fieldName}
         value={value}
@@ -150,7 +150,7 @@ describe("OSCALEditableFieldActions", () => {
   test(`displays save icon on edit icon click`, () => {
     render(
       <OSCALEditableTextField
-        canEdit
+        isEditable
         editedField={editedMetadataField}
         fieldName={fieldName}
         value={value}
@@ -172,7 +172,7 @@ describe("OSCALEditableFieldActions", () => {
   test(`displays save tooltip on hover`, async () => {
     render(
       <OSCALEditableTextField
-        canEdit
+        isEditable
         editedField={editedMetadataField}
         fieldName={fieldName}
         value={value}
@@ -197,7 +197,7 @@ describe("OSCALEditableFieldActions", () => {
   test(`displays cancel icon on edit icon click`, () => {
     render(
       <OSCALEditableTextField
-        canEdit
+        isEditable
         editedField={editedMetadataField}
         fieldName={fieldName}
         value={value}
@@ -219,7 +219,7 @@ describe("OSCALEditableFieldActions", () => {
   test(`displays cancel tooltip on hover`, async () => {
     render(
       <OSCALEditableTextField
-        canEdit
+        isEditable
         editedField={editedMetadataField}
         fieldName={fieldName}
         value={value}

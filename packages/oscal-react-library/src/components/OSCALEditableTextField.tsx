@@ -107,10 +107,6 @@ interface EditableTextFieldProps extends EditableFieldProps {
    */
   fieldName: string;
   /**
-   * Whether the field is editable.
-   */
-  canEdit: boolean;
-  /**
    * Path of each parent of field.
    *
    * @example: ["catalog", "back-matter", "resources"]
@@ -153,7 +149,7 @@ export default function OSCALEditableTextField(props: EditableTextFieldProps) {
   const reference = useRef("reference to text field");
   const [inEditState, setInEditState] = useState(false);
 
-  return props.canEdit ? (
+  return props.isEditable ? (
     textFieldWithEditableActions(props, reference, inEditState, setInEditState)
   ) : (
     <Grid item>
