@@ -4,6 +4,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Chip from "@mui/material/Chip";
 import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
 import { Typography } from "@mui/material";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
@@ -137,7 +138,7 @@ function BackMatterResource(props: BackMatterResourceProps) {
           </Grid>
           <OSCALEditableTextField
             fieldName="description"
-            isEditable={!!props.isEditable}
+            isEditable={props.isEditable}
             editedField={props.isEditable ? [objectKey, "back-matter", "resources"] : null}
             editedValue={props.backMatter?.resources}
             editedValueId={resource.uuid}
@@ -180,16 +181,12 @@ export default function OSCALBackMatter(props: OSCALBackMatterProps): ReactEleme
     <OSCALSection>
       <Card>
         <CardContent>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <OSCALAnchorLinkHeader>
-                <OSCALSectionHeader>Back Matter</OSCALSectionHeader>
-              </OSCALAnchorLinkHeader>
-            </Grid>
-            <Grid item xs={7}>
-              <Typography variant="body1">Resources</Typography>
-            </Grid>
-          </Grid>
+          <Stack>
+            <OSCALAnchorLinkHeader>
+              <OSCALSectionHeader>Back Matter</OSCALSectionHeader>
+            </OSCALAnchorLinkHeader>
+            <Typography variant="body1">Resources</Typography>
+          </Stack>
           <Grid container spacing={2} padding={2}>
             {props.backMatter?.resources?.map((resource) => (
               <BackMatterResource

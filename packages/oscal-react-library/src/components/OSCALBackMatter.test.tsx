@@ -10,48 +10,24 @@ import {
 
 describe("OSCAL Backmatter", () => {
   test(`displays resource title`, () => {
-    render(
-      <OSCALBackMatter
-        backMatter={backMatterTestData}
-        parentUrl={parentUrlTestData}
-        isEditable={false}
-      />
-    );
+    render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     const result = screen.getByText("Resource Test Title");
     expect(result).toBeVisible();
   });
 
   test(`displays resource description`, async () => {
-    render(
-      <OSCALBackMatter
-        backMatter={backMatterTestData}
-        parentUrl={parentUrlTestData}
-        isEditable={false}
-      />
-    );
+    render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     expect(await screen.findByText("This is a test description for resource")).toBeInTheDocument();
   });
 
   test(`displays media-type`, async () => {
-    render(
-      <OSCALBackMatter
-        backMatter={backMatterTestData}
-        parentUrl={parentUrlTestData}
-        isEditable={false}
-      />
-    );
+    render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     const result = screen.getByText("application/oscal.catalog+json");
     expect(result).toBeVisible();
   });
 
   test(`renders absolute href`, async () => {
-    render(
-      <OSCALBackMatter
-        backMatter={backMatterTestData}
-        parentUrl={parentUrlTestData}
-        isEditable={false}
-      />
-    );
+    render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     const button = screen.getByRole("button", {
       name: "application/oscal.catalog+json",
     });
@@ -59,13 +35,7 @@ describe("OSCAL Backmatter", () => {
   });
 
   test(`renders relative href`, async () => {
-    render(
-      <OSCALBackMatter
-        backMatter={backMatterTestData}
-        parentUrl={parentUrlTestData}
-        isEditable={false}
-      />
-    );
+    render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     const button = screen.getByRole("button", {
       name: "application/oscal.catalog+json2",
     });
@@ -73,13 +43,7 @@ describe("OSCAL Backmatter", () => {
   });
 
   test(`displays external link icon`, async () => {
-    render(
-      <OSCALBackMatter
-        backMatter={backMatterTestData}
-        parentUrl={parentUrlTestData}
-        isEditable={false}
-      />
-    );
+    render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     const button = screen.getByRole("button", {
       name: /application\/something\.else/i,
     });
@@ -92,7 +56,6 @@ describe("OSCAL Backmatter", () => {
       <OSCALBackMatter
         backMatter={exampleBackMatterWithoutMediaType}
         parentUrl={parentUrlTestData}
-        isEditable={false}
       />
     );
     const button = screen.getByRole("button", {
@@ -106,7 +69,6 @@ describe("OSCAL Backmatter", () => {
       <OSCALBackMatter
         backMatter={exampleBackMatterWithoutMediaTypeAndUnknownExtension}
         parentUrl={parentUrlTestData}
-        isEditable={false}
       />
     );
     const button = screen.getByRole("button", {
