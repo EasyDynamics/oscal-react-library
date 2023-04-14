@@ -7,7 +7,7 @@ const editedMetadataField = ["metadata"];
 const value = "Test Title";
 
 describe("OSCALEditableTextField", () => {
-  test(`displays default value as "Test Title"`, () => {
+  test('displays default value as "Test Title"', () => {
     render(
       <OSCALEditableTextField
         isEditable
@@ -28,7 +28,7 @@ describe("OSCALEditableTextField", () => {
     expect((textField as HTMLInputElement).value).toEqual(value);
   });
 
-  test(`remains same on ESC`, () => {
+  test("remains same on ESC", () => {
     render(
       <OSCALEditableTextField
         isEditable
@@ -54,7 +54,7 @@ describe("OSCALEditableTextField", () => {
     expect((textField as HTMLInputElement).value).toEqual(value);
   });
 
-  test(`remains same Enter`, () => {
+  test("remains same Enter", () => {
     render(
       <OSCALEditableTextField
         isEditable
@@ -80,7 +80,7 @@ describe("OSCALEditableTextField", () => {
     expect((textField as HTMLInputElement).value).toEqual(value);
   });
 
-  test(`changes value on Enter`, () => {
+  test("changes value on Enter", () => {
     render(
       <OSCALEditableTextField
         isEditable
@@ -109,7 +109,7 @@ describe("OSCALEditableTextField", () => {
 });
 
 describe("OSCALEditableFieldActions", () => {
-  test(`displays edit icon`, () => {
+  test("displays edit icon", () => {
     render(
       <OSCALEditableTextField
         isEditable
@@ -126,7 +126,7 @@ describe("OSCALEditableFieldActions", () => {
     expect(editButton).toBeVisible();
   });
 
-  test(`displays edit tooltip on hover`, async () => {
+  test("displays edit tooltip on hover", async () => {
     render(
       <OSCALEditableTextField
         isEditable
@@ -147,7 +147,7 @@ describe("OSCALEditableFieldActions", () => {
     expect(editText).toBeVisible();
   });
 
-  test(`displays save icon on edit icon click`, () => {
+  test("displays save icon on edit icon click", () => {
     render(
       <OSCALEditableTextField
         isEditable
@@ -169,7 +169,7 @@ describe("OSCALEditableFieldActions", () => {
     expect(saveButton).toBeVisible();
   });
 
-  test(`displays save tooltip on hover`, async () => {
+  test("displays save tooltip on hover", async () => {
     render(
       <OSCALEditableTextField
         isEditable
@@ -194,7 +194,7 @@ describe("OSCALEditableFieldActions", () => {
     expect(saveText).toBeVisible();
   });
 
-  test(`displays cancel icon on edit icon click`, () => {
+  test("displays cancel icon on edit icon click", () => {
     render(
       <OSCALEditableTextField
         isEditable
@@ -216,7 +216,7 @@ describe("OSCALEditableFieldActions", () => {
     expect(cancelButton).toBeVisible();
   });
 
-  test(`displays cancel tooltip on hover`, async () => {
+  test("displays cancel tooltip on hover", async () => {
     render(
       <OSCALEditableTextField
         isEditable

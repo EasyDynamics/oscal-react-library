@@ -9,24 +9,24 @@ import {
 } from "../test-data/BackMatterData";
 
 describe("OSCAL Backmatter", () => {
-  test(`displays resource title`, () => {
+  test("displays resource title", () => {
     render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     const result = screen.getByText("Resource Test Title");
     expect(result).toBeVisible();
   });
 
-  test(`displays resource description`, async () => {
+  test("displays resource description", async () => {
     render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     expect(await screen.findByText("This is a test description for resource")).toBeInTheDocument();
   });
 
-  test(`displays media-type`, async () => {
+  test("displays media-type", async () => {
     render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     const result = screen.getByText("application/oscal.catalog+json");
     expect(result).toBeVisible();
   });
 
-  test(`renders absolute href`, async () => {
+  test("renders absolute href", async () => {
     render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     const button = screen.getByRole("button", {
       name: "application/oscal.catalog+json",
@@ -34,7 +34,7 @@ describe("OSCAL Backmatter", () => {
     expect(button.getAttribute("href")).toEqual(revFourCatalog);
   });
 
-  test(`renders relative href`, async () => {
+  test("renders relative href", async () => {
     render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     const button = screen.getByRole("button", {
       name: "application/oscal.catalog+json2",
@@ -42,7 +42,7 @@ describe("OSCAL Backmatter", () => {
     expect(button.getAttribute("href")).toEqual(revFourCatalog);
   });
 
-  test(`displays external link icon`, async () => {
+  test("displays external link icon", async () => {
     render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     const button = screen.getByRole("button", {
       name: /application\/something\.else/i,
@@ -51,7 +51,7 @@ describe("OSCAL Backmatter", () => {
     within(button).getByTestId("OpenInNewIcon");
   });
 
-  test(`renders valid media type extension`, async () => {
+  test("renders valid media type extension", async () => {
     render(
       <OSCALBackMatter
         backMatter={exampleBackMatterWithoutMediaType}
@@ -64,7 +64,7 @@ describe("OSCAL Backmatter", () => {
     expect(button.getAttribute("href")).toBeTruthy();
   });
 
-  test(`renders "Unknown" media type extension`, async () => {
+  test('renders "Unknown" media type extension', async () => {
     render(
       <OSCALBackMatter
         backMatter={exampleBackMatterWithoutMediaTypeAndUnknownExtension}
