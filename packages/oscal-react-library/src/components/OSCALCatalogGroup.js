@@ -45,11 +45,11 @@ const StyledControlDescriptionWrapper = styled("div")`
 /**
  * Validates fragment and determines if top fragment item matches a list ID.
  *
- * @param {*} urlFragment The fragment currently being handled
- * @param {*} previousHandledFragment The previous handled fragment
- * @param {*} fragmentSuffix String with current item and sub items
- * @param {*} listId The group/control ID
- * @returns
+ * @param {string} urlFragment The fragment currently being handled
+ * @param {string} previousHandledFragment The previous handled fragment
+ * @param {string} fragmentSuffix The current item and sub items
+ * @param {string} listId The group/control ID
+ * @returns {boolean} Whether the top list item matches a list ID or not.
  */
 function isMatchingListItem(urlFragment, previousHandledFragment, fragmentSuffix, listId) {
   // Ensure fragment exists and split by groupings
