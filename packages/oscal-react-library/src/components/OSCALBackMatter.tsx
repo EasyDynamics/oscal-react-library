@@ -77,10 +77,15 @@ function getObjectRootKey(object: unknown): string {
   return keys[0];
 }
 
-interface OSCALBackMatterProps extends EditableFieldProps {
+export interface OSCALBackMatterProps extends EditableFieldProps {
+  /**
+   * Backmatter object of an OSCALDocument
+   */
   backMatter: BackMatter | undefined;
+  /**
+   * The url of the parent for resolution purposes
+   */
   parentUrl: string;
-  isEditable: boolean;
 }
 
 interface BackMatterResourceProps extends OSCALBackMatterProps {

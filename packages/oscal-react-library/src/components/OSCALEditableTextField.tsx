@@ -86,23 +86,54 @@ function textFieldWithEditableActions(
 }
 
 export interface EditableFieldProps {
-  isEditable?: boolean;
+  /**
+   * True if in editor mode
+   */
+  isEditable: boolean;
+  /**
+   * Currently this is the handleFieldSave() function passed down from the OSCALLoader.
+   * All of the funcionality of editing require this function.
+   */
   onFieldSave?: (...args: any[]) => void;
+  /**
+   * A partial representation of the json object you are patching.
+   */
   partialRestData?: any;
 }
 
 interface EditableTextFieldProps extends EditableFieldProps {
+  /**
+   * Name of the field currently being edited
+   */
   fieldName: string;
   /**
    * Whether the field is editable.
    */
   canEdit: boolean;
+  /**
+   * Path of each parent of field.
+   *
+   * @example: ["catalog", "back-matter", "resources"]
+   * to edit a backmatter resource.
+   */
   editedField: string[] | null;
   /**
-   * The value that is edited?
+   * The value of the object being changed via the REST api call.
+   *
+   * @example: backmatter.resources
    */
   editedValue?: any;
+  /**
+   * The id (usually a uuid) of the edited value
+   *
+   * @example resource.uuid
+   */
   editedValueId?: string;
+  /**
+   * The value of the field that is being changed.
+   *
+   * @example resource.title
+   */
   value?: string;
   size?: number;
   textFieldSize?: string;
