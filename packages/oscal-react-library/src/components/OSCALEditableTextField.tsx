@@ -135,8 +135,17 @@ interface EditableTextFieldProps extends EditableFieldProps {
    * @example resource.title
    */
   value?: string;
+  /**
+   * Grid item xs size
+   */
   size?: number;
+  /**
+   * Size prop of underling TextField
+   */
   textFieldSize?: string;
+  /**
+   * The variant of the non editable Typography
+   */
   typographyVariant?: TypographyVariant;
 }
 
