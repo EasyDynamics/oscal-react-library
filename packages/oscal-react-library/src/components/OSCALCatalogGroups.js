@@ -83,12 +83,12 @@ function determineControlExists(groups, controlLayers, rootLayer) {
   }
   // Ensure lowest/deepest control exists within controls/groups
   for (let i = 1; i < controlLayers.length && upperLayer; i += 1) {
-    upperLayer =
-      upperLayer?.controls?.find((control) => control.id === controlLayers[i]) ||
-      upperLayer?.groups?.find(
-        (group) =>
-          group.id === controlLayers[i] || conformLinkIdText(group.title) === controlLayers[i]
-      );
+    const subControl = upperLayer?.controls?.find((control) => control.id === controlLayers[i]);
+    const subGroup = upperLayer?.groups?.find(
+      (group) =>
+        group.id === controlLayers[i] || conformLinkIdText(group.title) === controlLayers[i]
+    );
+    upperLayer = subControl || subGroup;
   }
   return upperLayer;
 }
