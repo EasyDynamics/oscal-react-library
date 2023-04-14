@@ -255,49 +255,49 @@ function App() {
                     </Grid>
                   </Grid>
                 </Grid>
-                <Grid item md={4}>
-                  <Grid container alignItems="center" justifyContent="center">
-                    <Grid item align="center">
-                      <Typography variant="body2" sx={{ color: "white", fontStyle: "italic" }}>
-                        Powered by
-                      </Typography>
-                    </Grid>
-                    <Grid item align="center">
-                      <Button
-                        href="https://www.easydynamics.com"
-                        target="_blank"
-                        sx={{ color: "white" }}
-                      >
-                        <LogoImage src={logo} alt="Easy Dynamics Logo" />
-                      </Button>
-                    </Grid>
-                    <Grid item align="center">
-                      <IconButton
-                        href="https://github.com/EasyDynamics/oscal-react-library"
-                        target="_blank"
-                        rel="noreferrer"
-                        size="large"
-                      >
-                        <GitHubIcon htmlColor="white" />
-                      </IconButton>
-                    </Grid>
+                <Grid item md={8}>
+                  <Grid container alignItems="center" justifyContent="right">
+                    <Typography variant="body2" sx={{ color: "white", fontStyle: "italic" }}>
+                      Powered by
+                    </Typography>
+                    <Button
+                      href="https://www.easydynamics.com"
+                      target="_blank"
+                      sx={{ color: "white" }}
+                    >
+                      <LogoImage src={logo} alt="Easy Dynamics Logo" />
+                    </Button>
+                    <IconButton
+                      href="https://github.com/EasyDynamics/oscal-react-library"
+                      target="_blank"
+                      rel="noreferrer"
+                      size="large"
+                    >
+                      <GitHubIcon htmlColor="white" />
+                    </IconButton>
+                    {backendUrl && (
+                      <>
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "white", fontStyle: "italic", mx: 5 }}
+                        >
+                          |
+                        </Typography>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={isRestMode}
+                              color="warning"
+                              onChange={onChangeRestMode}
+                              name="isRestMode"
+                            />
+                          }
+                          label="REST Mode"
+                        />
+                      </>
+                    )}
                   </Grid>
                 </Grid>
-                {backendUrl && (
-                  <Grid item md={4} align="right">
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={isRestMode}
-                          color="warning"
-                          onChange={onChangeRestMode}
-                          name="isRestMode"
-                        />
-                      }
-                      label="REST Mode"
-                    />
-                  </Grid>
-                )}
               </Grid>
             </Toolbar>
           </AppBar>
