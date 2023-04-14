@@ -106,7 +106,6 @@ export default function OSCALCatalogGroups(props) {
   };
 
   useEffect(() => {
-    console.log(previousHandledFragment + " " + urlFragment);
     // Ensure fragment exists and split by groupings
     if (!urlFragment || previousHandledFragment === urlFragment) {
       return;
@@ -119,7 +118,6 @@ export default function OSCALCatalogGroups(props) {
     }
     // Confirm catalog tab group can be grabbed
     if (document.getElementById(`vertical-tab-${rootLayer}`)) {
-      console.log("Heyo");
       setOpenTab(rootLayer);
       // Set sub-group/control layer beneath to false for new fragment to be handled
       setIsControlListItemOpened(false);
