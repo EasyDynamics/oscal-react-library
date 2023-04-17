@@ -91,7 +91,13 @@ export default function OSCALSsp(props) {
         components={ssp["system-implementation"].components}
       />
       {controlImpl}
-      <OSCALBackMatter backMatter={ssp["back-matter"]} parentUrl={props.parentUrl} />
+      <OSCALBackMatter
+        backMatter={ssp["back-matter"]}
+        parentUrl={props.parentUrl}
+        isEditable={props.isEditable}
+        onFieldSave={props.onFieldSave}
+        partialRestData={partialRestData}
+      />
     </OSCALDocumentRoot>
   );
 }

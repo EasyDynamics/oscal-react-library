@@ -4,12 +4,45 @@ import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import { IconButton } from "@mui/material";
 import StyledTooltip from "./OSCALStyledTooltip";
+import { ReactElement } from "react-markdown/lib/react-markdown";
 
-export function getElementLabel(editedField) {
+export function getElementLabel(editedField: any): string {
   return editedField.toString().replace(/,/g, "-");
 }
 
-export default function OSCALEditableFieldActions(props) {
+interface EditableListItem {
+  uuid: string;
+  [key: string]: any;
+}
+
+/**
+ * Updates an item in a json list.
+ *
+ * @example Updating resources[i].title
+ *
+ * @param list - List of json objects
+ * @param uuid - UUID of the object to update
+ * @param field - Field to update with new value
+ * @param value - New json/string value
+ *
+ * @returns the updated json list
+ */
+export function updateListItem(
+  list: EditableListItem[],
+  uuid: string,
+  field: string,
+  value: string
+): EditableListItem[] {
+  const updatedItem = list.find((item) => item.uuid === uuid);
+
+  if (updatedItem) {
+    updatedItem[field] = value;
+  }
+
+  return list;
+}
+
+export default function OSCALEditableFieldActions(props: any): ReactElement {
   return props.inEditState ? (
     <>
       <StyledTooltip title="Save">
@@ -25,7 +58,14 @@ export default function OSCALEditableFieldActions(props) {
                 props.appendToLastFieldInPath,
                 props.partialRestData,
                 props.editedField,
-                props.reference.current.value
+                props.editedValueId
+                  ? updateListItem(
+                      props.editedValue,
+                      props.editedValueId,
+                      props.fieldName,
+                      props.reference.current.value
+                    )
+                  : props.reference.current.value
               );
             } else {
               props.onFieldSave();

@@ -1,6 +1,5 @@
 import React from "react";
 import { render, screen, within } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import OSCALBackMatter from "./OSCALBackMatter";
 import { parentUrlTestData, revFourCatalog } from "../test-data/Urls";
 import {
@@ -9,48 +8,42 @@ import {
   exampleBackMatterWithoutMediaType,
 } from "../test-data/BackMatterData";
 
-function backMatterRenderer() {
-  render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
-}
-
-export default function testOSCALBackMatter(parentElementName, renderer) {
-  test(`${parentElementName} displays resource title`, () => {
-    renderer();
+describe("OSCAL Backmatter", () => {
+  test("displays resource title", () => {
+    render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     const result = screen.getByText("Resource Test Title");
     expect(result).toBeVisible();
   });
 
-  test(`${parentElementName} displays resource description`, async () => {
-    renderer();
-    const descriptionDisplay = screen.getByTitle("Resource Test Title-description");
-    await userEvent.hover(descriptionDisplay);
+  test("displays resource description", async () => {
+    render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     expect(await screen.findByText("This is a test description for resource")).toBeInTheDocument();
   });
 
-  test(`${parentElementName} displays media-type`, async () => {
-    renderer();
+  test("displays media-type", async () => {
+    render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     const result = screen.getByText("application/oscal.catalog+json");
     expect(result).toBeVisible();
   });
 
-  test(`${parentElementName} renders absolute href`, async () => {
-    renderer();
+  test("renders absolute href", async () => {
+    render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     const button = screen.getByRole("button", {
       name: "application/oscal.catalog+json",
     });
     expect(button.getAttribute("href")).toEqual(revFourCatalog);
   });
 
-  test(`${parentElementName} renders relative href`, async () => {
-    renderer();
+  test("renders relative href", async () => {
+    render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     const button = screen.getByRole("button", {
       name: "application/oscal.catalog+json2",
     });
     expect(button.getAttribute("href")).toEqual(revFourCatalog);
   });
 
-  test(`${parentElementName} displays external link icon`, async () => {
-    renderer();
+  test("displays external link icon", async () => {
+    render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     const button = screen.getByRole("button", {
       name: /application\/something\.else/i,
     });
@@ -58,7 +51,7 @@ export default function testOSCALBackMatter(parentElementName, renderer) {
     within(button).getByTestId("OpenInNewIcon");
   });
 
-  test(`${parentElementName} renders valid media type extension`, async () => {
+  test("renders valid media type extension", async () => {
     render(
       <OSCALBackMatter
         backMatter={exampleBackMatterWithoutMediaType}
@@ -71,7 +64,7 @@ export default function testOSCALBackMatter(parentElementName, renderer) {
     expect(button.getAttribute("href")).toBeTruthy();
   });
 
-  test(`${parentElementName} renders "Unknown" media type extension`, async () => {
+  test('renders "Unknown" media type extension', async () => {
     render(
       <OSCALBackMatter
         backMatter={exampleBackMatterWithoutMediaTypeAndUnknownExtension}
@@ -83,8 +76,4 @@ export default function testOSCALBackMatter(parentElementName, renderer) {
     });
     expect(button.getAttribute("href")).toBeTruthy();
   });
-}
-
-if (!require.main) {
-  testOSCALBackMatter("OSCALBackMatter", backMatterRenderer);
-}
+});
