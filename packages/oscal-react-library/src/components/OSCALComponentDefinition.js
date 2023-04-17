@@ -79,6 +79,9 @@ export default function OSCALComponentDefinition(props) {
       <OSCALBackMatter
         backMatter={props.componentDefinition["back-matter"]}
         parentUrl={props.parentUrl}
+        isEditable={props.isEditable}
+        onFieldSave={props.onFieldSave}
+        partialRestData={partialRestData}
       />
     </OSCALDocumentRoot>
   );

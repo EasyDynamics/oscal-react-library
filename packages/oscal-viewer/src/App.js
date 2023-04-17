@@ -234,7 +234,7 @@ function App() {
           <AppBar position="static">
             <Toolbar>
               <Grid container alignItems="center">
-                <Grid item md={4} align="left">
+                <Grid item md={6} align="left">
                   <Grid container alignItems="center">
                     <Grid item align="left">
                       <OpenNavButton
@@ -253,51 +253,48 @@ function App() {
                         <Routes>{appBarRoutes}</Routes>
                       </Typography>
                     </Grid>
-                  </Grid>
-                </Grid>
-                <Grid item md={4}>
-                  <Grid container alignItems="center" justifyContent="center">
-                    <Grid item align="center">
-                      <Typography variant="body2" sx={{ color: "white", fontStyle: "italic" }}>
-                        Powered by
-                      </Typography>
-                    </Grid>
-                    <Grid item align="center">
-                      <Button
-                        href="https://www.easydynamics.com"
-                        target="_blank"
-                        sx={{ color: "white" }}
-                      >
-                        <LogoImage src={logo} alt="Easy Dynamics Logo" />
-                      </Button>
-                    </Grid>
-                    <Grid item align="center">
-                      <IconButton
-                        href="https://github.com/EasyDynamics/oscal-react-library"
-                        target="_blank"
-                        rel="noreferrer"
-                        size="large"
-                      >
-                        <GitHubIcon htmlColor="white" />
-                      </IconButton>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                {backendUrl && (
-                  <Grid item md={4} align="right">
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={isRestMode}
-                          color="warning"
-                          onChange={onChangeRestMode}
-                          name="isRestMode"
+                    {backendUrl && (
+                      <Grid item align="right" sx={{ mx: 4 }}>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={isRestMode}
+                              color="warning"
+                              onChange={onChangeRestMode}
+                              name="isRestMode"
+                            />
+                          }
+                          label="REST Mode"
                         />
-                      }
-                      label="REST Mode"
-                    />
+                      </Grid>
+                    )}
                   </Grid>
-                )}
+                </Grid>
+                <Grid item md={6}>
+                  <Grid container alignItems="center" justifyContent="right">
+                    <Typography variant="body2" sx={{ color: "white", fontStyle: "italic" }}>
+                      Powered by
+                    </Typography>
+                    <Button
+                      href="https://www.easydynamics.com"
+                      target="_blank"
+                      sx={{ color: "white" }}
+                    >
+                      <LogoImage src={logo} alt="Easy Dynamics Logo" />
+                    </Button>
+                    <Typography variant="body2" sx={{ color: "white", mx: 5 }}>
+                      |
+                    </Typography>
+                    <IconButton
+                      href="https://github.com/EasyDynamics/oscal-react-library"
+                      target="_blank"
+                      rel="noreferrer"
+                      size="large"
+                    >
+                      <GitHubIcon htmlColor="white" />
+                    </IconButton>
+                  </Grid>
+                </Grid>
               </Grid>
             </Toolbar>
           </AppBar>

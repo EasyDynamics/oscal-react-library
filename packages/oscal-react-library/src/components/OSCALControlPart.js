@@ -14,6 +14,13 @@ const OSCALControlPartWrapper = styled("div", {
   padding-left: ${(props) => (props.partName !== "statement" ? "2em" : "0")};
 `;
 
+const OSCALControlRemovedPartWrapper = styled("div", {
+  shouldForwardProp: (prop) => !["partName", "ownerState", "theme", "sx", "as"].includes(prop),
+})`
+  padding-left: ${(props) => (props.partName !== "statement" ? "2em" : "0")};
+  text-decoration: line-through;
+`;
+
 export default function OSCALControlPart(props) {
   // Don't display assessment if we're displaying a control implementation
   if (
@@ -76,6 +83,48 @@ export default function OSCALControlPart(props) {
         modificationDisplay={modificationDisplay}
         isImplemented
       />
+    );
+  }
+  const controlId = modificationDisplay?.props?.controlId ?? "";
+  const controlPartId = modificationDisplay?.props?.controlPartId ?? "";
+  const removeByIds = modificationDisplay?.props?.modificationAlters
+    ?.find((item) => item["control-id"] === controlId)
+    ?.removes?.find((object) => object["by-id"] === controlPartId);
+  const removeByNames = modificationDisplay?.props?.modificationAlters
+    ?.find((item) => item["control-id"] === controlId)
+    ?.removes?.find((object) => object["by-name"] === controlPartId);
+  const removeByNS = modificationDisplay?.props?.modificationAlters
+    ?.find((item) => item["control-id"] === controlId)
+    ?.removes?.find((object) => object["by-ns"] === controlPartId);
+  const removeByClass = modificationDisplay?.props?.modificationAlters
+    ?.find((item) => item["control-id"] === controlId)
+    ?.removes?.find((object) => object["by-class"] === controlPartId);
+  const removeByItemNames = modificationDisplay?.props?.modificationAlters
+    ?.find((item) => item["control-id"] === controlId)
+    ?.removes?.find((object) => object["by-item-name"] === controlPartId);
+
+  if (removeByIds || removeByNames || removeByNS || removeByClass || removeByItemNames) {
+    return (
+      <OSCALControlRemovedPartWrapper ownerState partName={props.part.name}>
+        {replacedProse}
+        {props.part.parts &&
+          props.part.parts.map((part) => (
+            <OSCALControlPart
+              part={part}
+              controlId={props.controlId ?? props.control.id}
+              parameters={props.parameters}
+              implementedRequirement={props.implementedRequirement}
+              componentId={props.componentId}
+              modificationAlters={props.modificationAlters}
+              modificationSetParameters={props.modificationSetParameters}
+              key={part.id ?? part.name}
+              isEditable={props.isEditable}
+              onRestSuccess={props.onRestSuccess}
+              onRestError={props.onRestError}
+              partialRestData={props.partialRestData}
+            />
+          ))}
+      </OSCALControlRemovedPartWrapper>
     );
   }
 

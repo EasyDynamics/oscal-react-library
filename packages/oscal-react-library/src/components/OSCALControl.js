@@ -95,7 +95,6 @@ export default function OSCALControl(props) {
     modificationAlters,
     showInList,
     childLevel,
-    includeAll,
     excludeControlIds,
     previousHandledFragment,
     setPreviousHandledFragment,
@@ -119,7 +118,7 @@ export default function OSCALControl(props) {
     setPreviousHandledFragment,
   ]);
 
-  if (!includeAll && (!control || (includeControlIds && !includeControlIds.includes(control.id)))) {
+  if (!control || (includeControlIds && !includeControlIds.includes(control.id))) {
     return null;
   }
   if (!control || (excludeControlIds && excludeControlIds.includes(control.id))) {

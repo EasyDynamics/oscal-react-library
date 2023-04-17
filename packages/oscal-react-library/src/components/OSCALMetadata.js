@@ -376,7 +376,7 @@ function OSCALMetadataBasicData(props) {
         <OSCALMetadataLabel variant="body2">Document Version:</OSCALMetadataLabel>
         <OSCALEditableTextField
           fieldName="Version"
-          canEdit={isEditable}
+          isEditable={isEditable}
           editedField={isEditable ? [Object.keys(partialRestData)[0], "metadata", "version"] : null}
           onFieldSave={onFieldSave}
           partialRestData={
@@ -609,7 +609,7 @@ export default function OSCALMetadata(props) {
         <OSCALMetadataTitle container direction="row" alignItems="center">
           <OSCALEditableTextField
             fieldName="Title"
-            canEdit={props.isEditable}
+            isEditable={props.isEditable}
             editedField={
               props.isEditable ? [Object.keys(props.partialRestData)[0], "metadata", "title"] : null
             }
