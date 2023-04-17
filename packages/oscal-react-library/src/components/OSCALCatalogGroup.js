@@ -61,6 +61,12 @@ function isMatchingListItem(urlFragment, previousHandledFragment, fragmentSuffix
   return currentList === listId;
 }
 
+/**
+ * Creates a collapsible component for a catalog group/control.
+ *
+ * @param {any} props A set of properties pertaining to a collapsible list item
+ * @returns A list item component with collapsible information
+ */
 function CollapsibleListItem(props) {
   const {
     urlFragment,
@@ -124,6 +130,12 @@ function CollapsibleListItem(props) {
   );
 }
 
+/**
+ * Creates a top-level withdrawn control list item.
+ *
+ * @param {any} props A set of properties pertaining to a withdrawn control list item
+ * @returns A top-level withdrawn control list item component
+ */
 function WithdrawnListItem(props) {
   const {
     children,
@@ -151,6 +163,12 @@ function WithdrawnListItem(props) {
   );
 }
 
+/**
+ * Creates a catalog list item component containing a catalog group/control.
+ *
+ * @param {any} props A set of properties pertaining to a list item
+ * @returns A list item component which contains sub list item(s) and/or collapsible information
+ */
 function OSCALCatalogControlListItem(props) {
   const {
     control,
@@ -223,6 +241,12 @@ function OSCALCatalogControlListItem(props) {
   );
 }
 
+/**
+ * Creates a catalog group list which contains groups/controls.
+ *
+ * @param {any} props A set of properties pertaining to a group list
+ * @returns A group list component which contains a set of items
+ */
 function OSCALCatalogGroupList(props) {
   const {
     group,
