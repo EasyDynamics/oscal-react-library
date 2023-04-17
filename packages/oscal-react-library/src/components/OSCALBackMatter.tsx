@@ -26,7 +26,13 @@ export const OSCALBackMatterCard = styled(Card)(
 );
 
 interface TitleDisplayProps {
+  /**
+   * uuid of the title prop
+   */
   uuid: string;
+  /**
+   * Children to display in typography
+   */
   children: React.ReactNode;
 }
 
