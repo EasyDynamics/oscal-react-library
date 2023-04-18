@@ -48,13 +48,14 @@ import {
   PartyType,
   TelephoneNumber,
 } from "@easydynamics/oscal-types";
+import { OSCALRevisionsButton } from "./OSCALRevision";
 
 const OSCALMetadataSectionInfoHeader = styled(Typography)`
   display: flex;
   align-items: center;
 ` as typeof Typography;
 
-const OSCALMetadataLabel = styled(Typography)(({ theme }) => ({
+export const OSCALMetadataLabel = styled(Typography)(({ theme }) => ({
   textAlign: "right",
   color: theme.palette.text.secondary,
 })) as typeof Typography;
@@ -506,7 +507,7 @@ const OSCALMetadataBasicData: React.FC<OSCALMetadataBasicDataProps> = (props) =>
   const { metadata, isEditable, partialRestData, onFieldSave } = props;
 
   return (
-    <Stack direction="row" spacing={4}>
+    <Stack direction="row" alignItems="center" spacing={4}>
       <Stack direction="row" spacing={1}>
         <OSCALMetadataLabel variant="body2">Document Version:</OSCALMetadataLabel>
         <OSCALEditableTextField
@@ -541,6 +542,7 @@ const OSCALMetadataBasicData: React.FC<OSCALMetadataBasicDataProps> = (props) =>
         title="Published Date:"
         data={metadata.published ? formatDate(metadata.published) : "Not published"}
       />
+      <OSCALRevisionsButton revisions={metadata.revisions} />
     </Stack>
   );
 };
