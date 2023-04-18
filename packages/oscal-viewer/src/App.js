@@ -1,5 +1,5 @@
 import "./App.css";
-import { styled, createTheme, ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
+import { styled, ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 import React, { createElement, useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
@@ -25,14 +25,7 @@ import {
   OSCALDrawerSelector,
 } from "@easydynamics/oscal-react-library";
 import logo from "./images/logo-header.svg";
-
-const appTheme = createTheme({
-  palette: {
-    primary: {
-      main: "#002867",
-    },
-  },
-});
+import { appTheme } from "./themes/AppTheme";
 
 const OpenNavButton = styled(IconButton)(({ theme }) => `margin-right: ${theme.spacing(2)}`);
 const LogoImage = styled("img")`
