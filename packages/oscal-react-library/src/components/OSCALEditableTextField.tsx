@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import Typography from "@mui/material/Typography";
-import { Grid, TextField } from "@mui/material";
+import { Grid, TextField, TextFieldProps } from "@mui/material";
 import OSCALEditableFieldActions, {
   getElementLabel,
   updateListItem,
@@ -8,16 +8,23 @@ import OSCALEditableFieldActions, {
 import { OSCALMarkupLine } from "./OSCALMarkupProse";
 import { TypographyVariant } from "@mui/material";
 
-function textFieldWithEditableActions(
-  props: any,
-  reference: React.MutableRefObject<string>,
-  inEditState: boolean,
-  setInEditState: React.Dispatch<React.SetStateAction<boolean>>
-) {
+interface TextFieldWithEditableActionsProps extends EditableTextFieldProps {
+  reference: React.MutableRefObject<TextFieldProps>;
+  inEditState: boolean;
+  setInEditState: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const TextFieldWithEditableActions: React.FC<TextFieldWithEditableActionsProps> = (props) => {
+  const { reference, inEditState, setInEditState } = props;
+
   if (inEditState) {
+    if (!props.onFieldSave) {
+      throw new Error("onFieldSave is not defined");
+    }
+
     return (
       <>
-        <Grid item xs={props.size} className={props.className}>
+        <Grid item xs={props.size}>
           <TextField
             label={props.fieldName}
             fullWidth
@@ -27,14 +34,13 @@ function textFieldWithEditableActions(
             inputRef={reference}
             size={props.textFieldSize}
             defaultValue={props.value}
-            variant={props.textFieldVariant}
             onKeyDown={(event) => {
               if (event.key === "Escape") {
                 setInEditState(false);
               } else if (event.key === "Enter") {
                 event.preventDefault();
-                props.onFieldSave(
-                  props.appendToLastFieldInPath,
+                props.onFieldSave!(
+                  false,
                   props.partialRestData,
                   props.editedField,
                   props.editedValueId
@@ -42,9 +48,9 @@ function textFieldWithEditableActions(
                         props.editedValue,
                         props.editedValueId,
                         props.fieldName,
-                        reference.current
+                        reference.current.value as any as string
                       )
-                    : reference.current
+                    : reference.current.value
                 );
                 setInEditState(false);
               }
@@ -53,14 +59,12 @@ function textFieldWithEditableActions(
         </Grid>
         <Grid item>
           <OSCALEditableFieldActions
-            appendToLastFieldInPath={props.appendToLastFieldInPath}
             inEditState={inEditState}
             editedField={props.editedField}
             editedValue={props.editedValue}
             editedValueId={props.editedValueId}
             fieldName={props.fieldName}
             setInEditState={setInEditState}
-            onCancel={props.onCancel}
             onFieldSave={props.onFieldSave}
             partialRestData={props.partialRestData}
             reference={reference}
@@ -83,7 +87,7 @@ function textFieldWithEditableActions(
       />
     </>
   );
-}
+};
 
 export interface EditableFieldProps {
   /**
@@ -138,7 +142,7 @@ interface EditableTextFieldProps extends EditableFieldProps {
   /**
    * Size prop of underling TextField
    */
-  textFieldSize?: string;
+  textFieldSize?: "small" | "medium" | undefined;
   /**
    * The variant of the non editable Typography
    */
@@ -146,11 +150,16 @@ interface EditableTextFieldProps extends EditableFieldProps {
 }
 
 export default function OSCALEditableTextField(props: EditableTextFieldProps) {
-  const reference = useRef("reference to text field");
+  const reference = useRef({ value: props.value });
   const [inEditState, setInEditState] = useState(false);
 
   return props.isEditable ? (
-    textFieldWithEditableActions(props, reference, inEditState, setInEditState)
+    <TextFieldWithEditableActions
+      {...props}
+      reference={reference}
+      inEditState={inEditState}
+      setInEditState={setInEditState}
+    />
   ) : (
     <Typography variant={props.typographyVariant}>{props.value}</Typography>
   );
