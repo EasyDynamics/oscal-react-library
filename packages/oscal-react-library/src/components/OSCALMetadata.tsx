@@ -49,16 +49,12 @@ import {
   TelephoneNumber,
 } from "@easydynamics/oscal-types";
 import { OSCALRevisionsButton } from "./OSCALRevision";
+import { OSCALMetadataLabel } from "./OSCALMetadataCommon";
 
 const OSCALMetadataSectionInfoHeader = styled(Typography)`
   display: flex;
   align-items: center;
 ` as typeof Typography;
-
-export const OSCALMetadataLabel = styled(Typography)(({ theme }) => ({
-  textAlign: "right",
-  color: theme.palette.text.secondary,
-})) as typeof Typography;
 
 const OSCALMetadataCardTitleFallbackText = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,

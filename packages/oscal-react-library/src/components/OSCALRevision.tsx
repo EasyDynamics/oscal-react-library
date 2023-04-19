@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { OSCALMetadataLabel } from "./OSCALMetadata";
+import { OSCALMetadataLabel } from "./OSCALMetadataCommon";
 import {
   StyledHeaderTableCell,
   StyledTableHead,
