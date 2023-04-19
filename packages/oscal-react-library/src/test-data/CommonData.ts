@@ -3,6 +3,7 @@ import {
   PartyOrganizationOrPerson,
   PartyType,
   PublicationMetadata,
+  RevisionHistoryEntry,
   Role,
 } from "@easydynamics/oscal-types";
 
@@ -153,6 +154,23 @@ export const keywordValuesList = {
     },
   ],
 };
+
+export const exampleRevisions: RevisionHistoryEntry[] = [
+  {
+    version: "V1",
+    title: "Title1",
+    published: new Date("2023-05-19T13:50:25+00:00"),
+    "last-modified": new Date("2023-04-19T13:50:25+00:00"),
+    "oscal-version": "1.0.4",
+  },
+  {
+    version: "V2",
+    title: "Title2",
+    published: new Date("2024-05-19T13:50:25+00:00"),
+    "last-modified": new Date("2024-04-19T13:50:25+00:00"),
+    "oscal-version": "1.0.3",
+  },
+];
 
 export const metadataTestData: PublicationMetadata = {
   title: "Test Title",
