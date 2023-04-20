@@ -88,7 +88,7 @@ Google Analytics or change the tracking ID is to rebuild the application.
 To enabled experimental features that make REST calls defined in
 [`oscal-rest`](https://github.com/EasyDynamics/oscal-rest) to a backend service, add a
 new environment variable setting the base rest url in the directory you are running the
-Viewer from. 
+Viewer from.
 
 ```bash
 export REACT_APP_REST_BASE_URL=http://localhost:8080/oscal/v1
