@@ -39,6 +39,7 @@ import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import OSCALEditableTextField from "./OSCALEditableTextField";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
+import OSCALProperties from "./OSCALProperties";
 
 const OSCALMetadataSectionInfoHeader = styled(Typography)`
   display: flex;
@@ -644,6 +645,9 @@ export default function OSCALMetadata(props) {
                 onFieldSave={props.onFieldSave}
               />
             </OSCALMetadataSection>
+            <OSCALMetadataSection>
+              <OSCALProperties properties={props.metadata.props} title={props.metadata.title} />
+            </ OSCALMetadataSection>
             <OSCALMarkupMultiLine>{props.metadata.remarks}</OSCALMarkupMultiLine>
             <OSCALMetadataKeywords
               keywords={propWithName(props.metadata.props, "keywords")?.value}
