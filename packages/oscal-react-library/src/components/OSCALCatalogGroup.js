@@ -81,7 +81,7 @@ function CollapsibleListItem(props) {
    * {function} setIsListItemOpened - Callback function to set list item opened
    * {function} setIsListItemNavigatedTo - Callback function to set whether the list item has been
    *   navigated to
-   * {string} previousHandledFragment The fragment that was handled previously
+   * {string} previousHandledFragment - The fragment that was handled previously
    * {function} setPreviousHandledFragment - Callback function to set the previously handled fragment
    */
   const {
