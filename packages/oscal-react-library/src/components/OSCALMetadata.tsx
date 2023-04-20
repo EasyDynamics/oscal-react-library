@@ -1,14 +1,4 @@
-import {
-  PartyOrganizationOrPerson,
-  PartyType,
-  PublicationMetadata,
-  Role,
-} from "@easydynamics/oscal-types";
-import EmailIcon from "@mui/icons-material/Email";
-import GroupIcon from "@mui/icons-material/Group";
-import MapIcon from "@mui/icons-material/Map";
-import PersonIcon from "@mui/icons-material/Person";
-import PhoneIcon from "@mui/icons-material/Phone";
+import { PublicationMetadata, Role } from "@easydynamics/oscal-types";
 import WorkIcon from "@mui/icons-material/Work";
 import { CardContent } from "@mui/material";
 import Card from "@mui/material/Card";
@@ -16,7 +6,6 @@ import Chip from "@mui/material/Chip";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Grid from "@mui/material/Grid";
-import List from "@mui/material/List";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
@@ -29,13 +18,11 @@ import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 import {
   formatDate,
   MetadataAvatar,
-  MetadataInfoList,
-  MetadataInfoType,
   OSCALMetadataCard,
-  OSCALMetadataContactTypeHeader,
   OSCALMetadataFieldArea,
   OSCALMetadataLabel,
 } from "./OSCALMetadataCommon";
+import { OSCALMetadataParties } from "./OSCALParty";
 import { OSCALRevisionsButton } from "./OSCALRevision";
 
 const OSCALMetadataTitle = styled(Grid)`
@@ -52,74 +39,6 @@ const OSCALMetadataSection = styled(Grid)(({ theme }) => ({
   paddingTop: ".5em",
   display: "flex",
 })) as typeof Grid;
-
-export interface OSCALMetadataPartyProps {
-  party: PartyOrganizationOrPerson;
-  partyRolesText: Role[] | undefined;
-}
-
-export const OSCALMetadataParty: React.FC<OSCALMetadataPartyProps> = (props) => {
-  const fallbackIcon =
-    props.party?.type === PartyType.ORGANIZATION ? <GroupIcon /> : <PersonIcon />;
-
-  const avatar = (
-    <MetadataAvatar id={props.party.uuid} text={props.party.name} fallbackIcon={fallbackIcon} />
-  );
-
-  return (
-    <OSCALMetadataCard
-      title={props.party.name}
-      subheader={props.partyRolesText?.map((role: Role) => role.title).join(", ")}
-      avatar={avatar}
-    >
-      <DialogTitle id="scroll-dialog-title">
-        <Stack direction="row" alignItems="center" gap={1}>
-          {avatar}
-          <Stack direction="column">
-            {props.party.name}
-            {props.partyRolesText?.map((role) => (
-              <Typography key={role.title}> {role.title} </Typography>
-            ))}
-          </Stack>
-        </Stack>
-      </DialogTitle>
-      <DialogContent dividers>
-        <Grid container spacing={1}>
-          <Grid item xs={4}>
-            <OSCALMetadataContactTypeHeader icon={<MapIcon fontSize="small" />} title="Address" />
-            <List>
-              <MetadataInfoList
-                list={props.party.addresses}
-                infoType={MetadataInfoType.address}
-                emptyMessage="No address information provided"
-              />
-            </List>
-          </Grid>
-          <Grid item xs={4}>
-            <OSCALMetadataContactTypeHeader icon={<PhoneIcon fontSize="small" />} title="Phone" />
-            <List>
-              <MetadataInfoList
-                list={props.party["telephone-numbers"]}
-                infoType={MetadataInfoType.telephone}
-                emptyMessage="No telephone information provided"
-              />
-            </List>
-          </Grid>
-          <Grid item xs={4}>
-            <OSCALMetadataContactTypeHeader icon={<EmailIcon fontSize="small" />} title="Email" />
-            <List>
-              <MetadataInfoList
-                list={props.party["email-addresses"]}
-                infoType={MetadataInfoType.email}
-                emptyMessage="No email information provided"
-              />
-            </List>
-          </Grid>
-        </Grid>
-      </DialogContent>
-    </OSCALMetadataCard>
-  );
-};
 
 interface OSCALMetadataRoleProps {
   role: Role;
@@ -230,38 +149,6 @@ const OSCALMetadataRoles: React.FC<OSCALMetadataRolesProps> = (props) => {
 
   return (
     <OSCALMetadataFieldArea title="Roles" urlFragment={urlFragment}>
-      {cards}
-    </OSCALMetadataFieldArea>
-  );
-};
-
-interface OSCALMetadataPartiesProps {
-  metadata: PublicationMetadata;
-  parties: PartyOrganizationOrPerson[] | undefined;
-  urlFragment?: string;
-}
-
-const OSCALMetadataParties: React.FC<OSCALMetadataPartiesProps> = (props) => {
-  const { parties, urlFragment } = props;
-
-  const getRoleLabel = (roleId: string) =>
-    props.metadata?.roles?.find((role) => role.id === roleId);
-
-  const getPartyRolesText = (party: PartyOrganizationOrPerson) =>
-    props.metadata["responsible-parties"]
-      ?.filter((responsibleParty) => responsibleParty["party-uuids"]?.includes(party.uuid))
-      .map((item) => item["role-id"])
-      .map(getRoleLabel)
-      .filter((item): item is Role => !!item);
-
-  const cards = parties?.map((party) => (
-    <Grid item xs={12} md={4} key={party.uuid} component={Card}>
-      <OSCALMetadataParty party={party} partyRolesText={getPartyRolesText(party)} />
-    </Grid>
-  ));
-
-  return (
-    <OSCALMetadataFieldArea title="Parties" urlFragment={urlFragment}>
       {cards}
     </OSCALMetadataFieldArea>
   );
