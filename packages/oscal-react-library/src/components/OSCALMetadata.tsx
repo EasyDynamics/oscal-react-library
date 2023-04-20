@@ -1,10 +1,7 @@
-import { PublicationMetadata, Role } from "@easydynamics/oscal-types";
-import WorkIcon from "@mui/icons-material/Work";
+import { PublicationMetadata } from "@easydynamics/oscal-types";
 import { CardContent } from "@mui/material";
 import Card from "@mui/material/Card";
 import Chip from "@mui/material/Chip";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
@@ -15,15 +12,10 @@ import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import OSCALEditableTextField, { EditableFieldProps } from "./OSCALEditableTextField";
 import { OSCALMetadataLocations } from "./OSCALLocations";
 import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
-import {
-  formatDate,
-  MetadataAvatar,
-  OSCALMetadataCard,
-  OSCALMetadataFieldArea,
-  OSCALMetadataLabel,
-} from "./OSCALMetadataCommon";
+import { formatDate, OSCALMetadataFieldArea, OSCALMetadataLabel } from "./OSCALMetadataCommon";
 import { OSCALMetadataParties } from "./OSCALParty";
 import { OSCALRevisionsButton } from "./OSCALRevision";
+import { OSCALMetadataRoles } from "./OSCALRole";
 
 const OSCALMetadataTitle = styled(Grid)`
   height: 56px;
@@ -39,30 +31,6 @@ const OSCALMetadataSection = styled(Grid)(({ theme }) => ({
   paddingTop: ".5em",
   display: "flex",
 })) as typeof Grid;
-
-interface OSCALMetadataRoleProps {
-  role: Role;
-}
-
-export const OSCALMetadataRole: React.FC<OSCALMetadataRoleProps> = (props) => {
-  const { role } = props;
-
-  const avatar = <MetadataAvatar id={role.id} text={role.title} fallbackIcon={<WorkIcon />} />;
-
-  return (
-    <OSCALMetadataCard
-      title={role.title}
-      subheader={role["short-name"]}
-      avatar={avatar}
-      disabled={!role.description}
-    >
-      <DialogTitle>{role.title}</DialogTitle>
-      <DialogContent dividers>
-        <OSCALMarkupMultiLine>{role?.description}</OSCALMarkupMultiLine>
-      </DialogContent>
-    </OSCALMetadataCard>
-  );
-};
 
 interface OSCALMetadataBasicDataItemProps {
   /**
@@ -131,26 +99,6 @@ const OSCALMetadataBasicData: React.FC<OSCALMetadataBasicDataProps> = (props) =>
       />
       <OSCALRevisionsButton revisions={metadata.revisions} />
     </Stack>
-  );
-};
-
-interface OSCALMetadataRolesProps {
-  roles: Role[] | undefined;
-  urlFragment?: string;
-}
-
-const OSCALMetadataRoles: React.FC<OSCALMetadataRolesProps> = (props) => {
-  const { roles, urlFragment } = props;
-  const cards = roles?.map((role) => (
-    <Grid item xs={12} md={4} key={role.id} component={Card}>
-      <OSCALMetadataRole role={role} />
-    </Grid>
-  ));
-
-  return (
-    <OSCALMetadataFieldArea title="Roles" urlFragment={urlFragment}>
-      {cards}
-    </OSCALMetadataFieldArea>
   );
 };
 
