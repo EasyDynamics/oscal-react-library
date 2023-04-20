@@ -68,6 +68,22 @@ function isMatchingListItem(urlFragment, previousHandledFragment, fragmentSuffix
  * @returns A list item component with collapsible information
  */
 function CollapsibleListItem(props) {
+  /**
+   * {string} urlFragment - The current fragment being handled
+   * {any} group - A catalog group that contains either groups/controls
+   * {string} listId - Identification used for a list
+   * {string} itemText - The title of an item
+   * {any} children - Children underneath the list item - either a control/group or control/group
+   *   list
+   * {string} fragmentSuffix - The end of a fragment which starts with the current group/control
+   *   being handled
+   * {boolean} listItemOpened - Tells whether or not the current list item is opened
+   * {function} setIsListItemOpened - Callback function to set list item opened
+   * {function} setIsListItemNavigatedTo - Callback function to set whether the list item has been
+   *   navigated to
+   * {string} previousHandledFragment The fragment that was handled previously
+   * {function} setPreviousHandledFragment - Callback function to set the previously handled fragment
+   */
   const {
     urlFragment,
     group,
@@ -137,6 +153,17 @@ function CollapsibleListItem(props) {
  * @returns A top-level withdrawn control list item component
  */
 function WithdrawnListItem(props) {
+  /**
+   * {string} urlFragment - The current fragment being handled
+   * {string} listId - Identification used for a list
+   * {any} children - Children underneath the list item - either a control/group or control/group
+   *   list
+   * {string} fragmentSuffix - The end of a fragment which starts with the current group/control
+   *   being handled
+   * {string} previousHandledFragment - The fragment that was handled previously
+   * {function} setPreviousHandledFragment - Callback function to set the previously handled
+   *   fragment
+   */
   const {
     children,
     urlFragment,
@@ -170,6 +197,20 @@ function WithdrawnListItem(props) {
  * @returns A list item component which contains sub list item(s) and/or collapsible information
  */
 function OSCALCatalogControlListItem(props) {
+  /**
+   * {any} control - The current control
+   * {string} urlFragment - The current fragment being handled
+   * {string} fragmentPrefix - The beginning of a fragment which ends with the current
+   *   group/control being handled
+   * {string} fragmentSuffix - The end of a fragment which starts with the current group/control
+   *   being handled
+   * {boolean} isControlListItemOpened - Tells whether the current list item is opened
+   * {function} setIsControlListItemOpened - Callback function to set whether the list item has
+   *   been navigated to
+   * {string} previousHandledFragment - The fragment that was handled previously
+   * {function} setPreviousHandledFragment - Callback function to set the previously handled
+   *   fragment
+   */
   const {
     control,
     urlFragment,
@@ -248,6 +289,21 @@ function OSCALCatalogControlListItem(props) {
  * @returns A group list component which contains a set of items
  */
 function OSCALCatalogGroupList(props) {
+  /**
+   * {any} group - The current group
+   * {string} urlFragment - The current fragment being handled
+   * {string} fragmentPrefix - The beginning of a fragment which ends with the current group/control
+   *   being handled
+   * {string} fragmentSuffix - The end of a fragment which starts with the current group/control
+   *   being handled
+   * {boolean} setIsControlListItemOpened - isControlListItemOpened Tells whether the current list
+   *   item is opened
+   * {function} setIsControlListItemOpened - Callback function to set whether the list item has
+   *   been navigated to
+   * {string} previousHandledFragment - The fragment that was handled previously
+   * {function} setPreviousHandledFragment - Callback function to set the previously handled
+   *   fragment
+   */
   const {
     group,
     urlFragment,
@@ -327,6 +383,16 @@ function OSCALCatalogGroupList(props) {
 }
 
 export default function OSCALCatalogGroup(props) {
+  /**
+   * {any} group - The current group
+   * {string} urlFragment - The current fragment being handled
+   * {boolean} isControlListItemOpened - Tells whether the current list item is opened
+   * {function} setIsControlListItemOpened - Callback function to set whether the list item has
+   *   been navigated to
+   * {string} previousHandledFragment - The fragment that was handled previously
+   * {function} setPreviousHandledFragment - Callback function to set the previously handled
+   *   fragment
+   */
   const {
     group,
     urlFragment,
