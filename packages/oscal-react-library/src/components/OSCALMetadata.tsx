@@ -761,11 +761,7 @@ export const OSCALMetadataKeyword: React.FC<OSCALMetadataKeywordProps> = (props)
   const { keyword } = props;
   const text = keyword.trim();
 
-  return (
-    <>
-      text && <Chip label={text} size="small" role="chip" />
-    </>
-  );
+  return <>{text && <Chip label={text} size="small" role="chip" />}</>;
 };
 
 export interface OSCALMetadataKeywordsProps {
