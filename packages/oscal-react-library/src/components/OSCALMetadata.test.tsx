@@ -284,9 +284,7 @@ describe("OSCAL metadata locations", () => {
 
 describe("OSCAL metadata keywords", () => {
   test("display keyword chips", () => {
-    metadataTestData.props = keywordValuesList.basic;
-
-    render(<OSCALMetadata metadata={metadataTestData} />);
+    render(<OSCALMetadata metadata={{ ...metadataTestData, props: keywordValuesList.basic }} />);
 
     const expand = screen.getByText("Keywords");
     fireEvent.click(expand);
@@ -303,9 +301,9 @@ describe("OSCAL metadata keywords", () => {
   });
 
   test("displays one keyword", () => {
-    metadataTestData.props = keywordValuesList.oneKeyWord;
-
-    render(<OSCALMetadata metadata={metadataTestData} />);
+    render(
+      <OSCALMetadata metadata={{ ...metadataTestData, props: keywordValuesList.oneKeyWord }} />
+    );
 
     const expand = screen.getByText("Keywords");
     fireEvent.click(expand);
@@ -318,9 +316,9 @@ describe("OSCAL metadata keywords", () => {
   });
 
   test("displays no keywords with empty props", () => {
-    metadataTestData.props = keywordValuesList.emptyProps;
-
-    render(<OSCALMetadata metadata={metadataTestData} />);
+    render(
+      <OSCALMetadata metadata={{ ...metadataTestData, props: keywordValuesList.emptyProps }} />
+    );
 
     const expand = screen.getByText("Keywords");
     fireEvent.click(expand);
@@ -331,9 +329,9 @@ describe("OSCAL metadata keywords", () => {
   });
 
   test("displays no keywords with empty value", () => {
-    metadataTestData.props = keywordValuesList.emptyValue;
-
-    render(<OSCALMetadata metadata={metadataTestData} />);
+    render(
+      <OSCALMetadata metadata={{ ...metadataTestData, props: keywordValuesList.emptyValue }} />
+    );
 
     const expand = screen.getByText("Keywords");
     fireEvent.click(expand);
@@ -344,9 +342,7 @@ describe("OSCAL metadata keywords", () => {
   });
 
   test("displays no keywords with different ns", () => {
-    metadataTestData.props = keywordValuesList.setns;
-
-    render(<OSCALMetadata metadata={metadataTestData} />);
+    render(<OSCALMetadata metadata={{ ...metadataTestData, props: keywordValuesList.setns }} />);
 
     const expand = screen.getByText("Keywords");
     fireEvent.click(expand);
