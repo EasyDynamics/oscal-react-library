@@ -29,7 +29,7 @@ import logo from "./images/logo-header.svg";
 const appTheme = createTheme({
   palette: {
     primary: {
-      main: "#002867",
+      main: "#001131",
     },
   },
 });
