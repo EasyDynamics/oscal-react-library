@@ -82,7 +82,9 @@ function getThirdPartyNamespaces(properties: any) {
   return items;
 }
 
-function OSCALPropertiesTable(properties: any, namespace: string) {
+function OSCALPropertiesTable(props: any) {
+  const { properties, namespace } = props;
+
   return (
     <DialogContent dividers>
       <OSCALSystemImplementationTableTitle variant="h6" id={`${namespace}-table-title`}>
@@ -101,7 +103,7 @@ function OSCALPropertiesTable(properties: any, namespace: string) {
             {properties
               ?.filter((property: any) =>
                 namespace === "NIST OSCAL"
-                  ? isNistNamespace(property.ns)
+                  ? isNistNamespace(property?.ns)
                   : property?.ns === namespace
               )
               .map((property: any) => (
