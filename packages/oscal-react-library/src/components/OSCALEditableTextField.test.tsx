@@ -14,6 +14,7 @@ describe("OSCALEditableTextField", () => {
         editedField={editedMetadataField}
         fieldName={fieldName}
         value={value}
+        onFieldSave={() => {}}
       />
     );
 
@@ -35,6 +36,7 @@ describe("OSCALEditableTextField", () => {
         editedField={editedMetadataField}
         fieldName={fieldName}
         value={value}
+        onFieldSave={() => {}}
       />
     );
 
@@ -61,6 +63,7 @@ describe("OSCALEditableTextField", () => {
         editedField={editedMetadataField}
         fieldName={fieldName}
         value={value}
+        onFieldSave={() => {}}
       />
     );
 
@@ -87,6 +90,7 @@ describe("OSCALEditableTextField", () => {
         editedField={editedMetadataField}
         fieldName={fieldName}
         value={value}
+        onFieldSave={() => {}}
       />
     );
 
@@ -116,6 +120,7 @@ describe("OSCALEditableFieldActions", () => {
         editedField={editedMetadataField}
         fieldName={fieldName}
         value={value}
+        onFieldSave={() => {}}
       />
     );
 
@@ -133,6 +138,7 @@ describe("OSCALEditableFieldActions", () => {
         editedField={editedMetadataField}
         fieldName={fieldName}
         value={value}
+        onFieldSave={() => {}}
       />
     );
 
@@ -154,6 +160,7 @@ describe("OSCALEditableFieldActions", () => {
         editedField={editedMetadataField}
         fieldName={fieldName}
         value={value}
+        onFieldSave={() => {}}
       />
     );
 
@@ -176,6 +183,7 @@ describe("OSCALEditableFieldActions", () => {
         editedField={editedMetadataField}
         fieldName={fieldName}
         value={value}
+        onFieldSave={() => {}}
       />
     );
 
@@ -201,6 +209,7 @@ describe("OSCALEditableFieldActions", () => {
         editedField={editedMetadataField}
         fieldName={fieldName}
         value={value}
+        onFieldSave={() => {}}
       />
     );
 
@@ -223,6 +232,7 @@ describe("OSCALEditableFieldActions", () => {
         editedField={editedMetadataField}
         fieldName={fieldName}
         value={value}
+        onFieldSave={() => {}}
       />
     );
 
