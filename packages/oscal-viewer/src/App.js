@@ -31,6 +31,9 @@ const appTheme = createTheme({
     primary: {
       main: "#001131",
     },
+    secondary: {
+      main: "#00BDE3",
+    },
   },
 });
 
