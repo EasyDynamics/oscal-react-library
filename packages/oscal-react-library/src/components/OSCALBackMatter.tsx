@@ -16,6 +16,7 @@ import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import OSCALEditableTextField, { EditableFieldProps } from "./OSCALEditableTextField";
 import { Resource, ResourceLink, BackMatter } from "@easydynamics/oscal-types";
 import { ReactElement } from "react";
+import { propWithName } from "./oscal-utils/OSCALPropUtils";
 
 export const OSCALBackMatterCard = styled(Card)(
   ({ theme }) => `
@@ -24,6 +25,73 @@ export const OSCALBackMatterCard = styled(Card)(
     flex-direction: column;
 `
 );
+
+interface BackMatterTypeRepresentationOptions {
+  convertToTitleCase?: boolean;
+}
+
+function backMatterTypeRepresentation(
+  value: string,
+  opts?: BackMatterTypeRepresentationOptions
+): string {
+  switch (value) {
+    case "logo":
+      return "Logo";
+    case "image":
+      return "Image";
+    case "screen-shot":
+      return "Screenshot";
+    case "law":
+      return "Law";
+    case "regulation":
+      return "Regulation";
+    case "standard":
+      return "Standard";
+    case "external-guidance":
+      return "External Guidance";
+    case "acronymns":
+      return "Acronyms";
+    case "citation":
+      return "Citation";
+    case "policy":
+      return "Policy";
+    case "procedure":
+      return "Procedure";
+    case "system-guide":
+      return "System Guide";
+    case "users-guide":
+      return "User's/Administrator's Guide";
+    case "administrators-guide":
+      return "Administrator's Guide";
+    case "rules-of-behavior":
+      return "Rules of Behavior";
+    case "plan":
+      return "Plan";
+    case "artifact":
+      return "Artifact";
+    case "evidence":
+      return "Evidence";
+    case "tool-output":
+      return "Output from a tool";
+    case "raw-data":
+      return "Raw Machine Data";
+    case "interview-notes":
+      return "Interview Notes";
+    case "questionnaire":
+      return "Questionnaire";
+    case "report":
+      return "Report";
+    case "agreement":
+      return "Agreement";
+  }
+  if (opts?.convertToTitleCase) {
+    return value
+      .split("-")
+      .map((str) => str.charAt(0).toUpperCase() + str.slice(1))
+      .join(" ");
+  }
+  return value;
+}
 
 interface TitleDisplayProps {
   /**
@@ -106,6 +174,8 @@ function BackMatterResource(props: BackMatterResourceProps) {
     rlink["media-type"] ||
     guessExtensionFromHref(getAbsoluteUrl(rlink.href, props.parentUrl) ?? "");
 
+  //const resourceType = propWithName(resource.props, "type")?.value;
+  const resourceType = "logo";
   const objectKey = getObjectRootKey(props.partialRestData);
 
   return (
@@ -113,7 +183,7 @@ function BackMatterResource(props: BackMatterResourceProps) {
       <OSCALBackMatterCard>
         <CardContent>
           <Grid container spacing={0}>
-            <Grid item xs={11}>
+            <Grid item xs={10}>
               <TitleDisplay uuid={resource.uuid}>
                 <OSCALEditableTextField
                   fieldName="title"
@@ -136,10 +206,11 @@ function BackMatterResource(props: BackMatterResourceProps) {
                 />
               </TitleDisplay>
             </Grid>
-            <Grid item xs={1}>
-              <Grid container spacing={0} justifyContent="flex-end">
+            <Grid item xs={2}>
+              <Stack direction="row" justifyContent="flex-end">
+                {resourceType && <Chip label={backMatterTypeRepresentation(resourceType)} />}
                 <CitationDisplay resource={resource} />
-              </Grid>
+              </Stack>
             </Grid>
           </Grid>
           <OSCALEditableTextField
