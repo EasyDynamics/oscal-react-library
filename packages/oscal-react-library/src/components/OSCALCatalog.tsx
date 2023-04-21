@@ -1,10 +1,19 @@
+import { Catalog } from "@easydynamics/oscal-types";
 import React, { useEffect } from "react";
 import OSCALBackMatter from "./OSCALBackMatter";
 import OSCALCatalogGroups from "./OSCALCatalogGroups";
+import { EditableFieldProps } from "./OSCALEditableTextField";
 import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
 import OSCALMetadata from "./OSCALMetadata";
 
-export default function OSCALCatalog(props) {
+export interface OSCALCatalogProps extends EditableFieldProps {
+  onResolutionComplete: React.EffectCallback;
+  catalog: Catalog;
+  urlFragment?: string | undefined;
+  parentUrl: string;
+}
+
+export const OSCALCatalog: React.FC<OSCALCatalogProps> = (props) => {
   const { onResolutionComplete, catalog, isEditable, onFieldSave, urlFragment, parentUrl } = props;
 
   useEffect(onResolutionComplete);
@@ -36,4 +45,6 @@ export default function OSCALCatalog(props) {
       />
     </OSCALDocumentRoot>
   );
-}
+};
+
+export default OSCALCatalog;
