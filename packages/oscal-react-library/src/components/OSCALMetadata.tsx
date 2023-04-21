@@ -33,30 +33,36 @@ import ListItem from "@mui/material/ListItem";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import React, { useEffect } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { OSCALSection } from "../styles/CommonPageStyles";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
-import OSCALEditableTextField from "./OSCALEditableTextField";
+import OSCALEditableTextField, { EditableFieldProps } from "./OSCALEditableTextField";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
+import {
+  Address,
+  PublicationMetadata,
+  Location,
+  PartyOrganizationOrPerson,
+  Role,
+  PartyType,
+  TelephoneNumber,
+} from "@easydynamics/oscal-types";
+import { OSCALRevisionsButton } from "./OSCALRevision";
+import { OSCALMetadataLabel } from "./OSCALMetadataCommon";
 
 const OSCALMetadataSectionInfoHeader = styled(Typography)`
   display: flex;
   align-items: center;
-`;
-
-const OSCALMetadataLabel = styled(Typography)(({ theme }) => ({
-  textAlign: "right",
-  color: theme.palette.text.secondary,
-}));
+` as typeof Typography;
 
 const OSCALMetadataCardTitleFallbackText = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
-}));
+})) as typeof Typography;
 
 const OSCALMetadataTitle = styled(Grid)`
   height: 56px;
-`;
+` as typeof Grid;
 
 const OSCALMetadataSection = styled(Grid)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -67,13 +73,10 @@ const OSCALMetadataSection = styled(Grid)(({ theme }) => ({
   paddingRight: ".5em",
   paddingTop: ".5em",
   display: "flex",
-}));
+})) as typeof Grid;
 
 // Returns a string with a locality-sensitive representation of this date
-function formatDate(isoDate) {
-  if (!isoDate) {
-    return isoDate;
-  }
+function formatDate(isoDate: string | number | Date): string {
   return new Date(isoDate).toLocaleString();
 }
 
@@ -90,22 +93,36 @@ const ADDRESS_ICON_MAPPING = {
 
 const UNKNOWN_TYPE_ICON = <HelpOutlineIcon />;
 
-function getIconOfType(mapping, contactType) {
+function getIconOfType(
+  mapping: Record<string, ReactNode> | undefined,
+  contactType: string | undefined
+) {
   if (!mapping || !contactType) {
     return UNKNOWN_TYPE_ICON;
   }
   return mapping[contactType] ?? UNKNOWN_TYPE_ICON;
 }
 
-function getPhoneIcon(contactType) {
+function getPhoneIcon(contactType: string | undefined) {
   return getIconOfType(TELEPHONE_ICON_MAPPING, contactType);
 }
 
-function getAddressIcon(contactType) {
+function getAddressIcon(contactType: string | undefined) {
   return getIconOfType(ADDRESS_ICON_MAPPING, contactType);
 }
 
-function TextWithIcon(props) {
+interface TextWithIconProps {
+  /**
+   * icon to display to the left of text
+   */
+  icon: ReactNode;
+  /**
+   * React component for text
+   */
+  children: ReactNode;
+}
+
+const TextWithIcon: React.FC<TextWithIconProps> = (props) => {
   const { icon, children } = props;
 
   return (
@@ -114,10 +131,14 @@ function TextWithIcon(props) {
       <Typography>{children}</Typography>
     </Stack>
   );
+};
+
+export interface OSCALMetadataAddressProps {
+  address: Address;
 }
 
-export function OSCALMetadataAddress(props) {
-  const tryFormatAddress = (address) => {
+export const OSCALMetadataAddress: React.FC<OSCALMetadataAddressProps> = (props) => {
+  const tryFormatAddress = (address: Address) => {
     const lines = address["addr-lines"] ?? [];
     const cityAndState = [address.city, address.state].filter((it) => it).join(", ");
     const line = [cityAndState, address["postal-code"]].filter((it) => it).join(" ");
@@ -130,25 +151,31 @@ export function OSCALMetadataAddress(props) {
   const formatted = addr.flatMap((it, index) => [it, <br key={index} />]);
 
   return addr.length ? (
-    <TextWithIcon icon={getAddressIcon(address.type)} key={address}>
-      {formatted}
-    </TextWithIcon>
+    <TextWithIcon icon={getAddressIcon(address.type)}>{formatted}</TextWithIcon>
   ) : (
-    <TextWithIcon icon={<ErrorOutlineIcon />} key={address}>
+    <TextWithIcon icon={<ErrorOutlineIcon />}>
       <Typography variant="body2">Address cannot be formatted</Typography>
     </TextWithIcon>
   );
+};
+
+export interface OSCALMetadataEmailProps {
+  email: string;
 }
 
-export function OSCALMetadataEmail(props) {
+export const OSCALMetadataEmail: React.FC<OSCALMetadataEmailProps> = (props) => {
   return (
     <Typography>
       <Link href={`mailto:${props.email}`}>{props.email}</Link>
     </Typography>
   );
+};
+
+export interface OSCALMetadataTelephoneProps {
+  telephone: TelephoneNumber;
 }
 
-export function OSCALMetadataTelephone(props) {
+export const OSCALMetadataTelephone: React.FC<OSCALMetadataTelephoneProps> = (props) => {
   const { telephone } = props;
 
   return (
@@ -156,9 +183,20 @@ export function OSCALMetadataTelephone(props) {
       <Link href={`tel:${telephone.number}`}>{telephone.number}</Link>
     </TextWithIcon>
   );
+};
+
+interface OSCALMetadataContactTypeHeaderProps {
+  /**
+   * Contact info list title
+   */
+  title: string;
+  /**
+   * Optional icon to display
+   */
+  icon?: ReactNode;
 }
 
-function OSCALMetadataContactTypeHeader(props) {
+const OSCALMetadataContactTypeHeader: React.FC<OSCALMetadataContactTypeHeaderProps> = (props) => {
   return (
     <Stack direction="row" alignItems="center" gap={1}>
       {props.icon}
@@ -167,12 +205,27 @@ function OSCALMetadataContactTypeHeader(props) {
       </OSCALMetadataSectionInfoHeader>
     </Stack>
   );
+};
+
+interface MetadataAvatarProps {
+  /**
+   * String to create avatar color with
+   */
+  id: string;
+  /**
+   * Text to appear on avatar
+   */
+  text: string | undefined;
+  /**
+   * Icon to use if text is undefined
+   */
+  fallbackIcon: ReactNode;
 }
 
-function MetadataAvatar(props) {
+const MetadataAvatar: React.FC<MetadataAvatarProps> = (props) => {
   const { id, text, fallbackIcon } = props;
 
-  const avatarColor = (name) => {
+  const avatarColor = (name: string) => {
     // This implementation hashes the given string to create a
     // color string. This is based of the example algorithm given
     // in the MUI documentation and adapted to our use case.
@@ -191,7 +244,7 @@ function MetadataAvatar(props) {
     return color;
   };
 
-  const avatarValue = (name) =>
+  const avatarValue = (name: string | undefined) =>
     name
       ?.split(" ")
       .map((str) => str.substring(0, 1))
@@ -200,34 +253,71 @@ function MetadataAvatar(props) {
       .toUpperCase();
 
   return <Avatar sx={{ bgcolor: avatarColor(id) }}>{avatarValue(text) ?? fallbackIcon}</Avatar>;
-}
-
-const MetadataInfoTypes = {
-  address: "address",
-  telephone: "telephone",
-  email: "email",
 };
 
-const TYPE_MAPPING = (infoProps) => ({
-  address: <OSCALMetadataAddress address={infoProps} />,
-  telephone: <OSCALMetadataTelephone telephone={infoProps} />,
-  email: <OSCALMetadataEmail email={infoProps} />,
-});
+enum MetadataInfoType {
+  address = "address",
+  telephone = "telephone",
+  email = "email",
+}
 
-const getMetadataInfoList = (list, infoType, emptyMessage = "No information provided") => {
+/**
+ * Maps a contact list item to the correct component.
+ *
+ * @param infoProps Props to pass to the component
+ * @param type Contact info type to use for map
+ */
+const mapContactType = (infoProps: Address | TelephoneNumber | string, type: MetadataInfoType) => {
+  switch (type) {
+    case MetadataInfoType.email:
+      return <OSCALMetadataEmail email={infoProps as string} />;
+    case MetadataInfoType.address:
+      return <OSCALMetadataAddress address={infoProps as Address} />;
+    case MetadataInfoType.telephone:
+      return <OSCALMetadataTelephone telephone={infoProps as TelephoneNumber} />;
+  }
+};
+
+interface MetadataInfoListProps {
+  /**
+   * List of metadata contact info
+   */
+  list: Address[] | string[] | TelephoneNumber[] | undefined;
+  /**
+   * Type of metadata contact info
+   */
+  infoType: MetadataInfoType;
+  /**
+   * Message to display if list is empty
+   */
+  emptyMessage: string;
+}
+
+const MetadataInfoList: React.FC<MetadataInfoListProps> = (props) => {
+  const { list, infoType, emptyMessage } = props;
+
   if (!list?.length) {
     return <Typography> {emptyMessage} </Typography>;
   }
 
-  return list.map((item) => (
-    <ListItem key={infoType === "email" ? item : `${item?.type}--${item?.name}`}>
-      {TYPE_MAPPING(item)[infoType]}
-    </ListItem>
-  ));
+  return (
+    <>
+      {list.map((item, index) => {
+        return <ListItem key={index}>{mapContactType(item, infoType)}</ListItem>;
+      })}
+    </>
+  );
 };
 
-export function OSCALMetadataParty(props) {
-  const fallbackIcon = props.party?.type === "organziation" ? <GroupIcon /> : <PersonIcon />;
+export interface OSCALMetadataPartyProps {
+  party: PartyOrganizationOrPerson;
+  partyRolesText: Role[] | undefined;
+}
+
+export const OSCALMetadataParty: React.FC<OSCALMetadataPartyProps> = (props) => {
+  const fallbackIcon =
+    props.party?.type === PartyType.ORGANIZATION ? <GroupIcon /> : <PersonIcon />;
+
   const avatar = (
     <MetadataAvatar id={props.party.uuid} text={props.party.name} fallbackIcon={fallbackIcon} />
   );
@@ -235,7 +325,7 @@ export function OSCALMetadataParty(props) {
   return (
     <OSCALMetadataCard
       title={props.party.name}
-      subheader={props.partyRolesText?.map((role) => role.title).join(", ")}
+      subheader={props.partyRolesText?.map((role: Role) => role.title).join(", ")}
       avatar={avatar}
     >
       <DialogTitle id="scroll-dialog-title">
@@ -254,40 +344,44 @@ export function OSCALMetadataParty(props) {
           <Grid item xs={4}>
             <OSCALMetadataContactTypeHeader icon={<MapIcon fontSize="small" />} title="Address" />
             <List>
-              {getMetadataInfoList(
-                props.party.addresses,
-                MetadataInfoTypes.address,
-                "No address information provided"
-              )}
+              <MetadataInfoList
+                list={props.party.addresses}
+                infoType={MetadataInfoType.address}
+                emptyMessage="No address information provided"
+              />
             </List>
           </Grid>
           <Grid item xs={4}>
             <OSCALMetadataContactTypeHeader icon={<PhoneIcon fontSize="small" />} title="Phone" />
             <List>
-              {getMetadataInfoList(
-                props.party["telephone-numbers"],
-                MetadataInfoTypes.telephone,
-                "No telephone information provided"
-              )}
+              <MetadataInfoList
+                list={props.party["telephone-numbers"]}
+                infoType={MetadataInfoType.telephone}
+                emptyMessage="No telephone information provided"
+              />
             </List>
           </Grid>
           <Grid item xs={4}>
             <OSCALMetadataContactTypeHeader icon={<EmailIcon fontSize="small" />} title="Email" />
             <List>
-              {getMetadataInfoList(
-                props.party["email-addresses"],
-                MetadataInfoTypes.email,
-                "No email information provided"
-              )}
+              <MetadataInfoList
+                list={props.party["email-addresses"]}
+                infoType={MetadataInfoType.email}
+                emptyMessage="No email information provided"
+              />
             </List>
           </Grid>
         </Grid>
       </DialogContent>
     </OSCALMetadataCard>
   );
+};
+
+interface OSCALMetadataRoleProps {
+  role: Role;
 }
 
-export function OSCALMetadataRole(props) {
+export const OSCALMetadataRole: React.FC<OSCALMetadataRoleProps> = (props) => {
   const { role } = props;
 
   const avatar = <MetadataAvatar id={role.id} text={role.title} fallbackIcon={<WorkIcon />} />;
@@ -305,9 +399,32 @@ export function OSCALMetadataRole(props) {
       </DialogContent>
     </OSCALMetadataCard>
   );
+};
+
+interface OSCALMetadataCardProps {
+  /**
+   * Title of the card
+   */
+  title: string | undefined;
+  /**
+   * Optional subheader for the card
+   */
+  subheader?: string;
+  /**
+   * Avatar icon for the card
+   */
+  avatar: ReactNode;
+  /**
+   * True if modal button should be disabled
+   */
+  disabled?: boolean;
+  /**
+   * Dialog component's children
+   */
+  children: ReactNode;
 }
 
-function OSCALMetadataCard(props) {
+const OSCALMetadataCard: React.FC<OSCALMetadataCardProps> = (props) => {
   const { title, subheader, avatar, disabled, children } = props;
 
   const [open, setOpen] = React.useState(false);
@@ -354,9 +471,20 @@ function OSCALMetadataCard(props) {
       </CardActions>
     </>
   );
+};
+
+interface OSCALMetadataBasicDataItemProps {
+  /**
+   * Title to display
+   */
+  title: string;
+  /**
+   * Child data
+   */
+  data: string;
 }
 
-function OSCALMetadataBasicDataItem(props) {
+const OSCALMetadataBasicDataItem: React.FC<OSCALMetadataBasicDataItemProps> = (props) => {
   const { title, data } = props;
 
   return (
@@ -365,13 +493,17 @@ function OSCALMetadataBasicDataItem(props) {
       <Typography variant="body2">{data}</Typography>
     </Stack>
   );
+};
+
+interface OSCALMetadataBasicDataProps extends EditableFieldProps {
+  metadata: PublicationMetadata;
 }
 
-function OSCALMetadataBasicData(props) {
+const OSCALMetadataBasicData: React.FC<OSCALMetadataBasicDataProps> = (props) => {
   const { metadata, isEditable, partialRestData, onFieldSave } = props;
 
   return (
-    <Stack direction="row" spacing={4}>
+    <Stack direction="row" alignItems="center" spacing={4}>
       <Stack direction="row" spacing={1}>
         <OSCALMetadataLabel variant="body2">Document Version:</OSCALMetadataLabel>
         <OSCALEditableTextField
@@ -404,13 +536,19 @@ function OSCALMetadataBasicData(props) {
       />
       <OSCALMetadataBasicDataItem
         title="Published Date:"
-        data={formatDate(metadata.published) ?? "Not published"}
+        data={metadata.published ? formatDate(metadata.published) : "Not published"}
       />
+      <OSCALRevisionsButton revisions={metadata.revisions} />
     </Stack>
   );
+};
+
+interface OSCALMetadataRolesProps {
+  roles: Role[] | undefined;
+  urlFragment?: string;
 }
 
-function OSCALMetadataRoles(props) {
+const OSCALMetadataRoles: React.FC<OSCALMetadataRolesProps> = (props) => {
   const { roles, urlFragment } = props;
   const cards = roles?.map((role) => (
     <Grid item xs={12} md={4} key={role.id} component={Card}>
@@ -423,19 +561,26 @@ function OSCALMetadataRoles(props) {
       {cards}
     </OSCALMetadataFieldArea>
   );
+};
+
+interface OSCALMetadataPartiesProps {
+  metadata: PublicationMetadata;
+  parties: PartyOrganizationOrPerson[] | undefined;
+  urlFragment?: string;
 }
 
-function OSCALMetadataParties(props) {
+const OSCALMetadataParties: React.FC<OSCALMetadataPartiesProps> = (props) => {
   const { parties, urlFragment } = props;
 
-  const getRoleLabel = (roleId) => props.metadata.roles.find((role) => role.id === roleId);
+  const getRoleLabel = (roleId: string) =>
+    props.metadata?.roles?.find((role) => role.id === roleId);
 
-  const getPartyRolesText = (party) =>
+  const getPartyRolesText = (party: PartyOrganizationOrPerson) =>
     props.metadata["responsible-parties"]
       ?.filter((responsibleParty) => responsibleParty["party-uuids"]?.includes(party.uuid))
       .map((item) => item["role-id"])
       .map(getRoleLabel)
-      .filter((item) => item);
+      .filter((item): item is Role => !!item);
 
   const cards = parties?.map((party) => (
     <Grid item xs={12} md={4} key={party.uuid} component={Card}>
@@ -448,9 +593,14 @@ function OSCALMetadataParties(props) {
       {cards}
     </OSCALMetadataFieldArea>
   );
+};
+
+interface OSCALMetadataLocationsProps {
+  locations: Location[] | undefined;
+  urlFragment?: string | undefined;
 }
 
-function OSCALMetadataLocations(props) {
+const OSCALMetadataLocations: React.FC<OSCALMetadataLocationsProps> = (props) => {
   const { locations, urlFragment } = props;
 
   const cards = locations?.map((location) => (
@@ -464,9 +614,16 @@ function OSCALMetadataLocations(props) {
       {cards}
     </OSCALMetadataFieldArea>
   );
+};
+
+interface OSCALMetadataLocationUrlsProps {
+  /**
+   * List of urls for a given location.
+   */
+  urls: string[] | undefined;
 }
 
-function OSCALMetadataLocationUrls(props) {
+const OSCALMetadataLocationUrls: React.FC<OSCALMetadataLocationUrlsProps> = (props) => {
   const { urls } = props;
   return (
     <Stack>
@@ -484,9 +641,9 @@ function OSCALMetadataLocationUrls(props) {
       )}
     </Stack>
   );
-}
+};
 
-export function OSCALMetadataLocationContent(props) {
+export const OSCALMetadataLocationContent: React.FC<OSCALMetadataLocationProps> = (props) => {
   const { location } = props;
 
   return (
@@ -499,30 +656,34 @@ export function OSCALMetadataLocationContent(props) {
         <Grid item xs={4}>
           <OSCALMetadataContactTypeHeader icon={<PhoneIcon fontSize="small" />} title="Phone" />
           <List>
-            {getMetadataInfoList(
-              location["telephone-numbers"],
-              MetadataInfoTypes.telephone,
-              "No telephone information provided"
-            )}
+            <MetadataInfoList
+              list={location["telephone-numbers"]}
+              infoType={MetadataInfoType.telephone}
+              emptyMessage="No telephone information provided"
+            />
           </List>
         </Grid>
         <Grid item xs={4}>
           <OSCALMetadataContactTypeHeader icon={<EmailIcon fontSize="small" />} title="Email" />
           <List>
-            {getMetadataInfoList(
-              location["email-addresses"],
-              MetadataInfoTypes.email,
-              "No email information provided"
-            )}
+            <MetadataInfoList
+              list={location["email-addresses"]}
+              infoType={MetadataInfoType.email}
+              emptyMessage="No email information provided"
+            />
           </List>
         </Grid>
       </Grid>
       <OSCALMetadataLocationUrls urls={location?.urls} />
     </Stack>
   );
+};
+
+export interface OSCALMetadataLocationProps {
+  location: Location;
 }
 
-export function OSCALMetadataLocation(props) {
+export const OSCALMetadataLocation: React.FC<OSCALMetadataLocationProps> = (props) => {
   const { location } = props;
 
   const avatar = (
@@ -539,9 +700,25 @@ export function OSCALMetadataLocation(props) {
       </DialogContent>
     </OSCALMetadataCard>
   );
+};
+
+interface OSCALMetadataFieldAreaProps {
+  /**
+   * Title of the accordion.
+   */
+  title: string;
+  /**
+   * Inner component displayed on opening of accordion.
+   */
+  children: ReactNode;
+  /**
+   * Summary element near title.
+   */
+  summary?: ReactNode;
+  urlFragment?: string;
 }
 
-function OSCALMetadataFieldArea(props) {
+const OSCALMetadataFieldArea: React.FC<OSCALMetadataFieldAreaProps> = (props) => {
   const { title, children, summary, urlFragment } = props;
 
   const [isExpanded, setIsExpanded] = React.useState(false);
@@ -574,31 +751,53 @@ function OSCALMetadataFieldArea(props) {
       </AccordionDetails>
     </Accordion>
   );
+};
+
+export interface OSCALMetadataKeywordProps {
+  keyword: string;
 }
 
-export function OSCALMetadataKeyword(props) {
+export const OSCALMetadataKeyword: React.FC<OSCALMetadataKeywordProps> = (props) => {
   const { keyword } = props;
   const text = keyword.trim();
 
-  return text && <Chip label={text} size="small" role="chip" />;
+  return <>{text && <Chip label={text} size="small" role="chip" />}</>;
+};
+
+export interface OSCALMetadataKeywordsProps {
+  /**
+   * Comma seperated list of keywords.
+   */
+  keywords: string | undefined;
+  urlFragment?: string;
 }
 
-export function OSCALMetadataKeywords(props) {
+export const OSCALMetadataKeywords: React.FC<OSCALMetadataKeywordsProps> = (props) => {
   const { keywords, urlFragment } = props;
 
-  const chips = (keywords ?? "")
-    .split(",")
-    .map((keyword) => keyword.trim())
-    .map((keyword) => <OSCALMetadataKeyword key={keyword} keyword={keyword} />);
+  const chips = !keywords
+    ? undefined
+    : keywords
+        ?.split(",")
+        .map((keyword) => keyword.trim())
+        .map((keyword) => <OSCALMetadataKeyword key={keyword} keyword={keyword} />);
 
   return (
     <OSCALMetadataFieldArea title="Keywords" urlFragment={urlFragment}>
       {chips}
     </OSCALMetadataFieldArea>
   );
+};
+
+interface OSCALMetadataProps extends EditableFieldProps {
+  /**
+   * The metadata of an OSCAL document.
+   */
+  metadata: PublicationMetadata;
+  urlFragment?: string;
 }
 
-export default function OSCALMetadata(props) {
+export const OSCALMetadata: React.FC<OSCALMetadataProps> = (props) => {
   if (!props.metadata) {
     return null;
   }
@@ -664,4 +863,6 @@ export default function OSCALMetadata(props) {
       </Card>
     </OSCALSection>
   );
-}
+};
+
+export default OSCALMetadata;

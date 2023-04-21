@@ -81,27 +81,33 @@ function determineControlExists(groups, controlLayers, rootLayer) {
   if (!upperLayer) {
     return null;
   }
-  // Ensure lowest/deepest control exists
+  // Ensure lowest/deepest control exists within controls/groups
   for (let i = 1; i < controlLayers.length && upperLayer; i += 1) {
-    upperLayer = upperLayer?.controls?.find((control) => control.id === controlLayers[i]);
+    const subControl = upperLayer?.controls?.find((control) => control.id === controlLayers[i]);
+    const subGroup = upperLayer?.groups?.find(
+      (group) =>
+        group.id === controlLayers[i] || conformLinkIdText(group.title) === controlLayers[i]
+    );
+    upperLayer = subControl || subGroup;
   }
   return upperLayer;
 }
 
 export default function OSCALCatalogGroups(props) {
   const { groups, urlFragment } = props;
-  const [openTab, setOpenTab] = React.useState(groups[0]?.id);
+  const [openTab, setOpenTab] = React.useState(
+    groups[0]?.id ?? conformLinkIdText(groups[0]?.title)
+  );
   const [isControlListItemOpened, setIsControlListItemOpened] = React.useState(false);
+  const [previousHandledFragment, setPreviousHandledFragment] = React.useState(null);
 
   const handleChange = (event, newValue) => {
     setOpenTab(newValue);
   };
 
   useEffect(() => {
-    // Initially set item opened to false for new fragment to be handled
-    setIsControlListItemOpened(false);
     // Ensure fragment exists and split by groupings
-    if (!urlFragment) {
+    if (!urlFragment || previousHandledFragment === urlFragment) {
       return;
     }
     // Break control groupings apart
@@ -113,8 +119,10 @@ export default function OSCALCatalogGroups(props) {
     // Confirm catalog tab group can be grabbed
     if (document.getElementById(`vertical-tab-${rootLayer}`)) {
       setOpenTab(rootLayer);
+      // Set sub-group/control layer beneath to false for new fragment to be handled
+      setIsControlListItemOpened(false);
     }
-  }, [urlFragment, groups]);
+  }, [urlFragment, groups, previousHandledFragment]);
 
   return (
     <OSCALSection>
@@ -161,6 +169,8 @@ export default function OSCALCatalogGroups(props) {
                     urlFragment={urlFragment}
                     isControlListItemOpened={isControlListItemOpened}
                     setIsControlListItemOpened={setIsControlListItemOpened}
+                    previousHandledFragment={previousHandledFragment}
+                    setPreviousHandledFragment={setPreviousHandledFragment}
                   />
                 </TabPanel>
               ))}
