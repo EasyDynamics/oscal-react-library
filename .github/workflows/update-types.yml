@@ -45,7 +45,7 @@ jobs:
               }
             }
             if (!url) {
-              console.log("WTF?!");
+              console.log(`Failed to find a matching download URL for ${version}`);
             }
             core.setOutput("url", url);
       - name: Download the latest OSCAL release
