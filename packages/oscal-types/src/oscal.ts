@@ -98,11 +98,15 @@ export interface Link {
      * Describes the type of relationship provided by the link. This can be an indicator of the
      * link's purpose.
      */
-    readonly rel?: string;
+    readonly rel?: Relation;
     /**
      * A textual label to associate with the link, which may be used for presentation in a tool.
      */
     readonly text?: string;
+}
+
+export enum Relation {
+    REFERENCE = 'reference',
 }
 
 /**
@@ -121,7 +125,7 @@ export interface Property {
      * A textual label that uniquely identifies a specific attribute, characteristic, or quality
      * of the property's containing object.
      */
-    readonly name: string;
+    readonly name: PropertyName;
     /**
      * A namespace qualifying the property's name. This allows different organizations to
      * associate distinct semantics with the same name.
@@ -139,6 +143,10 @@ export interface Property {
      * Indicates the value of the attribute, characteristic, or quality.
      */
     readonly value: string;
+}
+
+export enum PropertyName {
+    MARKING = 'marking',
 }
 
 /**
@@ -199,7 +207,7 @@ export interface AssessmentAssetsComponent {
     /**
      * A category describing the purpose of the component.
      */
-    readonly type: string;
+    readonly type: PurpleComponentType;
     /**
      * A machine-oriented, globally unique identifier with cross-instance scope that can be used
      * to reference this component elsewhere in this or other OSCAL instances. The locally
@@ -292,6 +300,23 @@ export enum PurpleState {
     UNDER_DEVELOPMENT = 'under-development',
 }
 
+export enum PurpleComponentType {
+    GUIDANCE = 'guidance',
+    HARDWARE = 'hardware',
+    INTERCONNECTION = 'interconnection',
+    NETWORK = 'network',
+    PHYSICAL = 'physical',
+    PLAN = 'plan',
+    POLICY = 'policy',
+    PROCESS_PROCEDURE = 'process-procedure',
+    SERVICE = 'service',
+    SOFTWARE = 'software',
+    STANDARD = 'standard',
+    SYSTEM = 'system',
+    THIS_SYSTEM = 'this-system',
+    VALIDATION = 'validation',
+}
+
 /**
  * Identifies system elements being assessed, such as components, inventory items, and
  * locations. In the assessment plan, this identifies a planned assessment subject. In the
@@ -315,7 +340,7 @@ export interface SubjectOfAssessment {
      * Indicates the type of assessment subject, such as a component, inventory, item, location,
      * or party represented by this selection statement.
      */
-    readonly type: string;
+    readonly type: SubjectType;
 }
 
 /**
@@ -333,13 +358,30 @@ export interface SelectAssessmentSubject {
     /**
      * Used to indicate the type of object pointed to by the uuid-ref within a subject.
      */
-    readonly type: string;
+    readonly type: SubjectUniversallyUniqueIdentifierReferenceType;
+}
+
+export enum SubjectUniversallyUniqueIdentifierReferenceType {
+    COMPONENT = 'component',
+    INVENTORY_ITEM = 'inventory-item',
+    LOCATION = 'location',
+    PARTY = 'party',
+    RESOURCE = 'resource',
+    USER = 'user',
 }
 
 /**
  * Include all controls from the imported catalog or profile resources.
  */
 export interface IncludeAll {
+}
+
+export enum SubjectType {
+    COMPONENT = 'component',
+    INVENTORY_ITEM = 'inventory-item',
+    LOCATION = 'location',
+    PARTY = 'party',
+    USER = 'user',
 }
 
 /**
@@ -426,7 +468,11 @@ export interface DocumentIdentifier {
      * Qualifies the kind of document identifier using a URI. If the scheme is not provided the
      * value of the element will be interpreted as a string of characters.
      */
-    readonly scheme?: string;
+    readonly scheme?: DocumentIdentificationScheme;
+}
+
+export enum DocumentIdentificationScheme {
+    HTTP_WWW_DOI_ORG = 'http://www.doi.org/',
 }
 
 /**
@@ -454,8 +500,19 @@ export interface Hash {
     /**
      * Method by which a hash is derived
      */
-    readonly algorithm: string;
+    readonly algorithm: HashAlgorithm;
     readonly value: string;
+}
+
+export enum HashAlgorithm {
+    SHA3_224 = 'SHA3-224',
+    SHA3_256 = 'SHA3-256',
+    SHA3_384 = 'SHA3-384',
+    SHA3_512 = 'SHA3-512',
+    SHA_224 = 'SHA-224',
+    SHA_256 = 'SHA-256',
+    SHA_384 = 'SHA-384',
+    SHA_512 = 'SHA-512',
 }
 
 /**
@@ -843,7 +900,12 @@ export interface Address {
     /**
      * Indicates the type of address.
      */
-    readonly type?: string;
+    readonly type?: AddressType;
+}
+
+export enum AddressType {
+    HOME = 'home',
+    WORK = 'work',
 }
 
 /**
@@ -854,7 +916,13 @@ export interface TelephoneNumber {
     /**
      * Indicates the type of phone number.
      */
-    readonly type?: string;
+    readonly type?: TypeFlag;
+}
+
+export enum TypeFlag {
+    HOME = 'home',
+    MOBILE = 'mobile',
+    OFFICE = 'office',
 }
 
 /**
@@ -902,7 +970,11 @@ export interface PartyExternalIdentifier {
     /**
      * Indicates the type of external identifier.
      */
-    readonly scheme: string;
+    readonly scheme: ExternalIdentifierSchema;
+}
+
+export enum ExternalIdentifierSchema {
+    HTTP_ORCID_ORG = 'http://orcid.org/',
 }
 
 export enum PartyType {
@@ -988,7 +1060,7 @@ export interface Task {
     /**
      * The type of task.
      */
-    readonly type: string;
+    readonly type: TaskType;
     /**
      * A machine-oriented, globally unique identifier with cross-instance scope that can be used
      * to reference this task elsewhere in this or other OSCAL instances. The locally defined
@@ -1090,6 +1162,11 @@ export interface OnDateRangeCondition {
     readonly start: Date;
 }
 
+export enum TaskType {
+    ACTION = 'action',
+    MILESTONE = 'milestone',
+}
+
 /**
  * Used to define various terms and conditions under which an assessment, described by the
  * plan, can be performed. Each child part defines a different type of term or condition.
@@ -1112,7 +1189,7 @@ export interface AssessmentPart {
     /**
      * A textual label that uniquely identifies the part's semantic type.
      */
-    readonly name: string;
+    readonly name: PartName;
     /**
      * A namespace qualifying the part's name. This allows different organizations to associate
      * distinct semantics with the same name.
@@ -1136,6 +1213,12 @@ export interface AssessmentPart {
      * be consistently used to identify the same subject across revisions of the document.
      */
     readonly uuid?: string;
+}
+
+export enum PartName {
+    ASSET = 'asset',
+    METHOD = 'method',
+    OBJECTIVE = 'objective',
 }
 
 /**
@@ -1469,7 +1552,15 @@ export interface ImplementationStatus {
     /**
      * Identifies the implementation status of the control or control objective.
      */
-    readonly state: string;
+    readonly state: ImplementationState;
+}
+
+export enum ImplementationState {
+    ALTERNATIVE = 'alternative',
+    IMPLEMENTED = 'implemented',
+    NOT_APPLICABLE = 'not-applicable',
+    PARTIAL = 'partial',
+    PLANNED = 'planned',
 }
 
 /**
@@ -1479,12 +1570,18 @@ export interface StatusClass {
     /**
      * The reason the objective was given it's status.
      */
-    readonly reason?: string;
+    readonly reason?: ObjectiveStatusReason;
     readonly remarks?: string;
     /**
      * An indication as to whether the objective is satisfied or not.
      */
     readonly state: ObjectiveStatusState;
+}
+
+export enum ObjectiveStatusReason {
+    FAIL = 'fail',
+    OTHER = 'other',
+    PASS = 'pass',
 }
 
 export enum ObjectiveStatusState {
@@ -1527,7 +1624,7 @@ export interface Observation {
      */
     readonly expires?: Date;
     readonly links?: Link[];
-    readonly methods: string[];
+    readonly methods: ObservationMethod[];
     readonly origins?: FindingOrigin[];
     readonly props?: Property[];
     readonly 'relevant-evidence'?: RelevantEvidence[];
@@ -1537,7 +1634,7 @@ export interface Observation {
      * The title for this observation.
      */
     readonly title?: string;
-    readonly types?: string[];
+    readonly types?: ObservationType[];
     /**
      * A machine-oriented, globally unique identifier with cross-instance scope that can be used
      * to reference this observation elsewhere in this or other OSCAL instances. The locally
@@ -1547,6 +1644,13 @@ export interface Observation {
      * of the document.
      */
     readonly uuid: string;
+}
+
+export enum ObservationMethod {
+    EXAMINE = 'EXAMINE',
+    INTERVIEW = 'INTERVIEW',
+    TEST = 'TEST',
+    UNKNOWN = 'UNKNOWN',
 }
 
 /**
@@ -1586,7 +1690,15 @@ export interface IdentifiesTheSubject {
     /**
      * Used to indicate the type of object pointed to by the uuid-ref within a subject.
      */
-    readonly type: string;
+    readonly type: SubjectUniversallyUniqueIdentifierReferenceType;
+}
+
+export enum ObservationType {
+    CONTROL_OBJECTIVE = 'control-objective',
+    FINDING = 'finding',
+    HISTORIC = 'historic',
+    MITIGATION = 'mitigation',
+    SSP_STATEMENT_ISSUE = 'ssp-statement-issue',
 }
 
 /**
@@ -1617,7 +1729,7 @@ export interface IdentifiedRisk {
      * An summary of impact for how the risk affects the system.
      */
     readonly statement: string;
-    readonly status: string;
+    readonly status: RiskStatus;
     readonly 'threat-ids'?: ThreatID[];
     /**
      * The title for this risk.
@@ -1659,11 +1771,22 @@ export interface Facet {
      * the same names to be used in different systems controlled by different parties. This
      * avoids the potential of a name clash.
      */
-    readonly system: string;
+    readonly system: NamingSystem;
     /**
      * Indicates the value of the facet.
      */
     readonly value: string;
+}
+
+export enum NamingSystem {
+    HTTP_CSRC_NIST_GOV_NS_OSCAL = 'http://csrc.nist.gov/ns/oscal',
+    HTTP_CSRC_NIST_GOV_NS_OSCAL_UNKNOWN = 'http://csrc.nist.gov/ns/oscal/unknown',
+    HTTP_CVE_MITRE_ORG = 'http://cve.mitre.org',
+    HTTP_FEDRAMP_GOV = 'http://fedramp.gov',
+    HTTP_FEDRAMP_GOV_NS_OSCAL = 'http://fedramp.gov/ns/oscal',
+    HTTP_WWW_FIRST_ORG_CVSS_V2_0 = 'http://www.first.org/cvss/v2.0',
+    HTTP_WWW_FIRST_ORG_CVSS_V3_0 = 'http://www.first.org/cvss/v3.0',
+    HTTP_WWW_FIRST_ORG_CVSS_V3_1 = 'http://www.first.org/cvss/v3.1',
 }
 
 /**
@@ -1722,7 +1845,7 @@ export interface RiskResponse {
      * Identifies whether this is a recommendation, such as from an assessor or tool, or an
      * actual plan accepted by the system owner.
      */
-    readonly lifecycle: string;
+    readonly lifecycle: RemediationIntent;
     readonly links?: Link[];
     readonly origins?: FindingOrigin[];
     readonly props?: Property[];
@@ -1742,6 +1865,12 @@ export interface RiskResponse {
      * of the document.
      */
     readonly uuid: string;
+}
+
+export enum RemediationIntent {
+    COMPLETED = 'completed',
+    PLANNED = 'planned',
+    RECOMMENDATION = 'recommendation',
 }
 
 /**
@@ -1801,7 +1930,7 @@ export interface RiskLogEntry {
      * Identifies the start date and time of the event.
      */
     readonly start: Date;
-    readonly 'status-change'?: string;
+    readonly 'status-change'?: RiskStatus;
     /**
      * The title for this risk log entry.
      */
@@ -1831,6 +1960,15 @@ export interface RiskResponseReference {
     readonly 'response-uuid': string;
 }
 
+export enum RiskStatus {
+    CLOSED = 'closed',
+    DEVIATION_APPROVED = 'deviation-approved',
+    DEVIATION_REQUESTED = 'deviation-requested',
+    INVESTIGATING = 'investigating',
+    OPEN = 'open',
+    REMEDIATING = 'remediating',
+}
+
 /**
  * A pointer, by ID, to an externally-defined threat.
  */
@@ -1843,7 +1981,12 @@ export interface ThreatID {
     /**
      * Specifies the source of the threat information.
      */
-    readonly system: string;
+    readonly system: ThreatTypeIdentificationSystem;
+}
+
+export enum ThreatTypeIdentificationSystem {
+    HTTP_FEDRAMP_GOV = 'http://fedramp.gov',
+    HTTP_FEDRAMP_GOV_NS_OSCAL = 'http://fedramp.gov/ns/oscal',
 }
 
 /**
@@ -2192,7 +2335,7 @@ export interface ComponentDefinitionComponent {
     /**
      * A category describing the purpose of the component.
      */
-    readonly type: string;
+    readonly type: FluffyComponentType;
     /**
      * A machine-oriented, globally unique identifier with cross-instance scope that can be used
      * to reference this component elsewhere in this or other OSCAL instances. The locally
@@ -2202,6 +2345,20 @@ export interface ComponentDefinitionComponent {
      * document.
      */
     readonly uuid: string;
+}
+
+export enum FluffyComponentType {
+    GUIDANCE = 'guidance',
+    HARDWARE = 'hardware',
+    INTERCONNECTION = 'interconnection',
+    PHYSICAL = 'physical',
+    PLAN = 'plan',
+    POLICY = 'policy',
+    PROCESS_PROCEDURE = 'process-procedure',
+    SERVICE = 'service',
+    SOFTWARE = 'software',
+    STANDARD = 'standard',
+    VALIDATION = 'validation',
 }
 
 /**
@@ -2316,7 +2473,14 @@ export interface SystemIdentification {
     /**
      * Identifies the identification system from which the provided identifier was assigned.
      */
-    readonly 'identifier-type'?: string;
+    readonly 'identifier-type'?: IdentificationSystemType;
+}
+
+export enum IdentificationSystemType {
+    HTTPS_FEDRAMP_GOV = 'https://fedramp.gov',
+    HTTPS_IETF_ORG_RFC_RFC4122 = 'https://ietf.org/rfc/rfc4122',
+    HTTP_FEDRAMP_GOV_NS_OSCAL = 'http://fedramp.gov/ns/oscal',
+    HTTP_IETF_ORG_RFC_RFC4122 = 'http://ietf.org/rfc/rfc4122',
 }
 
 /**
@@ -3089,7 +3253,11 @@ export interface InformationTypeCategorization {
     /**
      * Specifies the information type identification system used.
      */
-    readonly system: string;
+    readonly system: InformationTypeIdentificationSystem;
+}
+
+export enum InformationTypeIdentificationSystem {
+    HTTP_DOI_ORG_106028_NIST_SP_80060_V2_R1 = 'http://doi.org/10.6028/NIST.SP.800-60v2r1',
 }
 
 /**
@@ -3349,12 +3517,12 @@ const typeMap: any = {
     "Link": o([
         { json: "href", js: "href", typ: "" },
         { json: "media-type", js: "media-type", typ: u(undefined, "") },
-        { json: "rel", js: "rel", typ: u(undefined, "") },
+        { json: "rel", js: "rel", typ: u(undefined, r("Relation")) },
         { json: "text", js: "text", typ: u(undefined, "") },
     ], false),
     "Property": o([
         { json: "class", js: "class", typ: u(undefined, "") },
-        { json: "name", js: "name", typ: "" },
+        { json: "name", js: "name", typ: r("PropertyName") },
         { json: "ns", js: "ns", typ: u(undefined, "") },
         { json: "remarks", js: "remarks", typ: u(undefined, "") },
         { json: "uuid", js: "uuid", typ: u(undefined, "") },
@@ -3384,7 +3552,7 @@ const typeMap: any = {
         { json: "responsible-roles", js: "responsible-roles", typ: u(undefined, a(r("ResponsibleRole"))) },
         { json: "status", js: "status", typ: r("ComponentStatus") },
         { json: "title", js: "title", typ: "" },
-        { json: "type", js: "type", typ: "" },
+        { json: "type", js: "type", typ: r("PurpleComponentType") },
         { json: "uuid", js: "uuid", typ: "" },
     ], false),
     "ServiceProtocolInformation": o([
@@ -3417,14 +3585,14 @@ const typeMap: any = {
         { json: "links", js: "links", typ: u(undefined, a(r("Link"))) },
         { json: "props", js: "props", typ: u(undefined, a(r("Property"))) },
         { json: "remarks", js: "remarks", typ: u(undefined, "") },
-        { json: "type", js: "type", typ: "" },
+        { json: "type", js: "type", typ: r("SubjectType") },
     ], false),
     "SelectAssessmentSubject": o([
         { json: "links", js: "links", typ: u(undefined, a(r("Link"))) },
         { json: "props", js: "props", typ: u(undefined, a(r("Property"))) },
         { json: "remarks", js: "remarks", typ: u(undefined, "") },
         { json: "subject-uuid", js: "subject-uuid", typ: "" },
-        { json: "type", js: "type", typ: "" },
+        { json: "type", js: "type", typ: r("SubjectUniversallyUniqueIdentifierReferenceType") },
     ], false),
     "IncludeAll": o([
     ], false),
@@ -3454,7 +3622,7 @@ const typeMap: any = {
     ], false),
     "DocumentIdentifier": o([
         { json: "identifier", js: "identifier", typ: "" },
-        { json: "scheme", js: "scheme", typ: u(undefined, "") },
+        { json: "scheme", js: "scheme", typ: u(undefined, r("DocumentIdentificationScheme")) },
     ], false),
     "ResourceLink": o([
         { json: "hashes", js: "hashes", typ: u(undefined, a(r("Hash"))) },
@@ -3462,7 +3630,7 @@ const typeMap: any = {
         { json: "media-type", js: "media-type", typ: u(undefined, "") },
     ], false),
     "Hash": o([
-        { json: "algorithm", js: "algorithm", typ: "" },
+        { json: "algorithm", js: "algorithm", typ: r("HashAlgorithm") },
         { json: "value", js: "value", typ: "" },
     ], false),
     "ImportSystemSecurityPlan": o([
@@ -3615,11 +3783,11 @@ const typeMap: any = {
         { json: "country", js: "country", typ: u(undefined, "") },
         { json: "postal-code", js: "postal-code", typ: u(undefined, "") },
         { json: "state", js: "state", typ: u(undefined, "") },
-        { json: "type", js: "type", typ: u(undefined, "") },
+        { json: "type", js: "type", typ: u(undefined, r("AddressType")) },
     ], false),
     "TelephoneNumber": o([
         { json: "number", js: "number", typ: "" },
-        { json: "type", js: "type", typ: u(undefined, "") },
+        { json: "type", js: "type", typ: u(undefined, r("TypeFlag")) },
     ], false),
     "PartyOrganizationOrPerson": o([
         { json: "addresses", js: "addresses", typ: u(undefined, a(r("Address"))) },
@@ -3638,7 +3806,7 @@ const typeMap: any = {
     ], false),
     "PartyExternalIdentifier": o([
         { json: "id", js: "id", typ: "" },
-        { json: "scheme", js: "scheme", typ: "" },
+        { json: "scheme", js: "scheme", typ: r("ExternalIdentifierSchema") },
     ], false),
     "RevisionHistoryEntry": o([
         { json: "last-modified", js: "last-modified", typ: u(undefined, Date) },
@@ -3671,7 +3839,7 @@ const typeMap: any = {
         { json: "tasks", js: "tasks", typ: u(undefined, a(r("Task"))) },
         { json: "timing", js: "timing", typ: u(undefined, r("EventTiming")) },
         { json: "title", js: "title", typ: "" },
-        { json: "type", js: "type", typ: "" },
+        { json: "type", js: "type", typ: r("TaskType") },
         { json: "uuid", js: "uuid", typ: "" },
     ], false),
     "AssociatedActivity": o([
@@ -3708,7 +3876,7 @@ const typeMap: any = {
     "AssessmentPart": o([
         { json: "class", js: "class", typ: u(undefined, "") },
         { json: "links", js: "links", typ: u(undefined, a(r("Link"))) },
-        { json: "name", js: "name", typ: "" },
+        { json: "name", js: "name", typ: r("PartName") },
         { json: "ns", js: "ns", typ: u(undefined, "") },
         { json: "parts", js: "parts", typ: u(undefined, a(r("AssessmentPart"))) },
         { json: "props", js: "props", typ: u(undefined, a(r("Property"))) },
@@ -3829,10 +3997,10 @@ const typeMap: any = {
     ], false),
     "ImplementationStatus": o([
         { json: "remarks", js: "remarks", typ: u(undefined, "") },
-        { json: "state", js: "state", typ: "" },
+        { json: "state", js: "state", typ: r("ImplementationState") },
     ], false),
     "StatusClass": o([
-        { json: "reason", js: "reason", typ: u(undefined, "") },
+        { json: "reason", js: "reason", typ: u(undefined, r("ObjectiveStatusReason")) },
         { json: "remarks", js: "remarks", typ: u(undefined, "") },
         { json: "state", js: "state", typ: r("ObjectiveStatusState") },
     ], false),
@@ -3848,14 +4016,14 @@ const typeMap: any = {
         { json: "description", js: "description", typ: "" },
         { json: "expires", js: "expires", typ: u(undefined, Date) },
         { json: "links", js: "links", typ: u(undefined, a(r("Link"))) },
-        { json: "methods", js: "methods", typ: a("") },
+        { json: "methods", js: "methods", typ: a(r("ObservationMethod")) },
         { json: "origins", js: "origins", typ: u(undefined, a(r("FindingOrigin"))) },
         { json: "props", js: "props", typ: u(undefined, a(r("Property"))) },
         { json: "relevant-evidence", js: "relevant-evidence", typ: u(undefined, a(r("RelevantEvidence"))) },
         { json: "remarks", js: "remarks", typ: u(undefined, "") },
         { json: "subjects", js: "subjects", typ: u(undefined, a(r("IdentifiesTheSubject"))) },
         { json: "title", js: "title", typ: u(undefined, "") },
-        { json: "types", js: "types", typ: u(undefined, a("")) },
+        { json: "types", js: "types", typ: u(undefined, a(r("ObservationType"))) },
         { json: "uuid", js: "uuid", typ: "" },
     ], false),
     "RelevantEvidence": o([
@@ -3871,7 +4039,7 @@ const typeMap: any = {
         { json: "remarks", js: "remarks", typ: u(undefined, "") },
         { json: "subject-uuid", js: "subject-uuid", typ: "" },
         { json: "title", js: "title", typ: u(undefined, "") },
-        { json: "type", js: "type", typ: "" },
+        { json: "type", js: "type", typ: r("SubjectUniversallyUniqueIdentifierReferenceType") },
     ], false),
     "IdentifiedRisk": o([
         { json: "characterizations", js: "characterizations", typ: u(undefined, a(r("Characterization"))) },
@@ -3885,7 +4053,7 @@ const typeMap: any = {
         { json: "remediations", js: "remediations", typ: u(undefined, a(r("RiskResponse"))) },
         { json: "risk-log", js: "risk-log", typ: u(undefined, r("RiskLog")) },
         { json: "statement", js: "statement", typ: "" },
-        { json: "status", js: "status", typ: "" },
+        { json: "status", js: "status", typ: r("RiskStatus") },
         { json: "threat-ids", js: "threat-ids", typ: u(undefined, a(r("ThreatID"))) },
         { json: "title", js: "title", typ: "" },
         { json: "uuid", js: "uuid", typ: "" },
@@ -3901,7 +4069,7 @@ const typeMap: any = {
         { json: "name", js: "name", typ: "" },
         { json: "props", js: "props", typ: u(undefined, a(r("Property"))) },
         { json: "remarks", js: "remarks", typ: u(undefined, "") },
-        { json: "system", js: "system", typ: "" },
+        { json: "system", js: "system", typ: r("NamingSystem") },
         { json: "value", js: "value", typ: "" },
     ], false),
     "MitigatingFactor": o([
@@ -3917,7 +4085,7 @@ const typeMap: any = {
     ], false),
     "RiskResponse": o([
         { json: "description", js: "description", typ: "" },
-        { json: "lifecycle", js: "lifecycle", typ: "" },
+        { json: "lifecycle", js: "lifecycle", typ: r("RemediationIntent") },
         { json: "links", js: "links", typ: u(undefined, a(r("Link"))) },
         { json: "origins", js: "origins", typ: u(undefined, a(r("FindingOrigin"))) },
         { json: "props", js: "props", typ: u(undefined, a(r("Property"))) },
@@ -3948,7 +4116,7 @@ const typeMap: any = {
         { json: "related-responses", js: "related-responses", typ: u(undefined, a(r("RiskResponseReference"))) },
         { json: "remarks", js: "remarks", typ: u(undefined, "") },
         { json: "start", js: "start", typ: Date },
-        { json: "status-change", js: "status-change", typ: u(undefined, "") },
+        { json: "status-change", js: "status-change", typ: u(undefined, r("RiskStatus")) },
         { json: "title", js: "title", typ: u(undefined, "") },
         { json: "uuid", js: "uuid", typ: "" },
     ], false),
@@ -3962,7 +4130,7 @@ const typeMap: any = {
     "ThreatID": o([
         { json: "href", js: "href", typ: u(undefined, "") },
         { json: "id", js: "id", typ: "" },
-        { json: "system", js: "system", typ: "" },
+        { json: "system", js: "system", typ: r("ThreatTypeIdentificationSystem") },
     ], false),
     "Catalog": o([
         { json: "back-matter", js: "back-matter", typ: u(undefined, r("BackMatter")) },
@@ -4088,7 +4256,7 @@ const typeMap: any = {
         { json: "remarks", js: "remarks", typ: u(undefined, "") },
         { json: "responsible-roles", js: "responsible-roles", typ: u(undefined, a(r("ResponsibleRole"))) },
         { json: "title", js: "title", typ: "" },
-        { json: "type", js: "type", typ: "" },
+        { json: "type", js: "type", typ: r("FluffyComponentType") },
         { json: "uuid", js: "uuid", typ: "" },
     ], false),
     "ImportComponentDefinition": o([
@@ -4132,7 +4300,7 @@ const typeMap: any = {
     ], false),
     "SystemIdentification": o([
         { json: "id", js: "id", typ: "" },
-        { json: "identifier-type", js: "identifier-type", typ: u(undefined, "") },
+        { json: "identifier-type", js: "identifier-type", typ: u(undefined, r("IdentificationSystemType")) },
     ], false),
     "Profile": o([
         { json: "back-matter", js: "back-matter", typ: u(undefined, r("BackMatter")) },
@@ -4401,7 +4569,7 @@ const typeMap: any = {
     ], false),
     "InformationTypeCategorization": o([
         { json: "information-type-ids", js: "information-type-ids", typ: u(undefined, a("")) },
-        { json: "system", js: "system", typ: "" },
+        { json: "system", js: "system", typ: r("InformationTypeIdentificationSystem") },
     ], false),
     "ConfidentialityImpactLevel": o([
         { json: "adjustment-justification", js: "adjustment-justification", typ: u(undefined, "") },
@@ -4435,6 +4603,12 @@ const typeMap: any = {
         { json: "title", js: "title", typ: "" },
         { json: "uuid", js: "uuid", typ: "" },
     ], false),
+    "Relation": [
+        "reference",
+    ],
+    "PropertyName": [
+        "marking",
+    ],
     "Transport": [
         "TCP",
         "UDP",
@@ -4444,6 +4618,62 @@ const typeMap: any = {
         "operational",
         "other",
         "under-development",
+    ],
+    "PurpleComponentType": [
+        "guidance",
+        "hardware",
+        "interconnection",
+        "network",
+        "physical",
+        "plan",
+        "policy",
+        "process-procedure",
+        "service",
+        "software",
+        "standard",
+        "system",
+        "this-system",
+        "validation",
+    ],
+    "SubjectUniversallyUniqueIdentifierReferenceType": [
+        "component",
+        "inventory-item",
+        "location",
+        "party",
+        "resource",
+        "user",
+    ],
+    "SubjectType": [
+        "component",
+        "inventory-item",
+        "location",
+        "party",
+        "user",
+    ],
+    "DocumentIdentificationScheme": [
+        "http://www.doi.org/",
+    ],
+    "HashAlgorithm": [
+        "SHA3-224",
+        "SHA3-256",
+        "SHA3-384",
+        "SHA3-512",
+        "SHA-224",
+        "SHA-256",
+        "SHA-384",
+        "SHA-512",
+    ],
+    "AddressType": [
+        "home",
+        "work",
+    ],
+    "TypeFlag": [
+        "home",
+        "mobile",
+        "office",
+    ],
+    "ExternalIdentifierSchema": [
+        "http://orcid.org/",
     ],
     "PartyType": [
         "organization",
@@ -4457,10 +4687,31 @@ const typeMap: any = {
         "seconds",
         "years",
     ],
+    "TaskType": [
+        "action",
+        "milestone",
+    ],
+    "PartName": [
+        "asset",
+        "method",
+        "objective",
+    ],
     "ActorType": [
         "assessment-platform",
         "party",
         "tool",
+    ],
+    "ImplementationState": [
+        "alternative",
+        "implemented",
+        "not-applicable",
+        "partial",
+        "planned",
+    ],
+    "ObjectiveStatusReason": [
+        "fail",
+        "other",
+        "pass",
     ],
     "ObjectiveStatusState": [
         "not-satisfied",
@@ -4470,9 +4721,68 @@ const typeMap: any = {
         "objective-id",
         "statement-id",
     ],
+    "ObservationMethod": [
+        "EXAMINE",
+        "INTERVIEW",
+        "TEST",
+        "UNKNOWN",
+    ],
+    "ObservationType": [
+        "control-objective",
+        "finding",
+        "historic",
+        "mitigation",
+        "ssp-statement-issue",
+    ],
+    "NamingSystem": [
+        "http://csrc.nist.gov/ns/oscal",
+        "http://csrc.nist.gov/ns/oscal/unknown",
+        "http://cve.mitre.org",
+        "http://fedramp.gov",
+        "http://fedramp.gov/ns/oscal",
+        "http://www.first.org/cvss/v2.0",
+        "http://www.first.org/cvss/v3.0",
+        "http://www.first.org/cvss/v3.1",
+    ],
+    "RemediationIntent": [
+        "completed",
+        "planned",
+        "recommendation",
+    ],
+    "RiskStatus": [
+        "closed",
+        "deviation-approved",
+        "deviation-requested",
+        "investigating",
+        "open",
+        "remediating",
+    ],
+    "ThreatTypeIdentificationSystem": [
+        "http://fedramp.gov",
+        "http://fedramp.gov/ns/oscal",
+    ],
     "ParameterCardinality": [
         "one",
         "one-or-more",
+    ],
+    "FluffyComponentType": [
+        "guidance",
+        "hardware",
+        "interconnection",
+        "physical",
+        "plan",
+        "policy",
+        "process-procedure",
+        "service",
+        "software",
+        "standard",
+        "validation",
+    ],
+    "IdentificationSystemType": [
+        "https://fedramp.gov",
+        "https://ietf.org/rfc/rfc4122",
+        "http://fedramp.gov/ns/oscal",
+        "http://ietf.org/rfc/rfc4122",
     ],
     "IncludeContainedControlsWithControl": [
         "no",
@@ -4500,5 +4810,8 @@ const typeMap: any = {
         "other",
         "under-development",
         "under-major-modification",
+    ],
+    "InformationTypeIdentificationSystem": [
+        "http://doi.org/10.6028/NIST.SP.800-60v2r1",
     ],
 };
