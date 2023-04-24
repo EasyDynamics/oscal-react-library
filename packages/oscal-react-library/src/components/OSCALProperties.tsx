@@ -5,7 +5,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
-import React from "react";
+import React, { ReactElement } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -27,7 +27,18 @@ const OSCALPropertiesButton = styled(Button)(
   `
 );
 
-function OSCALPropertiesCard(props: any) {
+interface OSCALPropertiesCardProps {
+  /**
+   * Title of the element the properties resides under
+   */
+  title: string;
+  /**
+   * Children to display in the modal
+   */
+  children: React.ReactNode;
+}
+
+function OSCALPropertiesCard(props: OSCALPropertiesCardProps): ReactElement {
   const { title, children } = props;
 
   const [open, setOpen] = React.useState(false);
@@ -82,7 +93,18 @@ function getThirdPartyNamespaces(properties: any) {
   return items;
 }
 
-function OSCALPropertiesTable(props: any) {
+interface OSCALPropertiesTable {
+  /**
+   * Contains properties elements
+   */
+  properties: any;
+  /**
+   * A namespace used for the title of a table
+   */
+  namespace: string;
+}
+
+function OSCALPropertiesTable(props: OSCALPropertiesTable): ReactElement {
   const { properties, namespace } = props;
 
   return (
@@ -122,7 +144,18 @@ function OSCALPropertiesTable(props: any) {
   );
 }
 
-export default function OSCALProperties(props: any) {
+interface OSCALPropertiesProps {
+  /**
+   * Contains properties elements
+   */
+  properties: any;
+  /**
+   * Title of the element the properties resides under
+   */
+  title: string;
+}
+
+export default function OSCALProperties(props: OSCALPropertiesProps) {
   const { properties, title } = props;
   const thirdPartyNamespaces = getThirdPartyNamespaces(properties);
 
