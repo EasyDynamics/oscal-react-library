@@ -13,6 +13,7 @@ import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import { conformLinkIdText } from "./oscal-utils/OSCALLinkUtils";
+import { OSCALMarkupLine } from "./OSCALMarkupProse";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -131,7 +132,7 @@ export default function OSCALCatalogGroups(props) {
           <Grid container>
             <Grid item sm={9}>
               <OSCALAnchorLinkHeader>
-                <OSCALSectionHeader>Control Groups</OSCALSectionHeader>
+                <OSCALSectionHeader>Controls</OSCALSectionHeader>
               </OSCALAnchorLinkHeader>
             </Grid>
             <Grid item sm={3}>
@@ -149,7 +150,7 @@ export default function OSCALCatalogGroups(props) {
                 {groups?.map((group) => (
                   <ComponentTab
                     key={group.title}
-                    label={group.title}
+                    label={<OSCALMarkupLine>{group.title}</OSCALMarkupLine>}
                     {...a11yProps(group.id ?? conformLinkIdText(group.title))}
                     value={group.id ?? conformLinkIdText(group.title)}
                   />

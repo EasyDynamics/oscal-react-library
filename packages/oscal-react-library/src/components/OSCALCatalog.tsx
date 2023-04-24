@@ -1,4 +1,4 @@
-import { Catalog } from "@easydynamics/oscal-types";
+import { Catalog, ControlGroup } from "@easydynamics/oscal-types";
 import React, { useEffect } from "react";
 import OSCALBackMatter from "./OSCALBackMatter";
 import OSCALCatalogGroups from "./OSCALCatalogGroups";
@@ -24,6 +24,11 @@ export const OSCALCatalog: React.FC<OSCALCatalogProps> = (props) => {
     },
   };
 
+  const defaultGroup: ControlGroup = {
+    title: "*Ungrouped Controls*",
+    controls: catalog.controls,
+  };
+
   return (
     <OSCALDocumentRoot>
       <OSCALMetadata
@@ -34,7 +39,10 @@ export const OSCALCatalog: React.FC<OSCALCatalogProps> = (props) => {
         urlFragment={urlFragment}
       />
 
-      <OSCALCatalogGroups groups={catalog.groups} urlFragment={urlFragment} />
+      <OSCALCatalogGroups
+        groups={catalog.controls ? [defaultGroup, ...(catalog.groups ?? [])] : catalog.groups}
+        urlFragment={urlFragment}
+      />
 
       <OSCALBackMatter
         backMatter={catalog["back-matter"]}
