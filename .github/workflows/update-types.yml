@@ -6,6 +6,12 @@ on:
     # Run daily (Monday-Friday) at 12:15 UTC (08:15 EDT/07:15 EST)
     - cron: "15 12 * * 1-5"
   workflow_dispatch:
+    inputs:
+      prerelease:
+        description: "Allow prerelease OSCAL version"
+        required: true
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -15,16 +21,35 @@ jobs:
     name: Fetch the latest complete schema
     runs-on: ubuntu-latest
     steps:
+      - name: Get information about the latest release
+        id: fetch-data
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prerelease = context.payload?.inputs?.prerelease ?? false;
+            const requestParams = { owner: "usnistgov", repo: "OSCAL" };
+            const release = prerelease
+              ? (await github.rest.repos.listReleases(requestParams)).data[0]
+              : (await github.rest.repos.getLatestRelease(requestParams)).data;
+            const version = release.tag_name.slice(1); // Remove leading `v` character
+            core.setOutput("version", version);
+            let url = undefined;
+            for (const asset of release.assets) {
+              if (asset.name == `oscal-${version}.zip`) {
+                url = asset.browser_download_url;
+                break;
+              }
+            }
+            if (!url) {
+              console.log(`Failed to find a matching download URL for ${version}`);
+            }
+            core.setOutput("url", url);
       - name: Download the latest OSCAL release
         run: |
-          curl -s https://api.github.com/repos/usnistgov/oscal/releases/latest \
-            | jq '.assets[] | select(.name|match("oscal.*.zip$")) | .browser_download_url' -r \
-            | wget -qi -
-          unzip *.zip
-          cp oscal-*/json/schema/oscal_complete_schema.json .
-          curl -s https://api.github.com/repos/usnistgov/oscal/releases/latest \
-            | jq '.tag_name' -r \
-            | sed 's/v//' > VERSION.txt
+          wget -q ${{ steps.fetch-data.outputs.url }}
+          unzip oscal-${{ steps.fetch-data.outputs.version }}.zip
+          cp oscal-${{ steps.fetch-data.outputs.version }}/json/schema/oscal_complete_schema.json .
+          echo "${{ steps.fetch-data.outputs.version }}" > VERSION.txt
       - name: Upload schema artifact
         uses: actions/upload-artifact@v3
         with:
@@ -35,6 +60,7 @@ jobs:
 
   generate:
     name: Generate types from schema
+    needs: [fetch-schema]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
