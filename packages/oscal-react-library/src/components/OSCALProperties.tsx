@@ -87,7 +87,9 @@ function getThirdPartyNamespaces(properties: any) {
   properties
     ?.filter((property: any) => !isNistNamespace(property?.ns))
     .map((property: any) => {
-      items.push(property?.ns);
+      if (!items.includes(property?.ns)) {
+        items.push(property?.ns);
+      }
     });
 
   return items;
