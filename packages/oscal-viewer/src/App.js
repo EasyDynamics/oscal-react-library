@@ -26,6 +26,7 @@ import {
 } from "@easydynamics/oscal-react-library";
 import logo from "./images/logo-header.svg";
 import { appTheme } from "./themes/AppTheme";
+import { OSCALGlobalStyles } from "./GlobalStyles";
 
 const OpenNavButton = styled(IconButton)(({ theme }) => `margin-right: ${theme.spacing(2)}`);
 const LogoImage = styled("img")`
@@ -223,6 +224,7 @@ function App() {
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={appTheme}>
         <CssBaseline />
+        <OSCALGlobalStyles theme={appTheme} />
         <div className="App">
           <AppBar position="static">
             <Toolbar>

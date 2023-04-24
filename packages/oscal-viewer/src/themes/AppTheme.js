@@ -3,7 +3,10 @@ import { createTheme } from "@mui/material/styles";
 export const appTheme = createTheme({
   palette: {
     primary: {
-      main: "#002867",
+      main: "#001131",
+    },
+    secondary: {
+      main: "#00BDE3",
     },
   },
   typography: {
@@ -19,7 +22,6 @@ export const appTheme = createTheme({
         root: {
           fontWeight: "600",
           fontSize: "16px",
-          wordSpacing: "35px",
           borderRadius: "5px",
           lineHeight: "20px",
         },
