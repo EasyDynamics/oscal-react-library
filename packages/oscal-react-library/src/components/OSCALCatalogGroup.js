@@ -17,6 +17,7 @@ import {
   shiftFragmentSuffix,
   conformLinkIdText,
 } from "./oscal-utils/OSCALLinkUtils";
+import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -436,6 +437,11 @@ export default function OSCALCatalogGroup(props) {
           setPreviousHandledFragment={setPreviousHandledFragment}
         />
       ))}
+      {group.parts
+        ?.map((groupPart) => groupPart.prose)
+        .map((prose) => (
+          <OSCALMarkupMultiLine key={prose}>{prose}</OSCALMarkupMultiLine>
+        ))}
     </OSCALControlList>
   );
 }
