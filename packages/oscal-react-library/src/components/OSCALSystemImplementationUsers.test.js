@@ -1,9 +1,7 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { usersTestData } from "../test-data/SystemData";
 import OSCALSystemImplementationUsers from "./OSCALSystemImplementationUsers";
-import { act } from "react-dom/test-utils";
 
 describe("OSCALSystemImplementationUsers", () => {
   test("shows 'Users' section title", () => {
@@ -32,9 +30,7 @@ describe("OSCALSystemImplementationUsers", () => {
 
   test("shows name of a user listed", async () => {
     render(<OSCALSystemImplementationUsers users={usersTestData} />);
-    act(() => {
-      userEvent.hover(screen.getByText("User 1"));
-    });
+    fireEvent.mouseOver(screen.getByText("User 1"));
     expect(await screen.findByText("A system user")).toBeInTheDocument();
   });
 
@@ -46,9 +42,7 @@ describe("OSCALSystemImplementationUsers", () => {
 
   test("shows 'Authorized Privileges' description", async () => {
     render(<OSCALSystemImplementationUsers users={usersTestData} />);
-    act(() => {
-      userEvent.hover(screen.getByText("privilege title"));
-    });
+    fireEvent.mouseOver(screen.getByText("privilege title"));
     expect(await screen.findByText("privilege description")).toBeInTheDocument();
   });
 
