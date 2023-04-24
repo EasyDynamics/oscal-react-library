@@ -59,7 +59,7 @@ jobs:
           path: schema
       - name: Run the update command
         run: |
-          npx ts-node scripts/generate-types.ts schema/oscal_complete_schema.json packages/oscal-types/src
+          npx ts-node scripts/generate-types.ts schema packages/oscal-types/src
       - name: Save version as output
         id: version
         run: 
