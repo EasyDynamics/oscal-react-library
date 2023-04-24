@@ -16,9 +16,6 @@ on:
 permissions:
   contents: read
 
-env:
-  OSCAL_REPO: usnistgov/OSCAL
-
 jobs:
   fetch-schema:
     name: Fetch the latest complete schema
