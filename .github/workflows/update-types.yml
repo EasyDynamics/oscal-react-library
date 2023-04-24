@@ -31,7 +31,6 @@ jobs:
             const release = prerelease
               ? (await github.rest.repos.listReleases(requestParams)).data[0]
               : (await github.rest.repos.getLatestRelease(requestParams)).data;
-            console.log(JSON.stringify(release));
             const version = release.tag_name.slice(1); // Remove leading `v` character
             core.setOutput("version", version);
             let url = undefined;
