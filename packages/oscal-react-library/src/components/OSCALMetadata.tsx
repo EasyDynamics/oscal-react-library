@@ -50,15 +50,12 @@ import {
 } from "@easydynamics/oscal-types";
 import { OSCALRevisionsButton } from "./OSCALRevision";
 import { OSCALMetadataLabel } from "./OSCALMetadataCommon";
+import { NotSpecifiedTypography } from "./StyledTypography";
 
 const OSCALMetadataSectionInfoHeader = styled(Typography)`
   display: flex;
   align-items: center;
 ` as typeof Typography;
-
-const OSCALMetadataCardTitleFallbackText = styled(Typography)(({ theme }) => ({
-  color: theme.palette.text.secondary,
-})) as typeof Typography;
 
 const OSCALMetadataTitle = styled(Grid)`
   height: 56px;
@@ -440,7 +437,7 @@ const OSCALMetadataCard: React.FC<OSCALMetadataCardProps> = (props) => {
   const cardTitle = title ? (
     <OSCALMarkupLine>{title}</OSCALMarkupLine>
   ) : (
-    <OSCALMetadataCardTitleFallbackText>Not Specified</OSCALMetadataCardTitleFallbackText>
+    <NotSpecifiedTypography>Not Specified</NotSpecifiedTypography>
   );
 
   return (
