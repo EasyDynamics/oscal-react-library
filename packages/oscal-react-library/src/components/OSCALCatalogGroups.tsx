@@ -7,33 +7,39 @@ import { styled } from "@mui/material/styles";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import PropTypes from "prop-types";
-import React, { useEffect } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import { conformLinkIdText } from "./oscal-utils/OSCALLinkUtils";
 import { OSCALMarkupLine } from "./OSCALMarkupProse";
+import { Control, ControlGroup } from "@easydynamics/oscal-types";
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
   padding-right: 2em;
 `;
 
-function TabPanel(props) {
-  const { children, groupId, value, ...other } = props;
+interface TabPanelProps {
+  children: ReactNode;
+  groupId: string;
+  value: string;
+}
+
+const TabPanel: React.FC<TabPanelProps> = (props) => {
+  const { children, groupId, value } = props;
   return (
     <div
       role="tabpanel"
       hidden={value !== groupId}
       id={`vertical-tabpanel-${groupId}`}
       aria-labelledby={`vertical-tabpanel-${groupId}`}
-      {...other}
     >
       {value === groupId && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
-}
+};
 
 const ComponentTabs = styled(Tabs)(
   ({ theme }) => `
@@ -54,7 +60,7 @@ const ComponentTab = styled(Tab)(({ theme }) => ({
   textTransform: "none",
 }));
 
-function a11yProps(groupId) {
+function a11yProps(groupId: string) {
   return {
     id: `vertical-tab-${groupId}`,
     "aria-controls": `vertical-tab-${groupId}`,
@@ -72,20 +78,28 @@ TabPanel.propTypes = {
  * @param {*} groups The control groupings
  * @param {*} controlLayers An decending list of groups/controls
  * @param {*} rootLayer The top most layer
- * @returns This returns the lowest found control or null if not
+ * @returns This returns the lowest found control or undefined if not
  */
-function determineControlExists(groups, controlLayers, rootLayer) {
+function determineControlExists(
+  groups: ControlGroup[] | undefined,
+  controlLayers: any,
+  rootLayer: any
+): ControlGroup | undefined {
   // Ensure catalog tab grouping exists
   let upperLayer = groups?.find(
     (group) => group?.id === rootLayer || conformLinkIdText(group?.title) === rootLayer
   );
+
   if (!upperLayer) {
-    return null;
+    return undefined;
   }
+
   // Ensure lowest/deepest control exists within controls/groups
   for (let i = 1; i < controlLayers.length && upperLayer; i += 1) {
-    const subControl = upperLayer?.controls?.find((control) => control.id === controlLayers[i]);
-    const subGroup = upperLayer?.groups?.find(
+    const subControl: Control | undefined = upperLayer?.controls?.find(
+      (control) => control.id === controlLayers[i]
+    );
+    const subGroup: ControlGroup | undefined = upperLayer?.groups?.find(
       (group) =>
         group.id === controlLayers[i] || conformLinkIdText(group.title) === controlLayers[i]
     );
@@ -94,16 +108,21 @@ function determineControlExists(groups, controlLayers, rootLayer) {
   return upperLayer;
 }
 
-export default function OSCALCatalogGroups(props) {
+export interface OSCALCatalogGroupsProps {
+  groups: ControlGroup[] | undefined;
+  urlFragment?: string;
+}
+
+export const OSCALCatalogGroups: React.FC<OSCALCatalogGroupsProps> = (props) => {
   const { groups, urlFragment } = props;
   const [openTab, setOpenTab] = React.useState(
-    groups[0]?.id ?? conformLinkIdText(groups[0]?.title)
+    groups?.[0]?.id ?? conformLinkIdText(groups?.[0]?.title)
   );
   const [isControlListItemOpened, setIsControlListItemOpened] = React.useState(false);
-  const [previousHandledFragment, setPreviousHandledFragment] = React.useState(null);
+  const [previousHandledFragment, setPreviousHandledFragment] = React.useState(undefined);
 
-  const handleChange = (event, newValue) => {
-    setOpenTab(newValue);
+  const handleChange = (event: React.SyntheticEvent<Element, Event>, value: string) => {
+    setOpenTab(value);
   };
 
   useEffect(() => {
@@ -158,12 +177,11 @@ export default function OSCALCatalogGroups(props) {
               </ComponentTabs>
             </Grid>
             <TabPanelList item sm={8.5}>
-              {groups?.map((group, index) => (
+              {groups?.map((group) => (
                 <TabPanel
                   key={group.title}
                   groupId={group.id ?? conformLinkIdText(group.title)}
                   value={openTab}
-                  index={index}
                 >
                   <OSCALCatalogGroup
                     group={group}
@@ -181,4 +199,6 @@ export default function OSCALCatalogGroups(props) {
       </Card>
     </OSCALSection>
   );
-}
+};
+
+export default OSCALCatalogGroups;

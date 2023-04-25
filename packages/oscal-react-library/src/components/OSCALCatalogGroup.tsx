@@ -6,7 +6,7 @@ import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
-import React, { useEffect } from "react";
+import React, { ReactNode, useEffect } from "react";
 import OSCALControl from "./OSCALControl";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
@@ -18,6 +18,12 @@ import {
   conformLinkIdText,
 } from "./oscal-utils/OSCALLinkUtils";
 import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
+import { Control, ControlGroup, Part } from "@easydynamics/oscal-types";
+
+interface CatalogGroupFragmentProps {
+  previousHandledFragment: string | undefined;
+  setPreviousHandledFragment: (...args: any[]) => void;
+}
 
 export const OSCALControlList = styled(List)`
   padding-left: 2em;
@@ -52,39 +58,38 @@ const StyledControlDescriptionWrapper = styled("div")`
  * @param {string} listId The group/control ID
  * @returns {boolean} Whether the top list item matches a list ID or not.
  */
-function isMatchingListItem(urlFragment, previousHandledFragment, fragmentSuffix, listId) {
+function isMatchingListItem(
+  urlFragment: string | undefined,
+  previousHandledFragment: string | undefined,
+  fragmentSuffix: string | undefined,
+  listId: string
+): boolean {
   // Ensure fragment exists and split by groupings
   if (!urlFragment || previousHandledFragment === urlFragment) {
-    return;
+    return false;
   }
   // Determine if current control/group list state matches ID
-  const currentList = fragmentSuffix.split("/")[0];
+  const currentList = fragmentSuffix?.split("/")[0];
   return currentList === listId;
+}
+
+interface CollapsibleListItemProps extends CatalogGroupFragmentProps {
+  urlFragment?: string;
+  group?: ControlGroup;
+  listId: string;
+  itemText: ReactNode;
+  children: ReactNode;
+  fragmentSuffix: string | undefined;
+  listItemOpened?: boolean;
+  setListItemOpened: (...args: any[]) => void;
 }
 
 /**
  * Creates a collapsible component for a catalog group/control.
  *
- * @param {any} props A set of properties pertaining to a collapsible list item
  * @returns A list item component with collapsible information
  */
-function CollapsibleListItem(props) {
-  /**
-   * {string} urlFragment - The current fragment being handled
-   * {any} group - A catalog group that contains either groups/controls
-   * {string} listId - Identification used for a list
-   * {string} itemText - The title of an item
-   * {any} children - Children underneath the list item - either a control/group or control/group
-   *   list
-   * {string} fragmentSuffix - The end of a fragment which starts with the current group/control
-   *   being handled
-   * {boolean} listItemOpened - Tells whether or not the current list item is opened
-   * {function} setIsListItemOpened - Callback function to set list item opened
-   * {function} setIsListItemNavigatedTo - Callback function to set whether the list item has been
-   *   navigated to
-   * {string} previousHandledFragment - The fragment that was handled previously
-   * {function} setPreviousHandledFragment - Callback function to set the previously handled fragment
-   */
+const CollapsibleListItem: React.FC<CollapsibleListItemProps> = (props) => {
   const {
     urlFragment,
     group,
@@ -94,7 +99,6 @@ function CollapsibleListItem(props) {
     fragmentSuffix,
     listItemOpened,
     setListItemOpened,
-    setIsListItemNavigatedTo,
     previousHandledFragment,
     setPreviousHandledFragment,
   } = props;
@@ -105,15 +109,13 @@ function CollapsibleListItem(props) {
   };
 
   useEffect(() => {
-    if (listItemOpened) {
-      setIsListItemNavigatedTo(true);
-      return;
-    }
-
-    if (isMatchingListItem(urlFragment, previousHandledFragment, fragmentSuffix, listId)) {
+    if (
+      urlFragment &&
+      isMatchingListItem(urlFragment, previousHandledFragment, fragmentSuffix, listId)
+    ) {
       setIsOpen(true);
 
-      if (fragmentSuffix.split("/").length <= 1) {
+      if (fragmentSuffix && fragmentSuffix.split("/").length <= 1) {
         const elementWithFragment = document.getElementById(urlFragment);
         elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
         setPreviousHandledFragment(urlFragment);
@@ -123,7 +125,6 @@ function CollapsibleListItem(props) {
     urlFragment,
     fragmentSuffix,
     listItemOpened,
-    setIsListItemNavigatedTo,
     listId,
     previousHandledFragment,
     setPreviousHandledFragment,
@@ -145,26 +146,21 @@ function CollapsibleListItem(props) {
       </Collapse>
     </StyledListItemPaper>
   );
+};
+
+interface WithdrawnListItemProps extends CatalogGroupFragmentProps {
+  children: ReactNode;
+  urlFragment?: string;
+  listId: string;
+  fragmentSuffix: string | undefined;
 }
 
 /**
  * Creates a top-level withdrawn control list item.
  *
- * @param {any} props A set of properties pertaining to a withdrawn control list item
  * @returns A top-level withdrawn control list item component
  */
-function WithdrawnListItem(props) {
-  /**
-   * {string} urlFragment - The current fragment being handled
-   * {string} listId - Identification used for a list
-   * {any} children - Children underneath the list item - either a control/group or control/group
-   *   list
-   * {string} fragmentSuffix - The end of a fragment which starts with the current group/control
-   *   being handled
-   * {string} previousHandledFragment - The fragment that was handled previously
-   * {function} setPreviousHandledFragment - Callback function to set the previously handled
-   *   fragment
-   */
+const WithdrawnListItem: React.FC<WithdrawnListItemProps> = (props) => {
   const {
     children,
     urlFragment,
@@ -174,11 +170,14 @@ function WithdrawnListItem(props) {
     setPreviousHandledFragment,
   } = props;
   useEffect(() => {
-    if (isMatchingListItem(urlFragment, previousHandledFragment, fragmentSuffix, listId)) {
+    if (
+      urlFragment &&
+      isMatchingListItem(urlFragment, previousHandledFragment, fragmentSuffix, listId)
+    ) {
       const elementWithFragment = document.getElementById(urlFragment);
       elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
 
-      if (fragmentSuffix.split("/").length <= 1) {
+      if (fragmentSuffix && fragmentSuffix.split("/").length <= 1) {
         setPreviousHandledFragment(urlFragment);
       }
     }
@@ -189,29 +188,23 @@ function WithdrawnListItem(props) {
       <StyledListItem>{children}</StyledListItem>
     </StyledListItemPaper>
   );
+};
+
+interface OSCALCatalogControlListItemProps extends CatalogGroupFragmentProps {
+  control: Control;
+  urlFragment?: string;
+  fragmentPrefix: string;
+  fragmentSuffix: string | undefined;
+  isControlListItemOpened: boolean;
+  setIsControlListItemOpened: (...args: any[]) => void;
 }
 
 /**
  * Creates a catalog list item component containing a catalog group/control.
  *
- * @param {any} props A set of properties pertaining to a list item
  * @returns A list item component which contains sub list item(s) and/or collapsible information
  */
-function OSCALCatalogControlListItem(props) {
-  /**
-   * {any} control - The current control
-   * {string} urlFragment - The current fragment being handled
-   * {string} fragmentPrefix - The beginning of a fragment which ends with the current
-   *   group/control being handled
-   * {string} fragmentSuffix - The end of a fragment which starts with the current group/control
-   *   being handled
-   * {boolean} isControlListItemOpened - Tells whether the current list item is opened
-   * {function} setIsControlListItemOpened - Callback function to set whether the list item has
-   *   been navigated to
-   * {string} previousHandledFragment - The fragment that was handled previously
-   * {function} setPreviousHandledFragment - Callback function to set the previously handled
-   *   fragment
-   */
+const OSCALCatalogControlListItem: React.FC<OSCALCatalogControlListItemProps> = (props) => {
   const {
     control,
     urlFragment,
@@ -243,15 +236,13 @@ function OSCALCatalogControlListItem(props) {
 
   return withdrawn ? (
     <WithdrawnListItem
-      primary={itemText}
-      withdrawn={withdrawn}
       urlFragment={urlFragment}
       listId={control?.id}
       previousHandledFragment={previousHandledFragment}
       setPreviousHandledFragment={setPreviousHandledFragment}
       fragmentSuffix={shiftFragmentSuffix(fragmentSuffix)}
     >
-      <WithdrawnListItemText primary={itemText} withdrawn={withdrawn} />
+      <WithdrawnListItemText primary={itemText} />
     </WithdrawnListItem>
   ) : (
     <CollapsibleListItem
@@ -261,8 +252,6 @@ function OSCALCatalogControlListItem(props) {
       listItemOpened={isControlListItemOpened}
       setListItemOpened={setIsControlListItemOpened}
       listId={control?.id}
-      isListItemNavigatedTo={isListItemNavigatedTo}
-      setIsListItemNavigatedTo={setIsListItemNavigatedTo}
       previousHandledFragment={previousHandledFragment}
       setPreviousHandledFragment={setPreviousHandledFragment}
     >
@@ -281,30 +270,23 @@ function OSCALCatalogControlListItem(props) {
       />
     </CollapsibleListItem>
   );
+};
+
+interface OSCALCatalogGroupListProps extends CatalogGroupFragmentProps {
+  group: ControlGroup;
+  urlFragment?: string;
+  fragmentPrefix: string;
+  fragmentSuffix: string | undefined;
+  isControlListItemOpened: boolean;
+  setIsControlListItemOpened: (...args: any[]) => void;
 }
 
 /**
  * Creates a catalog group list which contains groups/controls.
  *
- * @param {any} props A set of properties pertaining to a group list
  * @returns A group list component which contains a set of items
  */
-function OSCALCatalogGroupList(props) {
-  /**
-   * {any} group - The current group
-   * {string} urlFragment - The current fragment being handled
-   * {string} fragmentPrefix - The beginning of a fragment which ends with the current group/control
-   *   being handled
-   * {string} fragmentSuffix - The end of a fragment which starts with the current group/control
-   *   being handled
-   * {boolean} setIsControlListItemOpened - isControlListItemOpened Tells whether the current list
-   *   item is opened
-   * {function} setIsControlListItemOpened - Callback function to set whether the list item has
-   *   been navigated to
-   * {string} previousHandledFragment - The fragment that was handled previously
-   * {function} setPreviousHandledFragment - Callback function to set the previously handled
-   *   fragment
-   */
+const OSCALCatalogGroupList: React.FC<OSCALCatalogGroupListProps> = (props) => {
   const {
     group,
     urlFragment,
@@ -315,7 +297,6 @@ function OSCALCatalogGroupList(props) {
     previousHandledFragment,
     setPreviousHandledFragment,
   } = props;
-  const [isListItemNavigatedTo, setIsListItemNavigatedTo] = React.useState(false);
   const itemText = (
     <OSCALAnchorLinkHeader
       name={appendToFragmentPrefix(
@@ -340,8 +321,6 @@ function OSCALCatalogGroupList(props) {
       fragmentSuffix={fragmentSuffix}
       listItemOpened={isControlListItemOpened}
       setListItemOpened={setIsControlListItemOpened}
-      isListItemNavigatedTo={isListItemNavigatedTo}
-      setIsListItemNavigatedTo={setIsListItemNavigatedTo}
       previousHandledFragment={previousHandledFragment}
       setPreviousHandledFragment={setPreviousHandledFragment}
     >
@@ -381,19 +360,16 @@ function OSCALCatalogGroupList(props) {
       </OSCALControlList>
     </CollapsibleListItem>
   );
+};
+
+export interface OSCALCatalogGroupProps extends CatalogGroupFragmentProps {
+  group: ControlGroup;
+  urlFragment?: string;
+  isControlListItemOpened: boolean;
+  setIsControlListItemOpened: (...args: any[]) => void;
 }
 
-export default function OSCALCatalogGroup(props) {
-  /**
-   * {any} group - The current group
-   * {string} urlFragment - The current fragment being handled
-   * {boolean} isControlListItemOpened - Tells whether the current list item is opened
-   * {function} setIsControlListItemOpened - Callback function to set whether the list item has
-   *   been navigated to
-   * {string} previousHandledFragment - The fragment that was handled previously
-   * {function} setPreviousHandledFragment - Callback function to set the previously handled
-   *   fragment
-   */
+export const OSCALCatalogGroup: React.FC<OSCALCatalogGroupProps> = (props) => {
   const {
     group,
     urlFragment,
@@ -407,11 +383,11 @@ export default function OSCALCatalogGroup(props) {
   const fragmentPrefix = group.id ?? conformLinkIdText(group.title) ?? "";
   const fragmentSuffix = urlFragment
     ? `${urlFragment.substring(urlFragment.indexOf("/") + 1)}`
-    : null;
+    : undefined;
 
   return (
     <OSCALControlList>
-      {group.groups?.map((innerGroup) => (
+      {group.groups?.map((innerGroup: ControlGroup) => (
         <OSCALCatalogGroupList
           group={innerGroup}
           key={innerGroup.title}
@@ -424,7 +400,7 @@ export default function OSCALCatalogGroup(props) {
           setPreviousHandledFragment={setPreviousHandledFragment}
         />
       ))}
-      {group.controls?.map((control) => (
+      {group.controls?.map((control: Control) => (
         <OSCALCatalogControlListItem
           control={control}
           key={control.id}
@@ -438,10 +414,12 @@ export default function OSCALCatalogGroup(props) {
         />
       ))}
       {group.parts
-        ?.map((groupPart) => groupPart.prose)
+        ?.map((groupPart: Part) => groupPart.prose)
         .map((prose) => (
           <OSCALMarkupMultiLine key={prose}>{prose}</OSCALMarkupMultiLine>
         ))}
     </OSCALControlList>
   );
-}
+};
+
+export default OSCALCatalogGroup;

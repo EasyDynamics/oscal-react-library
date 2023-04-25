@@ -98,7 +98,7 @@ export function appendToFragmentPrefix(fragmentPrefix: string, controlId: string
  * @param fragmentSuffix The end of a fragment
  * @returns fragmentSuffix with a removed control
  */
-export function shiftFragmentSuffix(fragmentSuffix: string): string | undefined {
+export function shiftFragmentSuffix(fragmentSuffix: string | undefined): string | undefined {
   return fragmentSuffix
     ? `${fragmentSuffix.substring(fragmentSuffix.indexOf("/") + 1)}`
     : undefined;

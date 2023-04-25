@@ -1,5 +1,5 @@
+import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
 import OSCALCatalogGroups from "./OSCALCatalogGroups";
 
 const testGroups = [
@@ -35,9 +35,9 @@ const testGroups = [
   },
 ];
 
-function getTextByChildren(text) {
-  function result(_content, node) {
-    const hasText = (checkNode) => checkNode.textContent === text;
+function getTextByChildren(text: string) {
+  function result(_content: any, node: any) {
+    const hasText = (checkNode: any) => checkNode.textContent === text;
     const nodeHasText = hasText(node);
     // This is necessary because we are providing a query function to override how
     // text search is performed.
