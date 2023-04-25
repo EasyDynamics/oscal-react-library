@@ -4,7 +4,6 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 import OSCALControlLabel from "./OSCALControlLabel";
@@ -54,13 +53,7 @@ export default function OSCALControlGuidance(props) {
           {` ${props.title} Discussion`}
         </DialogTitle>
         <DialogContent dividers>
-          <DialogContentText
-            id="scroll-dialog-description"
-            ref={descriptionElementRef}
-            tabIndex={-1}
-          >
-            <OSCALMarkupMultiLine>{props.prose}</OSCALMarkupMultiLine>
-          </DialogContentText>
+          <OSCALMarkupMultiLine>{props.prose}</OSCALMarkupMultiLine>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

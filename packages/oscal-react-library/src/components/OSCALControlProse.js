@@ -6,7 +6,7 @@ import Badge from "@mui/material/Badge";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { Grid, IconButton, TextField } from "@mui/material";
+import { Grid, IconButton, Stack, TextField } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
@@ -25,9 +25,7 @@ const OSCALStatementEditControlsContainer = styled(Grid)`
   text-align: right;
 `;
 
-const NotImplementedStatement = styled(Typography)(
-  ({ theme }) => `color: ${theme.palette.grey[400]};`
-);
+const NotImplementedStatement = styled(Stack)(({ theme }) => `color: ${theme.palette.grey[400]};`);
 
 const prosePlaceholderRegexpString = "{{ insert: param, ([0-9a-zA-B-_.]*) }}";
 
@@ -160,15 +158,11 @@ function getTextSegment(text, key) {
   if (!text) {
     return null;
   }
-  return (
-    <Typography component="span" key={key}>
-      {text.includes("\n") ? (
-        <OSCALMarkupMultiLine>{text}</OSCALMarkupMultiLine>
-      ) : (
-        <OSCALMarkupLine>{text}</OSCALMarkupLine>
-      )}
-    </Typography>
-  );
+
+  if (text.includes("\n")) {
+    return <OSCALMarkupMultiLine key={key}>{text}</OSCALMarkupMultiLine>;
+  }
+  return <OSCALMarkupLine key={key}>{text}</OSCALMarkupLine>;
 }
 
 /**
@@ -324,18 +318,18 @@ export function OSCALReplacedProseWithParameterLabel(props) {
 
   if (props.modificationDisplay === undefined) {
     return (
-      <Typography>
+      <div>
         {props.label} {prose}
         {props.modificationDisplay}
-      </Typography>
+      </div>
     );
   }
 
   return (
-    <Typography>
+    <div>
       {props.label} {prose}
       {props.modificationDisplay}
-    </Typography>
+    </div>
   );
 }
 
