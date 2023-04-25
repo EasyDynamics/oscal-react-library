@@ -7,10 +7,10 @@ import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
 import OSCALMetadata from "./OSCALMetadata";
 
 export interface OSCALCatalogProps extends EditableFieldProps {
-  onResolutionComplete: React.EffectCallback;
-  catalog: Catalog;
-  urlFragment?: string | undefined;
-  parentUrl: string;
+  readonly onResolutionComplete: React.EffectCallback;
+  readonly catalog: Catalog;
+  readonly urlFragment?: string | undefined;
+  readonly parentUrl: string;
 }
 
 export const OSCALCatalog: React.FC<OSCALCatalogProps> = (props) => {

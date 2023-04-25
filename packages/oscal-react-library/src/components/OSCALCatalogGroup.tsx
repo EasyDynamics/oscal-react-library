@@ -21,8 +21,8 @@ import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 import { Control, ControlGroup, Part } from "@easydynamics/oscal-types";
 
 interface CatalogGroupFragmentProps {
-  previousHandledFragment: string | undefined;
-  setPreviousHandledFragment: (...args: any[]) => void;
+  readonly previousHandledFragment: string | undefined;
+  readonly setPreviousHandledFragment: (...args: any[]) => void;
 }
 
 export const OSCALControlList = styled(List)`
@@ -74,14 +74,14 @@ function isMatchingListItem(
 }
 
 interface CollapsibleListItemProps extends CatalogGroupFragmentProps {
-  urlFragment?: string;
-  group?: ControlGroup;
-  listId: string;
-  itemText: ReactNode;
-  children: ReactNode;
-  fragmentSuffix: string | undefined;
-  listItemOpened?: boolean;
-  setListItemOpened: (...args: any[]) => void;
+  readonly urlFragment?: string;
+  readonly group?: ControlGroup;
+  readonly listId: string;
+  readonly itemText: ReactNode;
+  readonly children: ReactNode;
+  readonly fragmentSuffix: string | undefined;
+  readonly listItemOpened?: boolean;
+  readonly setListItemOpened: (...args: any[]) => void;
 }
 
 /**
@@ -149,10 +149,10 @@ const CollapsibleListItem: React.FC<CollapsibleListItemProps> = (props) => {
 };
 
 interface WithdrawnListItemProps extends CatalogGroupFragmentProps {
-  children: ReactNode;
-  urlFragment?: string;
-  listId: string;
-  fragmentSuffix: string | undefined;
+  readonly children: ReactNode;
+  readonly urlFragment?: string;
+  readonly listId: string;
+  readonly fragmentSuffix: string | undefined;
 }
 
 /**
@@ -191,12 +191,12 @@ const WithdrawnListItem: React.FC<WithdrawnListItemProps> = (props) => {
 };
 
 interface OSCALCatalogControlListItemProps extends CatalogGroupFragmentProps {
-  control: Control;
-  urlFragment?: string;
-  fragmentPrefix: string;
-  fragmentSuffix: string | undefined;
-  isControlListItemOpened: boolean;
-  setIsControlListItemOpened: (...args: any[]) => void;
+  readonly control: Control;
+  readonly urlFragment?: string;
+  readonly fragmentPrefix: string;
+  readonly fragmentSuffix: string | undefined;
+  readonly isControlListItemOpened: boolean;
+  readonly setIsControlListItemOpened: (...args: any[]) => void;
 }
 
 /**
@@ -273,12 +273,12 @@ const OSCALCatalogControlListItem: React.FC<OSCALCatalogControlListItemProps> = 
 };
 
 interface OSCALCatalogGroupListProps extends CatalogGroupFragmentProps {
-  group: ControlGroup;
-  urlFragment?: string;
-  fragmentPrefix: string;
-  fragmentSuffix: string | undefined;
-  isControlListItemOpened: boolean;
-  setIsControlListItemOpened: (...args: any[]) => void;
+  readonly group: ControlGroup;
+  readonly urlFragment?: string;
+  readonly fragmentPrefix: string;
+  readonly fragmentSuffix: string | undefined;
+  readonly isControlListItemOpened: boolean;
+  readonly setIsControlListItemOpened: (...args: any[]) => void;
 }
 
 /**
@@ -368,10 +368,10 @@ const OSCALCatalogGroupList: React.FC<OSCALCatalogGroupListProps> = (props) => {
 };
 
 export interface OSCALCatalogGroupProps extends CatalogGroupFragmentProps {
-  group: ControlGroup;
-  urlFragment?: string;
-  isControlListItemOpened: boolean;
-  setIsControlListItemOpened: (...args: any[]) => void;
+  readonly group: ControlGroup;
+  readonly urlFragment?: string;
+  readonly isControlListItemOpened: boolean;
+  readonly setIsControlListItemOpened: (...args: any[]) => void;
 }
 
 export const OSCALCatalogGroup: React.FC<OSCALCatalogGroupProps> = (props) => {
