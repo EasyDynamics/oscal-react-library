@@ -50,7 +50,6 @@ import {
 } from "@easydynamics/oscal-types";
 import { OSCALRevisionsButton } from "./OSCALRevision";
 import { OSCALMetadataLabel } from "./OSCALMetadataCommon";
-import { NotSpecifiedTypography } from "./StyledTypography";
 
 const OSCALMetadataSectionInfoHeader = styled(Typography)`
   display: flex;
@@ -437,7 +436,7 @@ const OSCALMetadataCard: React.FC<OSCALMetadataCardProps> = (props) => {
   const cardTitle = title ? (
     <OSCALMarkupLine>{title}</OSCALMarkupLine>
   ) : (
-    <NotSpecifiedTypography>Not Specified</NotSpecifiedTypography>
+    <Typography className="NotSpecified">Not Specified</Typography>
   );
 
   return (

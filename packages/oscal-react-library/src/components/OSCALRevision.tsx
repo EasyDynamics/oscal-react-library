@@ -18,7 +18,6 @@ import {
   StyledTableHead,
   StyledTableRow,
 } from "./OSCALSystemImplementationTableStyles";
-import { NotSpecifiedTypography } from "./StyledTypography";
 
 export interface OSCALRevisionProps {
   revision: RevisionHistoryEntry;
@@ -26,7 +25,7 @@ export interface OSCALRevisionProps {
 
 export const OSCALRevision: React.FC<OSCALRevisionProps> = (props) => {
   const { revision } = props;
-  const NO_INFORMATION = <NotSpecifiedTypography>Not Specified</NotSpecifiedTypography>;
+  const NO_INFORMATION = <Typography className="NotSpecified">Not Specified</Typography>;
 
   return (
     <StyledTableRow>

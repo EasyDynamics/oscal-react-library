@@ -14,6 +14,9 @@ const globalStyles = (theme) => ({
       ","
     ),
   },
+  ".NotSpecified": {
+    color: theme.palette.text.disabled,
+  },
 });
 
 export function OSCALGlobalStyles(props) {
