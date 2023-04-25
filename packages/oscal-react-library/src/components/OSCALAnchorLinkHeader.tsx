@@ -12,7 +12,16 @@ const AnchorLinkIcon = styled(LinkIcon)(({ theme }) => ({
   color: theme.palette.grey[500],
 }));
 
-export default function OSCALAnchorLinkHeader(props) {
+export interface AnchorLinkProps {
+  urlFragment?: string;
+}
+
+export interface OSCALAnchorLinkHeaderProps {
+  children: any;
+  value?: any;
+}
+
+export const OSCALAnchorLinkHeader: React.FC<OSCALAnchorLinkHeaderProps> = (props) => {
   const { children, value } = props;
   const [isHover, setIsHover] = useState(false);
   const onEnter = () => {
@@ -44,4 +53,6 @@ export default function OSCALAnchorLinkHeader(props) {
       )}
     </Stack>
   );
-}
+};
+
+export default OSCALAnchorLinkHeader;
