@@ -17,7 +17,15 @@ export interface AnchorLinkProps {
 }
 
 export interface OSCALAnchorLinkHeaderProps {
+  /**
+   * Text or element to link to.
+   *
+   * @example a <Typography />
+   */
   children: any;
+  /**
+   * Value to be used in the id and fragment.
+   */
   value?: any;
 }
 
