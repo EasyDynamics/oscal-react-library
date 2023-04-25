@@ -8,7 +8,7 @@ import OSCALSystemImplementationComponents from "./OSCALSystemImplementationComp
 import OSCALSystemImplementationInventoryItems from "./OSCALSystemImplementationInventoryItems";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
-import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 
 export default function OSCALSystemImplementation(props) {
   if (!props.systemImplementation) {

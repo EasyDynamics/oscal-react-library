@@ -8,7 +8,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 import React, { useEffect } from "react";
 import OSCALControl from "./OSCALControl";
-import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
 import OSCALControlLabel from "./OSCALControlLabel";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";

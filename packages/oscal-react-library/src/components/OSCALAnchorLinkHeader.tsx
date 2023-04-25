@@ -54,5 +54,3 @@ export const OSCALAnchorLinkHeader: React.FC<OSCALAnchorLinkHeaderProps> = (prop
     </Stack>
   );
 };
-
-export default OSCALAnchorLinkHeader;

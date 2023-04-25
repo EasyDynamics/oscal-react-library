@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 import OSCALControlLabel from "./OSCALControlLabel";
 import OSCALControlPart from "./OSCALControlPart";
 import OSCALControlModification from "./OSCALControlModification";
-import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import { appendToFragmentPrefix } from "./oscal-utils/OSCALLinkUtils";

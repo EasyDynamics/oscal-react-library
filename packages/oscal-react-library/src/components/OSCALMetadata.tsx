@@ -37,7 +37,7 @@ import React, { ReactNode, useEffect } from "react";
 import { OSCALSection } from "../styles/CommonPageStyles";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import OSCALEditableTextField, { EditableFieldProps } from "./OSCALEditableTextField";
-import OSCALAnchorLinkHeader, { AnchorLinkProps } from "./OSCALAnchorLinkHeader";
+import { OSCALAnchorLinkHeader, AnchorLinkProps } from "./OSCALAnchorLinkHeader";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 import {
   Address,

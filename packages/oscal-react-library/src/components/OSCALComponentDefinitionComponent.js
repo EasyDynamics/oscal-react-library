@@ -12,7 +12,7 @@ import TableRow from "@mui/material/TableRow";
 import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
-import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 
 export default function OSCALComponentDefinitionComponent(props) {
   return (
