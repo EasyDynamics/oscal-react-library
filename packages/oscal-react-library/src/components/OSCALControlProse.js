@@ -308,7 +308,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
 
   if (!props.isImplemented) {
     return (
-      <NotSpecifiedTypography>
+      <NotSpecifiedTypography component="div">
         {props.label} {prose}
         {props.modificationDisplay}
       </NotSpecifiedTypography>
