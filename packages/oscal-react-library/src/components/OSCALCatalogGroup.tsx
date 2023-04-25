@@ -358,6 +358,11 @@ const OSCALCatalogGroupList: React.FC<OSCALCatalogGroupListProps> = (props) => {
           />
         ))}
       </OSCALControlList>
+      {group.parts
+        ?.map((groupPart: Part) => groupPart.prose)
+        .map((prose) => (
+          <OSCALMarkupMultiLine key={prose}>{prose}</OSCALMarkupMultiLine>
+        ))}
     </CollapsibleListItem>
   );
 };
@@ -386,39 +391,41 @@ export const OSCALCatalogGroup: React.FC<OSCALCatalogGroupProps> = (props) => {
     : undefined;
 
   return (
-    <OSCALControlList>
-      {group.groups?.map((innerGroup: ControlGroup) => (
-        <OSCALCatalogGroupList
-          group={innerGroup}
-          key={innerGroup.title}
-          urlFragment={urlFragment}
-          fragmentPrefix={fragmentPrefix}
-          fragmentSuffix={fragmentSuffix}
-          isControlListItemOpened={isControlListItemOpened}
-          setIsControlListItemOpened={setIsControlListItemOpened}
-          previousHandledFragment={previousHandledFragment}
-          setPreviousHandledFragment={setPreviousHandledFragment}
-        />
-      ))}
-      {group.controls?.map((control: Control) => (
-        <OSCALCatalogControlListItem
-          control={control}
-          key={control.id}
-          urlFragment={urlFragment}
-          fragmentPrefix={fragmentPrefix}
-          fragmentSuffix={urlFragment}
-          isControlListItemOpened={isControlListItemOpened}
-          setIsControlListItemOpened={setIsControlListItemOpened}
-          previousHandledFragment={previousHandledFragment}
-          setPreviousHandledFragment={setPreviousHandledFragment}
-        />
-      ))}
+    <>
+      <OSCALControlList>
+        {group.groups?.map((innerGroup: ControlGroup) => (
+          <OSCALCatalogGroupList
+            group={innerGroup}
+            key={innerGroup.title}
+            urlFragment={urlFragment}
+            fragmentPrefix={fragmentPrefix}
+            fragmentSuffix={fragmentSuffix}
+            isControlListItemOpened={isControlListItemOpened}
+            setIsControlListItemOpened={setIsControlListItemOpened}
+            previousHandledFragment={previousHandledFragment}
+            setPreviousHandledFragment={setPreviousHandledFragment}
+          />
+        ))}
+        {group.controls?.map((control: Control) => (
+          <OSCALCatalogControlListItem
+            control={control}
+            key={control.id}
+            urlFragment={urlFragment}
+            fragmentPrefix={fragmentPrefix}
+            fragmentSuffix={urlFragment}
+            isControlListItemOpened={isControlListItemOpened}
+            setIsControlListItemOpened={setIsControlListItemOpened}
+            previousHandledFragment={previousHandledFragment}
+            setPreviousHandledFragment={setPreviousHandledFragment}
+          />
+        ))}
+      </OSCALControlList>
       {group.parts
         ?.map((groupPart: Part) => groupPart.prose)
         .map((prose) => (
           <OSCALMarkupMultiLine key={prose}>{prose}</OSCALMarkupMultiLine>
         ))}
-    </OSCALControlList>
+    </>
   );
 };
 
