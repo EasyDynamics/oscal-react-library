@@ -65,12 +65,12 @@ function isMatchingListItem(
   listId: string
 ): boolean {
   // Ensure fragment exists and split by groupings
-  if (!urlFragment || previousHandledFragment === urlFragment) {
-    return false;
-  }
-  // Determine if current control/group list state matches ID
-  const currentList = fragmentSuffix?.split("/")[0];
-  return currentList === listId;
+  //  & Determine if current control/group list state matches ID
+  return (
+    !!urlFragment &&
+    previousHandledFragment !== urlFragment &&
+    fragmentSuffix?.split("/")?.[0] === listId
+  );
 }
 
 interface CollapsibleListItemProps extends CatalogGroupFragmentProps {
