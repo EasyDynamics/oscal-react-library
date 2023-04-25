@@ -17,6 +17,14 @@ const globalStyles = (theme) => ({
   ".NotSpecified": {
     color: theme.palette.text.disabled,
   },
+  ".SmallTableCell": {
+    textAlign: "right",
+    padding: "0.75em 0.75em",
+  },
+  ".ComponentTableCell": {
+    textAlign: "left",
+    minwidth: "20em",
+  },
 });
 
 export function OSCALGlobalStyles(props) {

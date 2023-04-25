@@ -4,16 +4,6 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import TableHead from "@mui/material/TableHead";
 
-export const SmallTableCell = styled(TableCell)`
-  text-align: right;
-  padding: 0.75em 0.75em;
-`;
-
-export const ComponentTableCell = styled(TableCell)`
-  text-align: left;
-  minwidth: 20em;
-`;
-
 export const OSCALSystemImplementationTableTitle = styled(Typography)`
   flex: 1 1 100%;
   padding-top: 1.5em;

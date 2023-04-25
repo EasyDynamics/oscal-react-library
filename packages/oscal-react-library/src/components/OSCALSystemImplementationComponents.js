@@ -11,7 +11,6 @@ import {
   OSCALSystemImplementationTableTitle,
   StyledHeaderTableCell,
   StyledTableRow,
-  ComponentTableCell,
   StyledTableHead,
 } from "./OSCALSystemImplementationTableStyles";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
@@ -37,11 +36,11 @@ export default function OSCALSystemImplementationComponents(props) {
           <TableBody>
             {props.components.map((component) => (
               <StyledTableRow key={component.uuid}>
-                <ComponentTableCell component="th" scope="row">
+                <TableCell className={"ComponentTableCell"} component="th" scope="row">
                   <StyledTooltip title={component.description}>
                     <Typography>{component.title}</Typography>
                   </StyledTooltip>
-                </ComponentTableCell>
+                </TableCell>
                 <TableCell>{component.type}</TableCell>
                 <TableCell>{component.status?.state}</TableCell>
                 <TableCell>
