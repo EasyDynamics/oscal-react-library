@@ -6,12 +6,13 @@ import Badge from "@mui/material/Badge";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { Grid, IconButton, Stack, TextField } from "@mui/material";
+import { Grid, IconButton, TextField } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
+import { NotSpecifiedTypography } from "./StyledTypography";
 
 const OSCALStatementEditing = styled(Grid)`
   ${(props) =>
@@ -24,8 +25,6 @@ const OSCALStatementEditing = styled(Grid)`
 const OSCALStatementEditControlsContainer = styled(Grid)`
   text-align: right;
 `;
-
-const NotImplementedStatement = styled(Stack)(({ theme }) => `color: ${theme.palette.grey[400]};`);
 
 const prosePlaceholderRegexpString = "{{ insert: param, ([0-9a-zA-B-_.]*) }}";
 
@@ -309,10 +308,10 @@ export function OSCALReplacedProseWithParameterLabel(props) {
 
   if (!props.isImplemented) {
     return (
-      <NotImplementedStatement>
+      <NotSpecifiedTypography>
         {props.label} {prose}
         {props.modificationDisplay}
-      </NotImplementedStatement>
+      </NotSpecifiedTypography>
     );
   }
 
