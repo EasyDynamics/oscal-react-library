@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import Stack from "@mui/material/Stack";
 import LinkIcon from "@mui/icons-material/Link";
 import { Link } from "react-router-dom";
@@ -22,9 +22,10 @@ export interface OSCALAnchorLinkHeaderProps {
    *
    * @example a <Typography />
    */
-  children: any;
+  children: ReactNode;
   /**
-   * Value to be used in the id and fragment.
+   * Value to be used in the id and fragment. If not specified,
+   * children will be used.
    */
   name?: string;
 }
