@@ -88,7 +88,7 @@ const OSCALPropertiesDialog = (props: OSCALPropertiesDialogProps): ReactElement 
  * @returns {string[]} A list of third-party namespaces
  */
 function getThirdPartyNamespaces(properties: Property[]) {
-  let items: string[] = [""];
+  const items: string[] = [""];
 
   properties
     ?.filter((property: any) => !isNistNamespace(property?.ns))
@@ -137,7 +137,7 @@ const OSCALPropertiesTable = (props: OSCALPropertiesTableProps): ReactElement =>
                   : property?.ns === namespace
               )
               .map((property: any) => (
-                <StyledTooltip title={property?.remarks ?? ""}>
+                <StyledTooltip title={property?.remarks ?? ""} key={`${property?.uuid}-remarks`}>
                   <StyledTableRow key={property?.uuid}>
                     <TableCell>{property?.name}</TableCell>
                     <TableCell>{property?.class}</TableCell>

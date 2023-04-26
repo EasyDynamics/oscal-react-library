@@ -18,9 +18,9 @@ export function namespaceOf(ns: string | undefined): string {
 
 /**
  * Validates if the namespace is a NIST namespace.
- * 
+ *
  * @param namespace the namespace
- * @returns a boolean describing whether the namespace is 
+ * @returns a boolean describing whether the namespace is
  */
 export function isNistNamespace(ns: string | undefined): boolean {
   return !ns || ns === NIST_DEFAULT_NAMESPACE;
