@@ -9,10 +9,6 @@ on:
     # Run daily at 03:15 UTC (10:15/11:15 ET)
     - cron: "15 3 * * *"
 
-permissions:
-  contents: read
-  id-token: write
-
 concurrency:
   group: "viewer-dev"
   cancel-in-progress: false
@@ -24,6 +20,8 @@ jobs:
     defaults:
       run:
         shell: bash
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -50,10 +48,14 @@ jobs:
           path: packages/oscal-viewer/build
   deploy:
     name: Deploy artifact
+    needs: ["build"]
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
+    permissions:
+      contents: read
+      id-token: write
     environment:
       name: development
     steps:
@@ -65,7 +67,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: "${{ secrets.ROLE_ARN }}"
-          region: "${{ vars.AWS_REGION }}"
+          aws-region: "${{ vars.AWS_REGION }}"
       - name: Deploy files
         run: |
           aws s3 sync . s3://${{ secrets.S3_BUCKET_NAME }}
