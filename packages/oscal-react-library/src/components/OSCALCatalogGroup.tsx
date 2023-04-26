@@ -403,7 +403,7 @@ const OSCALCatalogGroupList: React.FC<OSCALCatalogGroupListProps> = (props) => {
       setPreviousHandledFragment={setPreviousHandledFragment}
     >
       {group.parts
-        ?.map((groupPart: Part) => groupPart.prose)
+        ?.map((groupPart) => groupPart.prose)
         .map((prose) => (
           <OSCALMarkupMultiLine key={prose}>{prose}</OSCALMarkupMultiLine>
         ))}
