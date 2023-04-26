@@ -142,7 +142,7 @@ export default function OSCALControl(props) {
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <OSCALAnchorLinkHeader
-              value={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}
+              name={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}
             >
               <Typography
                 variant="h6"

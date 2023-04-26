@@ -27,7 +27,7 @@ export default function OSCALProfileCatalogInheritance(props) {
     <OSCALSection>
       <Card>
         <CardContent>
-          <OSCALAnchorLinkHeader value="profile-catalog-inheritance">
+          <OSCALAnchorLinkHeader name="profile-catalog-inheritance">
             <OSCALSectionHeader>Profiles/Catalog Inheritance</OSCALSectionHeader>
           </OSCALAnchorLinkHeader>
           <TreeView

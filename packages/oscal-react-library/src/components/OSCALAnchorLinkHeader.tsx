@@ -26,11 +26,11 @@ export interface OSCALAnchorLinkHeaderProps {
   /**
    * Value to be used in the id and fragment.
    */
-  value?: any;
+  name?: any;
 }
 
 export const OSCALAnchorLinkHeader: React.FC<OSCALAnchorLinkHeaderProps> = (props) => {
-  const { children, value } = props;
+  const { children, name } = props;
   const [isHover, setIsHover] = useState(false);
   const onEnter = () => {
     setIsHover(true);
@@ -39,7 +39,7 @@ export const OSCALAnchorLinkHeader: React.FC<OSCALAnchorLinkHeaderProps> = (prop
     setIsHover(false);
   };
 
-  const linkId = value || conformLinkIdText(children);
+  const linkId = name || conformLinkIdText(children);
 
   return (
     <Stack

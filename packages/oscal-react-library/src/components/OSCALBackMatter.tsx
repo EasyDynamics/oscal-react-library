@@ -39,7 +39,7 @@ interface TitleDisplayProps {
 function TitleDisplay(props: TitleDisplayProps): ReactElement {
   const { children, uuid } = props;
   return (
-    <OSCALAnchorLinkHeader value={uuid}>
+    <OSCALAnchorLinkHeader name={uuid}>
       <Typography variant="subtitle1">{children}</Typography>
     </OSCALAnchorLinkHeader>
   );
