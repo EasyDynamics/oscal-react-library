@@ -26,7 +26,7 @@ export interface OSCALAnchorLinkHeaderProps {
   /**
    * Value to be used in the id and fragment.
    */
-  name?: any;
+  name?: string;
 }
 
 export const OSCALAnchorLinkHeader: React.FC<OSCALAnchorLinkHeaderProps> = (props) => {
