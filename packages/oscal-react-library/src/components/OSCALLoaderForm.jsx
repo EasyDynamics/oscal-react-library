@@ -23,8 +23,9 @@ export default function OSCALLoaderForm(props) {
 
   const onUpload = (event) => {
     const file = event.target.files[0];
-    url.current.value = file.name;
-    props.onUrlChange(URL.createObjectURL(file));
+    const fileUrl = URL.createObjectURL(file);
+    url.current.value = fileUrl;
+    props.onUrlChange(fileUrl);
   };
 
   return (
