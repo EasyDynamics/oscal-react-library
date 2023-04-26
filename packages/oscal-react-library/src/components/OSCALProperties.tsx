@@ -167,11 +167,19 @@ export const OSCALProperties = (props: OSCALPropertiesProps) => {
   const { properties, title } = props;
   const thirdPartyNamespaces = getThirdPartyNamespaces(properties);
 
-  return properties ? (
+  if (!properties) {
+    return null;
+  }
+
+  return (
     <OSCALPropertiesDialog title={title}>
       <DialogTitle id="scroll-dialog-title">{title} Properties</DialogTitle>
       {/* Handle NIST properties */}
-      <OSCALPropertiesTable properties={properties} namespace={NIST_DEFAULT_NAMESPACE} key={NIST_DEFAULT_NAMESPACE} />
+      <OSCALPropertiesTable
+        properties={properties}
+        namespace={NIST_DEFAULT_NAMESPACE}
+        key={NIST_DEFAULT_NAMESPACE}
+      />
       {
         /* Handle 3rd party properties */
         thirdPartyNamespaces
@@ -181,5 +189,5 @@ export const OSCALProperties = (props: OSCALPropertiesProps) => {
           ))
       }
     </OSCALPropertiesDialog>
-  ) : null;
+  );
 };
