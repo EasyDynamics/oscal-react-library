@@ -1,5 +1,5 @@
 ---
-name: Deploy viewer to Dev environment
+name: Deploy viewer to Production environment
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
     - cron: "15 3 * * *"
 
 concurrency:
-  group: "viewer-dev"
+  group: "viewer-prod"
   cancel-in-progress: false
 
 jobs:
@@ -57,7 +57,8 @@ jobs:
       contents: read
       id-token: write
     environment:
-      name: development
+      name: production
+      url: https://viewer.oscal.io/
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v3
