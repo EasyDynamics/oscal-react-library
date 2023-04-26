@@ -71,7 +71,9 @@ jobs:
       - name: Deploy files
         run: |
           aws s3 sync . s3://${{ secrets.S3_BUCKET_NAME }}
-        working-directory: oscal-viewer
+        # The directory is doubled because of the trip through the GitHub artifact
+        # storage.
+        working-directory: oscal-viewer/oscal-viewer
       - name: Invalidate CloudFront cache
         run:
           aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/index.html"
