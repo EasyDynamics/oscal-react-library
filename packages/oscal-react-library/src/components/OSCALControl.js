@@ -50,7 +50,7 @@ function ControlsList(props) {
         title={
           <>
             <OSCALControlLabel id={control.id} label={control.label} component="span" />
-            {` ${control.title} Discussion`}
+            {` ${control.title}`}
           </>
         }
       />

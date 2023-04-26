@@ -18,6 +18,7 @@ import {
   StyledTableRow,
   StyledTableHead,
 } from "./OSCALSystemImplementationTableStyles";
+import { Property } from "@easydynamics/oscal-types";
 
 const OSCALPropertiesButton = styled(Button)(
   ({ theme }) => `
@@ -27,7 +28,7 @@ const OSCALPropertiesButton = styled(Button)(
   `
 );
 
-interface OSCALPropertiesCardProps {
+interface OSCALPropertiesDialogProps {
   /**
    * Title of the element the properties resides under
    */
@@ -38,7 +39,7 @@ interface OSCALPropertiesCardProps {
   children: React.ReactNode;
 }
 
-function OSCALPropertiesCard(props: OSCALPropertiesCardProps): ReactElement {
+function OSCALPropertiesDialog(props: OSCALPropertiesDialogProps): ReactElement {
   const { title, children } = props;
 
   const [open, setOpen] = React.useState(false);
@@ -70,8 +71,11 @@ function OSCALPropertiesCard(props: OSCALPropertiesCardProps): ReactElement {
         aria-describedby="scroll-dialog-description"
         maxWidth="md"
         fullWidth
+        sx={{ maxHeight: "75em" }}
       >
-        {children}
+        <DialogContent sx={{ maxHeight: "75vh" }} dividers>
+          {children}
+        </DialogContent>
       </Dialog>
     </>
   );
@@ -95,22 +99,22 @@ function getThirdPartyNamespaces(properties: any) {
   return items;
 }
 
-interface OSCALPropertiesTable {
+interface OSCALPropertiesTableProps {
   /**
    * Contains properties elements
    */
-  properties: any;
+  properties: Property[];
   /**
    * A namespace used for the title of a table
    */
-  namespace: string;
+  namespace?: string;
 }
 
-function OSCALPropertiesTable(props: OSCALPropertiesTable): ReactElement {
+function OSCALPropertiesTable(props: OSCALPropertiesTableProps): ReactElement {
   const { properties, namespace } = props;
 
   return (
-    <DialogContent dividers>
+    <>
       <OSCALSystemImplementationTableTitle variant="h6" id={`${namespace}-table-title`}>
         {namespace}
       </OSCALSystemImplementationTableTitle>
@@ -142,7 +146,7 @@ function OSCALPropertiesTable(props: OSCALPropertiesTable): ReactElement {
           </TableBody>
         </Table>
       </TableContainer>
-    </DialogContent>
+    </>
   );
 }
 
@@ -162,20 +166,18 @@ export default function OSCALProperties(props: OSCALPropertiesProps) {
   const thirdPartyNamespaces = getThirdPartyNamespaces(properties);
 
   return properties ? (
-    <OSCALPropertiesCard title={title}>
-      <DialogTitle id="scroll-dialog-title">
-        <Stack direction="column">{title} Properties</Stack>
-      </DialogTitle>
+    <OSCALPropertiesDialog title={title}>
+      <DialogTitle id="scroll-dialog-title">{title} Properties</DialogTitle>
       {/* Handle NIST properties */}
-      <OSCALPropertiesTable properties={properties} namespace={"NIST OSCAL"} />
+      <OSCALPropertiesTable properties={properties} namespace={"NIST OSCAL"} key={"NIST OSCAL"} />
       {
         /* Handle 3rd party properties */
         thirdPartyNamespaces
           ?.filter((namespace) => namespace !== "")
           .map((namespace: any) => (
-            <OSCALPropertiesTable properties={properties} namespace={namespace} />
+            <OSCALPropertiesTable properties={properties} namespace={namespace} key={namespace} />
           ))
       }
-    </OSCALPropertiesCard>
+    </OSCALPropertiesDialog>
   ) : null;
 }

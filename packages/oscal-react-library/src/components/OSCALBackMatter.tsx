@@ -115,10 +115,6 @@ function BackMatterResource(props: BackMatterResourceProps) {
           <Grid container spacing={0}>
             <Grid item xs={11}>
               <TitleDisplay uuid={resource.uuid}>
-                <OSCALProperties
-                  properties={resource?.props}
-                  title={resource?.title ?? resource?.uuid}
-                />
                 <OSCALEditableTextField
                   fieldName="title"
                   isEditable={isEditable}
@@ -146,6 +142,7 @@ function BackMatterResource(props: BackMatterResourceProps) {
               </Grid>
             </Grid>
           </Grid>
+          <OSCALProperties properties={resource?.props} title={resource?.title ?? resource?.uuid} />
           <OSCALEditableTextField
             fieldName="description"
             isEditable={isEditable}
