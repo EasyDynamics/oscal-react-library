@@ -34,18 +34,22 @@ jobs:
           cache: npm
 
       - name: Install latest npm and and npm-check-updates
-        run: npm install -g npm@latest npm-check-updates@latest
+        run: npm install -g npm@latest npm-check-updates@latest lerna@latest
+
+      - name: Install the required project tooling
+        run: |
+          npm ci
 
       - name: Update project dependencies
         run: |-
           # Only allow minor/patch versions of react (and tightly-couple packages) and
           # upgrade all others to the newest version available.
           # Upgrade packages in the root
-          ncu --deep --upgrade --filter "react* @testing-library/react" --target minor
-          ncu --deep --upgrade --reject "react* @testing-library/react"
+          ncu --deep --upgrade --filter "react* @testing-library/react typescript" --target minor
+          ncu --deep --upgrade --reject "react* @testing-library/react typescript"
           # Upgrade packaes everyhwere (same as we just did but with lerna)
-          lerna exec --parallel ncu -- --deep --upgrade --filter "'react* @testing-library/react'" --target minor
-          lerna exec --parallel ncu -- --deep --upgrade --reject "'react* @testing-library/react'"
+          lerna exec --parallel ncu -- --deep --upgrade --filter "'react* @testing-library/react typescript'" --target minor
+          lerna exec --parallel ncu -- --deep --upgrade --reject "'react* @testing-library/react typescript'"
 
       - name: Install updated dependencies
         run: |-
