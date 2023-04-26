@@ -20,6 +20,12 @@ const testGroups = [
               {
                 id: "control-id",
                 title: "Access Control Policy and Procedures",
+                props: [
+                  {
+                    name: "label",
+                    value: "Access Control test label",
+                  },
+                ],
               },
             ],
           },
@@ -29,7 +35,19 @@ const testGroups = [
         id: "sibling-group",
         class: "family",
         title: "Sibling Title",
-        controls: [{ id: "control2-id", title: "Audit Events" }],
+        controls: [
+          {
+            id: "control2-id",
+            title: "Audit Events",
+            props: [
+              {
+                name: "label 2",
+                ns: "https://another.source.com/ns/oscal",
+                value: "Audit Events test label",
+              },
+            ],
+          },
+        ],
       },
     ],
   },
@@ -84,5 +102,46 @@ describe("OSCALCatalogGroup", () => {
 
     const expand2 = screen.getByText(getTextByChildren("control2-id Audit Events"));
     fireEvent.click(expand2);
+  });
+
+  test("displays parent properties", () => {
+    render(<OSCALCatalogGroups groups={testGroups} />);
+    const expand1 = screen.getByText("Access Control");
+    fireEvent.click(expand1);
+
+    const expand2 = screen.getByText("Sub Access Control");
+    fireEvent.click(expand2);
+
+    const expand3 = screen.getByText("Access Control Policy and Procedures");
+    fireEvent.click(expand3);
+
+    const openProperties = screen.getByText("Properties");
+    fireEvent.click(openProperties);
+
+    const modalTitle = screen.getByText("Access Control Policy and Procedures Properties");
+    expect(modalTitle).toBeVisible();
+    const nistText = screen.getByText("https://csrc.nist.gov/ns/oscal");
+    expect(nistText).toBeVisible();
+    const labelText = screen.getByText("label");
+    expect(labelText).toBeVisible();
+  });
+
+  test("displays sibling properties", () => {
+    render(<OSCALCatalogGroups groups={testGroups} />);
+    const expand1 = screen.getByText("Sibling Title");
+    fireEvent.click(expand1);
+
+    const expand2 = screen.getByText("Audit Events");
+    fireEvent.click(expand2);
+
+    const openProperties = screen.getByText("Properties");
+    fireEvent.click(openProperties);
+
+    const modalTitle = screen.getByText("Audit Events Properties");
+    expect(modalTitle).toBeVisible();
+    const nistText = screen.getByText("https://another.source.com/ns/oscal");
+    expect(nistText).toBeVisible();
+    const labelText = screen.getByText("Audit Events test label");
+    expect(labelText).toBeVisible();
   });
 });

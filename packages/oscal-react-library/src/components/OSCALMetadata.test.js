@@ -1,6 +1,9 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
-import { keywordValuesList, metadataTestData } from "../test-data/CommonData";
+import {
+  keywordValuesList,
+  metadataTestData,
+} from "../test-data/CommonData";
 import OSCALMetadata from "./OSCALMetadata";
 
 describe("OSCALMetadata", () => {
@@ -354,5 +357,17 @@ describe("OSCAL metadata keywords", () => {
     const chips = screen.queryAllByRole("chip");
 
     expect(chips.length).toBe(0);
+  });
+
+  test("displays props", () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
+
+    const openProperties = screen.getByText("Properties");
+    fireEvent.click(openProperties);
+
+    const modalTitle = screen.getByText("Test Title Properties");
+    expect(modalTitle).toBeVisible();
+    const keywordsText = screen.getByText("keywords");
+    expect(keywordsText).toBeVisible();
   });
 });
