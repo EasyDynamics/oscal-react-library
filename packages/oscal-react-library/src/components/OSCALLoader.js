@@ -4,7 +4,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { styled } from "@mui/material/styles";
 import CircularProgress from "@mui/material/CircularProgress";
 import Split from "react-split";
-import { Box, Fab } from "@mui/material";
+import { Box, Container, Fab } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import CodeIcon from "@mui/icons-material/Code";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
@@ -323,7 +323,7 @@ export default function OSCALLoader(props) {
   }
 
   return (
-    <>
+    <Container maxWidth={false}>
       {form}
       <ErrorBoundary
         FallbackComponent={BasicError}
@@ -339,7 +339,7 @@ export default function OSCALLoader(props) {
         <ErrorThrower error={error} />
         {result}
       </ErrorBoundary>
-    </>
+    </Container>
   );
 }
 

@@ -25,6 +25,7 @@ import {
   OSCALDrawerSelector,
 } from "@easydynamics/oscal-react-library";
 import logo from "./images/logo-header.svg";
+import Welcome from "./Welcome";
 
 const appTheme = createTheme({
   palette: {
@@ -149,7 +150,7 @@ function App() {
 
   const appBarRoutes = (
     <Route path="/">
-      <Route index element={`OSCAL Catalog ${appType}`} />
+      <Route index element={`OSCAL ${appType}`} />
       {oscalObjectTypes.map((oscalObjectType) => (
         <Route path={oscalObjectType.pathName} key={oscalObjectType.pathName}>
           {routePaths.map((path) => (
@@ -175,11 +176,7 @@ function App() {
 
   const navRoutes = (
     <Route path="/">
-      {/* Default index will open up the Catalog */}
-      <Route
-        index
-        element={createElement(oscalObjectTypes[0].loaderElement, oscalObjectLoaderProps)}
-      />
+      <Route index element={<Welcome />} />
       {oscalObjectTypes.map((oscalObjectType) => (
         <Route path={oscalObjectType.pathName} key={oscalObjectType.pathName}>
           {routePaths.map((path) => (
@@ -301,7 +298,7 @@ function App() {
               </Grid>
             </Toolbar>
           </AppBar>
-          <Container maxWidth={false} component="main">
+          <Container maxWidth={false} disableGutters component="main">
             <Routes>{navRoutes}</Routes>
           </Container>
         </div>
