@@ -18,7 +18,7 @@ import {
   StyledTableHead,
 } from "./OSCALSystemImplementationTableStyles";
 import { Property } from "@easydynamics/oscal-types";
-import { NIST_NAMESPACE_DOMAIN, isNistNamespace } from "./oscal-utils/OSCALPropUtils";
+import { NIST_DEFAULT_NAMESPACE, isNistNamespace } from "./oscal-utils/OSCALPropUtils";
 
 const OSCALPropertiesButton = styled(Button)(
   ({ theme }) => `
@@ -132,7 +132,7 @@ const OSCALPropertiesTable = (props: OSCALPropertiesTableProps): ReactElement =>
           <TableBody>
             {properties
               ?.filter((property: any) =>
-                namespace === NIST_NAMESPACE_DOMAIN
+                namespace === NIST_DEFAULT_NAMESPACE
                   ? isNistNamespace(property?.ns)
                   : property?.ns === namespace
               )
@@ -171,7 +171,7 @@ export const OSCALProperties = (props: OSCALPropertiesProps) => {
     <OSCALPropertiesDialog title={title}>
       <DialogTitle id="scroll-dialog-title">{title} Properties</DialogTitle>
       {/* Handle NIST properties */}
-      <OSCALPropertiesTable properties={properties} namespace={NIST_NAMESPACE_DOMAIN} key={NIST_NAMESPACE_DOMAIN} />
+      <OSCALPropertiesTable properties={properties} namespace={NIST_DEFAULT_NAMESPACE} key={NIST_DEFAULT_NAMESPACE} />
       {
         /* Handle 3rd party properties */
         thirdPartyNamespaces
