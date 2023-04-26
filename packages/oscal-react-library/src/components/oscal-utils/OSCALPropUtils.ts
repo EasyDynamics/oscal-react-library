@@ -70,7 +70,7 @@ export interface PropertyFilter {
 export function propWithName(
   props: Property[] | undefined,
   name: string,
-  ns: string | undefined
+  ns?: string | undefined
 ): Property | undefined {
   return matchingProp(props, { name, ns, filter: () => true });
 }

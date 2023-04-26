@@ -105,15 +105,15 @@ export function shiftFragmentSuffix(fragmentSuffix: string): string | undefined 
 }
 
 /**
- * Transforms text to prepare as a fragment, by replacing slashes and spaces with hyphens and
- * lowercasing all letters.
+ * Transforms text inner-text of an element to prepare as a fragment, by replacing slashes and
+ * spaces with hyphens and lowercasing all letters.
  *
- * @param {string} linkText Text to format
+ * @param {any} linkElement Text or element to format
  * @returns {string} Formatted text to work as a fragment
  */
-export function conformLinkIdText(linkText: any): string {
-  return !linkText
-    ? ""
-    : linkText?.props?.children.replace(/\\| |\//g, "-")?.toLowerCase() ||
-        linkText.replace(/\\| |\//g, "-")?.toLowerCase();
+export function conformLinkIdText(linkElement: any): string {
+  return !linkElement
+    ? null
+    : linkElement?.props?.children?.replace(/\\| |\//g, "-")?.toLowerCase() ||
+        linkElement?.replace(/\\| |\//g, "-")?.toLowerCase();
 }

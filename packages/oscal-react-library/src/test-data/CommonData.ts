@@ -1,7 +1,16 @@
-export const exampleParties = [
+import {
+  Location,
+  PartyOrganizationOrPerson,
+  PartyType,
+  PublicationMetadata,
+  RevisionHistoryEntry,
+  Role,
+} from "@easydynamics/oscal-types";
+
+export const exampleParties: PartyOrganizationOrPerson[] = [
   {
     uuid: "party-1",
-    type: "organization",
+    type: PartyType.ORGANIZATION,
     name: "Some group of people",
     "email-addresses": ["owners@email.org"],
     "telephone-numbers": [
@@ -49,7 +58,7 @@ export const exampleParties = [
   },
 ];
 
-export const exampleRoles = [
+export const exampleRoles: Role[] = [
   {
     id: "creator",
     title: "Document creator",
@@ -61,7 +70,7 @@ export const exampleRoles = [
   },
 ];
 
-export const exampleLocations = [
+export const exampleLocations: Location[] = [
   {
     uuid: "54e8923b-56d2-46f1-bb97-9c6f734d9d9e",
     title: "Example Location",
@@ -146,13 +155,32 @@ export const keywordValuesList = {
   ],
 };
 
-export const metadataTestData = {
+export const exampleRevisions: RevisionHistoryEntry[] = [
+  {
+    version: "V1",
+    title: "Title1",
+    published: new Date("2023-05-19T13:50:25+00:00"),
+    "last-modified": new Date("2023-04-19T13:50:25+00:00"),
+    "oscal-version": "1.0.4",
+  },
+  {
+    version: "V2",
+    title: "Title2",
+    published: new Date("2024-05-19T13:50:25+00:00"),
+    "last-modified": new Date("2024-04-19T13:50:25+00:00"),
+    "oscal-version": "1.0.3",
+  },
+];
+
+export const metadataTestData: PublicationMetadata = {
   title: "Test Title",
   parties: exampleParties,
   roles: exampleRoles,
   locations: exampleLocations,
   version: "Revision 5",
   remarks: "This is test data",
+  "last-modified": new Date("2019-09-28T23:20:50.52Z"),
+  "oscal-version": "1.0.4",
 };
 
 export const responsibleRolesTestData = [
