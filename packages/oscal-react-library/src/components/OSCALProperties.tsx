@@ -18,6 +18,7 @@ import {
   StyledTableHead,
 } from "./OSCALSystemImplementationTableStyles";
 import { Property } from "@easydynamics/oscal-types";
+import { NIST_NAMESPACE_DOMAIN, isNistNamespace } from "./oscal-utils/OSCALPropUtils";
 
 const OSCALPropertiesButton = styled(Button)(
   ({ theme }) => `
@@ -80,11 +81,13 @@ const OSCALPropertiesDialog = (props: OSCALPropertiesDialogProps): ReactElement 
   );
 };
 
-function isNistNamespace(namespace: string) {
-  return !namespace || namespace.includes("nist.gov");
-}
-
-function getThirdPartyNamespaces(properties: any) {
+/**
+ * Accumulates all instances of third-party namespaces into a list.
+ *
+ * @param {Property[]} properties A list of properties
+ * @returns {string[]} A list of third-party namespaces
+ */
+function getThirdPartyNamespaces(properties: Property[]) {
   let items: string[] = [""];
 
   properties
@@ -129,7 +132,7 @@ const OSCALPropertiesTable = (props: OSCALPropertiesTableProps): ReactElement =>
           <TableBody>
             {properties
               ?.filter((property: any) =>
-                namespace === "NIST OSCAL"
+                namespace === NIST_NAMESPACE_DOMAIN
                   ? isNistNamespace(property?.ns)
                   : property?.ns === namespace
               )
@@ -168,7 +171,7 @@ export const OSCALProperties = (props: OSCALPropertiesProps) => {
     <OSCALPropertiesDialog title={title}>
       <DialogTitle id="scroll-dialog-title">{title} Properties</DialogTitle>
       {/* Handle NIST properties */}
-      <OSCALPropertiesTable properties={properties} namespace={"NIST OSCAL"} key={"NIST OSCAL"} />
+      <OSCALPropertiesTable properties={properties} namespace={NIST_NAMESPACE_DOMAIN} key={NIST_NAMESPACE_DOMAIN} />
       {
         /* Handle 3rd party properties */
         thirdPartyNamespaces

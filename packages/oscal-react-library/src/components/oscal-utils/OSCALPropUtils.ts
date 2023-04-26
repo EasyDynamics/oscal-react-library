@@ -5,6 +5,7 @@ import type { Property } from "@easydynamics/oscal-types";
  * namespace is default namespace.
  */
 const NIST_DEFAULT_NAMESPACE = "https://csrc.nist.gov/ns/oscal";
+export const NIST_NAMESPACE_DOMAIN = "nist.gov";
 
 /**
  * Return the given namespace, or if undefined, the default namespace.
@@ -14,6 +15,16 @@ const NIST_DEFAULT_NAMESPACE = "https://csrc.nist.gov/ns/oscal";
  */
 export function namespaceOf(ns: string | undefined): string {
   return ns ?? NIST_DEFAULT_NAMESPACE;
+}
+
+/**
+ * Validates if the namespace is a NIST namespace.
+ * 
+ * @param namespace the namespace
+ * @returns a boolean describing whether the namespace is 
+ */
+export function isNistNamespace(ns: string | undefined): boolean {
+  return !ns || ns.includes(NIST_NAMESPACE_DOMAIN);
 }
 
 export interface PropertyFilter {
