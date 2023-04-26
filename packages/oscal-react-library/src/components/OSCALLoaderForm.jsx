@@ -1,9 +1,11 @@
 import React, { useRef } from "react";
 import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import ReplayIcon from "@mui/icons-material/Replay";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 
 const OSCALDocumentForm = styled("form")(
   ({ theme }) => `
@@ -17,6 +19,12 @@ export default function OSCALLoaderForm(props) {
 
   const submitForm = () => {
     props.onUrlChange(url.current.value);
+  };
+
+  const onUpload = (event) => {
+    const file = event.target.files[0];
+    url.current.value = file.name;
+    props.onUrlChange(URL.createObjectURL(file));
   };
 
   return (
@@ -43,16 +51,29 @@ export default function OSCALLoaderForm(props) {
               />
             </Grid>
             <Grid item xs={4} md={2}>
-              <Button
-                variant="contained"
-                size="large"
-                color="primary"
-                endIcon={<ReplayIcon>send</ReplayIcon>}
-                disabled={!props.isResolutionComplete}
-                type="submit"
-              >
-                Reload
-              </Button>
+              <Stack direction="row" spacing={1}>
+                <Button
+                  variant="contained"
+                  size="large"
+                  color="primary"
+                  endIcon={<ReplayIcon>send</ReplayIcon>}
+                  disabled={!props.isResolutionComplete}
+                  type="submit"
+                >
+                  Reload
+                </Button>
+                <Button
+                  variant="contained"
+                  size="large"
+                  color="secondary"
+                  endIcon={<FileUploadIcon />}
+                  component="label"
+                  disabled={!props.isResolutionComplete}
+                >
+                  Upload
+                  <input type="file" hidden accept="application/json" onChange={onUpload} />
+                </Button>
+              </Stack>
             </Grid>
           </>
         )}
