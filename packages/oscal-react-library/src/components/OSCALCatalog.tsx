@@ -6,6 +6,8 @@ import { EditableFieldProps } from "./OSCALEditableTextField";
 import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
 import OSCALMetadata from "./OSCALMetadata";
 
+const UNGROUPED_CONTROLS_TITLE = "*Ungrouped Controls*";
+
 export interface OSCALCatalogProps extends EditableFieldProps {
   readonly onResolutionComplete: React.EffectCallback;
   readonly catalog: Catalog;
@@ -25,7 +27,7 @@ export const OSCALCatalog: React.FC<OSCALCatalogProps> = (props) => {
   };
 
   const defaultGroup: ControlGroup = {
-    title: "*Ungrouped Controls*",
+    title: UNGROUPED_CONTROLS_TITLE,
     controls: catalog.controls,
   };
 

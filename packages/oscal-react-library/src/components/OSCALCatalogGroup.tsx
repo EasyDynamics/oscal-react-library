@@ -21,7 +21,13 @@ import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 import { Control, ControlGroup, Part } from "@easydynamics/oscal-types";
 
 interface CatalogGroupFragmentProps {
+  /**
+   * The fragment that was handled previously
+   */
   readonly previousHandledFragment: string | undefined;
+  /**
+   * Callback function to set the previously handled fragment
+   */
   readonly setPreviousHandledFragment: (...args: any[]) => void;
 }
 
@@ -74,13 +80,37 @@ function isMatchingListItem(
 }
 
 interface CollapsibleListItemProps extends CatalogGroupFragmentProps {
+  /**
+   * The current fragment being handled
+   */
   readonly urlFragment?: string;
+  /**
+   * A catalog group that contains either groups/controls
+   */
   readonly group?: ControlGroup;
+  /**
+   * Identification used for a list
+   */
   readonly listId: string;
+  /**
+   * The title of an item
+   */
   readonly itemText: ReactNode;
+  /**
+   * Children underneath the list item - either a control/group or control/group
+   */
   readonly children: ReactNode;
+  /**
+   * The end of a fragment which starts with the current group/control being handled
+   */
   readonly fragmentSuffix: string | undefined;
+  /**
+   * Tells whether or not the current list item is opened
+   */
   readonly listItemOpened?: boolean;
+  /**
+   * Callback function to set list item opened
+   */
   readonly setListItemOpened: (...args: any[]) => void;
 }
 
@@ -149,9 +179,21 @@ const CollapsibleListItem: React.FC<CollapsibleListItemProps> = (props) => {
 };
 
 interface WithdrawnListItemProps extends CatalogGroupFragmentProps {
+  /**
+   * Children underneath the list item - either a control/group or control/group
+   */
   readonly children: ReactNode;
+  /**
+   * The current fragment being handled
+   */
   readonly urlFragment?: string;
+  /**
+   * Identification used for a list
+   */
   readonly listId: string;
+  /**
+   * The end of a fragment which starts with the current group/control being handled
+   */
   readonly fragmentSuffix: string | undefined;
 }
 
@@ -191,12 +233,30 @@ const WithdrawnListItem: React.FC<WithdrawnListItemProps> = (props) => {
 };
 
 interface OSCALCatalogControlListItemProps extends CatalogGroupFragmentProps {
+  /**
+   * The current control
+   */
   readonly control: Control;
+  /**
+   * he current fragment being handled
+   */
   readonly urlFragment?: string;
+  /**
+   * The beginning of a fragment which ends with the current group/control being handled
+   */
   readonly fragmentPrefix: string;
+  /**
+   * The end of a fragment which starts with the current group/control being handled
+   */
   readonly fragmentSuffix: string | undefined;
+  /**
+   * Tells whether the current list item is opened
+   */
   readonly isControlListItemOpened: boolean;
-  readonly setIsControlListItemOpened: (...args: any[]) => void;
+  /**
+   * Callback function to set whether the list item has been navigated to
+   */
+  readonly setIsControlListItemOpened: (value: boolean) => void;
 }
 
 /**
@@ -273,12 +333,30 @@ const OSCALCatalogControlListItem: React.FC<OSCALCatalogControlListItemProps> = 
 };
 
 interface OSCALCatalogGroupListProps extends CatalogGroupFragmentProps {
+  /**
+   * The current group
+   */
   readonly group: ControlGroup;
+  /**
+   * The current fragment being handled
+   */
   readonly urlFragment?: string;
+  /**
+   * The beginning of a fragment which ends with the current group/control
+   */
   readonly fragmentPrefix: string;
+  /**
+   * The end of a fragment which starts with the current group/control being handled
+   */
   readonly fragmentSuffix: string | undefined;
+  /**
+   * Tells whether the current list item is opened
+   */
   readonly isControlListItemOpened: boolean;
-  readonly setIsControlListItemOpened: (...args: any[]) => void;
+  /**
+   * Callback function to set whether the list item has been navigated to
+   */
+  readonly setIsControlListItemOpened: (value: boolean) => void;
 }
 
 /**
@@ -324,6 +402,11 @@ const OSCALCatalogGroupList: React.FC<OSCALCatalogGroupListProps> = (props) => {
       previousHandledFragment={previousHandledFragment}
       setPreviousHandledFragment={setPreviousHandledFragment}
     >
+      {group.parts
+        ?.map((groupPart: Part) => groupPart.prose)
+        .map((prose) => (
+          <OSCALMarkupMultiLine key={prose}>{prose}</OSCALMarkupMultiLine>
+        ))}
       <OSCALControlList>
         {group.groups?.map((innerGroup) => (
           <OSCALCatalogGroupList
@@ -358,20 +441,27 @@ const OSCALCatalogGroupList: React.FC<OSCALCatalogGroupListProps> = (props) => {
           />
         ))}
       </OSCALControlList>
-      {group.parts
-        ?.map((groupPart: Part) => groupPart.prose)
-        .map((prose) => (
-          <OSCALMarkupMultiLine key={prose}>{prose}</OSCALMarkupMultiLine>
-        ))}
     </CollapsibleListItem>
   );
 };
 
 export interface OSCALCatalogGroupProps extends CatalogGroupFragmentProps {
+  /**
+   * The current group
+   */
   readonly group: ControlGroup;
+  /**
+   * The current fragment being handled
+   */
   readonly urlFragment?: string;
+  /**
+   * Tells whether the current list item is opened
+   */
   readonly isControlListItemOpened: boolean;
-  readonly setIsControlListItemOpened: (...args: any[]) => void;
+  /**
+   * Callback function to set whether the list item has been navigated to
+   */
+  readonly setIsControlListItemOpened: (value: boolean) => void;
 }
 
 export const OSCALCatalogGroup: React.FC<OSCALCatalogGroupProps> = (props) => {
@@ -392,6 +482,11 @@ export const OSCALCatalogGroup: React.FC<OSCALCatalogGroupProps> = (props) => {
 
   return (
     <>
+      {group.parts
+        ?.map((groupPart: Part) => groupPart.prose)
+        .map((prose) => (
+          <OSCALMarkupMultiLine key={prose}>{prose}</OSCALMarkupMultiLine>
+        ))}
       <OSCALControlList>
         {group.groups?.map((innerGroup: ControlGroup) => (
           <OSCALCatalogGroupList
@@ -420,11 +515,6 @@ export const OSCALCatalogGroup: React.FC<OSCALCatalogGroupProps> = (props) => {
           />
         ))}
       </OSCALControlList>
-      {group.parts
-        ?.map((groupPart: Part) => groupPart.prose)
-        .map((prose) => (
-          <OSCALMarkupMultiLine key={prose}>{prose}</OSCALMarkupMultiLine>
-        ))}
     </>
   );
 };

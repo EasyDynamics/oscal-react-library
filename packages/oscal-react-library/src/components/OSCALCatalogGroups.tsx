@@ -75,15 +75,15 @@ TabPanel.propTypes = {
  * Validates if the lowest control provided in an decending list (controlLayers) can be found
  * within the provided groups.
  *
- * @param {*} groups The control groupings
- * @param {*} controlLayers An decending list of groups/controls
- * @param {*} rootLayer The top most layer
+ * @param groups The control groupings
+ * @param controlLayers An decending list of groups/controls
+ * @param rootLayer The top most layer
  * @returns This returns the lowest found control or undefined if not
  */
 function determineControlExists(
   groups: ControlGroup[] | undefined,
-  controlLayers: any,
-  rootLayer: any
+  controlLayers: string[],
+  rootLayer: string
 ): ControlGroup | undefined {
   // Ensure catalog tab grouping exists
   let upperLayer = groups?.find(
