@@ -12,6 +12,7 @@ import StyledTooltip from "./OSCALStyledTooltip";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
+import { NotSpecifiedTypography } from "./StyledTypography";
 
 const OSCALStatementEditing = styled(Grid)`
   ${(props) =>
@@ -24,10 +25,6 @@ const OSCALStatementEditing = styled(Grid)`
 const OSCALStatementEditControlsContainer = styled(Grid)`
   text-align: right;
 `;
-
-const NotImplementedStatement = styled(Typography)(
-  ({ theme }) => `color: ${theme.palette.grey[400]};`
-);
 
 const prosePlaceholderRegexpString = "{{ insert: param, ([0-9a-zA-B-_.]*) }}";
 
@@ -160,15 +157,11 @@ function getTextSegment(text, key) {
   if (!text) {
     return null;
   }
-  return (
-    <Typography component="span" key={key}>
-      {text.includes("\n") ? (
-        <OSCALMarkupMultiLine>{text}</OSCALMarkupMultiLine>
-      ) : (
-        <OSCALMarkupLine>{text}</OSCALMarkupLine>
-      )}
-    </Typography>
-  );
+
+  if (text.includes("\n")) {
+    return <OSCALMarkupMultiLine key={key}>{text}</OSCALMarkupMultiLine>;
+  }
+  return <OSCALMarkupLine key={key}>{text}</OSCALMarkupLine>;
 }
 
 /**
@@ -315,27 +308,27 @@ export function OSCALReplacedProseWithParameterLabel(props) {
 
   if (!props.isImplemented) {
     return (
-      <NotImplementedStatement>
+      <NotSpecifiedTypography component="div">
         {props.label} {prose}
         {props.modificationDisplay}
-      </NotImplementedStatement>
+      </NotSpecifiedTypography>
     );
   }
 
   if (props.modificationDisplay === undefined) {
     return (
-      <Typography>
+      <div>
         {props.label} {prose}
         {props.modificationDisplay}
-      </Typography>
+      </div>
     );
   }
 
   return (
-    <Typography>
+    <div>
       {props.label} {prose}
       {props.modificationDisplay}
-    </Typography>
+    </div>
   );
 }
 
