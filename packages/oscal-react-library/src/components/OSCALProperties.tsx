@@ -3,7 +3,6 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import React, { ReactElement } from "react";
 import Table from "@mui/material/Table";
@@ -39,7 +38,7 @@ interface OSCALPropertiesDialogProps {
   children: React.ReactNode;
 }
 
-function OSCALPropertiesDialog(props: OSCALPropertiesDialogProps): ReactElement {
+const OSCALPropertiesDialog = (props: OSCALPropertiesDialogProps): ReactElement => {
   const { title, children } = props;
 
   const [open, setOpen] = React.useState(false);
@@ -79,7 +78,7 @@ function OSCALPropertiesDialog(props: OSCALPropertiesDialogProps): ReactElement 
       </Dialog>
     </>
   );
-}
+};
 
 function isNistNamespace(namespace: string) {
   return !namespace || namespace.includes("nist.gov");
@@ -110,7 +109,7 @@ interface OSCALPropertiesTableProps {
   namespace?: string;
 }
 
-function OSCALPropertiesTable(props: OSCALPropertiesTableProps): ReactElement {
+const OSCALPropertiesTable = (props: OSCALPropertiesTableProps): ReactElement => {
   const { properties, namespace } = props;
 
   return (
@@ -148,7 +147,7 @@ function OSCALPropertiesTable(props: OSCALPropertiesTableProps): ReactElement {
       </TableContainer>
     </>
   );
-}
+};
 
 interface OSCALPropertiesProps {
   /**
@@ -161,7 +160,7 @@ interface OSCALPropertiesProps {
   title: string;
 }
 
-export default function OSCALProperties(props: OSCALPropertiesProps) {
+export const OSCALProperties = (props: OSCALPropertiesProps) => {
   const { properties, title } = props;
   const thirdPartyNamespaces = getThirdPartyNamespaces(properties);
 
@@ -180,4 +179,4 @@ export default function OSCALProperties(props: OSCALPropertiesProps) {
       }
     </OSCALPropertiesDialog>
   ) : null;
-}
+};

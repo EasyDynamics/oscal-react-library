@@ -16,7 +16,7 @@ import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import OSCALEditableTextField, { EditableFieldProps } from "./OSCALEditableTextField";
 import { Resource, ResourceLink, BackMatter } from "@easydynamics/oscal-types";
 import { ReactElement } from "react";
-import OSCALProperties from "./OSCALProperties";
+import { OSCALProperties } from "./OSCALProperties";
 
 export const OSCALBackMatterCard = styled(Card)(
   ({ theme }) => `
