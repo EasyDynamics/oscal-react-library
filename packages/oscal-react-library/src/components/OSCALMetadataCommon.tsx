@@ -22,7 +22,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import { styled } from "@mui/material/styles";
-import { default as React, ReactNode, useEffect } from "react";
+import React, { ReactNode, useEffect } from "react";
 import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import { OSCALMarkupLine } from "./OSCALMarkupProse";
 
@@ -44,6 +44,37 @@ const OSCALMetadataSectionInfoHeader = styled(Typography)`
   display: flex;
   align-items: center;
 ` as typeof Typography;
+
+const TELEPHONE_ICON_MAPPING = {
+  home: <HomeIcon />,
+  mobile: <SmartphoneIcon />,
+  office: <BusinessIcon />,
+};
+
+const ADDRESS_ICON_MAPPING = {
+  home: <HomeIcon />,
+  work: <BusinessIcon />,
+};
+
+const UNKNOWN_TYPE_ICON = <HelpOutlineIcon />;
+
+function getIconOfType(
+  mapping: Record<string, ReactNode> | undefined,
+  contactType: string | undefined
+) {
+  if (!mapping || !contactType) {
+    return UNKNOWN_TYPE_ICON;
+  }
+  return mapping[contactType] ?? UNKNOWN_TYPE_ICON;
+}
+
+function getPhoneIcon(contactType: string | undefined) {
+  return getIconOfType(TELEPHONE_ICON_MAPPING, contactType);
+}
+
+function getAddressIcon(contactType: string | undefined) {
+  return getIconOfType(ADDRESS_ICON_MAPPING, contactType);
+}
 
 interface MetadataAvatarProps {
   /**
@@ -142,37 +173,6 @@ export const TextWithIcon: React.FC<TextWithIconProps> = (props) => {
 // Returns a string with a locality-sensitive representation of this date
 export function formatDate(isoDate: string | number | Date): string {
   return new Date(isoDate).toLocaleString();
-}
-
-const TELEPHONE_ICON_MAPPING = {
-  home: <HomeIcon />,
-  mobile: <SmartphoneIcon />,
-  office: <BusinessIcon />,
-};
-
-const ADDRESS_ICON_MAPPING = {
-  home: <HomeIcon />,
-  work: <BusinessIcon />,
-};
-
-const UNKNOWN_TYPE_ICON = <HelpOutlineIcon />;
-
-function getIconOfType(
-  mapping: Record<string, ReactNode> | undefined,
-  contactType: string | undefined
-) {
-  if (!mapping || !contactType) {
-    return UNKNOWN_TYPE_ICON;
-  }
-  return mapping[contactType] ?? UNKNOWN_TYPE_ICON;
-}
-
-function getPhoneIcon(contactType: string | undefined) {
-  return getIconOfType(TELEPHONE_ICON_MAPPING, contactType);
-}
-
-function getAddressIcon(contactType: string | undefined) {
-  return getIconOfType(ADDRESS_ICON_MAPPING, contactType);
 }
 
 export interface OSCALMetadataAddressProps {

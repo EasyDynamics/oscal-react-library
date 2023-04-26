@@ -36,7 +36,7 @@ export const OSCALMetadataParty: React.FC<OSCALMetadataPartyProps> = (props) => 
   return (
     <OSCALMetadataCard
       title={props.party.name}
-      subheader={props.partyRolesText?.map((role: Role) => role.title).join(", ")}
+      subheader={props.partyRolesText?.map((role) => role.title).join(", ")}
       avatar={avatar}
     >
       <DialogTitle id="scroll-dialog-title">

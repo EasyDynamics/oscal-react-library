@@ -29,7 +29,7 @@ import { OSCALMarkupLine } from "./OSCALMarkupProse";
 
 export interface OSCALMetadataLocationsProps {
   locations: Location[] | undefined;
-  urlFragment?: string | undefined;
+  urlFragment?: string;
 }
 
 export const OSCALMetadataLocations: React.FC<OSCALMetadataLocationsProps> = (props) => {
