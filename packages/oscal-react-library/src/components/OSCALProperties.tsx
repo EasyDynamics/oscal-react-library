@@ -19,6 +19,7 @@ import {
 } from "./OSCALSystemImplementationTableStyles";
 import { Property } from "@easydynamics/oscal-types";
 import { NIST_DEFAULT_NAMESPACE, isNistNamespace } from "./oscal-utils/OSCALPropUtils";
+import { NotSpecifiedTypography } from "./StyledTypography";
 
 const OSCALPropertiesButton = styled(Button)(
   ({ theme }) => `
@@ -57,13 +58,14 @@ interface OSCALProperty {
 
 const OSCALProperty = (props: OSCALProperty): ReactElement => {
   const { property } = props;
+  const NO_INFORMATION = <NotSpecifiedTypography>Not Specified</NotSpecifiedTypography>;
 
   return (
     <StyledTooltip title={property?.remarks ?? ""} key={`${property?.uuid}-remarks`}>
       <StyledTableRow key={property?.uuid}>
-        <TableCell>{property?.name}</TableCell>
-        <TableCell>{property?.class}</TableCell>
-        <TableCell>{property?.value}</TableCell>
+        <TableCell>{property?.name ?? NO_INFORMATION}</TableCell>
+        <TableCell>{property?.class ?? NO_INFORMATION}</TableCell>
+        <TableCell>{property?.value ?? NO_INFORMATION}</TableCell>
       </StyledTableRow>
     </StyledTooltip>
   );
