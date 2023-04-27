@@ -33,7 +33,7 @@ describe("OSCALCatalogs", () => {
       />
     );
 
-    const ungrouped = screen.getByText("Ungrouped Controls");
+    const ungrouped = screen.getByText("Top");
     fireEvent.click(ungrouped);
 
     const controlTitle = screen.getByText(controls[0].title);

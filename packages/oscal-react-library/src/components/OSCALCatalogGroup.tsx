@@ -232,7 +232,7 @@ const WithdrawnListItem: React.FC<WithdrawnListItemProps> = (props) => {
   );
 };
 
-interface OSCALCatalogControlListItemProps extends CatalogGroupFragmentProps {
+export interface OSCALCatalogControlListItemProps extends CatalogGroupFragmentProps {
   /**
    * The current control
    */
@@ -264,7 +264,7 @@ interface OSCALCatalogControlListItemProps extends CatalogGroupFragmentProps {
  *
  * @returns A list item component which contains sub list item(s) and/or collapsible information
  */
-const OSCALCatalogControlListItem: React.FC<OSCALCatalogControlListItemProps> = (props) => {
+export const OSCALCatalogControlListItem: React.FC<OSCALCatalogControlListItemProps> = (props) => {
   const {
     control,
     urlFragment,
