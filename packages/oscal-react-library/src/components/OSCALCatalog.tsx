@@ -2,7 +2,7 @@ import { Catalog, ControlGroup } from "@easydynamics/oscal-types";
 import { Card, CardContent } from "@mui/material";
 import React, { useEffect } from "react";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
-import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import OSCALBackMatter from "./OSCALBackMatter";
 import { OSCALCatalogControlListItem } from "./OSCALCatalogGroup";
 import OSCALCatalogGroups from "./OSCALCatalogGroups";
