@@ -2,6 +2,7 @@ import React from "react";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
 import Chip from "@mui/material/Chip";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
@@ -26,64 +27,67 @@ export const OSCALBackMatterCard = styled(Card)(
 `
 );
 
+// This maps the well-known back matter types to more human-readable names
+// based on their descriptions.
+const backMatterTypeLookup: Record<string, string> = {
+  logo: "Logo",
+  image: "Image",
+  "screen-shot": "Screenshot",
+  law: "Law",
+  regulation: "Regulation",
+  standard: "Standard",
+  "external-guidance": "External Guidance",
+  acronymns: "Acronyms",
+  citation: "Citation",
+  policy: "Policy",
+  procedure: "Procedure",
+  "system-guide": "System Guide",
+  "users-guide": "User's/Administrator's Guide",
+  "administrators-guide": "Administrator's Guide",
+  "rules-of-behavior": "Rules of Behavior",
+  plan: "Plan",
+  artifact: "Artifact",
+  evidence: "Evidence",
+  "tool-output": "Tool output",
+  "raw-data": "Raw Data",
+  "interview-notes": "Interview Notes",
+  questionnaire: "Questionnaire",
+  report: "Report",
+  agreement: "Agreement",
+};
+
 interface BackMatterTypeRepresentationOptions {
+  /**
+   * A mapping of possible values for the `type` field to descriptive names.
+   *
+   * @default - `backMatterTypeLookup`
+   */
+  mapToFriendlyName?: Record<string, string>;
+
+  /**
+   * For values not in the given mapping, whether to transform the name from
+   * the typical kebab-case to title case.
+   *
+   * @default - no conversion is applied to unknown values
+   */
   convertToTitleCase?: boolean;
 }
 
+/**
+ *
+ * @param value
+ * @param opts
+ * @returns
+ */
 function backMatterTypeRepresentation(
   value: string,
   opts?: BackMatterTypeRepresentationOptions
 ): string {
-  switch (value) {
-    case "logo":
-      return "Logo";
-    case "image":
-      return "Image";
-    case "screen-shot":
-      return "Screenshot";
-    case "law":
-      return "Law";
-    case "regulation":
-      return "Regulation";
-    case "standard":
-      return "Standard";
-    case "external-guidance":
-      return "External Guidance";
-    case "acronymns":
-      return "Acronyms";
-    case "citation":
-      return "Citation";
-    case "policy":
-      return "Policy";
-    case "procedure":
-      return "Procedure";
-    case "system-guide":
-      return "System Guide";
-    case "users-guide":
-      return "User's/Administrator's Guide";
-    case "administrators-guide":
-      return "Administrator's Guide";
-    case "rules-of-behavior":
-      return "Rules of Behavior";
-    case "plan":
-      return "Plan";
-    case "artifact":
-      return "Artifact";
-    case "evidence":
-      return "Evidence";
-    case "tool-output":
-      return "Output from a tool";
-    case "raw-data":
-      return "Raw Machine Data";
-    case "interview-notes":
-      return "Interview Notes";
-    case "questionnaire":
-      return "Questionnaire";
-    case "report":
-      return "Report";
-    case "agreement":
-      return "Agreement";
+  const knownName = (opts?.mapToFriendlyName ?? backMatterTypeLookup)[value];
+  if (knownName) {
+    return knownName;
   }
+
   if (opts?.convertToTitleCase) {
     return value
       .split("-")
@@ -174,45 +178,41 @@ function BackMatterResource(props: BackMatterResourceProps) {
     rlink["media-type"] ||
     guessExtensionFromHref(getAbsoluteUrl(rlink.href, props.parentUrl) ?? "");
 
-  //const resourceType = propWithName(resource.props, "type")?.value;
-  const resourceType = "logo";
+  const resourceType = propWithName(resource.props, "type")?.value;
+  const typeDisplay = resourceType && backMatterTypeRepresentation(resourceType);
   const objectKey = getObjectRootKey(props.partialRestData);
 
   return (
     <Grid item xs={3} key={resource.uuid}>
-      <OSCALBackMatterCard>
+      <OSCALBackMatterCard sx={{ height: "100%" }}>
+        <CardHeader
+          title={
+            <TitleDisplay uuid={resource.uuid}>
+              <OSCALEditableTextField
+                fieldName="title"
+                isEditable={props.isEditable}
+                editedField={props.isEditable ? [objectKey, "back-matter", "resources"] : null}
+                editedValue={props.backMatter?.resources}
+                editedValueId={resource.uuid}
+                onFieldSave={props.onFieldSave}
+                partialRestData={
+                  props.isEditable
+                    ? {
+                        [objectKey]: {
+                          uuid: props.partialRestData?.[objectKey].uuid,
+                          "back-matter": props.backMatter,
+                        },
+                      }
+                    : null
+                }
+                value={resource.title}
+              />
+            </TitleDisplay>
+          }
+          subheader={typeDisplay}
+          action={<CitationDisplay resource={resource} />}
+        />
         <CardContent>
-          <Grid container spacing={0}>
-            <Grid item xs={10}>
-              <TitleDisplay uuid={resource.uuid}>
-                <OSCALEditableTextField
-                  fieldName="title"
-                  isEditable={props.isEditable}
-                  editedField={props.isEditable ? [objectKey, "back-matter", "resources"] : null}
-                  editedValue={props.backMatter?.resources}
-                  editedValueId={resource.uuid}
-                  onFieldSave={props.onFieldSave}
-                  partialRestData={
-                    props.isEditable
-                      ? {
-                          [objectKey]: {
-                            uuid: props.partialRestData?.[objectKey].uuid,
-                            "back-matter": props.backMatter,
-                          },
-                        }
-                      : null
-                  }
-                  value={resource.title}
-                />
-              </TitleDisplay>
-            </Grid>
-            <Grid item xs={2}>
-              <Stack direction="row" justifyContent="flex-end">
-                {resourceType && <Chip label={backMatterTypeRepresentation(resourceType)} />}
-                <CitationDisplay resource={resource} />
-              </Stack>
-            </Grid>
-          </Grid>
           <OSCALEditableTextField
             fieldName="description"
             isEditable={props.isEditable}
