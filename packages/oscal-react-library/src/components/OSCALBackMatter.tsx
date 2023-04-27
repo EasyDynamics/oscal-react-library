@@ -16,7 +16,7 @@ import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import OSCALEditableTextField, { EditableFieldProps } from "./OSCALEditableTextField";
 import { Resource, ResourceLink, BackMatter } from "@easydynamics/oscal-types";
 import { ReactElement } from "react";
-import { OSCALProperties } from "./OSCALProperties";
+import { OSCALPropertiesDialog } from "./OSCALProperties";
 
 export const OSCALBackMatterCard = styled(Card)(
   ({ theme }) => `
@@ -142,7 +142,7 @@ function BackMatterResource(props: BackMatterResourceProps) {
               </Grid>
             </Grid>
           </Grid>
-          <OSCALProperties properties={resource?.props} title={resource?.title ?? resource?.uuid} />
+          <OSCALPropertiesDialog properties={resource?.props} title={resource?.title ?? resource?.uuid} />
           <OSCALEditableTextField
             fieldName="description"
             isEditable={isEditable}

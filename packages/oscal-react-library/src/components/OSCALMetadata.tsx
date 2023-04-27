@@ -51,7 +51,7 @@ import {
 import { OSCALRevisionsButton } from "./OSCALRevision";
 import { OSCALMetadataLabel } from "./OSCALMetadataCommon";
 import { NotSpecifiedTypography } from "./StyledTypography";
-import { OSCALProperties } from "./OSCALProperties";
+import { OSCALPropertiesDialog } from "./OSCALProperties";
 
 const OSCALMetadataSectionInfoHeader = styled(Typography)`
   display: flex;
@@ -842,7 +842,7 @@ export const OSCALMetadata: React.FC<OSCALMetadataProps> = (props) => {
               />
             </OSCALMetadataSection>
             <OSCALMetadataSection>
-              <OSCALProperties properties={props.metadata.props} title={props.metadata.title} />
+              <OSCALPropertiesDialog properties={props.metadata.props} title={props.metadata.title} />
             </OSCALMetadataSection>
             <OSCALMarkupMultiLine>{props.metadata.remarks}</OSCALMarkupMultiLine>
             <OSCALMetadataKeywords

@@ -11,7 +11,7 @@ import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
 import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import { appendToFragmentPrefix } from "./oscal-utils/OSCALLinkUtils";
-import { OSCALProperties } from "./OSCALProperties";
+import { OSCALPropertiesDialog } from "./OSCALProperties";
 
 const OSCALControlCard = styled(Card, {
   // https://github.com/mui/material-ui/blob/c34935814b81870ca325099cdf41a1025a85d4b5/packages/mui-system/src/createStyled.js#L56
@@ -45,7 +45,7 @@ function ControlsList(props) {
   } = props;
   return (
     <div>
-      <OSCALProperties
+      <OSCALPropertiesDialog
         properties={control.props}
         title={
           <>
