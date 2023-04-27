@@ -74,10 +74,12 @@ interface BackMatterTypeRepresentationOptions {
 }
 
 /**
+ * Transform the text for a `type` property on a back matter resource to a more
+ * human-friendly representation.
  *
- * @param value
- * @param opts
- * @returns
+ * @param value the string to transform
+ * @param opts options for the transformation
+ * @returns the transformed string
  */
 function backMatterTypeRepresentation(
   value: string,
