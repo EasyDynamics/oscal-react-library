@@ -8,7 +8,7 @@ import OSCALControlImplementationImplReq from "./OSCALControlImplementationImplR
 import OSCALControlImplementationAdd from "./OSCALControlImplementationAdd";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
-import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 
 /**
  * Creates the control implementation by setting up the header and outer grid elements

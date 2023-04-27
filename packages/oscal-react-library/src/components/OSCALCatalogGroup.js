@@ -8,7 +8,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 import React, { useEffect } from "react";
 import OSCALControl from "./OSCALControl";
-import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
 import OSCALControlLabel from "./OSCALControlLabel";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
@@ -230,7 +230,7 @@ function OSCALCatalogControlListItem(props) {
 
   const withdrawn = isWithdrawn(control);
   const itemText = (
-    <OSCALAnchorLinkHeader value={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}>
+    <OSCALAnchorLinkHeader name={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}>
       <OSCALControlLabel
         label={propWithName(control.props, "label")?.value}
         id={control.id}
@@ -317,7 +317,7 @@ function OSCALCatalogGroupList(props) {
   const [isListItemNavigatedTo, setIsListItemNavigatedTo] = React.useState(false);
   const itemText = (
     <OSCALAnchorLinkHeader
-      value={appendToFragmentPrefix(
+      name={appendToFragmentPrefix(
         fragmentPrefix,
         group.id ?? conformLinkIdText(group.title)
       ).toLowerCase()}

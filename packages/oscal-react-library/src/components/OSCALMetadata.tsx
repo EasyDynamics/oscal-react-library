@@ -37,7 +37,7 @@ import React, { ReactNode, useEffect } from "react";
 import { OSCALSection } from "../styles/CommonPageStyles";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import OSCALEditableTextField, { EditableFieldProps } from "./OSCALEditableTextField";
-import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import { OSCALAnchorLinkHeader, AnchorLinkProps } from "./OSCALAnchorLinkHeader";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 import {
   Address,
@@ -540,9 +540,8 @@ const OSCALMetadataBasicData: React.FC<OSCALMetadataBasicDataProps> = (props) =>
   );
 };
 
-interface OSCALMetadataRolesProps {
+interface OSCALMetadataRolesProps extends AnchorLinkProps {
   roles: Role[] | undefined;
-  urlFragment?: string;
 }
 
 const OSCALMetadataRoles: React.FC<OSCALMetadataRolesProps> = (props) => {
@@ -560,10 +559,9 @@ const OSCALMetadataRoles: React.FC<OSCALMetadataRolesProps> = (props) => {
   );
 };
 
-interface OSCALMetadataPartiesProps {
+interface OSCALMetadataPartiesProps extends AnchorLinkProps {
   metadata: PublicationMetadata;
   parties: PartyOrganizationOrPerson[] | undefined;
-  urlFragment?: string;
 }
 
 const OSCALMetadataParties: React.FC<OSCALMetadataPartiesProps> = (props) => {
@@ -592,9 +590,8 @@ const OSCALMetadataParties: React.FC<OSCALMetadataPartiesProps> = (props) => {
   );
 };
 
-interface OSCALMetadataLocationsProps {
+interface OSCALMetadataLocationsProps extends AnchorLinkProps {
   locations: Location[] | undefined;
-  urlFragment?: string | undefined;
 }
 
 const OSCALMetadataLocations: React.FC<OSCALMetadataLocationsProps> = (props) => {
@@ -699,7 +696,7 @@ export const OSCALMetadataLocation: React.FC<OSCALMetadataLocationProps> = (prop
   );
 };
 
-interface OSCALMetadataFieldAreaProps {
+interface OSCALMetadataFieldAreaProps extends AnchorLinkProps {
   /**
    * Title of the accordion.
    */
@@ -712,7 +709,6 @@ interface OSCALMetadataFieldAreaProps {
    * Summary element near title.
    */
   summary?: ReactNode;
-  urlFragment?: string;
 }
 
 const OSCALMetadataFieldArea: React.FC<OSCALMetadataFieldAreaProps> = (props) => {
@@ -761,12 +757,11 @@ export const OSCALMetadataKeyword: React.FC<OSCALMetadataKeywordProps> = (props)
   return <>{text && <Chip label={text} size="small" role="chip" />}</>;
 };
 
-export interface OSCALMetadataKeywordsProps {
+export interface OSCALMetadataKeywordsProps extends AnchorLinkProps {
   /**
    * Comma seperated list of keywords.
    */
   keywords: string | undefined;
-  urlFragment?: string;
 }
 
 export const OSCALMetadataKeywords: React.FC<OSCALMetadataKeywordsProps> = (props) => {
@@ -786,12 +781,11 @@ export const OSCALMetadataKeywords: React.FC<OSCALMetadataKeywordsProps> = (prop
   );
 };
 
-interface OSCALMetadataProps extends EditableFieldProps {
+interface OSCALMetadataProps extends EditableFieldProps, AnchorLinkProps {
   /**
    * The metadata of an OSCAL document.
    */
   metadata: PublicationMetadata;
-  urlFragment?: string;
 }
 
 export const OSCALMetadata: React.FC<OSCALMetadataProps> = (props) => {

@@ -15,7 +15,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import StyledTooltip from "./OSCALStyledTooltip";
 import OSCALDiagram from "./OSCALDiagram";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
-import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 
 export default function OSCALSystemCharacteristics(props) {
   return (

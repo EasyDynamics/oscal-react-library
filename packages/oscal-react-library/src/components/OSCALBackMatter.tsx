@@ -12,7 +12,7 @@ import StyledTooltip from "./OSCALStyledTooltip";
 import { getAbsoluteUrl, guessExtensionFromHref } from "./oscal-utils/OSCALLinkUtils";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALMarkupLine } from "./OSCALMarkupProse";
-import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import OSCALEditableTextField, { EditableFieldProps } from "./OSCALEditableTextField";
 import { Resource, ResourceLink, BackMatter } from "@easydynamics/oscal-types";
 import { ReactElement } from "react";
@@ -39,7 +39,7 @@ interface TitleDisplayProps {
 function TitleDisplay(props: TitleDisplayProps): ReactElement {
   const { children, uuid } = props;
   return (
-    <OSCALAnchorLinkHeader value={uuid}>
+    <OSCALAnchorLinkHeader name={uuid}>
       <Typography variant="subtitle1">{children}</Typography>
     </OSCALAnchorLinkHeader>
   );

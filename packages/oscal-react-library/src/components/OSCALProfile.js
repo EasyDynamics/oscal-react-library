@@ -10,7 +10,7 @@ import OSCALBackMatter from "./OSCALBackMatter";
 import { OSCALResolveProfile } from "./oscal-utils/OSCALProfileResolver";
 import OSCALProfileCatalogInheritance from "./OSCALProfileCatalogInheritance";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
-import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 
 /**
  * Displays a given OSCAL Profile is an easily consumable format. According to NIST, a profile

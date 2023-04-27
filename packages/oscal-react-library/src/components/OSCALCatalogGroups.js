@@ -11,7 +11,7 @@ import React, { useEffect } from "react";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALCatalogGroup from "./OSCALCatalogGroup";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
-import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import { conformLinkIdText } from "./oscal-utils/OSCALLinkUtils";
 
 export const OSCALControlList = styled(List)`

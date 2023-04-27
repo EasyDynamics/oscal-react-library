@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import Stack from "@mui/material/Stack";
 import LinkIcon from "@mui/icons-material/Link";
 import { Link } from "react-router-dom";
@@ -12,8 +12,26 @@ const AnchorLinkIcon = styled(LinkIcon)(({ theme }) => ({
   color: theme.palette.grey[500],
 }));
 
-export default function OSCALAnchorLinkHeader(props) {
-  const { children, value } = props;
+export interface AnchorLinkProps {
+  urlFragment?: string;
+}
+
+export interface OSCALAnchorLinkHeaderProps {
+  /**
+   * Text or element to link to.
+   *
+   * @example a <Typography />
+   */
+  children: ReactNode;
+  /**
+   * Value to be used in the id and fragment. If not specified,
+   * children will be used.
+   */
+  name?: string;
+}
+
+export const OSCALAnchorLinkHeader: React.FC<OSCALAnchorLinkHeaderProps> = (props) => {
+  const { children, name } = props;
   const [isHover, setIsHover] = useState(false);
   const onEnter = () => {
     setIsHover(true);
@@ -22,7 +40,7 @@ export default function OSCALAnchorLinkHeader(props) {
     setIsHover(false);
   };
 
-  const linkId = value || conformLinkIdText(children);
+  const linkId = name || conformLinkIdText(children);
 
   return (
     <Stack
@@ -44,4 +62,4 @@ export default function OSCALAnchorLinkHeader(props) {
       )}
     </Stack>
   );
-}
+};
