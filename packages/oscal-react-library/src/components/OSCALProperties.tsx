@@ -18,7 +18,7 @@ import {
   StyledTableHead,
 } from "./OSCALSystemImplementationTableStyles";
 import { Property } from "@easydynamics/oscal-types";
-import { namespaceOf, isNistNamespace } from "./oscal-utils/OSCALPropUtils";
+import { NIST_DEFAULT_NAMESPACE, namespaceOf } from "./oscal-utils/OSCALPropUtils";
 import { NotSpecifiedTypography } from "./StyledTypography";
 
 const OSCALPropertiesButton = styled(Button)(
@@ -34,38 +34,10 @@ const OSCALPropertiesButton = styled(Button)(
  * then orders by name.
  *
  * @param {Property[]} properties A list of properties
- * @returns {Property[] | undefined} A list of third-party namespaces
+ * @returns {Property[]} A sorted list of properties
  */
-function sortProperties(properties?: Property[]): Property[] | undefined {
-  const namespaceSortedProperties = properties?.sort((propA, propB) =>
-    namespaceOf(propA.ns) > namespaceOf(propB.ns) ? 1 : -1
-  );
-  const nistNamespaceFirstProperties = namespaceSortedProperties?.sort((propA, propB) =>
-    isNistNamespace(propA.ns) && !isNistNamespace(propB.ns) ? 1 : -1
-  );
-  const nameSortedProperties = nistNamespaceFirstProperties?.sort((propA, propB) =>
-    namespaceOf(propA.ns) === namespaceOf(propB.ns) && propA?.name > propB?.name ? 1 : -1
-  );
-
-  return nameSortedProperties;
-}
-
-/**
- * Provides a complete list of unique namespaces for properties.
- *
- * @param {Property[]} properties A list of properties
- * @returns {string[]} A list of namespaces
- */
-function getNamespaces(properties?: Property[]): string[] {
-  const items: string[] = [];
-
-  properties?.map((property: any) => {
-    if (!items.includes(namespaceOf(property?.ns))) {
-      items.push(namespaceOf(property?.ns));
-    }
-  });
-
-  return items;
+function sortProperties(properties: Property[]): Property[] {
+  return properties.sort((prop1, prop2) => prop1.name.localeCompare(prop2.name));
 }
 
 interface OSCALProperty {
@@ -144,21 +116,24 @@ interface OSCALPropertiesDialogProps {
 
 export const OSCALPropertiesDialog = (props: OSCALPropertiesDialogProps) => {
   const { properties, title } = props;
-  const propertiesSorted = sortProperties(properties);
-  const listOfNamespaces = getNamespaces(propertiesSorted);
-  const [open, setOpen] = React.useState(false);
 
+  if (!properties) {
+    return null;
+  }
+  const namespaceToProps: Record<string, Property[]> = {};
+  for (const prop of properties) {
+    namespaceToProps[namespaceOf(prop.ns)] ??= [];
+    namespaceToProps[namespaceOf(prop.ns)].push(prop);
+  }
+  const { [NIST_DEFAULT_NAMESPACE]: nist, ...thirdParties } = namespaceToProps;
+
+  const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
   };
-
-  if (!propertiesSorted) {
-    return null;
-  }
 
   return (
     <>
@@ -183,9 +158,20 @@ export const OSCALPropertiesDialog = (props: OSCALPropertiesDialogProps) => {
       >
         <DialogContent sx={{ maxHeight: "75vh" }} dividers>
           <DialogTitle id="scroll-dialog-title">{title} Properties</DialogTitle>
-          {listOfNamespaces.map((namespace: any) => (
-            <OSCALProperties properties={propertiesSorted} namespace={namespace} key={namespace} />
-          ))}
+          {/* Handle NIST properties */}
+          <OSCALProperties
+            properties={sortProperties(nist)}
+            namespace={NIST_DEFAULT_NAMESPACE}
+            key={NIST_DEFAULT_NAMESPACE}
+          />
+          {
+            /* Handle 3rd party properties */
+            Object.entries(thirdParties)
+              .sort(([key1, props1], [key2, props2]) => key1.localeCompare(key2))
+              .map(([key, props]) => (
+                <OSCALProperties properties={sortProperties(props)} namespace={key} key={key} />
+              ))
+          }
         </DialogContent>
       </Dialog>
     </>

@@ -16,16 +16,6 @@ export function namespaceOf(ns: string | undefined): string {
   return ns ?? NIST_DEFAULT_NAMESPACE;
 }
 
-/**
- * Validates if the namespace is a NIST namespace.
- *
- * @param namespace the namespace
- * @returns a boolean describing whether the namespace is
- */
-export function isNistNamespace(ns: string | undefined): boolean {
-  return namespaceOf(ns) === NIST_DEFAULT_NAMESPACE;
-}
-
 export interface PropertyFilter {
   /**
    * The namespace of the property.
