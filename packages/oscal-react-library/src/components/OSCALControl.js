@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 import OSCALControlLabel from "./OSCALControlLabel";
 import OSCALControlPart from "./OSCALControlPart";
 import OSCALControlModification from "./OSCALControlModification";
-import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import { appendToFragmentPrefix } from "./oscal-utils/OSCALLinkUtils";
@@ -152,7 +152,7 @@ export default function OSCALControl(props) {
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <OSCALAnchorLinkHeader
-              value={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}
+              name={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}
             >
               <Typography
                 variant="h6"
