@@ -53,11 +53,11 @@ const OSCALProperty = (props: OSCALPropertyProps): ReactElement => {
   const NO_INFORMATION = <NotSpecifiedTypography>Not Specified</NotSpecifiedTypography>;
 
   return (
-    <StyledTooltip title={property?.remarks ?? ""} key={`${property?.uuid}-remarks`}>
-      <StyledTableRow key={property?.uuid}>
-        <TableCell>{property?.name ?? NO_INFORMATION}</TableCell>
-        <TableCell>{property?.class ?? NO_INFORMATION}</TableCell>
-        <TableCell>{property?.value ?? NO_INFORMATION}</TableCell>
+    <StyledTooltip title={property.remarks ?? ""}>
+      <StyledTableRow key={property.uuid}>
+        <TableCell>{property.name ?? NO_INFORMATION}</TableCell>
+        <TableCell>{property.class ?? NO_INFORMATION}</TableCell>
+        <TableCell>{property.value ?? NO_INFORMATION}</TableCell>
       </StyledTableRow>
     </StyledTooltip>
   );
