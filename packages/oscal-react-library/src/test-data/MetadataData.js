@@ -10,12 +10,6 @@ export const exampleMetadata = {
   "last-modified": lastModified,
   version,
   "oscal-version": oscalVersion,
-  props: [
-    {
-      name: "keywords",
-      title: "Metadata test keywords",
-    },
-  ],
 };
 
 export const exampleMetadataWithPartiesAndRoles = {

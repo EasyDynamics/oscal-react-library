@@ -353,14 +353,14 @@ describe("OSCAL metadata keywords", () => {
   });
 
   test("displays props", () => {
-    render(<OSCALMetadata metadata={metadataTestData} />);
+    render(<OSCALMetadata metadata={{ ...metadataTestData, props: keywordValuesList.setns }} />);
 
     const openProperties = screen.getByText("Properties");
     fireEvent.click(openProperties);
 
     const modalTitle = screen.getByText("Test Title Properties");
     expect(modalTitle).toBeVisible();
-    const keywordsText = screen.getByText("keywords");
-    expect(keywordsText).toBeVisible();
+    const valueText = screen.getByText("Keyword_1");
+    expect(valueText).toBeVisible();
   });
 });

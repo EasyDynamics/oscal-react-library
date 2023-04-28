@@ -161,7 +161,7 @@ export const OSCALPropertiesDialog = (props: OSCALPropertiesDialogProps) => {
           <DialogTitle id="scroll-dialog-title">{title} Properties</DialogTitle>
           {/* Handle NIST properties */}
           <OSCALProperties
-            properties={nist.sort(byName)}
+            properties={nist?.sort(byName)}
             namespace={NIST_DEFAULT_NAMESPACE}
             key={NIST_DEFAULT_NAMESPACE}
           />
@@ -170,7 +170,7 @@ export const OSCALPropertiesDialog = (props: OSCALPropertiesDialogProps) => {
             Object.entries(thirdParties)
               .sort(([key1], [key2]) => key1.localeCompare(key2))
               .map(([key, props]) => (
-                <OSCALProperties properties={props.sort(byName)} namespace={key} key={key} />
+                <OSCALProperties properties={props?.sort(byName)} namespace={key} key={key} />
               ))
           }
         </DialogContent>
