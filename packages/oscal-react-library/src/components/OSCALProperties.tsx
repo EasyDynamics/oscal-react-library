@@ -27,14 +27,14 @@ const OSCALPropertiesButton = styled(Button)(
     margin-top: 1em;
     margin-bottom: 0.5em;
   `
-);
+) as typeof Button;
 
 /**
  * Sorts the namespaces by NIST namespaces first, orders third-party namespaces alphabetically,
  * then orders by name.
  *
- * @param {Property[]} properties A list of properties
- * @returns {Property[]} A sorted list of properties
+ * @param properties A list of properties
+ * @returns A sorted list of properties
  */
 function sortProperties(properties: Property[]): Property[] {
   return properties.sort((prop1, prop2) => prop1.name.localeCompare(prop2.name));
@@ -92,8 +92,8 @@ const OSCALProperties = (props: OSCALPropertiesProps): ReactElement => {
           </StyledTableHead>
           <TableBody>
             {properties
-              ?.filter((property: any) => namespaceOf(property?.ns) === namespace)
-              .map((property: any) => (
+              ?.filter((property: Property) => namespaceOf(property?.ns) === namespace)
+              .map((property: Property) => (
                 <OSCALProperty property={property} />
               ))}
           </TableBody>
