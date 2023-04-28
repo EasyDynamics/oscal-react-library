@@ -34,15 +34,16 @@ jobs:
           cache: "npm"
       - name: Install global dependencies
         run: |
-          npm install -g npm@latest 
+          npm install -g npm@latest lerna@latest
       - name: Install npm dependencies
         run: |
           npm ci
       - name: Build viewer
         run:
-          npx lerna exec --include-dependencies --scope "@easydynamics/oscal-viewer" -- npm run build
+          lerna exec --include-dependencies --scope "@easydynamics/oscal-viewer" -- npm run build
         env:
           REACT_APP_GOOGLE_ANALYTICS: "${{ secrets.GA4_CODE }}"
+          PUBLIC_URL: "/"
       - name: Archive viewer
         uses: actions/upload-artifact@v3
         with:
