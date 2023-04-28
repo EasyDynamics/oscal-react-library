@@ -47,10 +47,12 @@ import {
   Role,
   PartyType,
   TelephoneNumber,
+  Link as OSCALLink,
 } from "@easydynamics/oscal-types";
 import { OSCALRevisionsButton } from "./OSCALRevision";
 import { OSCALMetadataLabel } from "./OSCALMetadataCommon";
 import { NotSpecifiedTypography } from "./StyledTypography";
+import resolveLinkHref, { ResolvableLinkHref } from "./oscal-utils/OSCALLinkUtils";
 
 const OSCALMetadataSectionInfoHeader = styled(Typography)`
   display: flex;
@@ -306,34 +308,72 @@ const MetadataInfoList: React.FC<MetadataInfoListProps> = (props) => {
   );
 };
 
-export interface OSCALMetadataPartyProps {
+interface OSCALMetadataPartyLogoProps extends ResolvableLinkHref {
+  link: OSCALLink;
+  partyName?: string;
+}
+
+const OSCALMetadataPartyLogo: React.FC<OSCALMetadataPartyLogoProps> = ({
+  link,
+  backMatter,
+  parentUrl,
+  partyName,
+}) => {
+  let logoUri = undefined;
+
+  if (backMatter) {
+    try {
+      logoUri = resolveLinkHref(backMatter, link.href, parentUrl, /^image\//, false);
+    } catch (err) {
+      // Silently fail on unresolved diagram resources
+    }
+  }
+
+  const imageSrc = logoUri ?? link.href;
+
+  return <img src={imageSrc} alt={`${partyName} logo`} style={{ maxWidth: "10em" }} />;
+};
+
+export interface OSCALMetadataPartyProps extends ResolvableLinkHref {
   party: PartyOrganizationOrPerson;
   partyRolesText: Role[] | undefined;
 }
 
-export const OSCALMetadataParty: React.FC<OSCALMetadataPartyProps> = (props) => {
-  const fallbackIcon =
-    props.party?.type === PartyType.ORGANIZATION ? <GroupIcon /> : <PersonIcon />;
+export const OSCALMetadataParty: React.FC<OSCALMetadataPartyProps> = ({
+  party,
+  partyRolesText,
+  backMatter,
+  parentUrl,
+}) => {
+  const fallbackIcon = party?.type === PartyType.ORGANIZATION ? <GroupIcon /> : <PersonIcon />;
 
-  const avatar = (
-    <MetadataAvatar id={props.party.uuid} text={props.party.name} fallbackIcon={fallbackIcon} />
-  );
+  const avatar = <MetadataAvatar id={party.uuid} text={party.name} fallbackIcon={fallbackIcon} />;
+
+  const logoLink = party.links?.find((item) => item.rel === "logo");
+  const logo = logoLink ? (
+    <OSCALMetadataPartyLogo
+      link={logoLink}
+      backMatter={backMatter}
+      parentUrl={parentUrl}
+      partyName={party.name}
+    />
+  ) : undefined;
 
   return (
     <OSCALMetadataCard
-      title={props.party.name}
-      subheader={props.partyRolesText?.map((role: Role) => role.title).join(", ")}
+      title={party.name}
+      subheader={partyRolesText?.map((role: Role) => role.title).join(", ")}
       avatar={avatar}
     >
       <DialogTitle id="scroll-dialog-title">
-        <Stack direction="row" alignItems="center" gap={1}>
-          {avatar}
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Stack direction="column">
-            {props.party.name}
-            {props.partyRolesText?.map((role) => (
+            {party.name}
+            {partyRolesText?.map((role) => (
               <Typography key={role.title}> {role.title} </Typography>
             ))}
           </Stack>
+          {logo}
         </Stack>
       </DialogTitle>
       <DialogContent dividers>
@@ -342,7 +382,7 @@ export const OSCALMetadataParty: React.FC<OSCALMetadataPartyProps> = (props) => 
             <OSCALMetadataContactTypeHeader icon={<MapIcon fontSize="small" />} title="Address" />
             <List>
               <MetadataInfoList
-                list={props.party.addresses}
+                list={party.addresses}
                 infoType={MetadataInfoType.address}
                 emptyMessage="No address information provided"
               />
@@ -352,7 +392,7 @@ export const OSCALMetadataParty: React.FC<OSCALMetadataPartyProps> = (props) => 
             <OSCALMetadataContactTypeHeader icon={<PhoneIcon fontSize="small" />} title="Phone" />
             <List>
               <MetadataInfoList
-                list={props.party["telephone-numbers"]}
+                list={party["telephone-numbers"]}
                 infoType={MetadataInfoType.telephone}
                 emptyMessage="No telephone information provided"
               />
@@ -362,7 +402,7 @@ export const OSCALMetadataParty: React.FC<OSCALMetadataPartyProps> = (props) => 
             <OSCALMetadataContactTypeHeader icon={<EmailIcon fontSize="small" />} title="Email" />
             <List>
               <MetadataInfoList
-                list={props.party["email-addresses"]}
+                list={party["email-addresses"]}
                 infoType={MetadataInfoType.email}
                 emptyMessage="No email information provided"
               />
@@ -559,19 +599,22 @@ const OSCALMetadataRoles: React.FC<OSCALMetadataRolesProps> = (props) => {
   );
 };
 
-interface OSCALMetadataPartiesProps extends AnchorLinkProps {
+interface OSCALMetadataPartiesProps extends AnchorLinkProps, ResolvableLinkHref {
   metadata: PublicationMetadata;
   parties: PartyOrganizationOrPerson[] | undefined;
 }
 
-const OSCALMetadataParties: React.FC<OSCALMetadataPartiesProps> = (props) => {
-  const { parties, urlFragment } = props;
-
-  const getRoleLabel = (roleId: string) =>
-    props.metadata?.roles?.find((role) => role.id === roleId);
+const OSCALMetadataParties: React.FC<OSCALMetadataPartiesProps> = ({
+  metadata,
+  parties,
+  urlFragment,
+  backMatter,
+  parentUrl,
+}) => {
+  const getRoleLabel = (roleId: string) => metadata?.roles?.find((role) => role.id === roleId);
 
   const getPartyRolesText = (party: PartyOrganizationOrPerson) =>
-    props.metadata["responsible-parties"]
+    metadata["responsible-parties"]
       ?.filter((responsibleParty) => responsibleParty["party-uuids"]?.includes(party.uuid))
       .map((item) => item["role-id"])
       .map(getRoleLabel)
@@ -579,7 +622,12 @@ const OSCALMetadataParties: React.FC<OSCALMetadataPartiesProps> = (props) => {
 
   const cards = parties?.map((party) => (
     <Grid item xs={12} md={4} key={party.uuid} component={Card}>
-      <OSCALMetadataParty party={party} partyRolesText={getPartyRolesText(party)} />
+      <OSCALMetadataParty
+        party={party}
+        partyRolesText={getPartyRolesText(party)}
+        backMatter={backMatter}
+        parentUrl={parentUrl}
+      />
     </Grid>
   ));
 
@@ -781,7 +829,7 @@ export const OSCALMetadataKeywords: React.FC<OSCALMetadataKeywordsProps> = (prop
   );
 };
 
-interface OSCALMetadataProps extends EditableFieldProps, AnchorLinkProps {
+interface OSCALMetadataProps extends EditableFieldProps, AnchorLinkProps, ResolvableLinkHref {
   /**
    * The metadata of an OSCAL document.
    */
@@ -843,6 +891,8 @@ export const OSCALMetadata: React.FC<OSCALMetadataProps> = (props) => {
               parties={props.metadata?.parties}
               metadata={props.metadata}
               urlFragment={props.urlFragment}
+              backMatter={props.backMatter}
+              parentUrl={props.parentUrl}
             />
             <OSCALMetadataRoles roles={props.metadata?.roles} urlFragment={props.urlFragment} />
             <OSCALMetadataLocations

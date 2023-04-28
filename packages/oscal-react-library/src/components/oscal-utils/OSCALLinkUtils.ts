@@ -1,7 +1,10 @@
 import type { BackMatter } from "@easydynamics/oscal-types";
 import { BackMatterLookup } from "./OSCALBackMatterUtils";
 
-export function getAbsoluteUrl(href: string | undefined, parentUrl: string): string | undefined {
+export function getAbsoluteUrl(
+  href: string | undefined,
+  parentUrl: string | undefined
+): string | undefined {
   if (
     href?.startsWith("https://") ||
     href?.startsWith("http://") ||
@@ -13,10 +16,21 @@ export function getAbsoluteUrl(href: string | undefined, parentUrl: string): str
   return new URL(href ?? "", parentUrl).toString();
 }
 
+export interface ResolvableLinkHref {
+  /**
+   * A BackMatter object to resolve relative links against.
+   */
+  backMatter?: BackMatter;
+  /**
+   * Url of parent for relative links.
+   */
+  parentUrl?: string;
+}
+
 export default function resolveLinkHref(
   backMatter: BackMatter,
   href: string,
-  parentUrl: string,
+  parentUrl: string | undefined,
   mediaType: RegExp,
   preferBase64 = false
 ) {
