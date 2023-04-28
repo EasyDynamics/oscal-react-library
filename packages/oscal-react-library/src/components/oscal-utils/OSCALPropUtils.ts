@@ -23,7 +23,7 @@ export function namespaceOf(ns: string | undefined): string {
  * @returns a boolean describing whether the namespace is
  */
 export function isNistNamespace(ns: string | undefined): boolean {
-  return !ns || ns === NIST_DEFAULT_NAMESPACE;
+  return namespaceOf(ns) === NIST_DEFAULT_NAMESPACE;
 }
 
 export interface PropertyFilter {
