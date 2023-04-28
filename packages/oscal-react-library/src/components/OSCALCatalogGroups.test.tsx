@@ -1,8 +1,9 @@
+import { ControlGroup } from "@easydynamics/oscal-types";
+import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
 import OSCALCatalogGroups from "./OSCALCatalogGroups";
 
-const testGroups = [
+const testGroups: ControlGroup[] = [
   {
     id: "parent-group",
     class: "family",
@@ -48,14 +49,30 @@ const testGroups = [
             ],
           },
         ],
+        parts: [
+          {
+            name: "Parent part prose",
+            prose: "Prose",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Test Group C",
+    parts: [
+      {
+        id: "test-c-overview-1",
+        name: "overview",
+        prose: "This group has prose",
       },
     ],
   },
 ];
 
-function getTextByChildren(text) {
-  function result(_content, node) {
-    const hasText = (checkNode) => checkNode.textContent === text;
+function getTextByChildren(text: string) {
+  function result(_content: any, node: any) {
+    const hasText = (checkNode: any) => checkNode.textContent === text;
     const nodeHasText = hasText(node);
     // This is necessary because we are providing a query function to override how
     // text search is performed.
@@ -143,5 +160,27 @@ describe("OSCALCatalogGroup", () => {
     expect(nistText).toBeVisible();
     const labelText = screen.getByText("Audit Events test label");
     expect(labelText).toBeVisible();
+  });
+  
+  test("displays outer group prose", () => {
+    render(<OSCALCatalogGroups groups={testGroups} />);
+
+    const expand1 = screen.getByText("Test Group C");
+    fireEvent.click(expand1);
+
+    const prose = screen.getByText("This group has prose");
+
+    expect(prose).toBeVisible();
+  });
+
+  test("displays child group prose", () => {
+    render(<OSCALCatalogGroups groups={testGroups} />);
+
+    const expand1 = screen.getByText("Sibling Title");
+    fireEvent.click(expand1);
+
+    const prose = screen.getByText("Prose");
+
+    expect(prose).toBeVisible();
   });
 });
