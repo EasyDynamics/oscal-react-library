@@ -30,14 +30,15 @@ const OSCALPropertiesButton = styled(Button)(
 ) as typeof Button;
 
 /**
- * Sorts the namespaces by NIST namespaces first, orders third-party namespaces alphabetically,
- * then orders by name.
+ * Helper to sort namespaces.
  *
- * @param properties A list of properties
- * @returns A sorted list of properties
+ * @param propA The first property to compare
+ * @param propB The second property to compare
+ * @returns A positive number if A is before B alphabetically ot a negative number if B is before A
+ *   alphabetically.
  */
-function sortProperties(properties: Property[]): Property[] {
-  return properties.sort((prop1, prop2) => prop1.name.localeCompare(prop2.name));
+function byName(propA: Property, propB: Property): number {
+  return propA.name.localeCompare(propB.name);
 }
 
 interface OSCALPropertyProps {
@@ -160,7 +161,7 @@ export const OSCALPropertiesDialog = (props: OSCALPropertiesDialogProps) => {
           <DialogTitle id="scroll-dialog-title">{title} Properties</DialogTitle>
           {/* Handle NIST properties */}
           <OSCALProperties
-            properties={sortProperties(nist)}
+            properties={nist.sort(byName)}
             namespace={NIST_DEFAULT_NAMESPACE}
             key={NIST_DEFAULT_NAMESPACE}
           />
@@ -169,7 +170,7 @@ export const OSCALPropertiesDialog = (props: OSCALPropertiesDialogProps) => {
             Object.entries(thirdParties)
               .sort(([key1], [key2]) => key1.localeCompare(key2))
               .map(([key, props]) => (
-                <OSCALProperties properties={sortProperties(props)} namespace={key} key={key} />
+                <OSCALProperties properties={props.sort(byName)} namespace={key} key={key} />
               ))
           }
         </DialogContent>
