@@ -19,6 +19,7 @@ import { Resource, ResourceLink, BackMatter } from "@easydynamics/oscal-types";
 import { ReactElement } from "react";
 import { OSCALPropertiesDialog } from "./OSCALProperties";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
+import { NotSpecifiedTypography } from "./StyledTypography";
 
 export const OSCALBackMatterCard = styled(Card)(
   ({ theme }) => `
@@ -217,7 +218,7 @@ function BackMatterResource(props: BackMatterResourceProps) {
         <CardContent>
           <OSCALPropertiesDialog
             properties={resource?.props}
-            title={resource?.title ?? resource?.uuid}
+            title={resource?.title}
           />
           <OSCALEditableTextField
             fieldName="description"
