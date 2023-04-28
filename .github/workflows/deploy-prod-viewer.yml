@@ -41,6 +41,8 @@ jobs:
       - name: Build viewer
         run:
           npx lerna exec --include-dependencies --scope "@easydynamics/oscal-viewer" -- npm run build
+        env:
+          REACT_APP_GOOGLE_ANALYTICS: "${{ secrets.GA4_CODE }}"
       - name: Archive viewer
         uses: actions/upload-artifact@v3
         with:
