@@ -836,7 +836,10 @@ export const OSCALMetadata: React.FC<OSCALMetadataProps> = (props) => {
               />
             </OSCALMetadataSection>
             <OSCALMetadataSection>
-              <OSCALPropertiesDialog properties={props.metadata.props} title={props.metadata.title} />
+              <OSCALPropertiesDialog
+                properties={props.metadata.props}
+                title={props.metadata.title}
+              />
             </OSCALMetadataSection>
             <OSCALMarkupMultiLine>{props.metadata.remarks}</OSCALMarkupMultiLine>
             <OSCALMetadataKeywords

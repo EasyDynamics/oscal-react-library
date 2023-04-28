@@ -40,14 +40,14 @@ function sortProperties(properties: Property[]): Property[] {
   return properties.sort((prop1, prop2) => prop1.name.localeCompare(prop2.name));
 }
 
-interface OSCALProperty {
+interface OSCALPropertyProps {
   /**
    * Contains property elements
    */
   property: Property;
 }
 
-const OSCALProperty = (props: OSCALProperty): ReactElement => {
+const OSCALProperty = (props: OSCALPropertyProps): ReactElement => {
   const { property } = props;
   const NO_INFORMATION = <NotSpecifiedTypography>Not Specified</NotSpecifiedTypography>;
 
@@ -92,9 +92,9 @@ const OSCALProperties = (props: OSCALPropertiesProps): ReactElement => {
           </StyledTableHead>
           <TableBody>
             {properties
-              ?.filter((property: Property) => namespaceOf(property?.ns) === namespace)
-              .map((property: Property) => (
-                <OSCALProperty property={property} />
+              ?.filter((property) => namespaceOf(property?.ns) === namespace)
+              .map((property) => (
+                <OSCALProperty property={property} key={`$namespaceOf(property?.ns)-properties`} />
               ))}
           </TableBody>
         </Table>
@@ -116,6 +116,7 @@ interface OSCALPropertiesDialogProps {
 
 export const OSCALPropertiesDialog = (props: OSCALPropertiesDialogProps) => {
   const { properties, title } = props;
+  const [open, setOpen] = React.useState(false);
 
   if (!properties) {
     return null;
@@ -127,7 +128,6 @@ export const OSCALPropertiesDialog = (props: OSCALPropertiesDialogProps) => {
   }
   const { [NIST_DEFAULT_NAMESPACE]: nist, ...thirdParties } = namespaceToProps;
 
-  const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
   };
@@ -167,7 +167,7 @@ export const OSCALPropertiesDialog = (props: OSCALPropertiesDialogProps) => {
           {
             /* Handle 3rd party properties */
             Object.entries(thirdParties)
-              .sort(([key1, props1], [key2, props2]) => key1.localeCompare(key2))
+              .sort(([key1], [key2]) => key1.localeCompare(key2))
               .map(([key, props]) => (
                 <OSCALProperties properties={sortProperties(props)} namespace={key} key={key} />
               ))

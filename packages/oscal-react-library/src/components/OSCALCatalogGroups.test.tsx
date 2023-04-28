@@ -161,7 +161,7 @@ describe("OSCALCatalogGroup", () => {
     const labelText = screen.getByText("Audit Events test label");
     expect(labelText).toBeVisible();
   });
-  
+
   test("displays outer group prose", () => {
     render(<OSCALCatalogGroups groups={testGroups} />);
 

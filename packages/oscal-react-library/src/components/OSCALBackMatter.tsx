@@ -215,6 +215,10 @@ function BackMatterResource(props: BackMatterResourceProps) {
           action={<CitationDisplay resource={resource} />}
         />
         <CardContent>
+          <OSCALPropertiesDialog
+            properties={resource?.props}
+            title={resource?.title ?? resource?.uuid}
+          />
           <OSCALEditableTextField
             fieldName="description"
             isEditable={isEditable}
@@ -234,7 +238,6 @@ function BackMatterResource(props: BackMatterResourceProps) {
             }
             value={resource.description}
           />
-          <OSCALPropertiesDialog properties={resource?.props} title={resource?.title ?? resource?.uuid} />
           <Typography>
             {resource.rlinks?.map((rlink) => (
               <Chip
