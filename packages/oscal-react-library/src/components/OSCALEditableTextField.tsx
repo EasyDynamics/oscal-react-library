@@ -45,11 +45,11 @@ const TextFieldWithEditableActions: React.FC<TextFieldWithEditableActionsProps> 
                   props.editedField,
                   props.editedValueId
                     ? updateListItem(
-                      props.editedValue,
-                      props.editedValueId,
-                      props.fieldName,
-                      reference.current.value as any as string
-                    )
+                        props.editedValue,
+                        props.editedValueId,
+                        props.fieldName,
+                        reference.current.value as any as string
+                      )
                     : reference.current.value
                 );
                 setInEditState(false);
