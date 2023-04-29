@@ -48,8 +48,7 @@ interface OSCALPropertyProps {
   property: Property;
 }
 
-const OSCALProperty = (props: OSCALPropertyProps): ReactElement => {
-  const { property } = props;
+const OSCALProperty: React.FC<OSCALPropertyProps> = ({ property }) => {
   const NO_INFORMATION = <NotSpecifiedTypography>Not Specified</NotSpecifiedTypography>;
 
   return (
@@ -74,9 +73,7 @@ interface OSCALPropertiesProps {
   namespace?: string;
 }
 
-const OSCALProperties = (props: OSCALPropertiesProps): ReactElement => {
-  const { properties, namespace } = props;
-
+const OSCALProperties: React.FC<OSCALPropertiesProps> = ({ properties, namespace }) => {
   return (
     <>
       <OSCALSystemImplementationTableTitle variant="h6" id={`${namespace}-table-title`}>
@@ -115,8 +112,10 @@ interface OSCALPropertiesDialogProps {
   title?: string | ReactElement;
 }
 
-export const OSCALPropertiesDialog = (props: OSCALPropertiesDialogProps) => {
-  const { properties, title } = props;
+export const OSCALPropertiesDialog: React.FC<OSCALPropertiesDialogProps> = ({
+  properties,
+  title,
+}) => {
   const [open, setOpen] = React.useState(false);
 
   if (!properties) {
