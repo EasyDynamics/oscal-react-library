@@ -112,7 +112,7 @@ interface OSCALPropertiesDialogProps {
   /**
    * Title of the element the properties resides under
    */
-  title?: string;
+  title?: string | ReactElement;
 }
 
 export const OSCALPropertiesDialog = (props: OSCALPropertiesDialogProps) => {
@@ -136,12 +136,6 @@ export const OSCALPropertiesDialog = (props: OSCALPropertiesDialogProps) => {
     setOpen(false);
   };
 
-  const dialogTitle = title ? (
-    `${title} Properties`
-  ) : (
-    <NotSpecifiedTypography component="span">Resource</NotSpecifiedTypography>
-  );
-
   return (
     <>
       <OSCALPropertiesButton
@@ -164,7 +158,7 @@ export const OSCALPropertiesDialog = (props: OSCALPropertiesDialogProps) => {
         sx={{ maxHeight: "75em" }}
       >
         <DialogContent sx={{ maxHeight: "75vh" }} dividers>
-          <DialogTitle id="scroll-dialog-title">{dialogTitle}</DialogTitle>
+          <DialogTitle id="scroll-dialog-title">{title} Properties</DialogTitle>
           {/* Handle NIST properties */}
           <OSCALProperties
             properties={nist?.sort(byName)}

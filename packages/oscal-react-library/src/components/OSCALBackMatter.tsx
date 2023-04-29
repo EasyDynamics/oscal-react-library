@@ -218,7 +218,11 @@ function BackMatterResource(props: BackMatterResourceProps) {
         <CardContent>
           <OSCALPropertiesDialog
             properties={resource?.props}
-            title={resource?.title}
+            title={
+              resource?.title ?? (
+                <NotSpecifiedTypography component="span">Resource</NotSpecifiedTypography>
+              )
+            }
           />
           <OSCALEditableTextField
             fieldName="description"

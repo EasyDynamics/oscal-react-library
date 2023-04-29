@@ -43,13 +43,14 @@ function ControlsList(props) {
     urlFragment,
     fragmentPrefix,
   } = props;
+  const label = propWithName(control.props, "label")?.value;
   return (
     <div>
       <OSCALPropertiesDialog
         properties={control.props}
         title={
           <>
-            <OSCALControlLabel id={control.id} label={control.label} component="span" />
+            <OSCALControlLabel id={control.id} label={label} component="span" />
             {` ${control.title}`}
           </>
         }
