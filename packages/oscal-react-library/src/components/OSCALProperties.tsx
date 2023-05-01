@@ -92,7 +92,10 @@ const OSCALProperties: React.FC<OSCALPropertiesProps> = ({ properties, namespace
             {properties
               ?.filter((property) => namespaceOf(property?.ns) === namespace)
               .map((property) => (
-                <OSCALProperty property={property} key={`$namespaceOf(property?.ns)-properties`} />
+                <OSCALProperty
+                  property={property}
+                  key={`${namespaceOf(property?.ns)}-properties`}
+                />
               ))}
           </TableBody>
         </Table>
@@ -123,8 +126,9 @@ export const OSCALPropertiesDialog: React.FC<OSCALPropertiesDialogProps> = ({
   }
   const namespaceToProps: Record<string, Property[]> = {};
   for (const prop of properties) {
-    namespaceToProps[namespaceOf(prop.ns)] ??= [];
-    namespaceToProps[namespaceOf(prop.ns)].push(prop);
+    const ns = namespaceOf(prop.ns);
+    namespaceToProps[ns] ??= [];
+    namespaceToProps[ns].push(prop);
   }
   const { [NIST_DEFAULT_NAMESPACE]: nist, ...thirdParties } = namespaceToProps;
 
@@ -160,7 +164,7 @@ export const OSCALPropertiesDialog: React.FC<OSCALPropertiesDialogProps> = ({
           <DialogTitle id="scroll-dialog-title">{title} Properties</DialogTitle>
           {/* Handle NIST properties */}
           <OSCALProperties
-            properties={nist?.sort(byName)}
+            properties={nist.sort(byName)}
             namespace={NIST_DEFAULT_NAMESPACE}
             key={NIST_DEFAULT_NAMESPACE}
           />
