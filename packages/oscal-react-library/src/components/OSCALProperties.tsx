@@ -164,7 +164,7 @@ export const OSCALPropertiesDialog: React.FC<OSCALPropertiesDialogProps> = ({
           <DialogTitle id="scroll-dialog-title">{title} Properties</DialogTitle>
           {/* Handle NIST properties */}
           <OSCALProperties
-            properties={nist.sort(byName)}
+            properties={nist?.sort(byName)}
             namespace={NIST_DEFAULT_NAMESPACE}
             key={NIST_DEFAULT_NAMESPACE}
           />
