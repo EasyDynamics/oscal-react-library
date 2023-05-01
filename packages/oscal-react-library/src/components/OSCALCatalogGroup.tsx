@@ -19,7 +19,7 @@ import { Control, ControlGroup, Part } from "@easydynamics/oscal-types";
 import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
 import { Typography } from "@mui/material";
 
-const WithdrawnControlTitle = styled(Typography)(({ theme }) => ({
+const WithdrawnControlText = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[400],
   textDecoration: "line-through",
 })) as typeof Typography;
@@ -90,14 +90,12 @@ interface CollapsibleListItemProps extends CatalogGroupFragmentProps, AnchorLink
    */
   readonly setListItemOpened: (...args: any[]) => void;
 
-  readonly withdrawn?: boolean;
-
   /**
-   * Whether this item has any child content.
+   * Whether the control or its parent is withdrawn.
    *
    * @default false
    */
-  readonly isEmpty?: boolean;
+  readonly withdrawn?: boolean;
 }
 
 /**
@@ -154,29 +152,11 @@ const CollapsibleListItem: React.FC<CollapsibleListItemProps> = (props) => {
         unmountOnExit: true,
         timeout: 0,
       }}
-      disabled={false && props.isEmpty}
     >
       <AccordionSummary expandIcon={<ExpandMore />}>{itemText}</AccordionSummary>
       <AccordionDetails>{children}</AccordionDetails>
     </Accordion>
   );
-
-  // return (
-  //   <StyledListItemPaper>
-  //     <StyledListItem onClick={handleClick}>
-  //       <ListItemText primary={itemText} />
-  //       {isOpen ? <ExpandLess /> : <ExpandMore />}
-  //     </StyledListItem>
-  //     <Collapse
-  //       in={isOpen}
-  //       timeout="auto"
-  //       onEntered={() => !group && setListItemOpened(true)}
-  //       unmountOnExit
-  //     >
-  //       <StyledControlDescriptionWrapper>{children}</StyledControlDescriptionWrapper>
-  //     </Collapse>
-  //   </StyledListItemPaper>
-  // );
 };
 
 export interface OSCALCatalogControlListItemProps
@@ -222,7 +202,7 @@ export const OSCALCatalogControlListItem: React.FC<OSCALCatalogControlListItemPr
   }, [isControlListItemOpened]);
 
   const withdrawn = props.withdrawn || isWithdrawn(control);
-  const TitleComponent = withdrawn ? WithdrawnControlTitle : Typography;
+  const TitleComponent = withdrawn ? WithdrawnControlText : Typography;
 
   const itemText = (
     <OSCALAnchorLinkHeader name={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}>
@@ -247,7 +227,6 @@ export const OSCALCatalogControlListItem: React.FC<OSCALCatalogControlListItemPr
       listId={control?.id}
       previousHandledFragment={previousHandledFragment}
       setPreviousHandledFragment={setPreviousHandledFragment}
-      isEmpty={!control.parts?.length && !control.controls?.length}
     >
       <OSCALControl
         showInList
@@ -301,7 +280,7 @@ const OSCALCatalogGroupList: React.FC<OSCALCatalogGroupListProps> = (props) => {
   } = props;
 
   const withdrawn = props.withdrawn || isWithdrawn(group);
-  const TitleComponent = withdrawn ? WithdrawnControlTitle : Typography;
+  const TitleComponent = withdrawn ? WithdrawnControlText : Typography;
 
   const itemText = (
     <OSCALAnchorLinkHeader
@@ -331,12 +310,13 @@ const OSCALCatalogGroupList: React.FC<OSCALCatalogGroupListProps> = (props) => {
       setListItemOpened={setIsControlListItemOpened}
       previousHandledFragment={previousHandledFragment}
       setPreviousHandledFragment={setPreviousHandledFragment}
-      isEmpty={!group.parts?.length && !group.controls?.length && !group.groups?.length}
     >
       {group.parts
         ?.map((groupPart) => groupPart.prose)
         .map((prose) => (
-          <OSCALMarkupMultiLine key={prose}>{prose}</OSCALMarkupMultiLine>
+          <OSCALMarkupMultiLine component={TitleComponent} key={prose}>
+            {prose}
+          </OSCALMarkupMultiLine>
         ))}
       <OSCALControlList>
         {group.groups?.map((innerGroup) => (
