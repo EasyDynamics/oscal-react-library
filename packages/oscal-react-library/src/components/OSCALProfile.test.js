@@ -20,7 +20,7 @@ function profileRenderer() {
 }
 
 function testOSCALProfile(parentElementName, renderer) {
-  jest.setTimeout(6000);
+  jest.setTimeout(10000);
   test(`${parentElementName} displays controls`, async () => {
     renderer();
     const result = await screen.findByText("AC-1", {

@@ -21,6 +21,55 @@ const testGroups: ControlGroup[] = [
               {
                 id: "control-id",
                 title: "Access Control Policy and Procedures",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "sibling-group",
+        class: "family",
+        title: "Sibling Title",
+        controls: [{ id: "control2-id", title: "Audit Events" }],
+        parts: [
+          {
+            name: "Parent part prose",
+            prose: "Prose",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Test Group C",
+    parts: [
+      {
+        id: "test-c-overview-1",
+        name: "overview",
+        prose: "This group has prose",
+      },
+    ],
+  },
+];
+
+const testGroupswithProps: ControlGroup[] = [
+  {
+    id: "parent-group",
+    class: "family",
+    title: "Parent Group",
+    groups: [
+      {
+        id: "child-group",
+        class: "family",
+        title: "Access Control",
+        groups: [
+          {
+            id: "child-child-group",
+            title: "Sub Access Control",
+            controls: [
+              {
+                id: "control-id",
+                title: "Access Control Policy and Procedures",
                 props: [
                   {
                     name: "label",
@@ -122,7 +171,7 @@ describe("OSCALCatalogGroup", () => {
   });
 
   test("displays parent properties", () => {
-    render(<OSCALCatalogGroups groups={testGroups} />);
+    render(<OSCALCatalogGroups groups={testGroupswithProps} />);
     const expand1 = screen.getByText("Access Control");
     fireEvent.click(expand1);
 
@@ -144,7 +193,7 @@ describe("OSCALCatalogGroup", () => {
   });
 
   test("displays sibling properties", () => {
-    render(<OSCALCatalogGroups groups={testGroups} />);
+    render(<OSCALCatalogGroups groups={testGroupswithProps} />);
     const expand1 = screen.getByText("Sibling Title");
     fireEvent.click(expand1);
 
