@@ -1,50 +1,34 @@
+import {
+  ComponentControlImplementation,
+  ControlBasedRequirement,
+  Oscal,
+  SetParameterValue,
+  SpecificControlStatement,
+} from "@easydynamics/oscal-types";
 import { v4 as uuidv4 } from "uuid";
+import { OscalObjectType, oscalObjectTypes } from "./OSCALObjectData";
 
 /**
  * enum describing the available REST methods
  */
-export const restMethods = {
-  DELETE: "DELETE",
-  GET: "GET",
-  PATCH: "PATCH",
-  POST: "POST",
-  PUT: "PUT",
-};
+export enum RestMethod {
+  DELETE = "DELETE",
+  GET = "GET",
+  PATCH = "PATCH",
+  POST = "POST",
+  PUT = "PUT",
+}
 
-export const oscalObjectTypes = {
-  catalog: {
-    name: "Catalog",
-    defaultUrl:
-      "https://raw.githubusercontent.com/EasyDynamics/oscal-demo-content/main/catalogs/NIST_SP-800-53_rev5_catalog.json",
-    defaultUuid: "613fca2d-704a-42e7-8e2b-b206fb92b456",
-    jsonRootName: "catalog",
-    restPath: "catalogs",
-  },
-  component: {
-    name: "Component",
-    defaultUrl:
-      "https://raw.githubusercontent.com/EasyDynamics/oscal-demo-content/main/component-definitions/example-component.json",
-    defaultUuid: "8223d65f-57a9-4689-8f06-2a975ae2ad72",
-    jsonRootName: "component-definition",
-    restPath: "component-definitions",
-  },
-  profile: {
-    name: "Profile",
-    defaultUrl:
-      "https://raw.githubusercontent.com/EasyDynamics/oscal-demo-content/main/profiles/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json",
-    defaultUuid: "8b3beca1-fcdc-43e0-aebb-ffc0a080c486",
-    jsonRootName: "profile",
-    restPath: "profiles",
-  },
-  ssp: {
-    name: "System Security Plan",
-    defaultUrl:
-      "https://raw.githubusercontent.com/EasyDynamics/oscal-demo-content/main/system-security-plans/ssp-example.json",
-    defaultUuid: "cff8385f-108e-40a5-8f7a-82f3dc0eaba8",
-    jsonRootName: "system-security-plan",
-    restPath: "system-security-plans",
-  },
-};
+/**
+ * Re-mark all the fields in an object as mutable.
+ *
+ * This is a TERRIBLE IDEA. But we do it anyway because there are some really bad
+ * previous decisions to mutate data. This violates React's assumptions and generally
+ * makes things harder to reason about here.
+ *
+ * @deprecated use immutable data structures instead
+ */
+type Mutable<T> = { -readonly [P in keyof T]: T[P] };
 
 /**
  * Populates a map of oscal object types to oscal objects retrieved from a get request.
@@ -53,20 +37,29 @@ export const oscalObjectTypes = {
  * @param {Object} oscalObjectType Object that contains information on an oscalObject
  * @param {(any) => void} handleResult Function to map a fetched result to the json root name of an oscal object
  */
-export function fetchAllResourcesOfType(backendUrl, oscalObjectType, handleResult) {
+export function fetchAllResourcesOfType<T extends keyof Oscal>(
+  backendUrl: string,
+  oscalObjectType: OscalObjectType,
+  handleResult: (result: Pick<Oscal, T>[]) => void
+) {
   fetch(`${backendUrl}/${oscalObjectType.restPath}`)
     .then((response) => {
-      if (!response.ok) throw new Error(response.status);
+      if (!response.ok) throw new Error(response.status.toString());
       else return response.json();
     })
     .then(handleResult);
 }
 
-export function getOscalObjectTypeFromJsonRootName(jsonRootName) {
-  return Object.keys(oscalObjectTypes).find((element) => element.jsonRootName === jsonRootName);
-}
-
-export function deepClone(obj) {
+/**
+ * Clone all attributes of a JSON-serializable object.
+ *
+ * **Note**: this functions is **not safe** for objects with fields that cannot be represented
+ * in JSON.
+ *
+ * @param obj the object to clone
+ * @returns the cloned object
+ */
+export function deepClone<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));
 }
 
@@ -80,33 +73,34 @@ export function deepClone(obj) {
  * @param appendToLastFieldInPath boolean indicating if the updated value should be appended to an array or replace an existing value
  */
 export function populatePartialRestData(
-  data,
-  editedFieldJsonPath,
-  newValue = null,
+  data: any,
+  editedFieldJsonPath: string[],
+  newValue: any = null,
   appendToLastFieldInPath = false
 ) {
+  if (editedFieldJsonPath.length === 0) {
+    return;
+  }
   if (editedFieldJsonPath.length === 1) {
-    const editData = data;
-
     if (appendToLastFieldInPath) {
-      editData[editedFieldJsonPath].push(newValue);
+      data[editedFieldJsonPath[0]].push(newValue);
     } else {
-      editData[editedFieldJsonPath] = newValue;
+      data[editedFieldJsonPath[0]] = newValue;
     }
-
     return;
   }
 
+  const firstField = editedFieldJsonPath.shift()!;
   if (Number.isInteger(editedFieldJsonPath.at(0))) {
     populatePartialRestData(
-      data[Number(editedFieldJsonPath.shift())],
+      data[Number(firstField)],
       editedFieldJsonPath,
       newValue,
       appendToLastFieldInPath
     );
   } else {
     populatePartialRestData(
-      data[editedFieldJsonPath.shift()],
+      data[firstField],
       editedFieldJsonPath,
       newValue,
       appendToLastFieldInPath
@@ -114,18 +108,20 @@ export function populatePartialRestData(
   }
 }
 
-export function buildRequestUrl(partialRestData, restUrlPath, oscalObjectType) {
-  let url;
-  if (!restUrlPath || restUrlPath === "") {
-    url = `${process.env.REACT_APP_REST_BASE_URL}/${oscalObjectType.restPath}/${
+export function buildRequestUrl(
+  partialRestData: any,
+  restUrlPath: string | undefined,
+  oscalObjectType: OscalObjectType | null
+): string {
+  if (!restUrlPath && oscalObjectType) {
+    return `${process.env.REACT_APP_REST_BASE_URL}/${oscalObjectType.restPath}/${
       partialRestData[oscalObjectType.jsonRootName].uuid
     }`;
-  } else if (restUrlPath.startsWith("http", 0)) {
-    url = restUrlPath;
+  } else if (restUrlPath?.startsWith("http", 0)) {
+    return restUrlPath;
   } else {
-    url = `${process.env.REACT_APP_REST_BASE_URL}/${restUrlPath}`;
+    return `${process.env.REACT_APP_REST_BASE_URL}/${restUrlPath}`;
   }
-  return url;
 }
 
 /**
@@ -139,12 +135,12 @@ export function buildRequestUrl(partialRestData, restUrlPath, oscalObjectType) {
  * @param onError function called on error with the error as an argument
  */
 export function performRequest(
-  restJsonPayload,
-  httpMethod,
-  requestUrl,
-  onPreRestRequest,
-  onSuccess,
-  onError
+  restJsonPayload: any,
+  httpMethod: RestMethod,
+  requestUrl: string,
+  onPreRestRequest: () => void,
+  onSuccess: (result: any) => void,
+  onError: (err: any) => void
 ) {
   onPreRestRequest();
 
@@ -160,7 +156,7 @@ export function performRequest(
   fetch(requestUrl, requestInfo)
     .then(
       (response) => {
-        if (!response.ok) throw new Error(response.status);
+        if (!response.ok) throw new Error(response.status.toString());
         else return response.json();
       },
       (err) => onError(err)
@@ -188,22 +184,24 @@ export function performRequest(
  * @param onError function called on error with the error as an argument
  */
 export function createOrUpdateSspControlImplementationImplementedRequirementStatementByComponent(
-  partialRootRestData,
-  implementedRequirement,
-  statementId,
-  componentId,
-  description,
-  implementationSetParameters,
-  onPreRestRequest,
-  onSuccess,
-  onError
+  partialRootRestData: any,
+  implementedRequirement: ControlBasedRequirement,
+  statementId: string,
+  componentId: string,
+  description: string,
+  implementationSetParameters: SetParameterValue[],
+  onPreRestRequest: () => void,
+  onSuccess: (result: any) => void,
+  onError: (err: any) => void
 ) {
-  const partialRestImplementedRequirement = deepClone(implementedRequirement);
+  const partialRestImplementedRequirement: Mutable<ControlBasedRequirement> =
+    deepClone(implementedRequirement);
 
   // Find our statement
-  let statement = partialRestImplementedRequirement.statements?.find(
-    (element) => element["statement-id"] === statementId
-  );
+  let statement: Mutable<SpecificControlStatement> | undefined =
+    partialRestImplementedRequirement.statements?.find(
+      (element) => element["statement-id"] === statementId
+    );
 
   // If our statement doesn't exist, create and add it
   if (!statement) {
@@ -217,14 +215,15 @@ export function createOrUpdateSspControlImplementationImplementedRequirementStat
   }
 
   // Find our statementByComponent
-  let statementByComponent = statement["by-components"]?.find(
-    (element) => element["component-uuid"] === componentId
-  );
+  let statementByComponent: Mutable<ComponentControlImplementation> | undefined = statement[
+    "by-components"
+  ]?.find((element) => element["component-uuid"] === componentId);
   // If our statementByComponent doesn't exit, create and add it
   if (!statementByComponent) {
     statementByComponent = {
       "component-uuid": componentId,
       uuid: uuidv4(),
+      description: "",
     };
     statement["by-components"] ??= [];
     statement["by-components"].push(statementByComponent);
@@ -237,13 +236,13 @@ export function createOrUpdateSspControlImplementationImplementedRequirementStat
     implementationSetParameters
       .filter((element) => !!element)
       .forEach((implementationSetParameter) => {
-        const foundExistingSetParam = statementByComponent["set-parameters"].find(
-          (element) => element["param-id"] === implementationSetParameter["param-id"]
-        );
+        const foundExistingSetParam: Mutable<SetParameterValue> | undefined = statementByComponent![
+          "set-parameters"
+        ]?.find((element) => element["param-id"] === implementationSetParameter["param-id"]);
         if (foundExistingSetParam) {
           foundExistingSetParam.values = implementationSetParameter.values;
         } else {
-          statementByComponent["set-parameters"].push(implementationSetParameter);
+          statementByComponent!["set-parameters"]?.push(implementationSetParameter);
         }
       });
   }
@@ -254,7 +253,7 @@ export function createOrUpdateSspControlImplementationImplementedRequirementStat
 
   performRequest(
     { "implemented-requirement": partialRestImplementedRequirement },
-    restMethods.PUT,
+    RestMethod.PUT,
     buildRequestUrl(null, requestUrl, null),
     onPreRestRequest,
     onSuccess,
@@ -273,11 +272,11 @@ export function createOrUpdateSspControlImplementationImplementedRequirementStat
  * @param {*} onError function called on error with the error as an argument
  */
 export function createSspControlImplementationImplementedRequirement(
-  partialRootRestData,
-  newImplementedRequirement,
-  onPreRestRequest,
-  onSuccess,
-  onError
+  partialRootRestData: any,
+  newImplementedRequirement: ControlBasedRequirement,
+  onPreRestRequest: () => void,
+  onSuccess: (result: any) => void,
+  onError: (err: any) => void
 ) {
   const rootUuid = partialRootRestData[oscalObjectTypes.ssp.jsonRootName].uuid;
   const rootRestPath = `${oscalObjectTypes.ssp.restPath}/${rootUuid}`;
@@ -285,7 +284,7 @@ export function createSspControlImplementationImplementedRequirement(
 
   performRequest(
     { "implemented-requirement": newImplementedRequirement },
-    restMethods.POST,
+    RestMethod.POST,
     buildRequestUrl(null, requestUrl, null),
     onPreRestRequest,
     onSuccess,
