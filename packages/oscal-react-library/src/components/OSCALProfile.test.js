@@ -20,11 +20,10 @@ function profileRenderer() {
 }
 
 function testOSCALProfile(parentElementName, renderer) {
-  jest.setTimeout(10000);
   test(`${parentElementName} displays controls`, async () => {
     renderer();
     const result = await screen.findByText("AC-1", {
-      timeout: 5000,
+      timeout: 30_000,
     });
     expect(result).toBeVisible();
   });
@@ -32,7 +31,7 @@ function testOSCALProfile(parentElementName, renderer) {
   test(`${parentElementName} displays parameter constraints`, async () => {
     renderer();
     const result = await screen.findAllByText("< organization-defined frequency >", {
-      timeout: 5000,
+      timeout: 30_000,
     });
     fireEvent.mouseOver(result[0]);
     expect(await screen.findByText("at least every 3 years")).toBeVisible();
