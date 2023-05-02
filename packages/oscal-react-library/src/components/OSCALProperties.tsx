@@ -30,7 +30,7 @@ const OSCALPropertiesButton = styled(Button)(
 ) as typeof Button;
 
 /**
- * Helper to sort namespaces.
+ *  Helper to sort properties by their `name` field.
  *
  * @param propA The first property to compare
  * @param propB The second property to compare
@@ -66,7 +66,7 @@ interface OSCALPropertiesProps {
   /**
    * Contains a list of properties
    */
-  properties: Property[];
+  properties?: Property[];
   /**
    * A namespace used for the title of a table
    */
@@ -173,7 +173,7 @@ export const OSCALPropertiesDialog: React.FC<OSCALPropertiesDialogProps> = ({
             Object.entries(thirdParties)
               .sort(([key1], [key2]) => key1.localeCompare(key2))
               .map(([key, props]) => (
-                <OSCALProperties properties={props?.sort(byName)} namespace={key} key={key} />
+                <OSCALProperties properties={props.sort(byName)} namespace={key} key={key} />
               ))
           }
         </DialogContent>
