@@ -11,6 +11,7 @@ import { AnchorLinkProps, OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader"
 import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import { appendToFragmentPrefix } from "./oscal-utils/OSCALLinkUtils";
+import { shouldForwardProp } from "@mui/system";
 import {
   Control,
   ImplementedRequirementElement,
@@ -27,17 +28,18 @@ interface OSCALControlCardProps extends CardProps, ControlListOptions {
   withdrawn: boolean;
 }
 
-const OSCALControlCard = styled(Card)<OSCALControlCardProps>(
-  ({ theme, childLevel, withdrawn }) => ({
-    marginTop: "1em",
-    marginBotom: "1em",
-    marginLeft: childLevel ? "1.5em" : "0",
-    marginRight: childLevel ? "1.5em" : "0",
-    backgroundColor: childLevel ? "#FFFCF0" : undefined,
-    textDecoration: withdrawn ? "line-through" : undefined,
-    color: withdrawn ? theme.palette.grey[400] : undefined,
-  })
-);
+const OSCALControlCard = styled(Card, {
+  shouldForwardProp: (prop) =>
+    shouldForwardProp(prop) && prop !== "childLevel" && prop !== "withdrawn",
+})<OSCALControlCardProps>(({ theme, childLevel, withdrawn }) => ({
+  marginTop: "1em",
+  marginBotom: "1em",
+  marginLeft: childLevel ? "1.5em" : "0",
+  marginRight: childLevel ? "1.5em" : "0",
+  backgroundColor: childLevel ? "#FFFCF0" : undefined,
+  textDecoration: withdrawn ? "line-through" : undefined,
+  color: withdrawn ? theme.palette.grey[400] : undefined,
+}));
 
 interface ControlsListProps extends EditableFieldProps, AnchorLinkProps, ControlListOptions {
   control: Control;
@@ -170,11 +172,12 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
   }
 
   const label = propWithName(control.props, "label")?.value;
+  const controlOrParentWithdrawn = withdrawn || isWithdrawn(control);
 
   return showInList ? (
-    <ControlsList {...props} withdrawn={withdrawn || isWithdrawn(control)} />
+    <ControlsList {...props} withdrawn={controlOrParentWithdrawn} />
   ) : (
-    <OSCALControlCard childLevel={childLevel ?? 0} withdrawn={withdrawn || isWithdrawn(control)}>
+    <OSCALControlCard childLevel={childLevel ?? 0} withdrawn={controlOrParentWithdrawn}>
       <CardContent>
         <Grid container spacing={1}>
           <Grid item xs={12}>
@@ -192,7 +195,7 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
             </OSCALAnchorLinkHeader>
           </Grid>
         </Grid>
-        <ControlsList {...props} withdrawn={withdrawn || isWithdrawn(control)} />
+        <ControlsList {...props} withdrawn={controlOrParentWithdrawn} />
       </CardContent>
     </OSCALControlCard>
   );
