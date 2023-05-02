@@ -14,10 +14,10 @@ import {
   shiftFragmentSuffix,
   conformLinkIdText,
 } from "./oscal-utils/OSCALLinkUtils";
-import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
-import { Control, ControlGroup, Part } from "@easydynamics/oscal-types";
+import { Control, ControlGroup } from "@easydynamics/oscal-types";
 import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
 import { Typography } from "@mui/material";
+import OSCALControlPart from "./OSCALControlPart";
 
 const WithdrawnControlText = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[400],
@@ -311,13 +311,16 @@ const OSCALCatalogGroupList: React.FC<OSCALCatalogGroupListProps> = (props) => {
       previousHandledFragment={previousHandledFragment}
       setPreviousHandledFragment={setPreviousHandledFragment}
     >
-      {group.parts
-        ?.map((groupPart) => groupPart.prose)
-        .map((prose) => (
-          <OSCALMarkupMultiLine component={TitleComponent} key={prose}>
-            {prose}
-          </OSCALMarkupMultiLine>
-        ))}
+      {group.parts?.map((part, index) => (
+        <OSCALControlPart
+          control={group}
+          controlId={group.title}
+          key={part.id ?? `part-${index}`}
+          parameters={group.params}
+          part={part}
+        />
+      ))}
+
       <OSCALControlList>
         {group.groups?.map((innerGroup) => (
           <OSCALCatalogGroupList
@@ -391,13 +394,17 @@ export const OSCALCatalogGroup: React.FC<OSCALCatalogGroupProps> = (props) => {
 
   return (
     <>
-      {group.parts
-        ?.map((groupPart: Part) => groupPart.prose)
-        .map((prose) => (
-          <OSCALMarkupMultiLine key={prose}>{prose}</OSCALMarkupMultiLine>
-        ))}
+      {group.parts?.map((part, index) => (
+        <OSCALControlPart
+          control={group}
+          controlId={group.title}
+          key={part.id ?? `part-${index}`}
+          parameters={group.params}
+          part={part}
+        />
+      ))}
       <OSCALControlList>
-        {group.groups?.map((innerGroup: ControlGroup) => (
+        {group.groups?.map((innerGroup) => (
           <OSCALCatalogGroupList
             group={innerGroup}
             key={innerGroup.title}
@@ -410,7 +417,7 @@ export const OSCALCatalogGroup: React.FC<OSCALCatalogGroupProps> = (props) => {
             setPreviousHandledFragment={setPreviousHandledFragment}
           />
         ))}
-        {group.controls?.map((control: Control) => (
+        {group.controls?.map((control) => (
           <OSCALCatalogControlListItem
             control={control}
             key={control.id}
