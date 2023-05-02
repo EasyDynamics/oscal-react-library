@@ -71,9 +71,7 @@ const ControlsList: React.FC<ControlsListProps> = (props) => {
     fragmentPrefix,
   } = props;
   return (
-    // TODO: I think that in this `control.parts` map is where we need to stuff to make the
-    // last bit of text use the `WithdrawnControlText` component? But I am not 100% sure.
-    <div>
+    <div style={{ textDecoration: props.withdrawn ? "line-through" : "none" }}>
       {control.parts?.map((part, index) => (
         <OSCALControlPart
           componentId={componentId}
