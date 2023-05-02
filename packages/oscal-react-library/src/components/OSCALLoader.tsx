@@ -68,14 +68,14 @@ type Renderer = (props: OSCALLoaderRendererProps) => ReactElement;
 
 type OscalWithSource = Oscal & { oscalSource?: string };
 
-interface OSCALDocumentLoaderProps {
+export interface OSCALDocumentLoaderProps {
   renderForm: boolean;
   backendUrl: string;
   urlFragment: string;
   isRestMode: boolean;
 }
 
-interface OSCALLoaderProps extends AnchorLinkProps {
+export interface OSCALLoaderProps extends AnchorLinkProps {
   isRestMode?: boolean;
   hasDefaultUrl?: boolean;
   backendUrl?: string;
@@ -84,14 +84,23 @@ interface OSCALLoaderProps extends AnchorLinkProps {
   renderer: Renderer;
 }
 
-interface OSCALLoaderRendererProps {
+export type OnFieldSaveHandlerWrapped = (
+  appendToLastFieldInPath: boolean,
+  partialRestData: Record<string, any>,
+  editedFieldJsonPath: string[],
+  newValue: string | object,
+  restUrlPath: string | undefined,
+  oscalObjectType: OscalObjectType
+) => void;
+
+export interface OSCALLoaderRendererProps {
   isRestMode: boolean | undefined;
   oscalData: OscalWithSource;
   oscalUrl: string;
   onResolutionComplete: () => void;
   handleRestSuccess: () => void;
   handleRestError: (e: Error) => void;
-  handleFieldSave: (...args: any[]) => any;
+  handleFieldSave: OnFieldSaveHandlerWrapped;
 }
 
 export default function OSCALLoader(props: OSCALLoaderProps): ReactElement {
@@ -138,13 +147,13 @@ export default function OSCALLoader(props: OSCALLoaderProps): ReactElement {
       }, handleError);
   };
 
-  const handleFieldSave = (
-    appendToLastFieldInPath: boolean,
-    partialRestData: Record<string, any>,
-    editedFieldJsonPath: string[],
-    newValue: string | object,
-    restUrlPath: string,
-    oscalObjectType: OscalObjectType
+  const handleFieldSave: OnFieldSaveHandlerWrapped = (
+    appendToLastFieldInPath,
+    partialRestData,
+    editedFieldJsonPath,
+    newValue,
+    restUrlPath,
+    oscalObjectType
   ) => {
     const requestUrl = restUtils.buildRequestUrl(partialRestData, restUrlPath, oscalObjectType);
 
@@ -454,11 +463,11 @@ export function OSCALSSPLoader(props: OSCALDocumentLoaderProps) {
       urlFragment={props.urlFragment}
       onResolutionComplete={onResolutionComplete}
       onFieldSave={(
-        appendToLastFieldInPath: any,
-        partialRestData: any,
-        editedFieldJsonPath: any,
-        newValue: any,
-        restUrlPath: any
+        appendToLastFieldInPath: boolean,
+        partialRestData: Record<string, any>,
+        editedFieldJsonPath: string[],
+        newValue: string | object,
+        restUrlPath?: string
       ) => {
         handleFieldSave(
           appendToLastFieldInPath,
@@ -506,11 +515,11 @@ export function OSCALComponentLoader(props: OSCALDocumentLoaderProps) {
       urlFragment={props.urlFragment}
       onResolutionComplete={onResolutionComplete}
       onFieldSave={(
-        appendToLastFieldInPath: any,
-        partialRestData: any,
-        editedFieldJsonPath: any,
-        newValue: any,
-        restUrlPath: any
+        appendToLastFieldInPath: boolean,
+        partialRestData: Record<string, any>,
+        editedFieldJsonPath: string[],
+        newValue: string | object,
+        restUrlPath?: string
       ) => {
         handleFieldSave(
           appendToLastFieldInPath,
@@ -557,11 +566,11 @@ export function OSCALProfileLoader(props: OSCALDocumentLoaderProps) {
       urlFragment={props.urlFragment}
       onResolutionComplete={onResolutionComplete}
       onFieldSave={(
-        appendToLastFieldInPath: any,
-        partialRestData: any,
-        editedFieldJsonPath: any,
-        newValue: any,
-        restUrlPath: any
+        appendToLastFieldInPath: boolean,
+        partialRestData: Record<string, any>,
+        editedFieldJsonPath: string[],
+        newValue: string | object,
+        restUrlPath?: string
       ) => {
         handleFieldSave(
           appendToLastFieldInPath,
