@@ -42,7 +42,7 @@ const TextFieldWithEditableActions: React.FC<TextFieldWithEditableActionsProps> 
                 props.onFieldSave!(
                   false,
                   props.partialRestData,
-                  props.editedField,
+                  props.editedField!,
                   props.editedValueId
                     ? updateListItem(
                         props.editedValue,
@@ -50,7 +50,7 @@ const TextFieldWithEditableActions: React.FC<TextFieldWithEditableActionsProps> 
                         props.fieldName,
                         reference.current.value as any as string
                       )
-                    : reference.current.value
+                    : (reference.current.value as any)
                 );
                 setInEditState(false);
               }
@@ -89,6 +89,14 @@ const TextFieldWithEditableActions: React.FC<TextFieldWithEditableActionsProps> 
   );
 };
 
+export type OnFieldSaveHandler = (
+  appendToLastFieldInPath: boolean,
+  partialRestData: Record<string, any>,
+  editedFieldJsonPath: string[],
+  newValue: string | object,
+  restUrlPath?: string
+) => void;
+
 export interface EditableFieldProps {
   /**
    * True if in editor mode
@@ -98,7 +106,7 @@ export interface EditableFieldProps {
    * Currently this is the handleFieldSave() function passed down from the OSCALLoader.
    * All of the funcionality of editing require this function.
    */
-  onFieldSave?: (...args: any[]) => void;
+  onFieldSave?: OnFieldSaveHandler;
   /**
    * A partial representation of the json object you are patching.
    */

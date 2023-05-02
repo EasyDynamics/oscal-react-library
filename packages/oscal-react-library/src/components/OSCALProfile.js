@@ -17,7 +17,7 @@ import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
  * represents the baseline of selected controls from one or more control catalogs.
  * For more information see: https://pages.nist.gov/OSCAL/concepts/layer/control/profile/
  *
- * @param {Object} props
+ * @param {*} props
  * @returns The OSCAL profile component
  */
 export default function OSCALProfile(props) {

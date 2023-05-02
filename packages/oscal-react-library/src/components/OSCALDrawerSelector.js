@@ -6,7 +6,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
 import { Link } from "react-router-dom";
-import { oscalObjectTypes, fetchAllResourcesOfType } from "./oscal-utils/OSCALRestUtils";
+import { oscalObjectTypes } from "./oscal-utils/OSCALObjectData";
+import { fetchAllResourcesOfType } from "./oscal-utils/OSCALRestUtils";
 import { OSCALMarkupLine } from "./OSCALMarkupProse";
 
 const DrawerHeader = styled("div")(({ theme }) => ({

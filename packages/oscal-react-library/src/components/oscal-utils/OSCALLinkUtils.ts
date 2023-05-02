@@ -68,8 +68,10 @@ export function guessExtensionFromHref(url: string): "Unknown" | string {
  * @param fragment A given fragment
  * @returns The control group id
  */
-export function determineControlGroupFromFragment(fragment: string): string | undefined {
-  if (fragment) {
+export function determineControlGroupFromFragment(
+  fragment: string | undefined
+): string | undefined {
+  if (!fragment) {
     return undefined;
   }
   // Create array from all tab control grouping elements

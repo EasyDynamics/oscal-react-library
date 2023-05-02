@@ -55,6 +55,8 @@ export interface OSCALCatalogProps extends EditableFieldProps {
   readonly catalog: Catalog;
   readonly urlFragment?: string | undefined;
   readonly parentUrl: string;
+  readonly onRestError?: (error: any) => void;
+  readonly onRestSuccess?: (data: any) => void;
 }
 
 export const OSCALCatalog: React.FC<OSCALCatalogProps> = ({
