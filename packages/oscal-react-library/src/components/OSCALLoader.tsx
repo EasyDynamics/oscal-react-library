@@ -98,7 +98,7 @@ export default function OSCALLoader(props: OSCALLoaderProps): ReactElement {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isResolutionComplete, setIsResolutionComplete] = useState(false);
   const [hasDefaultUrl, setHasDefaultUrl] = useState(props.hasDefaultUrl);
-  const [oscalData, setOscalData] = useState(null as unknown as OscalWithSource);
+  const [oscalData, setOscalData] = useState({} as OscalWithSource);
   const [editorIsVisible, setEditorIsVisible] = useState(true);
   const unmounted = useRef(false);
   const [error, setError] = useState(null as Error | null);
