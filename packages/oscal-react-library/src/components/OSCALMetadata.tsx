@@ -48,11 +48,12 @@ import {
   PartyType,
   TelephoneNumber,
   Link as OSCALLink,
+  BackMatter,
 } from "@easydynamics/oscal-types";
 import { OSCALRevisionsButton } from "./OSCALRevision";
 import { OSCALMetadataLabel } from "./OSCALMetadataCommon";
 import { NotSpecifiedTypography } from "./StyledTypography";
-import resolveLinkHref, { ResolvableLinkHref } from "./oscal-utils/OSCALLinkUtils";
+import resolveLinkHref, { UriReferenceLookup } from "./oscal-utils/OSCALLinkUtils";
 
 const OSCALMetadataSectionInfoHeader = styled(Typography)`
   display: flex;
@@ -308,42 +309,57 @@ const MetadataInfoList: React.FC<MetadataInfoListProps> = (props) => {
   );
 };
 
-interface OSCALMetadataPartyLogoProps extends ResolvableLinkHref {
+interface OSCALMetadataPartyLogoProps {
   link: OSCALLink;
+  uriReferenceLookup: UriReferenceLookup;
   partyName?: string;
 }
 
-const OSCALMetadataPartyLogo: React.FC<OSCALMetadataPartyLogoProps> = ({
-  link,
-  backMatter,
-  parentUrl,
-  partyName,
-}) => {
-  let logoUri = undefined;
-
-  if (backMatter) {
-    try {
-      logoUri = resolveLinkHref(backMatter, link.href, parentUrl, /^image\//, false);
-    } catch (err) {
-      // Silently fail on unresolved diagram resources
-    }
+const maybeResolveUri = (
+  backMatter: BackMatter | undefined,
+  href: string,
+  mediaType: RegExp,
+  preferBase64: boolean,
+  parentUrl?: string
+) => {
+  if (!backMatter) {
+    return undefined;
   }
 
-  const imageSrc = logoUri ?? link.href;
+  try {
+    return resolveLinkHref(backMatter, href, mediaType, preferBase64, parentUrl);
+  } catch (_) {
+    return undefined;
+  }
+};
+
+const OSCALMetadataPartyLogo: React.FC<OSCALMetadataPartyLogoProps> = ({
+  link,
+  uriReferenceLookup,
+  partyName,
+}) => {
+  const imageSrc =
+    maybeResolveUri(
+      uriReferenceLookup.backMatter,
+      link.href,
+      /^image\//,
+      false,
+      uriReferenceLookup.parentUrl
+    ) ?? link.href;
 
   return <img src={imageSrc} alt={`${partyName} logo`} style={{ maxWidth: "10em" }} />;
 };
 
-export interface OSCALMetadataPartyProps extends ResolvableLinkHref {
+export interface OSCALMetadataPartyProps {
   party: PartyOrganizationOrPerson;
   partyRolesText: Role[] | undefined;
+  uriReferenceLookup: UriReferenceLookup;
 }
 
 export const OSCALMetadataParty: React.FC<OSCALMetadataPartyProps> = ({
   party,
   partyRolesText,
-  backMatter,
-  parentUrl,
+  uriReferenceLookup,
 }) => {
   const fallbackIcon = party?.type === PartyType.ORGANIZATION ? <GroupIcon /> : <PersonIcon />;
 
@@ -353,8 +369,7 @@ export const OSCALMetadataParty: React.FC<OSCALMetadataPartyProps> = ({
   const logo = logoLink ? (
     <OSCALMetadataPartyLogo
       link={logoLink}
-      backMatter={backMatter}
-      parentUrl={parentUrl}
+      uriReferenceLookup={uriReferenceLookup}
       partyName={party.name}
     />
   ) : undefined;
@@ -599,17 +614,17 @@ const OSCALMetadataRoles: React.FC<OSCALMetadataRolesProps> = (props) => {
   );
 };
 
-interface OSCALMetadataPartiesProps extends AnchorLinkProps, ResolvableLinkHref {
+interface OSCALMetadataPartiesProps extends AnchorLinkProps {
   metadata: PublicationMetadata;
   parties: PartyOrganizationOrPerson[] | undefined;
+  uriReferenceLookup: UriReferenceLookup;
 }
 
 const OSCALMetadataParties: React.FC<OSCALMetadataPartiesProps> = ({
   metadata,
   parties,
   urlFragment,
-  backMatter,
-  parentUrl,
+  uriReferenceLookup,
 }) => {
   const getRoleLabel = (roleId: string) => metadata?.roles?.find((role) => role.id === roleId);
 
@@ -625,8 +640,7 @@ const OSCALMetadataParties: React.FC<OSCALMetadataPartiesProps> = ({
       <OSCALMetadataParty
         party={party}
         partyRolesText={getPartyRolesText(party)}
-        backMatter={backMatter}
-        parentUrl={parentUrl}
+        uriReferenceLookup={uriReferenceLookup}
       />
     </Grid>
   ));
@@ -829,11 +843,13 @@ export const OSCALMetadataKeywords: React.FC<OSCALMetadataKeywordsProps> = (prop
   );
 };
 
-interface OSCALMetadataProps extends EditableFieldProps, AnchorLinkProps, ResolvableLinkHref {
+interface OSCALMetadataProps extends EditableFieldProps, AnchorLinkProps {
   /**
    * The metadata of an OSCAL document.
    */
   metadata: PublicationMetadata;
+  backMatter?: BackMatter;
+  parentUrl?: string;
 }
 
 export const OSCALMetadata: React.FC<OSCALMetadataProps> = (props) => {
@@ -890,9 +906,7 @@ export const OSCALMetadata: React.FC<OSCALMetadataProps> = (props) => {
             <OSCALMetadataParties
               parties={props.metadata?.parties}
               metadata={props.metadata}
-              urlFragment={props.urlFragment}
-              backMatter={props.backMatter}
-              parentUrl={props.parentUrl}
+              uriReferenceLookup={{ backMatter: props.backMatter, parentUrl: props.parentUrl }}
             />
             <OSCALMetadataRoles roles={props.metadata?.roles} urlFragment={props.urlFragment} />
             <OSCALMetadataLocations

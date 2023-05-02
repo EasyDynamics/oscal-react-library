@@ -76,9 +76,9 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
             const importUrl = resolveLinkHref(
               profileBackMatter,
               profileImport.href,
-              null,
               OSCAL_MEDIA_TYPE,
-              false
+              false,
+              null
             );
             OSCALResolveProfileOrCatalogUrlControls(
               resolvedControls,
@@ -129,7 +129,7 @@ export function OSCALResolveProfile(profile, parentUrl, onSuccess, onError) {
     OSCALResolveProfileOrCatalogUrlControls(
       profile.resolvedControls,
       profile.modifications,
-      resolveLinkHref(profile?.["back-matter"] ?? [], imp.href, parentUrl, OSCAL_MEDIA_TYPE, false),
+      resolveLinkHref(profile?.["back-matter"] ?? [], imp.href, OSCAL_MEDIA_TYPE, false, parentUrl),
       parentUrl,
       profile?.["back-matter"] ?? [],
       inheritedProfilesAndCatalogs.inherited,

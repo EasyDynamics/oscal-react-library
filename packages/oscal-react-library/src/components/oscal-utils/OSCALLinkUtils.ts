@@ -16,7 +16,7 @@ export function getAbsoluteUrl(
   return new URL(href ?? "", parentUrl).toString();
 }
 
-export interface ResolvableLinkHref {
+export interface UriReferenceLookup {
   /**
    * A BackMatter object to resolve relative links against.
    */
@@ -30,9 +30,9 @@ export interface ResolvableLinkHref {
 export default function resolveLinkHref(
   backMatter: BackMatter,
   href: string,
-  parentUrl: string | undefined,
   mediaType: RegExp,
-  preferBase64 = false
+  preferBase64 = false,
+  parentUrl?: string
 ) {
   const lookup = new BackMatterLookup(backMatter, preferBase64);
   return getAbsoluteUrl(lookup?.resolve(href, mediaType)?.uri, parentUrl);

@@ -14,9 +14,9 @@ export default function OSCALDiagram(props) {
     diagramUri = resolveLinkHref(
       props.backMatter,
       link.href,
-      props.parentUrl.startsWith(".") ? null : props.parentUrl,
       /^image\//,
-      false
+      false,
+      props.parentUrl.startsWith(".") ? null : props.parentUrl
     );
   } catch (err) {
     // Silently fail on unresolved diagram resources
