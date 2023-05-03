@@ -1,14 +1,14 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import OSCALDrawerSelector from "./OSCALDrawerSelector";
+import { OSCALDrawerSelector } from "./OSCALDrawerSelector";
 
 describe("OSCALDrawerSelector", () => {
   test("loads", () => {
-    render(<OSCALDrawerSelector open />);
+    render(<OSCALDrawerSelector open handleClose={() => {}} />);
   });
 
   test(`displays expected tree items`, () => {
-    render(<OSCALDrawerSelector open />);
+    render(<OSCALDrawerSelector open handleClose={() => {}} />);
 
     const catalogItem = screen.getByRole("treeitem", {
       name: "Catalogs",
@@ -33,11 +33,9 @@ describe("OSCALDrawerSelector", () => {
   });
 
   test(`displays close button`, () => {
-    render(<OSCALDrawerSelector open />);
+    render(<OSCALDrawerSelector open handleClose={() => {}} />);
 
-    const closeButton = screen.getByTestId("ChevronLeftIcon", {
-      role: "button",
-    });
+    const closeButton = screen.getByTestId("ChevronLeftIcon");
 
     expect(closeButton).toBeVisible();
   });

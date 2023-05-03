@@ -1,5 +1,7 @@
 import { Oscal } from "@easydynamics/oscal-types";
 
+export type OscalObjectWrapped<T extends keyof Oscal> = Record<T, NonNullable<Oscal[T]>>;
+
 export interface OscalObjectType {
   name: string;
   defaultUrl: string;
