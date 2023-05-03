@@ -1,7 +1,7 @@
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
+import ArrowForwardSharp from "@mui/icons-material/ArrowForwardIosSharp";
+import MuiAccordion from "@mui/material/Accordion";
+import MuiAccordionSummary from "@mui/material/AccordionSummary";
+import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import List from "@mui/material/List";
 import { styled } from "@mui/material/styles";
 import React, { ReactNode, useEffect } from "react";
@@ -23,6 +23,37 @@ const WithdrawnControlText = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[400],
   textDecoration: "line-through",
 })) as typeof Typography;
+
+const Accordion = styled((props: any) => (
+  <MuiAccordion disableGutters elevation={0} square {...props} />
+))(({ theme }) => ({
+  border: `1px solid ${theme.palette.divider}`,
+  "&:not(:last-child)": {
+    borderBottom: 0,
+  },
+  "&:before": {
+    display: "none",
+  },
+})) as typeof MuiAccordion;
+
+const AccordionSummary = styled((props) => (
+  <MuiAccordionSummary expandIcon={<ArrowForwardSharp sx={{ fontSize: "0.9rem" }} />} {...props} />
+))(({ theme }) => ({
+  backgroundColor:
+    theme.palette.mode === "dark" ? "rgba(255, 255, 255, .05)" : "rgba(0, 0, 0, .03)",
+  flexDirection: "row-reverse",
+  "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
+    transform: "rotate(90deg)",
+  },
+  "& .MuiAccordionSummary-content": {
+    marginLeft: theme.spacing(1),
+  },
+})) as typeof MuiAccordionSummary;
+
+const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+  padding: theme.spacing(2),
+  borderTop: "1px solid rgba(0, 0, 0, .125)",
+})) as typeof MuiAccordionDetails;
 
 interface CatalogGroupFragmentProps {
   /**
@@ -150,10 +181,10 @@ const CollapsibleListItem: React.FC<CollapsibleListItemProps> = (props) => {
       TransitionProps={{
         onEntered: () => !group && setListItemOpened(true),
         unmountOnExit: true,
-        timeout: 0,
+        timeout: 500,
       }}
     >
-      <AccordionSummary expandIcon={<ExpandMore />}>{itemText}</AccordionSummary>
+      <AccordionSummary>{itemText}</AccordionSummary>
       <AccordionDetails>{children}</AccordionDetails>
     </Accordion>
   );
@@ -206,7 +237,7 @@ export const OSCALCatalogControlListItem: React.FC<OSCALCatalogControlListItemPr
 
   const itemText = (
     <OSCALAnchorLinkHeader name={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}>
-      <TitleComponent>
+      <TitleComponent style={{ fontWeight: "bold" }}>
         <OSCALControlLabel
           label={propWithName(control.props, "label")?.value}
           id={control.id}
@@ -289,7 +320,7 @@ const OSCALCatalogGroupList: React.FC<OSCALCatalogGroupListProps> = (props) => {
         group.id ?? conformLinkIdText(group.title)
       ).toLowerCase()}
     >
-      <TitleComponent>
+      <TitleComponent style={{ fontWeight: "bold" }}>
         <OSCALControlLabel
           label={propWithName(group.props, "label")?.value}
           id={group.id ?? conformLinkIdText(group.title)}

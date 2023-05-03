@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
 import Card, { CardProps } from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -71,7 +72,14 @@ const ControlsList: React.FC<ControlsListProps> = (props) => {
     fragmentPrefix,
   } = props;
   return (
-    <div style={{ textDecoration: props.withdrawn ? "line-through" : "none" }}>
+    <Box
+      sx={[
+        { textDecoration: props.withdrawn ? "line-through" : undefined },
+        (theme) => ({
+          color: props.withdrawn ? theme.palette.grey[400] : undefined,
+        }),
+      ]}
+    >
       {control.parts?.map((part, index) => (
         <OSCALControlPart
           componentId={componentId}
@@ -108,7 +116,7 @@ const ControlsList: React.FC<ControlsListProps> = (props) => {
           withdrawn={props.withdrawn}
         />
       ))}
-    </div>
+    </Box>
   );
 };
 
