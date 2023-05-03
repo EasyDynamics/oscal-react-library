@@ -11,13 +11,13 @@ export default function OSCALDiagram(props) {
 
   let diagramUri;
   try {
-    diagramUri = resolveLinkHref(
-      props.backMatter,
-      link.href,
-      props.parentUrl.startsWith(".") ? null : props.parentUrl,
-      /^image\//,
-      false
-    );
+    diagramUri = resolveLinkHref({
+      backMatter: props.backMatter,
+      href: link.href,
+      mediaType: /^image\//,
+      parentUrl: props.parentUrl.startsWith(".") ? null : props.parentUrl,
+      preferBase64: false,
+    });
   } catch (err) {
     // Silently fail on unresolved diagram resources
     diagramUri = link.href;

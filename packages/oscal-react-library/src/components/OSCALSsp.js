@@ -78,6 +78,8 @@ export default function OSCALSsp(props) {
         onFieldSave={props.onFieldSave}
         partialRestData={partialRestData}
         urlFragment={props.urlFragment}
+        backMatter={ssp["back-matter"]}
+        parentUrl={props.parentUrl}
       />
       <OSCALProfileCatalogInheritance inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs} />
       <OSCALSystemCharacteristics
