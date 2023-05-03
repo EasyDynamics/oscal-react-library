@@ -1,4 +1,4 @@
-import ConstructionIcon from '@mui/icons-material/Construction';
+import ConstructionIcon from "@mui/icons-material/Construction";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
@@ -145,7 +145,7 @@ export const OSCALPropertiesDialog: React.FC<OSCALPropertiesDialogProps> = ({
         size="small"
         variant="outlined"
         onClick={handleOpen}
-        aria-label={`Open Properties`}
+        aria-label={"Open Properties"}
         startIcon={<ConstructionIcon />}
       >
         Open Properties
