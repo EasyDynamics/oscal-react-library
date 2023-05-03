@@ -146,6 +146,8 @@ export default function OSCALProfile(props) {
         onFieldSave={props.onFieldSave}
         partialRestData={partialRestData}
         urlFragment={props.urlFragment}
+        parentUrl={props.parentUrl}
+        backMatter={props.profile["back-matter"]}
       />
       <OSCALProfileCatalogInheritance inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs} />
       {profileImports}

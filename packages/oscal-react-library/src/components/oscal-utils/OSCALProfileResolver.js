@@ -73,13 +73,13 @@ export default function OSCALResolveProfileOrCatalogUrlControls(
 
           result.profile.imports.forEach((profileImport) => {
             const profileBackMatter = result.profile?.["back-matter"] ?? [];
-            const importUrl = resolveLinkHref(
-              profileBackMatter,
-              profileImport.href,
-              null,
-              OSCAL_MEDIA_TYPE,
-              false
-            );
+            const importUrl = resolveLinkHref({
+              backMatter: profileBackMatter,
+              href: profileImport.href,
+              mediaType: OSCAL_MEDIA_TYPE,
+              parentUrl: null,
+              preferBase64: false,
+            });
             OSCALResolveProfileOrCatalogUrlControls(
               resolvedControls,
               modifications,
@@ -129,7 +129,13 @@ export function OSCALResolveProfile(profile, parentUrl, onSuccess, onError) {
     OSCALResolveProfileOrCatalogUrlControls(
       profile.resolvedControls,
       profile.modifications,
-      resolveLinkHref(profile?.["back-matter"] ?? [], imp.href, parentUrl, OSCAL_MEDIA_TYPE, false),
+      resolveLinkHref({
+        backMatter: profile?.["back-matter"] ?? [],
+        href: imp.href,
+        mediaType: OSCAL_MEDIA_TYPE,
+        parentUrl: parentUrl,
+        preferBase64: false,
+      }),
       parentUrl,
       profile?.["back-matter"] ?? [],
       inheritedProfilesAndCatalogs.inherited,

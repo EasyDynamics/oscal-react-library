@@ -88,6 +88,8 @@ export const OSCALCatalog: React.FC<OSCALCatalogProps> = ({
         onFieldSave={onFieldSave}
         partialRestData={partialRestData}
         urlFragment={urlFragment}
+        parentUrl={parentUrl}
+        backMatter={catalog["back-matter"]}
       />
 
       {catalog.groups ? (

@@ -55,6 +55,12 @@ export const exampleParties: PartyOrganizationOrPerson[] = [
         country: "US",
       },
     ],
+    links: [
+      {
+        href: "https://example.png",
+        rel: "logo",
+      },
+    ],
   },
 ];
 
