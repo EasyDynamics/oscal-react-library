@@ -1,15 +1,12 @@
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import Paper from "@mui/material/Paper";
-import Collapse from "@mui/material/Collapse";
+import ArrowForwardSharp from "@mui/icons-material/ArrowForwardIosSharp";
+import MuiAccordion from "@mui/material/Accordion";
+import MuiAccordionSummary from "@mui/material/AccordionSummary";
+import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import List from "@mui/material/List";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 import React, { ReactNode, useEffect } from "react";
 import OSCALControl from "./OSCALControl";
-import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
-import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
+import { AnchorLinkProps, OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import OSCALControlLabel from "./OSCALControlLabel";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import {
@@ -17,8 +14,46 @@ import {
   shiftFragmentSuffix,
   conformLinkIdText,
 } from "./oscal-utils/OSCALLinkUtils";
-import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
-import { Control, ControlGroup, Part } from "@easydynamics/oscal-types";
+import { Control, ControlGroup } from "@easydynamics/oscal-types";
+import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
+import { Typography } from "@mui/material";
+import OSCALControlPart from "./OSCALControlPart";
+
+const WithdrawnControlText = styled(Typography)(({ theme }) => ({
+  color: theme.palette.grey[400],
+  textDecoration: "line-through",
+})) as typeof Typography;
+
+const Accordion = styled((props: any) => (
+  <MuiAccordion disableGutters elevation={0} square {...props} />
+))(({ theme }) => ({
+  border: `1px solid ${theme.palette.divider}`,
+  "&:not(:last-child)": {
+    borderBottom: 0,
+  },
+  "&:before": {
+    display: "none",
+  },
+})) as typeof MuiAccordion;
+
+const AccordionSummary = styled((props) => (
+  <MuiAccordionSummary expandIcon={<ArrowForwardSharp sx={{ fontSize: "0.9rem" }} />} {...props} />
+))(({ theme }) => ({
+  backgroundColor:
+    theme.palette.mode === "dark" ? "rgba(255, 255, 255, .05)" : "rgba(0, 0, 0, .03)",
+  flexDirection: "row-reverse",
+  "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
+    transform: "rotate(90deg)",
+  },
+  "& .MuiAccordionSummary-content": {
+    marginLeft: theme.spacing(1),
+  },
+})) as typeof MuiAccordionSummary;
+
+const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+  padding: theme.spacing(2),
+  borderTop: "1px solid rgba(0, 0, 0, .125)",
+})) as typeof MuiAccordionDetails;
 
 interface CatalogGroupFragmentProps {
   /**
@@ -36,33 +71,14 @@ export const OSCALControlList = styled(List)`
   padding-right: 2em;
 `;
 
-const StyledListItem = styled(ListItemButton)(({ theme }) => ({
-  borderRadius: "0.5em",
-  marginBottom: "1em",
-  backgroundColor: theme.palette.grey[50],
-}));
-
-const StyledListItemPaper = styled(Paper)`
-  border-radius: 0.5em;
-`;
-
-const WithdrawnListItemText = styled(ListItemText)(({ theme }) => ({
-  textDecoration: "line-through",
-  color: theme.palette.grey[400],
-}));
-
-const StyledControlDescriptionWrapper = styled("div")`
-  padding: 1em;
-`;
-
 /**
  * Validates fragment and determines if top fragment item matches a list ID.
  *
- * @param {string} urlFragment The fragment currently being handled
- * @param {string} previousHandledFragment The previous handled fragment
- * @param {string} fragmentSuffix The current item and sub items
- * @param {string} listId The group/control ID
- * @returns {boolean} Whether the top list item matches a list ID or not.
+ * @param urlFragment The fragment currently being handled
+ * @param previousHandledFragment The previous handled fragment
+ * @param fragmentSuffix The current item and sub items
+ * @param listId The group/control ID
+ * @returns Whether the top list item matches a list ID or not.
  */
 function isMatchingListItem(
   urlFragment: string | undefined,
@@ -79,11 +95,7 @@ function isMatchingListItem(
   );
 }
 
-interface CollapsibleListItemProps extends CatalogGroupFragmentProps {
-  /**
-   * The current fragment being handled
-   */
-  readonly urlFragment?: string;
+interface CollapsibleListItemProps extends CatalogGroupFragmentProps, AnchorLinkProps {
   /**
    * A catalog group that contains either groups/controls
    */
@@ -101,10 +113,6 @@ interface CollapsibleListItemProps extends CatalogGroupFragmentProps {
    */
   readonly children: ReactNode;
   /**
-   * The end of a fragment which starts with the current group/control being handled
-   */
-  readonly fragmentSuffix: string | undefined;
-  /**
    * Tells whether or not the current list item is opened
    */
   readonly listItemOpened?: boolean;
@@ -112,6 +120,13 @@ interface CollapsibleListItemProps extends CatalogGroupFragmentProps {
    * Callback function to set list item opened
    */
   readonly setListItemOpened: (...args: any[]) => void;
+
+  /**
+   * Whether the control or its parent is withdrawn.
+   *
+   * @default false
+   */
+  readonly withdrawn?: boolean;
 }
 
 /**
@@ -159,96 +174,29 @@ const CollapsibleListItem: React.FC<CollapsibleListItemProps> = (props) => {
     previousHandledFragment,
     setPreviousHandledFragment,
   ]);
-
   return (
-    <StyledListItemPaper>
-      <StyledListItem onClick={handleClick}>
-        <ListItemText primary={itemText} />
-        {isOpen ? <ExpandLess /> : <ExpandMore />}
-      </StyledListItem>
-      <Collapse
-        in={isOpen}
-        timeout="auto"
-        onEntered={() => !group && setListItemOpened(true)}
-        unmountOnExit
-      >
-        <StyledControlDescriptionWrapper>{children}</StyledControlDescriptionWrapper>
-      </Collapse>
-    </StyledListItemPaper>
+    <Accordion
+      expanded={isOpen}
+      onChange={handleClick}
+      TransitionProps={{
+        onEntered: () => !group && setListItemOpened(true),
+        unmountOnExit: true,
+        timeout: 500,
+      }}
+    >
+      <AccordionSummary>{itemText}</AccordionSummary>
+      <AccordionDetails>{children}</AccordionDetails>
+    </Accordion>
   );
 };
 
-interface WithdrawnListItemProps extends CatalogGroupFragmentProps {
-  /**
-   * Children underneath the list item - either a control/group or control/group
-   */
-  readonly children: ReactNode;
-  /**
-   * The current fragment being handled
-   */
-  readonly urlFragment?: string;
-  /**
-   * Identification used for a list
-   */
-  readonly listId: string;
-  /**
-   * The end of a fragment which starts with the current group/control being handled
-   */
-  readonly fragmentSuffix: string | undefined;
-}
-
-/**
- * Creates a top-level withdrawn control list item.
- *
- * @returns A top-level withdrawn control list item component
- */
-const WithdrawnListItem: React.FC<WithdrawnListItemProps> = (props) => {
-  const {
-    children,
-    urlFragment,
-    listId,
-    fragmentSuffix,
-    previousHandledFragment,
-    setPreviousHandledFragment,
-  } = props;
-  useEffect(() => {
-    if (
-      urlFragment &&
-      isMatchingListItem(urlFragment, previousHandledFragment, fragmentSuffix, listId)
-    ) {
-      const elementWithFragment = document.getElementById(urlFragment);
-      elementWithFragment?.scrollIntoView?.({ behavior: "smooth" });
-
-      if (fragmentSuffix && fragmentSuffix.split("/").length <= 1) {
-        setPreviousHandledFragment(urlFragment);
-      }
-    }
-  }, [urlFragment, listId, fragmentSuffix, previousHandledFragment, setPreviousHandledFragment]);
-
-  return (
-    <StyledListItemPaper>
-      <StyledListItem>{children}</StyledListItem>
-    </StyledListItemPaper>
-  );
-};
-
-export interface OSCALCatalogControlListItemProps extends CatalogGroupFragmentProps {
+export interface OSCALCatalogControlListItemProps
+  extends CatalogGroupFragmentProps,
+    AnchorLinkProps {
   /**
    * The current control
    */
   readonly control: Control;
-  /**
-   * he current fragment being handled
-   */
-  readonly urlFragment?: string;
-  /**
-   * The beginning of a fragment which ends with the current group/control being handled
-   */
-  readonly fragmentPrefix: string;
-  /**
-   * The end of a fragment which starts with the current group/control being handled
-   */
-  readonly fragmentSuffix: string | undefined;
   /**
    * Tells whether the current list item is opened
    */
@@ -257,6 +205,8 @@ export interface OSCALCatalogControlListItemProps extends CatalogGroupFragmentPr
    * Callback function to set whether the list item has been navigated to
    */
   readonly setIsControlListItemOpened: (value: boolean) => void;
+
+  readonly withdrawn?: boolean;
 }
 
 /**
@@ -282,29 +232,23 @@ export const OSCALCatalogControlListItem: React.FC<OSCALCatalogControlListItemPr
     }
   }, [isControlListItemOpened]);
 
-  const withdrawn = isWithdrawn(control);
+  const withdrawn = props.withdrawn || isWithdrawn(control);
+  const TitleComponent = withdrawn ? WithdrawnControlText : Typography;
+
   const itemText = (
     <OSCALAnchorLinkHeader name={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}>
-      <OSCALControlLabel
-        label={propWithName(control.props, "label")?.value}
-        id={control.id}
-        component="span"
-      />
-      {control.title}
+      <TitleComponent style={{ fontWeight: "bold" }}>
+        <OSCALControlLabel
+          label={propWithName(control.props, "label")?.value}
+          id={control.id}
+          component="span"
+        />
+        {control.title}
+      </TitleComponent>
     </OSCALAnchorLinkHeader>
   );
 
-  return withdrawn ? (
-    <WithdrawnListItem
-      urlFragment={urlFragment}
-      listId={control?.id}
-      previousHandledFragment={previousHandledFragment}
-      setPreviousHandledFragment={setPreviousHandledFragment}
-      fragmentSuffix={shiftFragmentSuffix(fragmentSuffix)}
-    >
-      <WithdrawnListItemText primary={itemText} />
-    </WithdrawnListItem>
-  ) : (
+  return (
     <CollapsibleListItem
       itemText={itemText}
       urlFragment={urlFragment}
@@ -324,31 +268,19 @@ export const OSCALCatalogControlListItem: React.FC<OSCALCatalogControlListItemPr
         isItemNavigatedTo={isListItemNavigatedTo}
         urlFragment={urlFragment}
         fragmentPrefix={appendToFragmentPrefix(fragmentPrefix, control.id)}
-        fragmentSuffix={shiftFragmentSuffix(fragmentSuffix)}
         previousHandledFragment={previousHandledFragment}
         setPreviousHandledFragment={setPreviousHandledFragment}
+        withdrawn={withdrawn}
       />
     </CollapsibleListItem>
   );
 };
 
-interface OSCALCatalogGroupListProps extends CatalogGroupFragmentProps {
+interface OSCALCatalogGroupListProps extends CatalogGroupFragmentProps, AnchorLinkProps {
   /**
    * The current group
    */
   readonly group: ControlGroup;
-  /**
-   * The current fragment being handled
-   */
-  readonly urlFragment?: string;
-  /**
-   * The beginning of a fragment which ends with the current group/control
-   */
-  readonly fragmentPrefix: string;
-  /**
-   * The end of a fragment which starts with the current group/control being handled
-   */
-  readonly fragmentSuffix: string | undefined;
   /**
    * Tells whether the current list item is opened
    */
@@ -357,6 +289,8 @@ interface OSCALCatalogGroupListProps extends CatalogGroupFragmentProps {
    * Callback function to set whether the list item has been navigated to
    */
   readonly setIsControlListItemOpened: (value: boolean) => void;
+
+  readonly withdrawn?: boolean;
 }
 
 /**
@@ -375,6 +309,10 @@ const OSCALCatalogGroupList: React.FC<OSCALCatalogGroupListProps> = (props) => {
     previousHandledFragment,
     setPreviousHandledFragment,
   } = props;
+
+  const withdrawn = props.withdrawn || isWithdrawn(group);
+  const TitleComponent = withdrawn ? WithdrawnControlText : Typography;
+
   const itemText = (
     <OSCALAnchorLinkHeader
       name={appendToFragmentPrefix(
@@ -382,12 +320,14 @@ const OSCALCatalogGroupList: React.FC<OSCALCatalogGroupListProps> = (props) => {
         group.id ?? conformLinkIdText(group.title)
       ).toLowerCase()}
     >
-      <OSCALControlLabel
-        label={propWithName(group.props, "label")?.value}
-        id={group.id ?? conformLinkIdText(group.title)}
-        component="span"
-      />
-      {group.title}
+      <TitleComponent style={{ fontWeight: "bold" }}>
+        <OSCALControlLabel
+          label={propWithName(group.props, "label")?.value}
+          id={group.id ?? conformLinkIdText(group.title)}
+          component="span"
+        />
+        {group.title}
+      </TitleComponent>
     </OSCALAnchorLinkHeader>
   );
   return (
@@ -402,11 +342,16 @@ const OSCALCatalogGroupList: React.FC<OSCALCatalogGroupListProps> = (props) => {
       previousHandledFragment={previousHandledFragment}
       setPreviousHandledFragment={setPreviousHandledFragment}
     >
-      {group.parts
-        ?.map((groupPart) => groupPart.prose)
-        .map((prose) => (
-          <OSCALMarkupMultiLine key={prose}>{prose}</OSCALMarkupMultiLine>
-        ))}
+      {group.parts?.map((part, index) => (
+        <OSCALControlPart
+          control={group}
+          controlId={group.title}
+          key={part.id ?? `part-${index}`}
+          parameters={group.params}
+          part={part}
+        />
+      ))}
+
       <OSCALControlList>
         {group.groups?.map((innerGroup) => (
           <OSCALCatalogGroupList
@@ -422,6 +367,7 @@ const OSCALCatalogGroupList: React.FC<OSCALCatalogGroupListProps> = (props) => {
             setIsControlListItemOpened={setIsControlListItemOpened}
             previousHandledFragment={previousHandledFragment}
             setPreviousHandledFragment={setPreviousHandledFragment}
+            withdrawn={withdrawn}
           />
         ))}
         {group.controls?.map((groupControl) => (
@@ -438,6 +384,7 @@ const OSCALCatalogGroupList: React.FC<OSCALCatalogGroupListProps> = (props) => {
             setIsControlListItemOpened={setIsControlListItemOpened}
             previousHandledFragment={previousHandledFragment}
             setPreviousHandledFragment={setPreviousHandledFragment}
+            withdrawn={withdrawn}
           />
         ))}
       </OSCALControlList>
@@ -445,15 +392,11 @@ const OSCALCatalogGroupList: React.FC<OSCALCatalogGroupListProps> = (props) => {
   );
 };
 
-export interface OSCALCatalogGroupProps extends CatalogGroupFragmentProps {
+export interface OSCALCatalogGroupProps extends CatalogGroupFragmentProps, AnchorLinkProps {
   /**
    * The current group
    */
   readonly group: ControlGroup;
-  /**
-   * The current fragment being handled
-   */
-  readonly urlFragment?: string;
   /**
    * Tells whether the current list item is opened
    */
@@ -482,13 +425,17 @@ export const OSCALCatalogGroup: React.FC<OSCALCatalogGroupProps> = (props) => {
 
   return (
     <>
-      {group.parts
-        ?.map((groupPart: Part) => groupPart.prose)
-        .map((prose) => (
-          <OSCALMarkupMultiLine key={prose}>{prose}</OSCALMarkupMultiLine>
-        ))}
+      {group.parts?.map((part, index) => (
+        <OSCALControlPart
+          control={group}
+          controlId={group.title}
+          key={part.id ?? `part-${index}`}
+          parameters={group.params}
+          part={part}
+        />
+      ))}
       <OSCALControlList>
-        {group.groups?.map((innerGroup: ControlGroup) => (
+        {group.groups?.map((innerGroup) => (
           <OSCALCatalogGroupList
             group={innerGroup}
             key={innerGroup.title}
@@ -501,7 +448,7 @@ export const OSCALCatalogGroup: React.FC<OSCALCatalogGroupProps> = (props) => {
             setPreviousHandledFragment={setPreviousHandledFragment}
           />
         ))}
-        {group.controls?.map((control: Control) => (
+        {group.controls?.map((control) => (
           <OSCALCatalogControlListItem
             control={control}
             key={control.id}

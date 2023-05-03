@@ -1,32 +1,61 @@
 import React, { useEffect } from "react";
 import { styled } from "@mui/material/styles";
-import Card from "@mui/material/Card";
+import Box from "@mui/material/Box";
+import Card, { CardProps } from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import OSCALControlLabel from "./OSCALControlLabel";
 import OSCALControlPart from "./OSCALControlPart";
 import OSCALControlModification from "./OSCALControlModification";
-import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
+import { AnchorLinkProps, OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import { appendToFragmentPrefix } from "./oscal-utils/OSCALLinkUtils";
+import { shouldForwardProp } from "@mui/system";
+import {
+  Control,
+  ImplementedRequirementElement,
+  SetParameterValue,
+  Alteration,
+} from "@easydynamics/oscal-types";
+import { EditableFieldProps } from "./OSCALEditableTextField";
+
+interface ControlListOptions {
+  childLevel: number;
+}
+
+interface OSCALControlCardProps extends CardProps, ControlListOptions {
+  withdrawn: boolean;
+}
 
 const OSCALControlCard = styled(Card, {
-  // https://github.com/mui/material-ui/blob/c34935814b81870ca325099cdf41a1025a85d4b5/packages/mui-system/src/createStyled.js#L56
   shouldForwardProp: (prop) =>
-    !["childLevel", "withdrawn", "ownerState", "theme", "sx", "as"].includes(prop),
-})`
-  margin-top: 1em;
-  margin-bottom: 1em;
-  margin-left: ${(props) => (props.childLevel > 0 ? "1.5em" : "0")};
-  margin-right: ${(props) => (props.childLevel > 0 ? "1.5em" : "0")};
-  ${(props) => props.childLevel > 0 && "background-color: #fffcf0;"}
-  ${(props) =>
-    props.withdrawn && `text-decoration: line-through; color: ${props.theme.palette.grey[400]};`}
-`;
+    shouldForwardProp(prop) && prop !== "childLevel" && prop !== "withdrawn",
+})<OSCALControlCardProps>(({ theme, childLevel, withdrawn }) => ({
+  marginTop: "1em",
+  marginBotom: "1em",
+  marginLeft: childLevel ? "1.5em" : "0",
+  marginRight: childLevel ? "1.5em" : "0",
+  backgroundColor: childLevel ? "#FFFCF0" : undefined,
+  textDecoration: withdrawn ? "line-through" : undefined,
+  color: withdrawn ? theme.palette.grey[400] : undefined,
+}));
 
-function ControlsList(props) {
+interface ControlsListProps extends EditableFieldProps, AnchorLinkProps, ControlListOptions {
+  control: Control;
+  componentId?: string;
+  implementedRequirement?: ImplementedRequirementElement;
+  includeControlIds?: string[];
+  excludeControlIds?: string[];
+  onRestError?: (...args: any[]) => void;
+  onRestSuccess?: (...args: any[]) => void;
+  modificationAlters?: Alteration[];
+  modificationSetParameters?: SetParameterValue[];
+  withdrawn: boolean;
+}
+
+const ControlsList: React.FC<ControlsListProps> = (props) => {
   const {
     control,
     componentId,
@@ -43,7 +72,14 @@ function ControlsList(props) {
     fragmentPrefix,
   } = props;
   return (
-    <div>
+    <Box
+      sx={[
+        { textDecoration: props.withdrawn ? "line-through" : undefined },
+        (theme) => ({
+          color: props.withdrawn ? theme.palette.grey[400] : undefined,
+        }),
+      ]}
+    >
       {control.parts?.map((part, index) => (
         <OSCALControlPart
           componentId={componentId}
@@ -74,17 +110,25 @@ function ControlsList(props) {
           modificationSetParameters={modificationSetParameters}
           onRestError={onRestError}
           onRestSuccess={onRestSuccess}
-          parameters={listControl.params}
           partialRestData={partialRestData}
           urlFragment={urlFragment}
           fragmentPrefix={fragmentPrefix}
+          withdrawn={props.withdrawn}
         />
       ))}
-    </div>
+    </Box>
   );
+};
+
+export interface OSCALControlProps extends ControlsListProps, AnchorLinkProps {
+  listItemOpened?: boolean;
+  isItemNavigatedTo?: boolean;
+  showInList?: boolean;
+  previousHandledFragment?: string;
+  setPreviousHandledFragment?: (fragment: string) => void;
 }
 
-export default function OSCALControl(props) {
+const OSCALControl: React.FC<OSCALControlProps> = (props) => {
   const {
     listItemOpened,
     isItemNavigatedTo,
@@ -98,6 +142,7 @@ export default function OSCALControl(props) {
     excludeControlIds,
     previousHandledFragment,
     setPreviousHandledFragment,
+    withdrawn,
   } = props;
 
   useEffect(() => {
@@ -133,11 +178,12 @@ export default function OSCALControl(props) {
   }
 
   const label = propWithName(control.props, "label")?.value;
+  const controlOrParentWithdrawn = withdrawn || isWithdrawn(control);
 
   return showInList ? (
-    <ControlsList {...props} />
+    <ControlsList {...props} withdrawn={controlOrParentWithdrawn} />
   ) : (
-    <OSCALControlCard childLevel={childLevel ?? 0} withdrawn={isWithdrawn(control)}>
+    <OSCALControlCard childLevel={childLevel ?? 0} withdrawn={controlOrParentWithdrawn}>
       <CardContent>
         <Grid container spacing={1}>
           <Grid item xs={12}>
@@ -155,8 +201,10 @@ export default function OSCALControl(props) {
             </OSCALAnchorLinkHeader>
           </Grid>
         </Grid>
-        <ControlsList {...props} />
+        <ControlsList {...props} withdrawn={controlOrParentWithdrawn} />
       </CardContent>
     </OSCALControlCard>
   );
-}
+};
+
+export default OSCALControl;

@@ -13,7 +13,18 @@ const AnchorLinkIcon = styled(LinkIcon)(({ theme }) => ({
 }));
 
 export interface AnchorLinkProps {
-  urlFragment?: string;
+  /**
+   * he current fragment being handled
+   */
+  readonly urlFragment?: string;
+  /**
+   * The beginning of a fragment which ends with the current group/control being handled
+   */
+  readonly fragmentPrefix?: string;
+  /**
+   * The end of a fragment which starts with the current group/control being handled
+   */
+  readonly fragmentSuffix?: string;
 }
 
 export interface OSCALAnchorLinkHeaderProps {
