@@ -6,7 +6,7 @@ import {
   SpecificControlStatement,
 } from "@easydynamics/oscal-types";
 import { v4 as uuidv4 } from "uuid";
-import { OscalObjectType, oscalObjectTypes } from "./OSCALObjectData";
+import { OscalObjectType, oscalObjectTypes, OscalObjectWrapped } from "./OSCALObjectData";
 
 /**
  * enum describing the available REST methods
@@ -38,9 +38,9 @@ type Mutable<T> = { -readonly [P in keyof T]: T[P] };
  * @param {(any) => void} handleResult Function to map a fetched result to the json root name of an oscal object
  */
 export function fetchAllResourcesOfType<T extends keyof Oscal>(
-  backendUrl: string,
+  backendUrl: string | undefined,
   oscalObjectType: OscalObjectType,
-  handleResult: (result: Pick<Oscal, T>[]) => void
+  handleResult: (result: OscalObjectWrapped<T>[]) => void
 ) {
   fetch(`${backendUrl}/${oscalObjectType.restPath}`)
     .then((response) => {
