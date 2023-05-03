@@ -181,7 +181,7 @@ describe("OSCALCatalogGroup", () => {
     const expand3 = screen.getByText("Access Control Policy and Procedures");
     fireEvent.click(expand3);
 
-    const openProperties = screen.getByText("Properties");
+    const openProperties = screen.getByText("Open Properties");
     fireEvent.click(openProperties);
 
     const modalTitle = screen.getByText("Access Control Policy and Procedures Properties");
@@ -200,7 +200,7 @@ describe("OSCALCatalogGroup", () => {
     const expand2 = screen.getByText("Audit Events");
     fireEvent.click(expand2);
 
-    const openProperties = screen.getByText("Properties");
+    const openProperties = screen.getByText("Open Properties");
     fireEvent.click(openProperties);
 
     const modalTitle = screen.getByText("Audit Events Properties");

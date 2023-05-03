@@ -79,7 +79,7 @@ describe("OSCAL Backmatter", () => {
 
   test("displays props", async () => {
     render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
-    const openProperties = screen.getByText("Properties");
+    const openProperties = screen.getByText("Open Properties");
     fireEvent.click(openProperties);
 
     const modalTitle = screen.getByText("Resource Test Title Properties");
