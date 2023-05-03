@@ -319,15 +319,15 @@ const maybeResolveUri = (
   backMatter: BackMatter | undefined,
   href: string,
   mediaType: RegExp,
-  preferBase64: boolean,
-  parentUrl?: string
+  parentUrl?: string,
+  preferBase64?: boolean
 ) => {
   if (!backMatter) {
     return undefined;
   }
 
   try {
-    return resolveLinkHref(backMatter, href, mediaType, preferBase64, parentUrl);
+    return resolveLinkHref({ backMatter, href, mediaType, preferBase64, parentUrl });
   } catch (_) {
     return undefined;
   }
@@ -343,8 +343,8 @@ const OSCALMetadataPartyLogo: React.FC<OSCALMetadataPartyLogoProps> = ({
       uriReferenceLookup.backMatter,
       link.href,
       /^image\//,
-      false,
-      uriReferenceLookup.parentUrl
+      uriReferenceLookup.parentUrl,
+      false
     ) ?? link.href;
 
   return <img src={imageSrc} alt={`${partyName} logo`} style={{ maxWidth: "10em" }} />;
@@ -906,6 +906,7 @@ export const OSCALMetadata: React.FC<OSCALMetadataProps> = (props) => {
             <OSCALMetadataParties
               parties={props.metadata?.parties}
               metadata={props.metadata}
+              urlFragment={props.urlFragment}
               uriReferenceLookup={{ backMatter: props.backMatter, parentUrl: props.parentUrl }}
             />
             <OSCALMetadataRoles roles={props.metadata?.roles} urlFragment={props.urlFragment} />

@@ -27,15 +27,17 @@ export interface UriReferenceLookup {
   parentUrl?: string;
 }
 
-export default function resolveLinkHref(
-  backMatter: BackMatter,
-  href: string,
-  mediaType: RegExp,
-  preferBase64 = false,
-  parentUrl?: string
-) {
-  const lookup = new BackMatterLookup(backMatter, preferBase64);
-  return getAbsoluteUrl(lookup?.resolve(href, mediaType)?.uri, parentUrl);
+interface ResolveLinkHrefProps {
+  backMatter: BackMatter;
+  href: string;
+  mediaType: RegExp;
+  preferBase64?: boolean;
+  parentUrl?: string;
+}
+
+export default function resolveLinkHref(props: ResolveLinkHrefProps) {
+  const lookup = new BackMatterLookup(props.backMatter, props.preferBase64);
+  return getAbsoluteUrl(lookup?.resolve(props.href, props.mediaType)?.uri, props.parentUrl);
 }
 
 /**
