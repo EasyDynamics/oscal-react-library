@@ -2,7 +2,9 @@ import ArrowForwardSharp from "@mui/icons-material/ArrowForwardIosSharp";
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
+import Box from "@mui/material/Box";
 import List from "@mui/material/List";
+import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import React, { ReactNode, useEffect } from "react";
 import OSCALControl from "./OSCALControl";
@@ -18,6 +20,7 @@ import { Control, ControlGroup } from "@easydynamics/oscal-types";
 import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
 import { Typography } from "@mui/material";
 import OSCALControlPart from "./OSCALControlPart";
+import { OSCALPropertiesDialog } from "./OSCALProperties";
 
 const WithdrawnControlText = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[400],
@@ -235,17 +238,29 @@ export const OSCALCatalogControlListItem: React.FC<OSCALCatalogControlListItemPr
   const withdrawn = props.withdrawn || isWithdrawn(control);
   const TitleComponent = withdrawn ? WithdrawnControlText : Typography;
 
+  const label = propWithName(control.props, "label")?.value;
   const itemText = (
-    <OSCALAnchorLinkHeader name={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}>
-      <TitleComponent style={{ fontWeight: "bold" }}>
-        <OSCALControlLabel
-          label={propWithName(control.props, "label")?.value}
-          id={control.id}
-          component="span"
+    <Stack direction="row" alignItems="center" justifyContent="space-between" width="100%">
+      <OSCALAnchorLinkHeader
+        name={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}
+      >
+        <TitleComponent style={{ fontWeight: "bold" }}>
+          <OSCALControlLabel label={label} id={control.id} component="span" />
+          {control.title}
+        </TitleComponent>
+      </OSCALAnchorLinkHeader>
+      <Box>
+        <OSCALPropertiesDialog
+          properties={control.props}
+          title={
+            <>
+              <OSCALControlLabel id={control.id} label={label} component="span" />
+              {` ${control.title}`}
+            </>
+          }
         />
-        {control.title}
-      </TitleComponent>
-    </OSCALAnchorLinkHeader>
+      </Box>
+    </Stack>
   );
 
   return (
@@ -313,22 +328,36 @@ const OSCALCatalogGroupList: React.FC<OSCALCatalogGroupListProps> = (props) => {
   const withdrawn = props.withdrawn || isWithdrawn(group);
   const TitleComponent = withdrawn ? WithdrawnControlText : Typography;
 
+  const label = propWithName(group.props, "label")?.value;
   const itemText = (
-    <OSCALAnchorLinkHeader
-      name={appendToFragmentPrefix(
-        fragmentPrefix,
-        group.id ?? conformLinkIdText(group.title)
-      ).toLowerCase()}
-    >
-      <TitleComponent style={{ fontWeight: "bold" }}>
-        <OSCALControlLabel
-          label={propWithName(group.props, "label")?.value}
-          id={group.id ?? conformLinkIdText(group.title)}
-          component="span"
+    <Stack direction="row" alignItems="center" justifyContent="space-between" width="100%">
+      <OSCALAnchorLinkHeader
+        name={appendToFragmentPrefix(
+          fragmentPrefix,
+          group.id ?? conformLinkIdText(group.title)
+        ).toLowerCase()}
+      >
+        <TitleComponent style={{ fontWeight: "bold" }}>
+          <OSCALControlLabel
+            label={label}
+            id={group.id ?? conformLinkIdText(group.title)}
+            component="span"
+          />
+          {group.title}
+        </TitleComponent>
+      </OSCALAnchorLinkHeader>
+      <Box>
+        <OSCALPropertiesDialog
+          properties={group.props}
+          title={
+            <>
+              <OSCALControlLabel id={group.id} label={label} component="span" />
+              {` ${group.title}`}
+            </>
+          }
         />
-        {group.title}
-      </TitleComponent>
-    </OSCALAnchorLinkHeader>
+      </Box>
+    </Stack>
   );
   return (
     <CollapsibleListItem
