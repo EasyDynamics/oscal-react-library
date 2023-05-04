@@ -1,59 +1,25 @@
-import ArrowForwardSharp from "@mui/icons-material/ArrowForwardIosSharp";
-import MuiAccordion from "@mui/material/Accordion";
-import MuiAccordionSummary from "@mui/material/AccordionSummary";
-import MuiAccordionDetails from "@mui/material/AccordionDetails";
+import { Control, ControlGroup } from "@easydynamics/oscal-types";
+import { Typography } from "@mui/material";
 import List from "@mui/material/List";
 import { styled } from "@mui/material/styles";
 import React, { ReactNode, useEffect } from "react";
-import OSCALControl from "./OSCALControl";
-import { AnchorLinkProps, OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
-import OSCALControlLabel from "./OSCALControlLabel";
-import { propWithName } from "./oscal-utils/OSCALPropUtils";
+import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
 import {
   appendToFragmentPrefix,
-  shiftFragmentSuffix,
   conformLinkIdText,
+  shiftFragmentSuffix,
 } from "./oscal-utils/OSCALLinkUtils";
-import { Control, ControlGroup } from "@easydynamics/oscal-types";
-import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
-import { Typography } from "@mui/material";
+import { propWithName } from "./oscal-utils/OSCALPropUtils";
+import { AnchorLinkProps, OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
+import OSCALControl from "./OSCALControl";
+import OSCALControlLabel from "./OSCALControlLabel";
 import OSCALControlPart from "./OSCALControlPart";
+import { Accordion, AccordionDetails, AccordionSummary } from "./StyedAccordion";
 
 const WithdrawnControlText = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[400],
   textDecoration: "line-through",
 })) as typeof Typography;
-
-const Accordion = styled((props: any) => (
-  <MuiAccordion disableGutters elevation={0} square {...props} />
-))(({ theme }) => ({
-  border: `1px solid ${theme.palette.divider}`,
-  "&:not(:last-child)": {
-    borderBottom: 0,
-  },
-  "&:before": {
-    display: "none",
-  },
-})) as typeof MuiAccordion;
-
-const AccordionSummary = styled((props) => (
-  <MuiAccordionSummary expandIcon={<ArrowForwardSharp sx={{ fontSize: "0.9rem" }} />} {...props} />
-))(({ theme }) => ({
-  backgroundColor:
-    theme.palette.mode === "dark" ? "rgba(255, 255, 255, .05)" : "rgba(0, 0, 0, .03)",
-  flexDirection: "row-reverse",
-  "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
-    transform: "rotate(90deg)",
-  },
-  "& .MuiAccordionSummary-content": {
-    marginLeft: theme.spacing(1),
-  },
-})) as typeof MuiAccordionSummary;
-
-const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
-  padding: theme.spacing(2),
-  borderTop: "1px solid rgba(0, 0, 0, .125)",
-})) as typeof MuiAccordionDetails;
 
 interface CatalogGroupFragmentProps {
   /**
