@@ -373,7 +373,7 @@ describe("OSCAL metadata keywords", () => {
   test("displays props", () => {
     render(<OSCALMetadata metadata={{ ...metadataTestData, props: keywordValuesList.setns }} />);
 
-    const openProperties = screen.getByText("Open Properties");
+    const openProperties = screen.getByRole("button", { name: "Open Properties" });
     fireEvent.click(openProperties);
 
     const modalTitle = screen.getByText("Test Title Properties");

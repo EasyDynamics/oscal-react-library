@@ -81,14 +81,17 @@ const OSCALProperties: React.FC<OSCALPropertiesProps> = ({ properties, namespace
             </TableRow>
           </StyledTableHead>
           <TableBody>
-            {properties
-              ?.filter((property) => namespaceOf(property?.ns) === namespace)
-              .map((property) => (
-                <OSCALProperty
-                  property={property}
-                  key={`${namespaceOf(property?.ns)}-properties`}
-                />
-              ))}
+            {
+              // The index must be used because there is no combination of attributes of
+              // a property that is guaranteed to be unique; the index is the best available
+              // option. A UUID is not guaranteed to be present.
+            }
+            {properties?.map((property, idx) => (
+              <OSCALProperty
+                property={property}
+                key={`${namespaceOf(property?.ns)}-property-${idx}`}
+              />
+            ))}
           </TableBody>
         </Table>
       </TableContainer>

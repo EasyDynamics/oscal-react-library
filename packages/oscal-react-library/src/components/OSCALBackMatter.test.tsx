@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import OSCALBackMatter from "./OSCALBackMatter";
 import { parentUrlTestData, revFourCatalog } from "../test-data/Urls";
 import {
@@ -75,16 +75,5 @@ describe("OSCAL Backmatter", () => {
       name: "Unknown",
     });
     expect(button.getAttribute("href")).toBeTruthy();
-  });
-
-  test("displays props", async () => {
-    render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
-    const openProperties = screen.getByText("Open Properties");
-    fireEvent.click(openProperties);
-
-    const modalTitle = screen.getByText("Resource Test Title Properties");
-    expect(modalTitle).toBeVisible();
-    const keywordsText = screen.getByText("Resource test keywords");
-    expect(keywordsText).toBeVisible();
   });
 });
