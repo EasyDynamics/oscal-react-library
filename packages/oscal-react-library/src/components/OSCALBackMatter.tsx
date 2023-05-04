@@ -17,7 +17,9 @@ import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import OSCALEditableTextField, { EditableFieldProps } from "./OSCALEditableTextField";
 import { Resource, ResourceLink, BackMatter } from "@easydynamics/oscal-types";
 import { ReactElement } from "react";
+import { OSCALPropertiesDialog } from "./OSCALProperties";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
+import { NotSpecifiedTypography } from "./StyledTypography";
 
 export const OSCALBackMatterCard = styled(Card)(
   ({ theme }) => `
@@ -174,15 +176,14 @@ interface BackMatterResourceProps extends OSCALBackMatterProps {
 }
 
 function BackMatterResource(props: BackMatterResourceProps) {
-  const { resource } = props;
+  const { resource, parentUrl, partialRestData, isEditable, backMatter, onFieldSave } = props;
 
   const getMediaType = (rlink: ResourceLink) =>
-    rlink["media-type"] ||
-    guessExtensionFromHref(getAbsoluteUrl(rlink.href, props.parentUrl) ?? "");
+    rlink["media-type"] || guessExtensionFromHref(getAbsoluteUrl(rlink.href, parentUrl) ?? "");
 
   const resourceType = propWithName(resource.props, "type")?.value;
   const typeDisplay = resourceType && backMatterTypeRepresentation(resourceType);
-  const objectKey = getObjectRootKey(props.partialRestData);
+  const objectKey = getObjectRootKey(partialRestData);
 
   return (
     <Grid item xs={3} key={resource.uuid}>
@@ -215,19 +216,27 @@ function BackMatterResource(props: BackMatterResourceProps) {
           action={<CitationDisplay resource={resource} />}
         />
         <CardContent>
+          <OSCALPropertiesDialog
+            properties={resource?.props}
+            title={
+              resource?.title ?? (
+                <NotSpecifiedTypography component="span">Resource</NotSpecifiedTypography>
+              )
+            }
+          />
           <OSCALEditableTextField
             fieldName="description"
-            isEditable={props.isEditable}
-            editedField={props.isEditable ? [objectKey, "back-matter", "resources"] : null}
-            editedValue={props.backMatter?.resources}
+            isEditable={isEditable}
+            editedField={isEditable ? [objectKey, "back-matter", "resources"] : null}
+            editedValue={backMatter?.resources}
             editedValueId={resource.uuid}
-            onFieldSave={props.onFieldSave}
+            onFieldSave={onFieldSave}
             partialRestData={
-              props.isEditable
+              isEditable
                 ? {
                     [objectKey]: {
-                      uuid: props.partialRestData?.[objectKey].uuid,
-                      "back-matter": props.backMatter,
+                      uuid: partialRestData?.[objectKey].uuid,
+                      "back-matter": backMatter,
                     },
                   }
                 : null
@@ -242,7 +251,7 @@ function BackMatterResource(props: BackMatterResourceProps) {
                 label={getMediaType(rlink)}
                 component="a"
                 role="button"
-                href={getAbsoluteUrl(rlink.href, props.parentUrl)}
+                href={getAbsoluteUrl(rlink.href, parentUrl)}
                 target="_blank"
                 variant="outlined"
                 clickable
