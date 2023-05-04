@@ -106,7 +106,10 @@ export function determineControlGroupFromFragment(
  * @param controlId The identification for a control
  * @returns fragmentPrefix with an added control
  */
-export function appendToFragmentPrefix(fragmentPrefix: string, controlId: string): string {
+export function appendToFragmentPrefix(
+  fragmentPrefix: string | undefined,
+  controlId: string
+): string {
   return fragmentPrefix ? `${fragmentPrefix}/${controlId}` : controlId;
 }
 

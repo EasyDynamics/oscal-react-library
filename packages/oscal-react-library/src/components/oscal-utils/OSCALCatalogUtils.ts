@@ -1,4 +1,4 @@
-import type { Control } from "@easydynamics/oscal-types";
+import type { Control, ControlGroup } from "@easydynamics/oscal-types";
 import matchingProp from "./OSCALPropUtils";
 
 /**
@@ -7,10 +7,10 @@ import matchingProp from "./OSCALPropUtils";
  * @param control A catalog control
  * @returns true if control is withdrawn
  */
-export default function isWithdrawn(control: Control): boolean {
+export default function isWithdrawn(item: Control | ControlGroup): boolean {
   // By default controls are *not* withdrawn
-  if (!control.props) {
+  if (!item.props) {
     return false;
   }
-  return !!matchingProp(control.props, { name: "status", value: "withdrawn" });
+  return !!matchingProp(item.props, { name: "status", value: "withdrawn" });
 }
