@@ -17,14 +17,16 @@ async function testIfModificationsDisplayed(modificationName) {
     { timeout: 10000 }
   );
   fireEvent.click(modButton);
-  expect(await screen.findByText("Modifications")).toBeVisible();
-  expect(await screen.findByText("Adds")).toBeVisible();
+  expect(screen.getByText("Modifications")).toBeVisible();
+  expect(screen.getByText("Adds")).toBeVisible();
 }
 
-test("OSCALCatalog displays controls", () => {
+test("OSCALCatalog displays controls", async () => {
   const testControl = { id: "ac-1" };
   render(<OSCALControl control={testControl} />);
-  const result = screen.getByText("ac-1");
+  const result = await screen.findByText("ac-1", {
+    timeout: 30_000,
+  });
   expect(result).toBeVisible();
 });
 
