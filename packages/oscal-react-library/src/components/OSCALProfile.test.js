@@ -36,4 +36,24 @@ describe("The OSCAL Profile", () => {
     fireEvent.mouseOver(result[0]);
     expect(await screen.findByText("at least every 3 years")).toBeVisible();
   });
+
+  it("displays profile control modifications", async () => {
+    render(
+      <OSCALProfile
+        profile={profileTestData}
+        parentUrl={parentUrlTestData}
+        onResolutionComplete={() => {}}
+      />
+    );
+
+    const modButton = await screen.findByRole(
+      "button",
+      { name: "ac-1 modifications" },
+      { timeout: 10000 }
+    );
+    fireEvent.click(modButton);
+
+    expect(screen.getByText("Modifications")).toBeVisible();
+    expect(screen.getByText("Adds")).toBeVisible();
+  }, 30000);
 });
