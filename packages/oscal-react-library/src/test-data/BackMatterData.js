@@ -27,6 +27,12 @@ export const backMatterTestData = {
           "media-type": "application/something.else",
         },
       ],
+      props: [
+        {
+          name: "keywords",
+          value: "Resource test keywords",
+        },
+      ],
     },
     {
       uuid: "dc380596-027f-423b-83f2-82757554ee28",
