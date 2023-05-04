@@ -41,7 +41,7 @@ export const oscalObjectTypes: Record<
   ssp: {
     name: "System Security Plan",
     defaultUrl:
-      "https://raw.githubusercontent.com/EasyDynamics/oscal-demo-content/main/system-security-plans/ssp-example.json",
+      "https://raw.githubusercontent.com/GSA/fedramp-automation/master/dist/content/rev4/templates/ssp/json/FedRAMP-SSP-OSCAL-Template.json",
     defaultUuid: "cff8385f-108e-40a5-8f7a-82f3dc0eaba8",
     jsonRootName: "system-security-plan",
     restPath: "system-security-plans",
