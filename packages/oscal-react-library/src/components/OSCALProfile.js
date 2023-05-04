@@ -39,7 +39,6 @@ export default function OSCALProfile(props) {
       props.parentUrl,
       (profilesCatalogsTree) => {
         if (!unmounted.current) {
-          console.log("----- SUCCESS -----");
           setIsLoaded(true);
           setInheritedProfilesAndCatalogs(profilesCatalogsTree);
           props.onResolutionComplete();
@@ -47,15 +46,12 @@ export default function OSCALProfile(props) {
       },
       () => {
         if (!unmounted.current) {
-          console.log("----- FAILURE -----");
           setError(error);
           setIsLoaded(true);
           props.onResolutionComplete();
         }
       }
     );
-
-    console.log("----- PROFILE RESOLVED ------");
 
     return () => {
       unmounted.current = true;
