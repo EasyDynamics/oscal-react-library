@@ -1,7 +1,6 @@
 import BusinessIcon from "@mui/icons-material/Business";
 import EmailIcon from "@mui/icons-material/Email";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import GroupIcon from "@mui/icons-material/Group";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import HomeIcon from "@mui/icons-material/Home";
@@ -14,10 +13,8 @@ import PlaceIcon from "@mui/icons-material/Place";
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
 import WorkIcon from "@mui/icons-material/Work";
 import { CardContent } from "@mui/material";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
 import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -54,6 +51,7 @@ import { OSCALRevisionsButton } from "./OSCALRevision";
 import { OSCALMetadataLabel } from "./OSCALMetadataCommon";
 import { NotSpecifiedTypography } from "./StyledTypography";
 import resolveLinkHref, { UriReferenceLookup } from "./oscal-utils/OSCALLinkUtils";
+import { Accordion, AccordionSummary, AccordionDetails } from "./StyedAccordion";
 import { OSCALPropertiesDialog } from "./OSCALProperties";
 
 const OSCALMetadataSectionInfoHeader = styled(Typography)`
@@ -497,7 +495,7 @@ const OSCALMetadataCard: React.FC<OSCALMetadataCardProps> = (props) => {
   );
 
   return (
-    <>
+    <Card sx={{ height: "100%" }}>
       <CardHeader title={cardTitle} subheader={subheader} avatar={avatar} />
       <CardActions>
         <Button
@@ -522,7 +520,7 @@ const OSCALMetadataCard: React.FC<OSCALMetadataCardProps> = (props) => {
           {children}
         </Dialog>
       </CardActions>
-    </>
+    </Card>
   );
 };
 
@@ -604,7 +602,7 @@ interface OSCALMetadataRolesProps extends AnchorLinkProps {
 const OSCALMetadataRoles: React.FC<OSCALMetadataRolesProps> = (props) => {
   const { roles, urlFragment } = props;
   const cards = roles?.map((role) => (
-    <Grid item xs={12} md={4} key={role.id} component={Card}>
+    <Grid item xs={12} md={4} key={role.id}>
       <OSCALMetadataRole role={role} />
     </Grid>
   ));
@@ -638,7 +636,7 @@ const OSCALMetadataParties: React.FC<OSCALMetadataPartiesProps> = ({
       .filter((item): item is Role => !!item);
 
   const cards = parties?.map((party) => (
-    <Grid item xs={12} md={4} key={party.uuid} component={Card}>
+    <Grid item xs={12} md={4} key={party.uuid}>
       <OSCALMetadataParty
         party={party}
         partyRolesText={getPartyRolesText(party)}
@@ -662,7 +660,7 @@ const OSCALMetadataLocations: React.FC<OSCALMetadataLocationsProps> = (props) =>
   const { locations, urlFragment } = props;
 
   const cards = locations?.map((location) => (
-    <Grid item xs={12} md={4} key={location.uuid} component={Card}>
+    <Grid item xs={12} md={4} key={location.uuid}>
       <OSCALMetadataLocation location={location} />
     </Grid>
   ));
@@ -795,14 +793,14 @@ const OSCALMetadataFieldArea: React.FC<OSCALMetadataFieldAreaProps> = (props) =>
 
   return (
     <Accordion expanded={isExpanded} onChange={handleExpand}>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+      <AccordionSummary>
         <OSCALAnchorLinkHeader>
           <Typography>{title}</Typography>
         </OSCALAnchorLinkHeader>
         <Typography sx={{ color: "text.secondary" }}>{summary}</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Grid container alignItems="stretch">
+        <Grid container spacing={2}>
           {children}
         </Grid>
       </AccordionDetails>
@@ -840,7 +838,7 @@ export const OSCALMetadataKeywords: React.FC<OSCALMetadataKeywordsProps> = (prop
 
   return (
     <OSCALMetadataFieldArea title="Keywords" urlFragment={urlFragment}>
-      {chips}
+      <Box sx={{ margin: "1em" }}>{chips}</Box>
     </OSCALMetadataFieldArea>
   );
 };
