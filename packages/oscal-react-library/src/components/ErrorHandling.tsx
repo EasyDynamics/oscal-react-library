@@ -5,7 +5,7 @@ import Alert from "@mui/material/Alert";
  * A basic FallbackComponent for the {@link ErrorBoundary}. Displays a "yikes"
  * message using a Material UI Alert.
  */
-export function BasicError(props) {
+export function BasicError(props: { error: Error }) {
   // Cleanup the message to prevent potential weird spacing around the parenthesis
   const message = props.error.message?.trim();
   return (
@@ -28,7 +28,7 @@ export function BasicError(props) {
  *
  * @deprecated
  */
-export function ErrorThrower(props) {
+export function ErrorThrower(props: { error: Error }) {
   if (props.error) {
     throw props.error;
   }

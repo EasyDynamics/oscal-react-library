@@ -6,8 +6,11 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
 import { Link } from "react-router-dom";
-import { oscalObjectTypes, fetchAllResourcesOfType } from "./oscal-utils/OSCALRestUtils";
+import { oscalObjectTypes } from "./oscal-utils/OSCALObjectData";
+import { fetchAllResourcesOfType } from "./oscal-utils/OSCALRestUtils";
 import { OSCALMarkupLine } from "./OSCALMarkupProse";
+import { Oscal } from "@easydynamics/oscal-types";
+import { OscalObjectWrapped } from "./oscal-utils/OSCALObjectData";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -36,9 +39,17 @@ const StyledTreeView = styled(TreeView)`
   max-width: ${drawerWidth};
 `;
 
-function DocumentTree(props) {
+interface DocumentTreeProps {
+  backendUrl?: string;
+  handleClose: () => void;
+}
+
+export type OscalObjectList<T extends keyof Oscal> = Record<T, OscalObjectWrapped<T>[]>;
+export type OscalObjects = OscalObjectList<keyof Oscal>;
+
+const DocumentTree: React.FC<DocumentTreeProps> = (props) => {
   const { backendUrl, handleClose } = props;
-  const [oscalObjects, setOscalObjects] = useState({});
+  const [oscalObjects, setOscalObjects] = useState({} as OscalObjects);
 
   useEffect(() => {
     Object.values(oscalObjectTypes).forEach((oscalObjectType) =>
@@ -57,23 +68,20 @@ function DocumentTree(props) {
       defaultCollapseIcon={<ExpandMoreIcon />}
       defaultExpandIcon={<ChevronRightIcon />}
     >
-      {Object.values(oscalObjectTypes).map((oscalObjectType, index) => (
+      {Object.values(oscalObjectTypes).map(({ jsonRootName, name, defaultUuid }, index) => (
         <TreeItem
           nodeId={index.toString()}
-          label={<Typography noWrap>{`${oscalObjectType.name}s`}</Typography>}
-          key={oscalObjectType.defaultUuid}
+          label={<Typography noWrap>{`${name}s`}</Typography>}
+          key={defaultUuid}
         >
-          {oscalObjects[oscalObjectType.jsonRootName]
-            ?.map((oscalObject) => oscalObject[oscalObjectType.jsonRootName])
+          {oscalObjects[jsonRootName]
+            ?.map((oscalObject) => oscalObject[jsonRootName])
             ?.map((oscalObject) => (
               <TreeItem
                 nodeId={oscalObject.uuid}
                 key={oscalObject.uuid}
                 label={
-                  <Link
-                    to={`${oscalObjectType.jsonRootName}/${oscalObject.uuid}`}
-                    onClick={handleClose}
-                  >
+                  <Link to={`${jsonRootName}/${oscalObject.uuid}`} onClick={handleClose}>
                     <Typography noWrap>
                       <OSCALMarkupLine>{oscalObject.metadata.title}</OSCALMarkupLine>
                     </Typography>
@@ -85,9 +93,15 @@ function DocumentTree(props) {
       ))}
     </StyledTreeView>
   );
+};
+
+export interface OSCALDrawerSelectorProps {
+  backendUrl?: string;
+  open: boolean;
+  handleClose: () => void;
 }
 
-export default function OSCALDrawerSelector(props) {
+export const OSCALDrawerSelector: React.FC<OSCALDrawerSelectorProps> = (props) => {
   const theme = useTheme();
 
   return (
@@ -102,4 +116,4 @@ export default function OSCALDrawerSelector(props) {
       <Divider />
     </StyledDrawer>
   );
-}
+};

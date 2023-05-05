@@ -18,8 +18,8 @@ Within an `oscal-react-library` component, in order to add an anchor link:
 2. Surround the element/text within an `OSCALAnchorLinkHeader` component (which
    must be imported from `src/components/OSCALAnchorLinkHeader`)
 3. (Optional) If you wish for the fragment to be a different value than the
-   default value, specify a string with the `value` property
-   - `value` by default is the embedded text within an `OSCALAnchorLinkHeader`,
+   default value, specify a string with the `name` property
+   - `name` by default is the embedded text within an `OSCALAnchorLinkHeader`,
      lower cased and hyphen separated
 
 ## A Basic Example
@@ -27,7 +27,7 @@ Within an `oscal-react-library` component, in order to add an anchor link:
 Here's an example of a header with an `OSCALAnchorLinkHeader`:
 
 ```js
-<OSCALAnchorLinkHeader value="sample-header">
+<OSCALAnchorLinkHeader name="sample-header">
   <OSCALSectionHeader>Sample Section Header Text</OSCALSectionHeader>
 </OSCALAnchorLinkHeader>
 ```

@@ -66,6 +66,8 @@ export default function OSCALComponentDefinition(props) {
         onFieldSave={props.onFieldSave}
         partialRestData={partialRestData}
         urlFragment={props.urlFragment}
+        parentUrl={props.parentUrl}
+        backMatter={props.componentDefinition["back-matter"]}
       />
       <OSCALProfileCatalogInheritance inheritedProfilesAndCatalogs={inheritedProfilesAndCatalogs} />
       {Object.entries(props.componentDefinition.components).map(([key, component]) => (

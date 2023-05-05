@@ -1,8 +1,9 @@
+import { ControlGroup } from "@easydynamics/oscal-types";
+import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
 import OSCALCatalogGroups from "./OSCALCatalogGroups";
 
-const testGroups = [
+const testGroups: ControlGroup[] = [
   {
     id: "parent-group",
     class: "family",
@@ -30,14 +31,30 @@ const testGroups = [
         class: "family",
         title: "Sibling Title",
         controls: [{ id: "control2-id", title: "Audit Events" }],
+        parts: [
+          {
+            name: "Parent part prose",
+            prose: "Prose",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Test Group C",
+    parts: [
+      {
+        id: "test-c-overview-1",
+        name: "overview",
+        prose: "This group has prose",
       },
     ],
   },
 ];
 
-function getTextByChildren(text) {
-  function result(_content, node) {
-    const hasText = (checkNode) => checkNode.textContent === text;
+function getTextByChildren(text: string) {
+  function result(_content: any, node: any) {
+    const hasText = (checkNode: any) => checkNode.textContent === text;
     const nodeHasText = hasText(node);
     // This is necessary because we are providing a query function to override how
     // text search is performed.
@@ -84,5 +101,27 @@ describe("OSCALCatalogGroup", () => {
 
     const expand2 = screen.getByText(getTextByChildren("control2-id Audit Events"));
     fireEvent.click(expand2);
+  });
+
+  test("displays outer group prose", () => {
+    render(<OSCALCatalogGroups groups={testGroups} />);
+
+    const expand1 = screen.getByText("Test Group C");
+    fireEvent.click(expand1);
+
+    const prose = screen.getByText("This group has prose");
+
+    expect(prose).toBeVisible();
+  });
+
+  test("displays child group prose", () => {
+    render(<OSCALCatalogGroups groups={testGroups} />);
+
+    const expand1 = screen.getByText("Sibling Title");
+    fireEvent.click(expand1);
+
+    const prose = screen.getByText("Prose");
+
+    expect(prose).toBeVisible();
   });
 });

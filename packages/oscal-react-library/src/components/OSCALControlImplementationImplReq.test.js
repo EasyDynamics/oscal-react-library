@@ -76,7 +76,9 @@ export default function testOSCALControlImplementationImplReq(parentElementName,
         timeout: 10000,
       })
     ).toBeInTheDocument();
-    await expect(() => screen.findByRole("button")).rejects.toThrow('Unable to find role="button"');
+    await expect(() => screen.findByRole("button", { name: /.* modifications/ })).rejects.toThrow(
+      /Unable to find role="button"/
+    );
   });
 }
 

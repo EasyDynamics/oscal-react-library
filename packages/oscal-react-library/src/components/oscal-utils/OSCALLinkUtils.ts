@@ -1,7 +1,10 @@
 import type { BackMatter } from "@easydynamics/oscal-types";
 import { BackMatterLookup } from "./OSCALBackMatterUtils";
 
-export function getAbsoluteUrl(href: string | undefined, parentUrl: string): string | undefined {
+export function getAbsoluteUrl(
+  href: string | undefined,
+  parentUrl: string | undefined
+): string | undefined {
   if (
     href?.startsWith("https://") ||
     href?.startsWith("http://") ||
@@ -13,15 +16,28 @@ export function getAbsoluteUrl(href: string | undefined, parentUrl: string): str
   return new URL(href ?? "", parentUrl).toString();
 }
 
-export default function resolveLinkHref(
-  backMatter: BackMatter,
-  href: string,
-  parentUrl: string,
-  mediaType: RegExp,
-  preferBase64 = false
-) {
-  const lookup = new BackMatterLookup(backMatter, preferBase64);
-  return getAbsoluteUrl(lookup?.resolve(href, mediaType)?.uri, parentUrl);
+export interface UriReferenceLookup {
+  /**
+   * A BackMatter object to resolve relative links against.
+   */
+  backMatter?: BackMatter;
+  /**
+   * Url of parent for relative links.
+   */
+  parentUrl?: string;
+}
+
+interface ResolveLinkHrefProps {
+  backMatter: BackMatter;
+  href: string;
+  mediaType: RegExp;
+  preferBase64?: boolean;
+  parentUrl?: string;
+}
+
+export default function resolveLinkHref(props: ResolveLinkHrefProps) {
+  const lookup = new BackMatterLookup(props.backMatter, props.preferBase64);
+  return getAbsoluteUrl(lookup?.resolve(props.href, props.mediaType)?.uri, props.parentUrl);
 }
 
 /**
@@ -68,8 +84,10 @@ export function guessExtensionFromHref(url: string): "Unknown" | string {
  * @param fragment A given fragment
  * @returns The control group id
  */
-export function determineControlGroupFromFragment(fragment: string): string | undefined {
-  if (fragment) {
+export function determineControlGroupFromFragment(
+  fragment: string | undefined
+): string | undefined {
+  if (!fragment) {
     return undefined;
   }
   // Create array from all tab control grouping elements
@@ -88,7 +106,10 @@ export function determineControlGroupFromFragment(fragment: string): string | un
  * @param controlId The identification for a control
  * @returns fragmentPrefix with an added control
  */
-export function appendToFragmentPrefix(fragmentPrefix: string, controlId: string): string {
+export function appendToFragmentPrefix(
+  fragmentPrefix: string | undefined,
+  controlId: string
+): string {
   return fragmentPrefix ? `${fragmentPrefix}/${controlId}` : controlId;
 }
 
@@ -98,7 +119,7 @@ export function appendToFragmentPrefix(fragmentPrefix: string, controlId: string
  * @param fragmentSuffix The end of a fragment
  * @returns fragmentSuffix with a removed control
  */
-export function shiftFragmentSuffix(fragmentSuffix: string): string | undefined {
+export function shiftFragmentSuffix(fragmentSuffix: string | undefined): string | undefined {
   return fragmentSuffix
     ? `${fragmentSuffix.substring(fragmentSuffix.indexOf("/") + 1)}`
     : undefined;

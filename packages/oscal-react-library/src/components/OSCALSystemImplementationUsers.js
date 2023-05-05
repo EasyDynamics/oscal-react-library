@@ -12,7 +12,7 @@ import {
   StyledTableRow,
   StyledTableHead,
 } from "./OSCALSystemImplementationTableStyles";
-import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import PropertiesTable from "./OSCALSystemImplementationPropertiesTable";
 
 function FunctionsPreformedTable(props) {

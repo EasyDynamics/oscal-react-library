@@ -5,7 +5,7 @@ import {
   OSCALProfileLoader,
 } from "./components/OSCALLoader";
 
-import OSCALDrawerSelector from "./components/OSCALDrawerSelector";
+import { OSCALDrawerSelector } from "./components/OSCALDrawerSelector";
 
 /**
  * Bundels loaders and referenced components into "dist/" when rollup is run.

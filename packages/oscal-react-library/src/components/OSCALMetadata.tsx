@@ -1,7 +1,6 @@
 import BusinessIcon from "@mui/icons-material/Business";
 import EmailIcon from "@mui/icons-material/Email";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import GroupIcon from "@mui/icons-material/Group";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import HomeIcon from "@mui/icons-material/Home";
@@ -14,10 +13,8 @@ import PlaceIcon from "@mui/icons-material/Place";
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
 import WorkIcon from "@mui/icons-material/Work";
 import { CardContent } from "@mui/material";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
 import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -37,7 +34,7 @@ import React, { ReactNode, useEffect } from "react";
 import { OSCALSection } from "../styles/CommonPageStyles";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import OSCALEditableTextField, { EditableFieldProps } from "./OSCALEditableTextField";
-import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import { OSCALAnchorLinkHeader, AnchorLinkProps } from "./OSCALAnchorLinkHeader";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 import {
   Address,
@@ -47,10 +44,15 @@ import {
   Role,
   PartyType,
   TelephoneNumber,
+  Link as OSCALLink,
+  BackMatter,
 } from "@easydynamics/oscal-types";
 import { OSCALRevisionsButton } from "./OSCALRevision";
 import { OSCALMetadataLabel } from "./OSCALMetadataCommon";
 import { NotSpecifiedTypography } from "./StyledTypography";
+import resolveLinkHref, { UriReferenceLookup } from "./oscal-utils/OSCALLinkUtils";
+import { Accordion, AccordionSummary, AccordionDetails } from "./StyedAccordion";
+import { OSCALPropertiesDialog } from "./OSCALProperties";
 
 const OSCALMetadataSectionInfoHeader = styled(Typography)`
   display: flex;
@@ -306,34 +308,86 @@ const MetadataInfoList: React.FC<MetadataInfoListProps> = (props) => {
   );
 };
 
+interface OSCALMetadataPartyLogoProps {
+  link: OSCALLink;
+  uriReferenceLookup: UriReferenceLookup;
+  partyName?: string;
+}
+
+const maybeResolveUri = (
+  backMatter: BackMatter | undefined,
+  href: string,
+  mediaType: RegExp,
+  parentUrl?: string,
+  preferBase64?: boolean
+) => {
+  if (!backMatter) {
+    return undefined;
+  }
+
+  try {
+    return resolveLinkHref({ backMatter, href, mediaType, preferBase64, parentUrl });
+  } catch (_) {
+    return undefined;
+  }
+};
+
+const OSCALMetadataPartyLogo: React.FC<OSCALMetadataPartyLogoProps> = ({
+  link,
+  uriReferenceLookup,
+  partyName,
+}) => {
+  const imageSrc =
+    maybeResolveUri(
+      uriReferenceLookup.backMatter,
+      link.href,
+      /^image\//,
+      uriReferenceLookup.parentUrl,
+      false
+    ) ?? link.href;
+
+  return <img src={imageSrc} alt={`${partyName} logo`} style={{ maxWidth: "10em" }} />;
+};
+
 export interface OSCALMetadataPartyProps {
   party: PartyOrganizationOrPerson;
   partyRolesText: Role[] | undefined;
+  uriReferenceLookup: UriReferenceLookup;
 }
 
-export const OSCALMetadataParty: React.FC<OSCALMetadataPartyProps> = (props) => {
-  const fallbackIcon =
-    props.party?.type === PartyType.ORGANIZATION ? <GroupIcon /> : <PersonIcon />;
+export const OSCALMetadataParty: React.FC<OSCALMetadataPartyProps> = ({
+  party,
+  partyRolesText,
+  uriReferenceLookup,
+}) => {
+  const fallbackIcon = party?.type === PartyType.ORGANIZATION ? <GroupIcon /> : <PersonIcon />;
 
-  const avatar = (
-    <MetadataAvatar id={props.party.uuid} text={props.party.name} fallbackIcon={fallbackIcon} />
-  );
+  const avatar = <MetadataAvatar id={party.uuid} text={party.name} fallbackIcon={fallbackIcon} />;
+
+  const logoLink = party.links?.find((item) => item.rel === "logo");
+  const logo = logoLink ? (
+    <OSCALMetadataPartyLogo
+      link={logoLink}
+      uriReferenceLookup={uriReferenceLookup}
+      partyName={party.name}
+    />
+  ) : undefined;
 
   return (
     <OSCALMetadataCard
-      title={props.party.name}
-      subheader={props.partyRolesText?.map((role: Role) => role.title).join(", ")}
+      title={party.name}
+      subheader={partyRolesText?.map((role: Role) => role.title).join(", ")}
       avatar={avatar}
     >
       <DialogTitle id="scroll-dialog-title">
-        <Stack direction="row" alignItems="center" gap={1}>
-          {avatar}
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Stack direction="column">
-            {props.party.name}
-            {props.partyRolesText?.map((role) => (
+            {party.name}
+            {partyRolesText?.map((role) => (
               <Typography key={role.title}> {role.title} </Typography>
             ))}
           </Stack>
+          {logo}
         </Stack>
       </DialogTitle>
       <DialogContent dividers>
@@ -342,7 +396,7 @@ export const OSCALMetadataParty: React.FC<OSCALMetadataPartyProps> = (props) => 
             <OSCALMetadataContactTypeHeader icon={<MapIcon fontSize="small" />} title="Address" />
             <List>
               <MetadataInfoList
-                list={props.party.addresses}
+                list={party.addresses}
                 infoType={MetadataInfoType.address}
                 emptyMessage="No address information provided"
               />
@@ -352,7 +406,7 @@ export const OSCALMetadataParty: React.FC<OSCALMetadataPartyProps> = (props) => 
             <OSCALMetadataContactTypeHeader icon={<PhoneIcon fontSize="small" />} title="Phone" />
             <List>
               <MetadataInfoList
-                list={props.party["telephone-numbers"]}
+                list={party["telephone-numbers"]}
                 infoType={MetadataInfoType.telephone}
                 emptyMessage="No telephone information provided"
               />
@@ -362,7 +416,7 @@ export const OSCALMetadataParty: React.FC<OSCALMetadataPartyProps> = (props) => 
             <OSCALMetadataContactTypeHeader icon={<EmailIcon fontSize="small" />} title="Email" />
             <List>
               <MetadataInfoList
-                list={props.party["email-addresses"]}
+                list={party["email-addresses"]}
                 infoType={MetadataInfoType.email}
                 emptyMessage="No email information provided"
               />
@@ -441,7 +495,7 @@ const OSCALMetadataCard: React.FC<OSCALMetadataCardProps> = (props) => {
   );
 
   return (
-    <>
+    <Card sx={{ height: "100%" }}>
       <CardHeader title={cardTitle} subheader={subheader} avatar={avatar} />
       <CardActions>
         <Button
@@ -466,7 +520,7 @@ const OSCALMetadataCard: React.FC<OSCALMetadataCardProps> = (props) => {
           {children}
         </Dialog>
       </CardActions>
-    </>
+    </Card>
   );
 };
 
@@ -536,19 +590,19 @@ const OSCALMetadataBasicData: React.FC<OSCALMetadataBasicDataProps> = (props) =>
         data={metadata.published ? formatDate(metadata.published) : "Not published"}
       />
       <OSCALRevisionsButton revisions={metadata.revisions} />
+      <OSCALPropertiesDialog properties={props.metadata.props} title={props.metadata.title} />
     </Stack>
   );
 };
 
-interface OSCALMetadataRolesProps {
+interface OSCALMetadataRolesProps extends AnchorLinkProps {
   roles: Role[] | undefined;
-  urlFragment?: string;
 }
 
 const OSCALMetadataRoles: React.FC<OSCALMetadataRolesProps> = (props) => {
   const { roles, urlFragment } = props;
   const cards = roles?.map((role) => (
-    <Grid item xs={12} md={4} key={role.id} component={Card}>
+    <Grid item xs={12} md={4} key={role.id}>
       <OSCALMetadataRole role={role} />
     </Grid>
   ));
@@ -560,28 +614,34 @@ const OSCALMetadataRoles: React.FC<OSCALMetadataRolesProps> = (props) => {
   );
 };
 
-interface OSCALMetadataPartiesProps {
+interface OSCALMetadataPartiesProps extends AnchorLinkProps {
   metadata: PublicationMetadata;
   parties: PartyOrganizationOrPerson[] | undefined;
-  urlFragment?: string;
+  uriReferenceLookup: UriReferenceLookup;
 }
 
-const OSCALMetadataParties: React.FC<OSCALMetadataPartiesProps> = (props) => {
-  const { parties, urlFragment } = props;
-
-  const getRoleLabel = (roleId: string) =>
-    props.metadata?.roles?.find((role) => role.id === roleId);
+const OSCALMetadataParties: React.FC<OSCALMetadataPartiesProps> = ({
+  metadata,
+  parties,
+  urlFragment,
+  uriReferenceLookup,
+}) => {
+  const getRoleLabel = (roleId: string) => metadata?.roles?.find((role) => role.id === roleId);
 
   const getPartyRolesText = (party: PartyOrganizationOrPerson) =>
-    props.metadata["responsible-parties"]
+    metadata["responsible-parties"]
       ?.filter((responsibleParty) => responsibleParty["party-uuids"]?.includes(party.uuid))
       .map((item) => item["role-id"])
       .map(getRoleLabel)
       .filter((item): item is Role => !!item);
 
   const cards = parties?.map((party) => (
-    <Grid item xs={12} md={4} key={party.uuid} component={Card}>
-      <OSCALMetadataParty party={party} partyRolesText={getPartyRolesText(party)} />
+    <Grid item xs={12} md={4} key={party.uuid}>
+      <OSCALMetadataParty
+        party={party}
+        partyRolesText={getPartyRolesText(party)}
+        uriReferenceLookup={uriReferenceLookup}
+      />
     </Grid>
   ));
 
@@ -592,16 +652,15 @@ const OSCALMetadataParties: React.FC<OSCALMetadataPartiesProps> = (props) => {
   );
 };
 
-interface OSCALMetadataLocationsProps {
+interface OSCALMetadataLocationsProps extends AnchorLinkProps {
   locations: Location[] | undefined;
-  urlFragment?: string | undefined;
 }
 
 const OSCALMetadataLocations: React.FC<OSCALMetadataLocationsProps> = (props) => {
   const { locations, urlFragment } = props;
 
   const cards = locations?.map((location) => (
-    <Grid item xs={12} md={4} key={location.uuid} component={Card}>
+    <Grid item xs={12} md={4} key={location.uuid}>
       <OSCALMetadataLocation location={location} />
     </Grid>
   ));
@@ -699,7 +758,7 @@ export const OSCALMetadataLocation: React.FC<OSCALMetadataLocationProps> = (prop
   );
 };
 
-interface OSCALMetadataFieldAreaProps {
+interface OSCALMetadataFieldAreaProps extends AnchorLinkProps {
   /**
    * Title of the accordion.
    */
@@ -712,7 +771,6 @@ interface OSCALMetadataFieldAreaProps {
    * Summary element near title.
    */
   summary?: ReactNode;
-  urlFragment?: string;
 }
 
 const OSCALMetadataFieldArea: React.FC<OSCALMetadataFieldAreaProps> = (props) => {
@@ -735,14 +793,14 @@ const OSCALMetadataFieldArea: React.FC<OSCALMetadataFieldAreaProps> = (props) =>
 
   return (
     <Accordion expanded={isExpanded} onChange={handleExpand}>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+      <AccordionSummary>
         <OSCALAnchorLinkHeader>
           <Typography>{title}</Typography>
         </OSCALAnchorLinkHeader>
         <Typography sx={{ color: "text.secondary" }}>{summary}</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Grid container alignItems="stretch">
+        <Grid container spacing={2}>
           {children}
         </Grid>
       </AccordionDetails>
@@ -761,12 +819,11 @@ export const OSCALMetadataKeyword: React.FC<OSCALMetadataKeywordProps> = (props)
   return <>{text && <Chip label={text} size="small" role="chip" />}</>;
 };
 
-export interface OSCALMetadataKeywordsProps {
+export interface OSCALMetadataKeywordsProps extends AnchorLinkProps {
   /**
    * Comma seperated list of keywords.
    */
   keywords: string | undefined;
-  urlFragment?: string;
 }
 
 export const OSCALMetadataKeywords: React.FC<OSCALMetadataKeywordsProps> = (props) => {
@@ -781,17 +838,18 @@ export const OSCALMetadataKeywords: React.FC<OSCALMetadataKeywordsProps> = (prop
 
   return (
     <OSCALMetadataFieldArea title="Keywords" urlFragment={urlFragment}>
-      {chips}
+      <Box sx={{ margin: "1em" }}>{chips}</Box>
     </OSCALMetadataFieldArea>
   );
 };
 
-interface OSCALMetadataProps extends EditableFieldProps {
+interface OSCALMetadataProps extends EditableFieldProps, AnchorLinkProps {
   /**
    * The metadata of an OSCAL document.
    */
   metadata: PublicationMetadata;
-  urlFragment?: string;
+  backMatter?: BackMatter;
+  parentUrl?: string;
 }
 
 export const OSCALMetadata: React.FC<OSCALMetadataProps> = (props) => {
@@ -849,6 +907,7 @@ export const OSCALMetadata: React.FC<OSCALMetadataProps> = (props) => {
               parties={props.metadata?.parties}
               metadata={props.metadata}
               urlFragment={props.urlFragment}
+              uriReferenceLookup={{ backMatter: props.backMatter, parentUrl: props.parentUrl }}
             />
             <OSCALMetadataRoles roles={props.metadata?.roles} urlFragment={props.urlFragment} />
             <OSCALMetadataLocations

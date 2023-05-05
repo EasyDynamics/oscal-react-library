@@ -47,6 +47,24 @@ describe("OSCAL metadata parties", () => {
     expect(button).toBeVisible();
   });
 
+  test(`displays logo`, () => {
+    render(<OSCALMetadata metadata={metadataTestData} />);
+
+    const expand = screen.getByText("Parties");
+    fireEvent.click(expand);
+
+    const button = screen.getByRole("button", {
+      name: /some group of people details button/i,
+    });
+
+    fireEvent.click(button);
+
+    const logo = screen.getByAltText("Some group of people logo");
+
+    expect(logo).toBeVisible();
+    expect(logo).toHaveAttribute("src", "https://example.png");
+  });
+
   test(`displays email contact info`, () => {
     render(<OSCALMetadata metadata={metadataTestData} />);
 
@@ -57,7 +75,7 @@ describe("OSCAL metadata parties", () => {
       name: /some group of people details button/i,
     });
 
-    button.click();
+    fireEvent.click(button);
 
     expect(screen.getByText("Email")).toBeVisible();
     expect(screen.getByRole("link", { name: /owners@email\.org/i })).toBeVisible();
@@ -72,7 +90,7 @@ describe("OSCAL metadata parties", () => {
     const button = screen.getByRole("button", {
       name: /some group of people details button/i,
     });
-    button.click();
+    fireEvent.click(button);
 
     expect(screen.getByText("Phone")).toBeVisible();
     expect(screen.getByRole("link", { name: /\+18005555555/i })).toBeVisible();
@@ -88,7 +106,7 @@ describe("OSCAL metadata parties", () => {
       name: /some group of people details button/i,
     });
 
-    button.click();
+    fireEvent.click(button);
 
     expect(screen.getByText("Phone")).toBeVisible();
     expect(screen.getByRole("link", { name: /\+18004444444/i })).toBeVisible();
@@ -104,7 +122,7 @@ describe("OSCAL metadata parties", () => {
       name: /some group of people details button/i,
     });
 
-    button.click();
+    fireEvent.click(button);
 
     expect(screen.getByText("Phone")).toBeVisible();
     expect(screen.getByRole("link", { name: /\+18007777777/i })).toBeVisible();
@@ -120,7 +138,7 @@ describe("OSCAL metadata parties", () => {
       name: /some group of people details button/i,
     });
 
-    button.click();
+    fireEvent.click(button);
 
     expect(screen.getByText("Phone")).toBeVisible();
     expect(screen.getByRole("link", { name: /\+1800666666/i })).toBeVisible();
@@ -136,7 +154,7 @@ describe("OSCAL metadata parties", () => {
       name: /some group of people details button/i,
     });
 
-    button.click();
+    fireEvent.click(button);
     expect(screen.getByText("Address")).toBeVisible();
     expect(screen.getByText(/0000 stsuite 3city, state 0000us/i)).toBeVisible();
   });
@@ -151,7 +169,7 @@ describe("OSCAL metadata parties", () => {
       name: /some group of people details button/i,
     });
 
-    button.click();
+    fireEvent.click(button);
 
     expect(screen.getByText("Address")).toBeVisible();
     expect(screen.getByText(/1111 road stcity, state 0000us/i)).toBeVisible();
@@ -167,7 +185,7 @@ describe("OSCAL metadata parties", () => {
       name: /some group of people details button/i,
     });
 
-    button.click();
+    fireEvent.click(button);
 
     expect(screen.getByText("Address")).toBeVisible();
     expect(screen.getByText(/2222 stcity, state 0000us/i)).toBeVisible();
@@ -197,7 +215,7 @@ describe("OSCAL metadata roles", () => {
     const button = screen.getByRole("button", {
       name: /document creator details button/i,
     });
-    button.click();
+    fireEvent.click(button);
 
     const title = screen.getByRole("heading", { name: /document creator/i });
     const description = screen.getByText("Creates documents");
@@ -230,7 +248,7 @@ describe("OSCAL metadata locations", () => {
     const button = screen.getByRole("button", {
       name: /Example Location details button/i,
     });
-    button.click();
+    fireEvent.click(button);
 
     expect(screen.getByText("Address")).toBeVisible();
     expect(screen.getByText(/0000 stsuite 3city, state 0000us/i)).toBeVisible();
@@ -245,7 +263,7 @@ describe("OSCAL metadata locations", () => {
     const button = screen.getByRole("button", {
       name: /Example Location details button/i,
     });
-    button.click();
+    fireEvent.click(button);
 
     expect(screen.getByText("Phone")).toBeVisible();
     expect(screen.getByRole("link", { name: /\+18004444444/i })).toBeVisible();
@@ -260,7 +278,7 @@ describe("OSCAL metadata locations", () => {
     const button = screen.getByRole("button", {
       name: /Example Location details button/i,
     });
-    button.click();
+    fireEvent.click(button);
 
     expect(screen.getByText("Email")).toBeVisible();
     expect(screen.getByRole("link", { name: /owners@email\.org/i })).toBeVisible();
@@ -275,7 +293,7 @@ describe("OSCAL metadata locations", () => {
     const button = screen.getByRole("button", {
       name: /Example Location details button/i,
     });
-    button.click();
+    fireEvent.click(button);
 
     expect(screen.getByText("URLs")).toBeVisible();
     expect(screen.getByRole("link", { name: /www\.website\.com/i })).toBeVisible();
@@ -350,5 +368,17 @@ describe("OSCAL metadata keywords", () => {
     const chips = screen.queryAllByRole("chip");
 
     expect(chips.length).toBe(0);
+  });
+
+  test("displays props", () => {
+    render(<OSCALMetadata metadata={{ ...metadataTestData, props: keywordValuesList.setns }} />);
+
+    const openProperties = screen.getByRole("button", { name: "Open Properties" });
+    fireEvent.click(openProperties);
+
+    const modalTitle = screen.getByText("Test Title Properties");
+    expect(modalTitle).toBeVisible();
+    const valueText = screen.getByText("Keyword_1");
+    expect(valueText).toBeVisible();
   });
 });

@@ -28,6 +28,10 @@ export const WithMediaType = Template.bind({});
 
 export const WithoutTitle = Template.bind({});
 
+export const WithType = Template.bind({});
+
+export const WithTypeAndDescription = Template.bind({});
+
 Default.args = {
   backMatter: exampleBackMatter,
   parentUrl: parentUrlTestData,
@@ -50,5 +54,24 @@ WithMediaType.args = {
 
 WithoutTitle.args = {
   backMatter: exampleBackMatterWithoutTitle,
+  parentUrl: parentUrlTestData,
+};
+
+WithType.args = {
+  backMatter: {
+    resources: [{ ...exampleBackMatter.resources[0], props: [{ name: "type", value: "logo" }] }],
+  },
+  parentUrl: parentUrlTestData,
+};
+
+WithTypeAndDescription.args = {
+  backMatter: {
+    resources: [
+      {
+        ...exampleBackMatterWithDescription.resources[0],
+        props: [{ name: "type", value: "logo" }],
+      },
+    ],
+  },
   parentUrl: parentUrlTestData,
 };

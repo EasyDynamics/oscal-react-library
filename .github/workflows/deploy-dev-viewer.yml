@@ -1,0 +1,81 @@
+---
+name: Deploy viewer to Dev environment
+
+on:
+  push:
+    branches: ["develop"]
+  workflow_dispatch:
+  schedule:
+    # Run daily at 03:15 UTC (10:15/11:15 ET)
+    - cron: "15 3 * * *"
+
+concurrency:
+  group: "viewer-dev"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "npm"
+      - name: Install global dependencies
+        run: |
+          npm install -g npm@latest 
+      - name: Install npm dependencies
+        run: |
+          npm ci
+      - name: Build viewer
+        run:
+          npx lerna exec --include-dependencies --scope "@easydynamics/oscal-viewer" -- npm run build
+        env:
+          PUBLIC_URL: "/"
+      - name: Archive viewer
+        uses: actions/upload-artifact@v3
+        with:
+          name: oscal-viewer
+          path: packages/oscal-viewer/build
+  deploy:
+    name: Deploy artifact
+    needs: ["build"]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    permissions:
+      contents: read
+      id-token: write
+    environment:
+      name: development
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          path: oscal-viewer
+      - name: Sign in to AWS
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: "${{ secrets.ROLE_ARN }}"
+          aws-region: "${{ vars.AWS_REGION }}"
+      - name: Deploy files
+        run: |
+          aws s3 sync . s3://${{ secrets.S3_BUCKET_NAME }} --delete
+        # The directory is doubled because of the trip through the GitHub artifact
+        # storage.
+        working-directory: oscal-viewer/oscal-viewer
+      - name: Invalidate CloudFront cache
+        run:
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/index.html"

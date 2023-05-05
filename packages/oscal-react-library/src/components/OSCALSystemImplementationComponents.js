@@ -14,7 +14,7 @@ import {
   ComponentTableCell,
   StyledTableHead,
 } from "./OSCALSystemImplementationTableStyles";
-import OSCALAnchorLinkHeader from "./OSCALAnchorLinkHeader";
+import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import PropertiesTable from "./OSCALSystemImplementationPropertiesTable";
 
 export default function OSCALSystemImplementationComponents(props) {
