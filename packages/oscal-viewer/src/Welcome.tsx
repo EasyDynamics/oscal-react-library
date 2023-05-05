@@ -13,11 +13,11 @@ const Welcome: React.FC<WelcomeProps> = (props) => {
         sx={{
           bgcolor: "primary.main",
           color: "white",
-          pt: "10%",
+          pt: "4em",
           pb: 6,
           width: "100%",
-          height: "calc(100vh - 4em)",
-          minHeight: "calc(100vh - 4em)",
+          height: "calc(50vh - 4em)",
+          minHeight: "calc(50vh - 4em)",
         }}
       >
         <Container maxWidth="lg">
@@ -53,15 +53,24 @@ const Welcome: React.FC<WelcomeProps> = (props) => {
           </Stack>
         </Container>
       </Box>
-      <Container maxWidth={false}>
-        <h1 id="docs">OSCAL {type}</h1>
-        <p>
+      <Container maxWidth="xl" sx={{ pt: "2em" }}>
+        <Typography component="h2" variant="h4" id="docs">
+          About the OSCAL {type}
+        </Typography>
+        <Typography sx={{ pt: "1em" }}>
           The OSCAL {type} is built on top of the{" "}
           <Link href="https://github.com/EasyDynamics/oscal-react-library" target="_blank">
             OSCAL React Library
           </Link>
-          .
-        </p>
+          , a component library for visualizing the individual assemblies of an OSCAL document. This
+          tool is open source and
+          <Link
+            href="https://github.com/EasyDynamics/oscal-react-library/tree/develop/packages/oscal-viewer"
+            target="_blank"
+          >
+            available on GitHub.
+          </Link>
+        </Typography>
       </Container>
     </>
   );
