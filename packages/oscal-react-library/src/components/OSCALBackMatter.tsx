@@ -213,17 +213,21 @@ function BackMatterResource(props: BackMatterResourceProps) {
             </TitleDisplay>
           }
           subheader={typeDisplay}
-          action={<CitationDisplay resource={resource} />}
+          action={
+            <>
+              <OSCALPropertiesDialog
+                properties={resource?.props}
+                title={
+                  resource?.title ?? (
+                    <NotSpecifiedTypography component="span">Resource</NotSpecifiedTypography>
+                  )
+                }
+              />
+              <CitationDisplay resource={resource} />
+            </>
+          }
         />
         <CardContent>
-          <OSCALPropertiesDialog
-            properties={resource?.props}
-            title={
-              resource?.title ?? (
-                <NotSpecifiedTypography component="span">Resource</NotSpecifiedTypography>
-              )
-            }
-          />
           <OSCALEditableTextField
             fieldName="description"
             isEditable={isEditable}

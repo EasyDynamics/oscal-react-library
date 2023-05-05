@@ -1,9 +1,9 @@
 import ConstructionIcon from "@mui/icons-material/Construction";
-import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { styled } from "@mui/material/styles";
 import React, { ReactElement } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -20,14 +20,6 @@ import {
 import { Property } from "@easydynamics/oscal-types";
 import { NIST_DEFAULT_NAMESPACE, namespaceOf } from "./oscal-utils/OSCALPropUtils";
 import { NotSpecifiedTypography } from "./StyledTypography";
-
-const OSCALPropertiesButton = styled(Button)(
-  ({ theme }) => `
-    color: ${theme.palette.primary.main};
-    margin-top: 1em;
-    margin-bottom: 0.5em;
-  `
-) as typeof Button;
 
 /**
  *  Helper to sort properties by their `name` field.
@@ -89,14 +81,17 @@ const OSCALProperties: React.FC<OSCALPropertiesProps> = ({ properties, namespace
             </TableRow>
           </StyledTableHead>
           <TableBody>
-            {properties
-              ?.filter((property) => namespaceOf(property?.ns) === namespace)
-              .map((property) => (
-                <OSCALProperty
-                  property={property}
-                  key={`${namespaceOf(property?.ns)}-properties`}
-                />
-              ))}
+            {
+              // The index must be used because there is no combination of attributes of
+              // a property that is guaranteed to be unique; the index is the best available
+              // option. A UUID is not guaranteed to be present.
+            }
+            {properties?.map((property, idx) => (
+              <OSCALProperty
+                property={property}
+                key={`${namespaceOf(property?.ns)}-property-${idx}`}
+              />
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -121,11 +116,8 @@ export const OSCALPropertiesDialog: React.FC<OSCALPropertiesDialogProps> = ({
 }) => {
   const [open, setOpen] = React.useState(false);
 
-  if (!properties) {
-    return null;
-  }
   const namespaceToProps: Record<string, Property[]> = {};
-  for (const prop of properties) {
+  for (const prop of properties ?? []) {
     const ns = namespaceOf(prop.ns);
     namespaceToProps[ns] ??= [];
     namespaceToProps[ns].push(prop);
@@ -141,15 +133,26 @@ export const OSCALPropertiesDialog: React.FC<OSCALPropertiesDialogProps> = ({
 
   return (
     <>
-      <OSCALPropertiesButton
-        size="small"
-        variant="outlined"
-        onClick={handleOpen}
-        aria-label={"Open Properties"}
-        startIcon={<ConstructionIcon />}
-      >
-        Open Properties
-      </OSCALPropertiesButton>
+      <StyledTooltip title="Open Properties">
+        {
+          // This Box is necessary to ensure the tooltip is present when the button is disabled.
+          // If the Button were never disabled, the Box can be removed. This change may be made
+          // when property editing is enabled to ensure that the dialog can be opened to edit &
+          // create properties, even when none exist. In that case, even the Tooltip wrapper may
+          // not be necessary.
+        }
+        <Box display="inline">
+          <IconButton
+            color="primary"
+            size="small"
+            onClick={handleOpen}
+            aria-label="Open Properties"
+            disabled={!properties}
+          >
+            <ConstructionIcon />
+          </IconButton>
+        </Box>
+      </StyledTooltip>
       <Dialog
         open={open}
         onClose={handleClose}
