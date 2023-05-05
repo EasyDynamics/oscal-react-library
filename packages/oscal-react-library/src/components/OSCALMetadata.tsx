@@ -592,6 +592,7 @@ const OSCALMetadataBasicData: React.FC<OSCALMetadataBasicDataProps> = (props) =>
         data={metadata.published ? formatDate(metadata.published) : "Not published"}
       />
       <OSCALRevisionsButton revisions={metadata.revisions} />
+      <OSCALPropertiesDialog properties={props.metadata.props} title={props.metadata.title} />
     </Stack>
   );
 };
@@ -897,12 +898,6 @@ export const OSCALMetadata: React.FC<OSCALMetadataProps> = (props) => {
                 isEditable={props.isEditable}
                 partialRestData={props.partialRestData}
                 onFieldSave={props.onFieldSave}
-              />
-            </OSCALMetadataSection>
-            <OSCALMetadataSection>
-              <OSCALPropertiesDialog
-                properties={props.metadata.props}
-                title={props.metadata.title}
               />
             </OSCALMetadataSection>
             <OSCALMarkupMultiLine>{props.metadata.remarks}</OSCALMarkupMultiLine>

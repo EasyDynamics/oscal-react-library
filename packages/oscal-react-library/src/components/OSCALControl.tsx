@@ -21,6 +21,7 @@ import {
   Alteration,
 } from "@easydynamics/oscal-types";
 import { EditableFieldProps } from "./OSCALEditableTextField";
+import { Stack } from "@mui/material";
 
 interface ControlListOptions {
   childLevel: number;
@@ -72,7 +73,6 @@ const ControlsList: React.FC<ControlsListProps> = (props) => {
     urlFragment,
     fragmentPrefix,
   } = props;
-  const label = propWithName(control.props, "label")?.value;
   return (
     <Box
       sx={[
@@ -82,15 +82,6 @@ const ControlsList: React.FC<ControlsListProps> = (props) => {
         }),
       ]}
     >
-      <OSCALPropertiesDialog
-        properties={control.props}
-        title={
-          <>
-            <OSCALControlLabel id={control.id} label={label} component="span" />
-            {` ${control.title}`}
-          </>
-        }
-      />
       {control.parts?.map((part, index) => (
         <OSCALControlPart
           componentId={componentId}
@@ -198,18 +189,31 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
       <CardContent>
         <Grid container spacing={1}>
           <Grid item xs={12}>
-            <OSCALAnchorLinkHeader
-              name={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}
-            >
-              <Typography
-                variant="h6"
-                component="h2"
-                style={childLevel ? { fontSize: "1.1rem" } : undefined}
+            <Stack alignItems="center" direction="row" justifyContent="space-between">
+              <OSCALAnchorLinkHeader
+                name={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}
               >
-                <OSCALControlLabel component="span" label={label} id={control.id} /> {control.title}{" "}
-                {modificationDisplay}
-              </Typography>
-            </OSCALAnchorLinkHeader>
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  style={childLevel ? { fontSize: "1.1rem" } : undefined}
+                >
+                  <OSCALControlLabel component="span" label={label} id={control.id} />{" "}
+                  {control.title} {modificationDisplay}
+                </Typography>
+              </OSCALAnchorLinkHeader>
+              <Box>
+                <OSCALPropertiesDialog
+                  properties={control.props}
+                  title={
+                    <>
+                      <OSCALControlLabel id={control.id} label={label} component="span" />
+                      {` ${control.title}`}
+                    </>
+                  }
+                />
+              </Box>
+            </Stack>
           </Grid>
         </Grid>
         <ControlsList {...props} withdrawn={controlOrParentWithdrawn} />
