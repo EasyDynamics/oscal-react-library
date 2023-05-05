@@ -14,6 +14,7 @@ import SmartphoneIcon from "@mui/icons-material/Smartphone";
 import WorkIcon from "@mui/icons-material/Work";
 import { CardContent } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -836,7 +837,7 @@ export const OSCALMetadataKeywords: React.FC<OSCALMetadataKeywordsProps> = (prop
 
   return (
     <OSCALMetadataFieldArea title="Keywords" urlFragment={urlFragment}>
-      {chips}
+      <Box sx={{ margin: "1em" }}>{chips}</Box>
     </OSCALMetadataFieldArea>
   );
 };
