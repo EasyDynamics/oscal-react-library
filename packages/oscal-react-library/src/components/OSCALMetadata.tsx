@@ -51,6 +51,7 @@ import { OSCALMetadataLabel } from "./OSCALMetadataCommon";
 import { NotSpecifiedTypography } from "./StyledTypography";
 import resolveLinkHref, { UriReferenceLookup } from "./oscal-utils/OSCALLinkUtils";
 import { Accordion, AccordionSummary, AccordionDetails } from "./StyedAccordion";
+import { OSCALPropertiesDialog } from "./OSCALProperties";
 
 const OSCALMetadataSectionInfoHeader = styled(Typography)`
   display: flex;
@@ -893,6 +894,12 @@ export const OSCALMetadata: React.FC<OSCALMetadataProps> = (props) => {
                 isEditable={props.isEditable}
                 partialRestData={props.partialRestData}
                 onFieldSave={props.onFieldSave}
+              />
+            </OSCALMetadataSection>
+            <OSCALMetadataSection>
+              <OSCALPropertiesDialog
+                properties={props.metadata.props}
+                title={props.metadata.title}
               />
             </OSCALMetadataSection>
             <OSCALMarkupMultiLine>{props.metadata.remarks}</OSCALMarkupMultiLine>

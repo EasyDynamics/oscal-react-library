@@ -12,6 +12,7 @@ import { AnchorLinkProps, OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader"
 import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import { appendToFragmentPrefix } from "./oscal-utils/OSCALLinkUtils";
+import { OSCALPropertiesDialog } from "./OSCALProperties";
 import { shouldForwardProp } from "@mui/system";
 import {
   Control,
@@ -71,6 +72,7 @@ const ControlsList: React.FC<ControlsListProps> = (props) => {
     urlFragment,
     fragmentPrefix,
   } = props;
+  const label = propWithName(control.props, "label")?.value;
   return (
     <Box
       sx={[
@@ -80,6 +82,15 @@ const ControlsList: React.FC<ControlsListProps> = (props) => {
         }),
       ]}
     >
+      <OSCALPropertiesDialog
+        properties={control.props}
+        title={
+          <>
+            <OSCALControlLabel id={control.id} label={label} component="span" />
+            {` ${control.title}`}
+          </>
+        }
+      />
       {control.parts?.map((part, index) => (
         <OSCALControlPart
           componentId={componentId}

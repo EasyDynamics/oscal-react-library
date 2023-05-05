@@ -369,4 +369,16 @@ describe("OSCAL metadata keywords", () => {
 
     expect(chips.length).toBe(0);
   });
+
+  test("displays props", () => {
+    render(<OSCALMetadata metadata={{ ...metadataTestData, props: keywordValuesList.setns }} />);
+
+    const openProperties = screen.getByText("Open Properties");
+    fireEvent.click(openProperties);
+
+    const modalTitle = screen.getByText("Test Title Properties");
+    expect(modalTitle).toBeVisible();
+    const valueText = screen.getByText("Keyword_1");
+    expect(valueText).toBeVisible();
+  });
 });
