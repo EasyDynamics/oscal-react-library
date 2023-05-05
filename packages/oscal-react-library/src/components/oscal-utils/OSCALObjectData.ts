@@ -17,7 +17,7 @@ export const oscalObjectTypes: Record<
   catalog: {
     name: "Catalog",
     defaultUrl:
-      "https://raw.githubusercontent.com/EasyDynamics/oscal-demo-content/main/catalogs/NIST_SP-800-53_rev5_catalog.json",
+      "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
     defaultUuid: "613fca2d-704a-42e7-8e2b-b206fb92b456",
     jsonRootName: "catalog",
     restPath: "catalogs",
@@ -33,7 +33,7 @@ export const oscalObjectTypes: Record<
   profile: {
     name: "Profile",
     defaultUrl:
-      "https://raw.githubusercontent.com/EasyDynamics/oscal-demo-content/main/profiles/NIST_SP-800-53_rev4_MODERATE-baseline_profile.json",
+      "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_MODERATE-baseline_profile.json",
     defaultUuid: "8b3beca1-fcdc-43e0-aebb-ffc0a080c486",
     jsonRootName: "profile",
     restPath: "profiles",
@@ -41,7 +41,7 @@ export const oscalObjectTypes: Record<
   ssp: {
     name: "System Security Plan",
     defaultUrl:
-      "https://raw.githubusercontent.com/EasyDynamics/oscal-demo-content/main/system-security-plans/ssp-example.json",
+      "https://raw.githubusercontent.com/GSA/fedramp-automation/master/dist/content/rev4/templates/ssp/json/FedRAMP-SSP-OSCAL-Template.json",
     defaultUuid: "cff8385f-108e-40a5-8f7a-82f3dc0eaba8",
     jsonRootName: "system-security-plan",
     restPath: "system-security-plans",
