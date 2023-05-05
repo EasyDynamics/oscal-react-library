@@ -104,7 +104,7 @@ const OSCALProperties: React.FC<OSCALPropertiesProps> = ({ properties, namespace
   );
 };
 
-interface OSCALPropertiesDialogProps {
+export interface OSCALPropertiesDialogProps {
   /**
    * Contains properties elements
    */
