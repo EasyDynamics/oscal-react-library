@@ -1,5 +1,5 @@
 import "./App.css";
-import { styled, createTheme, ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
+import { styled, ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 import React, { createElement, useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
@@ -25,17 +25,8 @@ import {
   OSCALDrawerSelector,
 } from "@easydynamics/oscal-react-library";
 import logo from "./images/logo-header.svg";
-
-const appTheme = createTheme({
-  palette: {
-    primary: {
-      main: "#001131",
-    },
-    secondary: {
-      main: "#00BDE3",
-    },
-  },
-});
+import { appTheme } from "./themes/AppTheme";
+import { OSCALGlobalStyles } from "./GlobalStyles";
 
 const OpenNavButton = styled(IconButton)(({ theme }) => `margin-right: ${theme.spacing(2)}`);
 const LogoImage = styled("img")`
@@ -231,8 +222,15 @@ function App() {
 
   return (
     <StyledEngineProvider injectFirst>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap"
+        rel="stylesheet"
+      />
       <ThemeProvider theme={appTheme}>
         <CssBaseline />
+        <OSCALGlobalStyles theme={appTheme} />
         <div className="App">
           <AppBar position="static">
             <Toolbar>
