@@ -10,13 +10,9 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
+import TableHead from "@mui/material/TableHead";
+import Typography from "@mui/material/Typography";
 import StyledTooltip from "./OSCALStyledTooltip";
-import {
-  OSCALSystemImplementationTableTitle,
-  StyledHeaderTableCell,
-  StyledTableRow,
-  StyledTableHead,
-} from "./OSCALSystemImplementationTableStyles";
 import { Property } from "@easydynamics/oscal-types";
 import { NIST_DEFAULT_NAMESPACE, namespaceOf } from "./oscal-utils/OSCALPropUtils";
 import { NotSpecifiedTypography } from "./StyledTypography";
@@ -45,11 +41,11 @@ const OSCALProperty: React.FC<OSCALPropertyProps> = ({ property }) => {
 
   return (
     <StyledTooltip title={property.remarks ?? ""}>
-      <StyledTableRow key={property.uuid}>
+      <TableRow key={property.uuid} className="StyledTableRow">
         <TableCell>{property.name ?? NO_INFORMATION}</TableCell>
         <TableCell>{property.class ?? NO_INFORMATION}</TableCell>
         <TableCell>{property.value ?? NO_INFORMATION}</TableCell>
-      </StyledTableRow>
+      </TableRow>
     </StyledTooltip>
   );
 };
@@ -68,18 +64,22 @@ interface OSCALPropertiesProps {
 const OSCALProperties: React.FC<OSCALPropertiesProps> = ({ properties, namespace }) => {
   return (
     <>
-      <OSCALSystemImplementationTableTitle variant="h6" id={`${namespace}-table-title`}>
+      <Typography
+        variant="h6"
+        id={`${namespace}-table-title`}
+        className="OSCALSystemImplementationTableTitle"
+      >
         {namespace}
-      </OSCALSystemImplementationTableTitle>
+      </Typography>
       <TableContainer sx={{ maxHeight: "20em" }}>
         <Table aria-label="Components" sx={{ height: "max-content" }}>
-          <StyledTableHead>
+          <TableHead className="StyledTableHead">
             <TableRow>
-              <StyledHeaderTableCell>Name</StyledHeaderTableCell>
-              <StyledHeaderTableCell>Class</StyledHeaderTableCell>
-              <StyledHeaderTableCell>Value</StyledHeaderTableCell>
+              <TableCell className="StyledHeaderTableCell">Name</TableCell>
+              <TableCell className="StyledHeaderTableCell">Class</TableCell>
+              <TableCell className="StyledHeaderTableCell">Value</TableCell>
             </TableRow>
-          </StyledTableHead>
+          </TableHead>
           <TableBody>
             {
               // The index must be used because there is no combination of attributes of
