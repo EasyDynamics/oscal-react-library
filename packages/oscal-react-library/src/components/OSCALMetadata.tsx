@@ -49,7 +49,6 @@ import {
 } from "@easydynamics/oscal-types";
 import { OSCALRevisionsButton } from "./OSCALRevision";
 import { OSCALMetadataLabel } from "./OSCALMetadataCommon";
-import { NotSpecifiedTypography } from "./StyledTypography";
 import resolveLinkHref, { UriReferenceLookup } from "./oscal-utils/OSCALLinkUtils";
 import { Accordion, AccordionSummary, AccordionDetails } from "./StyedAccordion";
 import { OSCALPropertiesDialog } from "./OSCALProperties";
@@ -296,7 +295,7 @@ const MetadataInfoList: React.FC<MetadataInfoListProps> = (props) => {
   const { list, infoType, emptyMessage } = props;
 
   if (!list?.length) {
-    return <Typography> {emptyMessage} </Typography>;
+    return <Typography className="NotSpecified">{emptyMessage}</Typography>;
   }
 
   return (
@@ -491,7 +490,7 @@ const OSCALMetadataCard: React.FC<OSCALMetadataCardProps> = (props) => {
   const cardTitle = title ? (
     <OSCALMarkupLine>{title}</OSCALMarkupLine>
   ) : (
-    <NotSpecifiedTypography>Not Specified</NotSpecifiedTypography>
+    <Typography className="NotSpecified">Not Specified</Typography>
   );
 
   return (
@@ -693,7 +692,7 @@ const OSCALMetadataLocationUrls: React.FC<OSCALMetadataLocationUrlsProps> = (pro
           </TextWithIcon>
         ))
       ) : (
-        <Typography>No URL specified</Typography>
+        <Typography className="NotSpecified">No URL specified</Typography>
       )}
     </Stack>
   );

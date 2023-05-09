@@ -15,7 +15,6 @@ import Typography from "@mui/material/Typography";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { Property } from "@easydynamics/oscal-types";
 import { NIST_DEFAULT_NAMESPACE, namespaceOf } from "./oscal-utils/OSCALPropUtils";
-import { NotSpecifiedTypography } from "./StyledTypography";
 
 /**
  *  Helper to sort properties by their `name` field.
@@ -37,7 +36,7 @@ interface OSCALPropertyProps {
 }
 
 const OSCALProperty: React.FC<OSCALPropertyProps> = ({ property }) => {
-  const NO_INFORMATION = <NotSpecifiedTypography>Not Specified</NotSpecifiedTypography>;
+  const NO_INFORMATION = <Typography className="NotSpecified">Not Specified</Typography>;
 
   return (
     <StyledTooltip title={property.remarks ?? ""}>
