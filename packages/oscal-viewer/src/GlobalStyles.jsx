@@ -14,6 +14,39 @@ const globalStyles = (theme) => ({
       ","
     ),
   },
+  ".App": {
+    textAlign: "left",
+  },
+  ".App-logo": {
+    height: "40vmin",
+    pointerEvents: "none",
+  },
+  "@media (prefers-reduced-motion: no-preference)": {
+    ".App-logo": {
+      animation: "App-logo-spin infinite 20s linear",
+    },
+  },
+  ".App-header": {
+    backgroundColor: "#999999",
+    minHeight: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "calc(10px + 2vmin)",
+    color: "white",
+  },
+  ".App-link": {
+    color: "#00BDE3",
+  },
+  "@keyframes App-logo-spin": {
+    from: {
+      transform: "rotate(0deg)",
+    },
+    to: {
+      transform: "rotate(360deg)",
+    },
+  },
   ".NotSpecified": {
     color: theme.palette.text.disabled,
   },

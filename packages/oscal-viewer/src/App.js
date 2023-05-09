@@ -1,4 +1,3 @@
-import "./App.css";
 import { styled, ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 import React, { createElement, useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
@@ -11,7 +10,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import CssBaseline from "@mui/material/CssBaseline";
 import ReactGA from "react-ga4";
 import { Route, Routes, Link as RouterLink, useLocation } from "react-router-dom";
 import Grid from "@mui/material/Grid";
@@ -229,7 +227,6 @@ function App() {
         rel="stylesheet"
       />
       <ThemeProvider theme={appTheme}>
-        <CssBaseline />
         <OSCALGlobalStyles theme={appTheme} />
         <div className="App">
           <AppBar position="static">
