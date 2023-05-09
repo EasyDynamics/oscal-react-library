@@ -218,7 +218,9 @@ function BackMatterResource(props: BackMatterResourceProps) {
                 properties={resource?.props}
                 title={
                   resource?.title ?? (
-                    <Typography className="NotSpecified" component="span">Resource</Typography>
+                    <Typography className="NotSpecified" component="span">
+                      Resource
+                    </Typography>
                   )
                 }
               />

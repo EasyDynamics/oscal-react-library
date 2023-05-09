@@ -25,7 +25,7 @@ export interface OSCALRevisionProps {
 
 export const OSCALRevision: React.FC<OSCALRevisionProps> = (props) => {
   const { revision } = props;
-  const NO_INFORMATION =  <Typography className="NotSpecified">Not Specified</Typography>
+  const NO_INFORMATION = <Typography className="NotSpecified">Not Specified</Typography>;
 
   return (
     <StyledTableRow>
