@@ -20,6 +20,7 @@ import {
 import { Property } from "@easydynamics/oscal-types";
 import { NIST_DEFAULT_NAMESPACE, namespaceOf } from "./oscal-utils/OSCALPropUtils";
 import { NotSpecifiedTypography } from "./StyledTypography";
+import { groupBy } from "../utils";
 
 /**
  *  Helper to sort properties by their `name` field.
@@ -116,13 +117,9 @@ export const OSCALPropertiesDialog: React.FC<OSCALPropertiesDialogProps> = ({
 }) => {
   const [open, setOpen] = React.useState(false);
 
-  const namespaceToProps: Record<string, Property[]> = {};
-  for (const prop of properties ?? []) {
-    const ns = namespaceOf(prop.ns);
-    namespaceToProps[ns] ??= [];
-    namespaceToProps[ns].push(prop);
-  }
-  const { [NIST_DEFAULT_NAMESPACE]: nist, ...thirdParties } = namespaceToProps;
+  const { [NIST_DEFAULT_NAMESPACE]: nist, ...thirdParties } = groupBy(properties ?? [], (prop) =>
+    namespaceOf(prop.ns)
+  );
 
   const handleOpen = () => {
     setOpen(true);
