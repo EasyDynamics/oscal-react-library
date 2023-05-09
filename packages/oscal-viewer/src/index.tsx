@@ -5,8 +5,11 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
-const root = createRoot(document.getElementById("root")!);
-root.render(
+const root = document.getElementById("root");
+if (!root) {
+  throw new Error("No root element");
+}
+createRoot(root).render(
   <React.StrictMode>
     <BrowserRouter>
       <App />

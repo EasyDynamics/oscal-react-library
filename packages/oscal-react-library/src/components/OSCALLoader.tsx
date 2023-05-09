@@ -263,16 +263,6 @@ export default function OSCALLoader(props: OSCALLoaderProps): ReactElement {
     }
   }, [oscalObjectUuid]);
 
-  // Note: the empty deps array [] means
-  // this useEffect will run once
-  // similar to componentDidMount()
-  useEffect(
-    () => () => {
-      unmounted.current = true;
-    },
-    []
-  );
-
   useLayoutEffect(() => {
     if (oscalObjectUuid) {
       setIsLoaded(true);
@@ -378,7 +368,7 @@ export default function OSCALLoader(props: OSCALLoaderProps): ReactElement {
       {form}
       <ErrorBoundary
         FallbackComponent={BasicError}
-        onResetKeysChange={() => {
+        onReset={() => {
           setError(null);
         }}
         onError={() => {
