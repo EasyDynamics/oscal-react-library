@@ -70,3 +70,30 @@ jobs:
         with:
           name: oscal-viewer
           path: packages/oscal-viewer/build
+  build-storybook:
+    name: Build Storybook site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: "npm"
+      - name: Setup pages
+        uses: actions/configure-pages@v3
+      - name: Globally update npm
+        run: npm install -g npm@latest
+      - name: Install dependencies
+        run: npm ci
+      - name: Build library's dependencies
+        run: npx lerna exec --include-dependencies --scope '@easydynamics/oscal-react-library' -- npm run build
+      - name: Build Storybook
+        run: npm run build-storybook
+        working-directory: packages/oscal-react-library
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: packages/oscal-react-library/storybook-static
+          retention-days: "7"
