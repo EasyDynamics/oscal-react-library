@@ -6,7 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import OSCALControlLabel from "./OSCALControlLabel";
-import OSCALControlPart from "./OSCALControlPart";
+import OSCALControlPart, { partNameToFriendlyName } from "./OSCALControlPart";
 import OSCALControlModification from "./OSCALControlModification";
 import { AnchorLinkProps, OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
@@ -22,6 +22,8 @@ import {
 } from "@easydynamics/oscal-types";
 import { EditableFieldProps } from "./OSCALEditableTextField";
 import { Stack } from "@mui/material";
+import { groupBy } from "../utils";
+import { Accordion, AccordionSummary, AccordionDetails } from "./StyedAccordion";
 
 interface ControlListOptions {
   childLevel: number;
@@ -73,6 +75,11 @@ const ControlsList: React.FC<ControlsListProps> = (props) => {
     urlFragment,
     fragmentPrefix,
   } = props;
+  // Per the documentation, there should be at most one overview and exactly one statement;
+  // however, this is not strictly enforced by constraint validation. Even if it was, it would
+  // be extremely awkward (or impossible) to represent that in the type definition. For _display_
+  // purposes _only_ we allow multiple overview and statement parts (or 0...).
+  const { overview, statement, ...otherParts } = groupBy(control.parts ?? [], (part) => part.name);
   return (
     <Box
       sx={[
@@ -82,23 +89,78 @@ const ControlsList: React.FC<ControlsListProps> = (props) => {
         }),
       ]}
     >
-      {control.parts?.map((part, index) => (
-        <OSCALControlPart
-          componentId={componentId}
-          control={control}
-          controlId={control.id}
-          implementedRequirement={implementedRequirement}
-          isEditable={isEditable}
-          key={part.id ?? `part-${index}`}
-          modificationAlters={modificationAlters}
-          modificationSetParameters={modificationSetParameters}
-          onRestError={onRestError}
-          onRestSuccess={onRestSuccess}
-          parameters={control.params}
-          part={part}
-          partialRestData={partialRestData}
-        />
-      ))}
+      <Box sx={{ paddingBottom: "1em" }}>
+        {overview?.map((part, index) => (
+          <OSCALControlPart
+            componentId={componentId}
+            control={control}
+            controlId={control.id}
+            implementedRequirement={implementedRequirement}
+            isEditable={isEditable}
+            key={part.id ?? `part-${index}`}
+            modificationAlters={modificationAlters}
+            modificationSetParameters={modificationSetParameters}
+            onRestError={onRestError}
+            onRestSuccess={onRestSuccess}
+            parameters={control.params}
+            part={part}
+            partialRestData={partialRestData}
+          />
+        ))}
+        {statement?.map((part, index) => (
+          <OSCALControlPart
+            componentId={componentId}
+            control={control}
+            controlId={control.id}
+            implementedRequirement={implementedRequirement}
+            isEditable={isEditable}
+            key={part.id ?? `part-${index}`}
+            modificationAlters={modificationAlters}
+            modificationSetParameters={modificationSetParameters}
+            onRestError={onRestError}
+            onRestSuccess={onRestSuccess}
+            parameters={control.params}
+            part={part}
+            partialRestData={partialRestData}
+          />
+        ))}
+      </Box>
+
+      <Box sx={{ paddingBottom: "1em" }}>
+        {(Object.entries(otherParts) ?? []).map(([partName, parts]) => (
+          <Accordion key={partName}>
+            <AccordionSummary>
+              {
+                // This can be cleaned up significantly if OSCALControlPart is refactored to
+                // use TypeScript (all the types here can go away).
+                ((partNameToFriendlyName as Record<string, string>)[partName] as
+                  | string
+                  | undefined) ?? partName
+              }
+            </AccordionSummary>
+            <AccordionDetails>
+              {parts.map((part, idx) => (
+                <OSCALControlPart
+                  key={part.id ?? `part-${idx}`}
+                  componentId={componentId}
+                  control={control}
+                  controlId={control.id}
+                  implementedRequirement={implementedRequirement}
+                  isEditable={isEditable}
+                  modificationAlters={modificationAlters}
+                  modificationSetParameters={modificationSetParameters}
+                  onRestError={onRestError}
+                  onRestSuccess={onRestSuccess}
+                  parameters={control.params}
+                  part={part}
+                  partialRestData={partialRestData}
+                />
+              ))}
+            </AccordionDetails>
+          </Accordion>
+        ))}
+      </Box>
+
       {control.controls?.map((listControl) => (
         <OSCALControl
           childLevel={(childLevel ?? 0) + 1}
@@ -199,10 +261,11 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
                   style={childLevel ? { fontSize: "1.1rem" } : undefined}
                 >
                   <OSCALControlLabel component="span" label={label} id={control.id} />{" "}
-                  {control.title} {modificationDisplay}
+                  {control.title}
                 </Typography>
               </OSCALAnchorLinkHeader>
               <Box>
+                {modificationDisplay}
                 <OSCALPropertiesDialog
                   properties={control.props}
                   title={
