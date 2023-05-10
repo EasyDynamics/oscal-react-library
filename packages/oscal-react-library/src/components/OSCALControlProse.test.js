@@ -21,54 +21,45 @@ import { sspRestData } from "../test-data/SystemData";
 const labelTestData = "label-1";
 const labelTestDataDecimal = "label-1.1";
 
-function proseParamLabelsRenderer() {
-  render(
-    <OSCALReplacedProseWithParameterLabel
-      implementedRequirement={controlImplTestData["implemented-requirements"][0]}
-      label={labelTestData}
-      prose={controlProseTestData}
-      parameters={exampleParams}
-      modificationSetParameters={exampleModificationSetParameters}
-    />
-  );
-}
+describe("OSCALControlProse", () => {
+  test("displays parameter labels", async () => {
+    render(
+      <OSCALReplacedProseWithParameterLabel
+        implementedRequirement={controlImplTestData["implemented-requirements"][0]}
+        label={labelTestData}
+        prose={controlProseTestData}
+        parameters={exampleParams}
+        modificationSetParameters={exampleModificationSetParameters}
+      />
+    );
 
-function testOSCALControlProseParamLabels(parentElementName, renderer) {
-  test(`${parentElementName} displays parameter labels`, async () => {
-    renderer();
     const result = await screen.findByText("< control 1 label >");
     fireEvent.mouseOver(result);
     expect(await screen.findByText("some constraint")).toBeVisible();
     expect(await screen.findByText("param 3 value")).toBeVisible();
   });
-}
+});
 
-testOSCALControlProseParamLabels("OSCALControlProse", proseParamLabelsRenderer);
+describe("OSCALControlProse with parameter values editing", () => {
+  test("displays default description and parameter inputs", async () => {
+    render(
+      <OSCALReplacedProseWithByComponentParameterValue
+        label={labelTestData}
+        prose={controlProseTestData}
+        parameters={exampleParams}
+        implementedRequirement={controlImplTestData["implemented-requirements"][0]}
+        statementId="control-1_smt.a"
+        componentId="component-1"
+        modificationSetParameters={exampleModificationSetParameters}
+        isEditable
+        partialRestData={sspRestData}
+      />
+    );
 
-function proseParamValuesEditingRenderer() {
-  render(
-    <OSCALReplacedProseWithByComponentParameterValue
-      label={labelTestData}
-      prose={controlProseTestData}
-      parameters={exampleParams}
-      implementedRequirement={controlImplTestData["implemented-requirements"][0]}
-      statementId="control-1_smt.a"
-      componentId="component-1"
-      modificationSetParameters={exampleModificationSetParameters}
-      isEditable
-      partialRestData={sspRestData}
-    />
-  );
-}
-
-function testOSCALControlProseEditing(parentElementName, renderer) {
-  test(`${parentElementName} displays default description and parameter inputs`, async () => {
-    renderer();
-    screen
-      .getByRole("button", {
-        name: "edit-bycomponent-component-1-statement-control-1_smt.a",
-      })
-      .click();
+    const button = screen.getByRole("button", {
+      name: "edit-bycomponent-component-1-statement-control-1_smt.a",
+    });
+    fireEvent.click(button);
 
     const descriptionTextField = screen.getByLabelText("Description");
     const paramValueTextField = screen.getByLabelText("control-1_prm_1");
@@ -77,86 +68,105 @@ function testOSCALControlProseEditing(parentElementName, renderer) {
     expect(paramValueTextField.value).toBe("control 1 / component 1 / parameter 1 value");
   });
 
-  test(`${parentElementName} handles edit with just description edit and keeps placeholders`, async () => {
-    renderer();
-    screen
-      .getByRole("button", {
-        name: "edit-bycomponent-component-1-statement-control-1_smt.a",
-      })
-      .click();
+  test("handles edit with just description edit and keeps placeholders", async () => {
+    render(
+      <OSCALReplacedProseWithByComponentParameterValue
+        label={labelTestData}
+        prose={controlProseTestData}
+        parameters={exampleParams}
+        implementedRequirement={controlImplTestData["implemented-requirements"][0]}
+        statementId="control-1_smt.a"
+        componentId="component-1"
+        modificationSetParameters={exampleModificationSetParameters}
+        isEditable
+        partialRestData={sspRestData}
+      />
+    );
+
+    const editButton = screen.getByRole("button", {
+      name: "edit-bycomponent-component-1-statement-control-1_smt.a",
+    });
+    fireEvent.click(editButton);
 
     const descriptionTextField = screen.getByLabelText("Description");
     const paramValueTextField = screen.getByLabelText("control-1_prm_1");
+
     fireEvent.change(descriptionTextField, {
       target: { value: "Test Description" },
     });
-    screen
-      .getByRole("button", {
-        name: "save-control-1_smt.a",
-      })
-      .click();
+
+    const saveButton = screen.getByRole("button", {
+      name: "save-control-1_smt.a",
+    });
+    fireEvent.click(saveButton);
+
     expect(descriptionTextField.value).toBe("Test Description");
 
     screen.getByLabelText("control-1_prm_1");
     expect(paramValueTextField.value).toBe("control 1 / component 1 / parameter 1 value");
   });
 
-  test(`${parentElementName} saves changes to controller name and description values`, async () => {
-    renderer();
-    screen
-      .getByRole("button", {
-        name: "edit-bycomponent-component-1-statement-control-1_smt.a",
-      })
-      .click();
+  test("saves changes to controller name and description values", async () => {
+    render(
+      <OSCALReplacedProseWithByComponentParameterValue
+        label={labelTestData}
+        prose={controlProseTestData}
+        parameters={exampleParams}
+        implementedRequirement={controlImplTestData["implemented-requirements"][0]}
+        statementId="control-1_smt.a"
+        componentId="component-1"
+        modificationSetParameters={exampleModificationSetParameters}
+        isEditable
+        partialRestData={sspRestData}
+      />
+    );
+
+    const editButton = screen.getByRole("button", {
+      name: "edit-bycomponent-component-1-statement-control-1_smt.a",
+    });
+
+    fireEvent.click(editButton);
 
     const descriptionTextField = screen.getByLabelText("Description");
     const paramValueTextField = screen.getByLabelText("control-1_prm_1");
+
     fireEvent.change(descriptionTextField, {
       target: { value: "Test Description" },
     });
     fireEvent.change(paramValueTextField, {
       target: { value: "Test Control Name" },
     });
-    screen
-      .getByRole("button", {
-        name: "save-control-1_smt.a",
-      })
-      .click();
+
+    const saveButton = screen.getByRole("button", {
+      name: "save-control-1_smt.a",
+    });
+    fireEvent.click(saveButton);
 
     expect(descriptionTextField.value).toBe("Test Description");
     expect(paramValueTextField.value).toBe("Test Control Name");
   });
-}
+});
 
-testOSCALControlProseEditing(
-  "OSCALReplacedProseWithByComponentParameterValue",
-  proseParamValuesEditingRenderer
-);
+describe("OSCALReplacedProse With ByComponent Parameter With Decimal Value", () => {
+  test("displays default description and parameter inputs", async () => {
+    render(
+      <OSCALReplacedProseWithByComponentParameterValue
+        label={labelTestDataDecimal}
+        prose={controlProseDecimalTestData}
+        parameters={exampleDecimalParams}
+        implementedRequirement={controlImplWithDecSmtTestData["implemented-requirements"][0]}
+        statementId="control-1.1_smt.a"
+        componentId="component-1.1"
+        modificationSetParameters={exampleModificationSetParametersDecimal}
+        isEditable
+        partialRestData={sspRestData}
+      />
+    );
 
-function proseDecimalParamValuesEditingRenderer() {
-  render(
-    <OSCALReplacedProseWithByComponentParameterValue
-      label={labelTestDataDecimal}
-      prose={controlProseDecimalTestData}
-      parameters={exampleDecimalParams}
-      implementedRequirement={controlImplWithDecSmtTestData["implemented-requirements"][0]}
-      statementId="control-1.1_smt.a"
-      componentId="component-1.1"
-      modificationSetParameters={exampleModificationSetParametersDecimal}
-      isEditable
-      partialRestData={sspRestData}
-    />
-  );
-}
-
-function testOSCALControlDecimalProseEditing(parentElementName, renderer) {
-  test(`${parentElementName} displays default description and parameter inputs`, async () => {
-    renderer();
-    screen
-      .getByRole("button", {
-        name: "edit-bycomponent-component-1.1-statement-control-1.1_smt.a",
-      })
-      .click();
+    const editButton = screen.getByRole("button", {
+      name: "edit-bycomponent-component-1.1-statement-control-1.1_smt.a",
+    });
+    fireEvent.click(editButton);
 
     const descriptionTextField = screen.getByLabelText("Description");
     const paramValueTextField = screen.getByLabelText("control-1.1_prm_1");
@@ -165,37 +175,63 @@ function testOSCALControlDecimalProseEditing(parentElementName, renderer) {
     expect(paramValueTextField.value).toBe("control 1.1 / component 1.1 / parameter 1 value");
   });
 
-  test(`${parentElementName} handles edit with just description edit and keeps placeholders`, async () => {
-    renderer();
-    screen
-      .getByRole("button", {
-        name: "edit-bycomponent-component-1.1-statement-control-1.1_smt.a",
-      })
-      .click();
+  test("handles edit with just description edit and keeps placeholders", async () => {
+    render(
+      <OSCALReplacedProseWithByComponentParameterValue
+        label={labelTestDataDecimal}
+        prose={controlProseDecimalTestData}
+        parameters={exampleDecimalParams}
+        implementedRequirement={controlImplWithDecSmtTestData["implemented-requirements"][0]}
+        statementId="control-1.1_smt.a"
+        componentId="component-1.1"
+        modificationSetParameters={exampleModificationSetParametersDecimal}
+        isEditable
+        partialRestData={sspRestData}
+      />
+    );
+
+    const editButton = screen.getByRole("button", {
+      name: "edit-bycomponent-component-1.1-statement-control-1.1_smt.a",
+    });
+    fireEvent.click(editButton);
 
     const descriptionTextField = screen.getByLabelText("Description");
     const paramValueTextField = screen.getByLabelText("control-1.1_prm_1");
+
     fireEvent.change(descriptionTextField, {
       target: { value: "Test Description" },
     });
-    screen
-      .getByRole("button", {
-        name: "save-control-1.1_smt.a",
-      })
-      .click();
+
+    const saveButton = screen.getByRole("button", {
+      name: "save-control-1.1_smt.a",
+    });
+    fireEvent.click(saveButton);
+
     expect(descriptionTextField.value).toBe("Test Description");
 
     screen.getByLabelText("control-1.1_prm_1");
     expect(paramValueTextField.value).toBe("control 1.1 / component 1.1 / parameter 1 value");
   });
 
-  test(`${parentElementName} saves changes to controller name and description values`, async () => {
-    renderer();
-    screen
-      .getByRole("button", {
-        name: "edit-bycomponent-component-1.1-statement-control-1.1_smt.a",
-      })
-      .click();
+  test("saves changes to controller name and description values", async () => {
+    render(
+      <OSCALReplacedProseWithByComponentParameterValue
+        label={labelTestDataDecimal}
+        prose={controlProseDecimalTestData}
+        parameters={exampleDecimalParams}
+        implementedRequirement={controlImplWithDecSmtTestData["implemented-requirements"][0]}
+        statementId="control-1.1_smt.a"
+        componentId="component-1.1"
+        modificationSetParameters={exampleModificationSetParametersDecimal}
+        isEditable
+        partialRestData={sspRestData}
+      />
+    );
+
+    const editButton = screen.getByRole("button", {
+      name: "edit-bycomponent-component-1.1-statement-control-1.1_smt.a",
+    });
+    fireEvent.click(editButton);
 
     const descriptionTextField = screen.getByLabelText("Description");
     const paramValueTextField = screen.getByLabelText("control-1.1_prm_1");
@@ -205,18 +241,13 @@ function testOSCALControlDecimalProseEditing(parentElementName, renderer) {
     fireEvent.change(paramValueTextField, {
       target: { value: "Test Control Name" },
     });
-    screen
-      .getByRole("button", {
-        name: "save-control-1.1_smt.a",
-      })
-      .click();
+
+    const saveButton = screen.getByRole("button", {
+      name: "save-control-1.1_smt.a",
+    });
+    fireEvent.click(saveButton);
 
     expect(descriptionTextField.value).toBe("Test Description");
     expect(paramValueTextField.value).toBe("Test Control Name");
   });
-}
-
-testOSCALControlDecimalProseEditing(
-  "OSCALReplacedProseWithByComponentParameterWithDecimalValue",
-  proseDecimalParamValuesEditingRenderer
-);
+});
