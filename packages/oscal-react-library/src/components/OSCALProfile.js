@@ -24,7 +24,7 @@ export default function OSCALProfile(props) {
   const [error, setError] = useState(null);
   const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
-  const unmounted = useRef(false);
+  const isMounted = useRef(false);
 
   const partialRestData = {
     profile: {
@@ -34,23 +34,28 @@ export default function OSCALProfile(props) {
 
   // Resolved profile using oscal-utils. Provides error when failure.
   useEffect(() => {
+    isMounted.current = true;
     OSCALResolveProfile(
       props.profile,
       props.parentUrl,
       (profilesCatalogsTree) => {
-        setIsLoaded(true);
-        setInheritedProfilesAndCatalogs(profilesCatalogsTree);
-        props.onResolutionComplete();
+        if (isMounted.current) {
+          setIsLoaded(true);
+          setInheritedProfilesAndCatalogs(profilesCatalogsTree);
+          props.onResolutionComplete();
+        }
       },
       () => {
-        setError(error);
-        setIsLoaded(true);
-        props.onResolutionComplete();
+        if (isMounted.current) {
+          setError(error);
+          setIsLoaded(true);
+          props.onResolutionComplete();
+        }
       }
     );
 
     return () => {
-      unmounted.current = true;
+      isMounted.current = false;
     };
   }, []);
 
@@ -103,7 +108,7 @@ export default function OSCALProfile(props) {
       }
     >
       {isLoaded ? (
-        props.profile.resolvedControls.map((control) => (
+        props.profile.resolvedControls?.map((control) => (
           <OSCALControl
             control={control}
             excludeControlIds={excludeControlIds}
