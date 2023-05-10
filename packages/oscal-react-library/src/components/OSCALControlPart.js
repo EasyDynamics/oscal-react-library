@@ -6,6 +6,7 @@ import {
   OSCALReplacedProseWithParameterLabel,
 } from "./OSCALControlProse";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
+import { Typography } from "@mui/material";
 
 const OSCALControlPartWrapper = styled("div", {
   shouldForwardProp: (prop) => !["partName", "ownerState", "theme", "sx", "as"].includes(prop),
@@ -34,6 +35,11 @@ export const partNameToFriendlyName = {
 export default function OSCALControlPart(props) {
   const partLabel = propWithName(props.part?.props, "label")?.value;
 
+  const position = props?.modificationAlters
+    ?.find((item) => item["control-id"] === props.controlId)
+    ?.adds?.flatMap((item) => item["position"])
+    .filter((part) => part)[0];
+
   let modificationDisplay;
   if (props.modificationAlters) {
     modificationDisplay = (
@@ -47,6 +53,26 @@ export default function OSCALControlPart(props) {
 
   let replacedProse;
   if (props.implementedRequirement) {
+    if (position === "before") {
+      replacedProse = (
+        <Typography>
+          {modificationDisplay}
+          <OSCALReplacedProseWithByComponentParameterValue
+            label={partLabel}
+            prose={props.part.prose}
+            parameters={props.parameters}
+            implementedRequirement={props.implementedRequirement}
+            statementId={props.part.id}
+            componentId={props.componentId}
+            modificationSetParameters={props.modificationSetParameters}
+            isEditable={props.isEditable}
+            onRestSuccess={props.onRestSuccess}
+            onRestError={props.onRestError}
+            partialRestData={props.partialRestData}
+          />
+        </Typography>
+      );
+    }
     replacedProse = (
       <OSCALReplacedProseWithByComponentParameterValue
         label={partLabel}
@@ -64,6 +90,20 @@ export default function OSCALControlPart(props) {
       />
     );
   } else {
+    if (position === "before") {
+      replacedProse = (
+        <Typography>
+          {modificationDisplay}
+          <OSCALReplacedProseWithParameterLabel
+            label={partLabel}
+            prose={props.part.prose}
+            parameters={props.parameters}
+            modificationSetParameters={props.modificationSetParameters}
+            isImplemented
+          />
+        </Typography>
+      );
+    }
     replacedProse = (
       <OSCALReplacedProseWithParameterLabel
         label={partLabel}
