@@ -38,18 +38,14 @@ export default function OSCALProfile(props) {
       props.profile,
       props.parentUrl,
       (profilesCatalogsTree) => {
-        if (!unmounted.current) {
-          setIsLoaded(true);
-          setInheritedProfilesAndCatalogs(profilesCatalogsTree);
-          props.onResolutionComplete();
-        }
+        setIsLoaded(true);
+        setInheritedProfilesAndCatalogs(profilesCatalogsTree);
+        props.onResolutionComplete();
       },
       () => {
-        if (!unmounted.current) {
-          setError(error);
-          setIsLoaded(true);
-          props.onResolutionComplete();
-        }
+        setError(error);
+        setIsLoaded(true);
+        props.onResolutionComplete();
       }
     );
 
