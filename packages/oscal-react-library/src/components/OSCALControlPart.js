@@ -35,10 +35,9 @@ export const partNameToFriendlyName = {
 export default function OSCALControlPart(props) {
   const partLabel = propWithName(props.part?.props, "label")?.value;
 
-  const position = props?.modificationAlters
+  const partAddPosition = props?.modificationAlters
     ?.find((item) => item["control-id"] === props.controlId)
-    ?.adds?.flatMap((item) => item["position"])
-    .filter((part) => part)[0];
+    ?.adds?.find((item) => item["by-id"] === props.part.id)?.position;
 
   let modificationDisplay;
   if (props.modificationAlters) {
@@ -53,7 +52,23 @@ export default function OSCALControlPart(props) {
 
   let replacedProse;
   if (props.implementedRequirement) {
-    if (position === "before") {
+    replacedProse = (
+      <OSCALReplacedProseWithByComponentParameterValue
+        label={partLabel}
+        prose={props.part.prose}
+        parameters={props.parameters}
+        implementedRequirement={props.implementedRequirement}
+        statementId={props.part.id}
+        componentId={props.componentId}
+        modificationSetParameters={props.modificationSetParameters}
+        modificationDisplay={modificationDisplay}
+        isEditable={props.isEditable}
+        onRestSuccess={props.onRestSuccess}
+        onRestError={props.onRestError}
+        partialRestData={props.partialRestData}
+      />
+    );
+    if (partAddPosition === "before") {
       replacedProse = (
         <Typography>
           {modificationDisplay}
@@ -73,24 +88,37 @@ export default function OSCALControlPart(props) {
         </Typography>
       );
     }
+    if (partAddPosition === "ending") {
+      replacedProse = (
+        <Typography>
+          <OSCALReplacedProseWithByComponentParameterValue
+            label={partLabel}
+            prose={props.part.prose}
+            parameters={props.parameters}
+            implementedRequirement={props.implementedRequirement}
+            statementId={props.part.id}
+            componentId={props.componentId}
+            modificationSetParameters={props.modificationSetParameters}
+            isEditable={props.isEditable}
+            onRestSuccess={props.onRestSuccess}
+            onRestError={props.onRestError}
+            partialRestData={props.partialRestData}
+          />
+        </Typography>
+      );
+    }
+  } else {
     replacedProse = (
-      <OSCALReplacedProseWithByComponentParameterValue
+      <OSCALReplacedProseWithParameterLabel
         label={partLabel}
         prose={props.part.prose}
         parameters={props.parameters}
-        implementedRequirement={props.implementedRequirement}
-        statementId={props.part.id}
-        componentId={props.componentId}
         modificationSetParameters={props.modificationSetParameters}
         modificationDisplay={modificationDisplay}
-        isEditable={props.isEditable}
-        onRestSuccess={props.onRestSuccess}
-        onRestError={props.onRestError}
-        partialRestData={props.partialRestData}
+        isImplemented
       />
     );
-  } else {
-    if (position === "before") {
+    if (partAddPosition === "before") {
       replacedProse = (
         <Typography>
           {modificationDisplay}
@@ -104,16 +132,19 @@ export default function OSCALControlPart(props) {
         </Typography>
       );
     }
-    replacedProse = (
-      <OSCALReplacedProseWithParameterLabel
-        label={partLabel}
-        prose={props.part.prose}
-        parameters={props.parameters}
-        modificationSetParameters={props.modificationSetParameters}
-        modificationDisplay={modificationDisplay}
-        isImplemented
-      />
-    );
+    if (partAddPosition === "ending") {
+      replacedProse = (
+        <Typography>
+          <OSCALReplacedProseWithParameterLabel
+            label={partLabel}
+            prose={props.part.prose}
+            parameters={props.parameters}
+            modificationSetParameters={props.modificationSetParameters}
+            isImplemented
+          />
+        </Typography>
+      );
+    }
   }
   const controlId = modificationDisplay?.props?.controlId ?? "";
   const controlPartId = modificationDisplay?.props?.controlPartId ?? "";
@@ -157,7 +188,31 @@ export default function OSCALControlPart(props) {
       </OSCALControlRemovedPartWrapper>
     );
   }
-
+  if (partAddPosition === "ending") {
+    return (
+      <OSCALControlPartWrapper ownerState partName={props.part.name}>
+        {replacedProse}
+        {props.part.parts?.map((part) => (
+          <OSCALControlPart
+            part={part}
+            control={props.control}
+            controlId={props.controlId ?? props.control.id}
+            parameters={props.parameters}
+            implementedRequirement={props.implementedRequirement}
+            componentId={props.componentId}
+            modificationAlters={props.modificationAlters}
+            modificationSetParameters={props.modificationSetParameters}
+            key={part.id ?? part.name}
+            isEditable={props.isEditable}
+            onRestSuccess={props.onRestSuccess}
+            onRestError={props.onRestError}
+            partialRestData={props.partialRestData}
+          />
+        ))}
+        {modificationDisplay}
+      </OSCALControlPartWrapper>
+    );
+  }
   return (
     <OSCALControlPartWrapper ownerState partName={props.part.name}>
       {replacedProse}
