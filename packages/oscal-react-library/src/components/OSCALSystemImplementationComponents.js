@@ -1,11 +1,9 @@
 import React from "react";
-import Typography from "@mui/material/Typography";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
-import StyledTooltip from "./OSCALStyledTooltip";
 import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
 import {
   OSCALSystemImplementationTableTitle,
@@ -16,6 +14,8 @@ import {
 } from "./OSCALSystemImplementationTableStyles";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import PropertiesTable from "./OSCALSystemImplementationPropertiesTable";
+import { HoverablePopover } from "./HoverablePopover";
+import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 export default function OSCALSystemImplementationComponents(props) {
   return (
@@ -38,9 +38,11 @@ export default function OSCALSystemImplementationComponents(props) {
             {props.components.map((component) => (
               <StyledTableRow key={component.uuid}>
                 <ComponentTableCell component="th" scope="row">
-                  <StyledTooltip title={component.description}>
-                    <Typography>{component.title}</Typography>
-                  </StyledTooltip>
+                  <HoverablePopover
+                    popoverContent={<OSCALMarkupLine>{component.title}</OSCALMarkupLine>}
+                  >
+                    <OSCALMarkupMultiLine>{component.description}</OSCALMarkupMultiLine>
+                  </HoverablePopover>
                 </ComponentTableCell>
                 <TableCell>{component.type}</TableCell>
                 <TableCell>{component.status?.state}</TableCell>

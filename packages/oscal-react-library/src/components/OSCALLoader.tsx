@@ -378,7 +378,7 @@ export default function OSCALLoader(props: OSCALLoaderProps): ReactElement {
       {form}
       <ErrorBoundary
         FallbackComponent={BasicError}
-        onResetKeysChange={() => {
+        onReset={() => {
           setError(null);
         }}
         onError={() => {
