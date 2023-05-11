@@ -68,7 +68,6 @@ export const OSCALCatalog: React.FC<OSCALCatalogProps> = ({
   parentUrl,
 }) => {
   useEffect(onResolutionComplete);
-
   const partialRestData = {
     catalog: {
       uuid: catalog.uuid,
