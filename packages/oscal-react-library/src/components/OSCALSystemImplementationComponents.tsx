@@ -16,8 +16,16 @@ import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import PropertiesTable from "./OSCALSystemImplementationPropertiesTable";
 import { MarkupMultiLinePopover } from "./HoverablePopover";
 import { OSCALMarkupLine } from "./OSCALMarkupProse";
+import { AssessmentAssetsComponent, PartyOrganizationOrPerson } from "@easydynamics/oscal-types";
 
-export default function OSCALSystemImplementationComponents(props) {
+export interface OSCALSystemImplementationComponentsProps {
+  components: AssessmentAssetsComponent[];
+  parties: PartyOrganizationOrPerson[];
+}
+
+export const OSCALSystemImplementationComponents: React.FC<
+  OSCALSystemImplementationComponentsProps
+> = (props) => {
   return (
     <>
       <OSCALSystemImplementationTableTitle variant="h6" id="tableTitle">
@@ -60,4 +68,4 @@ export default function OSCALSystemImplementationComponents(props) {
       </TableContainer>
     </>
   );
-}
+};

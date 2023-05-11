@@ -1,7 +1,7 @@
 import React from "react";
 import { systemImplementationTestData } from "../test-data/SystemData";
 import { exampleParties } from "../test-data/CommonData";
-import OSCALSystemImplementationComponents from "../components/OSCALSystemImplementationComponents";
+import { OSCALSystemImplementationComponents } from "../components/OSCALSystemImplementationComponents";
 
 export default {
   title: "Components/System Implementation Components",
