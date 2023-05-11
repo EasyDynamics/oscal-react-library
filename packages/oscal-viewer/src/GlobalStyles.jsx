@@ -83,12 +83,6 @@ const globalStyles = (theme) => ({
   },
 });
 
-export function OSCALGlobalStyles(props) {
-  const { theme } = props;
-  console.log(theme.palette.primary.main);
-  return (
-    <>
-      <GlobalStyles styles={globalStyles(theme)} />
-    </>
-  );
-}
+export const OSCALGlobalStyles = ({ theme }) => {
+  return <GlobalStyles styles={globalStyles(theme)} />;
+};
