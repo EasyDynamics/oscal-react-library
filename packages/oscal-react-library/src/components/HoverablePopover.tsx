@@ -1,13 +1,15 @@
 import { Box, Popover } from "@mui/material";
 import React from "react";
+import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 export interface HoverablePopoverProps {
   /**
    * The content of the popover.
    */
   popoverContent: React.ReactNode;
+
   /**
-   * Content to display on hover.
+   * Content to hover over.
    */
   children: React.ReactNode;
 }
@@ -34,7 +36,7 @@ export const HoverablePopover: React.FC<HoverablePopoverProps> = ({ popoverConte
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
       >
-        {popoverContent}
+        {children}
       </Box>
       <Popover
         open={open}
@@ -54,8 +56,35 @@ export const HoverablePopover: React.FC<HoverablePopoverProps> = ({ popoverConte
         onClose={handlePopoverClose}
         disableRestoreFocus
       >
-        <Box sx={{ padding: "1em" }}>{children}</Box>
+        <Box sx={{ padding: "1em" }}>{popoverContent}</Box>
       </Popover>
     </>
   );
+};
+
+export interface MarkupPopoverProps {
+  /**
+   * The markup multi line content of the popover.
+   */
+  popoverContent: string;
+
+  /**
+   * Content to hover over.
+   */
+  children: React.ReactNode;
+}
+
+export const MarkupMultiLinePopover: React.FC<MarkupPopoverProps> = ({
+  popoverContent,
+  children,
+}) => {
+  const markup = <OSCALMarkupMultiLine>{popoverContent}</OSCALMarkupMultiLine>;
+
+  return <HoverablePopover popoverContent={markup}>{children}</HoverablePopover>;
+};
+
+export const MarkupLinePopover: React.FC<MarkupPopoverProps> = ({ popoverContent, children }) => {
+  const markup = <OSCALMarkupLine>{popoverContent}</OSCALMarkupLine>;
+
+  return <HoverablePopover popoverContent={markup}>{children}</HoverablePopover>;
 };

@@ -14,8 +14,8 @@ import {
 } from "./OSCALSystemImplementationTableStyles";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import PropertiesTable from "./OSCALSystemImplementationPropertiesTable";
-import { HoverablePopover } from "./HoverablePopover";
-import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
+import { MarkupMultiLinePopover } from "./HoverablePopover";
+import { OSCALMarkupLine } from "./OSCALMarkupProse";
 
 export default function OSCALSystemImplementationComponents(props) {
   return (
@@ -38,11 +38,9 @@ export default function OSCALSystemImplementationComponents(props) {
             {props.components.map((component) => (
               <StyledTableRow key={component.uuid}>
                 <ComponentTableCell component="th" scope="row">
-                  <HoverablePopover
-                    popoverContent={<OSCALMarkupLine>{component.title}</OSCALMarkupLine>}
-                  >
-                    <OSCALMarkupMultiLine>{component.description}</OSCALMarkupMultiLine>
-                  </HoverablePopover>
+                  <MarkupMultiLinePopover popoverContent={component.description}>
+                    <OSCALMarkupLine>{component.title}</OSCALMarkupLine>
+                  </MarkupMultiLinePopover>
                 </ComponentTableCell>
                 <TableCell>{component.type}</TableCell>
                 <TableCell>{component.status?.state}</TableCell>
