@@ -21,11 +21,6 @@ const globalStyles = (theme) => ({
     height: "40vmin",
     pointerEvents: "none",
   },
-  "@media (prefers-reduced-motion: no-preference)": {
-    ".App-logo": {
-      animation: "App-logo-spin infinite 20s linear",
-    },
-  },
   ".App-header": {
     backgroundColor: "#999999",
     minHeight: "100vh",
@@ -38,14 +33,6 @@ const globalStyles = (theme) => ({
   },
   ".App-link": {
     color: "#00BDE3",
-  },
-  "@keyframes App-logo-spin": {
-    from: {
-      transform: "rotate(0deg)",
-    },
-    to: {
-      transform: "rotate(360deg)",
-    },
   },
   ".NotSpecified": {
     color: theme.palette.text.disabled,
