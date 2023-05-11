@@ -133,7 +133,6 @@ export default function OSCALControlImplementationImplReq(props) {
           <Grid item lg={9.5} sm={12}>
             {Object.values(props.components).map((component, index) => (
               <ComponentTabPanelScrollable value={value} index={index} key={component.uuid}>
-                <p>What?!</p>
                 <OSCALControl
                   control={getControlOrSubControl(
                     props.controls,
