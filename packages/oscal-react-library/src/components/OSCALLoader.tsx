@@ -109,7 +109,7 @@ export default function OSCALLoader(props: OSCALLoaderProps): ReactElement {
   const [hasDefaultUrl, setHasDefaultUrl] = useState(props.hasDefaultUrl);
   const [oscalData, setOscalData] = useState({} as OscalWithSource);
   const [editorIsVisible, setEditorIsVisible] = useState(true);
-  const unmounted = useRef(false);
+  const isMounted = useRef(false);
   const [error, setError] = useState(null as Error | null);
   const handleError = setError;
   // We "count" the number of times the reload button has been pressed (when active).
@@ -136,7 +136,7 @@ export default function OSCALLoader(props: OSCALLoaderProps): ReactElement {
       })
       .then((result) => Convert.toOscal(result))
       .then((oscalObj) => {
-        if (!unmounted.current) {
+        if (isMounted.current) {
           const source = Convert.oscalToJson(oscalObj);
           // TODO: Currently data is passed to components through modifying objects.
           // This approach should be revisited.
@@ -175,7 +175,7 @@ export default function OSCALLoader(props: OSCALLoaderProps): ReactElement {
         setIsResolutionComplete(false);
       },
       (result) => {
-        if (!unmounted.current) {
+        if (isMounted.current) {
           result.oscalSource = JSON.stringify(result, null, "\t");
           setOscalData(result);
           setIsLoaded(true);
@@ -239,7 +239,7 @@ export default function OSCALLoader(props: OSCALLoaderProps): ReactElement {
         setIsResolutionComplete(false);
       },
       (result) => {
-        if (!unmounted.current) {
+        if (isMounted.current) {
           result.oscalSource = JSON.stringify(result, null, "\t");
           setOscalData(result);
           setIsLoaded(true);
@@ -266,12 +266,12 @@ export default function OSCALLoader(props: OSCALLoaderProps): ReactElement {
   // Note: the empty deps array [] means
   // this useEffect will run once
   // similar to componentDidMount()
-  useEffect(
-    () => () => {
-      unmounted.current = true;
-    },
-    []
-  );
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   useLayoutEffect(() => {
     if (oscalObjectUuid) {
@@ -378,7 +378,7 @@ export default function OSCALLoader(props: OSCALLoaderProps): ReactElement {
       {form}
       <ErrorBoundary
         FallbackComponent={BasicError}
-        onResetKeysChange={() => {
+        onReset={() => {
           setError(null);
         }}
         onError={() => {

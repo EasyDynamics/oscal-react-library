@@ -12,7 +12,7 @@ export default function OSCALSsp(props) {
   const [error, setError] = useState(null);
   const [inheritedProfilesAndCatalogs, setInheritedProfilesAndCatalogs] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
-  const unmounted = useRef(false);
+  const isMounted = useRef(false);
 
   const ssp = props["system-security-plan"];
   const partialRestData = {
@@ -27,18 +27,19 @@ export default function OSCALSsp(props) {
   }
 
   useEffect(() => {
+    isMounted.current = true;
     OSCALSspResolveProfile(
       ssp,
       props.parentUrl,
       (profilesCatalogsTree) => {
-        if (!unmounted.current) {
+        if (isMounted.current) {
           setIsLoaded(true);
           setInheritedProfilesAndCatalogs(profilesCatalogsTree);
           props.onResolutionComplete();
         }
       },
       () => {
-        if (!unmounted.current) {
+        if (isMounted.current) {
           setError(error);
           setIsLoaded(true);
           props.onResolutionComplete();
@@ -47,7 +48,9 @@ export default function OSCALSsp(props) {
     );
 
     return () => {
-      unmounted.current = true;
+      return () => {
+        isMounted.current = false;
+      };
     };
   }, []);
 
