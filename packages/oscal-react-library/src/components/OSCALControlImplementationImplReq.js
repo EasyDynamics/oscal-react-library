@@ -93,7 +93,7 @@ function a11yProps(index) {
  * Creates the internal elements of Control Implementation.
  *
  * @param {object} props SSP properties
- * @returns The corresponding Control Implementation Reques
+ * @returns The corresponding Control Implementation
  */
 export default function OSCALControlImplementationImplReq(props) {
   const [value, setValue] = React.useState(0);
