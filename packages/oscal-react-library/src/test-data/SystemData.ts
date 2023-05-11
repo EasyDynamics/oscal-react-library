@@ -2,7 +2,7 @@ import { metadataTestData, responsibleRolesTestData } from "./CommonData";
 import { systemCharacteristicsDescriptionUrl, systemCharacteristicsInformationUrl } from "./Urls";
 import { localReferenceDiagram } from "./DiagramData";
 import { backMatterTestData } from "./BackMatterData";
-import { AssessmentAssetsComponent, PurpleState } from "@easydynamics/oscal-types";
+import { AssessmentAssetsComponent, ComponentStatusState } from "@easydynamics/oscal-types";
 
 export const inventoryItemsTestData = [
   {
@@ -65,7 +65,7 @@ export const componentsTestData: AssessmentAssetsComponent[] = [
     uuid: "component-1",
     description: "An example component.",
     status: {
-      state: PurpleState.OPERATIONAL,
+      state: ComponentStatusState.OPERATIONAL,
     },
     type: "software",
     props: [
