@@ -64,7 +64,7 @@ export function getRequestedUrl() {
   return new URLSearchParams(window.location.search).get("url");
 }
 
-type Renderer = (props: OSCALLoaderRendererProps) => ReactElement;
+type Renderer = React.FC<OSCALLoaderRendererProps>;
 
 type OscalWithSource = Oscal & { oscalSource?: string };
 
@@ -323,6 +323,7 @@ export default function OSCALLoader(props: OSCALLoaderProps): ReactElement {
       </Grid>
     );
   } else if (oscalUrl) {
+    console.log("WTF?!", JSON.stringify(oscalData));
     result = props.isRestMode ? (
       <Grid container pt={3}>
         <EditorToolbar>
@@ -346,7 +347,24 @@ export default function OSCALLoader(props: OSCALLoaderProps): ReactElement {
             <OSCALJsonEditor value={oscalData.oscalSource} onSave={handleRestPut} />
           </Box>
           <Box>
-            {props.renderer({
+            {Object.keys(oscalData).length
+              ? props.renderer({
+                  isRestMode: props.isRestMode,
+                  oscalData,
+                  oscalUrl,
+                  onResolutionComplete,
+                  handleFieldSave,
+                  handleRestSuccess,
+                  handleRestError: handleError,
+                })
+              : null}
+          </Box>
+        </EditorSplit>
+      </Grid>
+    ) : (
+      <>
+        {Object.keys(oscalData).length
+          ? props.renderer({
               isRestMode: props.isRestMode,
               oscalData,
               oscalUrl,
@@ -354,21 +372,8 @@ export default function OSCALLoader(props: OSCALLoaderProps): ReactElement {
               handleFieldSave,
               handleRestSuccess,
               handleRestError: handleError,
-            })}
-          </Box>
-        </EditorSplit>
-      </Grid>
-    ) : (
-      <>
-        {props.renderer({
-          isRestMode: props.isRestMode,
-          oscalData,
-          oscalUrl,
-          onResolutionComplete,
-          handleFieldSave,
-          handleRestSuccess,
-          handleRestError: handleError,
-        })}
+            })
+          : null}
       </>
     );
   }
