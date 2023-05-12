@@ -24,6 +24,7 @@ import { EditableFieldProps } from "./OSCALEditableTextField";
 import { Stack } from "@mui/material";
 import { groupBy } from "../utils";
 import { Accordion, AccordionSummary, AccordionDetails } from "./StyedAccordion";
+import { OSCALParamsDialog } from "./OSCALParam";
 
 interface ControlListOptions {
   childLevel: number;
@@ -266,6 +267,7 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
               </OSCALAnchorLinkHeader>
               <Box>
                 {modificationDisplay}
+                <OSCALParamsDialog params={control.params} />
                 <OSCALPropertiesDialog
                   properties={control.props}
                   title={
