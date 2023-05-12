@@ -323,7 +323,6 @@ export default function OSCALLoader(props: OSCALLoaderProps): ReactElement {
       </Grid>
     );
   } else if (oscalUrl) {
-    console.log("WTF?!", JSON.stringify(oscalData));
     result = props.isRestMode ? (
       <Grid container pt={3}>
         <EditorToolbar>
