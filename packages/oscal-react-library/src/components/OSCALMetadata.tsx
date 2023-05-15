@@ -13,6 +13,7 @@ import PlaceIcon from "@mui/icons-material/Place";
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
 import WorkIcon from "@mui/icons-material/Work";
 import { CardContent } from "@mui/material";
+import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -50,7 +51,7 @@ import {
 import { OSCALRevisionsButton } from "./OSCALRevision";
 import { OSCALMetadataLabel } from "./OSCALMetadataCommon";
 import resolveLinkHref, { UriReferenceLookup } from "./oscal-utils/OSCALLinkUtils";
-import { Accordion, AccordionSummary, AccordionDetails } from "./StyedAccordion";
+import { Accordion, AccordionSummary } from "./StyledAccordion";
 import { OSCALPropertiesDialog } from "./OSCALProperties";
 
 const OSCALMetadataSectionInfoHeader = styled(Typography)`
@@ -798,11 +799,11 @@ const OSCALMetadataFieldArea: React.FC<OSCALMetadataFieldAreaProps> = (props) =>
         </OSCALAnchorLinkHeader>
         <Typography sx={{ color: "text.secondary" }}>{summary}</Typography>
       </AccordionSummary>
-      <AccordionDetails>
+      <MuiAccordionDetails className="AccordionDetails">
         <Grid container spacing={2}>
           {children}
         </Grid>
-      </AccordionDetails>
+      </MuiAccordionDetails>
     </Accordion>
   );
 };

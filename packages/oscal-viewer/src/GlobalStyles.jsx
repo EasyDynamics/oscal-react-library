@@ -3,6 +3,7 @@ import { GlobalStyles } from "@mui/material";
 import { tableCellClasses } from "@mui/material/TableCell";
 
 const globalStyles = (theme) => ({
+  // Common HTML
   body: {
     margin: 0,
     padding: 0,
@@ -14,6 +15,8 @@ const globalStyles = (theme) => ({
       ","
     ),
   },
+
+  // App
   ".App": {
     textAlign: "left",
   },
@@ -37,6 +40,8 @@ const globalStyles = (theme) => ({
   ".NotSpecified": {
     color: theme.palette.text.disabled,
   },
+
+  // Table
   ".SmallTableCell": {
     textAlign: "right",
     padding: "0.75em 0.75em",
@@ -67,6 +72,33 @@ const globalStyles = (theme) => ({
     "&:nth-of-type(even)": {
       backgroundColor: theme.palette.action.hover,
     },
+  },
+
+  // Accordion
+  ".Accordion": {
+    border: `1px solid ${theme.palette.divider}`,
+    "&:not(:last-child)": {
+      borderBottom: 0,
+    },
+    "&:before": {
+      display: "none",
+    },
+  },
+  ".AccordionSummary": {
+    backgroundColor:
+      theme.palette.mode === "dark" ? "rgba(255, 255, 255, .05)" : "rgba(0, 0, 0, .03)",
+    fontSize: "0.9rem",
+    flexDirection: "row-reverse",
+    "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
+      transform: "rotate(90deg)",
+    },
+    "& .MuiAccordionSummary-content": {
+      marginLeft: theme.spacing(1),
+    },
+  },
+  ".AccordionDetails": {
+    padding: theme.spacing(2),
+    borderTop: "1px solid rgba(0, 0, 0, .125)",
   },
 });
 
