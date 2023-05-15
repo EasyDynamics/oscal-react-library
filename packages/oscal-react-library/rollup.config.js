@@ -25,14 +25,14 @@ export default {
     },
   ],
   plugins: [
+    resolve({ preferBuiltins: false, extensions: EXTENSIONS }),
+    peerDepsExternal(),
     postcss(),
     typescript({
       tsconfigOverride: {
         exclude: ["**/stories.*"],
       },
     }),
-    resolve({ preferBuiltins: false, extensions: EXTENSIONS }),
-    peerDepsExternal(),
     json(),
     commonjs({ include: /node_modules/ }),
     babel({

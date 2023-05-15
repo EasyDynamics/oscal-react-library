@@ -20,6 +20,7 @@ import { ReactElement } from "react";
 import { OSCALPropertiesDialog } from "./OSCALProperties";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import { NotSpecifiedTypography } from "./StyledTypography";
+import { getFriendlyDisplayOfMediaType } from "./oscal-utils/OSCALMediaTypeUtils";
 
 export const OSCALBackMatterCard = styled(Card)(
   ({ theme }) => `
@@ -256,7 +257,9 @@ function BackMatterResource(props: BackMatterResourceProps) {
                 href={getAbsoluteUrl(rlink.href, parentUrl)!}
                 target="_blank"
                 variant="outlined"
-              />
+              >
+                {getFriendlyDisplayOfMediaType(rlink)}
+              </Button>
             ))}
           </Typography>
         </CardContent>
