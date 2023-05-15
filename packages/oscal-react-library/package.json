@@ -73,6 +73,7 @@
     "@mui/system": "^5.12.3",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^24.1.0",
+    "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.0.2",
     "@storybook/addon-actions": "^7.0.8",
     "@storybook/addon-docs": "^7.0.8",

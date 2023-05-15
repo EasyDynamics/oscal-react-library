@@ -3,7 +3,7 @@ import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
-import Chip from "@mui/material/Chip";
+import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import { Typography } from "@mui/material";
@@ -249,16 +249,13 @@ function BackMatterResource(props: BackMatterResourceProps) {
           />
           <Typography>
             {resource.rlinks?.map((rlink) => (
-              <Chip
-                icon={<OpenInNewIcon />}
+              <Button
+                startIcon={<OpenInNewIcon />}
                 key={rlink.href}
-                label={getMediaType(rlink)}
-                component="a"
                 role="button"
-                href={getAbsoluteUrl(rlink.href, parentUrl)}
+                href={getAbsoluteUrl(rlink.href, parentUrl)!}
                 target="_blank"
                 variant="outlined"
-                clickable
               />
             ))}
           </Typography>
