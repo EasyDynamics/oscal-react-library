@@ -24,6 +24,7 @@ import { EditableFieldProps } from "./OSCALEditableTextField";
 import { Stack } from "@mui/material";
 import { groupBy } from "../utils";
 import { Accordion, AccordionSummary, AccordionDetails } from "./StyedAccordion";
+import { Position } from "@easydynamics/oscal-types";
 
 interface ControlListOptions {
   childLevel: number;
@@ -249,7 +250,7 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
   const label = propWithName(control.props, "label")?.value;
   const controlOrParentWithdrawn = withdrawn || isWithdrawn(control);
 
-  if (position === "after") {
+  if (position === Position.AFTER) {
     return showInList ? (
       <ControlsList {...props} withdrawn={controlOrParentWithdrawn} />
     ) : (
@@ -291,7 +292,7 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
     );
   }
 
-  if (position === "before") {
+  if (position === Position.BEFORE) {
     return showInList ? (
       <ControlsList {...props} withdrawn={controlOrParentWithdrawn} />
     ) : (
@@ -333,7 +334,7 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
     );
   }
 
-  if (position === "ending") {
+  if (position === Position.ENDING) {
     return showInList ? (
       <ControlsList {...props} withdrawn={controlOrParentWithdrawn} />
     ) : (

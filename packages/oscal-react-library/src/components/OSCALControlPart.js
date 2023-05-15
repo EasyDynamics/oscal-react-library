@@ -7,6 +7,7 @@ import {
 } from "./OSCALControlProse";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import { Typography } from "@mui/material";
+import { Position } from "@easydynamics/oscal-types";
 
 const OSCALControlPartWrapper = styled("div", {
   shouldForwardProp: (prop) => !["partName", "ownerState", "theme", "sx", "as"].includes(prop),
@@ -68,7 +69,7 @@ export default function OSCALControlPart(props) {
         partialRestData={props.partialRestData}
       />
     );
-    if (partAddPosition === "before") {
+    if (partAddPosition === Position.BEFORE) {
       replacedProse = (
         <Typography>
           {modificationDisplay}
@@ -88,7 +89,7 @@ export default function OSCALControlPart(props) {
         </Typography>
       );
     }
-    if (partAddPosition === "after") {
+    if (partAddPosition === Position.AFTER) {
       replacedProse = (
         <Typography>
           <OSCALReplacedProseWithByComponentParameterValue
@@ -108,7 +109,7 @@ export default function OSCALControlPart(props) {
         </Typography>
       );
     }
-    if (partAddPosition === "ending") {
+    if (partAddPosition === Position.ENDING) {
       replacedProse = (
         <Typography>
           <OSCALReplacedProseWithByComponentParameterValue
@@ -138,7 +139,7 @@ export default function OSCALControlPart(props) {
         isImplemented
       />
     );
-    if (partAddPosition === "before") {
+    if (partAddPosition === Position.BEFORE) {
       replacedProse = (
         <Typography>
           {modificationDisplay}
@@ -152,7 +153,7 @@ export default function OSCALControlPart(props) {
         </Typography>
       );
     }
-    if (partAddPosition === "after") {
+    if (partAddPosition === Position.AFTER) {
       replacedProse = (
         <Typography>
           <OSCALReplacedProseWithParameterLabel
@@ -166,7 +167,7 @@ export default function OSCALControlPart(props) {
         </Typography>
       );
     }
-    if (partAddPosition === "ending") {
+    if (partAddPosition === Position.ENDING) {
       replacedProse = (
         <Typography>
           <OSCALReplacedProseWithParameterLabel
@@ -222,7 +223,7 @@ export default function OSCALControlPart(props) {
       </OSCALControlRemovedPartWrapper>
     );
   }
-  if (partAddPosition === "ending") {
+  if (partAddPosition === Position.ENDING) {
     return (
       <OSCALControlPartWrapper ownerState partName={props.part.name}>
         {replacedProse}
