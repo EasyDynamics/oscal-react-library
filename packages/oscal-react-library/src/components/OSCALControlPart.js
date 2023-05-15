@@ -88,6 +88,26 @@ export default function OSCALControlPart(props) {
         </Typography>
       );
     }
+    if (partAddPosition === "after") {
+      replacedProse = (
+        <Typography>
+          <OSCALReplacedProseWithByComponentParameterValue
+            label={partLabel}
+            prose={props.part.prose}
+            parameters={props.parameters}
+            implementedRequirement={props.implementedRequirement}
+            statementId={props.part.id}
+            componentId={props.componentId}
+            modificationSetParameters={props.modificationSetParameters}
+            isEditable={props.isEditable}
+            onRestSuccess={props.onRestSuccess}
+            onRestError={props.onRestError}
+            partialRestData={props.partialRestData}
+          />
+          {modificationDisplay}
+        </Typography>
+      );
+    }
     if (partAddPosition === "ending") {
       replacedProse = (
         <Typography>
@@ -129,6 +149,20 @@ export default function OSCALControlPart(props) {
             modificationSetParameters={props.modificationSetParameters}
             isImplemented
           />
+        </Typography>
+      );
+    }
+    if (partAddPosition === "after") {
+      replacedProse = (
+        <Typography>
+          <OSCALReplacedProseWithParameterLabel
+            label={partLabel}
+            prose={props.part.prose}
+            parameters={props.parameters}
+            modificationSetParameters={props.modificationSetParameters}
+            isImplemented
+          />
+          {modificationDisplay}
         </Typography>
       );
     }
