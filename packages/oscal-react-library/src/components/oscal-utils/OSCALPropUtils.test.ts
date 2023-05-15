@@ -1,4 +1,4 @@
-import { propWithName } from "./OSCALPropUtils";
+import { NIST_DEFAULT_NAMESPACE, propWithName } from "./OSCALPropUtils";
 
 const TEST_NS = "https://test.easydynamics.com/ns/oscal-react/";
 
@@ -20,6 +20,16 @@ const testProps = {
       value: "value",
     },
   ],
+  defaultNistNsExplicit: [
+    {
+      name: "test",
+      value: "test",
+      // This is the default NIST OSCAL namespace from the documentation
+      // directly. This allows us to ensure that the constant we use is
+      // defined correctly.
+      ns: "http://csrc.nist.gov/ns/oscal",
+    },
+  ],
 };
 
 describe("OSCAL Prop Utils", () => {
@@ -35,5 +45,11 @@ describe("OSCAL Prop Utils", () => {
     const props = testProps.nsWithStuff;
     // THEN
     expect(propWithName(props, "test", TEST_NS)?.value).toBe("test2");
+  });
+
+  it("has the correct value for the NIST namespace", () => {
+    const props = testProps.defaultNistNsExplicit;
+    expect(propWithName(props, "test", NIST_DEFAULT_NAMESPACE)?.value).toBe("test");
+    expect(propWithName(props, "test")?.value).toBe("test");
   });
 });
