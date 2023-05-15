@@ -1,6 +1,5 @@
-import type { BackMatter, ResourceLink } from "@easydynamics/oscal-types";
+import type { BackMatter } from "@easydynamics/oscal-types";
 import { BackMatterLookup } from "./OSCALBackMatterUtils";
-import { lookup as mimeTypeLookup } from "mime-types";
 
 export function getAbsoluteUrl(
   href: string | undefined,
@@ -55,10 +54,6 @@ function getFileExtension(url: string): string {
   } catch (err) {
     return "";
   }
-}
-
-export function getFallbackMediaTypeFromExtension(link: ResourceLink): string | false {
-  return mimeTypeLookup(link.href);
 }
 
 /**
