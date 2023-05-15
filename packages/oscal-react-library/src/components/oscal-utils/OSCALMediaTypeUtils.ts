@@ -25,7 +25,7 @@ function extname(path: string): string | undefined {
   return extension;
 }
 
-const UNRECOGNIZED = "Unrecognized Media Type";
+const UNRECOGNIZED = "Unrecognized";
 
 type Matcher = (type: MediaType) => string | undefined;
 
@@ -77,7 +77,7 @@ enum Suffix {
   ZSTANDARD = "zstd",
 }
 
-function isRegisteredSuffix(str: string): str is Type {
+export function isRegisteredSuffix(str: string): str is Type {
   switch (str) {
     case Suffix.XML:
     case Suffix.JSON:
@@ -306,10 +306,7 @@ function determineMediaType(link: ResourceLink): string | undefined {
   if (!mediaType) {
     return undefined;
   }
-  const type = MediaType.fromString(mediaType);
-  if (!type) {
-    return undefined;
-  }
+  return mediaType;
 }
 
 export function getFriendlyDisplayOfMediaType(link: ResourceLink): string {

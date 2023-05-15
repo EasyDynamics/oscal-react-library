@@ -10,12 +10,12 @@ import { Typography } from "@mui/material";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import StyledTooltip from "./OSCALStyledTooltip";
-import { getAbsoluteUrl, guessExtensionFromHref } from "./oscal-utils/OSCALLinkUtils";
+import { getAbsoluteUrl } from "./oscal-utils/OSCALLinkUtils";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALMarkupLine } from "./OSCALMarkupProse";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import OSCALEditableTextField, { EditableFieldProps } from "./OSCALEditableTextField";
-import { Resource, ResourceLink, BackMatter } from "@easydynamics/oscal-types";
+import { Resource, BackMatter } from "@easydynamics/oscal-types";
 import { ReactElement } from "react";
 import { OSCALPropertiesDialog } from "./OSCALProperties";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
@@ -178,9 +178,6 @@ interface BackMatterResourceProps extends OSCALBackMatterProps {
 
 function BackMatterResource(props: BackMatterResourceProps) {
   const { resource, parentUrl, partialRestData, isEditable, backMatter, onFieldSave } = props;
-
-  const getMediaType = (rlink: ResourceLink) =>
-    rlink["media-type"] || guessExtensionFromHref(getAbsoluteUrl(rlink.href, parentUrl) ?? "");
 
   const resourceType = propWithName(resource.props, "type")?.value;
   const typeDisplay = resourceType && backMatterTypeRepresentation(resourceType);
