@@ -1,18 +1,32 @@
 import { createTheme } from "@mui/material/styles";
 
+const primaryBlue = "#001131";
+const secondaryBlue = "#023E88";
+// const backgroundGray = "#F6F6F6";
+// const primaryAccent = "#FF6600";
+
 export const appTheme = createTheme({
   palette: {
     primary: {
-      main: "#001131",
+      main: primaryBlue,
     },
     secondary: {
-      main: "#00BDE3",
+      main: secondaryBlue,
     },
   },
   typography: {
     h1: {
       fontWeight: "700",
-      fontSize: "50px",
+      fontSize: "2rem",
+    },
+    h2: {
+      fontWeight: "700",
+      fontSize: "1.375rem",
+      color: primaryBlue,
+    },
+    body: {
+      fontWeight: "400",
+      fontSize: "1rem",
     },
     fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
   },
@@ -26,9 +40,9 @@ export const appTheme = createTheme({
           lineHeight: "20px",
         },
         contained: {
-          backgroundColor: "#073C92",
+          backgroundColor: secondaryBlue,
           "&:hover": {
-            backgroundColor: "#0B4CB7",
+            backgroundColor: primaryBlue,
           },
         },
       },
