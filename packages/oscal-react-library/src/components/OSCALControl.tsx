@@ -256,30 +256,24 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
   let modificationDisplayStarting = modificationDisplay;
 
   switch (position) {
-    case Position.AFTER:
-      // eslint-disable-next-line no-lone-blocks
-      {
-        modificationDisplayBefore = undefined;
-        modificationDisplayEnding = undefined;
-        modificationDisplayStarting = undefined;
-      }
+    case Position.AFTER: {
+      modificationDisplayBefore = undefined;
+      modificationDisplayEnding = undefined;
+      modificationDisplayStarting = undefined;
       break;
-    case Position.BEFORE:
-      // eslint-disable-next-line no-lone-blocks
-      {
-        modificationDisplayAfter = undefined;
-        modificationDisplayEnding = undefined;
-        modificationDisplayStarting = undefined;
-      }
+    }
+    case Position.BEFORE: {
+      modificationDisplayAfter = undefined;
+      modificationDisplayEnding = undefined;
+      modificationDisplayStarting = undefined;
       break;
-    case Position.ENDING:
-      // eslint-disable-next-line no-lone-blocks
-      {
-        modificationDisplayAfter = undefined;
-        modificationDisplayBefore = undefined;
-        modificationDisplayStarting = undefined;
-      }
+    }
+    case Position.ENDING: {
+      modificationDisplayAfter = undefined;
+      modificationDisplayBefore = undefined;
+      modificationDisplayStarting = undefined;
       break;
+    }
     default: {
       modificationDisplayAfter = undefined;
       modificationDisplayEnding = undefined;

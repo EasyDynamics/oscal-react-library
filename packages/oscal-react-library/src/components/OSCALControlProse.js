@@ -309,7 +309,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
   if (!props.isImplemented) {
     return (
       <NotSpecifiedTypography component="div">
-        {props.label} {prose}
+        {props.label} {props.modificationDisplayBefore} {prose}
         {props.modificationDisplay}
       </NotSpecifiedTypography>
     );
@@ -318,7 +318,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
   if (props.modificationDisplay === undefined) {
     return (
       <div>
-        {props.label} {prose}
+        {props.label} {props.modificationDisplayBefore} {prose}
         {props.modificationDisplay}
       </div>
     );
@@ -326,7 +326,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
 
   return (
     <div>
-      {props.label} {prose}
+      {props.label} {props.modificationDisplayBefore} {prose}
       {props.modificationDisplay}
     </div>
   );
@@ -379,6 +379,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
       <Grid container spacing={2}>
         <Grid item xs={11}>
           <OSCALReplacedProseWithParameterLabel
+            modificationDisplayBefore={props.modificationDisplayBefore}
             label={props.label}
             key={props.prose}
             prose={props.prose}

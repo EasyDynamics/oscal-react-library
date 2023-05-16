@@ -54,28 +54,22 @@ export default function OSCALControlPart(props) {
   let modificationDisplayAfter = modificationDisplay;
   let modificationDisplayStarting = modificationDisplay;
   switch (partAddPosition) {
-    case Position.AFTER:
-      // eslint-disable-next-line no-lone-blocks
-      {
-        modificationDisplayBefore = undefined;
-        modificationDisplayStarting = undefined;
-      }
+    case Position.AFTER: {
+      modificationDisplayBefore = undefined;
+      modificationDisplayStarting = undefined;
       break;
-    case Position.BEFORE:
-      // eslint-disable-next-line no-lone-blocks
-      {
-        modificationDisplayAfter = undefined;
-        modificationDisplayStarting = undefined;
-      }
+    }
+    case Position.BEFORE: {
+      modificationDisplayAfter = undefined;
+      modificationDisplayStarting = undefined;
       break;
-    case Position.ENDING:
-      // eslint-disable-next-line no-lone-blocks
-      {
-        modificationDisplayAfter = undefined;
-        modificationDisplayBefore = undefined;
-        modificationDisplayStarting = undefined;
-      }
+    }
+    case Position.ENDING: {
+      modificationDisplayAfter = undefined;
+      modificationDisplayBefore = undefined;
+      modificationDisplayStarting = undefined;
       break;
+    }
     default: {
       modificationDisplayAfter = undefined;
       modificationDisplayBefore = undefined;
@@ -85,7 +79,6 @@ export default function OSCALControlPart(props) {
   if (props.implementedRequirement) {
     replacedProse = (
       <Typography>
-        {modificationDisplayBefore}
         <OSCALReplacedProseWithByComponentParameterValue
           label={partLabel}
           prose={props.part.prose}
@@ -95,6 +88,7 @@ export default function OSCALControlPart(props) {
           componentId={props.componentId}
           modificationSetParameters={props.modificationSetParameters}
           modificationDisplay={modificationDisplayStarting}
+          modificationDisplayBefore={modificationDisplayBefore}
           isEditable={props.isEditable}
           onRestSuccess={props.onRestSuccess}
           onRestError={props.onRestError}
@@ -106,13 +100,13 @@ export default function OSCALControlPart(props) {
   } else {
     replacedProse = (
       <Typography>
-        {modificationDisplayBefore}
         <OSCALReplacedProseWithParameterLabel
           label={partLabel}
           prose={props.part.prose}
           parameters={props.parameters}
           modificationSetParameters={props.modificationSetParameters}
           modificationDisplay={modificationDisplayStarting}
+          modificationDisplayBefore={modificationDisplayBefore}
           isImplemented
         />
         {modificationDisplayAfter}
