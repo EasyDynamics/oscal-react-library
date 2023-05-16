@@ -6,6 +6,7 @@ import { OSCALPropertiesDialog } from "./OSCALProperties";
 import { Stack } from "@mui/system";
 import { Accordion, AccordionDetails, AccordionSummary } from "./StyedAccordion";
 import { ButtonLaunchedDialog } from "./ButtonLaunchedDialog";
+import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 export interface OSCALParamProps {
   param: Parameter;
@@ -24,11 +25,19 @@ export const OSCALParam: React.FC<OSCALParamProps> = ({ param }) => {
     <Accordion expanded={isOpen} onChange={handleClick}>
       <AccordionSummary>
         <Stack direction="row" alignItems="center" justifyContent="space-between" width="100%">
-          <Typography>{paramLabel}</Typography>
+          <Typography>{param.id}</Typography>
+          <Typography sx={{ color: "text.secondary" }}>{paramLabel}</Typography>
           <OSCALPropertiesDialog properties={param.props} />
         </Stack>
       </AccordionSummary>
-      <AccordionDetails>PUT INFO HERE</AccordionDetails>
+      <AccordionDetails>
+        <Stack direction="column" spacing={2}>
+          <OSCALMarkupMultiLine>{param.remarks}</OSCALMarkupMultiLine>
+          {param.guidelines?.map((guideline) => (
+            <OSCALMarkupMultiLine key={guideline.prose}>{guideline.prose}</OSCALMarkupMultiLine>
+          ))}
+        </Stack>
+      </AccordionDetails>
     </Accordion>
   );
 };
