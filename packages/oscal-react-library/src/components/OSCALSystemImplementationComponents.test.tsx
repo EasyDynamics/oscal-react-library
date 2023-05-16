@@ -1,17 +1,21 @@
 import React from "react";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { responsiblePartiesTestData } from "../test-data/CommonData";
 import { componentsTestData } from "../test-data/SystemData";
-import OSCALSystemImplementationComponents from "./OSCALSystemImplementationComponents";
+import { OSCALSystemImplementationComponents } from "./OSCALSystemImplementationComponents";
+import { PartyOrganizationOrPerson, PartyType } from "@easydynamics/oscal-types";
+
+const parties: PartyOrganizationOrPerson[] = [
+  {
+    uuid: "party-1",
+    type: PartyType.ORGANIZATION,
+  },
+];
 
 describe("OSCALSystemImplementationComponents", () => {
   test("shows Components section title", () => {
     render(
-      <OSCALSystemImplementationComponents
-        components={componentsTestData}
-        parties={responsiblePartiesTestData}
-      />
+      <OSCALSystemImplementationComponents components={componentsTestData} parties={parties} />
     );
     const result = screen.getByText("Components");
     expect(result).toBeVisible();
@@ -19,10 +23,7 @@ describe("OSCALSystemImplementationComponents", () => {
 
   test(`shows component title`, () => {
     render(
-      <OSCALSystemImplementationComponents
-        components={componentsTestData}
-        parties={responsiblePartiesTestData}
-      />
+      <OSCALSystemImplementationComponents components={componentsTestData} parties={parties} />
     );
     const result = screen.getByText("Example Component");
     expect(result).toBeVisible();
@@ -30,10 +31,7 @@ describe("OSCALSystemImplementationComponents", () => {
 
   test(`shows component description`, async () => {
     render(
-      <OSCALSystemImplementationComponents
-        components={componentsTestData}
-        parties={responsiblePartiesTestData}
-      />
+      <OSCALSystemImplementationComponents components={componentsTestData} parties={parties} />
     );
     await userEvent.hover(screen.getByText("Example Component"));
     expect(await screen.findByText("An example component.")).toBeInTheDocument();
@@ -41,10 +39,7 @@ describe("OSCALSystemImplementationComponents", () => {
 
   test(`shows component status`, () => {
     render(
-      <OSCALSystemImplementationComponents
-        components={componentsTestData}
-        parties={responsiblePartiesTestData}
-      />
+      <OSCALSystemImplementationComponents components={componentsTestData} parties={parties} />
     );
     // Grab example party row beneath heading row
     const exampleResponsiblePartiesRow = screen.getAllByRole("row")[1];
@@ -58,10 +53,7 @@ describe("OSCALSystemImplementationComponents", () => {
 
   test(`shows component type`, () => {
     render(
-      <OSCALSystemImplementationComponents
-        components={componentsTestData}
-        parties={responsiblePartiesTestData}
-      />
+      <OSCALSystemImplementationComponents components={componentsTestData} parties={parties} />
     );
     // Grab example party row beneath heading row
     const exampleResponsiblePartiesRow = screen.getAllByRole("row")[1];
@@ -75,10 +67,7 @@ describe("OSCALSystemImplementationComponents", () => {
 
   test(`shows component version`, () => {
     render(
-      <OSCALSystemImplementationComponents
-        components={componentsTestData}
-        parties={responsiblePartiesTestData}
-      />
+      <OSCALSystemImplementationComponents components={componentsTestData} parties={parties} />
     );
     // Grab example party row beneath heading row
     const exampleResponsiblePartiesRow = screen.getAllByRole("row")[1];
