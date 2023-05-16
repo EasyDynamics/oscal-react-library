@@ -275,11 +275,10 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
                   {modificationDisplayBefore}
                   <OSCALControlLabel component="span" label={label} id={control.id} />{" "}
                   {control.title}
-                  {modificationDisplayAfter}
                 </Typography>
               </OSCALAnchorLinkHeader>
               <Box>
-                {modificationDisplayStarting}
+                {modificationDisplayAfter}
                 <OSCALParamsDialog params={control.params} />
                 <OSCALPropertiesDialog
                   properties={control.props}
@@ -294,6 +293,7 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
             </Stack>
           </Grid>
         </Grid>
+        {modificationDisplayStarting}
         <ControlsList {...props} withdrawn={controlOrParentWithdrawn} />
         {modificationDisplayEnding}
       </CardContent>

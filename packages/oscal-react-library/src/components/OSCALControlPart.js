@@ -70,14 +70,14 @@ export default function OSCALControlPart(props) {
           statementId={props.part.id}
           componentId={props.componentId}
           modificationSetParameters={props.modificationSetParameters}
-          modificationDisplay={modificationDisplayStarting}
+          modificationDisplay={modificationDisplayAfter}
           modificationDisplayBefore={modificationDisplayBefore}
           isEditable={props.isEditable}
           onRestSuccess={props.onRestSuccess}
           onRestError={props.onRestError}
           partialRestData={props.partialRestData}
         />
-        {modificationDisplayAfter}
+        {modificationDisplayStarting}
       </Typography>
     );
   } else {
@@ -88,11 +88,11 @@ export default function OSCALControlPart(props) {
           prose={props.part.prose}
           parameters={props.parameters}
           modificationSetParameters={props.modificationSetParameters}
-          modificationDisplay={modificationDisplayStarting}
+          modificationDisplay={modificationDisplayAfter}
           modificationDisplayBefore={modificationDisplayBefore}
           isImplemented
         />
-        {modificationDisplayAfter}
+        {modificationDisplayStarting}
       </Typography>
     );
   }
