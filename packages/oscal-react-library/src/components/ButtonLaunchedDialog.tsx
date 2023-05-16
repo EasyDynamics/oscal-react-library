@@ -1,8 +1,8 @@
-import IconButton from "@mui/material/IconButton";
+import { Dialog, DialogContent, DialogTitle, SvgIcon, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
 import React from "react";
 import StyledTooltip from "./OSCALStyledTooltip";
-import { Dialog, DialogContent, DialogTitle, SvgIcon, Typography } from "@mui/material";
 
 interface ButtonLaunchedDialogProps {
   Icon: typeof SvgIcon;
@@ -19,12 +19,22 @@ export const ButtonLaunchedDialog: React.FC<ButtonLaunchedDialogProps> = ({
 }) => {
   const [open, setOpen] = React.useState(false);
 
-  const handleOpen = () => {
+  // These event handlers (and the dialog below) specify `stopPropagation` to
+  // avoid the click event from being passed on. This is because within the
+  // library, the button and dialog often appear in contexts where clicks
+  // matter (such as in an AccordionSummary).
+  const handleOpen = (e: React.MouseEvent) => {
     setOpen(true);
+    e.stopPropagation();
   };
-
-  const handleClose = () => {
+  // The type defined for `onClose` for a dialog is `{}` which doesn't seem
+  // to be correct it's unclear what it's supposed to be but `MouseEvent` is
+  // close enough and gives us the `stopPropagation` method.
+  const handleClose = (e: MouseEvent, reason: string) => {
     setOpen(false);
+    if (reason === "backdropClick") {
+      e.stopPropagation();
+    }
   };
 
   return (
@@ -57,9 +67,11 @@ export const ButtonLaunchedDialog: React.FC<ButtonLaunchedDialogProps> = ({
         aria-describedby="scroll-dialog-description"
         maxWidth="md"
         fullWidth
-        sx={{ maxHeight: "75em" }}
+        sx={{
+          maxHeight: "75em",
+        }}
       >
-        <DialogContent>
+        <DialogContent onClick={(e) => e.stopPropagation()}>
           <DialogTitle>
             <Typography>{title}</Typography>
           </DialogTitle>
