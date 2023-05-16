@@ -25,7 +25,7 @@ function extname(path: string): string | undefined {
   return extension;
 }
 
-const UNRECOGNIZED = "Unrecognized";
+const UNRECOGNIZED = "Unrecognized File Type";
 
 type Matcher = (type: MediaType) => string | undefined;
 

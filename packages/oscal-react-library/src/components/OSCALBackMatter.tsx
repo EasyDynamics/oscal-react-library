@@ -3,7 +3,9 @@ import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import { Typography } from "@mui/material";
@@ -15,7 +17,7 @@ import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALMarkupLine } from "./OSCALMarkupProse";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import OSCALEditableTextField, { EditableFieldProps } from "./OSCALEditableTextField";
-import { Resource, BackMatter } from "@easydynamics/oscal-types";
+import { Resource, BackMatter, ResourceLink } from "@easydynamics/oscal-types";
 import { ReactElement } from "react";
 import { OSCALPropertiesDialog } from "./OSCALProperties";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
@@ -172,6 +174,39 @@ export interface OSCALBackMatterProps extends EditableFieldProps {
   parentUrl: string;
 }
 
+interface BackMatterResourceLinkButtonsProps {
+  rlinks: ResourceLink[];
+  parentUrl: string;
+}
+const BackMatterResourceLinkButtons: React.FC<BackMatterResourceLinkButtonsProps> = ({
+  rlinks,
+  parentUrl,
+}) => {
+  return (
+    <Box>
+      <Typography variant="subtitle2">Resource Links</Typography>
+      <ButtonGroup size="small" variant="outlined">
+        {rlinks.map((rlink) => {
+          const display = getFriendlyDisplayOfMediaType(rlink);
+          return (
+            <Button
+              startIcon={<OpenInNewIcon />}
+              key={rlink.href}
+              href={getAbsoluteUrl(rlink.href, parentUrl)!}
+              target="_blank"
+              title={`Open as ${display}`}
+              aria-label={`Open as ${display}`}
+              sx={{ textTransform: "none" }}
+            >
+              {display}
+            </Button>
+          );
+        })}
+      </ButtonGroup>
+    </Box>
+  );
+};
+
 interface BackMatterResourceProps extends OSCALBackMatterProps {
   resource: Resource;
 }
@@ -245,22 +280,9 @@ function BackMatterResource(props: BackMatterResourceProps) {
             }
             value={resource.description}
           />
-          <Typography>
-            {resource.rlinks?.map((rlink) => (
-              <Button
-                startIcon={<OpenInNewIcon />}
-                key={rlink.href}
-                role="button"
-                href={getAbsoluteUrl(rlink.href, parentUrl)!}
-                target="_blank"
-                variant="outlined"
-                size="small"
-                sx={{ textTransform: "none" }}
-              >
-                {getFriendlyDisplayOfMediaType(rlink)}
-              </Button>
-            ))}
-          </Typography>
+          {resource.rlinks?.length ? (
+            <BackMatterResourceLinkButtons rlinks={resource.rlinks} parentUrl={parentUrl} />
+          ) : null}
         </CardContent>
       </OSCALBackMatterCard>
     </Grid>
