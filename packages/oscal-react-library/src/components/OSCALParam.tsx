@@ -1,13 +1,11 @@
 import { Parameter } from "@easydynamics/oscal-types";
-import IconButton from "@mui/material/IconButton";
 import DataObjectIcon from "@mui/icons-material/DataObject";
-import Box from "@mui/material/Box";
 import React from "react";
-import StyledTooltip from "./OSCALStyledTooltip";
-import { Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { OSCALPropertiesDialog } from "./OSCALProperties";
 import { Stack } from "@mui/system";
 import { Accordion, AccordionDetails, AccordionSummary } from "./StyedAccordion";
+import { ButtonLaunchedDialog } from "./ButtonLaunchedDialog";
 
 export interface OSCALParamProps {
   param: Parameter;
@@ -49,56 +47,8 @@ export const OSCALParams: React.FC<OSCALParamsProps> = ({ params }) => {
   );
 };
 
-export const OSCALParamsDialog: React.FC<OSCALParamsProps> = ({ params }) => {
-  const [open, setOpen] = React.useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <>
-      <StyledTooltip title="Open Parameters">
-        {
-          // This Box is necessary to ensure the tooltip is present when the button is disabled.
-          // If the Button were never disabled, the Box can be removed. This change may be made
-          // when property editing is enabled to ensure that the dialog can be opened to edit &
-          // create properties, even when none exist. In that case, even the Tooltip wrapper may
-          // not be necessary.
-        }
-        <Box display="inline">
-          <IconButton
-            color="primary"
-            size="small"
-            onClick={handleOpen}
-            aria-label="Open Parameters"
-            disabled={!params}
-          >
-            <DataObjectIcon />
-          </IconButton>
-        </Box>
-      </StyledTooltip>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        scroll="paper"
-        aria-labelledby="scroll-dialog-title"
-        aria-describedby="scroll-dialog-description"
-        maxWidth="md"
-        fullWidth
-        sx={{ maxHeight: "75em" }}
-      >
-        <DialogContent>
-          <DialogTitle>
-            <Typography>Parameters</Typography>
-          </DialogTitle>
-          <OSCALParams params={params} />
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-};
+export const OSCALParamsDialog = (props: OSCALParamsProps) => (
+  <ButtonLaunchedDialog title="Parameters" disabled={!props.params} Icon={DataObjectIcon}>
+    <OSCALParams params={props.params} />
+  </ButtonLaunchedDialog>
+);
