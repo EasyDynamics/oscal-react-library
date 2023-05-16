@@ -24,7 +24,6 @@ import { EditableFieldProps } from "./OSCALEditableTextField";
 import { Stack } from "@mui/material";
 import { groupBy } from "../utils";
 import { Accordion, AccordionSummary, AccordionDetails } from "./StyedAccordion";
-import { Position } from "@easydynamics/oscal-types";
 
 interface ControlListOptions {
   childLevel: number;
@@ -278,7 +277,7 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
                 </Typography>
               </OSCALAnchorLinkHeader>
               <Box>
-                {modificationDisplayStarting}
+                {modificationDisplay}
                 <OSCALPropertiesDialog
                   properties={control.props}
                   title={

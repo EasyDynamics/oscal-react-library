@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import OSCALControl from "./OSCALControl";
 import getControlOrSubControl from "./oscal-utils/OSCALControlResolver";
 
@@ -21,7 +22,7 @@ const OSCALImplReqCard = styled(Card, {
   ${(props) => props.childLevel > 0 && "background-color: #fffcf0;"}
 `;
 
-const ComponentTabContainer = styled("div")(
+const ComponentTabContainer = styled(Grid)(
   ({ theme }) => `
   flex-grow: 1;
   background-color: ${theme.palette.background.paper};
@@ -92,7 +93,7 @@ function a11yProps(index) {
  * Creates the internal elements of Control Implementation.
  *
  * @param {object} props SSP properties
- * @returns The corresponding Control Implementation Request
+ * @returns The corresponding Control Implementation
  */
 export default function OSCALControlImplementationImplReq(props) {
   const [value, setValue] = React.useState(0);
@@ -111,41 +112,45 @@ export default function OSCALControlImplementationImplReq(props) {
   return (
     <OSCALImplReqCard>
       <CardContent>
-        <ComponentTabContainer>
-          <ComponentTabs
-            orientation="vertical"
-            variant="scrollable"
-            value={value}
-            onChange={handleChange}
-            aria-label="Vertical tabs example"
-          >
+        <ComponentTabContainer container>
+          <Grid item lg={2.5} sm={12}>
+            <ComponentTabs
+              orientation="vertical"
+              variant="scrollable"
+              value={value}
+              onChange={handleChange}
+              aria-label="Vertical tabs example"
+            >
+              {Object.values(props.components).map((component, index) => (
+                <ComponentTabButton
+                  label={component.title}
+                  {...a11yProps(index)}
+                  key={component.uuid}
+                />
+              ))}
+            </ComponentTabs>
+          </Grid>
+          <Grid item lg={9.5} sm={12}>
             {Object.values(props.components).map((component, index) => (
-              <ComponentTabButton
-                label={component.title}
-                {...a11yProps(index)}
-                key={component.uuid}
-              />
+              <ComponentTabPanelScrollable value={value} index={index} key={component.uuid}>
+                <OSCALControl
+                  control={getControlOrSubControl(
+                    props.controls,
+                    props.implementedRequirement["control-id"]
+                  )}
+                  childLevel={0}
+                  implementedRequirement={props.implementedRequirement}
+                  componentId={component.uuid}
+                  isEditable={props.isEditable}
+                  modificationAlters={modAlters}
+                  modificationSetParameters={modParams}
+                  onRestSuccess={props.onRestSuccess}
+                  onRestError={props.onRestError}
+                  partialRestData={props.partialRestData}
+                />
+              </ComponentTabPanelScrollable>
             ))}
-          </ComponentTabs>
-          {Object.values(props.components).map((component, index) => (
-            <ComponentTabPanelScrollable value={value} index={index} key={component.uuid}>
-              <OSCALControl
-                control={getControlOrSubControl(
-                  props.controls,
-                  props.implementedRequirement["control-id"]
-                )}
-                childLevel={0}
-                implementedRequirement={props.implementedRequirement}
-                componentId={component.uuid}
-                isEditable={props.isEditable}
-                modificationAlters={modAlters}
-                modificationSetParameters={modParams}
-                onRestSuccess={props.onRestSuccess}
-                onRestError={props.onRestError}
-                partialRestData={props.partialRestData}
-              />
-            </ComponentTabPanelScrollable>
-          ))}
+          </Grid>
         </ComponentTabContainer>
       </CardContent>
     </OSCALImplReqCard>

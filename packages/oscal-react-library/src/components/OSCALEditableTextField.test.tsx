@@ -18,11 +18,10 @@ describe("OSCALEditableTextField", () => {
       />
     );
 
-    screen
-      .getByRole("button", {
-        name: "edit-metadata",
-      })
-      .click();
+    const button = screen.getByRole("button", {
+      name: "edit-metadata",
+    });
+    fireEvent.click(button);
 
     const textField = screen.getByRole("textbox", { name: /title/i });
 
@@ -40,11 +39,10 @@ describe("OSCALEditableTextField", () => {
       />
     );
 
-    screen
-      .getByRole("button", {
-        name: "edit-metadata",
-      })
-      .click();
+    const button = screen.getByRole("button", {
+      name: "edit-metadata",
+    });
+    fireEvent.click(button);
 
     const textField = screen.getByRole("textbox", { name: /title/i });
 
@@ -67,11 +65,10 @@ describe("OSCALEditableTextField", () => {
       />
     );
 
-    screen
-      .getByRole("button", {
-        name: "edit-metadata",
-      })
-      .click();
+    const button = screen.getByRole("button", {
+      name: "edit-metadata",
+    });
+    fireEvent.click(button);
 
     const textField = screen.getByRole("textbox", { name: /title/i });
 
@@ -94,11 +91,10 @@ describe("OSCALEditableTextField", () => {
       />
     );
 
-    screen
-      .getByRole("button", {
-        name: "edit-metadata",
-      })
-      .click();
+    const button = screen.getByRole("button", {
+      name: "edit-metadata",
+    });
+    fireEvent.click(button);
 
     const textField = screen.getByRole("textbox", { name: /title/i });
 

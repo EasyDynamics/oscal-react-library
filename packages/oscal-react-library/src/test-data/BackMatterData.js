@@ -41,7 +41,7 @@ export const backMatterTestData = {
       rlinks: [
         {
           href,
-          "media-type": "application/oscal.catalog+json2",
+          "media-type": "application/json",
         },
       ],
     },
