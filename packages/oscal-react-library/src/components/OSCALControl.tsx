@@ -250,36 +250,11 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
   const label = propWithName(control.props, "label")?.value;
   const controlOrParentWithdrawn = withdrawn || isWithdrawn(control);
 
-  let modificationDisplayBefore = modificationDisplay;
-  let modificationDisplayAfter = modificationDisplay;
-  let modificationDisplayEnding = modificationDisplay;
-  let modificationDisplayStarting = modificationDisplay;
+  const modificationDisplayBefore = position === Position.BEFORE ? modificationDisplay : null;
+  const modificationDisplayAfter = position === Position.AFTER ? modificationDisplay : null;
+  const modificationDisplayStarting = position === Position.STARTING ? modificationDisplay : null;
+  const modificationDisplayEnding = position === Position.ENDING ? modificationDisplay : null;
 
-  switch (position) {
-    case Position.AFTER: {
-      modificationDisplayBefore = undefined;
-      modificationDisplayEnding = undefined;
-      modificationDisplayStarting = undefined;
-      break;
-    }
-    case Position.BEFORE: {
-      modificationDisplayAfter = undefined;
-      modificationDisplayEnding = undefined;
-      modificationDisplayStarting = undefined;
-      break;
-    }
-    case Position.ENDING: {
-      modificationDisplayAfter = undefined;
-      modificationDisplayBefore = undefined;
-      modificationDisplayStarting = undefined;
-      break;
-    }
-    default: {
-      modificationDisplayAfter = undefined;
-      modificationDisplayEnding = undefined;
-      modificationDisplayBefore = undefined;
-    }
-  }
   return showInList ? (
     <ControlsList {...props} withdrawn={controlOrParentWithdrawn} />
   ) : (

@@ -50,31 +50,14 @@ export default function OSCALControlPart(props) {
       />
     );
   }
-  let modificationDisplayBefore = modificationDisplay;
-  let modificationDisplayAfter = modificationDisplay;
-  let modificationDisplayStarting = modificationDisplay;
-  switch (partAddPosition) {
-    case Position.AFTER: {
-      modificationDisplayBefore = undefined;
-      modificationDisplayStarting = undefined;
-      break;
-    }
-    case Position.BEFORE: {
-      modificationDisplayAfter = undefined;
-      modificationDisplayStarting = undefined;
-      break;
-    }
-    case Position.ENDING: {
-      modificationDisplayAfter = undefined;
-      modificationDisplayBefore = undefined;
-      modificationDisplayStarting = undefined;
-      break;
-    }
-    default: {
-      modificationDisplayAfter = undefined;
-      modificationDisplayBefore = undefined;
-    }
-  }
+  const modificationDisplayBefore =
+    partAddPosition === Position.BEFORE ? modificationDisplay : null;
+  const modificationDisplayAfter = partAddPosition === Position.AFTER ? modificationDisplay : null;
+  const modificationDisplayStarting =
+    partAddPosition === Position.STARTING ? modificationDisplay : null;
+  const modificationDisplayEnding =
+    partAddPosition === Position.ENDING ? modificationDisplay : null;
+
   let replacedProse;
   if (props.implementedRequirement) {
     replacedProse = (
@@ -176,7 +159,7 @@ export default function OSCALControlPart(props) {
             partialRestData={props.partialRestData}
           />
         ))}
-        {modificationDisplay}
+        {modificationDisplayEnding}
       </OSCALControlPartWrapper>
     );
   }
