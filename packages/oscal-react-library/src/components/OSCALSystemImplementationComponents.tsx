@@ -14,8 +14,8 @@ import {
 } from "./OSCALSystemImplementationTableStyles";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import PropertiesTable from "./OSCALSystemImplementationPropertiesTable";
-import { MarkupMultiLinePopover } from "./HoverablePopover";
-import { OSCALMarkupLine } from "./OSCALMarkupProse";
+import { HoverablePopover } from "./HoverablePopover";
+import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 import { AssessmentAssetsComponent, PartyOrganizationOrPerson } from "@easydynamics/oscal-types";
 
 export interface OSCALSystemImplementationComponentsProps {
@@ -46,9 +46,13 @@ export const OSCALSystemImplementationComponents: React.FC<
             {props.components.map((component) => (
               <StyledTableRow key={component.uuid}>
                 <ComponentTableCell component="th" scope="row">
-                  <MarkupMultiLinePopover popoverContent={component.description}>
+                  <HoverablePopover
+                    popoverContent={
+                      <OSCALMarkupMultiLine>{component.description}</OSCALMarkupMultiLine>
+                    }
+                  >
                     <OSCALMarkupLine>{component.title}</OSCALMarkupLine>
-                  </MarkupMultiLinePopover>
+                  </HoverablePopover>
                 </ComponentTableCell>
                 <TableCell>{component.type}</TableCell>
                 <TableCell>{component.status?.state}</TableCell>

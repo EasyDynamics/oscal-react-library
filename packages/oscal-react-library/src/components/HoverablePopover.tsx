@@ -1,6 +1,5 @@
 import { Box, Popover } from "@mui/material";
 import React from "react";
-import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 export interface HoverablePopoverProps {
   /**
@@ -60,31 +59,4 @@ export const HoverablePopover: React.FC<HoverablePopoverProps> = ({ popoverConte
       </Popover>
     </>
   );
-};
-
-export interface MarkupPopoverProps {
-  /**
-   * The markup multi line content of the popover.
-   */
-  popoverContent: string;
-
-  /**
-   * Content to hover over.
-   */
-  children: React.ReactNode;
-}
-
-export const MarkupMultiLinePopover: React.FC<MarkupPopoverProps> = ({
-  popoverContent,
-  children,
-}) => {
-  const markup = <OSCALMarkupMultiLine>{popoverContent}</OSCALMarkupMultiLine>;
-
-  return <HoverablePopover popoverContent={markup}>{children}</HoverablePopover>;
-};
-
-export const MarkupLinePopover: React.FC<MarkupPopoverProps> = ({ popoverContent, children }) => {
-  const markup = <OSCALMarkupLine>{popoverContent}</OSCALMarkupLine>;
-
-  return <HoverablePopover popoverContent={markup}>{children}</HoverablePopover>;
 };
