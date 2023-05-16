@@ -250,130 +250,41 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
   const label = propWithName(control.props, "label")?.value;
   const controlOrParentWithdrawn = withdrawn || isWithdrawn(control);
 
-  if (position === Position.AFTER) {
-    return showInList ? (
-      <ControlsList {...props} withdrawn={controlOrParentWithdrawn} />
-    ) : (
-      <OSCALControlCard childLevel={childLevel ?? 0} withdrawn={controlOrParentWithdrawn}>
-        <CardContent>
-          <Grid container spacing={1}>
-            <Grid item xs={12}>
-              <Stack alignItems="center" direction="row" justifyContent="space-between">
-                <OSCALAnchorLinkHeader
-                  name={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}
-                >
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    style={childLevel ? { fontSize: "1.1rem" } : undefined}
-                  >
-                    <OSCALControlLabel component="span" label={label} id={control.id} />{" "}
-                    {control.title}
-                    {modificationDisplay}
-                  </Typography>
-                </OSCALAnchorLinkHeader>
-                <Box>
-                  <OSCALPropertiesDialog
-                    properties={control.props}
-                    title={
-                      <>
-                        <OSCALControlLabel id={control.id} label={label} component="span" />
-                        {` ${control.title}`}
-                      </>
-                    }
-                  />
-                </Box>
-              </Stack>
-            </Grid>
-          </Grid>
-          <ControlsList {...props} withdrawn={controlOrParentWithdrawn} />
-        </CardContent>
-      </OSCALControlCard>
-    );
-  }
+  let modificationDisplayBefore = modificationDisplay;
+  let modificationDisplayAfter = modificationDisplay;
+  let modificationDisplayEnding = modificationDisplay;
+  let modificationDisplayStarting = modificationDisplay;
 
-  if (position === Position.BEFORE) {
-    return showInList ? (
-      <ControlsList {...props} withdrawn={controlOrParentWithdrawn} />
-    ) : (
-      <OSCALControlCard childLevel={childLevel ?? 0} withdrawn={controlOrParentWithdrawn}>
-        <CardContent>
-          <Grid container spacing={1}>
-            <Grid item xs={12}>
-              <Stack alignItems="center" direction="row" justifyContent="space-between">
-                <OSCALAnchorLinkHeader
-                  name={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}
-                >
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    style={childLevel ? { fontSize: "1.1rem" } : undefined}
-                  >
-                    {modificationDisplay}
-                    <OSCALControlLabel component="span" label={label} id={control.id} />{" "}
-                    {control.title}
-                  </Typography>
-                </OSCALAnchorLinkHeader>
-                <Box>
-                  <OSCALPropertiesDialog
-                    properties={control.props}
-                    title={
-                      <>
-                        <OSCALControlLabel id={control.id} label={label} component="span" />
-                        {` ${control.title}`}
-                      </>
-                    }
-                  />
-                </Box>
-              </Stack>
-            </Grid>
-          </Grid>
-          <ControlsList {...props} withdrawn={controlOrParentWithdrawn} />
-        </CardContent>
-      </OSCALControlCard>
-    );
-  }
-
-  if (position === Position.ENDING) {
-    return showInList ? (
-      <ControlsList {...props} withdrawn={controlOrParentWithdrawn} />
-    ) : (
-      <OSCALControlCard childLevel={childLevel ?? 0} withdrawn={controlOrParentWithdrawn}>
-        <CardContent>
-          <Grid container spacing={1}>
-            <Grid item xs={12}>
-              <Stack alignItems="center" direction="row" justifyContent="space-between">
-                <OSCALAnchorLinkHeader
-                  name={appendToFragmentPrefix(fragmentPrefix, control.id).toLowerCase()}
-                >
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    style={childLevel ? { fontSize: "1.1rem" } : undefined}
-                  >
-                    <OSCALControlLabel component="span" label={label} id={control.id} />{" "}
-                    {control.title}
-                  </Typography>
-                </OSCALAnchorLinkHeader>
-                <Box>
-                  <OSCALPropertiesDialog
-                    properties={control.props}
-                    title={
-                      <>
-                        <OSCALControlLabel id={control.id} label={label} component="span" />
-                        {` ${control.title}`}
-                      </>
-                    }
-                  />
-                </Box>
-              </Stack>
-            </Grid>
-          </Grid>
-          <ControlsList {...props} withdrawn={controlOrParentWithdrawn} />
-          {modificationDisplay}
-        </CardContent>
-      </OSCALControlCard>
-    );
+  switch (position) {
+    case Position.AFTER:
+      // eslint-disable-next-line no-lone-blocks
+      {
+        modificationDisplayBefore = undefined;
+        modificationDisplayEnding = undefined;
+        modificationDisplayStarting = undefined;
+      }
+      break;
+    case Position.BEFORE:
+      // eslint-disable-next-line no-lone-blocks
+      {
+        modificationDisplayAfter = undefined;
+        modificationDisplayEnding = undefined;
+        modificationDisplayStarting = undefined;
+      }
+      break;
+    case Position.ENDING:
+      // eslint-disable-next-line no-lone-blocks
+      {
+        modificationDisplayAfter = undefined;
+        modificationDisplayBefore = undefined;
+        modificationDisplayStarting = undefined;
+      }
+      break;
+    default: {
+      modificationDisplayAfter = undefined;
+      modificationDisplayEnding = undefined;
+      modificationDisplayBefore = undefined;
+    }
   }
   return showInList ? (
     <ControlsList {...props} withdrawn={controlOrParentWithdrawn} />
@@ -391,12 +302,14 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
                   component="h2"
                   style={childLevel ? { fontSize: "1.1rem" } : undefined}
                 >
+                  {modificationDisplayBefore}
                   <OSCALControlLabel component="span" label={label} id={control.id} />{" "}
                   {control.title}
+                  {modificationDisplayAfter}
                 </Typography>
               </OSCALAnchorLinkHeader>
               <Box>
-                {modificationDisplay}
+                {modificationDisplayStarting}
                 <OSCALPropertiesDialog
                   properties={control.props}
                   title={
@@ -411,6 +324,7 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
           </Grid>
         </Grid>
         <ControlsList {...props} withdrawn={controlOrParentWithdrawn} />
+        {modificationDisplayEnding}
       </CardContent>
     </OSCALControlCard>
   );
