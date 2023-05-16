@@ -1,5 +1,5 @@
 import { ResourceLink } from "@easydynamics/oscal-types";
-import db from "mime-db";
+import mimeDb from "mime-db";
 
 /**
  * A naive implementation to get the extension of a file name.
@@ -25,11 +25,11 @@ function extname(path: string): string | undefined {
   return extension;
 }
 
-const UNRECOGNIZED = "Unrecognized File Type";
+export const UNRECOGNIZED = "Unrecognized File Type";
 
 type Matcher = (type: MediaType) => string | undefined;
 
-enum Type {
+export enum Type {
   APPLICATION = "application",
   AUDIO = "audio",
   EXAMPLE = "example",
@@ -42,7 +42,7 @@ enum Type {
   VIDEO = "video",
 }
 
-function isValidType(str: string): str is Type {
+export function isValidType(str: string): str is Type {
   switch (str) {
     case Type.APPLICATION:
     case Type.AUDIO:
@@ -59,7 +59,7 @@ function isValidType(str: string): str is Type {
   return false;
 }
 
-enum Suffix {
+export enum Suffix {
   XML = "xml",
   JSON = "json",
   BER = "ber",
@@ -99,16 +99,25 @@ export function isRegisteredSuffix(str: string): str is Type {
   return false;
 }
 
-interface IMediaType {
+export interface IMediaType {
   readonly type: Type;
   readonly subtype: string;
   readonly suffix?: Suffix | string;
 }
 
-class MediaType implements IMediaType {
+/**
+ * A Media/MIME type object.
+ *
+ * This contains the type, subtype, and suffix. This can be parsed using
+ * `fromString` static factory method.
+ *
+ * Formally, this only supports types under the registered categories with
+ * IANA.
+ */
+export class MediaType implements IMediaType {
   static fromString(s: string): MediaType | undefined {
     const [type, rest] = s.split("/");
-    if (!isValidType(type)) {
+    if (!isValidType(type) || !rest) {
       return undefined;
     }
     const [subtype, suffix] = rest.split("+");
@@ -138,6 +147,7 @@ class MediaType implements IMediaType {
 // in every list is a reasonable fall back for items in that category. Of course, `application/`
 // is the hardest for that but overall, this should be a reasonable set of mappings considering
 // the audience of the library/application.
+/** @private */
 const map: { [key in Type]: Matcher[] } = {
   [Type.APPLICATION]: [
     // Handle the various OSCAL document format types specially
@@ -182,7 +192,9 @@ const map: { [key in Type]: Matcher[] } = {
         case "xml":
           return "XML";
       }
-      // Fallback to the base document type for some specific suffixes.
+      // Fallback to the base document type for some specific suffixes. This isn't strictly
+      // correct in all cases but is probably sufficient in the JSON/XML/YAML case within
+      // application/
       switch (type.suffix) {
         case Suffix.JSON:
           return "JSON";
@@ -200,6 +212,7 @@ const map: { [key in Type]: Matcher[] } = {
     (type) => (type.subtype === "rtf" ? "Rich Text (RTF)" : undefined),
     (type) => (type.subtype === "ogg" ? "Media (OGG)" : undefined),
     (type) => (type.subtype === "octet-stream" ? "Binary Data" : undefined),
+
     () => "Application/Binary Data",
   ],
   [Type.AUDIO]: [
@@ -239,7 +252,6 @@ const map: { [key in Type]: Matcher[] } = {
         case "webp":
           return "Image (WebP)";
         case "x-icon":
-          return "Image (Icon)";
         case "vnd.microsoft.icon":
           return "Image (Icon)";
         case "vnd.adobe.photoshop":
@@ -280,17 +292,38 @@ const map: { [key in Type]: Matcher[] } = {
   ],
 };
 
+/**
+ * A cache of file extensions to media types.
+ *
+ * @private
+ */
 const mediaTypeCache: { [extension: string]: string[] } = {};
 
+/**
+ * Build the cache of extensions to media types.
+ *
+ * @private
+ */
 function buildCache() {
-  Object.entries(db).forEach(([type, data]) => {
+  Object.entries(mimeDb).forEach(([type, data]) => {
     data.extensions?.forEach((ext) => {
       mediaTypeCache[ext] ??= [];
       mediaTypeCache[ext].push(type);
     });
   });
 }
-
+/**
+ * Attempt to determine the media type from an OSCAL Resource Link.
+ *
+ * This first checks the `media-type`; however, if that is unspecified, an
+ * attempt is made to determine the media type based on the extension of
+ * the given file.
+ *
+ * This will build a cache of extensions to file names on the first invocation
+ * so that subsequent calls will be faster.
+ *
+ * @private
+ */
 function determineMediaType(link: ResourceLink): string | undefined {
   if (link["media-type"]) {
     return link["media-type"];
@@ -309,21 +342,47 @@ function determineMediaType(link: ResourceLink): string | undefined {
   return mediaType;
 }
 
+/**
+ * Get a friendly display of the media type for a given resource link.
+ *
+ * Media Types are not inherently human-readable and may not provide sufficient
+ * context to understand the document's type. This attempts to convert to a common
+ * set of descriptions for the media type. If a media type can be determined at all,
+ * a general descriptions of the "class" of file will be returned; however, if there
+ * is not a media type that can be determined, a generic fallback ({@see UNRECOGNIZED})
+ * will be returned.
+ *
+ * @param link the back matter resource's rlink field
+ */
 export function getFriendlyDisplayOfMediaType(link: ResourceLink): string {
+  // Get the media type based on the rlink; this is either the field from
+  // the object or a guess based on the file extension in the `href` field.
   const mediaTypeRaw = determineMediaType(link);
   if (!mediaTypeRaw) {
     return UNRECOGNIZED;
   }
+
+  // Attempt to convert the media type into its constituent parts. If the
+  // media type is invalid, then abort.
   const mediaType = MediaType.fromString(mediaTypeRaw);
   if (!mediaType) {
     return UNRECOGNIZED;
   }
 
+  // Check if the given media type has any valid functions to apply to
+  // provide a friendly representation; if they do not then the generic
+  // fallback will be used.
   const matchers = map[mediaType.type];
   if (!matchers?.length) {
     return UNRECOGNIZED;
   }
 
+  // This applies each of the "matchers" for the top-level media type
+  // until any of them return a value. This allows for checking against
+  // all the fields of the media type but looking them up based on the
+  // primary type means we can avoid conficts (such as when something appears
+  // in audio/ and video/ or text/ and application/) and allows for specifying
+  // the priority within each type.
   for (const matcher of matchers) {
     const result = matcher(mediaType);
     if (result) {
