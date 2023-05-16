@@ -194,6 +194,7 @@ const BackMatterResourceLinkButtons: React.FC<BackMatterResourceLinkButtonsProps
               key={rlink.href}
               href={getAbsoluteUrl(rlink.href, parentUrl)!}
               target="_blank"
+              role="button"
               title={`Open as ${display}`}
               aria-label={`Open as ${display}`}
               sx={{ textTransform: "none" }}
