@@ -254,6 +254,8 @@ function BackMatterResource(props: BackMatterResourceProps) {
                 href={getAbsoluteUrl(rlink.href, parentUrl)!}
                 target="_blank"
                 variant="outlined"
+                size="small"
+                sx={{ textTransform: "none" }}
               >
                 {getFriendlyDisplayOfMediaType(rlink)}
               </Button>
