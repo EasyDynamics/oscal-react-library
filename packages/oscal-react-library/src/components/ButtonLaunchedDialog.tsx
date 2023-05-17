@@ -6,13 +6,15 @@ import StyledTooltip from "./OSCALStyledTooltip";
 
 interface ButtonLaunchedDialogProps {
   Icon: typeof SvgIcon;
-  title: string | React.ReactElement;
+  toolTipTitle?: string;
+  title: React.ReactNode;
   children: React.ReactNode;
   disabled?: boolean;
 }
 
 export const ButtonLaunchedDialog: React.FC<ButtonLaunchedDialogProps> = ({
   Icon,
+  toolTipTitle,
   disabled,
   children,
   title,
@@ -39,7 +41,7 @@ export const ButtonLaunchedDialog: React.FC<ButtonLaunchedDialogProps> = ({
 
   return (
     <>
-      <StyledTooltip title={`Open ${title}`}>
+      <StyledTooltip title={`Open ${toolTipTitle ?? title}`}>
         {
           // This Box is necessary to ensure the tooltip is present when the button is disabled.
           // If the Button were never disabled, the Box can be removed. This change may be made
@@ -52,7 +54,7 @@ export const ButtonLaunchedDialog: React.FC<ButtonLaunchedDialogProps> = ({
             color="primary"
             size="small"
             onClick={handleOpen}
-            aria-label={`Open ${title}`}
+            aria-label={`Open ${toolTipTitle ?? title}`}
             disabled={disabled}
           >
             <Icon />

@@ -120,6 +120,7 @@ export const OSCALPropertiesDialog: React.FC<OSCALPropertiesDialogProps> = ({
       Icon={ConstructionIcon}
       disabled={!properties}
       title={`${title} Properties`}
+      toolTipTitle={"Properties"}
     >
       {/* Handle NIST properties */}
       <OSCALProperties
