@@ -63,6 +63,7 @@ interface OSCALPropertiesProps {
 }
 
 const OSCALProperties: React.FC<OSCALPropertiesProps> = ({ properties, namespace }) => {
+  if (!properties?.length) return null;
   return (
     <>
       <OSCALSystemImplementationTableTitle variant="h6" id={`${namespace}-table-title`}>
