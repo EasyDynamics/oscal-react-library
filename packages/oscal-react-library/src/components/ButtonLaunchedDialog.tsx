@@ -4,11 +4,30 @@ import IconButton from "@mui/material/IconButton";
 import React from "react";
 import StyledTooltip from "./OSCALStyledTooltip";
 
-interface ButtonLaunchedDialogProps {
+export interface ButtonLaunchedDialogProps {
+  /**
+   * The icon to display on the button.
+   */
   Icon: typeof SvgIcon;
+
+  /**
+   * The title of the tooltip. This will be displayed on hover over the button.
+   */
   toolTipTitle?: string;
+
+  /**
+   * The title of the dialog. This will be displayed in the dialog's header.
+   */
   title: React.ReactNode;
+
+  /**
+   * The content of the dialog. This will be displayed in the dialog's body.
+   */
   children: React.ReactNode;
+
+  /**
+   * If true, the button will be disabled.
+   */
   disabled?: boolean;
 }
 
