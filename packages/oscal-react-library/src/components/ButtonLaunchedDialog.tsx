@@ -5,10 +5,33 @@ import React from "react";
 import StyledTooltip from "./OSCALStyledTooltip";
 
 interface ButtonLaunchedDialogProps {
+  /**
+   * The icon to display to open the dialog
+   */
   Icon: typeof SvgIcon;
+
+  /**
+   * The title to display specifically in tooltips that describe the dialog
+   *
+   * @default the value of `title`
+   */
   toolTipTitle?: string;
+
+  /**
+   * The title of the item being viewed in the dialog
+   */
   title: React.ReactNode;
+
+  /**
+   * The dialog contents
+   */
   children: React.ReactNode;
+
+  /**
+   * Whether launching the dialog should be disabled.
+   *
+   * @default false - the dialog is enabled
+   */
   disabled?: boolean;
 }
 
