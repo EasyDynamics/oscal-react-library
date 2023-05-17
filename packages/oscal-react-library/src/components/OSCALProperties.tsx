@@ -1,9 +1,4 @@
 import ConstructionIcon from "@mui/icons-material/Construction";
-import IconButton from "@mui/material/IconButton";
-import Box from "@mui/material/Box";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
 import React, { ReactElement } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -21,6 +16,7 @@ import { Property } from "@easydynamics/oscal-types";
 import { NIST_DEFAULT_NAMESPACE, namespaceOf } from "./oscal-utils/OSCALPropUtils";
 import { NotSpecifiedTypography } from "./StyledTypography";
 import { groupBy } from "../utils";
+import { ButtonLaunchedDialog } from "./ButtonLaunchedDialog";
 
 /**
  *  Helper to sort properties by their `name` field.
@@ -67,6 +63,7 @@ interface OSCALPropertiesProps {
 }
 
 const OSCALProperties: React.FC<OSCALPropertiesProps> = ({ properties, namespace }) => {
+  if (!properties?.length) return null;
   return (
     <>
       <OSCALSystemImplementationTableTitle variant="h6" id={`${namespace}-table-title`}>
@@ -115,69 +112,30 @@ export const OSCALPropertiesDialog: React.FC<OSCALPropertiesDialogProps> = ({
   properties,
   title,
 }) => {
-  const [open, setOpen] = React.useState(false);
-
   const { [NIST_DEFAULT_NAMESPACE]: nist, ...thirdParties } = groupBy(properties ?? [], (prop) =>
     namespaceOf(prop.ns)
   );
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   return (
-    <>
-      <StyledTooltip title="Open Properties">
-        {
-          // This Box is necessary to ensure the tooltip is present when the button is disabled.
-          // If the Button were never disabled, the Box can be removed. This change may be made
-          // when property editing is enabled to ensure that the dialog can be opened to edit &
-          // create properties, even when none exist. In that case, even the Tooltip wrapper may
-          // not be necessary.
-        }
-        <Box display="inline">
-          <IconButton
-            color="primary"
-            size="small"
-            onClick={handleOpen}
-            aria-label="Open Properties"
-            disabled={!properties}
-          >
-            <ConstructionIcon />
-          </IconButton>
-        </Box>
-      </StyledTooltip>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        scroll="paper"
-        aria-labelledby="scroll-dialog-title"
-        aria-describedby="scroll-dialog-description"
-        maxWidth="md"
-        fullWidth
-        sx={{ maxHeight: "75em" }}
-      >
-        <DialogContent sx={{ maxHeight: "75vh" }} dividers>
-          <DialogTitle id="scroll-dialog-title">{title} Properties</DialogTitle>
-          {/* Handle NIST properties */}
-          <OSCALProperties
-            properties={nist?.sort(byName)}
-            namespace={NIST_DEFAULT_NAMESPACE}
-            key={NIST_DEFAULT_NAMESPACE}
-          />
-          {
-            /* Handle 3rd party properties */
-            Object.entries(thirdParties)
-              .sort(([key1], [key2]) => key1.localeCompare(key2))
-              .map(([key, props]) => (
-                <OSCALProperties properties={props.sort(byName)} namespace={key} key={key} />
-              ))
-          }
-        </DialogContent>
-      </Dialog>
-    </>
+    <ButtonLaunchedDialog
+      Icon={ConstructionIcon}
+      disabled={!properties}
+      title={`${title} Properties`}
+      toolTipTitle={"Properties"}
+    >
+      {/* Handle NIST properties */}
+      <OSCALProperties
+        properties={nist?.sort(byName)}
+        namespace={NIST_DEFAULT_NAMESPACE}
+        key={NIST_DEFAULT_NAMESPACE}
+      />
+      {
+        /* Handle 3rd party properties */
+        Object.entries(thirdParties)
+          .sort(([key1], [key2]) => key1.localeCompare(key2))
+          .map(([key, props]) => (
+            <OSCALProperties properties={props.sort(byName)} namespace={key} key={key} />
+          ))
+      }
+    </ButtonLaunchedDialog>
   );
 };
