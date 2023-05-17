@@ -23,7 +23,7 @@ interface ButtonLaunchedDialogProps {
   title: React.ReactNode;
 
   /**
-   * The dialog contents
+   * The content of the dialog. This will be displayed in the dialog's body.
    */
   children: React.ReactNode;
 
