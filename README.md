@@ -8,7 +8,7 @@ These components enable React application developers to quickly compose pages th
 OSCAL data or entire catalogs, profiles, component definitions, and system security plans.
 
 ![OSCSAL SSP Viewer Screenshot](packages/oscal-viewer/docs/resources/ssp-viewer-screenshot.png)
-Take a tour with the [live demo](https://oscal-viewer.msd.easydynamics.com/) or learn more about
+Take a tour with the [live demo](https://viewer.oscal.io/) or learn more about
 developing with the library below.
 
 ## Components and Documentation
