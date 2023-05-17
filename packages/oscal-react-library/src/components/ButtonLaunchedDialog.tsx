@@ -29,9 +29,10 @@ export const ButtonLaunchedDialog: React.FC<ButtonLaunchedDialogProps> = ({
     setOpen(true);
     e.stopPropagation();
   };
-  // The type defined for `onClose` for a dialog is `{}` which doesn't seem
-  // to be correct it's unclear what it's supposed to be but `MouseEvent` is
-  // close enough and gives us the `stopPropagation` method.
+  // The type defined for the `event` parameter for a dialog's `onClose` handler
+  // is `{}` which doesn't seem to be correct it's unclear what it's
+  // supposed to be but `MouseEvent` is close enough and gives us
+  // the `stopPropagation` method.
   const handleClose = (e: MouseEvent, reason: string) => {
     setOpen(false);
     if (reason === "backdropClick") {
