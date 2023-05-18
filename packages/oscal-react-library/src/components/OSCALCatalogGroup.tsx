@@ -1,5 +1,5 @@
 import { Control, ControlGroup } from "@easydynamics/oscal-types";
-import { Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import Stack from "@mui/material/Stack";
@@ -18,6 +18,7 @@ import OSCALControlLabel from "./OSCALControlLabel";
 import OSCALControlPart from "./OSCALControlPart";
 import { Accordion, AccordionDetails, AccordionSummary } from "./StyedAccordion";
 import { OSCALPropertiesDialog } from "./OSCALProperties";
+import { OSCALParamsDialog } from "./OSCALParam";
 
 const WithdrawnControlText = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[400],
@@ -216,6 +217,7 @@ export const OSCALCatalogControlListItem: React.FC<OSCALCatalogControlListItemPr
         </TitleComponent>
       </OSCALAnchorLinkHeader>
       <Box>
+        <OSCALParamsDialog params={control.params} />
         <OSCALPropertiesDialog
           properties={control.props}
           title={
@@ -313,6 +315,7 @@ const OSCALCatalogGroupList: React.FC<OSCALCatalogGroupListProps> = (props) => {
         </TitleComponent>
       </OSCALAnchorLinkHeader>
       <Box>
+        <OSCALParamsDialog params={group.params} />
         <OSCALPropertiesDialog
           properties={group.props}
           title={
@@ -418,8 +421,22 @@ export const OSCALCatalogGroup: React.FC<OSCALCatalogGroupProps> = (props) => {
     ? `${urlFragment.substring(urlFragment.indexOf("/") + 1)}`
     : undefined;
 
+  const label = propWithName(group.props, "label")?.value;
+
   return (
     <>
+      <Grid container justifyContent="flex-end">
+        <OSCALParamsDialog params={group.params} />{" "}
+        <OSCALPropertiesDialog
+          properties={group.props}
+          title={
+            <>
+              <OSCALControlLabel id={group.id} label={label} component="span" />
+              {` ${group.title}`}
+            </>
+          }
+        />
+      </Grid>
       {group.parts?.map((part, index) => (
         <OSCALControlPart
           control={group}

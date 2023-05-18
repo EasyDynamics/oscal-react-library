@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { profileCatalogInheritanceData } from "../test-data/CommonData";
 import OSCALProfileCatalogInheritance from "./OSCALProfileCatalogInheritance";
 
@@ -21,6 +21,7 @@ describe("OSCALProfileCatalogInheritance", () => {
         inheritedProfilesAndCatalogs={profileCatalogInheritanceData}
       />
     );
+
     const resultProfile = screen.getByText("Example Inherited Profile");
     expect(resultProfile).toBeVisible();
   });
@@ -31,7 +32,9 @@ describe("OSCALProfileCatalogInheritance", () => {
         inheritedProfilesAndCatalogs={profileCatalogInheritanceData}
       />
     );
-    screen.getByText("Example Inherited Profile").click();
+
+    const item = screen.getByText("Example Inherited Profile");
+    fireEvent.click(item);
 
     const nestedCatalog = screen.getByText("Nested Inherited Catalog");
     expect(nestedCatalog).toBeVisible();

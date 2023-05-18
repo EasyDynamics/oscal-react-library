@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { controlsData } from "../test-data/ControlsData";
 import { sspRestData } from "../test-data/SystemData";
 import OSCALControlImplementationAdd from "./OSCALControlImplementationAdd";
@@ -10,19 +10,15 @@ const controls = controlsData.map((control) => ({
 }));
 const implementedControls = [controlsData[0].id];
 
-function OSCALControlImplementationAddRenderer() {
-  render(
-    <OSCALControlImplementationAdd
-      controls={controls}
-      restData={sspRestData}
-      implementedControls={implementedControls}
-    />
-  );
-}
-
-export default function testOSCALControlImplementationAdd(parentElementName, renderer) {
-  test(`${parentElementName} displays the add button`, () => {
-    renderer();
+describe("OSCALControlImplementationAdd", () => {
+  test("displays the add button", () => {
+    render(
+      <OSCALControlImplementationAdd
+        controls={controls}
+        restData={sspRestData}
+        implementedControls={implementedControls}
+      />
+    );
 
     const addButton = screen.getByRole("button", {
       name: "add-system-security-plan-control-implementation",
@@ -31,13 +27,19 @@ export default function testOSCALControlImplementationAdd(parentElementName, ren
     expect(addButton).toBeVisible();
   });
 
-  test(`${parentElementName} displays autocomplete, save button, and cancel button on add button click`, () => {
-    renderer();
+  test("displays autocomplete, save button, and cancel button on add button click", () => {
+    render(
+      <OSCALControlImplementationAdd
+        controls={controls}
+        restData={sspRestData}
+        implementedControls={implementedControls}
+      />
+    );
 
     const addButton = screen.getByRole("button", {
       name: "add-system-security-plan-control-implementation",
     });
-    addButton.click();
+    fireEvent.click(addButton);
 
     const saveButton = screen.getByRole("button", {
       name: "save-system-security-plan-control-implementation",
@@ -54,9 +56,4 @@ export default function testOSCALControlImplementationAdd(parentElementName, ren
     });
     expect(autocomplete).toBeVisible();
   });
-}
-
-testOSCALControlImplementationAdd(
-  "OSCALControlImplementationAdd",
-  OSCALControlImplementationAddRenderer
-);
+});

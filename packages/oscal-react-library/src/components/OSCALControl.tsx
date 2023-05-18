@@ -25,6 +25,7 @@ import { Stack } from "@mui/material";
 import { groupBy } from "../utils";
 import { Accordion, AccordionSummary, AccordionDetails } from "./StyedAccordion";
 import { Position } from "@easydynamics/oscal-types";
+import { OSCALParamsDialog } from "./OSCALParam";
 
 interface ControlListOptions {
   childLevel: number;
@@ -279,6 +280,7 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
               </OSCALAnchorLinkHeader>
               <Box>
                 {modificationDisplayStarting}
+                <OSCALParamsDialog params={control.params} />
                 <OSCALPropertiesDialog
                   properties={control.props}
                   title={
