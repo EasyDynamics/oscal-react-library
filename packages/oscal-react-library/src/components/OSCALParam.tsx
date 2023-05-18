@@ -261,7 +261,7 @@ export const OSCALParams: React.FC<OSCALParamsProps> = ({ params }) => {
 };
 
 export const OSCALParamsDialog = (props: OSCALParamsProps) => (
-  <ButtonLaunchedDialog title="Parameters" disabled={!props.params} Icon={DataObjectIcon}>
+  <ButtonLaunchedDialog dialogTitle="Parameters" disabled={!props.params} Icon={DataObjectIcon}>
     <OSCALParams params={props.params} />
   </ButtonLaunchedDialog>
 );

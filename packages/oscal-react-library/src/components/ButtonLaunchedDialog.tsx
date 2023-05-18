@@ -11,16 +11,18 @@ interface ButtonLaunchedDialogProps {
   Icon: typeof SvgIcon;
 
   /**
-   * The title to display specifically in tooltips that describe the dialog
+   * The title of the dialog.
    *
-   * @default the value of `title`
+   * @example "Properties"
    */
-  toolTipTitle?: string;
+  dialogTitle: string;
 
   /**
-   * The title of the item being viewed in the dialog
+   * The title of the item being viewed in the dialog.
+   *
+   * @example "AC-1"
    */
-  title: React.ReactNode;
+  componentTitle?: React.ReactNode;
 
   /**
    * The content of the dialog. This will be displayed in the dialog's body.
@@ -37,10 +39,10 @@ interface ButtonLaunchedDialogProps {
 
 export const ButtonLaunchedDialog: React.FC<ButtonLaunchedDialogProps> = ({
   Icon,
-  toolTipTitle,
+  dialogTitle,
   disabled,
   children,
-  title,
+  componentTitle,
 }) => {
   const [open, setOpen] = React.useState(false);
 
@@ -65,7 +67,7 @@ export const ButtonLaunchedDialog: React.FC<ButtonLaunchedDialogProps> = ({
 
   return (
     <>
-      <StyledTooltip title={`Open ${toolTipTitle ?? title}`}>
+      <StyledTooltip title={`Open ${dialogTitle}`}>
         {
           // This Box is necessary to ensure the tooltip is present when the button is disabled.
           // If the Button were never disabled, the Box can be removed. This change may be made
@@ -78,7 +80,7 @@ export const ButtonLaunchedDialog: React.FC<ButtonLaunchedDialogProps> = ({
             color="primary"
             size="small"
             onClick={handleOpen}
-            aria-label={`Open ${toolTipTitle ?? title}`}
+            aria-label={`Open ${dialogTitle}`}
             disabled={disabled}
           >
             <Icon />
@@ -99,7 +101,9 @@ export const ButtonLaunchedDialog: React.FC<ButtonLaunchedDialogProps> = ({
       >
         <DialogContent onClick={(e) => e.stopPropagation()}>
           <DialogTitle>
-            <Typography>{title}</Typography>
+            <Typography>
+              {componentTitle} {dialogTitle}
+            </Typography>
           </DialogTitle>
           {children}
         </DialogContent>

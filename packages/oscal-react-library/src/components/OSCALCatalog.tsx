@@ -1,5 +1,6 @@
 import { Catalog, ControlGroup } from "@easydynamics/oscal-types";
 import { Card, CardContent } from "@mui/material";
+import { Stack } from "@mui/system";
 import React, { useEffect } from "react";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
@@ -9,6 +10,7 @@ import OSCALCatalogGroups from "./OSCALCatalogGroups";
 import { EditableFieldProps } from "./OSCALEditableTextField";
 import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
 import OSCALMetadata from "./OSCALMetadata";
+import { OSCALParamsDialog } from "./OSCALParam";
 
 const UNGROUPED_CONTROLS_TITLE = "*Top*";
 
@@ -81,6 +83,9 @@ export const OSCALCatalog: React.FC<OSCALCatalogProps> = ({
 
   return (
     <OSCALDocumentRoot>
+      <Stack justifyContent="flex-end" direction="row">
+        <OSCALParamsDialog params={catalog.params} />
+      </Stack>
       <OSCALMetadata
         metadata={catalog.metadata}
         isEditable={isEditable}
@@ -90,7 +95,6 @@ export const OSCALCatalog: React.FC<OSCALCatalogProps> = ({
         parentUrl={parentUrl}
         backMatter={catalog["back-matter"]}
       />
-
       {catalog.groups ? (
         <OSCALCatalogGroups
           groups={catalog.controls ? [defaultGroup, ...(catalog.groups ?? [])] : catalog.groups}
@@ -99,7 +103,6 @@ export const OSCALCatalog: React.FC<OSCALCatalogProps> = ({
       ) : catalog.controls ? (
         <OSCALCatalogControlsList controls={catalog.controls} urlFragment={urlFragment} />
       ) : undefined}
-
       <OSCALBackMatter
         backMatter={catalog["back-matter"]}
         parentUrl={parentUrl}
