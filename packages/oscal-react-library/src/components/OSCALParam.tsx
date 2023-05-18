@@ -31,6 +31,7 @@ import {
   StyledTableHead,
   StyledTableRow,
 } from "./OSCALSystemImplementationTableStyles";
+import { SmallInlineClassDisplay } from "./OSCALClass";
 
 interface OSCALParamUsageProps {
   usage: string | undefined;
@@ -223,6 +224,7 @@ export const OSCALParam: React.FC<OSCALParamProps> = ({ param }) => {
         <Stack direction="row" alignItems="center" justifyContent="space-between" width="100%">
           <Typography>{param.id}</Typography>
           <Typography sx={{ color: "text.secondary" }}>{param.label}</Typography>
+          <SmallInlineClassDisplay item={param} />
           <OSCALPropertiesDialog properties={param.props} />
         </Stack>
       </AccordionSummary>
