@@ -53,6 +53,7 @@ import { NotSpecifiedTypography } from "./StyledTypography";
 import resolveLinkHref, { UriReferenceLookup } from "./oscal-utils/OSCALLinkUtils";
 import { Accordion, AccordionSummary, AccordionDetails } from "./StyedAccordion";
 import { OSCALPropertiesDialog } from "./OSCALProperties";
+import { colorFromString } from "../utils";
 
 const OSCALMetadataSectionInfoHeader = styled(Typography)`
   display: flex;
@@ -224,25 +225,6 @@ interface MetadataAvatarProps {
 const MetadataAvatar: React.FC<MetadataAvatarProps> = (props) => {
   const { id, text, fallbackIcon } = props;
 
-  const avatarColor = (name: string) => {
-    // This implementation hashes the given string to create a
-    // color string. This is based of the example algorithm given
-    // in the MUI documentation and adapted to our use case.
-    let hash = 0;
-    for (let i = 0; i < name.length; i += 1) {
-      // eslint-disable-next-line no-bitwise
-      hash = name.charCodeAt(i) + ((hash << 5) - hash);
-    }
-
-    let color = "#";
-    for (let i = 0; i < 3; i += 1) {
-      // eslint-disable-next-line no-bitwise
-      const value = (hash >> (i * 8)) & 0xff;
-      color += `00${value.toString(16)}`.slice(-2);
-    }
-    return color;
-  };
-
   const avatarValue = (name: string | undefined) =>
     name
       ?.split(" ")
@@ -251,7 +233,7 @@ const MetadataAvatar: React.FC<MetadataAvatarProps> = (props) => {
       .substring(0, 2)
       .toUpperCase();
 
-  return <Avatar sx={{ bgcolor: avatarColor(id) }}>{avatarValue(text) ?? fallbackIcon}</Avatar>;
+  return <Avatar sx={{ bgcolor: colorFromString(id) }}>{avatarValue(text) ?? fallbackIcon}</Avatar>;
 };
 
 enum MetadataInfoType {

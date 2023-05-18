@@ -17,6 +17,7 @@ import { NIST_DEFAULT_NAMESPACE, namespaceOf } from "./oscal-utils/OSCALPropUtil
 import { NotSpecifiedTypography } from "./StyledTypography";
 import { groupBy } from "../utils";
 import { ButtonLaunchedDialog } from "./ButtonLaunchedDialog";
+import { SmallInlineClassDisplay } from "./OSCALClass";
 
 /**
  *  Helper to sort properties by their `name` field.
@@ -44,7 +45,9 @@ const OSCALProperty: React.FC<OSCALPropertyProps> = ({ property }) => {
     <StyledTooltip title={property.remarks ?? ""}>
       <StyledTableRow key={property.uuid}>
         <TableCell>{property.name ?? NO_INFORMATION}</TableCell>
-        <TableCell>{property.class ?? NO_INFORMATION}</TableCell>
+        <TableCell>
+          {property.class ? <SmallInlineClassDisplay item={property} /> : NO_INFORMATION}
+        </TableCell>
         <TableCell>{property.value ?? NO_INFORMATION}</TableCell>
       </StyledTableRow>
     </StyledTooltip>
