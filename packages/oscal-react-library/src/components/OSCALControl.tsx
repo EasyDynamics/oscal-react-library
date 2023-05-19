@@ -313,16 +313,6 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
               </OSCALAnchorLinkHeader>
               <Box>
                 {modificationDisplayAfter}
-                <OSCALParamsDialog params={control.params} />
-                <OSCALPropertiesDialog
-                  properties={control.props}
-                  title={
-                    <>
-                      <OSCALControlLabel id={control.id} label={label} component="span" />
-                      {` ${control.title}`}
-                    </>
-                  }
-                />
                 <ControlMetadataItems item={control} />
               </Box>
             </Stack>
