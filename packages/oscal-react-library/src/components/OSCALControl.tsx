@@ -323,7 +323,6 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
                     </>
                   }
                 />
-                {modificationDisplay}
                 <ControlMetadataItems item={control} />
               </Box>
             </Stack>
