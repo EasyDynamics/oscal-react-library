@@ -9,6 +9,7 @@ import OSCALCatalogGroups from "./OSCALCatalogGroups";
 import { EditableFieldProps } from "./OSCALEditableTextField";
 import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
 import OSCALMetadata from "./OSCALMetadata";
+import { OSCALParams } from "./OSCALParam";
 
 const UNGROUPED_CONTROLS_TITLE = "*Top*";
 
@@ -90,7 +91,14 @@ export const OSCALCatalog: React.FC<OSCALCatalogProps> = ({
         parentUrl={parentUrl}
         backMatter={catalog["back-matter"]}
       />
-
+      <OSCALSection>
+        <Card>
+          <CardContent>
+            <OSCALSectionHeader>Parameters</OSCALSectionHeader>
+            <OSCALParams params={catalog.params} />
+          </CardContent>
+        </Card>
+      </OSCALSection>
       {catalog.groups ? (
         <OSCALCatalogGroups
           groups={catalog.controls ? [defaultGroup, ...(catalog.groups ?? [])] : catalog.groups}
@@ -99,7 +107,6 @@ export const OSCALCatalog: React.FC<OSCALCatalogProps> = ({
       ) : catalog.controls ? (
         <OSCALCatalogControlsList controls={catalog.controls} urlFragment={urlFragment} />
       ) : undefined}
-
       <OSCALBackMatter
         backMatter={catalog["back-matter"]}
         parentUrl={parentUrl}

@@ -118,12 +118,13 @@ export const OSCALPropertiesDialog: React.FC<OSCALPropertiesDialogProps> = ({
   const { [NIST_DEFAULT_NAMESPACE]: nist, ...thirdParties } = groupBy(properties ?? [], (prop) =>
     namespaceOf(prop.ns)
   );
+
   return (
     <ButtonLaunchedDialog
       Icon={ConstructionIcon}
       disabled={!properties}
-      title={`${title} Properties`}
-      toolTipTitle={"Properties"}
+      componentTitle={title}
+      dialogTitle={"Properties"}
     >
       {/* Handle NIST properties */}
       <OSCALProperties
