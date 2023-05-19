@@ -16,6 +16,7 @@ import { OSCALPropertiesDialog } from "./OSCALProperties";
 import { shouldForwardProp } from "@mui/system";
 import {
   Control,
+  ControlGroup,
   ImplementedRequirementElement,
   SetParameterValue,
   Alteration,
@@ -26,6 +27,7 @@ import { groupBy } from "../utils";
 import { Accordion, AccordionSummary, AccordionDetails } from "./StyedAccordion";
 import { Position } from "@easydynamics/oscal-types";
 import { OSCALParamsDialog } from "./OSCALParam";
+import { SmallInlineClassDisplay } from "./OSCALClass";
 
 interface ControlListOptions {
   childLevel: number;
@@ -60,6 +62,38 @@ interface ControlsListProps extends EditableFieldProps, AnchorLinkProps, Control
   modificationSetParameters?: SetParameterValue[];
   withdrawn: boolean;
 }
+
+export interface ControlMetadataItemsProps {
+  /**
+   * The control or group to display details about.
+   */
+  item: Control | ControlGroup;
+}
+
+/**
+ * Metadata to display about the control (or group).
+ */
+export const ControlMetadataItems: React.FC<ControlMetadataItemsProps> = ({ item }) => {
+  return (
+    <>
+      <SmallInlineClassDisplay item={item} />
+      <OSCALParamsDialog params={item.params} />
+      <OSCALPropertiesDialog
+        properties={item.props}
+        title={
+          <>
+            <OSCALControlLabel
+              id={item.id}
+              label={propWithName(item.props, "label")?.value}
+              component="span"
+            />
+            {` ${item.title}`}
+          </>
+        }
+      />
+    </>
+  );
+};
 
 const ControlsList: React.FC<ControlsListProps> = (props) => {
   const {
@@ -289,6 +323,8 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
                     </>
                   }
                 />
+                {modificationDisplay}
+                <ControlMetadataItems item={control} />
               </Box>
             </Stack>
           </Grid>
