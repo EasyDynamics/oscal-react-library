@@ -25,6 +25,7 @@ import { EditableFieldProps } from "./OSCALEditableTextField";
 import { Stack } from "@mui/material";
 import { groupBy } from "../utils";
 import { Accordion, AccordionSummary, AccordionDetails } from "./StyedAccordion";
+import { Position } from "@easydynamics/oscal-types";
 import { OSCALParamsDialog } from "./OSCALParam";
 import { SmallInlineClassDisplay } from "./OSCALClass";
 
@@ -276,8 +277,18 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
     );
   }
 
+  const position = props?.modificationAlters
+    ?.find((item) => item["control-id"] === props.control.id)
+    ?.adds?.flatMap((item) => item["position"])
+    .filter((part) => part)[0];
+
   const label = propWithName(control.props, "label")?.value;
   const controlOrParentWithdrawn = withdrawn || isWithdrawn(control);
+
+  const modificationDisplayBefore = position === Position.BEFORE ? modificationDisplay : null;
+  const modificationDisplayAfter = position === Position.AFTER ? modificationDisplay : null;
+  const modificationDisplayStarting = position === Position.STARTING ? modificationDisplay : null;
+  const modificationDisplayEnding = position === Position.ENDING ? modificationDisplay : null;
 
   return showInList ? (
     <ControlsList {...props} withdrawn={controlOrParentWithdrawn} />
@@ -295,18 +306,21 @@ const OSCALControl: React.FC<OSCALControlProps> = (props) => {
                   component="h2"
                   style={childLevel ? { fontSize: "1.1rem" } : undefined}
                 >
+                  {modificationDisplayBefore}
                   <OSCALControlLabel component="span" label={label} id={control.id} />{" "}
                   {control.title}
                 </Typography>
               </OSCALAnchorLinkHeader>
               <Box>
-                {modificationDisplay}
+                {modificationDisplayAfter}
                 <ControlMetadataItems item={control} />
               </Box>
             </Stack>
           </Grid>
         </Grid>
+        {modificationDisplayStarting}
         <ControlsList {...props} withdrawn={controlOrParentWithdrawn} />
+        {modificationDisplayEnding}
       </CardContent>
     </OSCALControlCard>
   );
