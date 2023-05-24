@@ -41,7 +41,9 @@ function AuthorizedPrivilegesTable(props) {
               <TableCell>
                 <HoverablePopover
                   popoverContent={
-                    <OSCALMarkupMultiLine>{privilege.description}</OSCALMarkupMultiLine>
+                    privilege.description && (
+                      <OSCALMarkupMultiLine>{privilege.description}</OSCALMarkupMultiLine>
+                    )
                   }
                 >
                   <OSCALMarkupLine>{privilege.title}</OSCALMarkupLine>
@@ -96,7 +98,11 @@ export default function OSCALSystemImplementationUsers(props) {
               <StyledTableRow key={user.uuid}>
                 <TableCell>
                   <HoverablePopover
-                    popoverContent={<OSCALMarkupMultiLine>{user.description}</OSCALMarkupMultiLine>}
+                    popoverContent={
+                      user.description && (
+                        <OSCALMarkupMultiLine>{user.description}</OSCALMarkupMultiLine>
+                      )
+                    }
                   >
                     <OSCALMarkupLine>{user.title}</OSCALMarkupLine>
                   </HoverablePopover>

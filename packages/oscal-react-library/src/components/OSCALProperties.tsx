@@ -18,7 +18,7 @@ import { groupBy } from "../utils";
 import { ButtonLaunchedDialog } from "./ButtonLaunchedDialog";
 import { SmallInlineClassDisplay } from "./OSCALClass";
 import { HoverablePopover } from "./HoverablePopover";
-import { OSCALMarkupLine } from "./OSCALMarkupProse";
+import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 /**
  *  Helper to sort properties by their `name` field.
@@ -43,7 +43,11 @@ const OSCALProperty: React.FC<OSCALPropertyProps> = ({ property }) => {
   const NO_INFORMATION = <NotSpecifiedTypography>Not Specified</NotSpecifiedTypography>;
 
   return (
-    <HoverablePopover popoverContent={<OSCALMarkupLine>{property.remarks}</OSCALMarkupLine>}>
+    <HoverablePopover
+      popoverContent={
+        property.remarks && <OSCALMarkupMultiLine>{property.remarks}</OSCALMarkupMultiLine>
+      }
+    >
       <StyledTableRow key={property.uuid}>
         <TableCell>{property.name ?? NO_INFORMATION}</TableCell>
         <TableCell>

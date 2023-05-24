@@ -77,7 +77,7 @@ const TextFieldWithEditableActions: React.FC<TextFieldWithEditableActionsProps> 
   return (
     <>
       <Typography display="inline" variant={props.typographyVariant}>
-        <OSCALMarkupLine>{props.value}</OSCALMarkupLine>
+        <OSCALMarkupLine>{props.value ?? ""}</OSCALMarkupLine>
       </Typography>
       <OSCALEditableFieldActions
         editedField={props.editedField}

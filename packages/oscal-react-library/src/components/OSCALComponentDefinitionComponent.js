@@ -40,9 +40,11 @@ export default function OSCALComponentDefinitionComponent(props) {
                       <TableCell component="th" scope="row">
                         <HoverablePopover
                           popoverContent={
-                            <OSCALMarkupMultiLine>
-                              {props.component.description}
-                            </OSCALMarkupMultiLine>
+                            props.component.description && (
+                              <OSCALMarkupMultiLine>
+                                {props.component.description}
+                              </OSCALMarkupMultiLine>
+                            )
                           }
                         >
                           <OSCALMarkupLine>{props.component.title}</OSCALMarkupLine>

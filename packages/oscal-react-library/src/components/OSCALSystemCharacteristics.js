@@ -148,9 +148,11 @@ export default function OSCALSystemCharacteristics(props) {
                           <TableCell component="th" scope="row">
                             <HoverablePopover
                               popoverContent={
-                                <OSCALMarkupMultiLine>
-                                  {informationType.description}
-                                </OSCALMarkupMultiLine>
+                                informationType.description && (
+                                  <OSCALMarkupMultiLine>
+                                    {informationType.description}
+                                  </OSCALMarkupMultiLine>
+                                )
                               }
                             >
                               <OSCALMarkupLine>{informationType.title}</OSCALMarkupLine>

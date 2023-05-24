@@ -48,7 +48,9 @@ export const OSCALSystemImplementationComponents: React.FC<
                 <ComponentTableCell component="th" scope="row">
                   <HoverablePopover
                     popoverContent={
-                      <OSCALMarkupMultiLine>{component.description}</OSCALMarkupMultiLine>
+                      component.description && (
+                        <OSCALMarkupMultiLine>{component.description}</OSCALMarkupMultiLine>
+                      )
                     }
                   >
                     <OSCALMarkupLine>{component.title}</OSCALMarkupLine>
