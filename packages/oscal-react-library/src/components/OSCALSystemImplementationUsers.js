@@ -1,11 +1,9 @@
 import React from "react";
-import Typography from "@mui/material/Typography";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
-import StyledTooltip from "./OSCALStyledTooltip";
 import {
   OSCALSystemImplementationTableTitle,
   StyledHeaderTableCell,
@@ -14,6 +12,8 @@ import {
 } from "./OSCALSystemImplementationTableStyles";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import PropertiesTable from "./OSCALSystemImplementationPropertiesTable";
+import { HoverablePopover } from "./HoverablePopover";
+import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 function FunctionsPreformedTable(props) {
   return (
@@ -39,9 +39,13 @@ function AuthorizedPrivilegesTable(props) {
           {props.authorizedPrivileges?.map((privilege) => (
             <TableRow key={privilege.title}>
               <TableCell>
-                <StyledTooltip title={privilege.description ?? ""}>
-                  <Typography>{privilege.title}</Typography>
-                </StyledTooltip>
+                <HoverablePopover
+                  popoverContent={
+                    <OSCALMarkupMultiLine>{privilege.description}</OSCALMarkupMultiLine>
+                  }
+                >
+                  <OSCALMarkupLine>{privilege.title}</OSCALMarkupLine>
+                </HoverablePopover>
               </TableCell>
               <TableCell>
                 <FunctionsPreformedTable functions={privilege["functions-performed"]} />
@@ -91,9 +95,11 @@ export default function OSCALSystemImplementationUsers(props) {
             {props.users.map((user) => (
               <StyledTableRow key={user.uuid}>
                 <TableCell>
-                  <StyledTooltip title={user.description ?? ""}>
-                    <Typography>{user.title}</Typography>
-                  </StyledTooltip>
+                  <HoverablePopover
+                    popoverContent={<OSCALMarkupMultiLine>{user.description}</OSCALMarkupMultiLine>}
+                  >
+                    <OSCALMarkupLine>{user.title}</OSCALMarkupLine>
+                  </HoverablePopover>
                 </TableCell>
                 <TableCell>{user["short-name"]}</TableCell>
                 <TableCell>

@@ -5,7 +5,6 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
-import StyledTooltip from "./OSCALStyledTooltip";
 import {
   OSCALSystemImplementationTableTitle,
   StyledHeaderTableCell,
@@ -18,6 +17,8 @@ import { NotSpecifiedTypography } from "./StyledTypography";
 import { groupBy } from "../utils";
 import { ButtonLaunchedDialog } from "./ButtonLaunchedDialog";
 import { SmallInlineClassDisplay } from "./OSCALClass";
+import { HoverablePopover } from "./HoverablePopover";
+import { OSCALMarkupLine } from "./OSCALMarkupProse";
 
 /**
  *  Helper to sort properties by their `name` field.
@@ -42,7 +43,7 @@ const OSCALProperty: React.FC<OSCALPropertyProps> = ({ property }) => {
   const NO_INFORMATION = <NotSpecifiedTypography>Not Specified</NotSpecifiedTypography>;
 
   return (
-    <StyledTooltip title={property.remarks ?? ""}>
+    <HoverablePopover popoverContent={<OSCALMarkupLine>{property.remarks}</OSCALMarkupLine>}>
       <StyledTableRow key={property.uuid}>
         <TableCell>{property.name ?? NO_INFORMATION}</TableCell>
         <TableCell>
@@ -50,7 +51,7 @@ const OSCALProperty: React.FC<OSCALPropertyProps> = ({ property }) => {
         </TableCell>
         <TableCell>{property.value ?? NO_INFORMATION}</TableCell>
       </StyledTableRow>
-    </StyledTooltip>
+    </HoverablePopover>
   );
 };
 

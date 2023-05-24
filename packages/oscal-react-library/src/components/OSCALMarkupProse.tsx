@@ -16,7 +16,7 @@ const baseComponents = {
 };
 
 export interface OSCALMarkupInterface {
-  children: string;
+  children: string | undefined;
 }
 
 export interface OSCALMarkupMultiLineInterface extends OSCALMarkupInterface {
@@ -31,6 +31,10 @@ export const OSCALMarkupMultiLine: React.FC<OSCALMarkupMultiLineInterface> = ({
   paragraphComponent,
   ...rest
 }) => {
+  if (!children) {
+    return null;
+  }
+
   return (
     <ReactMarkdown
       {...rest}
@@ -45,6 +49,10 @@ export const OSCALMarkupMultiLine: React.FC<OSCALMarkupMultiLineInterface> = ({
 };
 
 export const OSCALMarkupLine: React.FC<OSCALMarkupInterface> = ({ children, ...rest }) => {
+  if (!children) {
+    return null;
+  }
+
   return (
     <ReactMarkdown {...rest} components={{ ...baseComponents, p: React.Fragment }}>
       {children}

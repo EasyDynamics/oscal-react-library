@@ -2,7 +2,6 @@ import React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -10,9 +9,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
-import StyledTooltip from "./OSCALStyledTooltip";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
+import { HoverablePopover } from "./HoverablePopover";
+import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 export default function OSCALComponentDefinitionComponent(props) {
   return (
@@ -38,9 +38,15 @@ export default function OSCALComponentDefinitionComponent(props) {
                   <TableBody>
                     <TableRow key={props.component.uuid}>
                       <TableCell component="th" scope="row">
-                        <StyledTooltip title={props.component.description}>
-                          <Typography variant="body2">{props.component.title}</Typography>
-                        </StyledTooltip>
+                        <HoverablePopover
+                          popoverContent={
+                            <OSCALMarkupMultiLine>
+                              {props.component.description}
+                            </OSCALMarkupMultiLine>
+                          }
+                        >
+                          <OSCALMarkupLine>{props.component.title}</OSCALMarkupLine>
+                        </HoverablePopover>
                       </TableCell>
                       <TableCell>{props.component.type}</TableCell>
                       <TableCell>

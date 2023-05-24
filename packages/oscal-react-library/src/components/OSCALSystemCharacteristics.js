@@ -16,6 +16,8 @@ import StyledTooltip from "./OSCALStyledTooltip";
 import OSCALDiagram from "./OSCALDiagram";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
+import { HoverablePopover } from "./HoverablePopover";
+import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
 export default function OSCALSystemCharacteristics(props) {
   return (
@@ -144,9 +146,15 @@ export default function OSCALSystemCharacteristics(props) {
                       (informationType) => (
                         <TableRow key={informationType.uuid}>
                           <TableCell component="th" scope="row">
-                            <StyledTooltip title={informationType.description}>
-                              <Typography variant="body2">{informationType.title}</Typography>
-                            </StyledTooltip>
+                            <HoverablePopover
+                              popoverContent={
+                                <OSCALMarkupMultiLine>
+                                  {informationType.description}
+                                </OSCALMarkupMultiLine>
+                              }
+                            >
+                              <OSCALMarkupLine>{informationType.title}</OSCALMarkupLine>
+                            </HoverablePopover>
                           </TableCell>
                           <TableCell>
                             {informationType.categorizations?.map((categorization) =>
