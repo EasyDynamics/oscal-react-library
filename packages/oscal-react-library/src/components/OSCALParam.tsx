@@ -1,17 +1,10 @@
-import {
-  Constraint,
-  Guideline,
-  Parameter,
-  ParameterCardinality,
-  Link as OSCALLink,
-} from "@easydynamics/oscal-types";
+import { Constraint, Guideline, Parameter, ParameterCardinality } from "@easydynamics/oscal-types";
 import DataObjectIcon from "@mui/icons-material/DataObject";
 import React from "react";
 import {
   Divider,
   FormControl,
   FormHelperText,
-  Link,
   MenuItem,
   Table,
   TableBody,
@@ -126,27 +119,6 @@ const OSCALParamValues: React.FC<OSCALParamValuesProps> = ({ values }) => {
   );
 };
 
-interface OSCALParamLinksProps {
-  links: OSCALLink[] | undefined;
-}
-
-const OSCALParamLinks: React.FC<OSCALParamLinksProps> = ({ links }) => {
-  if (!links) {
-    return null;
-  }
-  return (
-    <>
-      <Divider />
-      <OSCALSectionHeader>Links</OSCALSectionHeader>
-      {links?.map((link) => (
-        <Link key={link.href} href={link.href}>
-          {link.text ?? link.href}
-        </Link>
-      ))}
-    </>
-  );
-};
-
 interface OSCALSelectProps {
   choice?: string[];
 }
@@ -235,7 +207,6 @@ export const OSCALParam: React.FC<OSCALParamProps> = ({ param }) => {
           <OSCALParamConstraints constraints={param.constraints} />
           <OSCALParamGuidelines guidelines={param.guidelines} />
           <OSCALParamValues values={param.values} />
-          <OSCALParamLinks links={param.links} />
           {param.select ? <Divider /> : null}
           {param.select?.["how-many"] === ParameterCardinality.ONE ? (
             <OSCALSingleSelect choice={param.select.choice} />
