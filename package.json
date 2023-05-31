@@ -9,7 +9,7 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@types/node": "^20.2.4",
+    "@types/node": "^20.2.5",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
     "lerna": "^6.6.2",
