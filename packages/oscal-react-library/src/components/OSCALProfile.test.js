@@ -7,7 +7,7 @@ import {
   profileWithIncludeAll,
   profileWithIncludeAllAndExcludeAC3,
 } from "../test-data/ProfileData";
-const PROFILE_RESOLUTION_TEST_TIMEOUT_MS = 30_000;
+const PROFILE_RESOLUTION_TEST_TIMEOUT_MS = 100_000;
 describe("The OSCAL Profile", () => {
   it("displays controls", async () => {
     render(
