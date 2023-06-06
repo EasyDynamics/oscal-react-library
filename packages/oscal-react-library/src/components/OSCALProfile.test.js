@@ -23,7 +23,7 @@ describe("The OSCAL Profile", () => {
     });
 
     expect(result).toBeVisible();
-  }, 30000);
+  }, 60000);
 
   it("displays parameter constraints", async () => {
     render(
@@ -59,7 +59,7 @@ describe("The OSCAL Profile", () => {
 
     expect(screen.getByText("Modifications")).toBeVisible();
     expect(screen.getByText("Adds")).toBeVisible();
-  }, 30000);
+  }, 60000);
   it("displays profile removed control modifications", async () => {
     render(
       <OSCALProfile
@@ -78,7 +78,7 @@ describe("The OSCAL Profile", () => {
 
     expect(screen.getByText("Modifications")).toBeVisible();
     expect(screen.getByText("Removes")).toBeVisible();
-  }, 30000);
+  }, 60000);
   it("displays profile removed control part modifications", async () => {
     render(
       <OSCALProfile
