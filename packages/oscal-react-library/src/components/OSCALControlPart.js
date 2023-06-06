@@ -119,7 +119,11 @@ export default function OSCALControlPart(props) {
 
   if (removeByIds || removeByNames || removeByNS || removeByClass || removeByItemNames) {
     return (
-      <OSCALControlRemovedPartWrapper ownerState partName={props.part.name}>
+      <OSCALControlRemovedPartWrapper
+        ownerState
+        partName={props.part.name}
+        data-testid={`${controlPartId} remove-div`}
+      >
         {replacedProse}
         {props.part.parts?.map((part) => (
           <OSCALControlPart
