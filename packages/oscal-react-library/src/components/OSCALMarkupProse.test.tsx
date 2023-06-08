@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 
-const asHtml = (component) => render(component).container.innerHTML;
+const asHtml = (component: React.ReactElement) => render(component).container.innerHTML;
 
 test(`OSCALMarkupLine converts plaintext to HTML`, () => {
   const html = asHtml(<OSCALMarkupLine>Test</OSCALMarkupLine>);
@@ -18,7 +18,8 @@ test(`OSCALMarkupLine converts hyperlinks to HTML`, () => {
   render(<OSCALMarkupLine>[Link to EasyDynamics](https://www.easydynamics.com)]</OSCALMarkupLine>);
   const a = screen.getByText("Link to EasyDynamics");
 
-  expect(a.href).toEqual("https://www.easydynamics.com/");
+  expect(a).toBeInstanceOf(HTMLAnchorElement);
+  expect((a as HTMLAnchorElement).href).toEqual("https://www.easydynamics.com/");
 });
 
 test(`OSCALMarkupLine converts images to HTML`, () => {
@@ -71,6 +72,7 @@ test(`OSCALMarkupLine Handles titles of links`, () => {
   render(<OSCALMarkupLine>{testingTitle}</OSCALMarkupLine>);
   const a = screen.getByTitle("Testing Title");
 
-  expect(a.href).toEqual("http://localhost/#");
+  expect(a).toBeInstanceOf(HTMLAnchorElement);
+  expect((a as HTMLAnchorElement).href).toEqual("http://localhost/#");
   expect(a.title).toEqual("Testing Title");
 });

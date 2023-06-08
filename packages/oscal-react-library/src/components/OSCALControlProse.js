@@ -13,6 +13,7 @@ import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 import { NotSpecifiedTypography } from "./StyledTypography";
+import { HoverablePopover } from "./HoverablePopover";
 
 const OSCALStatementEditing = styled(Grid)`
   ${(props) =>
@@ -451,11 +452,13 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   return (
     <OSCALStatementEditing container spacing={2}>
       <Grid item xs={11}>
-        <StyledTooltip title={statementByComponentDescriptionMarkup ?? props.componentId}>
+        <HoverablePopover
+          popoverContent={statementByComponentDescriptionMarkup ?? props.componentId}
+        >
           <Link underline="hover" href={`#${props.label}`}>
             {props.label}
           </Link>
-        </StyledTooltip>{" "}
+        </HoverablePopover>{" "}
         {proseDisplay}
         {props.modificationDisplay}
       </Grid>

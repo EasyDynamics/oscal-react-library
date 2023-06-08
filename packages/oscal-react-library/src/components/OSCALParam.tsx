@@ -58,7 +58,7 @@ const OSCALParamConstraints: React.FC<OSCALParamConstraintsProps> = ({ constrain
       <OSCALSectionHeader>Constraints</OSCALSectionHeader>
       {constraints?.map((constraint) => (
         <>
-          <OSCALMarkupMultiLine>{constraint.description}</OSCALMarkupMultiLine>
+          <OSCALMarkupMultiLine>{constraint.description ?? ""}</OSCALMarkupMultiLine>
           <Table>
             <StyledTableHead>
               <TableRow>
@@ -202,7 +202,7 @@ export const OSCALParam: React.FC<OSCALParamProps> = ({ param }) => {
       </AccordionSummary>
       <AccordionDetails sx={{ maxHeight: "40em", overflowY: "scroll" }}>
         <Stack direction="column" spacing={2}>
-          <OSCALMarkupMultiLine>{param.remarks}</OSCALMarkupMultiLine>
+          <OSCALMarkupMultiLine>{param.remarks ?? ""}</OSCALMarkupMultiLine>
           <OSCALParamUsage usage={param.usage} />
           <OSCALParamConstraints constraints={param.constraints} />
           <OSCALParamGuidelines guidelines={param.guidelines} />

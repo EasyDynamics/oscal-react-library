@@ -1,5 +1,5 @@
 import { Box, Popover } from "@mui/material";
-import React from "react";
+import React, { Fragment } from "react";
 
 export interface HoverablePopoverProps {
   /**
@@ -26,6 +26,29 @@ export const HoverablePopover: React.FC<HoverablePopoverProps> = ({ popoverConte
 
   const open = Boolean(anchorEl);
 
+  const popover = popoverContent ? (
+    <Popover
+      open={open}
+      sx={{
+        pointerEvents: "none",
+        maxWidth: "30em",
+      }}
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "left",
+      }}
+      anchorEl={anchorEl}
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "left",
+      }}
+      onClose={handlePopoverClose}
+      disableRestoreFocus
+    >
+      <Box sx={{ padding: "1em" }}>{popoverContent}</Box>
+    </Popover>
+  ) : null;
+
   return (
     <>
       <Box
@@ -37,26 +60,7 @@ export const HoverablePopover: React.FC<HoverablePopoverProps> = ({ popoverConte
       >
         {children}
       </Box>
-      <Popover
-        open={open}
-        sx={{
-          pointerEvents: "none",
-          maxWidth: "30em",
-        }}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        anchorEl={anchorEl}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        onClose={handlePopoverClose}
-        disableRestoreFocus
-      >
-        <Box sx={{ padding: "1em" }}>{popoverContent}</Box>
-      </Popover>
+      {popover}
     </>
   );
 };

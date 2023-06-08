@@ -11,10 +11,9 @@ import Stack from "@mui/material/Stack";
 import { Typography } from "@mui/material";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import StyledTooltip from "./OSCALStyledTooltip";
 import { getAbsoluteUrl } from "./oscal-utils/OSCALLinkUtils";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
-import { OSCALMarkupLine } from "./OSCALMarkupProse";
+import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import OSCALEditableTextField, { EditableFieldProps } from "./OSCALEditableTextField";
 import { Resource, BackMatter, ResourceLink } from "@easydynamics/oscal-types";
@@ -23,6 +22,7 @@ import { OSCALPropertiesDialog } from "./OSCALProperties";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import { NotSpecifiedTypography } from "./StyledTypography";
 import { getFriendlyDisplayOfMediaType } from "./oscal-utils/OSCALMediaTypeUtils";
+import { HoverablePopover } from "./HoverablePopover";
 
 export const OSCALBackMatterCard = styled(Card)(
   ({ theme }) => `
@@ -139,13 +139,15 @@ function CitationDisplay(props: CitationDisplayProps): ReactElement {
     );
   }
   return (
-    <StyledTooltip title={<OSCALMarkupLine>{props.resource.citation.text}</OSCALMarkupLine>}>
+    <HoverablePopover
+      popoverContent={<OSCALMarkupMultiLine>{props.resource.citation.text}</OSCALMarkupMultiLine>}
+    >
       <FormatQuoteIcon
         color="primary"
         fontSize="small"
         titleAccess={`${props.resource.title}-citation`}
       />
-    </StyledTooltip>
+    </HoverablePopover>
   );
 }
 
