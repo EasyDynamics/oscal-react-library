@@ -11,7 +11,9 @@ test("OSCALSsp loads", () => {
 });
 
 function sspRenderer() {
-  render(<OSCALSsp system-security-plan={sspTestData} parentUrl="./" />);
+  render(
+    <OSCALSsp system-security-plan={sspTestData} parentUrl="./" onResolutionComplete={() => {}} />
+  );
 }
 
 testOSCALSystemCharacteristics("OSCALSsp", sspRenderer);
