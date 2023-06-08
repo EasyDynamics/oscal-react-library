@@ -428,7 +428,7 @@ export const OSCALMetadataRole: React.FC<OSCALMetadataRoleProps> = (props) => {
     >
       <DialogTitle>{role.title}</DialogTitle>
       <DialogContent dividers>
-        <OSCALMarkupMultiLine>{role?.description}</OSCALMarkupMultiLine>
+        <OSCALMarkupMultiLine>{role.description ?? ""}</OSCALMarkupMultiLine>
       </DialogContent>
     </OSCALMetadataCard>
   );
@@ -731,7 +731,7 @@ export const OSCALMetadataLocation: React.FC<OSCALMetadataLocationProps> = (prop
   return (
     <OSCALMetadataCard title={location.title} avatar={avatar}>
       <DialogTitle>
-        <OSCALMarkupLine>{location.title}</OSCALMarkupLine>
+        <OSCALMarkupLine>{location.title ?? ""}</OSCALMarkupLine>
       </DialogTitle>
       <DialogContent dividers>
         <OSCALMetadataLocationContent location={location} />
@@ -880,7 +880,7 @@ export const OSCALMetadata: React.FC<OSCALMetadataProps> = (props) => {
                 onFieldSave={props.onFieldSave}
               />
             </OSCALMetadataSection>
-            <OSCALMarkupMultiLine>{props.metadata.remarks}</OSCALMarkupMultiLine>
+            <OSCALMarkupMultiLine>{props.metadata.remarks ?? ""}</OSCALMarkupMultiLine>
             <OSCALMetadataKeywords
               keywords={propWithName(props.metadata.props, "keywords")?.value}
               urlFragment={props.urlFragment}
