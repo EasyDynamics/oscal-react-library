@@ -20,7 +20,7 @@ describe("OSCALComponentDefinition", () => {
     );
 
     // THEN
-    expect(screen.getByText("Example Content")).toBeVisible();
+    expect(screen.getByText("Example Component")).toBeVisible();
   });
 
   it("shows component description", async () => {
