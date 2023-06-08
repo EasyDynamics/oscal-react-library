@@ -52,7 +52,10 @@ export default function OSCALControlPart(props) {
   }
   const modificationDisplayBefore =
     partAddPosition === Position.BEFORE ? modificationDisplay : null;
-  const modificationDisplayAfter = partAddPosition === Position.AFTER ? modificationDisplay : null;
+  const modificationDisplayAfter =
+    partAddPosition === undefined || partAddPosition === Position.AFTER
+      ? modificationDisplay
+      : null;
   const modificationDisplayStarting =
     partAddPosition === Position.STARTING ? modificationDisplay : null;
   const modificationDisplayEnding =
@@ -116,7 +119,11 @@ export default function OSCALControlPart(props) {
 
   if (removeByIds || removeByNames || removeByNS || removeByClass || removeByItemNames) {
     return (
-      <OSCALControlRemovedPartWrapper ownerState partName={props.part.name}>
+      <OSCALControlRemovedPartWrapper
+        ownerState
+        partName={props.part.name}
+        data-testid={`${controlPartId} remove-div`}
+      >
         {replacedProse}
         {props.part.parts?.map((part) => (
           <OSCALControlPart
