@@ -22,3 +22,5 @@ export const systemCharacteristicsDescriptionUrl = "https://ietf.org/rfc/rfc4122
 export const systemCharacteristicsInformationUrl = "https://doi.org/10.6028/NIST.SP.800-60v2r1";
 
 export const urlParameterTestUrl = "https://www.easydynamics.com/";
+export const urlSmallCatalogUrl =
+  "https://raw.githubusercontent.com/EasyDynamics/oscal-demo-content/test-content/catalogs/smallCatalog.json";
