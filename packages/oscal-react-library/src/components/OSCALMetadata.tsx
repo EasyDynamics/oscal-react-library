@@ -50,7 +50,7 @@ import {
 import { OSCALRevisionsButton } from "./OSCALRevision";
 import { OSCALMetadataLabel } from "./OSCALMetadataCommon";
 import resolveLinkHref, { UriReferenceLookup } from "./oscal-utils/OSCALLinkUtils";
-import { Accordion, AccordionDetails, AccordionSummary } from "./StyledAccordion";
+import { Accordion, AccordionDetails, AccordionSummary } from "./styles/OSCALAccordion";
 import { OSCALPropertiesDialog } from "./OSCALProperties";
 import { colorFromString } from "../utils";
 

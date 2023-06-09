@@ -13,7 +13,7 @@ import { AnchorLinkProps, OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader"
 import OSCALControl, { ControlMetadataItems } from "./OSCALControl";
 import OSCALControlLabel from "./OSCALControlLabel";
 import OSCALControlPart from "./OSCALControlPart";
-import { Accordion, AccordionDetails, AccordionSummary } from "./StyledAccordion";
+import { Accordion, AccordionDetails, AccordionSummary } from "./styles/OSCALAccordion";
 
 const WithdrawnControlText = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[400],

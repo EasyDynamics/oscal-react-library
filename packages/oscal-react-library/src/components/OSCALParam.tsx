@@ -15,7 +15,7 @@ import {
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { OSCALPropertiesDialog } from "./OSCALProperties";
 import { Stack } from "@mui/system";
-import { Accordion, AccordionDetails, AccordionSummary } from "./StyledAccordion";
+import { Accordion, AccordionDetails, AccordionSummary } from "./styles/OSCALAccordion";
 import { ButtonLaunchedDialog } from "./ButtonLaunchedDialog";
 import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 import { OSCALSectionHeader } from "../styles/CommonPageStyles";
