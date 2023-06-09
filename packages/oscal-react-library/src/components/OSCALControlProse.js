@@ -12,6 +12,7 @@ import StyledTooltip from "./OSCALStyledTooltip";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
+import { NotSpecifiedTypography } from "./StyledTypography";
 
 const OSCALStatementEditing = styled(Grid)`
   ${(props) =>
@@ -317,7 +318,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
   if (props.modificationDisplay === undefined) {
     return (
       <div>
-        {props.label} {prose}
+        {props.label} {props.modificationDisplayBefore} {prose}
         {props.modificationDisplay}
       </div>
     );
@@ -325,7 +326,7 @@ export function OSCALReplacedProseWithParameterLabel(props) {
 
   return (
     <div>
-      {props.label} {prose}
+      {props.label} {props.modificationDisplayBefore} {prose}
       {props.modificationDisplay}
     </div>
   );
@@ -378,6 +379,7 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
       <Grid container spacing={2}>
         <Grid item xs={11}>
           <OSCALReplacedProseWithParameterLabel
+            modificationDisplayBefore={props.modificationDisplayBefore}
             label={props.label}
             key={props.prose}
             prose={props.prose}
@@ -449,11 +451,13 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   return (
     <OSCALStatementEditing container spacing={2}>
       <Grid item xs={11}>
-        <StyledTooltip title={statementByComponentDescriptionMarkup ?? props.componentId}>
+        <HoverablePopover
+          popoverContent={statementByComponentDescriptionMarkup ?? props.componentId}
+        >
           <Link underline="hover" href={`#${props.label}`}>
             {props.label}
           </Link>
-        </StyledTooltip>{" "}
+        </HoverablePopover>{" "}
         {proseDisplay}
         {props.modificationDisplay}
       </Grid>

@@ -22,14 +22,14 @@ describe("OSCAL Backmatter", () => {
 
   test("displays media-type", async () => {
     render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
-    const result = screen.getByText("application/oscal.catalog+json");
+    const result = screen.getByText("OSCAL (JSON)");
     expect(result).toBeVisible();
   });
 
   test("renders absolute href", async () => {
     render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     const button = screen.getByRole("button", {
-      name: "application/oscal.catalog+json",
+      name: "Open as OSCAL (JSON)",
     });
     expect(button.getAttribute("href")).toEqual(revFourCatalog);
   });
@@ -37,7 +37,7 @@ describe("OSCAL Backmatter", () => {
   test("renders relative href", async () => {
     render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     const button = screen.getByRole("button", {
-      name: "application/oscal.catalog+json2",
+      name: "Open as JSON",
     });
     expect(button.getAttribute("href")).toEqual(revFourCatalog);
   });
@@ -45,7 +45,7 @@ describe("OSCAL Backmatter", () => {
   test("displays external link icon", async () => {
     render(<OSCALBackMatter backMatter={backMatterTestData} parentUrl={parentUrlTestData} />);
     const button = screen.getByRole("button", {
-      name: /application\/something\.else/i,
+      name: "Open as Application/Binary Data",
     });
 
     within(button).getByTestId("OpenInNewIcon");
@@ -59,7 +59,7 @@ describe("OSCAL Backmatter", () => {
       />
     );
     const button = screen.getByRole("button", {
-      name: "PNG",
+      name: "Open as Image (PNG)",
     });
     expect(button.getAttribute("href")).toBeTruthy();
   });
@@ -72,7 +72,7 @@ describe("OSCAL Backmatter", () => {
       />
     );
     const button = screen.getByRole("button", {
-      name: "Unknown",
+      name: /Unrecognized File Type/,
     });
     expect(button.getAttribute("href")).toBeTruthy();
   });

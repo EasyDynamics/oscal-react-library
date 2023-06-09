@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from "react";
 import Stack from "@mui/material/Stack";
 import LinkIcon from "@mui/icons-material/Link";
-import { Link } from "react-router-dom";
+import IconButton from "@mui/material/IconButton";
 import Fade from "@mui/material/Fade";
 import { styled } from "@mui/material/styles";
 import { conformLinkIdText } from "./oscal-utils/OSCALLinkUtils";
@@ -61,15 +61,16 @@ export const OSCALAnchorLinkHeader: React.FC<OSCALAnchorLinkHeaderProps> = (prop
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
       id={linkId}
+      sx={{ minHeight: "1.5em" }}
     >
       {children}
       {isHover && (
         // Navigate to a specified fragment or use the child text
-        <Link to={`#${linkId}`}>
-          <Fade in={isHover}>
+        <Fade in={isHover}>
+          <IconButton href={`#${linkId}`} size="small">
             <AnchorLinkIcon aria-label={`${linkId} anchor link`} />
-          </Fade>
-        </Link>
+          </IconButton>
+        </Fade>
       )}
     </Stack>
   );

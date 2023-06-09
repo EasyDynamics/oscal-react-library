@@ -15,24 +15,29 @@ const baseComponents = {
     ),
 };
 
+export interface OSCALMarkupInterface {
+  children: string;
+}
+
+export interface OSCALMarkupMultiLineInterface extends OSCALMarkupInterface {
+  paragraphComponent?: any;
+}
+
 /**
  * Renders a string of markdown to React elements
- * @param {String} props.text
- * @returns a React element from the markdown
  */
-export function OSCALMarkupMultiLine(props) {
-  const { paragraphComponent, ...otherProps } = props;
+export const OSCALMarkupMultiLine: React.FC<OSCALMarkupMultiLineInterface> = (props) => {
   return (
     <ReactMarkdown
-      {...otherProps}
+      {...props}
       components={{
         ...baseComponents,
-        p: paragraphComponent ?? "p",
+        p: props.paragraphComponent ?? "p",
       }}
     />
   );
-}
+};
 
-export function OSCALMarkupLine(props) {
+export const OSCALMarkupLine: React.FC<OSCALMarkupInterface> = (props) => {
   return <ReactMarkdown {...props} components={{ ...baseComponents, p: React.Fragment }} />;
-}
+};

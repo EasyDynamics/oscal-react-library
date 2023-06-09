@@ -1,9 +1,6 @@
 import { Control, ControlGroup } from "@easydynamics/oscal-types";
-import { Typography } from "@mui/material";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
-import Box from "@mui/material/Box";
-import List from "@mui/material/List";
-import Stack from "@mui/material/Stack";
+import { Box, Grid, List, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import React, { ReactNode, useEffect } from "react";
 import isWithdrawn from "./oscal-utils/OSCALCatalogUtils";
@@ -14,10 +11,10 @@ import {
 } from "./oscal-utils/OSCALLinkUtils";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import { AnchorLinkProps, OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
-import OSCALControl from "./OSCALControl";
+import OSCALControl, { ControlMetadataItems } from "./OSCALControl";
 import OSCALControlLabel from "./OSCALControlLabel";
 import OSCALControlPart from "./OSCALControlPart";
-import { Accordion, AccordionSummary } from "./StyledAccordion";
+import { Accordion, AccordionDetails, AccordionSummary } from "./StyledAccordion";
 import { OSCALPropertiesDialog } from "./OSCALProperties";
 
 const WithdrawnControlText = styled(Typography)(({ theme }) => ({
@@ -217,15 +214,7 @@ export const OSCALCatalogControlListItem: React.FC<OSCALCatalogControlListItemPr
         </TitleComponent>
       </OSCALAnchorLinkHeader>
       <Box>
-        <OSCALPropertiesDialog
-          properties={control.props}
-          title={
-            <>
-              <OSCALControlLabel id={control.id} label={label} component="span" />
-              {` ${control.title}`}
-            </>
-          }
-        />
+        <ControlMetadataItems item={control} />
       </Box>
     </Stack>
   );
@@ -314,15 +303,7 @@ const OSCALCatalogGroupList: React.FC<OSCALCatalogGroupListProps> = (props) => {
         </TitleComponent>
       </OSCALAnchorLinkHeader>
       <Box>
-        <OSCALPropertiesDialog
-          properties={group.props}
-          title={
-            <>
-              <OSCALControlLabel id={group.id} label={label} component="span" />
-              {` ${group.title}`}
-            </>
-          }
-        />
+        <ControlMetadataItems item={group} />
       </Box>
     </Stack>
   );
@@ -421,6 +402,9 @@ export const OSCALCatalogGroup: React.FC<OSCALCatalogGroupProps> = (props) => {
 
   return (
     <>
+      <Grid container justifyContent="flex-end">
+        <ControlMetadataItems item={group} />
+      </Grid>
       {group.parts?.map((part, index) => (
         <OSCALControlPart
           control={group}

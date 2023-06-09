@@ -24,7 +24,7 @@ export default function getControlOrSubControl(resolvedControls, controlId) {
   // If the control isn't at root level or a subcontrol of it's parent,
   // it should be able to be found by just searching all subcontrols.
   return findControlById(
-    resolvedControls.flatMap((parentControl) => parentControl.controls),
+    resolvedControls?.flatMap((parentControl) => parentControl.controls),
     controlId
   );
 }

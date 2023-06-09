@@ -1,12 +1,13 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
-import OSCALControlGuidance from "./OSCALControlGuidance";
 import OSCALControlModification from "./OSCALControlModification";
 import {
   OSCALReplacedProseWithByComponentParameterValue,
   OSCALReplacedProseWithParameterLabel,
 } from "./OSCALControlProse";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
+import { Typography } from "@mui/material";
+import { Position } from "@easydynamics/oscal-types";
 
 const OSCALControlPartWrapper = styled("div", {
   shouldForwardProp: (prop) => !["partName", "ownerState", "theme", "sx", "as"].includes(prop),
@@ -21,28 +22,23 @@ const OSCALControlRemovedPartWrapper = styled("div", {
   text-decoration: line-through;
 `;
 
+export const partNameToFriendlyName = {
+  overview: "Overview",
+  statement: "Statement",
+  guidance: "Discussion",
+  objective: "Objective",
+  "assessment-method": "Assessment Method",
+  "assessment-objective": "Assessment Objective",
+  // This is deprecated but we still support viewing it.
+  assessment: "Assessment Method",
+};
+
 export default function OSCALControlPart(props) {
-  // Don't display assessment if we're displaying a control implementation
-  if (
-    (props.implementedRequirement || props.modificationSetParameters || props.modificationAlters) &&
-    (props.part.name === "objective" || props.part.name === "assessment")
-  ) {
-    return null;
-  }
-
   const partLabel = propWithName(props.part?.props, "label")?.value;
-  const controlLabel = propWithName(props.control?.props, "label")?.value;
 
-  if (props.part.name === "guidance") {
-    return (
-      <OSCALControlGuidance
-        prose={props.part.prose}
-        id={props.control.id}
-        title={props.control.title}
-        label={controlLabel}
-      />
-    );
-  }
+  const partAddPosition = props?.modificationAlters
+    ?.find((item) => item["control-id"] === props.controlId)
+    ?.adds?.find((item) => item["by-id"] === props.part.id)?.position;
 
   let modificationDisplay;
   if (props.modificationAlters) {
@@ -54,35 +50,53 @@ export default function OSCALControlPart(props) {
       />
     );
   }
+  const modificationDisplayBefore =
+    partAddPosition === Position.BEFORE ? modificationDisplay : null;
+  const modificationDisplayAfter =
+    partAddPosition === undefined || partAddPosition === Position.AFTER
+      ? modificationDisplay
+      : null;
+  const modificationDisplayStarting =
+    partAddPosition === Position.STARTING ? modificationDisplay : null;
+  const modificationDisplayEnding =
+    partAddPosition === Position.ENDING ? modificationDisplay : null;
 
   let replacedProse;
   if (props.implementedRequirement) {
     replacedProse = (
-      <OSCALReplacedProseWithByComponentParameterValue
-        label={partLabel}
-        prose={props.part.prose}
-        parameters={props.parameters}
-        implementedRequirement={props.implementedRequirement}
-        statementId={props.part.id}
-        componentId={props.componentId}
-        modificationSetParameters={props.modificationSetParameters}
-        modificationDisplay={modificationDisplay}
-        isEditable={props.isEditable}
-        onRestSuccess={props.onRestSuccess}
-        onRestError={props.onRestError}
-        partialRestData={props.partialRestData}
-      />
+      <Typography>
+        <OSCALReplacedProseWithByComponentParameterValue
+          label={partLabel}
+          prose={props.part.prose}
+          parameters={props.parameters}
+          implementedRequirement={props.implementedRequirement}
+          statementId={props.part.id}
+          componentId={props.componentId}
+          modificationSetParameters={props.modificationSetParameters}
+          modificationDisplay={modificationDisplayAfter}
+          modificationDisplayBefore={modificationDisplayBefore}
+          isEditable={props.isEditable}
+          onRestSuccess={props.onRestSuccess}
+          onRestError={props.onRestError}
+          partialRestData={props.partialRestData}
+        />
+        {modificationDisplayStarting}
+      </Typography>
     );
   } else {
     replacedProse = (
-      <OSCALReplacedProseWithParameterLabel
-        label={partLabel}
-        prose={props.part.prose}
-        parameters={props.parameters}
-        modificationSetParameters={props.modificationSetParameters}
-        modificationDisplay={modificationDisplay}
-        isImplemented
-      />
+      <Typography>
+        <OSCALReplacedProseWithParameterLabel
+          label={partLabel}
+          prose={props.part.prose}
+          parameters={props.parameters}
+          modificationSetParameters={props.modificationSetParameters}
+          modificationDisplay={modificationDisplayAfter}
+          modificationDisplayBefore={modificationDisplayBefore}
+          isImplemented
+        />
+        {modificationDisplayStarting}
+      </Typography>
     );
   }
   const controlId = modificationDisplay?.props?.controlId ?? "";
@@ -105,36 +119,16 @@ export default function OSCALControlPart(props) {
 
   if (removeByIds || removeByNames || removeByNS || removeByClass || removeByItemNames) {
     return (
-      <OSCALControlRemovedPartWrapper ownerState partName={props.part.name}>
+      <OSCALControlRemovedPartWrapper
+        ownerState
+        partName={props.part.name}
+        data-testid={`${controlPartId} remove-div`}
+      >
         {replacedProse}
-        {props.part.parts &&
-          props.part.parts.map((part) => (
-            <OSCALControlPart
-              part={part}
-              controlId={props.controlId ?? props.control.id}
-              parameters={props.parameters}
-              implementedRequirement={props.implementedRequirement}
-              componentId={props.componentId}
-              modificationAlters={props.modificationAlters}
-              modificationSetParameters={props.modificationSetParameters}
-              key={part.id ?? part.name}
-              isEditable={props.isEditable}
-              onRestSuccess={props.onRestSuccess}
-              onRestError={props.onRestError}
-              partialRestData={props.partialRestData}
-            />
-          ))}
-      </OSCALControlRemovedPartWrapper>
-    );
-  }
-
-  return (
-    <OSCALControlPartWrapper ownerState partName={props.part.name}>
-      {replacedProse}
-      {props.part.parts &&
-        props.part.parts.map((part) => (
+        {props.part.parts?.map((part) => (
           <OSCALControlPart
             part={part}
+            control={props.control}
             controlId={props.controlId ?? props.control.id}
             parameters={props.parameters}
             implementedRequirement={props.implementedRequirement}
@@ -148,6 +142,54 @@ export default function OSCALControlPart(props) {
             partialRestData={props.partialRestData}
           />
         ))}
+      </OSCALControlRemovedPartWrapper>
+    );
+  }
+  if (partAddPosition === Position.ENDING) {
+    return (
+      <OSCALControlPartWrapper ownerState partName={props.part.name}>
+        {replacedProse}
+        {props.part.parts?.map((part) => (
+          <OSCALControlPart
+            part={part}
+            control={props.control}
+            controlId={props.controlId ?? props.control.id}
+            parameters={props.parameters}
+            implementedRequirement={props.implementedRequirement}
+            componentId={props.componentId}
+            modificationAlters={props.modificationAlters}
+            modificationSetParameters={props.modificationSetParameters}
+            key={part.id ?? part.name}
+            isEditable={props.isEditable}
+            onRestSuccess={props.onRestSuccess}
+            onRestError={props.onRestError}
+            partialRestData={props.partialRestData}
+          />
+        ))}
+        {modificationDisplayEnding}
+      </OSCALControlPartWrapper>
+    );
+  }
+  return (
+    <OSCALControlPartWrapper ownerState partName={props.part.name}>
+      {replacedProse}
+      {props.part.parts?.map((part) => (
+        <OSCALControlPart
+          part={part}
+          control={props.control}
+          controlId={props.controlId ?? props.control.id}
+          parameters={props.parameters}
+          implementedRequirement={props.implementedRequirement}
+          componentId={props.componentId}
+          modificationAlters={props.modificationAlters}
+          modificationSetParameters={props.modificationSetParameters}
+          key={part.id ?? part.name}
+          isEditable={props.isEditable}
+          onRestSuccess={props.onRestSuccess}
+          onRestError={props.onRestError}
+          partialRestData={props.partialRestData}
+        />
+      ))}
     </OSCALControlPartWrapper>
   );
 }
