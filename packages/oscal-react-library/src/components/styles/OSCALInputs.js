@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
+import React from "react";
 
 // TODO: Add styling to GlobalStyles
 export const OSCALTextField = (props) => {
@@ -52,11 +53,11 @@ export const OSCALDropdown = (props) => {
   );
 };
 
-export const OSCALCheckbox = (props) => {
+export const OSCALCheckbox = () => {
   return <Checkbox className="" />;
 };
 
-export const OSCALRadio = (props) => {
+export const OSCALRadio = () => {
   return <Radio className="" />;
 };
 
@@ -70,7 +71,7 @@ const OSCALInputButton = styled(IconButton)(({ theme }) => ({
   },
 }));
 
-export const OSCALCancelButton = (props) => {
+export const OSCALCancelButton = () => {
   return (
     <OSCALInputButton>
       <ClearIcon fontSize="small" />
@@ -78,7 +79,7 @@ export const OSCALCancelButton = (props) => {
   );
 };
 
-export const OSCALConfirmButton = (props) => {
+export const OSCALConfirmButton = () => {
   return (
     <OSCALInputButton>
       <DoneIcon fontSize="small" />

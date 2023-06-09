@@ -12,7 +12,7 @@ import StyledTooltip from "./OSCALStyledTooltip";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
-import { NotSpecifiedTypography } from "./StyledTypography";
+import { HoverablePopover } from "./HoverablePopover";
 
 const OSCALStatementEditing = styled(Grid)`
   ${(props) =>

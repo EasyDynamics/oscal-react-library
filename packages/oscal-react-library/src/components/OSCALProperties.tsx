@@ -8,12 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import { Typography } from "@mui/material";
 import StyledTooltip from "./OSCALStyledTooltip";
 import TableHead from "@mui/material/TableHead";
-import {
-  OSCALSystemImplementationTableTitle,
-  StyledHeaderTableCell,
-  StyledTableRow,
-  StyledTableHead,
-} from "./OSCALSystemImplementationTableStyles";
+import { StyledTableRow } from "./OSCALSystemImplementationTableStyles";
 import { Property } from "@easydynamics/oscal-types";
 import { NIST_DEFAULT_NAMESPACE, namespaceOf } from "./oscal-utils/OSCALPropUtils";
 import { SmallInlineClassDisplay } from "./OSCALClass";
