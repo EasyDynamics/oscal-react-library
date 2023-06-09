@@ -1,5 +1,4 @@
 import { Control, ControlGroup } from "@easydynamics/oscal-types";
-import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import { Box, Grid, List, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import React, { ReactNode, useEffect } from "react";
@@ -15,7 +14,6 @@ import OSCALControl, { ControlMetadataItems } from "./OSCALControl";
 import OSCALControlLabel from "./OSCALControlLabel";
 import OSCALControlPart from "./OSCALControlPart";
 import { Accordion, AccordionDetails, AccordionSummary } from "./StyledAccordion";
-import { OSCALPropertiesDialog } from "./OSCALProperties";
 
 const WithdrawnControlText = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[400],
@@ -152,7 +150,7 @@ const CollapsibleListItem: React.FC<CollapsibleListItemProps> = (props) => {
       }}
     >
       <AccordionSummary>{itemText}</AccordionSummary>
-      <MuiAccordionDetails className="AccordionDetails">{children}</MuiAccordionDetails>
+      <AccordionDetails>{children}</AccordionDetails>
     </Accordion>
   );
 };
