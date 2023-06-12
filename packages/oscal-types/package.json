@@ -1,6 +1,6 @@
 {
   "name": "@easydynamics/oscal-types",
-  "version": "1.0.4",
+  "version": "0.1.0",
   "description": "Type definitions for the OSCAL specification",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -11,6 +11,9 @@
     "test": "echo 'This package has no tests'",
     "lint": "echo 'This package is not linted'"
   },
+  "files": [
+    "lib"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/EasyDynamics/oscal-react-library.git",
