@@ -1,6 +1,6 @@
 {
   "name": "@easydynamics/oscal-react-library",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "author": "EasyDynamics",
   "license": "MIT",
   "private": false,
@@ -27,7 +27,7 @@
     "web-vitals": "^3.3.2"
   },
   "peerDependencies": {
-    "@easydynamics/oscal-types": "^1.0.4",
+    "@easydynamics/oscal-types": "^0.1.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.11",
@@ -65,7 +65,7 @@
     "@babel/preset-env": "^7.22.5",
     "@babel/preset-react": "^7.22.5",
     "@babel/preset-typescript": "^7.22.5",
-    "@easydynamics/oscal-types": "^1.0.4",
+    "@easydynamics/oscal-types": "^0.1.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.11.16",
