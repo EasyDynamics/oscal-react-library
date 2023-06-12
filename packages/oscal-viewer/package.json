@@ -1,7 +1,7 @@
 {
   "name": "@easydynamics/oscal-viewer",
   "homepage": ".",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "private": true,
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
-    "@easydynamics/oscal-react-library": "^0.6.0",
+    "@easydynamics/oscal-react-library": "^0.6.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.11.16",
