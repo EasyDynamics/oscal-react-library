@@ -67,6 +67,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          ref: main
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -118,7 +119,7 @@ jobs:
           add-paths: |
             packages/oscal-types
           delete-branch: true
-          base: develop
+          base: main
           committer: Easy Dynamics Automation <noreply@easydynamics.com>
           author: Easy Dynamics Automation <noreply@easydynamics.com>
           token: "${{ steps.generate-token.outputs.token }}"
