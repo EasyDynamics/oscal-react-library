@@ -5,5 +5,8 @@ updates:
     directory: "/"
     schedule:
       interval: daily
+    commit-message:
+      include: scope
+      prefix: "chore"
     reviewers:
-      - "EasyDynamics/easygrc-reviewers"
+      - "EasyDynamics/oscal-editor-reviewers"

@@ -13,7 +13,7 @@ permissions:
 jobs:
   lint:
     name: Lint the code base
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -22,13 +22,12 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
           cache: "npm"
       - name: Globally update npm
         run: npm install -g npm@latest
       - name: Install dependencies
-        run:
-          npm ci && cd example && npm ci && cd ..
+        run: npm ci
       - name: Install lint dependencies
         run: |
           npm install -g markdownlint-cli
@@ -36,17 +35,18 @@ jobs:
       - name: Lint code base
         run: |
           # Run built-in JavaScript/JSON linting
-          npm run lint
+          npx lerna run lint
           # Lint markdown files
-          markdownlint '**/*.md' --ignore node_modules --ignore example/node_modules
+          markdownlint '**/*.md'
           # Lint YAML files
           yamllint --format github --config-file .yaml-lint.yml .
   build_and_test:
-    strategy:
-      matrix:
-        node: [14, 16]
-    name: Build and test (on NodeJS ${{ matrix.node }})
-    runs-on: ubuntu-20.04
+    name: Build and test (on NodeJS 16)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        # setting the shell to bash will enable fail-fast behavior
+        shell: bash
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -55,24 +55,45 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 16
           cache: "npm"
       - name: Globally update npm
         run: npm install -g npm@latest
       - name: Install dependencies
-        run: npm ci && cd example && npm ci && cd ..
+        run: npm ci
       - name: Build library
-        run: npm run build
+        run: npx lerna run build
       - name: Run tests
-        run: npm run test -- --ci --watchAll=false
-      - name: Run example app tests
-        run:
-          cd example && npm run test -- --ci --watchAll=false && cd ..
-      - name: Build application
-        run:
-          npm run predeploy
+        run: npx lerna run test --scope="@easydynamics/oscal-react-library"
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
         with:
           name: oscal-viewer
-          path: example/build
+          path: packages/oscal-viewer/build
+  build-storybook:
+    name: Build Storybook site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: "npm"
+      - name: Setup pages
+        uses: actions/configure-pages@v3
+      - name: Globally update npm
+        run: npm install -g npm@latest
+      - name: Install dependencies
+        run: npm ci
+      - name: Build library's dependencies
+        run: npx lerna exec --include-dependencies --scope '@easydynamics/oscal-react-library' -- npm run build
+      - name: Build Storybook
+        run: npm run build-storybook
+        working-directory: packages/oscal-react-library
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: packages/oscal-react-library/storybook-static
+          retention-days: "7"

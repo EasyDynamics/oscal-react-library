@@ -1,0 +1,14 @@
+---
+changelog:
+  exclude:
+    labels:
+      - chore
+      - dependencies
+      - spike
+  categories:
+    - title: New Features
+      labels:
+        - enhancement
+    - title: Bug fixes
+      labels:
+        - bug

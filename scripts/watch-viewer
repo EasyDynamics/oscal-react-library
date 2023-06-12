@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+lerna="node_modules/.bin/lerna"
+
+if [ ! -f "$lerna" ]; then
+	echo "Please run 'npm ci' before running this script"
+	exit 1
+fi
+
+"$lerna" exec --stream --include-dependencies --scope="@easydynamics/oscal-viewer" -- npm run build
+"$lerna" exec --stream --include-dependencies --scope="@easydynamics/oscal-viewer" --parallel -- npm run watch

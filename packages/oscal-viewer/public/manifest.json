@@ -1,0 +1,24 @@
+{
+  "short_name": "OSCAL Viewer",
+  "name": "Browse OSCAL data, including catalogs, profiles, component definitions, and system security plans",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo-header.svg",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#001131",
+  "background_color": "#ffffff"
+}
