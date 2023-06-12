@@ -4,7 +4,7 @@
   "description": "Type definitions for the OSCAL specification",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
-  "private": "false",
+  "private": false,
   "scripts": {
     "build": "tsc",
     "watch": "npm run build -- --watch",
