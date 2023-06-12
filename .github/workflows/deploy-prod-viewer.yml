@@ -3,7 +3,8 @@ name: Deploy viewer to Production environment
 
 on:
   push:
-    tags: ["v*"]
+    branches:
+      - "main"
   workflow_dispatch:
   schedule:
     # Run daily at 03:15 UTC (10:15/11:15 ET)
