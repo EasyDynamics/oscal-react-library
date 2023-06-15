@@ -5,7 +5,6 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
 import OSCALControlImplementationImplReq from "./OSCALControlImplementationImplReq";
-import OSCALControlImplementationAdd from "./OSCALControlImplementationAdd";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
@@ -19,10 +18,6 @@ import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
  */
 export default function OSCALControlImplementation(props) {
   const implementedRequirements = props.controlImplementation["implemented-requirements"];
-  const controlIds = implementedRequirements.map(
-    (implementedControl) => implementedControl["control-id"]
-  );
-
   return (
     <OSCALSection>
       <Card>
@@ -49,24 +44,9 @@ export default function OSCALControlImplementation(props) {
                     childLevel={0}
                     key={implementedRequirement.uuid}
                     modifications={props.modifications}
-                    isEditable={props.isEditable}
-                    onRestSuccess={props.onRestSuccess}
-                    onRestError={props.onRestError}
-                    partialRestData={props.partialRestData}
                   />
                 ))}
               </List>
-              {props.isEditable ? (
-                <Grid item>
-                  <OSCALControlImplementationAdd
-                    controls={props.controls}
-                    implementedControls={controlIds}
-                    onRestSuccess={props.onRestSuccess}
-                    onRestError={props.onRestError}
-                    partialRestData={props.partialRestData}
-                  />
-                </Grid>
-              ) : null}
             </Grid>
           </Grid>
         </CardContent>

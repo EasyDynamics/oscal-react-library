@@ -141,12 +141,8 @@ export default function OSCALControlImplementationImplReq(props) {
                   childLevel={0}
                   implementedRequirement={props.implementedRequirement}
                   componentId={component.uuid}
-                  isEditable={props.isEditable}
                   modificationAlters={modAlters}
                   modificationSetParameters={modParams}
-                  onRestSuccess={props.onRestSuccess}
-                  onRestError={props.onRestError}
-                  partialRestData={props.partialRestData}
                 />
               </ComponentTabPanelScrollable>
             ))}

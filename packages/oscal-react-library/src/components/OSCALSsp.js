@@ -15,11 +15,6 @@ export default function OSCALSsp(props) {
   const isMounted = useRef(false);
 
   const ssp = props["system-security-plan"];
-  const partialRestData = {
-    "system-security-plan": {
-      uuid: ssp.uuid,
-    },
-  };
 
   let sspParties;
   if (ssp.metadata) {
@@ -64,11 +59,7 @@ export default function OSCALSsp(props) {
         controlImplementation={ssp["control-implementation"]}
         components={ssp["system-implementation"].components}
         controls={ssp.resolvedControls}
-        isEditable={props.isEditable}
         modifications={ssp.modifications}
-        onRestSuccess={props.onRestSuccess}
-        onRestError={props.onRestError}
-        partialRestData={partialRestData}
       />
     );
   }
@@ -77,9 +68,6 @@ export default function OSCALSsp(props) {
     <OSCALDocumentRoot>
       <OSCALMetadata
         metadata={ssp.metadata}
-        isEditable={props.isEditable}
-        onFieldSave={props.onFieldSave}
-        partialRestData={partialRestData}
         urlFragment={props.urlFragment}
         backMatter={ssp["back-matter"]}
         parentUrl={props.parentUrl}
@@ -96,13 +84,7 @@ export default function OSCALSsp(props) {
         components={ssp["system-implementation"].components}
       />
       {controlImpl}
-      <OSCALBackMatter
-        backMatter={ssp["back-matter"]}
-        parentUrl={props.parentUrl}
-        isEditable={props.isEditable}
-        onFieldSave={props.onFieldSave}
-        partialRestData={partialRestData}
-      />
+      <OSCALBackMatter backMatter={ssp["back-matter"]} parentUrl={props.parentUrl} />
     </OSCALDocumentRoot>
   );
 }

@@ -6,7 +6,6 @@ import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import OSCALBackMatter from "./OSCALBackMatter";
 import { OSCALCatalogControlListItem } from "./OSCALCatalogGroup";
 import OSCALCatalogGroups from "./OSCALCatalogGroups";
-import { EditableFieldProps } from "./OSCALEditableTextField";
 import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
 import OSCALMetadata from "./OSCALMetadata";
 import { OSCALParams } from "./OSCALParam";
@@ -51,29 +50,20 @@ const OSCALCatalogControlsList: React.FC<OSCALCatalogControlsListProps> = ({
   );
 };
 
-export interface OSCALCatalogProps extends EditableFieldProps {
+export interface OSCALCatalogProps {
   readonly onResolutionComplete: React.EffectCallback;
   readonly catalog: Catalog;
   readonly urlFragment?: string | undefined;
   readonly parentUrl: string;
-  readonly onRestError?: (error: any) => void;
-  readonly onRestSuccess?: (data: any) => void;
 }
 
 export const OSCALCatalog: React.FC<OSCALCatalogProps> = ({
   onResolutionComplete,
   catalog,
-  isEditable,
-  onFieldSave,
   urlFragment,
   parentUrl,
 }) => {
   useEffect(onResolutionComplete);
-  const partialRestData = {
-    catalog: {
-      uuid: catalog.uuid,
-    },
-  };
 
   const defaultGroup: ControlGroup = {
     title: UNGROUPED_CONTROLS_TITLE,
@@ -84,9 +74,6 @@ export const OSCALCatalog: React.FC<OSCALCatalogProps> = ({
     <OSCALDocumentRoot>
       <OSCALMetadata
         metadata={catalog.metadata}
-        isEditable={isEditable}
-        onFieldSave={onFieldSave}
-        partialRestData={partialRestData}
         urlFragment={urlFragment}
         parentUrl={parentUrl}
         backMatter={catalog["back-matter"]}
@@ -107,13 +94,7 @@ export const OSCALCatalog: React.FC<OSCALCatalogProps> = ({
       ) : catalog.controls ? (
         <OSCALCatalogControlsList controls={catalog.controls} urlFragment={urlFragment} />
       ) : undefined}
-      <OSCALBackMatter
-        backMatter={catalog["back-matter"]}
-        parentUrl={parentUrl}
-        isEditable={isEditable}
-        onFieldSave={onFieldSave}
-        partialRestData={partialRestData}
-      />
+      <OSCALBackMatter backMatter={catalog["back-matter"]} parentUrl={parentUrl} />
     </OSCALDocumentRoot>
   );
 };

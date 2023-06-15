@@ -21,7 +21,6 @@ import {
   SetParameterValue,
   Alteration,
 } from "@easydynamics/oscal-types";
-import { EditableFieldProps } from "./OSCALEditableTextField";
 import { Stack } from "@mui/material";
 import { groupBy } from "../utils";
 import { Accordion, AccordionSummary, AccordionDetails } from "./StyedAccordion";
@@ -50,14 +49,12 @@ const OSCALControlCard = styled(Card, {
   color: withdrawn ? theme.palette.grey[400] : undefined,
 }));
 
-interface ControlsListProps extends EditableFieldProps, AnchorLinkProps, ControlListOptions {
+interface ControlsListProps extends AnchorLinkProps, ControlListOptions {
   control: Control;
   componentId?: string;
   implementedRequirement?: ImplementedRequirementElement;
   includeControlIds?: string[];
   excludeControlIds?: string[];
-  onRestError?: (...args: any[]) => void;
-  onRestSuccess?: (...args: any[]) => void;
   modificationAlters?: Alteration[];
   modificationSetParameters?: SetParameterValue[];
   withdrawn: boolean;
@@ -100,12 +97,8 @@ const ControlsList: React.FC<ControlsListProps> = (props) => {
     control,
     componentId,
     implementedRequirement,
-    isEditable,
     modificationAlters,
     modificationSetParameters,
-    onRestError,
-    onRestSuccess,
-    partialRestData,
     childLevel,
     includeControlIds,
     urlFragment,
@@ -132,15 +125,11 @@ const ControlsList: React.FC<ControlsListProps> = (props) => {
             control={control}
             controlId={control.id}
             implementedRequirement={implementedRequirement}
-            isEditable={isEditable}
             key={part.id ?? `part-${index}`}
             modificationAlters={modificationAlters}
             modificationSetParameters={modificationSetParameters}
-            onRestError={onRestError}
-            onRestSuccess={onRestSuccess}
             parameters={control.params}
             part={part}
-            partialRestData={partialRestData}
           />
         ))}
         {statement?.map((part, index) => (
@@ -149,15 +138,11 @@ const ControlsList: React.FC<ControlsListProps> = (props) => {
             control={control}
             controlId={control.id}
             implementedRequirement={implementedRequirement}
-            isEditable={isEditable}
             key={part.id ?? `part-${index}`}
             modificationAlters={modificationAlters}
             modificationSetParameters={modificationSetParameters}
-            onRestError={onRestError}
-            onRestSuccess={onRestSuccess}
             parameters={control.params}
             part={part}
-            partialRestData={partialRestData}
           />
         ))}
       </Box>
@@ -182,14 +167,10 @@ const ControlsList: React.FC<ControlsListProps> = (props) => {
                   control={control}
                   controlId={control.id}
                   implementedRequirement={implementedRequirement}
-                  isEditable={isEditable}
                   modificationAlters={modificationAlters}
                   modificationSetParameters={modificationSetParameters}
-                  onRestError={onRestError}
-                  onRestSuccess={onRestSuccess}
                   parameters={control.params}
                   part={part}
-                  partialRestData={partialRestData}
                 />
               ))}
             </AccordionDetails>
@@ -204,13 +185,9 @@ const ControlsList: React.FC<ControlsListProps> = (props) => {
           control={listControl}
           implementedRequirement={implementedRequirement}
           includeControlIds={includeControlIds}
-          isEditable={isEditable}
           key={listControl.id}
           modificationAlters={modificationAlters}
           modificationSetParameters={modificationSetParameters}
-          onRestError={onRestError}
-          onRestSuccess={onRestSuccess}
-          partialRestData={partialRestData}
           urlFragment={urlFragment}
           fragmentPrefix={fragmentPrefix}
           withdrawn={props.withdrawn}

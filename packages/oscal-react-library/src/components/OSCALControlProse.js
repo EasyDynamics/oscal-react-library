@@ -1,16 +1,12 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Badge from "@mui/material/Badge";
 import EditIcon from "@mui/icons-material/Edit";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Cancel";
-import { Grid, IconButton, TextField } from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
+import { Grid, IconButton } from "@mui/material";
 import StyledTooltip from "./OSCALStyledTooltip";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
-import * as restUtils from "./oscal-utils/OSCALRestUtils";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 import { NotSpecifiedTypography } from "./StyledTypography";
 import { HoverablePopover } from "./HoverablePopover";
@@ -342,7 +338,6 @@ export function OSCALReplacedProseWithParameterLabel(props) {
  */
 export function OSCALReplacedProseWithByComponentParameterValue(props) {
   const [isEditingStatement, setIsEditingStatement] = useState(false);
-  const [isProcessingRequest, setIsProcessingRequest] = useState(false);
 
   if (!props.prose) {
     return null;
@@ -365,13 +360,6 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
   const statementByComponentDescriptionMarkup = statementByComponentDescription ? (
     <OSCALMarkupMultiLine>{statementByComponentDescription}</OSCALMarkupMultiLine>
   ) : null;
-  const statementByComponentDescriptionRef = useRef(statementByComponentDescription);
-  const setParametersRefs = {};
-  if (props.parameters?.length > 0) {
-    props.parameters.forEach((parameter) => {
-      setParametersRefs[parameter.id] = useRef();
-    });
-  }
   /* eslint-enable react-hooks/rules-of-hooks */
 
   if (!statementByComponent && !isEditingStatement) {
@@ -415,30 +403,6 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
         // This is not a parameter placeholder
         return getTextSegment(segment, index.toString());
       }
-      if (isEditingStatement) {
-        // We're currently editing this statement, so build param input
-        const setParameter = statementByComponent?.["set-parameters"]?.find(
-          (element) => element["param-id"] === segment
-        ) ?? { "param-id": segment };
-        setParameter.values ??= [null];
-        const setParameterRef = setParametersRefs[segment];
-        // TODO: Support for more than one item in values array
-        // https://github.com/EasyDynamics/oscal-react-library/issues/501
-        return (
-          <TextField
-            id={`edit-bycomponent-${props.componentId}-statement-${props.statementId}-param-${segment}`}
-            label={segment}
-            variant="outlined"
-            size="small"
-            inputRef={setParameterRef}
-            defaultValue={setParameter.values[0]}
-            // Due to a lack of a good value for a key, the index is being used
-            // eslint-disable-next-line react/no-array-index-key
-            key={index}
-          />
-        );
-      }
-
       return getParameterValueSegment(
         statementByComponent,
         implReqSetParameters,
@@ -462,93 +426,6 @@ export function OSCALReplacedProseWithByComponentParameterValue(props) {
         {proseDisplay}
         {props.modificationDisplay}
       </Grid>
-      <OSCALStatementEditControlsContainer item xs={1}>
-        {props.isEditable && !isEditingStatement ? (
-          <IconButton
-            aria-label={`edit-bycomponent-${props.componentId}-statement-${props.statementId}`}
-            size="small"
-            onClick={() => {
-              setIsEditingStatement(!isEditingStatement);
-            }}
-          >
-            <EditIcon fontSize="small" />
-          </IconButton>
-        ) : null}
-      </OSCALStatementEditControlsContainer>
-      {isEditingStatement ? (
-        <>
-          <Grid item xs={10}>
-            <TextField
-              id={`edit-bycomponent-${props.componentId}-statement-${props.statementId}-description`}
-              fullWidth
-              label="Description"
-              multiline
-              variant="outlined"
-              inputProps={{
-                "data-testid": "Statement By Component Description TextField",
-              }}
-              inputRef={statementByComponentDescriptionRef}
-              defaultValue={statementByComponentDescription}
-            />
-          </Grid>
-          {!isProcessingRequest ? (
-            <>
-              <OSCALStatementEditControlsContainer item xs={1}>
-                <IconButton
-                  aria-label={`save-${[props.statementId]}`}
-                  onClick={() => {
-                    restUtils.createOrUpdateSspControlImplementationImplementedRequirementStatementByComponent(
-                      props.partialRestData,
-                      props.implementedRequirement,
-                      props.statementId,
-                      props.componentId,
-                      statementByComponentDescriptionRef.current.value,
-                      Object.keys(setParametersRefs).map((setParameterId) => {
-                        const setParameterValue = setParametersRefs[setParameterId]?.current?.value;
-                        return setParameterValue
-                          ? {
-                              "param-id": setParameterId,
-                              values: [setParameterValue],
-                            }
-                          : null;
-                      }),
-                      () => {
-                        setIsProcessingRequest(true);
-                      },
-                      () => {
-                        setIsEditingStatement(false);
-                        setIsProcessingRequest(false);
-                        props.onRestSuccess();
-                      },
-                      (error) => {
-                        props.onRestError(error);
-                      }
-                    );
-                  }}
-                  size="large"
-                >
-                  <SaveIcon fontSize={props.iconFontSize} />
-                </IconButton>
-              </OSCALStatementEditControlsContainer>
-              <OSCALStatementEditControlsContainer item xs={1}>
-                <IconButton
-                  aria-label={`cancel-${[props.statementId]}`}
-                  onClick={() => {
-                    setIsEditingStatement(false);
-                  }}
-                  size="large"
-                >
-                  <CancelIcon fontSize={props.iconFontSize} />
-                </IconButton>
-              </OSCALStatementEditControlsContainer>
-            </>
-          ) : (
-            <Grid item xs={2}>
-              <CircularProgress />
-            </Grid>
-          )}
-        </>
-      ) : null}
     </OSCALStatementEditing>
   );
 }

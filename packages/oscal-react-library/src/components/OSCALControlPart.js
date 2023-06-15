@@ -75,10 +75,6 @@ export default function OSCALControlPart(props) {
           modificationSetParameters={props.modificationSetParameters}
           modificationDisplay={modificationDisplayAfter}
           modificationDisplayBefore={modificationDisplayBefore}
-          isEditable={props.isEditable}
-          onRestSuccess={props.onRestSuccess}
-          onRestError={props.onRestError}
-          partialRestData={props.partialRestData}
         />
         {modificationDisplayStarting}
       </Typography>
@@ -136,10 +132,6 @@ export default function OSCALControlPart(props) {
             modificationAlters={props.modificationAlters}
             modificationSetParameters={props.modificationSetParameters}
             key={part.id ?? part.name}
-            isEditable={props.isEditable}
-            onRestSuccess={props.onRestSuccess}
-            onRestError={props.onRestError}
-            partialRestData={props.partialRestData}
           />
         ))}
       </OSCALControlRemovedPartWrapper>
@@ -160,10 +152,6 @@ export default function OSCALControlPart(props) {
             modificationAlters={props.modificationAlters}
             modificationSetParameters={props.modificationSetParameters}
             key={part.id ?? part.name}
-            isEditable={props.isEditable}
-            onRestSuccess={props.onRestSuccess}
-            onRestError={props.onRestError}
-            partialRestData={props.partialRestData}
           />
         ))}
         {modificationDisplayEnding}
@@ -184,10 +172,6 @@ export default function OSCALControlPart(props) {
           modificationAlters={props.modificationAlters}
           modificationSetParameters={props.modificationSetParameters}
           key={part.id ?? part.name}
-          isEditable={props.isEditable}
-          onRestSuccess={props.onRestSuccess}
-          onRestError={props.onRestError}
-          partialRestData={props.partialRestData}
         />
       ))}
     </OSCALControlPartWrapper>

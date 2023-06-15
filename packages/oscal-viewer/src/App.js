@@ -15,14 +15,11 @@ import CssBaseline from "@mui/material/CssBaseline";
 import ReactGA from "react-ga4";
 import { Route, Routes, Link as RouterLink, useLocation } from "react-router-dom";
 import Grid from "@mui/material/Grid";
-import Switch from "@mui/material/Switch";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import {
   OSCALCatalogLoader,
   OSCALSSPLoader,
   OSCALComponentLoader,
   OSCALProfileLoader,
-  OSCALDrawerSelector,
 } from "@easydynamics/oscal-react-library";
 import logo from "./images/logo-header.svg";
 
@@ -37,73 +34,18 @@ const appTheme = createTheme({
   },
 });
 
-const OpenNavButton = styled(IconButton)(({ theme }) => `margin-right: ${theme.spacing(2)}`);
 const LogoImage = styled("img")`
   width: 150px;
   margin-right: 1em;
 `;
 
-function getBackEndUrl(urlString) {
-  // If given something falsey, we need to also return something falsey.
-  // This ensures that we don't accidentally force the application
-  // to always be in editor/REST mode by creating a URL.
-  if (!urlString) {
-    return null;
-  }
-  // Because the URL may be a relative path and various application logic
-  // assumes that it will always be an absolute URL, it is easiest to just
-  // handle converting the potentially relative URL to an absolute URL and
-  // explicitly use the current origin as the base.
-  try {
-    return new URL(urlString, window.location.href).toString();
-  } catch (err) {
-    // If the given URL is invalid, for some reason, fallback to just using
-    // the provided value. This may result in more predictable errors
-    // elsewhere.
-    return urlString;
-  }
-}
-
 function App() {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isRestMode, setIsRestMode] = useState(
-    // We want to ensure that throughout the app this is always a boolean
-    // so that it can be decoupled from the _actual_ API URL (which may
-    // be different).
-    !!process.env.REACT_APP_REST_BASE_URL
-  );
-  const [backendUrl] = useState(getBackEndUrl(process.env.REACT_APP_REST_BASE_URL));
   const [hasDefaultUrl, setHasDefaultUrl] = useState(false);
   const [urlFragment, setUrlFragment] = useState(null);
 
   useEffect(() => {
-    const currentUrl = window.location.href;
-    // Open the drawer when in REST mode and no uuid is present.
-    // Note: The lowest subdirectory of the url is extracted to see if
-    // it contains a uuid.
-    if (isRestMode && currentUrl.substring(currentUrl.lastIndexOf("/") + 1) === "") {
-      setIsDrawerOpen(true);
-    }
-  }, [isRestMode]);
-
-  const appType = React.useMemo(() => (isRestMode ? "Editor" : "Viewer"), [isRestMode]);
-  useEffect(() => {
-    document.title = `OSCAL ${appType}`;
-  }, [appType]);
-
-  const handleAppNavOpen = (event) => {
-    if (event) {
-      setAnchorEl(event.currentTarget);
-    }
-
-    setIsDrawerOpen(true);
-  };
-
-  const handleAppNavClose = () => {
-    setAnchorEl(null);
-    setIsDrawerOpen(false);
-  };
+    document.title = `OSCAL Viewer`;
+  }, []);
 
   if (process.env.REACT_APP_GOOGLE_ANALYTICS) {
     ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS, {
@@ -149,15 +91,11 @@ function App() {
 
   const appBarRoutes = (
     <Route path="/">
-      <Route index element={`OSCAL Catalog ${appType}`} />
+      <Route index element={`OSCAL Catalog Viewer`} />
       {oscalObjectTypes.map((oscalObjectType) => (
         <Route path={oscalObjectType.pathName} key={oscalObjectType.pathName}>
           {routePaths.map((path) => (
-            <Route
-              path={path}
-              key={path}
-              element={`OSCAL ${oscalObjectType.elementName} ${appType}`}
-            />
+            <Route path={path} key={path} element={`OSCAL ${oscalObjectType.elementName} Viewer`} />
           ))}
         </Route>
       ))}
@@ -165,11 +103,9 @@ function App() {
   );
 
   const oscalObjectLoaderProps = {
-    renderForm: !isRestMode,
-    isRestMode,
+    renderForm: true,
     hasDefaultUrl,
     setHasDefaultUrl,
-    backendUrl,
     urlFragment,
   };
 
@@ -194,41 +130,6 @@ function App() {
     </Route>
   );
 
-  const navigation = isRestMode ? (
-    <OSCALDrawerSelector
-      open={isDrawerOpen}
-      handleClose={handleAppNavClose}
-      backendUrl={backendUrl}
-      handleOpen={handleAppNavOpen}
-    />
-  ) : (
-    <Menu
-      id="app-nav-menu"
-      anchorEl={anchorEl}
-      keepMounted
-      open={Boolean(anchorEl)}
-      onClose={handleAppNavClose}
-    >
-      <MenuItem onClick={handleAppNavClose} component={RouterLink} to="/catalog/">
-        {`Catalog ${appType}`}
-      </MenuItem>
-      <MenuItem onClick={handleAppNavClose} component={RouterLink} to="/profile/">
-        {`Profile ${appType}`}
-      </MenuItem>
-      <MenuItem onClick={handleAppNavClose} component={RouterLink} to="/component-definition/">
-        {`Component ${appType}`}
-      </MenuItem>
-      <MenuItem onClick={handleAppNavClose} component={RouterLink} to="/system-security-plan/">
-        {`System Security Plan ${appType}`}
-      </MenuItem>
-    </Menu>
-  );
-
-  const onChangeRestMode = (event) => {
-    setIsRestMode(event.target.checked);
-    setHasDefaultUrl(false);
-  };
-
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={appTheme}>
@@ -240,37 +141,10 @@ function App() {
                 <Grid item md={6} align="left">
                   <Grid container alignItems="center">
                     <Grid item align="left">
-                      <OpenNavButton
-                        edge="start"
-                        onClick={handleAppNavOpen}
-                        color="inherit"
-                        aria-label="menu"
-                        size="large"
-                      >
-                        <MenuIcon />
-                      </OpenNavButton>
-                      {navigation}
-                    </Grid>
-                    <Grid item align="left">
                       <Typography variant="h6">
                         <Routes>{appBarRoutes}</Routes>
                       </Typography>
                     </Grid>
-                    {backendUrl && (
-                      <Grid item align="right" sx={{ mx: 4 }}>
-                        <FormControlLabel
-                          control={
-                            <Switch
-                              checked={isRestMode}
-                              color="warning"
-                              onChange={onChangeRestMode}
-                              name="isRestMode"
-                            />
-                          }
-                          label="REST Mode"
-                        />
-                      </Grid>
-                    )}
                   </Grid>
                 </Grid>
                 <Grid item md={6}>

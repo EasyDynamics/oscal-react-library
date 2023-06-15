@@ -15,7 +15,7 @@ import { getAbsoluteUrl } from "./oscal-utils/OSCALLinkUtils";
 import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
 import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
-import OSCALEditableTextField, { EditableFieldProps } from "./OSCALEditableTextField";
+import OSCALEditableTextField from "./OSCALEditableTextField";
 import { Resource, BackMatter, ResourceLink } from "@easydynamics/oscal-types";
 import { ReactElement } from "react";
 import { OSCALPropertiesDialog } from "./OSCALProperties";
@@ -151,21 +151,7 @@ function CitationDisplay(props: CitationDisplayProps): ReactElement {
   );
 }
 
-function getObjectRootKey(object: unknown): string {
-  if (!object) {
-    return "";
-  }
-
-  const keys = Object.keys(object);
-  if (keys.length !== 1) {
-    throw new Error(
-      `The given object does not have exactly one root key ${JSON.stringify(object)}`
-    );
-  }
-  return keys[0];
-}
-
-export interface OSCALBackMatterProps extends EditableFieldProps {
+export interface OSCALBackMatterProps {
   /**
    * Backmatter object of an OSCALDocument
    */
@@ -215,11 +201,10 @@ interface BackMatterResourceProps extends OSCALBackMatterProps {
 }
 
 function BackMatterResource(props: BackMatterResourceProps) {
-  const { resource, parentUrl, partialRestData, isEditable, backMatter, onFieldSave } = props;
+  const { resource, parentUrl } = props;
 
   const resourceType = propWithName(resource.props, "type")?.value;
   const typeDisplay = resourceType && backMatterTypeRepresentation(resourceType);
-  const objectKey = getObjectRootKey(partialRestData);
 
   return (
     <Grid item xs={3} key={resource.uuid}>
@@ -227,25 +212,7 @@ function BackMatterResource(props: BackMatterResourceProps) {
         <CardHeader
           title={
             <TitleDisplay uuid={resource.uuid}>
-              <OSCALEditableTextField
-                fieldName="title"
-                isEditable={props.isEditable}
-                editedField={props.isEditable ? [objectKey, "back-matter", "resources"] : null}
-                editedValue={props.backMatter?.resources}
-                editedValueId={resource.uuid}
-                onFieldSave={props.onFieldSave}
-                partialRestData={
-                  props.isEditable
-                    ? {
-                        [objectKey]: {
-                          uuid: props.partialRestData?.[objectKey].uuid,
-                          "back-matter": props.backMatter,
-                        },
-                      }
-                    : null
-                }
-                value={resource.title}
-              />
+              <OSCALEditableTextField value={resource.title} />
             </TitleDisplay>
           }
           subheader={typeDisplay}
@@ -264,25 +231,7 @@ function BackMatterResource(props: BackMatterResourceProps) {
           }
         />
         <CardContent>
-          <OSCALEditableTextField
-            fieldName="description"
-            isEditable={isEditable}
-            editedField={isEditable ? [objectKey, "back-matter", "resources"] : null}
-            editedValue={backMatter?.resources}
-            editedValueId={resource.uuid}
-            onFieldSave={onFieldSave}
-            partialRestData={
-              isEditable
-                ? {
-                    [objectKey]: {
-                      uuid: partialRestData?.[objectKey].uuid,
-                      "back-matter": backMatter,
-                    },
-                  }
-                : null
-            }
-            value={resource.description}
-          />
+          <OSCALEditableTextField value={resource.description} />
           {resource.rlinks?.length ? (
             <BackMatterResourceLinkButtons rlinks={resource.rlinks} parentUrl={parentUrl} />
           ) : null}
@@ -308,9 +257,6 @@ export default function OSCALBackMatter(props: OSCALBackMatterProps): ReactEleme
               <BackMatterResource
                 key={resource.uuid}
                 backMatter={props.backMatter}
-                isEditable={props.isEditable}
-                onFieldSave={props.onFieldSave}
-                partialRestData={props.partialRestData}
                 resource={resource}
                 parentUrl={props.parentUrl}
               />

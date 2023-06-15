@@ -33,7 +33,6 @@ import Typography from "@mui/material/Typography";
 import React, { ReactNode, useEffect } from "react";
 import { OSCALSection } from "../styles/CommonPageStyles";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
-import OSCALEditableTextField, { EditableFieldProps } from "./OSCALEditableTextField";
 import { OSCALAnchorLinkHeader, AnchorLinkProps } from "./OSCALAnchorLinkHeader";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 import {
@@ -528,39 +527,18 @@ const OSCALMetadataBasicDataItem: React.FC<OSCALMetadataBasicDataItemProps> = (p
   );
 };
 
-interface OSCALMetadataBasicDataProps extends EditableFieldProps {
+interface OSCALMetadataBasicDataProps {
   metadata: PublicationMetadata;
 }
 
 const OSCALMetadataBasicData: React.FC<OSCALMetadataBasicDataProps> = (props) => {
-  const { metadata, isEditable, partialRestData, onFieldSave } = props;
+  const { metadata } = props;
 
   return (
     <Stack direction="row" alignItems="center" spacing={4}>
       <Stack direction="row" spacing={1}>
         <OSCALMetadataLabel variant="body2">Document Version:</OSCALMetadataLabel>
-        <OSCALEditableTextField
-          fieldName="Version"
-          isEditable={isEditable}
-          editedField={isEditable ? [Object.keys(partialRestData)[0], "metadata", "version"] : null}
-          onFieldSave={onFieldSave}
-          partialRestData={
-            isEditable
-              ? {
-                  [Object.keys(partialRestData)[0]]: {
-                    uuid: partialRestData[Object.keys(partialRestData)[0]].uuid,
-                    metadata: {
-                      version: metadata.version,
-                    },
-                  },
-                }
-              : null
-          }
-          size={4}
-          textFieldSize="small"
-          typographyVariant="body2"
-          value={metadata.version}
-        />
+        <Typography>{metadata.version}</Typography>
       </Stack>
       <OSCALMetadataBasicDataItem title="OSCAL Version:" data={metadata["oscal-version"]} />
       <OSCALMetadataBasicDataItem
@@ -811,12 +789,11 @@ export interface OSCALMetadataKeywordsProps extends AnchorLinkProps {
 export const OSCALMetadataKeywords: React.FC<OSCALMetadataKeywordsProps> = (props) => {
   const { keywords, urlFragment } = props;
 
-  const chips = !keywords
-    ? undefined
-    : keywords
-        ?.split(",")
-        .map((keyword) => keyword.trim())
-        .map((keyword) => <OSCALMetadataKeyword key={keyword} keyword={keyword} />);
+  const chips = keywords
+    ?.split(",")
+    ?.map((keyword) => keyword.trim())
+    ?.filter((keyword) => keyword)
+    ?.map((keyword) => <OSCALMetadataKeyword key={keyword} keyword={keyword} />);
 
   return (
     <OSCALMetadataFieldArea title="Keywords" urlFragment={urlFragment}>
@@ -825,7 +802,7 @@ export const OSCALMetadataKeywords: React.FC<OSCALMetadataKeywordsProps> = (prop
   );
 };
 
-interface OSCALMetadataProps extends EditableFieldProps, AnchorLinkProps {
+interface OSCALMetadataProps extends AnchorLinkProps {
   /**
    * The metadata of an OSCAL document.
    */
@@ -843,42 +820,14 @@ export const OSCALMetadata: React.FC<OSCALMetadataProps> = (props) => {
     <OSCALSection>
       <Stack>
         <OSCALMetadataTitle container direction="row" alignItems="center">
-          <OSCALEditableTextField
-            fieldName="Title"
-            isEditable={props.isEditable}
-            editedField={
-              props.isEditable ? [Object.keys(props.partialRestData)[0], "metadata", "title"] : null
-            }
-            onFieldSave={props.onFieldSave}
-            partialRestData={
-              props.isEditable
-                ? {
-                    [Object.keys(props.partialRestData)[0]]: {
-                      uuid: props.partialRestData[Object.keys(props.partialRestData)[0]].uuid,
-                      metadata: {
-                        title: props.metadata.title,
-                      },
-                    },
-                  }
-                : null
-            }
-            size={6}
-            textFieldSize="medium"
-            typographyVariant="h6"
-            value={props.metadata.title}
-          />
+          <Typography variant="h6">{props.metadata.title}</Typography>
         </OSCALMetadataTitle>
       </Stack>
       <Card>
         <CardContent>
           <Stack>
             <OSCALMetadataSection>
-              <OSCALMetadataBasicData
-                metadata={props.metadata}
-                isEditable={props.isEditable}
-                partialRestData={props.partialRestData}
-                onFieldSave={props.onFieldSave}
-              />
+              <OSCALMetadataBasicData metadata={props.metadata} />
             </OSCALMetadataSection>
             <OSCALMarkupMultiLine>{props.metadata.remarks ?? ""}</OSCALMarkupMultiLine>
             <OSCALMetadataKeywords

@@ -38,10 +38,6 @@ export default function OSCALComponentDefinitionControlImplementation(props) {
                               childLevel={0}
                               key={implementedRequirement.uuid}
                               modifications={controlImpl.modifications}
-                              isEditable={props.isEditable}
-                              onRestSuccess={props.onRestSuccess}
-                              onRestError={props.onRestError}
-                              partialRestData={props.partialRestData}
                             />
                           ))}
                         </List>
