@@ -22,17 +22,24 @@ import {
   OSCALSSPLoader,
   OSCALComponentLoader,
   OSCALProfileLoader,
-  OSCALDrawerSelector,
+  OSCALPermanentDrawer,
+  OSCALAppBar,
 } from "@easydynamics/oscal-react-library";
 import logo from "./images/logo-header.svg";
 
 const appTheme = createTheme({
   palette: {
     primary: {
-      main: "#001131",
+      main: "#002867",
     },
     secondary: {
-      main: "#00BDE3",
+      main: "#023E88",
+    },
+    backgroundGrey: {
+      main: "#F6F6F6",
+    },
+    primaryAccent: {
+      main: "#FF6600",
     },
   },
 });
@@ -194,13 +201,14 @@ function App() {
     </Route>
   );
 
+  const drawerWidth = "20rem";
+  const appBarHeight = "5rem";
+
   const navigation = isRestMode ? (
-    <OSCALDrawerSelector
-      open={isDrawerOpen}
-      handleClose={handleAppNavClose}
-      backendUrl={backendUrl}
-      handleOpen={handleAppNavOpen}
-    />
+    <>
+      <OSCALPermanentDrawer drawerWidth={drawerWidth} />
+      <OSCALAppBar drawerWidth={drawerWidth} appBarHeight={appBarHeight} />
+    </>
   ) : (
     <Menu
       id="app-nav-menu"
