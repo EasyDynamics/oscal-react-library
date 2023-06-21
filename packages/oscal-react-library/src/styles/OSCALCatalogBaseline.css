@@ -1,0 +1,193 @@
+
+.header {
+    position: absolute;
+    width: 290px;
+    height: 40px;
+    left: 22.22%;
+    right: 57.64%;
+    top: 12.89%;
+    bottom: 82.67%;
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-size: 32px;
+    font-weight: 700px;
+    line-height: 40.22px;
+    color: "#2B2B2B";
+}
+.breadcrumb {
+    position: absolute;
+    width: 321px;
+    height: 20px;
+    left: 22.22%;
+    right: 62.43%;
+    top: 10.67%;
+    bottom: 87.11%;
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-size: 16px;
+    line-height: 20px;
+}
+.lastModified {
+    position: absolute;
+    height: 18px;
+    width: 211px;
+    left: 332.375px;
+    top: 249.21400451660156px;
+    border-radius: nullpx;
+    left: 3.08%;
+    right: 62.27%;
+    top: 32.69%;
+    bottom: 70.31%;
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+/* identical to box height */
+    color: #2B2B2B;
+}
+.version {
+    height: 18px;
+    width: 136px;
+    left: 332px;
+    top: 275.2139892578125px;
+    border-radius: nullpx;
+
+    position: absolute;
+    left: 3.06%;
+    right: 67.5%;
+    top: 47.58%;
+    bottom: 67.42%;
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+/* identical to box height */
+    color: #2B2B2B;
+}
+.publicationDate {
+    height: 18px;
+    width: 192px;
+    left: 332.375px;
+    top: 299.2139892578125px;
+    border-radius: nullpx;
+
+    position: absolute;
+    left: 3.08%;
+    right: 63.59%;
+    top: 62.25%;
+    bottom: 64.75%;
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+/* identical to box height */
+    color: #2B2B2B;
+}
+.divider {
+    height: 0px;
+    width: 351.75px;
+
+    border-radius: 0px;
+
+    position: absolute;
+    left: 0%;
+    right: 53.35%;
+    top: 25.91%;
+    bottom: 74.09%;
+    border: 1px solid #D9DFE8;
+}
+.title {
+    height: 25px;
+    width: 300px;
+    left: 332px;
+    top: 197px;
+    border-radius: nullpx;
+
+    position: absolute;
+    left: 3.06%;
+    right: 69.17%;
+    top: 5.89%;
+    bottom: 75.33%;
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 25px;
+    color: #002867;
+}
+.button {
+    height: 39px;
+    width: 352px;
+    left: 320px;
+    top: 539px;
+    border-radius: 0px;
+
+    position: absolute;
+    left: 0.00%;
+    right: 53.33%;
+    top: 78.89%;
+    bottom: 35.78%;
+
+    background: #023E88;
+}
+.buttonLabel {
+    height: 17px;
+    width: 207px;
+    left: 440px;
+    top: 550px;
+    border-radius: nullpx;
+
+    position: absolute;
+    left: 20.56%;
+    right: 62.01%;
+    top: 30.11%;
+    bottom: 37%;
+
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 20px;
+
+    color: #FFFFFF;
+}
+
+.container {
+    height: 900px;
+    width: 1440px;
+    left: 0px;
+    top: 0px;
+    border-radius: 0px;
+
+    position: absolute;
+    left: 0%;
+    right: 0%;
+    top: 0%;
+    bottom: 0%;
+
+    background: #F6F6F6;
+}
+
+.box {
+    height: 187.11px;
+    width: 351px;
+   
+    border-radius: 0px;
+
+    position: relative;
+   
+
+    background: #FFFFFF;
+}
+
+.boxStack {
+    position: absolute;
+    left: 22.22%;
+    top: 17.67%;
+    width: 1100px;
+    height: 800px;
+    
+}
