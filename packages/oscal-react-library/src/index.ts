@@ -18,3 +18,9 @@ export {
   OSCALProfileLoader,
   OSCALDrawerSelector,
 };
+
+export { FeatureFlags, FeatureFlagsProvider } from "./contexts/FeatureFlags";
+export type { FeatureFlagConfiguration, FeatureFlagsProviderProps } from "./contexts/FeatureFlags";
+
+export { Feature } from "./components/Feature";
+export type { FeatureProps } from "./components/Feature";
