@@ -1,27 +1,29 @@
 
 .header {
     position: absolute;
+
+
     width: 290px;
     height: 40px;
-    left: 22.22%;
-    right: 57.64%;
-    top: 12.89%;
-    bottom: 82.67%;
+    top: 116px;
+    left: 100px;
+
+
     font-family: 'Source Sans Pro';
     font-style: normal;
     font-size: 32px;
     font-weight: 700px;
     line-height: 40.22px;
-    color: "#2B2B2B";
+    color: #2B2B2B;
 }
 .breadcrumb {
+
     position: absolute;
     width: 321px;
-    height: 20px;
-    left: 22.22%;
-    right: 62.43%;
-    top: 10.67%;
-    bottom: 87.11%;
+    height: 100px;
+    top: 96px;
+    left: 100px;
+
     font-family: 'Source Sans Pro';
     font-style: normal;
     font-size: 16px;
@@ -156,19 +158,30 @@
 }
 
 .container {
-    height: 900px;
-    width: 1440px;
-    left: 0px;
-    top: 0px;
-    border-radius: 0px;
 
     position: absolute;
-    left: 0%;
-    right: 0%;
-    top: 0%;
-    bottom: 0%;
-
+    width: 1440px;
+    height: 900px;
+    top: 0px;
+    left: 150px;
+    border: 1px;
+    
     background: #F6F6F6;
+}
+
+.containerShaded {
+
+    position: absolute;
+    width: 1440px;
+    height: 900px;
+    top: 0px;
+    left: 150px;
+    border: 1px;
+    
+    
+    background: #2B2B2B66;
+
+
 }
 
 .box {
@@ -176,6 +189,8 @@
     width: 351px;
    
     border-radius: 0px;
+    border: 1px solid #00286726;
+    box-shadow: 0px 0px 10px 0px #00000029;
 
     position: relative;
    
@@ -185,9 +200,38 @@
 
 .boxStack {
     position: absolute;
-    left: 22.22%;
-    top: 17.67%;
-    width: 1100px;
+
+
+    top: 186px;
+    left: 100px;
+
+    width: 1088px;
     height: 800px;
     
+}
+
+.upload {
+    position: absolute;
+    width: 57px;
+    height: 20px;
+    top: 128px;
+    left: 970px;
+    font-family: Source Sans Pro;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 20px;
+    letter-spacing: 0em;
+    text-align: left;
+
+}
+
+.createNew {
+    position: absolute;
+    width: 142px;
+    height: 35px;
+    top: 120px;
+    left: 1050px;
+    border: 1px;
+
+    border: 1px solid #073C92;
 }

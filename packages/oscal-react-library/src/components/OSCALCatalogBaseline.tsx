@@ -12,18 +12,19 @@ import Button from "@mui/material/Button";
 import { Divider } from "@mui/material";
 import "../styles/OSCALCatalogBaseline.css";
 import { Stack } from "@mui/system";
+import { useFetchers } from "./Fetchers";
 
 export interface OSCALCatalogBaselineProps extends EditableFieldProps {
   readonly baseline?: Profile;
-  readonly catalog: Catalog;
+  readonly catalog?: Catalog;
   readonly onRestError?: (error: any) => void;
   readonly onRestSuccess?: (data: any) => void;
 }
 
 export interface OSCALModelMetadataInfo extends EditableFieldProps {
-  readonly title: string;
-  readonly lastModified: string;
-  readonly version: string;
+  readonly title?: string;
+  readonly lastModified?: string;
+  readonly version?: string;
   readonly publicationDate?: string;
 }
 
@@ -55,8 +56,46 @@ const item3: OSCALModelMetadataInfo = {
   publicationDate: "05/12/2023",
 };
 const data: Array<OSCALModelMetadataInfo> = [item, item1, item2, item3];
-class BreadcrumbMenu extends React.Component {
+export class UploadButton extends React.Component {
   render() {
+    return (
+      <Button className="upload">
+        {" "}
+        <Typography style={{ color: "#023E88" }}> UPLOAD</Typography>{" "}
+      </Button>
+    );
+  }
+}
+const handleClick = () => {
+  return <OSCALAddNewCatalogBaseline></OSCALAddNewCatalogBaseline>;
+};
+export class CreateNewButton extends React.Component {
+  render() {
+    return (
+      <Button className="createNew" onClick={handleClick}>
+        {" "}
+        <Typography style={{ color: "#023E88" }}> CREATE NEW + </Typography>{" "}
+      </Button>
+    );
+  }
+}
+export const CatalogBreadCrumbMenu: React.FC<OSCALModelMetadataInfo | null> = (item) => {
+  if (item != null && item.title != null && item.title.length > 0)
+    return (
+      <BreadCrumbs aria-label="breadcrumb" className="breadcrumb">
+        <Link underline="hover" href="/" style={{ color: "#1D1D1D", fontWeight: "400" }}>
+          Home
+        </Link>
+        <Link underline="hover" href="/" style={{ color: "#002867", fontWeight: "700" }}>
+          CATALOGS & BASELINES
+        </Link>
+        <Link underline="hover" href="/" style={{ color: "#002867", fontWeight: "700" }}>
+          {" "}
+          {item?.title}
+        </Link>
+      </BreadCrumbs>
+    );
+  else
     return (
       <BreadCrumbs aria-label="breadcrumb" className="breadcrumb">
         <Link underline="hover" href="/" style={{ color: "#1D1D1D", fontWeight: "400" }}>
@@ -67,10 +106,9 @@ class BreadcrumbMenu extends React.Component {
         </Link>
       </BreadCrumbs>
     );
-  }
-}
+};
 
-class Header extends React.Component {
+export class CatalogBaselineHeader extends React.Component {
   render() {
     return <FormLabel className="header"> Catalogs & Baselines</FormLabel>;
   }
@@ -112,20 +150,27 @@ export const StackFunct: React.FC<ItemList> = (itemList) => {
   );
 };
 
-export const OSCALCatalogBaseline: React.FC<OSCALCatalogBaselineProps> = ({}) => {
-  /*
-    if(isEditable)
-    return (
-      <OSCALCatalogBaseline>
-  
-      </OSCALCatalogBaseline>
-    );
-    */
+export const OSCALCatalogBaseline: React.FC = () => {
   return (
     <Container className="container">
-      <BreadcrumbMenu></BreadcrumbMenu>
-      <Header></Header>
+      <CatalogBreadCrumbMenu></CatalogBreadCrumbMenu>
+      <CatalogBaselineHeader></CatalogBaselineHeader>
+      <UploadButton></UploadButton>
+      <CreateNewButton></CreateNewButton>
       <StackFunct Items={data}></StackFunct>
+    </Container>
+  );
+};
+
+export const OSCALAddNewCatalogBaseline: React.FC = () => {
+  return (
+    <Container className="container">
+      <CatalogBreadCrumbMenu></CatalogBreadCrumbMenu>
+      <CatalogBaselineHeader></CatalogBaselineHeader>
+      <UploadButton></UploadButton>
+      <CreateNewButton></CreateNewButton>
+      <StackFunct Items={data}></StackFunct>
+      <Container className="containerShaded"></Container>
     </Container>
   );
 };

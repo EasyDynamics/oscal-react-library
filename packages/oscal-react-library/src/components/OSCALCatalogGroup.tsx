@@ -14,6 +14,7 @@ import OSCALControl, { ControlMetadataItems } from "./OSCALControl";
 import OSCALControlLabel from "./OSCALControlLabel";
 import OSCALControlPart from "./OSCALControlPart";
 import { Accordion, AccordionDetails, AccordionSummary } from "./StyedAccordion";
+import { CatalogBreadCrumbMenu, OSCALModelMetadataInfo } from "./OSCALCatalogBaseline";
 
 const WithdrawnControlText = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[400],
@@ -174,6 +175,16 @@ export interface OSCALCatalogControlListItemProps
   readonly withdrawn?: boolean;
 }
 
+/**
+ * Creates a new catalog group using catalog metadata info
+ */
+export const OSCALCreateCatalogGroup: React.FC<OSCALModelMetadataInfo> = (item) => {
+  return (
+    <>
+      <CatalogBreadCrumbMenu title={item.title}></CatalogBreadCrumbMenu>
+    </>
+  );
+};
 /**
  * Creates a catalog list item component containing a catalog group/control.
  *
