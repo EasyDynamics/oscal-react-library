@@ -80,7 +80,7 @@ export const OSCALCatalog: React.FC<OSCALCatalogProps> = ({
     title: UNGROUPED_CONTROLS_TITLE,
     controls: catalog.controls,
   };
-  if (isEditable) return <OSCALCatalogBaseline></OSCALCatalogBaseline>;
+  if (isEditable || true) return <OSCALCatalogBaseline></OSCALCatalogBaseline>;
   return (
     <OSCALDocumentRoot>
       <OSCALMetadata
