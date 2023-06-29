@@ -199,7 +199,7 @@ export const FormHeaderLabel = styled(FormLabel)`
   line-height: 40.22px;
   color: #2b2b2b;
 `;
-export const BreadCrumbMenu = styled(BreadCrumbs)`
+export const BreadMenu = styled(BreadCrumbs)`
   position: absolute;
   width: 321px;
   height: 100px;
@@ -269,7 +269,7 @@ const handleClick = () => {
 export class CreateNewButton extends React.Component {
   render() {
     return (
-      <CreateNew className="createNew" onClick={handleClick}>
+      <CreateNew onClick={handleClick}>
         {" "}
         <Typography style={{ color: "#023E88" }}> CREATE NEW + </Typography>{" "}
       </CreateNew>
@@ -279,7 +279,7 @@ export class CreateNewButton extends React.Component {
 export const CatalogBreadCrumbsMenu: React.FC<OSCALModelMetadataInfo | null> = (item) => {
   if (item != null && item.title != null && item.title.length > 0)
     return (
-      <BreadCrumbMenu aria-label="breadcrumb" className="breadcrumb">
+      <BreadMenu aria-label="breadcrumb">
         <Link underline="hover" href="/" style={{ color: "#1D1D1D", fontWeight: "400" }}>
           Home
         </Link>
@@ -290,18 +290,18 @@ export const CatalogBreadCrumbsMenu: React.FC<OSCALModelMetadataInfo | null> = (
           {" "}
           {item?.title}
         </Link>
-      </BreadCrumbMenu>
+      </BreadMenu>
     );
   else
     return (
-      <BreadCrumbMenu aria-label="breadcrumb">
+      <BreadMenu aria-label="breadcrumb">
         <Link underline="hover" href="/" style={{ color: "#1D1D1D", fontWeight: "400" }}>
           Home
         </Link>
         <Link underline="hover" href="/" style={{ color: "#002867", fontWeight: "700" }}>
           CATALOGS & BASELINES
         </Link>
-      </BreadCrumbMenu>
+      </BreadMenu>
     );
 };
 
