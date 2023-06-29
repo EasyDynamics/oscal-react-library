@@ -12,7 +12,7 @@ import Button from "@mui/material/Button";
 import { Divider } from "@mui/material";
 import "../styles/OSCALCatalogBaseline.css";
 import { Stack } from "@mui/system";
-import { useFetchers } from "./Fetchers";
+//import { useFetchers } from "./Fetchers";
 
 export interface OSCALCatalogBaselineProps extends EditableFieldProps {
   readonly baseline?: Profile;
