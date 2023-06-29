@@ -14,7 +14,7 @@ import OSCALControl, { ControlMetadataItems } from "./OSCALControl";
 import OSCALControlLabel from "./OSCALControlLabel";
 import OSCALControlPart from "./OSCALControlPart";
 import { Accordion, AccordionDetails, AccordionSummary } from "./StyedAccordion";
-import { CatalogBreadCrumbMenu, OSCALModelMetadataInfo } from "./OSCALCatalogBaseline";
+import { CatalogBreadCrumbsMenu, OSCALModelMetadataInfo } from "./OSCALCatalogBaseline";
 
 const WithdrawnControlText = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[400],
@@ -181,7 +181,7 @@ export interface OSCALCatalogControlListItemProps
 export const OSCALCreateCatalogGroup: React.FC<OSCALModelMetadataInfo> = (item) => {
   return (
     <>
-      <CatalogBreadCrumbMenu title={item.title}></CatalogBreadCrumbMenu>
+      <CatalogBreadCrumbsMenu title={item.title}></CatalogBreadCrumbsMenu>
     </>
   );
 };
