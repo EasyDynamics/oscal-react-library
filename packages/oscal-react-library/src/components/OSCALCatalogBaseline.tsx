@@ -11,6 +11,7 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import { Divider } from "@mui/material";
 import { Stack, styled } from "@mui/system";
+//import BreadCrumbs from "@mui/material/node_modules/@mui/base";
 //import { useFetchers } from "./Fetchers";
 
 export const CreateNew = styled(Button)`
@@ -199,6 +200,7 @@ export const FormHeaderLabel = styled(FormLabel)`
   line-height: 40.22px;
   color: #2b2b2b;
 `;
+/*
 export const BreadMenu = styled(BreadCrumbs)`
   position: absolute;
   width: 321px;
@@ -210,6 +212,7 @@ export const BreadMenu = styled(BreadCrumbs)`
   font-size: 16px;
   line-height: 20px;
 `;
+*/
 
 export interface OSCALCatalogBaselineProps extends EditableFieldProps {
   readonly baseline?: Profile;
@@ -279,7 +282,20 @@ export class CreateNewButton extends React.Component {
 export const CatalogBreadCrumbsMenu: React.FC<OSCALModelMetadataInfo | null> = (item) => {
   if (item != null && item.title != null && item.title.length > 0)
     return (
-      <BreadMenu aria-label="breadcrumb">
+      <BreadCrumbs
+        aria-label="breadcrumb"
+        style={{
+          position: "absolute",
+          width: "321px",
+          height: "100px",
+          top: "96px",
+          left: "100px",
+          fontFamily: "Source Sans Pro",
+          fontStyle: "normal",
+          fontSize: "16px",
+          lineHeight: "20px",
+        }}
+      >
         <Link underline="hover" href="/" style={{ color: "#1D1D1D", fontWeight: "400" }}>
           Home
         </Link>
@@ -290,18 +306,31 @@ export const CatalogBreadCrumbsMenu: React.FC<OSCALModelMetadataInfo | null> = (
           {" "}
           {item?.title}
         </Link>
-      </BreadMenu>
+      </BreadCrumbs>
     );
   else
     return (
-      <BreadMenu aria-label="breadcrumb">
+      <BreadCrumbs
+        aria-label="breadcrumb"
+        style={{
+          position: "absolute",
+          width: "321px",
+          height: "100px",
+          top: "96px",
+          left: "100px",
+          fontFamily: "Source Sans Pro",
+          fontStyle: "normal",
+          fontSize: "16px",
+          lineHeight: "20px",
+        }}
+      >
         <Link underline="hover" href="/" style={{ color: "#1D1D1D", fontWeight: "400" }}>
           Home
         </Link>
         <Link underline="hover" href="/" style={{ color: "#002867", fontWeight: "700" }}>
           CATALOGS & BASELINES
         </Link>
-      </BreadMenu>
+      </BreadCrumbs>
     );
 };
 
