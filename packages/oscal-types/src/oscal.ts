@@ -8,6 +8,7 @@
 // match the expected interface, even if the JSON is valid.
 
 export interface Oscal {
+    readonly $schema?: string;
     readonly catalog?: Catalog;
     readonly profile?: Profile;
     readonly 'component-definition'?: ComponentDefinition;
@@ -3314,6 +3315,7 @@ function r(name: string) {
 
 const typeMap: any = {
     "Oscal": o([
+        { json: "$schema", js: "$schema", typ: u(undefined, "") },
         { json: "catalog", js: "catalog", typ: u(undefined, r("Catalog")) },
         { json: "profile", js: "profile", typ: u(undefined, r("Profile")) },
         { json: "component-definition", js: "component-definition", typ: u(undefined, r("ComponentDefinition")) },
