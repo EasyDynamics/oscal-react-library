@@ -11,11 +11,11 @@ import TextField from "@mui/material/TextField";
 import Toolbar from "@mui/material/Toolbar";
 
 import React, { useState } from "react";
-import { ReactComponent as GearIcon } from "../images/icons/gear.svg";
-import { ReactComponent as GearHovIcon } from "../images/icons/gear_hov.svg";
-import { ReactComponent as SearchIcon } from "../images/icons/search.svg";
-import { ReactComponent as NotifyIcon } from "../images/icons/notify.svg";
-import { ReactComponent as NotifyHovIcon } from "../images/icons/notify_hov.svg";
+import { ReactComponent as GearIcon } from "./images/icons/gear.svg";
+import { ReactComponent as GearHovIcon } from "./images/icons/gear_hov.svg";
+import { ReactComponent as SearchIcon } from "./images/icons/search.svg";
+import { ReactComponent as NotifyIcon } from "./images/icons/notify.svg";
+import { ReactComponent as NotifyHovIcon } from "./images/icons/notify_hov.svg";
 
 const HoverableIconButton = styled(IconButton)(({ theme }) => ({
   fill: theme.palette.secondary.main,

@@ -1,5 +1,4 @@
-import "./App.css";
-import { styled, createTheme, ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
+import { styled, ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 import React, { createElement, useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
@@ -11,7 +10,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import CssBaseline from "@mui/material/CssBaseline";
 import ReactGA from "react-ga4";
 import { Route, Routes, Link as RouterLink, useLocation } from "react-router-dom";
 import Grid from "@mui/material/Grid";
@@ -22,33 +20,24 @@ import {
   OSCALSSPLoader,
   OSCALComponentLoader,
   OSCALProfileLoader,
+  OSCALDrawerSelector,
   OSCALPermanentDrawer,
   OSCALAppBar,
 } from "@easydynamics/oscal-react-library";
 import logo from "./images/logo-header.svg";
-
-const appTheme = createTheme({
-  palette: {
-    primary: {
-      main: "#002867",
-    },
-    secondary: {
-      main: "#023E88",
-    },
-    backgroundGrey: {
-      main: "#F6F6F6",
-    },
-    primaryAccent: {
-      main: "#FF6600",
-    },
-  },
-});
+import { appTheme } from "./AppTheme";
+import { OSCALGlobalStyles } from "./GlobalStyles";
 
 const OpenNavButton = styled(IconButton)(({ theme }) => `margin-right: ${theme.spacing(2)}`);
 const LogoImage = styled("img")`
   width: 150px;
   margin-right: 1em;
 `;
+
+const isDevMode = true;
+
+let drawerWidth = "0rem";
+let appBarHeight = "0rem";
 
 function getBackEndUrl(urlString) {
   // If given something falsey, we need to also return something falsey.
@@ -90,7 +79,13 @@ function App() {
     // Note: The lowest subdirectory of the url is extracted to see if
     // it contains a uuid.
     if (isRestMode && currentUrl.substring(currentUrl.lastIndexOf("/") + 1) === "") {
-      setIsDrawerOpen(true);
+      if (!isDrawerOpen) {
+        setIsDrawerOpen(true);
+      }
+    }
+    if (isDevMode) {
+      drawerWidth = "20rem";
+      appBarHeight = "5rem";
     }
   }, [isRestMode]);
 
@@ -201,14 +196,24 @@ function App() {
     </Route>
   );
 
-  const drawerWidth = "20rem";
-  const appBarHeight = "5rem";
-
   const navigation = isRestMode ? (
-    <>
-      <OSCALPermanentDrawer drawerWidth={drawerWidth} />
-      <OSCALAppBar drawerWidth={drawerWidth} appBarHeight={appBarHeight} />
-    </>
+    isDevMode ? (
+      <>
+        <OSCALPermanentDrawer
+          drawerWidth={drawerWidth}
+          backendUrl={backendUrl}
+          handleClose={handleAppNavOpen}
+        />
+        <OSCALAppBar drawerWidth={drawerWidth} appBarHeight={appBarHeight} />
+      </>
+    ) : (
+      <OSCALDrawerSelector
+        open={isDrawerOpen}
+        handleClose={handleAppNavClose}
+        backendUrl={backendUrl}
+        handleOpen={handleAppNavOpen}
+      />
+    )
   ) : (
     <Menu
       id="app-nav-menu"
@@ -240,7 +245,7 @@ function App() {
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={appTheme}>
-        <CssBaseline />
+        <OSCALGlobalStyles theme={appTheme} drawerWidth={drawerWidth} appBarHeight={appBarHeight} />
         <div className="App">
           <AppBar position="static">
             <Toolbar>

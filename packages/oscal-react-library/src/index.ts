@@ -4,7 +4,7 @@ import {
   OSCALComponentLoader,
   OSCALProfileLoader,
 } from "./components/OSCALLoader";
-
+import { OSCALDrawerSelector } from "./components/OSCALDrawerSelector";
 import { OSCALPermanentDrawer } from "./components/OSCALPermanentDrawer";
 import { OSCALAppBar } from "./components/OSCALAppBar";
 
@@ -17,6 +17,7 @@ export {
   OSCALSSPLoader,
   OSCALComponentLoader,
   OSCALProfileLoader,
+  OSCALDrawerSelector,
   OSCALPermanentDrawer,
   OSCALAppBar,
 };

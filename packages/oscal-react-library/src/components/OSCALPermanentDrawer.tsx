@@ -1,11 +1,12 @@
 import Box from "@mui/material/Box";
-import { Divider, Drawer } from "@mui/material";
+import { Divider, Drawer, Grid } from "@mui/material";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Stack from "@mui/material/Stack";
 import TreeItem, { treeItemClasses } from "@mui/lab/TreeItem";
 import TreeView from "@mui/lab/TreeView";
 import Typography from "@mui/material/Typography";
+import { DocumentTree as DrawerSelectorDocumentTree } from "./OSCALDrawerSelector";
 
 import React, { useState } from "react";
 import { ReactComponent as CatalogsIcon } from "./images/icons/catalogs.svg";
@@ -24,6 +25,7 @@ import { ReactComponent as SupportIcon } from "./images/icons/support.svg";
 import { ReactComponent as SupportHovIcon } from "./images/icons/support_hov.svg";
 import { ReactComponent as UtilitiesIcon } from "./images/icons/tools.svg";
 import { ReactComponent as UtilitiesHovIcon } from "./images/icons/tools_hov.svg";
+import { ReactComponent as EDC_Reverse_Tagline } from "./images/EDC_Reverse_Tagline.svg";
 import { styled } from "@mui/material/styles";
 
 const footerHeight = "11rem";
@@ -36,7 +38,7 @@ const StyledDrawer = styled(Drawer)(({ theme }) => ({
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   color: "white",
-  marginTop: "2rem",
+  marginTop: "1rem",
   marginBottom: "1rem",
 }));
 
@@ -63,7 +65,7 @@ const TabTreeItemRoot = styled(TreeItem)(({ theme }) => ({
   fill: "#BCC6D5",
   // General styling for tree items
   [`& .${treeItemClasses.content}`]: {
-    minHeight: "1.75em",
+    minHeight: "3.5rem",
     paddingLeft: theme.spacing(4),
     flexDirection: "row-reverse",
     "&.Mui-expanded": {
@@ -95,7 +97,7 @@ export interface OSCALMarkupInterface {
   children: string;
 }
 
-function TabTreeItem(props) {
+function TabTreeItem(props: any) {
   const {
     labelIcon: LabelIcon,
     labelIconExpanded: LabelIconExpanded,
@@ -106,8 +108,7 @@ function TabTreeItem(props) {
   } = props;
 
   const selectedState =
-    selectedNode === props.nodeId ||
-    Array.from(selectedNode)[0] === props.nodeId;
+    selectedNode === props.nodeId || Array.from(selectedNode)[0] === props.nodeId;
 
   return (
     <TabTreeItemRoot
@@ -115,15 +116,15 @@ function TabTreeItem(props) {
         <Stack direction="row" spacing={2} alignItems="center">
           <Box
             component={selectedState ? LabelIconExpanded : LabelIcon}
+            height="1.25rem"
             width="1.25rem"
             sx={(theme) => ({
-              fill: selectedState
-                ? theme.palette.primaryAccent.main
-                : "#BCC6D5",
+              fill: selectedState ? theme.palette.primaryAccent.main : "#BCC6D5",
+              fontSize: "1rem",
+              letterSpacing: ".05rem",
             })}
           />
           <Typography
-            variant="body"
             sx={(theme) => ({
               fontWeight: selectedState
                 ? theme.typography.fontWeightBold
@@ -140,7 +141,11 @@ function TabTreeItem(props) {
   );
 }
 
-export const DocumentTree: React.FC<OSCALPermanentDrawerProps> = ({ drawerWidth }) => {
+export const DocumentTree: React.FC<OSCALPermanentDrawerProps> = ({
+  drawerWidth,
+  backendUrl,
+  handleClose,
+}) => {
   const [selectedNode, setselectedNode] = useState([]);
 
   const handleSelectToggle = (event: any, nodeIds: any) => {
@@ -151,25 +156,17 @@ export const DocumentTree: React.FC<OSCALPermanentDrawerProps> = ({ drawerWidth 
   return (
     <StyledTreeView
       aria-label="file system navigator"
-      defaultCollapseIcon={
-        <ExpandLessIcon sx={(theme) => ({ color: "#BCC6D5" })} />
-      }
-      defaultExpandIcon={
-        <ExpandMoreIcon sx={(theme) => ({ color: "#BCC6D5" })} />
-      }
+      defaultCollapseIcon={<ExpandLessIcon sx={(theme) => ({ color: "#BCC6D5" })} />}
+      defaultExpandIcon={<ExpandMoreIcon sx={(theme) => ({ color: "#BCC6D5" })} />}
       onNodeSelect={handleSelectToggle}
       sx={{
         width: `${drawerWidth}`,
       }}
-      className="TableContainer"
+      className="RightScrollbar"
     >
+      <Divider />
       <Box sx={{ padding: "0.75rem", paddingLeft: "2rem" }}>
-        <Typography
-          variant="bodySmall"
-          sx={{ textTransform: "uppercase" }}
-        >
-          Main Menu
-        </Typography>
+        <Typography sx={{ textTransform: "uppercase", fontSize: "0.75rem" }}>Main Menu</Typography>
       </Box>
       <TabTreeItem
         nodeId={"0"}
@@ -256,6 +253,10 @@ export const DocumentTree: React.FC<OSCALPermanentDrawerProps> = ({ drawerWidth 
           labelText={"* Utilities Example *"}
         />
       </TabTreeItem>
+      {/* TODO: Remove this once paths have been determined or dev flag is set, handleClose can also be removed as well */}
+      <Grid sx={{ backgroundColor: "white" }}>
+        <DrawerSelectorDocumentTree backendUrl={backendUrl} handleClose={handleClose} />
+      </Grid>
       <DrawerFooter>
         <Divider sx={{ bgcolor: "#BCC6D5", margin: "2rem" }} />
         <TabTreeItem
@@ -281,9 +282,15 @@ export const DocumentTree: React.FC<OSCALPermanentDrawerProps> = ({ drawerWidth 
 
 interface OSCALPermanentDrawerProps {
   drawerWidth: number;
+  backendUrl: string;
+  handleClose: () => void;
 }
 
-export const OSCALPermanentDrawer: React.FC<OSCALPermanentDrawerProps> = ({ drawerWidth }) => {
+export const OSCALPermanentDrawer: React.FC<OSCALPermanentDrawerProps> = ({
+  drawerWidth,
+  backendUrl,
+  handleClose,
+}) => {
   return (
     <StyledDrawer variant="permanent" anchor="left">
       <DrawerHeader
@@ -293,13 +300,11 @@ export const OSCALPermanentDrawer: React.FC<OSCALPermanentDrawerProps> = ({ draw
           alignItems: "center",
         }}
       >
-        <Box
-          component="img"
-          src={require("../images/EDC_Reverse_Tagline.png")}
-          width={`calc(${drawerWidth} - 4rem)`}
-        />
+        <Box component="svg" width={`calc(${drawerWidth} - 4rem)`}>
+          <EDC_Reverse_Tagline width="100%" height="50%" />
+        </Box>
       </DrawerHeader>
-      <DocumentTree drawerWidth={drawerWidth} />
+      <DocumentTree drawerWidth={drawerWidth} backendUrl={backendUrl} handleClose={handleClose} />
     </StyledDrawer>
   );
 };
