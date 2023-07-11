@@ -12,7 +12,7 @@ import { Typography } from "@mui/material";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getAbsoluteUrl } from "./oscal-utils/OSCALLinkUtils";
-import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
+import { OSCALSection, OSCALSectionHeader } from "./styles/CommonPageStyles";
 import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import OSCALEditableTextField, { EditableFieldProps } from "./OSCALEditableTextField";

@@ -9,7 +9,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import OSCALResponsibleRoles from "./OSCALResponsibleRoles";
-import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
+import { OSCALSection, OSCALSectionHeader } from "./styles/CommonPageStyles";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import { HoverablePopover } from "./HoverablePopover";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";

@@ -31,7 +31,7 @@ import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import React, { ReactNode, useEffect } from "react";
-import { OSCALSection } from "../styles/CommonPageStyles";
+import { OSCALSection } from "./styles/CommonPageStyles";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
 import OSCALEditableTextField, { EditableFieldProps } from "./OSCALEditableTextField";
 import { OSCALAnchorLinkHeader, AnchorLinkProps } from "./OSCALAnchorLinkHeader";

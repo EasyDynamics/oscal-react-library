@@ -4,7 +4,7 @@ import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
 import { List, ListItem, ListItemText } from "@mui/material";
 import OSCALControlImplementationImplReq from "./OSCALControlImplementationImplReq";
-import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
+import { OSCALSection, OSCALSectionHeader } from "./styles/CommonPageStyles";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 
