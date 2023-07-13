@@ -93,7 +93,6 @@
     "@types/mime-db": "^1.43.1",
     "@types/react": "^18.2.14",
     "@types/uuid": "^9.0.2",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "babel-jest": "^29.6.1",
     "cross-env": "^7.0.3",
