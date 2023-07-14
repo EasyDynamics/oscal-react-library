@@ -17,7 +17,7 @@ export const OscalContextProvider = ({ children }) => {
   const [currentFileJson, setCurrentFileJson] = useState("(empty)");
   const [currentValidation, setCurrentValidation] = useState([]);
   const [showValidation, setShowValidation] = useState(true);
-  /*
+
   const [sarTabValue, setSarTabValue] = useState("Metadata");
   const [sarTabLoaded, setSarTabLoaded] = useState(false);
   const [sarTabPath, setSarTabPath] = useState("assessment-results/metadata");
@@ -38,11 +38,12 @@ export const OscalContextProvider = ({ children }) => {
   const [eiAssessText, setEiAssessText] = useState("Loading...");
   const [eiControlIds, setEiControlIds] = useState(null);
   const [eiAssessPage, setEiAssessPage] = useState(0);
-  const [eiResultsJson, setEiResultsJson] = useState(null);
-  const [eiResourcesJson, setEiResourcesJson] = useState(null); */
 
   const eiMode = true;
   //const eiMode = false
+  //const styleMode = true
+  const styleMode = false;
+
   const overlays = {
     "assessment-results": true,
     "enterprise-initiative": true,
@@ -64,7 +65,31 @@ export const OscalContextProvider = ({ children }) => {
         currentFileJson: { get: currentFileJson, set: setCurrentFileJson },
         currentValidation: { get: currentValidation, set: setCurrentValidation },
         showValidation: { get: showValidation, set: setShowValidation },
+
+        sarTabValue: { get: sarTabValue, set: setSarTabValue },
+        sarTabLoaded: { get: sarTabLoaded, set: setSarTabLoaded },
+        sarTabPath: { get: sarTabPath, set: setSarTabPath },
+        lastSarTabPath: { get: lastSarTabPath, set: setLastSarTabPath },
+        sarTabContents: { get: sarTabContents, set: setSarTabContents },
+
+        eiNewInitMode: { get: eiNewInitMode, set: setEiNewInitMode },
+        eiUploadFile: { get: eiUploadFile, set: setEiUploadFile },
+        eiUploadStatus: { get: eiUploadStatus, set: setEiUploadStatus },
+        eiUploadErrors: { get: eiUploadErrors, set: setEiUploadErrors },
+        eiUploadErrors: { get: eiUploadErrors, set: setEiUploadErrors },
+        eiUploadPhase: { get: eiUploadPhase, set: setEiUploadPhase },
+
+        eiScopes: { get: eiScopes, set: setEiScopes },
+        eiScopeFile: { get: eiScopeFile, set: setEiScopeFile },
+        eiScopeTitle: { get: eiScopeTitle, set: setEiScopeTitle },
+        eiScopeMode: { get: eiScopeMode, set: setEiScopeMode },
+
+        eiAssessText: { get: eiAssessText, set: setEiAssessText },
+        eiControlIds: { get: eiControlIds, set: setEiControlIds },
+        eiAssessPage: { get: eiAssessPage, set: setEiAssessPage },
+
         eiMode,
+        styleMode,
         overlays,
       }}
     >
