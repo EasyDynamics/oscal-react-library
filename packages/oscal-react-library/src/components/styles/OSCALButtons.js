@@ -34,7 +34,8 @@ export const OSCALTertiaryButton = (props) => {
       disableElevation
       sx={{
         ":hover": {
-          backgroundColor: (theme) => theme.palette.lightBlue.main,
+          // backgroundColor: (theme) => theme.palette.lightBlue.main,
+          backgroundColor: "#E2ECFA",
         },
       }}
     />

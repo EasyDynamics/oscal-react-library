@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactElement } from "react";
+import React, { useState, useEffect } from "react";
 import { Catalog, Profile } from "@easydynamics/oscal-types";
 import { EditableFieldProps } from "./OSCALEditableTextField";
 
@@ -12,7 +12,6 @@ import { Divider } from "@mui/material";
 import { Stack, styled } from "@mui/system";
 //import BreadCrumbs from "@mui/material/node_modules/@mui/base";
 import { useFetchers } from "./Fetchers";
-import { isAbsolute } from "path";
 import {
   OSCALDialogActions,
   OSCALDialogTitle,
@@ -52,9 +51,18 @@ import {
   OSCALFormLabel,
 } from "./styles/OSCALInputs";
 
-import { FormatBold, FormatItalic, FormatQuote, Subscript, Superscript } from "@mui/icons-material";
+import {
+  EditAttributesSharp,
+  FormatBold,
+  FormatItalic,
+  FormatQuote,
+  Subscript,
+  Superscript,
+} from "@mui/icons-material";
 
 import { CodeOffSharp } from "@mui/icons-material";
+import { getDateRangePickerDayUtilityClass } from "@mui/lab";
+import { string } from "prop-types";
 
 const CreateNew = styled(Button)`
   position: absolute;
@@ -62,10 +70,14 @@ const CreateNew = styled(Button)`
   height: 35px;
   top: 120px;
   left: 1050px;
-  border: 1px;
-  border: 1px solid #073c92;
 `;
-
+const Hug = styled(Container)`
+  position: absolute;
+  width: 348px;
+  height: 36px;
+  top: 120px;
+  left: 950px;
+`;
 const Upload = styled(Button)`
   position: absolute;
   width: 57px;
@@ -135,11 +147,12 @@ const ItemButton = styled(Button)`
   right: 53.33%;
   top: 78.89%;
   bottom: 35.78%;
-  background: #023e88;
+  background: #002867;
+  hover: #023e88;
 `;
 const ItemTitle = styled(Typography)`
   height: 25px;
-  width: 300px;
+  width: 340px;
   left: 332px;
   top: 197px;
   border-radius: nullpx;
@@ -158,7 +171,7 @@ const ItemTitle = styled(Typography)`
 const LastModified = styled(Typography)`
   position: absolute;
   height: 18px;
-  width: 211px;
+  width: 350px;
   left: 332.375px;
   top: 249.21400451660156px;
   border-radius: nullpx;
@@ -173,9 +186,27 @@ const LastModified = styled(Typography)`
   line-height: 18px;
   color: #2b2b2b;
 `;
+const ItemResult = styled(Typography)`
+  position: absolute;
+  height: 18px;
+  width: 300px;
+  left: 332.375px;
+  top: 249.21400451660156px;
+  border-radius: nullpx;
+  left: 28.08%;
+  right: 62.27%;
+  top: 32.69%;
+  bottom: 70.31%;
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 18px;
+  color: #2b2b2b;
+`;
 const Version = styled(Typography)`
   height: 18px;
-  width: 136px;
+  width: 350px;
   left: 332px;
   top: 275.2139892578125px;
   border-radius: nullpx;
@@ -193,7 +224,7 @@ const Version = styled(Typography)`
 `;
 const PublicationDate = styled(Typography)`
   height: 18px;
-  width: 192px;
+  width: 350px;
   left: 332.375px;
   top: 299.2139892578125px;
   border-radius: nullpx;
@@ -222,7 +253,7 @@ const ItemDivider = styled(Divider)`
 `;
 const FormHeaderLabel = styled(FormLabel)`
   position: absolute;
-  width: 290px;
+  width: 350px;
   height: 40px;
   top: 116px;
   left: 100px;
@@ -260,7 +291,7 @@ const StepItemLabel = styled(StepLabel)`
 `;
 
 const AddInformationLabel = styled(Typography)`
-  width: 295px;
+  width: 500px;
   height: 26px;
   top: 30px;
   left: 20px;
@@ -269,7 +300,7 @@ const AddInformationLabel = styled(Typography)`
   font-weight: 700;
   line-height: 20px;
   letter-spacing: 0em;
-  text-align: left;
+  text-align: "left";
   color: #002867;
 `;
 
@@ -282,15 +313,47 @@ const ShadedContainer = styled(Container)`
   background: #2B2B2B66;
 }
 `;
-
-export interface OSCALCatalogBaselineProps extends EditableFieldProps {
+const SecondLabel = styled(Typography)`
+  font-family: "Source Sans Pro";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0em;
+  text-align: "left";
+`;
+export interface ContactInfo extends EditableFieldProps {
+  name?: string;
+  phone?: string;
+  email?: string;
+  address?: Address;
+}
+export interface Address extends EditableFieldProps {
+  line1?: string;
+  line2?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+}
+interface CatalogBaseline extends EditableFieldProps {
+  isVisible: boolean;
+  isCatalog?: boolean;
+  title?: string;
+  documentVersion?: string;
+  description?: string;
+  orgContactInfo?: ContactInfo;
+  authorContactInfo?: ContactInfo;
+}
+export interface OSCALModel extends EditableFieldProps {
+  model: CatalogBaseline;
+}
+interface OSCALCatalogBaselineProps extends EditableFieldProps {
   readonly baseline?: Profile;
   readonly catalog?: Catalog;
   readonly onRestError?: (error: any) => void;
   readonly onRestSuccess?: (data: any) => void;
 }
 
-export interface OSCALModelMetadataInfo extends EditableFieldProps {
+interface OSCALModelMetadataInfo extends EditableFieldProps {
   readonly title?: string;
   readonly lastModified?: string;
   readonly version?: string;
@@ -299,6 +362,14 @@ export interface OSCALModelMetadataInfo extends EditableFieldProps {
 
 export interface ItemList {
   readonly Items: Array<OSCALModelMetadataInfo>;
+}
+export interface Project {
+  readonly ProjectUUID: string;
+  readonly model: string;
+}
+export interface ProjectUUIDs {
+  readonly CatalogUUIDS: Array<string>;
+  readonly ProfileUUIDS: Array<string>;
 }
 const item: OSCALModelMetadataInfo = {
   title: "FedRamp Baseline",
@@ -401,156 +472,55 @@ export default function OSCALCatalogBaseline() {
 
   let Model = "Catalog";
   const [AddNewCatalogBaseline, setAddNewCatalogBaseline] = useState(false);
-  function handleEditDescriptionChange() {
-    return 0;
-  }
-  // const metadata = "";
-  const eiScopeFile =
-    "data/projects/enterprise-initiative_4d37c688-c897-4331-a1be-354515a92eac/oscal_data.json";
-  // const [modelMetadata, setMetadata] = useState<any | null>(metadata);
-  const [projects, setProjects] = useState([]);
-
-  let Catalogs: any[];
-  let Baselines: any[];
+  const [AddOrgDetails, setAddOrgDetails] = useState(false);
+  const [AddAuthorDetails, setAddAuthorDetails] = useState(false);
+  const [catalogIds, setCatalogIds] = useState<string[]>([]);
+  const [baselineIds, setBaselineIds] = useState<string[]>([]);
+  const Data: CatalogBaseline = {
+    isCatalog: true,
+    isVisible: true,
+  };
+  const [mainData, setMainData] = useState<CatalogBaseline>(Data);
+  const [orgAddress, setOrgAddress] = useState<Address>({});
+  const [orgContact, setOrgContact] = useState<ContactInfo>({});
+  const [authorAddress, setAuthorAddress] = useState<Address>({});
+  const [authorContact, setAuthorContact] = useState<ContactInfo>({});
+  const [initSelectedCatalogBaseline, setInitSelectedCatalogBaseline] = useState<string>(Model);
+  let address: Address = orgAddress;
+  let contact: ContactInfo = {};
+  address = authorAddress;
   const Metadatas: any[] = [];
-  const ItemMetadataInfos: Array<OSCALModelMetadataInfo> = [];
-  const [catalogs, setCatalogs] = useState<any[]>([]);
-  const [baselines, setBaselines] = useState<any[]>([]);
-  const [metadataCatalogs, setMetadataCatalogs] = useState<any[]>([]);
-  const [metadataBaselines, setMetadataBaselines] = useState<any[]>([]);
-  const [items, setItems] = useState<Array<OSCALModelMetadataInfo>>([]);
-  let metadata: any;
-  let modelUUID: string;
+  useEffect(() => {
+    getCatalogIds();
+    getBaselineIds();
+    getInitSelectedModel();
+  }, []);
 
-  // useEffect(() => {
-  //   //getOscalProjects();
-  //   // getCatalogProjects();
-  //   //getBaselineProjects();
-  //   getMetadata(modelUUID);
-  //   // setMetadataInfo();
-  // }, [getMetadata, modelUUID]);
-
-  function setMetadataInfo() {
-    // const titles = Metadatas.map((object) => object.title);
-    // console.log(titles.length);
-    for (let i = 0; i < Metadatas.length; i++) {
-      const value = Metadatas[i];
-      const temp: OSCALModelMetadataInfo = {
-        title: value.title,
-        lastModified: value["last-modified"],
-        version: value.version,
-      };
-      ItemMetadataInfos.push(temp);
-    }
-    // Metadatas.forEach(function (value) {
-    //   const temp: OSCALModelMetadataInfo = {
-    //     title: value.title,
-    //     lastModified: value["last-modified"],
-    //     version: value.version,
-    //   };
-    //   ItemMetadataInfos.push(temp);
-    // });
+  function getInitSelectedModel() {
+    setInitSelectedCatalogBaseline(Model);
   }
-  function getMetadata(modelUUID: string) {
+  function getCatalogIds() {
     const request_json = {
       method: "GET",
     };
-    const operation = "/catalog/" + modelUUID + "/catalog/metadata";
-    fetchRest(operation, request_json, getCatalogMetadataSuccess, getCatalogMetadataFail);
+    fetchRest(
+      "/catalog",
+      request_json,
+      getCatalogProjectsStatusSuccess,
+      getCatalogProjectsStatusFail
+    );
 
-    function getCatalogMetadataSuccess(response: any) {
-      metadata = response;
+    function getCatalogProjectsStatusSuccess(response: {
+      [x: string]: React.SetStateAction<string[]>;
+    }) {
+      setCatalogIds(response["projects"]);
     }
-    function getCatalogMetadataFail(e: any) {
+    function getCatalogProjectsStatusFail(e: any) {
       console.log("Operation fail " + e.statusText);
     }
   }
-  function restAddCatalogMetadataEntry(projectId: string) {
-    const operation = "/catalog/" + projectId + "/catalog/metadata";
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-    let slash = "/";
-    if (operation.startsWith("/")) {
-      slash = "";
-    }
-    fetch("/rest" + slash + operation, requestOptions)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        const titles = Metadatas.map((object) => object.title);
-        if (titles.length === 0) {
-          Metadatas.push(data);
-          const value = data;
-          const temp: OSCALModelMetadataInfo = {
-            title: value.title,
-            lastModified: value["last-modified"],
-            version: value.version,
-          };
-          ItemMetadataInfos.push(temp);
-        }
-        if (!titles.includes(data.title)) {
-          Metadatas.push(data);
-          const value = data;
-          const temp: OSCALModelMetadataInfo = {
-            title: value.title,
-            lastModified: value["last-modified"],
-            version: value.version,
-          };
-          ItemMetadataInfos.push(temp);
-        }
-        setItems(ItemMetadataInfos);
-      });
-  }
 
-  function restGetData(operation: string) {
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-    let slash = "/";
-    if (operation.startsWith("/")) {
-      slash = "";
-    }
-    fetch("/rest" + slash + operation, requestOptions)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        const titles = Metadatas.map((object) => object.title);
-        if (titles.length === 0) {
-          Metadatas.push(data);
-          const value = data;
-          const temp: OSCALModelMetadataInfo = {
-            title: value.title,
-            lastModified: value["last-modified"],
-            version: value.version,
-          };
-          ItemMetadataInfos.push(temp);
-        }
-        if (!titles.includes(data.title)) {
-          Metadatas.push(data);
-          const value = data;
-          const temp: OSCALModelMetadataInfo = {
-            title: value.title,
-            lastModified: value["last-modified"],
-            version: value.version,
-          };
-          ItemMetadataInfos.push(temp);
-        }
-        setItems(ItemMetadataInfos);
-      });
-  }
-
-  function getBaselineProjects() {
+  function getBaselineIds() {
     const request_json = {
       method: "GET",
     };
@@ -560,63 +530,117 @@ export default function OSCALCatalogBaseline() {
       getProfileProjectsStatusSuccess,
       getProfileProjectsStatusFail
     );
-  }
-  function getProfileProjectsStatusSuccess(response: []) {
-    Baselines = response;
-    getAllMetadataInfos(Baselines, "profile");
-  }
-  function getProfileProjectsStatusFail(e: any) {
-    console.log("Operation failed " + e.statusText);
-  }
-  function getAllMetadataInfos(temp: any, model: string) {
-    const items = temp.projects.flatMap((x: any) => x);
-    for (let i = 0; i < items.length; i++) {
-      const operation = "/" + model + "/" + items[i] + "/" + model + "/metadata";
-      restGetData(operation);
+
+    function getProfileProjectsStatusSuccess(response: {
+      [x: string]: React.SetStateAction<string[]>;
+    }) {
+      setBaselineIds(response["projects"]);
+    }
+    function getProfileProjectsStatusFail(e: any) {
+      console.log("Operation fail " + e.statusText);
     }
   }
-  //   function getOscalProjects() {
-  //     const request_json = {
-  //       model_type: "all",
-  //     };
-  //     fetchTransaction(
-  //       "/list_oscal_projects",
-  //       request_json,
-  //       getOSCALProjectStatusSuccess,
-  //       getOSCALProjectStatusFail
-  //     );
-  //   }
 
-  //   function getOSCALProjectStatusSuccess(response: any) {
-  //     console.log(response);
-  //   }
-  //   function getOSCALProjectStatusFail(e: any) {
-  //     console.log("operation fail " + e.statusText);
-  //   }
+  class HugHug extends React.Component {
+    render() {
+      return (
+        <Hug>
+          <Grid spacing={1}>
+            <OSCALTertiaryButton sx={{ width: 57, height: 20 }}>UPLOAD</OSCALTertiaryButton>
+            <OSCALSecondaryButton
+              sx={{ width: 88, height: 20 }}
+              onClick={handleAddNewCatalogBaseline}
+            >
+              CREATE NEW +
+            </OSCALSecondaryButton>
+          </Grid>
+        </Hug>
+      );
+    }
+  }
 
   const handleAddNewCatalogBaseline = () => {
     setAddNewCatalogBaseline(true);
   };
-  const handleCloseAddNewCatalogBaseline = () => {
-    setAddNewCatalogBaseline(false);
-  };
-  const CreateNewButton: React.FC = () => {
-    return (
-      <>
-        <CreateNew onClick={handleAddNewCatalogBaseline}>CREATE NEW +</CreateNew>
-      </>
-    );
-  };
+
   const CatalogBaselineItem: React.FC<OSCALModelMetadataInfo> = (item) => {
+    function fontSizeCorrection(title: string): number {
+      if (title.length < 40) return 14;
+      else if (title.length >= 40 && title.length < 60) return 13;
+      else if (title.length >= 60 && title.length < 80) return 12;
+      return 10;
+    }
+    function fontSizeCorrectionTitle(title: string): number {
+      if (title.length < 25) return 20;
+      else if (title.length >= 25 && title.length < 50) return 15;
+      else if (title.length >= 50 && title.length < 125) return 10;
+      return 8;
+    }
+    function topAdjusted(title: string): string {
+      if (title.length < 25) return " 5.89%";
+      else return "3.00%";
+    }
+    console.log("font size= ", fontSizeCorrectionTitle(item.title ?? ""));
     return (
       <ItemBox component="span">
-        <ItemTitle>{item.title}</ItemTitle>
+        <ItemTitle
+          sx={{
+            fontSize: fontSizeCorrectionTitle(item.title ?? ""),
+            top: topAdjusted(item.title ?? ""),
+          }}
+        >
+          {item.title}
+        </ItemTitle>
         <ItemDivider />
-        <LastModified> Last Modified: {item.lastModified} </LastModified>
-        <Version> Document Version: {item.version} </Version>
-        <PublicationDate> Publication Date: {item.publicationDate} </PublicationDate>
+        <Grid container direction="row">
+          <Grid>
+            <LastModified> Last Modified: </LastModified>
+            <ItemResult sx={{ fontSize: fontSizeCorrection(item.lastModified ?? "") }}>
+              {" "}
+              {item.lastModified}
+            </ItemResult>
+          </Grid>
+        </Grid>
+        <Grid container direction="row">
+          <Grid>
+            <Version>Document Version:</Version>
+          </Grid>
+          <Grid>
+            <ItemResult
+              sx={{ left: "35%", top: "47.58%", fontSize: fontSizeCorrection(item.version ?? "") }}
+            >
+              {" "}
+              {item.version}{" "}
+            </ItemResult>
+          </Grid>
+        </Grid>
+        <Grid container direction="row">
+          <Grid>
+            <PublicationDate> Publication Date:</PublicationDate>
+          </Grid>
+          <Grid>
+            <ItemResult
+              sx={{
+                left: "32%",
+                top: "62.25%",
+                fontSize: fontSizeCorrection(item.publicationDate ?? ""),
+              }}
+            >
+              {item.publicationDate}{" "}
+            </ItemResult>{" "}
+          </Grid>
+        </Grid>
         <ItemButton>
+          {/* <Container 
+          sx={{
+            height: 39,
+            width: 352,
+          }}
+        >
+          <OSCALPrimaryButton> */}
           <Label> OPEN CATALOG </Label>
+          {/* </OSCALPrimaryButton>
+        </Container> */}
         </ItemButton>
       </ItemBox>
     );
@@ -675,326 +699,549 @@ export default function OSCALCatalogBaseline() {
     );
   }
 
-  const OSCALAddOrgDetails: React.FC<{ show: boolean }> = ({ show }) => {
-    const [selectedCatalogBaseline, setSelectedCatalogBaseline] = useState<string>(Model);
-    function handleCatalogBaselineRadioChange(event: React.ChangeEvent<HTMLInputElement>) {
-      setSelectedCatalogBaseline(event.target.value);
-    }
-    Model = selectedCatalogBaseline;
+  const AddOrgDetailsDialog: React.FC<OSCALModel> = (data) => {
+    Model = data.model.isCatalog ? "Catalog" : "Baseline";
+
+    contact = data.model.orgContactInfo ?? {};
+    address = contact.address ?? {};
     const title = "Add a New " + Model;
-    if (AddNewCatalogBaseline)
+    function handleEditOrgNameChange(event: { target: { value: string | undefined } }) {
+      contact.name = event.target.value;
+    }
+    function handleEditAddressLine1Change(event: { target: { value: string | undefined } }) {
+      address.line1 = event.target.value;
+    }
+    function handleEditAddressLine2Change(event: { target: { value: string | undefined } }) {
+      address.line2 = event.target.value;
+    }
+    function handleEditOrgPhoneChange(event: { target: { value: string | undefined } }) {
+      contact.phone = event.target.value;
+    }
+    function handleEditOrgEmailChange(event: { target: { value: string | undefined } }) {
+      contact.email = event.target.value;
+    }
+    function handleEditCityChange(event: { target: { value: string | undefined } }) {
+      address.city = event.target.value;
+    }
+
+    function handleEditStateChange(event: { target: { value: string | undefined } }) {
+      address.state = event.target.value;
+    }
+    function handleEditZipChange(event: { target: { value: string | undefined } }) {
+      address.zip = event.target.value;
+    }
+
+    const handleCloseOrgDetails = () => {
+      contact.address = address;
+      setAddOrgDetails(false);
+      setAddNewCatalogBaseline(true);
+      setOrgAddress(address);
+      setOrgContact(contact);
+      data.model.orgContactInfo = orgContact;
+      setMainData(data.model);
+      console.log("closing now ", data.model);
+    };
+    const handleAddAuthorDetails = () => {
+      setAddOrgDetails(false);
+      setAddNewCatalogBaseline(false);
+      setAddAuthorDetails(true);
+      data.model.orgContactInfo = orgContact;
+      setMainData(data.model);
+    };
+    if (AddOrgDetails)
       return (
-        <ShadedContainer>
-          <Dialog
-            open={show}
-            onClose={handleCloseAddNewCatalogBaseline}
-            fullWidth={true}
-            sx={{ top: -30, left: 530, width: 560, height: 950 }}
-          >
-            <OSCALDialogTitle title={title} onClose={handleCloseAddNewCatalogBaseline} />
-            <DialogContent>
-              <Grid container rowSpacing={2} justifyContent="center">
-                <Grid item xs={12} sx={{ height: 100 }}>
-                  <StepperBar
-                    alternativeLabel
-                    activeStep={1}
-                    connector={
-                      <StepConnector sx={{ left: -155, width: 165, border: "1px solid #023E88" }} />
-                    }
-                  >
-                    <Step key="catalog" sx={{ width: 40, height: 40 }}>
-                      <StepItemLabel>{Model} Details</StepItemLabel>
-                    </Step>
-                    <Step key="org" sx={{ width: 40, height: 40 }}>
-                      <StepItemLabel>Org Details</StepItemLabel>
-                    </Step>
-                    <Step key="author" sx={{ width: 40, height: 40 }}>
-                      <StepItemLabel>Author Details</StepItemLabel>
-                    </Step>
-                  </StepperBar>
-                </Grid>
-                <Grid item xs={12}>
-                  <AddInformationLabel>
-                    Add information about the organization that owns this {Model.toLowerCase()}:
-                  </AddInformationLabel>
-                </Grid>
-                <Grid item xs={12}>
-                  <OSCALFormLabel label={"Organization Name"} required={true} />
-                  <TextField fullWidth id={"orgName"} onChange={handleEditDescriptionChange} />
-                  <OSCALFormLabel label={"Organization Phone"} required={false} />
-                  <TextField fullWidth id={"orgPhone"} onChange={handleEditDescriptionChange} />
-                </Grid>
-                <Grid item xs={12}>
-                  <OSCALFormLabel label={"Organization Email"} required={false} />
-                  <TextField fullWidth id={"orgEmail"} onChange={handleEditDescriptionChange} />
-                  <ToolBarMenu></ToolBarMenu>
-                </Grid>
-                <Grid item xs={12}>
-                  <OSCALFormLabel label={"Document Version"} required={true} />
-                  <TextField
-                    fullWidth
-                    id={"document-version"}
-                    onChange={handleEditDescriptionChange}
-                  />
-                </Grid>
-                <Grid item xs={12} sx={{ height: 90 }}>
-                  <OSCALFormLabel label={Model + " Description "} required={false}></OSCALFormLabel>
-                  <TextField
-                    multiline={true}
-                    fullWidth
-                    id={"Catalog-new-description"}
-                    onChange={handleEditDescriptionChange}
-                    rows={2}
-                    SelectProps={{
-                      MenuProps: {
-                        anchorOrigin: {
-                          vertical: "bottom",
-                          horizontal: "left",
-                        },
-                      },
-                    }}
-                  />
-                  <ToolBarMenu></ToolBarMenu>
-                </Grid>
+        <Dialog
+          open={data.model.isVisible}
+          onClose={handleCloseOrgDetails}
+          fullWidth={true}
+          sx={{ top: -30, left: 530, width: 560, height: 950 }}
+        >
+          <OSCALDialogTitle title={title} onClose={handleCloseOrgDetails} />
+          <DialogContent>
+            <Grid container rowSpacing={2} justifyContent="center">
+              <Grid item xs={12} sx={{ height: 100 }}>
+                <StepperBar
+                  alternativeLabel
+                  activeStep={1}
+                  connector={
+                    <StepConnector sx={{ left: -155, width: 165, border: "1px solid #023E88" }} />
+                  }
+                >
+                  <Step key="catalog" sx={{ width: 40, height: 40 }}>
+                    <StepItemLabel>{Model} Details</StepItemLabel>
+                  </Step>
+                  <Step key="org" sx={{ width: 40, height: 40 }}>
+                    <StepItemLabel>Org Details</StepItemLabel>
+                  </Step>
+                  <Step key="author" sx={{ width: 40, height: 40 }}>
+                    <StepItemLabel>Author Details</StepItemLabel>
+                  </Step>
+                </StepperBar>
               </Grid>
-            </DialogContent>
-            <DialogActions>
-              <OSCALSecondaryButton onClick={handleCloseAddNewCatalogBaseline}>
-                Cancel
-              </OSCALSecondaryButton>
-              <OSCALPrimaryButton>Next</OSCALPrimaryButton>
-            </DialogActions>
-          </Dialog>
-        </ShadedContainer>
+              <Grid item xs={12}>
+                <AddInformationLabel>
+                  Add information about the organization that owns this {Model.toLowerCase()}:
+                </AddInformationLabel>
+              </Grid>
+              <Grid item xs={12}>
+                <OSCALFormLabel label={"Organization Name"} required={true} />
+                <TextField
+                  fullWidth
+                  id={"orgName"}
+                  onChange={handleEditOrgNameChange}
+                  defaultValue={data.model.orgContactInfo?.name}
+                />
+                <OSCALFormLabel label={"Organization Phone"} required={false} />
+                <TextField
+                  fullWidth
+                  id={"orgPhone"}
+                  onChange={handleEditOrgPhoneChange}
+                  defaultValue={data.model.orgContactInfo?.phone}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <OSCALFormLabel label={"Organization Email"} required={false} />
+                <TextField
+                  fullWidth
+                  id={"orgEmail"}
+                  onChange={handleEditOrgEmailChange}
+                  defaultValue={data.model.orgContactInfo?.email}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <OSCALFormLabel label={"Organization Address"} required={false} />
+                <SecondLabel>Address Line 1</SecondLabel>
+                <TextField
+                  fullWidth
+                  id={"address line 1"}
+                  onChange={handleEditAddressLine1Change}
+                  defaultValue={data.model.orgContactInfo?.address?.line1}
+                />
+                <SecondLabel>Address Line 2</SecondLabel>
+                <TextField
+                  fullWidth
+                  id={"address line 2"}
+                  onChange={handleEditAddressLine2Change}
+                  defaultValue={data.model.orgContactInfo?.address?.line2}
+                />
+                <SecondLabel>City</SecondLabel>
+                <TextField
+                  defaultValue={data.model.orgContactInfo?.address?.city}
+                  fullWidth
+                  id={"city"}
+                  onChange={handleEditCityChange}
+                />
+                <SecondLabel>State</SecondLabel>
+                <TextField
+                  defaultValue={data.model.orgContactInfo?.address?.state}
+                  fullWidth
+                  id={"state"}
+                  onChange={handleEditStateChange}
+                />
+                <SecondLabel>ZIP</SecondLabel>
+                <TextField
+                  defaultValue={data.model.orgContactInfo?.address?.zip}
+                  sx={{ width: 100 }}
+                  id={"zip"}
+                  onChange={handleEditZipChange}
+                />
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <OSCALSecondaryButton onClick={handleCloseOrgDetails}>Previous</OSCALSecondaryButton>
+            <OSCALPrimaryButton onClick={handleAddAuthorDetails}>Next</OSCALPrimaryButton>
+          </DialogActions>
+        </Dialog>
       );
     else return null;
   };
 
-  const OSCALAddCatalogDetails: React.FC<{ show: boolean }> = ({ show }) => {
-    const [selectedCatalogBaseline, setSelectedCatalogBaseline] = useState<string>(Model);
-    function handleCatalogBaselineRadioChange(event: React.ChangeEvent<HTMLInputElement>) {
-      setSelectedCatalogBaseline(event.target.value);
-    }
-    Model = selectedCatalogBaseline;
+  const AddAuthorDetailsDialog: React.FC<OSCALModel> = (data) => {
+    Model = data.model.isCatalog ? "Catalog" : "Baseline";
+
+    contact = data.model.authorContactInfo ?? {};
+    address = contact.address ?? {};
     const title = "Add a New " + Model;
-    if (AddNewCatalogBaseline)
+    function handleEditOrgNameChange(event: { target: { value: string | undefined } }) {
+      contact.name = event.target.value;
+    }
+    function handleEditAddressLine1Change(event: { target: { value: string | undefined } }) {
+      address.line1 = event.target.value;
+    }
+    function handleEditAddressLine2Change(event: { target: { value: string | undefined } }) {
+      address.line2 = event.target.value;
+    }
+    function handleEditOrgPhoneChange(event: { target: { value: string | undefined } }) {
+      contact.phone = event.target.value;
+    }
+    function handleEditOrgEmailChange(event: { target: { value: string | undefined } }) {
+      contact.email = event.target.value;
+    }
+    function handleEditCityChange(event: { target: { value: string | undefined } }) {
+      address.city = event.target.value;
+    }
+
+    function handleEditStateChange(event: { target: { value: string | undefined } }) {
+      address.state = event.target.value;
+    }
+    function handleEditZipChange(event: { target: { value: string | undefined } }) {
+      address.zip = event.target.value;
+    }
+
+    const handleCloseOrgDetails = () => {
+      contact.address = address;
+      setAddOrgDetails(true);
+      setAddNewCatalogBaseline(false);
+      setAddAuthorDetails(false);
+      setAuthorAddress(address);
+      setAuthorContact(contact);
+      data.model.authorContactInfo = authorContact;
+      setMainData(data.model);
+      console.log("closing now ", data.model);
+    };
+    const handleCreateNewCatalogBaseline = () => {
+      setAddOrgDetails(false);
+      setAddNewCatalogBaseline(false);
+      setAddAuthorDetails(false);
+    };
+    if (AddAuthorDetails)
       return (
-        <ShadedContainer>
-          <Dialog
-            open={show}
-            onClose={handleCloseAddNewCatalogBaseline}
-            fullWidth={true}
-            sx={{ top: -30, left: 530, width: 560, height: 950 }}
-          >
-            <OSCALDialogTitle title={title} onClose={handleCloseAddNewCatalogBaseline} />
-            <DialogContent>
-              <Grid container rowSpacing={2} justifyContent="center">
-                <Grid item xs={12} sx={{ height: 100 }}>
-                  <StepperBar
-                    alternativeLabel
-                    connector={
-                      <StepConnector sx={{ left: -155, width: 165, border: "1px solid #023E88" }} />
-                    }
-                  >
-                    <Step key="catalog" sx={{ width: 40, height: 40 }}>
-                      <StepItemLabel>{Model} Details</StepItemLabel>
-                    </Step>
-                    <Step key="org" sx={{ width: 40, height: 40 }}>
-                      <StepItemLabel>Org Details</StepItemLabel>
-                    </Step>
-                    <Step key="author" sx={{ width: 40, height: 40 }}>
-                      <StepItemLabel>Author Details</StepItemLabel>
-                    </Step>
-                  </StepperBar>
-                </Grid>
-                <Grid item xs={12}>
-                  <AddInformationLabel>
-                    Add information about the {Model.toLowerCase()}:
-                  </AddInformationLabel>
-                </Grid>
-                <Grid item xs={12}>
-                  <OSCALFormLabel
-                    label={"Would you like to create a catalog or baseline?"}
-                    required={true}
-                  />
-                  <RadioGroup
-                    name="subject-radio-buttons-group"
-                    value={selectedCatalogBaseline}
-                    onChange={(event) => handleCatalogBaselineRadioChange(event)}
-                  >
-                    <FormControlLabel
-                      key={"subject-radio_0"}
-                      value={"Catalog"}
-                      control={<OSCALRadio />}
-                      label={"Catalog"}
-                    />
-                    <FormControlLabel
-                      key={"subject-radio_1"}
-                      value={"Baseline"}
-                      control={<OSCALRadio />}
-                      label={"Baseline"}
-                    />
-                  </RadioGroup>
-                </Grid>
-                <Grid item xs={12}>
-                  <OSCALFormLabel label={Model + " Title"} required={true} />
-                  <TextField fullWidth id={"title"} onChange={handleEditDescriptionChange} />
-                  <ToolBarMenu></ToolBarMenu>
-                </Grid>
-                <Grid item xs={12}>
-                  <OSCALFormLabel label={"Document Version"} required={true} />
-                  <TextField
-                    fullWidth
-                    id={"document-version"}
-                    onChange={handleEditDescriptionChange}
-                  />
-                </Grid>
-                <Grid item xs={12} sx={{ height: 90 }}>
-                  <OSCALFormLabel label={Model + " Description "} required={false}></OSCALFormLabel>
-                  <TextField
-                    multiline={true}
-                    fullWidth
-                    id={"Catalog-new-description"}
-                    onChange={handleEditDescriptionChange}
-                    rows={2}
-                    SelectProps={{
-                      MenuProps: {
-                        anchorOrigin: {
-                          vertical: "bottom",
-                          horizontal: "left",
-                        },
-                      },
-                    }}
-                  />
-                  <ToolBarMenu></ToolBarMenu>
-                </Grid>
+        <Dialog
+          open={data.model.isVisible}
+          onClose={handleCloseOrgDetails}
+          fullWidth={true}
+          sx={{ top: -30, left: 530, width: 560, height: 950 }}
+        >
+          <OSCALDialogTitle title={title} onClose={handleCloseOrgDetails} />
+          <DialogContent>
+            <Grid container rowSpacing={2} justifyContent="center">
+              <Grid item xs={12} sx={{ height: 100 }}>
+                <StepperBar
+                  alternativeLabel
+                  activeStep={2}
+                  connector={
+                    <StepConnector sx={{ left: -155, width: 165, border: "1px solid #023E88" }} />
+                  }
+                >
+                  <Step key="catalog" sx={{ width: 40, height: 40 }}>
+                    <StepItemLabel>{Model} Details</StepItemLabel>
+                  </Step>
+                  <Step key="org" sx={{ width: 40, height: 40 }}>
+                    <StepItemLabel>Org Details</StepItemLabel>
+                  </Step>
+                  <Step key="author" sx={{ width: 40, height: 40 }}>
+                    <StepItemLabel>Author Details</StepItemLabel>
+                  </Step>
+                </StepperBar>
               </Grid>
-            </DialogContent>
-            <DialogActions>
-              <OSCALSecondaryButton onClick={handleCloseAddNewCatalogBaseline}>
-                Cancel
-              </OSCALSecondaryButton>
-              <OSCALPrimaryButton>Next</OSCALPrimaryButton>
-            </DialogActions>
-          </Dialog>
-        </ShadedContainer>
+              <Grid item xs={12}>
+                <AddInformationLabel>
+                  Add information about the organization that owns this {Model.toLowerCase()}:
+                </AddInformationLabel>
+              </Grid>
+              <Grid item xs={12}>
+                <OSCALFormLabel label={"Author Name"} required={true} />
+                <TextField
+                  fullWidth
+                  id={"authorName"}
+                  onChange={handleEditOrgNameChange}
+                  defaultValue={data.model.authorContactInfo?.name}
+                />
+                <OSCALFormLabel label={"Author Phone"} required={false} />
+                <TextField
+                  fullWidth
+                  id={"authorPhone"}
+                  onChange={handleEditOrgPhoneChange}
+                  defaultValue={data.model.authorContactInfo?.phone}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <OSCALFormLabel label={"Author Email"} required={false} />
+                <TextField
+                  fullWidth
+                  id={"authorEmail"}
+                  onChange={handleEditOrgEmailChange}
+                  defaultValue={data.model.authorContactInfo?.email}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <OSCALFormLabel label={"Author Address"} required={false} />
+                <SecondLabel>Address Line 1</SecondLabel>
+                <TextField
+                  fullWidth
+                  id={"address line 1"}
+                  onChange={handleEditAddressLine1Change}
+                  defaultValue={data.model.authorContactInfo?.address?.line1}
+                />
+                <SecondLabel>Address Line 2</SecondLabel>
+                <TextField
+                  fullWidth
+                  id={"address line 2"}
+                  onChange={handleEditAddressLine2Change}
+                  defaultValue={data.model.authorContactInfo?.address?.line2}
+                />
+                <SecondLabel>City</SecondLabel>
+                <TextField
+                  defaultValue={data.model.authorContactInfo?.address?.city}
+                  fullWidth
+                  id={"city"}
+                  onChange={handleEditCityChange}
+                />
+                <SecondLabel>State</SecondLabel>
+                <TextField
+                  defaultValue={data.model.authorContactInfo?.address?.state}
+                  fullWidth
+                  id={"state"}
+                  onChange={handleEditStateChange}
+                />
+                <SecondLabel>ZIP</SecondLabel>
+                <TextField
+                  defaultValue={data.model.authorContactInfo?.address?.zip}
+                  sx={{ width: 100 }}
+                  id={"zip"}
+                  onChange={handleEditZipChange}
+                />
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <OSCALSecondaryButton onClick={handleCloseOrgDetails}>Previous</OSCALSecondaryButton>
+            <OSCALPrimaryButton onClick={handleCreateNewCatalogBaseline}>
+              CREATE {Model}
+            </OSCALPrimaryButton>
+          </DialogActions>
+        </Dialog>
       );
     else return null;
   };
 
+  const AddCatalogDetailsDialog: React.FC<OSCALModel> = (data) => {
+    if (data.model.isCatalog !== undefined) Model = data.model.isCatalog ? "Catalog" : "Baseline";
+    const [selectedCatalogBaseline, setSelectedCatalogBaseline] = useState<string>(Model);
+    function handleCatalogBaselineRadioChange(event: React.ChangeEvent<HTMLInputElement>) {
+      setSelectedCatalogBaseline(event.target.value);
+    }
+
+    data.model.isCatalog = selectedCatalogBaseline === "Catalog" ? true : false;
+    Model = selectedCatalogBaseline;
+    const handleCloseAddNewCatalogBaseline = () => {
+      setAddNewCatalogBaseline(false);
+      data.model.orgContactInfo = orgContact;
+      setMainData(data.model);
+    };
+    const handleAddOrgDetails = () => {
+      setAddOrgDetails(true);
+      setAddNewCatalogBaseline(false);
+      setAddAuthorDetails(false);
+      data.model.orgContactInfo = orgContact;
+      setMainData(data.model);
+    };
+    const title = "Add a New " + Model;
+    function handleEditTitleChange(event: { target: { value: string | undefined } }) {
+      data.model.title = event.target.value;
+    }
+    function handleEditDocumentVersionChange(event: React.ChangeEvent<HTMLInputElement>) {
+      data.model.documentVersion = event.target.value;
+    }
+    function handleEditDescriptionChange(event: React.ChangeEvent<HTMLInputElement>) {
+      data.model.description = event.target.value;
+    }
+    if (AddNewCatalogBaseline)
+      return (
+        <Dialog
+          open={data.model.isVisible}
+          onClose={handleCloseAddNewCatalogBaseline}
+          fullWidth={true}
+          sx={{ top: -30, left: 530, width: 560, height: 950 }}
+        >
+          <OSCALDialogTitle title={title} onClose={handleCloseAddNewCatalogBaseline} />
+          <DialogContent>
+            <Grid container rowSpacing={2} justifyContent="center">
+              <Grid item xs={12} sx={{ height: 100 }}>
+                <StepperBar
+                  alternativeLabel
+                  connector={
+                    <StepConnector sx={{ left: -155, width: 165, border: "1px solid #023E88" }} />
+                  }
+                >
+                  <Step key="catalog" sx={{ width: 40, height: 40 }}>
+                    <StepItemLabel>{Model} Details</StepItemLabel>
+                  </Step>
+                  <Step key="org" sx={{ width: 40, height: 40 }}>
+                    <StepItemLabel>Org Details</StepItemLabel>
+                  </Step>
+                  <Step key="author" sx={{ width: 40, height: 40 }}>
+                    <StepItemLabel>Author Details</StepItemLabel>
+                  </Step>
+                </StepperBar>
+              </Grid>
+              <Grid item xs={12}>
+                <AddInformationLabel>
+                  Add information about the {Model.toLowerCase()}:
+                </AddInformationLabel>
+              </Grid>
+              <Grid item xs={12}>
+                <OSCALFormLabel
+                  label={"Would you like to create a catalog or baseline?"}
+                  required={true}
+                />
+                <RadioGroup
+                  name="subject-radio-buttons-group"
+                  value={selectedCatalogBaseline}
+                  onChange={(event) => handleCatalogBaselineRadioChange(event)}
+                >
+                  <FormControlLabel
+                    key={"subject-radio_0"}
+                    value={"Catalog"}
+                    control={<OSCALRadio />}
+                    label={"Catalog"}
+                  />
+                  <FormControlLabel
+                    key={"subject-radio_1"}
+                    value={"Baseline"}
+                    control={<OSCALRadio />}
+                    label={"Baseline"}
+                  />
+                </RadioGroup>
+              </Grid>
+              <Grid item xs={12}>
+                <OSCALFormLabel label={Model + " Title"} required={true} />
+                <TextField
+                  fullWidth
+                  id={"title"}
+                  onChange={handleEditTitleChange}
+                  defaultValue={data.model.title}
+                />
+                <ToolBarMenu></ToolBarMenu>
+              </Grid>
+              <Grid item xs={12}>
+                <OSCALFormLabel label={"Document Version"} required={true} />
+                <TextField
+                  fullWidth
+                  id={"document-version"}
+                  onChange={handleEditDocumentVersionChange}
+                  defaultValue={data.model.documentVersion}
+                />
+              </Grid>
+              <Grid item xs={12} sx={{ height: 90 }}>
+                <OSCALFormLabel label={Model + " Description "} required={false}></OSCALFormLabel>
+                <TextField
+                  multiline={true}
+                  fullWidth
+                  id={"Catalog-new-description"}
+                  onChange={handleEditDescriptionChange}
+                  defaultValue={data.model.description}
+                  rows={2}
+                  SelectProps={{
+                    MenuProps: {
+                      anchorOrigin: {
+                        vertical: "bottom",
+                        horizontal: "left",
+                      },
+                    },
+                  }}
+                />
+                <ToolBarMenu></ToolBarMenu>
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <OSCALSecondaryButton onClick={handleCloseAddNewCatalogBaseline}>
+              Cancel
+            </OSCALSecondaryButton>
+            <OSCALPrimaryButton onClick={handleAddOrgDetails}>Next</OSCALPrimaryButton>
+          </DialogActions>
+        </Dialog>
+      );
+    else return null;
+  };
+  function renderAuthorDetailDialog() {
+    if (!AddAuthorDetails) return null;
+
+    return <AddAuthorDetailsDialog model={mainData} />;
+  }
+  function renderOrgDetailsDialog() {
+    if (!AddOrgDetails) return null;
+
+    return <AddOrgDetailsDialog model={mainData} />;
+  }
   function renderAddNewCatalogBaselineDialog() {
     if (!AddNewCatalogBaseline) return null;
 
-    return <OSCALAddCatalogDetails show={AddNewCatalogBaseline} />;
+    return <AddCatalogDetailsDialog model={mainData} />;
   }
-  const FilledBoxItem: React.FC<any> = (catalogId) => {
-    const [metadataObject, setMetadataObject] = useState<any>();
-    console.log("catalogId= ", catalogId.catalogId);
+  const FilledBoxItem: React.FC<Project> = (project) => {
+    const [metadataObject, setMetadataObject] = useState<any>({});
+    console.log("Id= ", project.ProjectUUID);
+    console.log("model=", project.model);
+    useEffect(() => {
+      getData();
+    }, []);
 
-    modelUUID = catalogId.catalogId;
-    const request_json = {
-      method: "GET",
-    };
-    const operation = "/catalog/" + catalogId.catalogId + "/catalog/metadata";
-    fetchRest(operation, request_json, getCatalogMetadataSuccess, getCatalogMetadataFail);
+    function getData() {
+      const request_json = {
+        method: "GET",
+      };
+      const operation =
+        "/" + project.model + "/" + project.ProjectUUID + "/" + project.model + "/metadata";
+      fetchRest(operation, request_json, getCatalogMetadataSuccess, getCatalogMetadataFail);
 
-    function getCatalogMetadataSuccess(response: any) {
-      setMetadataObject(response);
+      function getCatalogMetadataSuccess(response: any) {
+        console.log("Successuf REST CAll with path", operation);
+        setMetadataObject(response);
+      }
+      function getCatalogMetadataFail(e: any) {
+        console.log("Operation fail " + e.statusText);
+      }
     }
-    function getCatalogMetadataFail(e: any) {
-      console.log("Operation fail " + e.statusText);
-    }
-    console.log("metadata= ");
-    console.log(metadataObject);
+
     return (
-      <></>
-      //<CatalogBaselineItem
-      // key={metadata.title}
-      // title={metadata.title}
-      // version={metadata["version"]}
-      // lastModified={metadata["last-modified"]}
-      // publicationDate={metadata["publication-date"]}
-      // ></CatalogBaselineItem>
+      <CatalogBaselineItem
+        key={metadataObject.title}
+        title={metadataObject.title}
+        version={metadataObject["version"]}
+        lastModified={metadataObject["last-modified"]}
+        publicationDate={metadataObject["publication-date"]}
+      ></CatalogBaselineItem>
     );
   };
-  function RenderCatalogItems(): ReactElement<any, any> {
+  const RenderCatalogItems: React.FC<ProjectUUIDs> = (entries) => {
     console.log("In RenderCatalogItems:");
-    const [catalogIds, setCatalogIds] = useState<string[]>([]);
 
-    // useEffect(() => {
-    //   getOscalProjects();
-    //   getCatalogProjects();
-    //   getBaselineProjects();
-    //   getCatalogMetadataSuccess();
-    //    setMetadataInfo();
-    // }, []);
-    const request_json = {
-      method: "GET",
-    };
-    fetchRest(
-      "/catalog",
-      request_json,
-      getCatalogProjectsStatusSuccess,
-      getCatalogProjectsStatusFail
-    );
-
-    function getCatalogProjectsStatusSuccess(response: {
-      [x: string]: React.SetStateAction<string[]>;
-    }) {
-      setCatalogIds(response["projects"]);
-      //getAllMetadataInfos(catalogs, "catalog");
-    }
-    function getCatalogProjectsStatusFail(e: any) {
-      console.log("Operation fail " + e.statusText);
-    }
     //console.log(catalogIds);
     console.log(" enumerate ids");
-    catalogIds.flatMap((catalog) => console.log(catalog));
+    entries.CatalogUUIDS.map((id) => console.log(id));
+    console.log(Metadatas);
     return (
       <StackBox>
         <Stack spacing={{ xs: 10, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
-          {catalogIds.flatMap((catalog) => (
-            <FilledBoxItem key={catalog} catalogId={catalog}></FilledBoxItem>
-
-            // <CatalogBaselineItem
-            //   key={catalog}
-            //   title={catalog}
-            //   version={catalog}
-            //   lastModified={catalog}
-            //   publicationDate={catalog}
-            // ></CatalogBaselineItem>
+          {entries.CatalogUUIDS.map((catalog) => (
+            <FilledBoxItem key={catalog} ProjectUUID={catalog} model={"catalog"}></FilledBoxItem>
           ))}
-        </Stack>
-      </StackBox>
-    );
-  }
-  const StackFunct: React.FC<ItemList> = (itemList) => {
-    return (
-      <StackBox>
-        <Stack spacing={{ xs: 10, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
-          {itemList.Items.map((item) => (
-            <CatalogBaselineItem
-              key={item.title}
-              title={item.title}
-              version={item.version}
-              lastModified={item.lastModified}
-              publicationDate={item.publicationDate}
-            ></CatalogBaselineItem>
+
+          {entries.ProfileUUIDS.map((profile) => (
+            <FilledBoxItem key={profile} ProjectUUID={profile} model={"profile"}></FilledBoxItem>
           ))}
         </Stack>
       </StackBox>
     );
   };
 
+  const ids = catalogIds.concat(baselineIds);
+  console.log(" All ids:");
+  console.log(ids);
   return (
     <MainContainer>
       <CatalogBreadCrumbsMenu></CatalogBreadCrumbsMenu>
       <FormHeaderLabel> Catalogs & Baselines </FormHeaderLabel>
-      <UploadButton></UploadButton>
-      <CreateNewButton></CreateNewButton>
-      <StackFunct Items={data}></StackFunct>
-      {/* <RenderCatalogItems></RenderCatalogItems> */}
+      {/* <UploadButton></UploadButton> */}
+      <HugHug></HugHug>
+      {/* <StackFunct Items={data}></StackFunct> */}
+      <RenderCatalogItems CatalogUUIDS={catalogIds} ProfileUUIDS={baselineIds}></RenderCatalogItems>
       {renderAddNewCatalogBaselineDialog()}
+      {renderOrgDetailsDialog()}
+      {renderAuthorDetailDialog()}
     </MainContainer>
   );
 }
