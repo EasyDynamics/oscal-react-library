@@ -498,7 +498,7 @@ export default function OSCALCatalogBaseline() {
     getCatalogIds();
     getBaselineIds();
     //  getInitSelectedModel();
-  }, []);
+  });
 
   // function getInitSelectedModel() {
   //   setInitSelectedCatalogBaseline(Model);

@@ -67,7 +67,7 @@ export const OSCALUnsatisfiedButton = (props) => {
       variant="contained"
       disableElevation
       sx={{
-        color:  "#B31515", // (theme) => theme.palette.black.main,
+        color: "#B31515", // (theme) => theme.palette.black.main,
         backgroundColor: "#FFD9D9", //(theme) => theme.palette.lightPink.main,
         ":hover": {
           backgroundColor: "#EEC8C8", //(theme) => theme.palette.lightPink.dark,

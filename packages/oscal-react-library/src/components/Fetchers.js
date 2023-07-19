@@ -59,10 +59,6 @@ export function useFetchers() {
   };
 
   const fetchRest = (operation, request, success, fail) => {
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
     var slash = "/";
     if (operation.startsWith("/")) {
       slash = "";
