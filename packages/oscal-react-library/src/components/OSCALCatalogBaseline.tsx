@@ -63,6 +63,7 @@ import {
 import { CodeOffSharp } from "@mui/icons-material";
 import { getDateRangePickerDayUtilityClass } from "@mui/lab";
 import { string } from "prop-types";
+import { timeStamp } from "console";
 
 const CreateNew = styled(Button)`
   position: absolute;
@@ -338,6 +339,7 @@ interface CatalogBaseline extends EditableFieldProps {
   isVisible: boolean;
   isCatalog?: boolean;
   title?: string;
+  lastModified?: string;
   documentVersion?: string;
   description?: string;
   orgContactInfo?: ContactInfo;
@@ -413,7 +415,7 @@ export const CatalogBreadCrumbsMenu: React.FC<OSCALModelMetadataInfo | null> = (
     return (
       <BreadCrumbs
         aria-label="breadcrumb"
-        style={{
+        sx={{
           position: "absolute",
           width: "321px",
           height: "100px",
@@ -423,15 +425,48 @@ export const CatalogBreadCrumbsMenu: React.FC<OSCALModelMetadataInfo | null> = (
           fontStyle: "normal",
           fontSize: "16px",
           lineHeight: "20px",
+          ":hover": {
+            color: "#FF6600",
+          },
         }}
       >
-        <Link underline="hover" href="/" style={{ color: "#1D1D1D", fontWeight: "400" }}>
-          Home
+        <Link
+          href="/"
+          style={{
+            color: "#1D1D1D",
+            fontWeight: "400",
+            fontFamily: "Source Sans Pro",
+            fontStyle: "normal",
+            fontSize: "16px",
+            lineHeight: "20px",
+          }}
+        >
+          HOME
         </Link>
-        <Link underline="hover" href="/" style={{ color: "#002867", fontWeight: "700" }}>
+        <Link
+          href="/"
+          style={{
+            color: "#002867",
+            fontWeight: "700",
+            fontFamily: "Source Sans Pro",
+            fontStyle: "normal",
+            fontSize: "16px",
+            lineHeight: "20px",
+          }}
+        >
           CATALOGS & BASELINES
         </Link>
-        <Link underline="hover" href="/" style={{ color: "#002867", fontWeight: "700" }}>
+        <Link
+          href="/"
+          style={{
+            color: "#002867",
+            fontWeight: "700",
+            fontFamily: "Source Sans Pro",
+            fontStyle: "normal",
+            fontSize: "16px",
+            lineHeight: "20px",
+          }}
+        >
           {" "}
           {item?.title}
         </Link>
@@ -441,7 +476,7 @@ export const CatalogBreadCrumbsMenu: React.FC<OSCALModelMetadataInfo | null> = (
     return (
       <BreadCrumbs
         aria-label="breadcrumb"
-        style={{
+        sx={{
           position: "absolute",
           width: "321px",
           height: "100px",
@@ -451,12 +486,41 @@ export const CatalogBreadCrumbsMenu: React.FC<OSCALModelMetadataInfo | null> = (
           fontStyle: "normal",
           fontSize: "16px",
           lineHeight: "20px",
+          ":hover": {
+            color: "#FF6600",
+          },
         }}
       >
-        <Link underline="hover" href="/" style={{ color: "#1D1D1D", fontWeight: "400" }}>
-          Home
+        <Link
+          href="/"
+          sx={{
+            color: "#1D1D1D",
+            fontWeight: "400",
+            fontFamily: "Source Sans Pro",
+            fontStyle: "normal",
+            fontSize: "16px",
+            lineHeight: "20px",
+            ":hover": {
+              color: "#FF6600",
+            },
+          }}
+        >
+          HOME
         </Link>
-        <Link underline="hover" href="/" style={{ color: "#002867", fontWeight: "700" }}>
+        <Link
+          href="/"
+          sx={{
+            color: "#002867",
+            fontWeight: "700",
+            fontFamily: "Source Sans Pro",
+            fontStyle: "normal",
+            fontSize: "16px",
+            lineHeight: "20px",
+            ":hover": {
+              color: "#FF6600",
+            },
+          }}
+        >
           CATALOGS & BASELINES
         </Link>
       </BreadCrumbs>
@@ -486,10 +550,12 @@ export default function OSCALCatalogBaseline() {
   const [authorAddress, setAuthorAddress] = useState<Address>({});
   const [authorContact, setAuthorContact] = useState<ContactInfo>({});
   const [initSelectedCatalogBaseline, setInitSelectedCatalogBaseline] = useState<string>(Model);
+  const [openCatalogBaseline, setOpenCatalogBaseline] = useState(false);
+  let newModelCreationDone = false;
   let address: Address = orgAddress;
   let contact: ContactInfo = {};
   address = authorAddress;
-  const Metadatas: any[] = [];
+  //const Metadatas: any[] = [];
   useEffect(() => {
     getCatalogIds();
     getBaselineIds();
@@ -540,7 +606,17 @@ export default function OSCALCatalogBaseline() {
       console.log("Operation fail " + e.statusText);
     }
   }
-
+  class DeleteCatalogBaseline extends React.Component {
+    render() {
+      return (
+        <Hug>
+          <Grid spacing={1}>
+            <OSCALDestructiveButton>DELETE CATALOG</OSCALDestructiveButton>
+          </Grid>
+        </Hug>
+      );
+    }
+  }
   class HugHug extends React.Component {
     render() {
       return (
@@ -571,16 +647,15 @@ export default function OSCALCatalogBaseline() {
       return 10;
     }
     function fontSizeCorrectionTitle(title: string): number {
-      if (title.length < 25) return 20;
-      else if (title.length >= 25 && title.length < 50) return 15;
-      else if (title.length >= 50 && title.length < 125) return 10;
+      if (title.length < 40) return 20;
+      else if (title.length >= 40 && title.length < 60) return 15;
+      else if (title.length >= 60 && title.length < 100) return 10;
       return 8;
     }
     function topAdjusted(title: string): string {
       if (title.length < 25) return " 5.89%";
       else return "3.00%";
     }
-    console.log("font size= ", fontSizeCorrectionTitle(item.title ?? ""));
     return (
       <ItemBox component="span">
         <ItemTitle
@@ -630,18 +705,30 @@ export default function OSCALCatalogBaseline() {
             </ItemResult>{" "}
           </Grid>
         </Grid>
-        <ItemButton>
-          {/* <Container 
+        {/* <ItemButton> */}
+        <Container
           sx={{
             height: 39,
             width: 352,
           }}
         >
-          <OSCALPrimaryButton> */}
-          <Label> OPEN CATALOG </Label>
-          {/* </OSCALPrimaryButton>
-        </Container> */}
-        </ItemButton>
+          <OSCALPrimaryButton
+            sx={{
+              height: 39,
+              width: 352,
+              left: 0,
+              borderRadius: 0,
+              position: "absolute",
+              right: "53.33%",
+              top: "78.89%",
+              bottom: "35.78%",
+            }}
+          >
+            {/* <Label> OPEN CATALOG </Label> */}
+            OPEN CATALOG
+          </OSCALPrimaryButton>
+        </Container>
+        {/* </ItemButton> */}
       </ItemBox>
     );
   };
@@ -747,6 +834,7 @@ export default function OSCALCatalogBaseline() {
       setAddAuthorDetails(true);
       data.model.orgContactInfo = orgContact;
       setMainData(data.model);
+      newModelCreationDone = false;
     };
     if (AddOrgDetails)
       return (
@@ -790,6 +878,7 @@ export default function OSCALCatalogBaseline() {
                   id={"orgName"}
                   onChange={handleEditOrgNameChange}
                   defaultValue={data.model.orgContactInfo?.name}
+                  margin="none"
                 />
                 <OSCALFormLabel label={"Organization Phone"} required={false} />
                 <TextField
@@ -797,6 +886,7 @@ export default function OSCALCatalogBaseline() {
                   id={"orgPhone"}
                   onChange={handleEditOrgPhoneChange}
                   defaultValue={data.model.orgContactInfo?.phone}
+                  margin="none"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -856,10 +946,21 @@ export default function OSCALCatalogBaseline() {
       );
     else return null;
   };
-
+  function getProjectUUID(path: string): string {
+    if (path.length > 0 && path.includes("/")) {
+      const parts = path.split("/");
+      const term = parts[1];
+      if (term.length > 0 && term.includes("_")) {
+        const subparts = term.split("_");
+        return subparts[1];
+      }
+      return "";
+    }
+    return "";
+  }
   const AddAuthorDetailsDialog: React.FC<OSCALModel> = (data) => {
     Model = data.model.isCatalog ? "Catalog" : "Baseline";
-
+    const [newOSCALFilePath, setNewOSCALFilePath] = useState("");
     contact = data.model.authorContactInfo ?? {};
     address = contact.address ?? {};
     const title = "Add a New " + Model;
@@ -901,10 +1002,70 @@ export default function OSCALCatalogBaseline() {
       console.log("closing now ", data.model);
     };
     const handleCreateNewCatalogBaseline = () => {
+      createNewProject();
+      wrapper();
       setAddOrgDetails(false);
       setAddNewCatalogBaseline(false);
       setAddAuthorDetails(false);
     };
+
+    useEffect(() => {
+      createNewProject();
+      wrapper();
+    });
+    function wrapper() {
+      if (newOSCALFilePath.length > 0) {
+        updateMetadata();
+      }
+    }
+    function createNewProject() {
+      const rootFile = data.model.isCatalog ? "empty-catalog.json" : "empty-profile.json";
+      const request_json = {
+        file: rootFile,
+      };
+      function createNewModelSuccess(response: any) {
+        console.log("successful creation of a new catalog/baseline", response["new_oscal_file"]);
+        setNewOSCALFilePath(response["new_oscal_file"]);
+      }
+      function createNewModelFail(e: any) {
+        console.log("Fail to create a new Catalog/Baseline", e.statusText);
+      }
+      if (!newModelCreationDone) {
+        console.log("starting the creation of a new catalog/baseline");
+        fetchTransaction(
+          "/create_oscal_project",
+          request_json,
+          createNewModelSuccess,
+          createNewModelFail
+        );
+        newModelCreationDone = true;
+      }
+    }
+
+    function updateMetadata() {
+      const nowTime = Date.now().toLocaleString();
+      console.log("Start updating the metadata of this project ", newOSCALFilePath);
+      data.model.lastModified = "2023-07-19T13:57:28.91745-04:00"; //nowTime;
+      const inputs = {
+        oscal_file: newOSCALFilePath,
+        title: data.model.title ?? "",
+        last_modified: data.model.lastModified,
+        version: data.model.documentVersion,
+        oscal_version: "1.0.6",
+        description: data.model.description ?? " ",
+      };
+      const operation = "/add_metadata_entries";
+      console.log(JSON.stringify(inputs));
+      fetchTransaction(operation, inputs, updateMetadataSuccess, updateMetadataFail);
+
+      function updateMetadataSuccess(response: any) {
+        console.log("Successful update of metadata of project ", newOSCALFilePath + " ", response);
+      }
+      function updateMetadataFail(e: any) {
+        console.log("Fail updating metadata of ", newOSCALFilePath, e.statusText);
+      }
+    }
+
     if (AddAuthorDetails)
       return (
         <Dialog
@@ -1156,6 +1317,11 @@ export default function OSCALCatalogBaseline() {
       );
     else return null;
   };
+
+  function renderHugHug() {
+    if (!openCatalogBaseline) return <HugHug></HugHug>;
+    else return <DeleteCatalogBaseline></DeleteCatalogBaseline>;
+  }
   function renderAuthorDetailDialog() {
     if (!AddAuthorDetails) return null;
 
@@ -1171,10 +1337,16 @@ export default function OSCALCatalogBaseline() {
 
     return <AddCatalogDetailsDialog model={mainData} />;
   }
+  function renderFilledItemBox() {
+    if (openCatalogBaseline) return null;
+    return (
+      <RenderCatalogItems CatalogUUIDS={catalogIds} ProfileUUIDS={baselineIds}></RenderCatalogItems>
+    );
+  }
   const FilledBoxItem: React.FC<Project> = (project) => {
     const [metadataObject, setMetadataObject] = useState<any>({});
-    console.log("Id= ", project.ProjectUUID);
-    console.log("model=", project.model);
+    console.log("In FilledBoxItem Id= ", project.ProjectUUID);
+    console.log("In FilledBoxItem model=", project.model);
     useEffect(() => {
       getData();
     }, []);
@@ -1182,19 +1354,30 @@ export default function OSCALCatalogBaseline() {
     function getData() {
       const request_json = {
         method: "GET",
+        headers: { "Content-Type": "application/json" },
       };
       const operation =
         "/" + project.model + "/" + project.ProjectUUID + "/" + project.model + "/metadata";
+
+      console.log(
+        "In FilledItemBox: Starting fetching with operation",
+        operation,
+        "with request",
+        request_json
+      );
+
       fetchRest(operation, request_json, getCatalogMetadataSuccess, getCatalogMetadataFail);
+      //fetchRestGetData(operation, getCatalogMetadataSuccess, getCatalogMetadataFail);
 
       function getCatalogMetadataSuccess(response: any) {
-        console.log("Successuf REST CAll with path", operation);
+        console.log("In FilledBoxItem: Successfull REST CAll with path", operation);
         setMetadataObject(response);
       }
       function getCatalogMetadataFail(e: any) {
-        console.log("Operation fail " + e.statusText);
+        console.log("In FilledBoxItem: Operation fail ", e.statusText);
       }
     }
+    console.log("In FilledItemBox: Done fetching...");
 
     return (
       <CatalogBaselineItem
@@ -1208,11 +1391,7 @@ export default function OSCALCatalogBaseline() {
   };
   const RenderCatalogItems: React.FC<ProjectUUIDs> = (entries) => {
     console.log("In RenderCatalogItems:");
-
-    //console.log(catalogIds);
-    console.log(" enumerate ids");
-    entries.CatalogUUIDS.map((id) => console.log(id));
-    console.log(Metadatas);
+    console.log("entries", entries);
     return (
       <StackBox>
         <Stack spacing={{ xs: 10, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
@@ -1228,17 +1407,15 @@ export default function OSCALCatalogBaseline() {
     );
   };
 
-  const ids = catalogIds.concat(baselineIds);
-  console.log(" All ids:");
-  console.log(ids);
   return (
     <MainContainer>
       <CatalogBreadCrumbsMenu></CatalogBreadCrumbsMenu>
       <FormHeaderLabel> Catalogs & Baselines </FormHeaderLabel>
       {/* <UploadButton></UploadButton> */}
-      <HugHug></HugHug>
+      {renderHugHug()}
       {/* <StackFunct Items={data}></StackFunct> */}
-      <RenderCatalogItems CatalogUUIDS={catalogIds} ProfileUUIDS={baselineIds}></RenderCatalogItems>
+      {/* <RenderCatalogItems CatalogUUIDS={catalogIds} ProfileUUIDS={baselineIds}></RenderCatalogItems> */}
+      {renderFilledItemBox()}
       {renderAddNewCatalogBaselineDialog()}
       {renderOrgDetailsDialog()}
       {renderAuthorDetailDialog()}

@@ -67,7 +67,7 @@ export function useFetchers() {
     if (operation.startsWith("/")) {
       slash = "";
     }
-    fetch("/rest" + slash + operation, requestOptions)
+    fetch("/rest" + slash + operation, request)
       .then((response) => {
         if (!response.ok) {
           throw new Error(response.status);
