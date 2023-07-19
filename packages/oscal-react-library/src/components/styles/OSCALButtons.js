@@ -50,9 +50,9 @@ export const OSCALDestructiveButton = (props) => {
       variant="contained"
       disableElevation
       sx={{
-        backgroundColor: (theme) => theme.palette.destructive.main,
+        backgroundColor: "#B31515", //(theme) => theme.palette.destructive.main,
         ":hover": {
-          backgroundColor: (theme) => theme.palette.destructive.dark,
+          backgroundColor: "#9B1616", //(theme) => theme.palette.destructive.dark,
         },
       }}
     />
@@ -67,10 +67,10 @@ export const OSCALUnsatisfiedButton = (props) => {
       variant="contained"
       disableElevation
       sx={{
-        color: (theme) => theme.palette.black.main,
-        backgroundColor: (theme) => theme.palette.lightPink.main,
+        color:  "#B31515", // (theme) => theme.palette.black.main,
+        backgroundColor: "#FFD9D9", //(theme) => theme.palette.lightPink.main,
         ":hover": {
-          backgroundColor: (theme) => theme.palette.lightPink.dark,
+          backgroundColor: "#EEC8C8", //(theme) => theme.palette.lightPink.dark,
         },
       }}
     />
