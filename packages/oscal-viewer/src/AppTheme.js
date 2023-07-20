@@ -39,14 +39,17 @@ export const appTheme = createTheme({
       fontWeight: "400",
       fontSize: "1.25rem",
     },
-    body: {
+    body1: {
       fontWeight: "400",
       fontSize: "1rem",
       letterSpacing: ".05rem",
     },
+    body2: {
+      fontSize: "0.85rem",
+    },
     fontWeightLight: "300",
     fontWeightRegular: "400",
-    fontWeightSemiBold: "600",
+    fontWeightMedium: "600",
     fontWeightBold: "700",
     fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
   },

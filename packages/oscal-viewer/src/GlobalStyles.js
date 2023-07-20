@@ -20,7 +20,7 @@ const globalStyles = (theme, drawerWidth, appBarHeight) => ({
 
   // App
   ".App": {
-    textAlign: "center",
+    textAlign: "left",
     marginLeft: drawerWidth,
     marginTop: appBarHeight,
   },

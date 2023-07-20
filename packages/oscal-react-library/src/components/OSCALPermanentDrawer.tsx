@@ -6,7 +6,6 @@ import Stack from "@mui/material/Stack";
 import TreeItem, { treeItemClasses } from "@mui/lab/TreeItem";
 import TreeView from "@mui/lab/TreeView";
 import Typography from "@mui/material/Typography";
-import { DocumentTree as DrawerSelectorDocumentTree } from "./OSCALDrawerSelector";
 
 import React, { useState } from "react";
 import { ReactComponent as CatalogsIcon } from "./images/icons/catalogs.svg";
@@ -65,7 +64,7 @@ const TabTreeItemRoot = styled(TreeItem)(({ theme }) => ({
   fill: "#BCC6D5",
   // General styling for tree items
   [`& .${treeItemClasses.content}`]: {
-    minHeight: "3.5rem",
+    minHeight: "3.25rem",
     paddingLeft: theme.spacing(4),
     flexDirection: "row-reverse",
     "&.Mui-expanded": {
@@ -125,6 +124,7 @@ function TabTreeItem(props: any) {
             })}
           />
           <Typography
+            variant="body1"
             sx={(theme) => ({
               fontWeight: selectedState
                 ? theme.typography.fontWeightBold
@@ -142,9 +142,7 @@ function TabTreeItem(props: any) {
 }
 
 export const DocumentTree: React.FC<OSCALPermanentDrawerProps> = ({
-  drawerWidth,
-  backendUrl,
-  handleClose,
+  drawerWidth
 }) => {
   const [selectedNode, setselectedNode] = useState([]);
 
@@ -166,7 +164,7 @@ export const DocumentTree: React.FC<OSCALPermanentDrawerProps> = ({
     >
       <Divider />
       <Box sx={{ padding: "0.75rem", paddingLeft: "2rem" }}>
-        <Typography sx={{ textTransform: "uppercase", fontSize: "0.75rem" }}>Main Menu</Typography>
+        <Typography variant="body2" sx={(theme) => ({ textTransform: "uppercase" })}>Main Menu</Typography>
       </Box>
       <TabTreeItem
         nodeId={"0"}
@@ -253,10 +251,6 @@ export const DocumentTree: React.FC<OSCALPermanentDrawerProps> = ({
           labelText={"* Utilities Example *"}
         />
       </TabTreeItem>
-      {/* TODO: Remove this once paths have been determined or dev flag is set, handleClose can also be removed as well */}
-      <Grid sx={{ backgroundColor: "white" }}>
-        <DrawerSelectorDocumentTree backendUrl={backendUrl} handleClose={handleClose} />
-      </Grid>
       <DrawerFooter>
         <Divider sx={{ bgcolor: "#BCC6D5", margin: "2rem" }} />
         <TabTreeItem
@@ -282,14 +276,10 @@ export const DocumentTree: React.FC<OSCALPermanentDrawerProps> = ({
 
 interface OSCALPermanentDrawerProps {
   drawerWidth: number;
-  backendUrl: string;
-  handleClose: () => void;
-}
+};
 
 export const OSCALPermanentDrawer: React.FC<OSCALPermanentDrawerProps> = ({
-  drawerWidth,
-  backendUrl,
-  handleClose,
+  drawerWidth
 }) => {
   return (
     <StyledDrawer variant="permanent" anchor="left">
@@ -300,11 +290,12 @@ export const OSCALPermanentDrawer: React.FC<OSCALPermanentDrawerProps> = ({
           alignItems: "center",
         }}
       >
-        <Box component="svg" width={`calc(${drawerWidth} - 4rem)`}>
-          <EDC_Reverse_Tagline width="100%" height="50%" />
+        <Box component="svg" width={`calc(${drawerWidth} - 4rem)`} height="5rem">
+          <EDC_Reverse_Tagline width="100%" height="100%" />
         </Box>
       </DrawerHeader>
-      <DocumentTree drawerWidth={drawerWidth} backendUrl={backendUrl} handleClose={handleClose} />
+      {/* TODO: Pass in backend URL to get working routes */}
+      <DocumentTree drawerWidth={drawerWidth} /*backendUrl={backendUrl}*/ />
     </StyledDrawer>
   );
 };
