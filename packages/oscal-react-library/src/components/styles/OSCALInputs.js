@@ -44,7 +44,7 @@ const ErrorMessage = (props) => {
         }}
       >
         <ErrorOutline sx={{ width: "1rem" }} />
-        {props.helper ? `\u00a0{props.helper}` : `\u00a0Fill in required text field`}
+        {props.error != true ? `\u00a0${props.error}` : `\u00a0This field is required`}
       </Stack>
     );
   }
@@ -52,29 +52,33 @@ const ErrorMessage = (props) => {
 
 export const OSCALFormLabel = (props) => {
   return (
-    <FormLabel
-      sx={{
-        fontWeight: (theme) => theme.typography.fontWeightSemiBold,
-        color: (theme) => theme.palette.black.main,
-      }}
-      component="legend"
-      className=""
-      disabled={props.disabled}
-    >
-      <Stack direction="row">
-        {!props.noLabel && !props.disabled && props.required && <RequiredAsterick />}
-        {props.label}
-        {!props.noLabel && !props.disabled && !props.required && <OptionalText />}
-      </Stack>
-    </FormLabel>
+    <>
+      <FormLabel
+        sx={{
+          fontWeight: (theme) => theme.typography.fontWeightSemiBold,
+          color: (theme) => theme.palette.black.main,
+        }}
+        component="legend"
+        disabled={props.disabled}
+      >
+        <Stack direction="row">
+          {!props.noLabel && !props.disabled && props.required && <RequiredAsterick />}
+          {props.label}
+          {!props.noLabel && !props.disabled && !props.required && <OptionalText />}
+        </Stack>
+      </FormLabel>
+      {props.children}
+      <FormHelperText>
+        {props.error ? <ErrorMessage error={props.error} /> : props.helper}
+      </FormHelperText>
+    </>
   );
 };
 
 // TODO: Add styling to GlobalStyles
 export const OSCALTextField = (props) => {
   return (
-    <>
-      <OSCALFormLabel {...props} />
+    <OSCALFormLabel {...props}>
       <TextField
         {...props}
         placeholder={props.placeholder}
@@ -90,15 +94,12 @@ export const OSCALTextField = (props) => {
           },
           "&:hover .MuiOutlinedInput-root": {
             "& > fieldset": {
-              borderColor: (theme) => theme.palette.primary.main,
+              borderColor: (theme) => !props.disabled && !props.error && theme.palette.primary.main,
             },
           },
         }}
-      ></TextField>
-      <FormHelperText>
-        {props.error ? <ErrorMessage helper={props.helper} /> : props.helper}
-      </FormHelperText>
-    </>
+      />
+    </OSCALFormLabel>
   );
 };
 
@@ -106,8 +107,7 @@ export const OSCALTextField = (props) => {
 
 export const OSCALDropdown = (props) => {
   return (
-    <>
-      <OSCALFormLabel {...props} />
+    <OSCALFormLabel {...props}>
       <Select
         {...props}
         label=""
@@ -125,8 +125,8 @@ export const OSCALDropdown = (props) => {
             borderColor: (theme) => theme.palette.primary.main,
           },
         }}
-      ></Select>
-    </>
+      />
+    </OSCALFormLabel>
   );
 };
 
@@ -144,28 +144,36 @@ export const OSCALRadio = styled(Radio)(({ theme }) => ({
   },
 }));
 
-const OSCALInputButton = styled(IconButton)(({ theme }) => ({
-  color: theme.palette.secondary.main,
-  border: `0.1rem solid ${theme.palette.secondary.main}`,
-  "&:hover": {
-    color: theme.palette.white.main,
-    backgroundColor: theme.palette.primaryAccent.main,
-    border: `0.1rem solid ${theme.palette.primaryAccent.main}`,
-  },
-}));
-
 export const OSCALCancelButton = (props) => {
   return (
-    <OSCALInputButton size="small">
+    <IconButton
+      {...props}
+      size="small"
+      sx={{
+        color: (theme) => theme.palette.secondary.main,
+        border: (theme) => `0.1rem solid ${theme.palette.secondary.main}`,
+      }}
+    >
       <ClearIcon fontSize="small" />
-    </OSCALInputButton>
+    </IconButton>
   );
 };
 
 export const OSCALConfirmButton = (props) => {
   return (
-    <OSCALInputButton size="small">
+    <IconButton
+      {...props}
+      size="small"
+      sx={{
+        color: (theme) => theme.palette.white.main,
+        backgroundColor: (theme) => theme.palette.primaryAccent.main,
+        border: (theme) => `0.1rem solid ${theme.palette.primaryAccent.main}`,
+        "&:hover": {
+          backgroundColor: (theme) => theme.palette.primaryAccent.main,
+        },
+      }}
+    >
       <DoneIcon fontSize="small" />
-    </OSCALInputButton>
+    </IconButton>
   );
 };

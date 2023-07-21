@@ -5,20 +5,6 @@ import { IconButton } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import React from "react";
 
-export const OSCALWarningDialog = (props) => {
-  return (
-    <Dialog
-      {...props}
-      PaperProps={{
-        sx: {
-          borderLeft: (theme) => `10px solid ${theme.palette.destructive.main}`,
-          minWidth: "30rem",
-        },
-      }}
-    ></Dialog>
-  );
-};
-
 export const OSCALDialogTitle = (props) => {
   return (
     <DialogTitle>
@@ -56,6 +42,20 @@ export const OSCALDialogTitle = (props) => {
         </IconButton>
       )}
     </DialogTitle>
+  );
+};
+
+export const OSCALWarningDialog = (props) => {
+  return (
+    <Dialog
+      {...props}
+      PaperProps={{
+        sx: {
+          borderLeft: (theme) => `10px solid ${theme.palette.destructive.main}`,
+          minWidth: "30rem",
+        },
+      }}
+    ></Dialog>
   );
 };
 

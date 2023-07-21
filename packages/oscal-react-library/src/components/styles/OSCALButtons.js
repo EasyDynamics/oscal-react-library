@@ -2,7 +2,7 @@ import Button from "@mui/material/Button";
 
 // TODO: Add class name
 export const OSCALPrimaryButton = (props) => {
-  return <Button {...props} className="" variant="contained" color="primary" disableElevation />;
+  return <Button {...props} variant="contained" color="primary" disableElevation />;
 };
 
 export const OSCALSecondaryButton = (props) => {
@@ -22,7 +22,7 @@ export const OSCALSecondaryButton = (props) => {
   );
 };
 
-export const OSCALSecondarySecondaryButton = (props) => {
+export const OSCALSmallSecondaryButton = (props) => {
   return (
     <Button
       {...props}
@@ -80,7 +80,6 @@ export const OSCALUnsatisfiedButton = (props) => {
   return (
     <Button
       {...props}
-      className=""
       variant="contained"
       disableElevation
       sx={{
@@ -98,7 +97,6 @@ export const OSCALSatisfiedButton = (props) => {
   return (
     <Button
       {...props}
-      className=""
       variant="contained"
       disableElevation
       sx={{
@@ -115,7 +113,7 @@ export const OSCALSatisfiedButton = (props) => {
 export const OSCALImportButton = (props) => {
   return (
     <form>
-      <input {...props} type="file" className="inputFile" />
+      <input {...props} type="file" className="InputFile" />
     </form>
   );
 };
