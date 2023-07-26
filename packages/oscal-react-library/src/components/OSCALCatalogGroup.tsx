@@ -14,7 +14,6 @@ import OSCALControl, { ControlMetadataItems } from "./OSCALControl";
 import OSCALControlLabel from "./OSCALControlLabel";
 import OSCALControlPart from "./OSCALControlPart";
 import { Accordion, AccordionDetails, AccordionSummary } from "./StyedAccordion";
-//import { CatalogBreadCrumbsMenu, OSCALModelMetadataInfo } from "./OSCALCatalogBaseline";
 
 const WithdrawnControlText = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[400],

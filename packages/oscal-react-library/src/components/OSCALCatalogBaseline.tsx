@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { EditableFieldProps } from "./OSCALEditableTextField";
-
-import { Link } from "@mui/material";
+import { ButtonGroup, Link, NativeSelect, Select, TextField } from "@mui/material";
 import FormLabel from "@mui/material/FormLabel";
 import BreadCrumbs from "@mui/material/Breadcrumbs";
 import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import { Divider } from "@mui/material";
 import { Stack, styled } from "@mui/system";
-//import BreadCrumbs from "@mui/material/node_modules/@mui/base";
 import { useFetchers } from "./Fetchers";
-import { OSCALDialogTitle } from "./styles/OSCALDialog";
+import { OSCALDialogTitle, OSCALEditingDialog } from "./styles/OSCALDialog";
 
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -23,13 +21,10 @@ import StepLabel from "@mui/material/StepLabel";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 
-import Toolbar from "@mui/material/Toolbar";
-
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import IconButton from "@mui/material/IconButton";
 import { Typography, Container, Grid } from "@mui/material";
-import AppBar from "@mui/material/AppBar";
 
 import {
   OSCALPrimaryButton,
@@ -37,7 +32,7 @@ import {
   OSCALTertiaryButton,
   OSCALUnsatisfiedButton,
 } from "./styles/OSCALButtons";
-import { OSCALTextField, OSCALDropdown, OSCALRadio, OSCALFormLabel } from "./styles/OSCALInputs";
+import { OSCALTextField, OSCALRadio, OSCALFormLabel } from "./styles/OSCALInputs";
 
 import { FormatBold, FormatItalic, FormatQuote, Subscript, Superscript } from "@mui/icons-material";
 
@@ -91,7 +86,6 @@ const ItemTitle = styled(Typography)`
   top: 5.89%;
   bottom: 75.33%;
   font-family: "Source Sans Pro";
-  font-style: normal;
   font-weight: 700;
   font-size: 20px;
   line-height: 25px;
@@ -101,15 +95,14 @@ const LastModified = styled(Typography)`
   position: absolute;
   height: 18px;
   width: 350px;
-  left: 332.375px;
-  top: 249.21400451660156px;
+  left: 332 px;
+  top: 249 px;
   border-radius: nullpx;
   left: 3.08%;
   right: 62.27%;
   top: 32.69%;
   bottom: 70.31%;
   font-family: "Source Sans Pro";
-  font-style: normal;
   font-weight: 400;
   font-size: 14px;
   line-height: 18px;
@@ -120,14 +113,13 @@ const ItemResult = styled(Typography)`
   height: 18px;
   width: 300px;
   left: 332.375px;
-  top: 249.21400451660156px;
+  top: 249px;
   border-radius: nullpx;
   left: 28.08%;
   right: 62.27%;
   top: 32.69%;
   bottom: 70.31%;
   font-family: "Source Sans Pro";
-  font-style: normal;
   font-weight: 700;
   font-size: 14px;
   line-height: 18px;
@@ -137,7 +129,7 @@ const Version = styled(Typography)`
   height: 18px;
   width: 350px;
   left: 332px;
-  top: 275.2139892578125px;
+  top: 275px;
   border-radius: nullpx;
   position: absolute;
   left: 3.06%;
@@ -145,7 +137,6 @@ const Version = styled(Typography)`
   top: 47.58%;
   bottom: 67.42%;
   font-family: "Source Sans Pro";
-  font-style: normal;
   font-weight: 400;
   font-size: 14px;
   line-height: 18px;
@@ -155,7 +146,7 @@ const PublicationDate = styled(Typography)`
   height: 18px;
   width: 350px;
   left: 332.375px;
-  top: 299.2139892578125px;
+  top: 299px;
   border-radius: nullpx;
   position: absolute;
   left: 3.08%;
@@ -163,7 +154,6 @@ const PublicationDate = styled(Typography)`
   top: 62.25%;
   bottom: 64.75%;
   font-family: "Source Sans Pro";
-  font-style: normal;
   font-weight: 400;
   font-size: 14px;
   line-height: 18px;
@@ -187,7 +177,6 @@ const FormHeaderLabel = styled(FormLabel)`
   top: 116px;
   left: 100px;
   font-family: "Source Sans Pro";
-  font-style: normal;
   font-size: 32px;
   font-weight: 700px;
   line-height: 40.22px;
@@ -225,7 +214,6 @@ const AddInformationLabel = styled(Typography)`
   top: 30px;
   left: 20px;
   font-family: "Source Sans Pro";
-  font-size: 16px;
   font-weight: 700;
   line-height: 20px;
   letter-spacing: 0em;
@@ -235,11 +223,34 @@ const AddInformationLabel = styled(Typography)`
 
 const SecondLabel = styled(Typography)`
   font-family: "Source Sans Pro";
-  font-size: 16px;
   font-weight: 400;
   line-height: 20px;
   letter-spacing: 0em;
   text-align: "left";
+`;
+const CTab = styled(Tab)`
+  background: #d2d2d2;
+  border: 1px solid #d2d2d2;
+  font-family: Source Sans Pro;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0em;
+  text-align: left;
+`;
+const OSCALBreadCrumbs = styled(BreadCrumbs)`
+  position: absolute;
+  width: 800px;
+  height: 100px;
+  top: 96px;
+  left: 100px;
+  font-family: "Source Sans Pro";
+  line-height: 20px;
+`;
+const OSCALLink = styled(Link)`
+  color: "#002867";
+  font-weight: 400;
+  font-family: "Source Sans Pro";
+  line-height: 20px;
 `;
 export interface ContactInfo extends EditableFieldProps {
   name?: string;
@@ -268,6 +279,8 @@ interface CatalogBaseline extends EditableFieldProps {
 }
 export interface OSCALModel extends EditableFieldProps {
   model: CatalogBaseline;
+  startCollectingOrgDetails?: boolean;
+  startCollectingAuthorDetails?: boolean;
 }
 
 interface OSCALModelMetadataInfo extends EditableFieldProps {
@@ -294,64 +307,40 @@ export interface ProjectUUIDs {
 export const CatalogBreadCrumbsMenu: React.FC<OSCALModel | undefined> = (item) => {
   if (item !== undefined && item.model.title !== undefined && item.model.title.length > 0)
     return (
-      <BreadCrumbs
+      <OSCALBreadCrumbs
         aria-label="breadcrumb"
         sx={{
-          position: "absolute",
-          width: "800px",
-          height: "100px",
-          top: "96px",
-          left: "100px",
-          fontFamily: "Source Sans Pro",
-          fontStyle: "normal",
-          fontSize: "16px",
-          lineHeight: "20px",
           ":hover": {
             color: "#FF6600",
           },
         }}
       >
-        <Link
+        <OSCALLink
           href="/"
           sx={{
-            color: "#1D1D1D",
-            fontWeight: "400",
-            fontFamily: "Source Sans Pro",
-            fontStyle: "normal",
-            fontSize: "16px",
-            lineHeight: "20px",
             ":hover": {
               color: "#FF6600",
             },
           }}
         >
           HOME
-        </Link>
-        <Link
+        </OSCALLink>
+        <OSCALLink
           href="/"
           sx={{
-            color: "#1D1D1D",
             fontWeight: "700",
-            fontFamily: "Source Sans Pro",
-            fontStyle: "normal",
-            fontSize: "16px",
-            lineHeight: "20px",
             ":hover": {
               color: "#FF6600",
             },
           }}
         >
           CATALOGS & BASELINES
-        </Link>
-        <Link
+        </OSCALLink>
+        <OSCALLink
           href="/"
           sx={{
             color: "#002867",
             fontWeight: "700",
-            fontFamily: "Source Sans Pro",
-            fontStyle: "normal",
-            fontSize: "16px",
-            lineHeight: "20px",
             ":hover": {
               color: "#FF6600",
             },
@@ -359,65 +348,46 @@ export const CatalogBreadCrumbsMenu: React.FC<OSCALModel | undefined> = (item) =
         >
           {" "}
           {item.model.title.toUpperCase()}
-        </Link>
-      </BreadCrumbs>
+        </OSCALLink>
+      </OSCALBreadCrumbs>
     );
   else
     return (
-      <BreadCrumbs
+      <OSCALBreadCrumbs
         aria-label="breadcrumb"
         sx={{
-          position: "absolute",
-          width: "321px",
-          height: "100px",
-          top: "96px",
-          left: "100px",
-          fontFamily: "Source Sans Pro",
-          fontStyle: "normal",
-          fontSize: "16px",
-          lineHeight: "20px",
           ":hover": {
             color: "#FF6600",
           },
         }}
       >
-        <Link
+        <OSCALLink
           href="/"
           sx={{
-            color: "#1D1D1D",
-            fontWeight: "400",
-            fontFamily: "Source Sans Pro",
-            fontStyle: "normal",
-            fontSize: "16px",
-            lineHeight: "20px",
             ":hover": {
               color: "#FF6600",
             },
           }}
         >
           HOME
-        </Link>
-        <Link
+        </OSCALLink>
+        <OSCALLink
           href="/"
           sx={{
             color: "#002867",
             fontWeight: "700",
-            fontFamily: "Source Sans Pro",
-            fontStyle: "normal",
-            fontSize: "16px",
-            lineHeight: "20px",
             ":hover": {
               color: "#FF6600",
             },
           }}
         >
           CATALOGS & BASELINES
-        </Link>
-      </BreadCrumbs>
+        </OSCALLink>
+      </OSCALBreadCrumbs>
     );
 };
 
-export function LabTabs() {
+export function CatalogBaselineTabs() {
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -425,14 +395,64 @@ export function LabTabs() {
   };
 
   return (
-    <Box sx={{ width: 990, typography: "body1", top: 180, left: 100, position: "absolute" }}>
+    <Box
+      sx={{
+        width: 1070,
+        height: 900,
+        typography: "body1",
+        top: 200,
+        left: 100,
+        position: "absolute",
+        background: "linear-gradient(0deg, #FFFFFF, #FFFFFF)",
+      }}
+    >
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="Controls" value="1" />
-            <Tab label="Catalog Details" value="2" />
-            <Tab label="Directory" value="3" />
-            <Tab label="Back Matter" value="4" />
+          <TabList
+            onChange={handleChange}
+            aria-label="lab API tabs example"
+            sx={{ background: "#F6F6F6" }}
+          >
+            <CTab
+              label="Controls"
+              value="1"
+              sx={{
+                ":focus": {
+                  background: "#FFffff",
+                  weight: 600,
+                },
+              }}
+            />
+            <CTab
+              label="Catalog Details"
+              value="2"
+              sx={{
+                ":focus": {
+                  background: "#FFffff",
+                  weight: 600,
+                },
+              }}
+            />
+            <CTab
+              label="Directory"
+              value="3"
+              sx={{
+                ":focus": {
+                  background: "#FFffff",
+                  weight: 600,
+                },
+              }}
+            />
+            <CTab
+              label="Resources"
+              value="4"
+              sx={{
+                ":focus": {
+                  background: "#FFffff",
+                  weight: 600,
+                },
+              }}
+            />
           </TabList>
         </Box>
         <TabPanel value="1">Controls</TabPanel>
@@ -465,13 +485,13 @@ export function OSCALDateTimeConversion(oscalTime: string): string {
 }
 export default function OSCALCatalogBaseline() {
   const fetchers = useFetchers();
-  //const fetchUploadFile = fetchers["fetchUploadFile"];
   const fetchTransaction = fetchers["fetchTransaction"];
   const fetchRest = fetchers["fetchRest"];
 
   let Model = "Catalog";
   const [AddNewCatalogBaseline, setAddNewCatalogBaseline] = useState(false);
   const [AddOrgDetails, setAddOrgDetails] = useState(false);
+  const [createdNewCatalogBaseline, setCreatedNewCatalogBaseline] = useState(false);
   const [AddAuthorDetails, setAddAuthorDetails] = useState(false);
   const [catalogIds, setCatalogIds] = useState<string[]>([]);
   const [baselineIds, setBaselineIds] = useState<string[]>([]);
@@ -484,7 +504,6 @@ export default function OSCALCatalogBaseline() {
   const [orgContact, setOrgContact] = useState<ContactInfo>({});
   const [authorAddress, setAuthorAddress] = useState<Address>({});
   const [authorContact, setAuthorContact] = useState<ContactInfo>({});
-  // const [initSelectedCatalogBaseline, setInitSelectedCatalogBaseline] = useState<string>(Model);
   const [openCatalogBaseline, setOpenCatalogBaseline] = useState(false);
   const [newOSCALModel, setNewOSCALModel] = useState<CatalogBaseline | undefined>(undefined);
   let newModelCreationDone = false;
@@ -497,12 +516,8 @@ export default function OSCALCatalogBaseline() {
   useEffect(() => {
     getCatalogIds();
     getBaselineIds();
-    //  getInitSelectedModel();
-  });
+  }, []);
 
-  // function getInitSelectedModel() {
-  //   setInitSelectedCatalogBaseline(Model);
-  // }
   function getCatalogIds() {
     const request_json = {
       method: "GET",
@@ -525,7 +540,7 @@ export default function OSCALCatalogBaseline() {
   }
 
   function renderTabs() {
-    if (openCatalogBaseline) return <LabTabs></LabTabs>;
+    if (openCatalogBaseline) return <CatalogBaselineTabs></CatalogBaselineTabs>;
     else return null;
   }
 
@@ -663,7 +678,7 @@ export default function OSCALCatalogBaseline() {
           <Grid>
             <Typography
               sx={{
-                left: 540,
+                left: 560,
                 top: 162,
                 fontSize: 14,
                 fontFamily: "Source Sans Pro",
@@ -678,7 +693,7 @@ export default function OSCALCatalogBaseline() {
           <Grid>
             <Typography
               sx={{
-                left: 643,
+                left: 663,
                 top: 161,
                 fontSize: 14,
                 fontFamily: "Source Sans Pro",
@@ -713,6 +728,7 @@ export default function OSCALCatalogBaseline() {
       if (title.length < 25) return " 5.89%";
       else return "3.00%";
     }
+    const type = item.isCatalog ? "Catalog" : "Baseline";
     function handleOpenCatalogBaseline() {
       const model: CatalogBaseline = {
         title: item.title,
@@ -776,7 +792,6 @@ export default function OSCALCatalogBaseline() {
             </ItemResult>{" "}
           </Grid>
         </Grid>
-        {/* <ItemButton> */}
         <Container
           sx={{
             height: 39,
@@ -796,72 +811,113 @@ export default function OSCALCatalogBaseline() {
             }}
             onClick={handleOpenCatalogBaseline}
           >
-            {/* <Label> OPEN CATALOG </Label> */}
-            OPEN CATALOG
+            OPEN {type}
           </OSCALPrimaryButton>
         </Container>
-        {/* </ItemButton> */}
       </ItemBox>
     );
   };
-  function DenseAppBar() {
-    return (
-      <Box sx={{ flexGrow: 1, top: 10 }}>
-        <AppBar position="static" sx={{ background: "#ffffff", height: 10 }}>
-          <Toolbar
-            variant="dense"
-            sx={{ background: "#ffffff", height: 7, border: "1px solid #CCCCCC" }}
-          >
-            <IconButton edge="start" aria-label="menu" sx={{ mr: 1 }}>
-              <FormatBold />
-            </IconButton>
-            <IconButton edge="start" aria-label="menu" sx={{ mr: 1 }}>
-              <FormatItalic />
-            </IconButton>
-            <IconButton edge="start" aria-label="menu" sx={{ mr: 1 }}>
-              <CodeOffSharp />
-            </IconButton>
-            <IconButton edge="start" aria-label="menu" sx={{ mr: 1 }}>
-              <FormatQuote />
-            </IconButton>
-            <IconButton edge="start" aria-label="menu" sx={{ mr: 1 }}>
-              <Subscript />
-            </IconButton>
-            <IconButton edge="start" aria-label="menu" sx={{ mr: 1 }}>
-              <Superscript />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-      </Box>
-    );
-  }
 
-  function ToolBarMenu() {
+  function ButtonBar() {
     return (
-      <Box
-        justifyContent="center"
+      <Grid
         sx={{
-          height: 12,
+          flexGrow: 1,
+          top: 15,
+          background: "#ffffff",
+          height: 20,
         }}
+        container
+        spacing={0}
       >
-        <Grid container spacing={1}>
-          <Grid xs={6}>
-            <Container></Container>
-          </Grid>
-          <Grid xs={6}>
-            <Box>
-              <DenseAppBar></DenseAppBar>
-            </Box>
-          </Grid>
-        </Grid>
-      </Box>
+        <ButtonGroup size="small" aria-label="small button group">
+          <IconButton edge="start" aria-label="menu">
+            <FormatBold sx={{ border: "1px solid #CCCCCC" }} />
+          </IconButton>
+          <IconButton edge="start" aria-label="menu">
+            <FormatItalic sx={{ border: "1px solid #CCCCCC" }} />
+          </IconButton>
+          <IconButton edge="start" aria-label="menu">
+            <CodeOffSharp sx={{ border: "1px solid #CCCCCC" }} />
+          </IconButton>
+          <IconButton edge="start" aria-label="menu">
+            <FormatQuote sx={{ border: "1px solid #CCCCCC" }} />
+          </IconButton>
+          <IconButton edge="start" aria-label="menu">
+            <Subscript sx={{ border: "1px solid #CCCCCC" }} />
+          </IconButton>
+          <IconButton edge="start" aria-label="menu">
+            <Superscript sx={{ border: "1px solid #CCCCCC" }} />
+          </IconButton>
+        </ButtonGroup>
+      </Grid>
     );
   }
+  const ToolBarMenu: React.FC<{ hasDropdown: boolean | null }> = (item) => {
+    if (item.hasDropdown != null && item.hasDropdown) {
+      return (
+        <Box
+          justifyContent="center"
+          sx={{
+            height: 12,
+          }}
+        >
+          <Grid container spacing={0}>
+            <Grid xs={5}>
+              <Container></Container>
+            </Grid>
+            <Grid xs={3}>
+              <Container>
+                <NativeSelect
+                  defaultValue={30}
+                  inputProps={{
+                    name: "font",
+                    id: "uncontrolled-native",
+                  }}
+                  sx={{ width: 100, border: "1px" }}
+                >
+                  <option value={10}>Times New Roman</option>
+                  <option value={20}>Sans Pro</option>
+                  <option value={30}>Normal</option>
+                </NativeSelect>
+              </Container>
+            </Grid>
+            <Grid xs={4}>
+              <Box>
+                <ButtonBar></ButtonBar>
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
+      );
+    } else {
+      return (
+        <Box
+          justifyContent="center"
+          sx={{
+            height: 12,
+          }}
+        >
+          <Grid container spacing={1}>
+            <Grid xs={8}>
+              <Container></Container>
+            </Grid>
+            <Grid xs={4}>
+              <Box>
+                <ButtonBar></ButtonBar>
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
+      );
+    }
+  };
 
-  const AddOrgDetailsDialog: React.FC<OSCALModel> = (data) => {
+  const AddOrgAuthorDetailsDialog: React.FC<OSCALModel> = (data) => {
     Model = data.model.isCatalog ? "Catalog" : "Baseline";
-
-    contact = data.model.orgContactInfo ?? {};
+    const [newOSCALFilePath, setNewOSCALFilePath] = useState("");
+    if (data.startCollectingOrgDetails) contact = data.model.orgContactInfo ?? {};
+    if (data.startCollectingAuthorDetails) contact = data.model.authorContactInfo ?? {};
     address = contact.address ?? {};
     const title = "Add a New " + Model;
     function handleEditOrgNameChange(event: { target: { value: string | undefined } }) {
@@ -898,7 +954,7 @@ export default function OSCALCatalogBaseline() {
       setOrgContact(contact);
       data.model.orgContactInfo = orgContact;
       setMainData(data.model);
-      console.log("closing now ", data.model);
+      console.log("In Handle CloseOrg ", data);
     };
     const handleAddAuthorDetails = () => {
       setAddOrgDetails(false);
@@ -906,164 +962,11 @@ export default function OSCALCatalogBaseline() {
       setAddAuthorDetails(true);
       data.model.orgContactInfo = orgContact;
       setMainData(data.model);
+      contact = authorContact;
       newModelCreationDone = false;
     };
-    if (AddOrgDetails)
-      return (
-        <Dialog
-          open={data.model.isVisible}
-          onClose={handleCloseOrgDetails}
-          fullWidth={true}
-          sx={{ top: -30, left: 530, width: 560, height: 950 }}
-        >
-          <OSCALDialogTitle title={title} onClose={handleCloseOrgDetails} />
-          <DialogContent>
-            <Grid container rowSpacing={2} justifyContent="center">
-              <Grid item xs={12} sx={{ height: 100 }}>
-                <StepperBar
-                  alternativeLabel
-                  activeStep={1}
-                  connector={
-                    <StepConnector sx={{ left: -155, width: 165, border: "1px solid #023E88" }} />
-                  }
-                >
-                  <Step key="catalog" sx={{ width: 40, height: 40 }}>
-                    <StepItemLabel>{Model} Details</StepItemLabel>
-                  </Step>
-                  <Step key="org" sx={{ width: 40, height: 40 }}>
-                    <StepItemLabel>Org Details</StepItemLabel>
-                  </Step>
-                  <Step key="author" sx={{ width: 40, height: 40 }}>
-                    <StepItemLabel>Author Details</StepItemLabel>
-                  </Step>
-                </StepperBar>
-              </Grid>
-              <Grid item xs={12}>
-                <AddInformationLabel>
-                  Add information about the organization that owns this {Model.toLowerCase()}:
-                </AddInformationLabel>
-              </Grid>
-              <Grid item xs={12}>
-                <OSCALFormLabel label={"Organization Name"} required={true} />
-                <OSCALTextField
-                  fullWidth
-                  id={"orgName"}
-                  onChange={handleEditOrgNameChange}
-                  defaultValue={data.model.orgContactInfo?.name}
-                  margin="none"
-                />
-                <OSCALFormLabel label={"Organization Phone"} required={false} />
-                <OSCALTextField
-                  fullWidth
-                  id={"orgPhone"}
-                  onChange={handleEditOrgPhoneChange}
-                  defaultValue={data.model.orgContactInfo?.phone}
-                  margin="none"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <OSCALFormLabel label={"Organization Email"} required={false} />
-                <OSCALTextField
-                  fullWidth
-                  id={"orgEmail"}
-                  onChange={handleEditOrgEmailChange}
-                  defaultValue={data.model.orgContactInfo?.email}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <OSCALFormLabel label={"Organization Address"} required={false} />
-                <SecondLabel>Address Line 1</SecondLabel>
-                <OSCALTextField
-                  fullWidth
-                  id={"address line 1"}
-                  onChange={handleEditAddressLine1Change}
-                  defaultValue={data.model.orgContactInfo?.address?.line1}
-                />
-                <SecondLabel>Address Line 2</SecondLabel>
-                <OSCALTextField
-                  fullWidth
-                  id={"address line 2"}
-                  onChange={handleEditAddressLine2Change}
-                  defaultValue={data.model.orgContactInfo?.address?.line2}
-                />
-                <SecondLabel>City</SecondLabel>
-                <OSCALTextField
-                  defaultValue={data.model.orgContactInfo?.address?.city}
-                  fullWidth
-                  id={"city"}
-                  onChange={handleEditCityChange}
-                />
-                <SecondLabel>State</SecondLabel>
-                <OSCALDropdown
-                  nolabel={true}
-                  defaultValue={data.model.orgContactInfo?.address?.state}
-                  fullWidth
-                  id={"state"}
-                  onChange={handleEditStateChange}
-                ></OSCALDropdown>
-                <SecondLabel>ZIP</SecondLabel>
-                <OSCALTextField
-                  defaultValue={data.model.orgContactInfo?.address?.zip}
-                  sx={{ width: 100 }}
-                  id={"zip"}
-                  onChange={handleEditZipChange}
-                />
-              </Grid>
-            </Grid>
-          </DialogContent>
-          <DialogActions>
-            <OSCALSecondaryButton onClick={handleCloseOrgDetails}>Previous</OSCALSecondaryButton>
-            <OSCALPrimaryButton onClick={handleAddAuthorDetails}>Next</OSCALPrimaryButton>
-          </DialogActions>
-        </Dialog>
-      );
-    else return null;
-  };
-  function getProjectUUID(path: string): string {
-    if (path.length > 0 && path.includes("/")) {
-      const parts = path.split("/");
-      const term = parts[1];
-      if (term.length > 0 && term.includes("_")) {
-        const subparts = term.split("_");
-        return subparts[1];
-      }
-      return "";
-    }
-    return "";
-  }
-  const AddAuthorDetailsDialog: React.FC<OSCALModel> = (data) => {
-    Model = data.model.isCatalog ? "Catalog" : "Baseline";
-    const [newOSCALFilePath, setNewOSCALFilePath] = useState("");
-    contact = data.model.authorContactInfo ?? {};
-    address = contact.address ?? {};
-    const title = "Add a New " + Model;
-    function handleEditOrgNameChange(event: { target: { value: string | undefined } }) {
-      contact.name = event.target.value;
-    }
-    function handleEditAddressLine1Change(event: { target: { value: string | undefined } }) {
-      address.line1 = event.target.value;
-    }
-    function handleEditAddressLine2Change(event: { target: { value: string | undefined } }) {
-      address.line2 = event.target.value;
-    }
-    function handleEditOrgPhoneChange(event: { target: { value: string | undefined } }) {
-      contact.phone = event.target.value;
-    }
-    function handleEditOrgEmailChange(event: { target: { value: string | undefined } }) {
-      contact.email = event.target.value;
-    }
-    function handleEditCityChange(event: { target: { value: string | undefined } }) {
-      address.city = event.target.value;
-    }
 
-    function handleEditStateChange(event: { target: { value: string | undefined } }) {
-      address.state = event.target.value;
-    }
-    function handleEditZipChange(event: { target: { value: string | undefined } }) {
-      address.zip = event.target.value;
-    }
-
-    const handleCloseOrgDetails = () => {
+    const handleCloseAuthorDetails = () => {
       contact.address = address;
       setAddOrgDetails(true);
       setAddNewCatalogBaseline(false);
@@ -1072,9 +975,9 @@ export default function OSCALCatalogBaseline() {
       setAuthorContact(contact);
       data.model.authorContactInfo = authorContact;
       setMainData(data.model);
-      console.log("closing now ", data.model);
     };
     const handleCreateNewCatalogBaseline = () => {
+      setCreatedNewCatalogBaseline(true);
       createNewProject();
       wrapper();
       setAddOrgDetails(false);
@@ -1082,6 +985,7 @@ export default function OSCALCatalogBaseline() {
       setAddAuthorDetails(false);
       setOpenCatalogBaseline(true);
       setNewOSCALModel(data.model);
+      setOpenCatalogBaseline(true);
     };
 
     useEffect(() => {
@@ -1094,6 +998,8 @@ export default function OSCALCatalogBaseline() {
       }
     }
     function createNewProject() {
+      // if (AddAuthorDetails) return;
+      if (createdNewCatalogBaseline) return;
       const rootFile = data.model.isCatalog ? "empty-catalog.json" : "empty-profile.json";
       const request_json = {
         file: rootFile,
@@ -1118,9 +1024,11 @@ export default function OSCALCatalogBaseline() {
     }
 
     function updateMetadata() {
-      const nowTime = Date.now().toLocaleString();
+      const date = new Date();
+      const nowDate = date.toLocaleDateString();
+      const nowTime = date.toLocaleTimeString();
       console.log("Start updating the metadata of this project ", newOSCALFilePath);
-      data.model.lastModified = nowTime; // "2023-07-19T13:57:28.91745-04:00"
+      data.model.lastModified = nowDate + ", " + nowTime; // "2023-07-19T13:57:28.91745-04:00"
       data.model.projectUUID = getProjectUUID(newOSCALFilePath);
       const inputs = {
         oscal_file: newOSCALFilePath,
@@ -1140,125 +1048,205 @@ export default function OSCALCatalogBaseline() {
       function updateMetadataFail(e: any) {
         console.log("Fail updating metadata of ", newOSCALFilePath, e.statusText);
       }
+      setCreatedNewCatalogBaseline(true);
+    }
+    let previousStep = "Previous";
+    let nextStep = "Next";
+    let handleClose: () => void = () => {};
+    let handleNextStep: () => void = () => {};
+    let contactInfo: ContactInfo | undefined = {};
+    let agent = "";
+    let step = 1;
+    if (AddOrgDetails && data.startCollectingOrgDetails) {
+      contactInfo = data.model.orgContactInfo;
+      agent = "Organization";
+      handleClose = handleCloseOrgDetails;
+      handleNextStep = handleAddAuthorDetails;
+      previousStep = "Previous";
+      nextStep = "Next";
+      step = 1;
+    }
+    if (AddAuthorDetails && data.startCollectingAuthorDetails) {
+      contactInfo = data.model.authorContactInfo;
+      agent = "Author";
+      previousStep = "Previous";
+      const type = data.model.isCatalog ? "Catalog" : "Baseline";
+      nextStep = "Create " + type;
+      handleClose = handleCloseAuthorDetails;
+      handleNextStep = handleCreateNewCatalogBaseline;
+
+      step = 2;
     }
 
-    if (AddAuthorDetails)
-      return (
-        <Dialog
-          open={data.model.isVisible}
-          onClose={handleCloseOrgDetails}
-          fullWidth={true}
-          sx={{ top: -30, left: 530, width: 560, height: 950 }}
-        >
-          <OSCALDialogTitle title={title} onClose={handleCloseOrgDetails} />
-          <DialogContent>
-            <Grid container rowSpacing={2} justifyContent="center">
-              <Grid item xs={12} sx={{ height: 100 }}>
-                <StepperBar
-                  alternativeLabel
-                  activeStep={2}
-                  connector={
-                    <StepConnector sx={{ left: -155, width: 165, border: "1px solid #023E88" }} />
-                  }
-                >
-                  <Step key="catalog" sx={{ width: 40, height: 40 }}>
-                    <StepItemLabel>{Model} Details</StepItemLabel>
-                  </Step>
-                  <Step key="org" sx={{ width: 40, height: 40 }}>
-                    <StepItemLabel>Org Details</StepItemLabel>
-                  </Step>
-                  <Step key="author" sx={{ width: 40, height: 40 }}>
-                    <StepItemLabel>Author Details</StepItemLabel>
-                  </Step>
-                </StepperBar>
-              </Grid>
-              <Grid item xs={12}>
-                <AddInformationLabel>
-                  Add information about the organization that owns this {Model.toLowerCase()}:
-                </AddInformationLabel>
-              </Grid>
-              <Grid item xs={12} sx={{ height: 61.5 }}>
-                <OSCALTextField
-                  label={"Author Name"}
-                  required={true}
-                  fullWidth
-                  id={"authorName"}
-                  onChange={handleEditOrgNameChange}
-                  defaultValue={data.model.authorContactInfo?.name}
-                />
-                <OSCALTextField
-                  label={"Author Phone"}
-                  fullWidth
-                  id={"authorPhone"}
-                  onChange={handleEditOrgPhoneChange}
-                  defaultValue={data.model.authorContactInfo?.phone}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <OSCALTextField
-                  label={"Author Email"}
-                  required={false}
-                  fullWidth
-                  id={"authorEmail"}
-                  onChange={handleEditOrgEmailChange}
-                  defaultValue={data.model.authorContactInfo?.email}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <OSCALFormLabel label={"Author Address"} required={false} />
-                <SecondLabel>Address Line 1</SecondLabel>
-                <OSCALTextField
-                  nolabel={true}
-                  fullWidth
-                  id={"address line 1"}
-                  onChange={handleEditAddressLine1Change}
-                  defaultValue={data.model.authorContactInfo?.address?.line1}
-                />
-                <SecondLabel>Address Line 2</SecondLabel>
-                <OSCALTextField
-                  nolabel={true}
-                  fullWidth
-                  id={"address line 2"}
-                  onChange={handleEditAddressLine2Change}
-                  defaultValue={data.model.authorContactInfo?.address?.line2}
-                />
-                <SecondLabel>City</SecondLabel>
-                <OSCALTextField
-                  nolabel={true}
-                  defaultValue={data.model.authorContactInfo?.address?.city}
-                  fullWidth
-                  id={"city"}
-                  onChange={handleEditCityChange}
-                />
-                <SecondLabel>State</SecondLabel>
-                <OSCALTextField
-                  nolabel={true}
-                  defaultValue={data.model.authorContactInfo?.address?.state}
-                  fullWidth
-                  id={"state"}
-                  onChange={handleEditStateChange}
-                />
-                <SecondLabel>ZIP</SecondLabel>
-                <OSCALTextField
-                  nolabel={true}
-                  defaultValue={data.model.authorContactInfo?.address?.zip}
-                  sx={{ width: 100 }}
-                  id={"zip"}
-                  onChange={handleEditZipChange}
-                />
-              </Grid>
+    return (
+      <Dialog
+        open={data.model.isVisible}
+        onClose={handleClose}
+        fullWidth={true}
+        sx={{ top: -30, left: 530, width: 560, height: 950 }}
+      >
+        <OSCALDialogTitle title={title} onClose={handleClose} />
+        <DialogContent sx={{ overflow: "hidden" }}>
+          <Grid container rowSpacing={2} justifyContent="center">
+            <Grid item xs={12} sx={{ height: 100 }}>
+              <StepperBar
+                alternativeLabel
+                activeStep={step}
+                connector={
+                  <StepConnector sx={{ left: -155, width: 165, border: "1px solid #023E88" }} />
+                }
+              >
+                <Step key="catalog" sx={{ width: 40, height: 40 }}>
+                  <StepItemLabel>{Model} Details</StepItemLabel>
+                </Step>
+                <Step key="org" sx={{ width: 40, height: 40 }}>
+                  <StepItemLabel>Org Details</StepItemLabel>
+                </Step>
+                <Step key="author" sx={{ width: 40, height: 40 }}>
+                  <StepItemLabel>Author Details</StepItemLabel>
+                </Step>
+              </StepperBar>
             </Grid>
-          </DialogContent>
-          <DialogActions>
-            <OSCALSecondaryButton onClick={handleCloseOrgDetails}>Previous</OSCALSecondaryButton>
-            <OSCALPrimaryButton onClick={handleCreateNewCatalogBaseline}>
-              CREATE {Model}
-            </OSCALPrimaryButton>
-          </DialogActions>
-        </Dialog>
-      );
-    else return null;
+            <Grid item xs={12}>
+              <AddInformationLabel>
+                Add information about the organization that owns this {Model.toLowerCase()}:
+              </AddInformationLabel>
+            </Grid>
+            <Grid item xs={12}>
+              <OSCALTextField
+                label={agent + " Name"}
+                required={true}
+                fullWidth
+                id={agent + "Name"}
+                onChange={handleEditOrgNameChange}
+                defaultValue={contactInfo?.name}
+                margin="none"
+              />
+              <OSCALTextField
+                fullWidth
+                label={agent + " Phone"}
+                required={false}
+                id={agent + "Phone"}
+                onChange={handleEditOrgPhoneChange}
+                defaultValue={contactInfo?.phone}
+                margin="none"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <OSCALTextField
+                fullWidth
+                label={agent + " Email"}
+                required={false}
+                id={agent + "Email"}
+                onChange={handleEditOrgEmailChange}
+                defaultValue={contactInfo?.email}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <OSCALFormLabel label={agent + " Address"} required={false} />
+              <SecondLabel>Address Line 1</SecondLabel>
+              <TextField
+                size="small"
+                label=""
+                fullWidth
+                id={"address line 1"}
+                onChange={handleEditAddressLine1Change}
+                defaultValue={contactInfo?.address?.line1}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& > fieldset": {
+                      borderColor: (theme) => theme.palette.secondary.main,
+                    },
+                  },
+                }}
+              ></TextField>
+              <SecondLabel>Address Line 2</SecondLabel>
+              <TextField
+                fullWidth
+                size="small"
+                id={"address line 2"}
+                onChange={handleEditAddressLine2Change}
+                defaultValue={contactInfo?.address?.line2}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& > fieldset": {
+                      borderColor: (theme) => theme.palette.secondary.main,
+                    },
+                  },
+                }}
+              />
+              <SecondLabel>City</SecondLabel>
+              <TextField
+                defaultValue={contactInfo?.address?.city}
+                fullWidth
+                size="small"
+                id={"city"}
+                onChange={handleEditCityChange}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& > fieldset": {
+                      borderColor: (theme) => theme.palette.secondary.main,
+                    },
+                  },
+                }}
+              />
+              <SecondLabel>State</SecondLabel>
+              <Select
+                defaultValue={contactInfo?.address?.state}
+                fullWidth
+                id={"state"}
+                size="small"
+                onChange={handleEditStateChange}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& > fieldset": {
+                      borderColor: (theme) => theme.palette.secondary.main,
+                    },
+                  },
+                }}
+              >
+                <option value={"AL"}>AL</option>
+                <option value={"AR"}>AR</option>
+                <option value={"MD"}>MD</option>
+              </Select>
+              <SecondLabel>ZIP</SecondLabel>
+              <TextField
+                defaultValue={contactInfo?.address?.zip}
+                id={"zip"}
+                size="small"
+                onChange={handleEditZipChange}
+                sx={{
+                  width: 100,
+                  "& .MuiOutlinedInput-root": {
+                    "& > fieldset": {
+                      borderColor: (theme) => theme.palette.secondary.main,
+                    },
+                  },
+                }}
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <OSCALSecondaryButton onClick={handleClose}> {previousStep} </OSCALSecondaryButton>
+          <OSCALPrimaryButton onClick={handleNextStep}> {nextStep} </OSCALPrimaryButton>
+        </DialogActions>
+      </Dialog>
+    );
   };
+
+  function getProjectUUID(path: string): string {
+    if (path.length > 0 && path.includes("/")) {
+      const parts = path.split("/");
+      const term = parts[1];
+      if (term.length > 0 && term.includes("_")) {
+        const subparts = term.split("_");
+        return subparts[1];
+      }
+      return "";
+    }
+    return "";
+  }
 
   const AddCatalogDetailsDialog: React.FC<OSCALModel> = (data) => {
     if (data.model.isCatalog !== undefined) Model = data.model.isCatalog ? "Catalog" : "Baseline";
@@ -1293,29 +1281,30 @@ export default function OSCALCatalogBaseline() {
     }
     if (AddNewCatalogBaseline)
       return (
-        <Dialog
+        <OSCALEditingDialog
           open={data.model.isVisible}
           onClose={handleCloseAddNewCatalogBaseline}
           fullWidth={true}
-          sx={{ top: -30, left: 530, width: 560, height: 950 }}
+          sx={{ top: 80, left: 490, width: 600, position: "absolute" }}
         >
           <OSCALDialogTitle title={title} onClose={handleCloseAddNewCatalogBaseline} />
-          <DialogContent>
-            <Grid container rowSpacing={2} justifyContent="center">
+          <DialogContent sx={{ width: "100%", height: 600, overflow: "hidden" }}>
+            <Grid container rowSpacing={2} justifyContent="center" sx={{ width: "100%" }}>
               <Grid item xs={12} sx={{ height: 100 }}>
                 <StepperBar
                   alternativeLabel
+                  sx={{ width: "100%", border: "1px solid #023E88" }}
                   connector={
-                    <StepConnector sx={{ left: -155, width: 165, border: "1px solid #023E88" }} />
+                    <StepConnector sx={{ left: -165, width: 175, border: "1px solid #023E88" }} />
                   }
                 >
                   <Step key="catalog" sx={{ width: 40, height: 40 }}>
                     <StepItemLabel>{Model} Details</StepItemLabel>
                   </Step>
-                  <Step key="org" sx={{ width: 40, height: 40 }}>
+                  <Step key="org" sx={{ width: 40, height: 40, left: 50 }}>
                     <StepItemLabel>Org Details</StepItemLabel>
                   </Step>
-                  <Step key="author" sx={{ width: 40, height: 40 }}>
+                  <Step key="author" sx={{ width: 40, height: 40, left: 90 }}>
                     <StepItemLabel>Author Details</StepItemLabel>
                   </Step>
                 </StepperBar>
@@ -1350,33 +1339,36 @@ export default function OSCALCatalogBaseline() {
                 </RadioGroup>
               </Grid>
               <Grid item xs={12}>
-                <OSCALFormLabel label={Model + " Title"} required={true} />
                 <OSCALTextField
-                  fullWidth
+                  label={Model + " Title"}
+                  required={true}
                   id={"title"}
                   onChange={handleEditTitleChange}
                   defaultValue={data.model.title}
+                  fullWidth
                 />
-                <ToolBarMenu></ToolBarMenu>
+                <ToolBarMenu hasDropdown={false}></ToolBarMenu>
               </Grid>
               <Grid item xs={12}>
-                <OSCALFormLabel label={"Document Version"} required={true} />
                 <OSCALTextField
-                  fullWidth
+                  label={"Document Version"}
+                  required={true}
                   id={"document-version"}
                   onChange={handleEditDocumentVersionChange}
                   defaultValue={data.model.documentVersion}
+                  fullWidth
                 />
               </Grid>
               <Grid item xs={12} sx={{ height: 90 }}>
-                <OSCALFormLabel label={Model + " Description "} required={false}></OSCALFormLabel>
                 <OSCALTextField
+                  label={Model + " Description "}
+                  required={false}
                   multiline={true}
-                  fullWidth
                   id={"Catalog-new-description"}
                   onChange={handleEditDescriptionChange}
                   defaultValue={data.model.description}
-                  rows={2}
+                  fullWidth
+                  rows={3}
                   SelectProps={{
                     MenuProps: {
                       anchorOrigin: {
@@ -1386,7 +1378,7 @@ export default function OSCALCatalogBaseline() {
                     },
                   }}
                 />
-                <ToolBarMenu></ToolBarMenu>
+                <ToolBarMenu hasDropdown={true}></ToolBarMenu>
               </Grid>
             </Grid>
           </DialogContent>
@@ -1396,7 +1388,7 @@ export default function OSCALCatalogBaseline() {
             </OSCALSecondaryButton>
             <OSCALPrimaryButton onClick={handleAddOrgDetails}>Next</OSCALPrimaryButton>
           </DialogActions>
-        </Dialog>
+        </OSCALEditingDialog>
       );
     else return null;
   };
@@ -1408,17 +1400,35 @@ export default function OSCALCatalogBaseline() {
   function renderAuthorDetailDialog() {
     if (!AddAuthorDetails) return null;
 
-    return <AddAuthorDetailsDialog model={mainData} />;
+    return (
+      <AddOrgAuthorDetailsDialog
+        startCollectingAuthorDetails={true}
+        startCollectingOrgDetails={false}
+        model={mainData}
+      />
+    );
   }
   function renderOrgDetailsDialog() {
     if (!AddOrgDetails) return null;
 
-    return <AddOrgDetailsDialog model={mainData} />;
+    return (
+      <AddOrgAuthorDetailsDialog
+        startCollectingAuthorDetails={false}
+        startCollectingOrgDetails={true}
+        model={mainData}
+      />
+    );
   }
   function renderAddNewCatalogBaselineDialog() {
     if (!AddNewCatalogBaseline) return null;
 
-    return <AddCatalogDetailsDialog model={mainData} />;
+    return (
+      <AddCatalogDetailsDialog
+        startCollectingAuthorDetails={false}
+        startCollectingOrgDetails={false}
+        model={mainData}
+      />
+    );
   }
   function renderFilledItemBox() {
     if (openCatalogBaseline) return null;
@@ -1451,7 +1461,6 @@ export default function OSCALCatalogBaseline() {
       );
 
       fetchRest(operation, request_json, getCatalogMetadataSuccess, getCatalogMetadataFail);
-      //fetchRestGetData(operation, getCatalogMetadataSuccess, getCatalogMetadataFail);
 
       function getCatalogMetadataSuccess(response: any) {
         console.log("In FilledBoxItem: Successfull REST CAll with path", operation);
@@ -1499,10 +1508,7 @@ export default function OSCALCatalogBaseline() {
       <HeaderRow model={createdModel}></HeaderRow>
       <CatalogBreadCrumbsMenu model={createdModel}></CatalogBreadCrumbsMenu>
       <FormHeaderLabel> {LabelText}</FormHeaderLabel>
-      {/* <UploadButton></UploadButton> */}
       {renderHugHug()}
-      {/* <StackFunct Items={data}></StackFunct> */}
-      {/* <RenderCatalogItems CatalogUUIDS={catalogIds} ProfileUUIDS={baselineIds}></RenderCatalogItems> */}
       {renderFilledItemBox()}
       {renderAddNewCatalogBaselineDialog()}
       {renderOrgDetailsDialog()}
