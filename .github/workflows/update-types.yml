@@ -48,7 +48,8 @@ jobs:
         run: |
           wget -q ${{ steps.fetch-data.outputs.url }}
           unzip oscal-${{ steps.fetch-data.outputs.version }}.zip
-          cp oscal-${{ steps.fetch-data.outputs.version }}/json/schema/oscal_complete_schema.json .
+          basedir="$(test -d json && echo "." || echo "oscal-${{ steps.fetch-data.outputs.version }}")"
+          cp "$basedir/json/schema/oscal_complete_schema.json" .
           echo "${{ steps.fetch-data.outputs.version }}" > VERSION.txt
       - name: Upload schema artifact
         uses: actions/upload-artifact@v3
