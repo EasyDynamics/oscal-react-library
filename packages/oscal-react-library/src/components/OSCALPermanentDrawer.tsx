@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import { Divider, Drawer, Grid } from "@mui/material";
+import { Divider, Drawer } from "@mui/material";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Stack from "@mui/material/Stack";
@@ -35,7 +35,7 @@ const StyledDrawer = styled(Drawer)(({ theme }) => ({
   },
 }));
 
-const DrawerHeader = styled("div")(({ theme }) => ({
+const DrawerHeader = styled("div")(() => ({
   color: "white",
   marginTop: "1rem",
   marginBottom: "1rem",
@@ -48,7 +48,7 @@ const DrawerFooter = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
 }));
 
-const StyledTreeView = styled(TreeView)(({ theme }) => ({
+const StyledTreeView = styled(TreeView)(() => ({
   color: "#BCC6D5",
   overflow: "hidden",
   flexGrow: 1,
@@ -100,7 +100,6 @@ function TabTreeItem(props: any) {
   const {
     labelIcon: LabelIcon,
     labelIconExpanded: LabelIconExpanded,
-    labelInfo,
     labelText,
     selectedNode,
     ...other
@@ -141,9 +140,7 @@ function TabTreeItem(props: any) {
   );
 }
 
-export const DocumentTree: React.FC<OSCALPermanentDrawerProps> = ({
-  drawerWidth
-}) => {
+export const DocumentTree: React.FC<OSCALPermanentDrawerProps> = ({ drawerWidth }) => {
   const [selectedNode, setselectedNode] = useState([]);
 
   const handleSelectToggle = (event: any, nodeIds: any) => {
@@ -154,8 +151,8 @@ export const DocumentTree: React.FC<OSCALPermanentDrawerProps> = ({
   return (
     <StyledTreeView
       aria-label="file system navigator"
-      defaultCollapseIcon={<ExpandLessIcon sx={(theme) => ({ color: "#BCC6D5" })} />}
-      defaultExpandIcon={<ExpandMoreIcon sx={(theme) => ({ color: "#BCC6D5" })} />}
+      defaultCollapseIcon={<ExpandLessIcon sx={{ color: "#BCC6D5" }} />}
+      defaultExpandIcon={<ExpandMoreIcon sx={{ color: "#BCC6D5" }} />}
       onNodeSelect={handleSelectToggle}
       sx={{
         width: `${drawerWidth}`,
@@ -164,7 +161,9 @@ export const DocumentTree: React.FC<OSCALPermanentDrawerProps> = ({
     >
       <Divider />
       <Box sx={{ padding: "0.75rem", paddingLeft: "2rem" }}>
-        <Typography variant="body2" sx={(theme) => ({ textTransform: "uppercase" })}>Main Menu</Typography>
+        <Typography variant="body2" sx={{ textTransform: "uppercase" }}>
+          Main Menu
+        </Typography>
       </Box>
       <TabTreeItem
         nodeId={"0"}
@@ -276,11 +275,9 @@ export const DocumentTree: React.FC<OSCALPermanentDrawerProps> = ({
 
 interface OSCALPermanentDrawerProps {
   drawerWidth: number;
-};
+}
 
-export const OSCALPermanentDrawer: React.FC<OSCALPermanentDrawerProps> = ({
-  drawerWidth
-}) => {
+export const OSCALPermanentDrawer: React.FC<OSCALPermanentDrawerProps> = ({ drawerWidth }) => {
   return (
     <StyledDrawer variant="permanent" anchor="left">
       <DrawerHeader

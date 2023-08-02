@@ -2,7 +2,7 @@ import AppBar from "@mui/material/AppBar";
 import Avatar from "@mui/material/Avatar";
 import Badge from "@mui/material/Badge";
 import Button from "@mui/material/Button";
-import { Divider, Typography, styled } from "@mui/material";
+import { Divider, styled } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
@@ -64,7 +64,7 @@ const BrandedTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-const TopAppBar = styled(AppBar)(({ theme }) => ({
+const TopAppBar = styled(AppBar)(() => ({
   backgroundColor: "white",
   color: "#BCC6D5",
 }));
