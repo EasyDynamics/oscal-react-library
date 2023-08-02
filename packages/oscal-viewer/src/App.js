@@ -83,7 +83,7 @@ function App() {
         setIsDrawerOpen(true);
       }
     }
-  }, [isRestMode]);
+  }, [isRestMode, isDrawerOpen]);
 
   const appType = React.useMemo(() => (isRestMode ? "Editor" : "Viewer"), [isRestMode]);
   useEffect(() => {
