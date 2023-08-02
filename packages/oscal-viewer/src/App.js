@@ -34,10 +34,10 @@ const LogoImage = styled("img")`
   margin-right: 1em;
 `;
 
-const isDevMode = false;
+const isDevMode = true;
 
-let drawerWidth = "0rem";
-let appBarHeight = "0rem";
+const drawerWidth = isDevMode ? "20rem" : "0rem";
+const appBarHeight = isDevMode ? "5rem" : "0rem";
 
 function getBackEndUrl(urlString) {
   // If given something falsey, we need to also return something falsey.
@@ -84,16 +84,6 @@ function App() {
       }
     }
   }, [isRestMode]);
-
-  useEffect(() => {
-    if (isDevMode && isRestMode) {
-      drawerWidth = "20rem";
-      appBarHeight = "5rem";
-    } else {
-      drawerWidth = "0rem";
-      appBarHeight = "0rem";
-    }
-  }, [isDevMode, isRestMode]);
 
   const appType = React.useMemo(() => (isRestMode ? "Editor" : "Viewer"), [isRestMode]);
   useEffect(() => {
@@ -318,7 +308,7 @@ function App() {
               </AppBar>
             </>
           )}
-          <Container maxWidth={false} component="main">
+          <Container maxWidth={false} component="main" sx={{ paddingY: "0.5rem" }}>
             <Routes>{navRoutes}</Routes>
           </Container>
         </div>
