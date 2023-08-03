@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { EditableFieldProps } from "./OSCALEditableTextField";
-import { ButtonGroup, Link, NativeSelect, Select, TextField } from "@mui/material";
-import FormLabel from "@mui/material/FormLabel";
+import { Button, ButtonGroup, Link, NativeSelect, Select, TextField, Tooltip } from "@mui/material";
 import BreadCrumbs from "@mui/material/Breadcrumbs";
 import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
-import { Divider } from "@mui/material";
+import { Divider, TooltipProps } from "@mui/material";
 import { Stack, styled } from "@mui/system";
 import { useFetchers } from "./Fetchers";
 import { OSCALDialogTitle, OSCALEditingDialog } from "./styles/OSCALDialog";
@@ -30,7 +29,6 @@ import {
   OSCALPrimaryButton,
   OSCALSecondaryButton,
   OSCALTertiaryButton,
-  OSCALUnsatisfiedButton,
 } from "./styles/OSCALButtons";
 import { OSCALTextField, OSCALRadio, OSCALFormLabel } from "./styles/OSCALInputs";
 
@@ -43,9 +41,15 @@ const Hug = styled(Container)`
   width: 348px;
   height: 36px;
   top: 120px;
-  left: 950px;
+  left: 920px;
 `;
-
+const HugPublish = styled(Container)`
+  position: absolute;
+  width: 448px;
+  height: 36px;
+  top: 120px;
+  left: 810px;
+`;
 const StackBox = styled(Box)`
   position: absolute;
   top: 186px;
@@ -170,9 +174,9 @@ const ItemDivider = styled(Divider)`
   bottom: 74.09%;
   border: 1px solid #d9dfe8;
 `;
-const FormHeaderLabel = styled(FormLabel)`
+const FormHeaderLabel = styled(Typography)`
   position: absolute;
-  width: 350px;
+  width: 700px;
   height: 40px;
   top: 116px;
   left: 100px;
@@ -236,6 +240,10 @@ const CTab = styled(Tab)`
   line-height: 20px;
   letter-spacing: 0em;
   text-align: left;
+  :focus {
+    background: #ffffff;
+    weight: 600;
+  }
 `;
 const OSCALBreadCrumbs = styled(BreadCrumbs)`
   position: absolute;
@@ -245,12 +253,32 @@ const OSCALBreadCrumbs = styled(BreadCrumbs)`
   left: 100px;
   font-family: "Source Sans Pro";
   line-height: 20px;
+  :hover {
+    color: #ff6600;
+  }
 `;
 const OSCALLink = styled(Link)`
   color: "#002867";
   font-weight: 400;
   font-family: "Source Sans Pro";
   line-height: 20px;
+  :hover {
+    color: #ff6600;
+  }
+`;
+const CatalogTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))`
+  font-size: 20;
+  box-shadow: 0px 0px 10px 0px #00000029;
+`;
+const ButtonTypography = styled(Typography)`
+  font-family: Source Sans Pro;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0em;
+  text-align: left;
 `;
 export interface ContactInfo extends EditableFieldProps {
   name?: string;
@@ -305,80 +333,43 @@ export interface ProjectUUIDs {
 }
 
 export const CatalogBreadCrumbsMenu: React.FC<OSCALModel | undefined> = (item) => {
+  const usedTitle = item?.model.title ?? "";
+  const trunckatedTitle = usedTitle.length > 45 ? usedTitle.substring(0, 44) + "..." : usedTitle;
   if (item !== undefined && item.model.title !== undefined && item.model.title.length > 0)
     return (
-      <OSCALBreadCrumbs
-        aria-label="breadcrumb"
-        sx={{
-          ":hover": {
-            color: "#FF6600",
-          },
-        }}
-      >
-        <OSCALLink
-          href="/"
-          sx={{
-            ":hover": {
-              color: "#FF6600",
-            },
-          }}
-        >
-          HOME
-        </OSCALLink>
+      <OSCALBreadCrumbs aria-label="breadcrumb">
+        <OSCALLink href="/">HOME</OSCALLink>
         <OSCALLink
           href="/"
           sx={{
             fontWeight: "700",
-            ":hover": {
-              color: "#FF6600",
-            },
           }}
         >
           CATALOGS & BASELINES
         </OSCALLink>
-        <OSCALLink
-          href="/"
-          sx={{
-            color: "#002867",
-            fontWeight: "700",
-            ":hover": {
-              color: "#FF6600",
-            },
-          }}
-        >
-          {" "}
-          {item.model.title.toUpperCase()}
-        </OSCALLink>
+        <CatalogTooltip title={usedTitle.toUpperCase()}>
+          <OSCALLink
+            href="/"
+            sx={{
+              color: "#002867",
+              fontWeight: "700",
+            }}
+          >
+            {" "}
+            {trunckatedTitle.toUpperCase()}
+          </OSCALLink>
+        </CatalogTooltip>
       </OSCALBreadCrumbs>
     );
   else
     return (
-      <OSCALBreadCrumbs
-        aria-label="breadcrumb"
-        sx={{
-          ":hover": {
-            color: "#FF6600",
-          },
-        }}
-      >
-        <OSCALLink
-          href="/"
-          sx={{
-            ":hover": {
-              color: "#FF6600",
-            },
-          }}
-        >
-          HOME
-        </OSCALLink>
+      <OSCALBreadCrumbs aria-label="breadcrumb">
+        <OSCALLink href="/">HOME</OSCALLink>
         <OSCALLink
           href="/"
           sx={{
             color: "#002867",
             fontWeight: "700",
-            ":hover": {
-              color: "#FF6600",
-            },
           }}
         >
           CATALOGS & BASELINES
@@ -413,46 +404,10 @@ export function CatalogBaselineTabs() {
             aria-label="lab API tabs example"
             sx={{ background: "#F6F6F6" }}
           >
-            <CTab
-              label="Controls"
-              value="1"
-              sx={{
-                ":focus": {
-                  background: "#FFffff",
-                  weight: 600,
-                },
-              }}
-            />
-            <CTab
-              label="Catalog Details"
-              value="2"
-              sx={{
-                ":focus": {
-                  background: "#FFffff",
-                  weight: 600,
-                },
-              }}
-            />
-            <CTab
-              label="Directory"
-              value="3"
-              sx={{
-                ":focus": {
-                  background: "#FFffff",
-                  weight: 600,
-                },
-              }}
-            />
-            <CTab
-              label="Resources"
-              value="4"
-              sx={{
-                ":focus": {
-                  background: "#FFffff",
-                  weight: 600,
-                },
-              }}
-            />
+            <CTab label="Controls" value="1" />
+            <CTab label="Catalog Details" value="2" />
+            <CTab label="Directory" value="3" />
+            <CTab label="Resources" value="4" />
           </TabList>
         </Box>
         <TabPanel value="1">Controls</TabPanel>
@@ -512,6 +467,7 @@ export default function OSCALCatalogBaseline() {
   address = authorAddress;
   const createdModel = newOSCALModel === undefined ? Data : newOSCALModel;
   const LabelText = openCatalogBaseline ? createdModel.title : " Catalogs & Baselines";
+  Model = createdModel.isCatalog ? "Catalog" : "Baseline";
 
   useEffect(() => {
     getCatalogIds();
@@ -564,41 +520,45 @@ export default function OSCALCatalogBaseline() {
       console.log("Operation fail " + e.statusText);
     }
   }
-  class DeleteCatalogBaseline extends React.Component {
-    render() {
-      return (
-        <Hug>
-          <Grid spacing={1}>
-            <OSCALUnsatisfiedButton sx={{ width: 57, height: 20, color: "#FFD9D9" }}>
-              DELETE
-            </OSCALUnsatisfiedButton>
-            <OSCALSecondaryButton
-              sx={{ width: 88, height: 20 }}
-              onClick={handleAddNewCatalogBaseline}
-            >
-              PUBLISH
-            </OSCALSecondaryButton>
-          </Grid>
-        </Hug>
-      );
-    }
+  function DeleteCatalogBaseline() {
+    return (
+      <HugPublish>
+        <Grid spacing={1}>
+          <Button
+            disableElevation
+            variant="text"
+            color="primary"
+            sx={{ width: 170, height: 20, color: "#B31515" }}
+          >
+            <ButtonTypography> DELETE {Model.toUpperCase()}</ButtonTypography>
+          </Button>
+          <OSCALSecondaryButton
+            sx={{ width: 160, height: 20 }}
+            onClick={handleAddNewCatalogBaseline}
+          >
+            <ButtonTypography> PUBLISH {Model.toUpperCase()}</ButtonTypography>
+          </OSCALSecondaryButton>
+        </Grid>
+      </HugPublish>
+    );
   }
-  class HugHug extends React.Component {
-    render() {
-      return (
-        <Hug>
-          <Grid spacing={1}>
-            <OSCALTertiaryButton sx={{ width: 57, height: 20 }}>UPLOAD</OSCALTertiaryButton>
-            <OSCALSecondaryButton
-              sx={{ width: 88, height: 20 }}
-              onClick={handleAddNewCatalogBaseline}
-            >
-              CREATE NEW +
-            </OSCALSecondaryButton>
-          </Grid>
-        </Hug>
-      );
-    }
+  function HugHug() {
+    return (
+      <Hug>
+        <Grid spacing={1}>
+          <OSCALTertiaryButton sx={{ width: 57, height: 20 }}>
+            {" "}
+            <ButtonTypography> UPLOAD </ButtonTypography>{" "}
+          </OSCALTertiaryButton>
+          <OSCALSecondaryButton
+            sx={{ width: 88, height: 20 }}
+            onClick={handleAddNewCatalogBaseline}
+          >
+            <ButtonTypography> CREATE NEW + </ButtonTypography>
+          </OSCALSecondaryButton>
+        </Grid>
+      </Hug>
+    );
   }
 
   const handleAddNewCatalogBaseline = () => {
@@ -712,18 +672,6 @@ export default function OSCALCatalogBaseline() {
   };
 
   const CatalogBaselineItem: React.FC<OSCALModelMetadataInfo> = (item) => {
-    function fontSizeCorrection(title: string): number {
-      if (title.length < 40) return 14;
-      else if (title.length >= 40 && title.length < 60) return 13;
-      else if (title.length >= 60 && title.length < 80) return 12;
-      return 10;
-    }
-    function fontSizeCorrectionTitle(title: string): number {
-      if (title.length < 40) return 20;
-      else if (title.length >= 40 && title.length < 60) return 15;
-      else if (title.length >= 60 && title.length < 100) return 10;
-      return 8;
-    }
     function topAdjusted(title: string): string {
       if (title.length < 25) return " 5.89%";
       else return "3.00%";
@@ -743,21 +691,21 @@ export default function OSCALCatalogBaseline() {
       setOpenCatalogBaseline(true);
     }
     const published = item.publicationDate ?? "Not published";
+    const usedTitle = item.title ?? "";
+    const trunckatedTitle = usedTitle.length > 60 ? usedTitle.substring(0, 59) + "..." : usedTitle;
     return (
       <ItemBox component="span">
-        <ItemTitle
-          sx={{
-            fontSize: fontSizeCorrectionTitle(item.title ?? ""),
-            top: topAdjusted(item.title ?? ""),
-          }}
-        >
-          {item.title}
-        </ItemTitle>
-        <ItemDivider />
+        <CatalogTooltip title={usedTitle}>
+          <ItemTitle sx={{ top: topAdjusted(item.title ?? "") }}>{trunckatedTitle}</ItemTitle>
+        </CatalogTooltip>
+        <ItemDivider sx={{ top: usedTitle.length < 25 ? "25.91%" : "30.91%" }} />
         <Grid container direction="row">
           <Grid>
-            <LastModified> Last Modified: </LastModified>
-            <ItemResult sx={{ fontSize: fontSizeCorrection(item.lastModified ?? "") }}>
+            <LastModified sx={{ top: usedTitle.length < 25 ? "32.69%" : "35.69%" }}>
+              {" "}
+              Last Modified:{" "}
+            </LastModified>
+            <ItemResult sx={{ top: usedTitle.length < 25 ? "32.69%" : "35.69%" }}>
               {" "}
               {OSCALDateTimeConversion(item.lastModified ?? "")}
             </ItemResult>
@@ -765,12 +713,12 @@ export default function OSCALCatalogBaseline() {
         </Grid>
         <Grid container direction="row">
           <Grid>
-            <Version>Document Version:</Version>
+            <Version sx={{ top: usedTitle.length < 25 ? "47.58%" : "49.58%" }}>
+              Document Version:
+            </Version>
           </Grid>
           <Grid>
-            <ItemResult
-              sx={{ left: "35%", top: "47.58%", fontSize: fontSizeCorrection(item.version ?? "") }}
-            >
+            <ItemResult sx={{ left: "35%", top: usedTitle.length < 25 ? "47.58%" : "49.58%" }}>
               {" "}
               {item.version}{" "}
             </ItemResult>
@@ -778,14 +726,16 @@ export default function OSCALCatalogBaseline() {
         </Grid>
         <Grid container direction="row">
           <Grid>
-            <PublicationDate> Publication Date:</PublicationDate>
+            <PublicationDate sx={{ top: usedTitle.length < 25 ? "62.25%" : "64.25%" }}>
+              {" "}
+              Publication Date:
+            </PublicationDate>
           </Grid>
           <Grid>
             <ItemResult
               sx={{
                 left: "32%",
-                top: "62.25%",
-                fontSize: fontSizeCorrection(published),
+                top: usedTitle.length < 25 ? "62.25%" : "64.25%",
               }}
             >
               {OSCALDateTimeConversion(published)}{" "}
@@ -811,7 +761,7 @@ export default function OSCALCatalogBaseline() {
             }}
             onClick={handleOpenCatalogBaseline}
           >
-            OPEN {type}
+            <ButtonTypography sx={{ fontWeight: 700 }}> OPEN {type} </ButtonTypography>
           </OSCALPrimaryButton>
         </Container>
       </ItemBox>
@@ -1293,7 +1243,7 @@ export default function OSCALCatalogBaseline() {
               <Grid item xs={12} sx={{ height: 100 }}>
                 <StepperBar
                   alternativeLabel
-                  sx={{ width: "100%", border: "1px solid #023E88" }}
+                  sx={{ width: "100%" }}
                   connector={
                     <StepConnector sx={{ left: -165, width: 175, border: "1px solid #023E88" }} />
                   }
@@ -1501,13 +1451,16 @@ export default function OSCALCatalogBaseline() {
       </StackBox>
     );
   };
-
+  const usedText = LabelText ?? "";
+  const trunckatedTitle = usedText.length > 45 ? usedText.substring(0, 44) + "..." : usedText;
   return (
     <MainContainer>
       {renderTabs()}
       <HeaderRow model={createdModel}></HeaderRow>
       <CatalogBreadCrumbsMenu model={createdModel}></CatalogBreadCrumbsMenu>
-      <FormHeaderLabel> {LabelText}</FormHeaderLabel>
+      <CatalogTooltip title={LabelText}>
+        <FormHeaderLabel>{trunckatedTitle}</FormHeaderLabel>
+      </CatalogTooltip>
       {renderHugHug()}
       {renderFilledItemBox()}
       {renderAddNewCatalogBaselineDialog()}
