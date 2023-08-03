@@ -18,7 +18,7 @@
     "noEmit": true,
     "jsx": "react"
   },
-  "include": ["src"],
+  "include": ["src", "custom.d.ts", "createPalette.d.ts"],
   "exclude": ["node_modules", "lib"],
   "outDir": "./dist"
 }
