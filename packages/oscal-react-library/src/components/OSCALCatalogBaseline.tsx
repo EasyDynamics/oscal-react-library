@@ -41,26 +41,26 @@ const Hug = styled(Container)`
   width: 348px;
   height: 36px;
   top: 120px;
-  left: 920px;
+  left: 810px;
 `;
 const HugPublish = styled(Container)`
   position: absolute;
   width: 448px;
   height: 36px;
   top: 120px;
-  left: 810px;
+  left: 700px;
 `;
 const StackBox = styled(Box)`
   position: absolute;
   top: 186px;
-  left: 100px;
-  width: 1088px;
+  left: 40px;
+  width: 1188px;
   height: 800px;
 `;
 
 const ItemBox = styled(Box)`
   height: 187.11px;
-  width: 351px;
+  width: 331px;
   border-radius: 0px;
   border: 1px solid #00286726;
   box-shadow: 0px 0px 10px 0px #00000029;
@@ -70,10 +70,10 @@ const ItemBox = styled(Box)`
 
 const MainContainer = styled(Container)`
   position: absolute;
-  width: 1440px;
+  width: 1120px;
   height: 900px;
   top: 0px;
-  left: 150px;
+  left: 320px;
   border: 1px;
   background: #f6f6f6;
 `;
@@ -165,7 +165,7 @@ const PublicationDate = styled(Typography)`
 `;
 const ItemDivider = styled(Divider)`
   height: 0px;
-  width: 351.75px;
+  width: 331px;
   border-radius: 0px;
   position: absolute;
   left: 0%;
@@ -179,7 +179,7 @@ const FormHeaderLabel = styled(Typography)`
   width: 700px;
   height: 40px;
   top: 116px;
-  left: 100px;
+  left: 40px;
   font-family: "Source Sans Pro";
   font-size: 32px;
   font-weight: 700px;
@@ -250,7 +250,7 @@ const OSCALBreadCrumbs = styled(BreadCrumbs)`
   width: 800px;
   height: 100px;
   top: 96px;
-  left: 100px;
+  left: 40px;
   font-family: "Source Sans Pro";
   line-height: 20px;
   :hover {
@@ -388,11 +388,11 @@ export function CatalogBaselineTabs() {
   return (
     <Box
       sx={{
-        width: 1070,
+        width: 1040,
         height: 900,
         typography: "body1",
         top: 200,
-        left: 100,
+        left: 40,
         position: "absolute",
         background: "linear-gradient(0deg, #FFFFFF, #FFFFFF)",
       }}
@@ -573,7 +573,7 @@ export default function OSCALCatalogBaseline() {
           <Grid>
             <Typography
               sx={{
-                left: 100,
+                left: 40,
                 top: 162,
                 fontSize: 14,
                 fontFamily: "Source Sans Pro",
@@ -588,7 +588,7 @@ export default function OSCALCatalogBaseline() {
           <Grid>
             <Typography
               sx={{
-                left: 215,
+                left: 155,
                 top: 160,
                 fontSize: 16,
                 fontFamily: "Source Sans Pro",
@@ -606,7 +606,7 @@ export default function OSCALCatalogBaseline() {
           <Grid>
             <Typography
               sx={{
-                left: 295,
+                left: 235,
                 top: 162,
                 fontSize: 14,
                 fontFamily: "Source Sans Pro",
@@ -621,7 +621,7 @@ export default function OSCALCatalogBaseline() {
           <Grid>
             <Typography
               sx={{
-                left: 385,
+                left: 325,
                 top: 160,
                 fontSize: 16,
                 fontFamily: "Source Sans Pro",
@@ -638,7 +638,7 @@ export default function OSCALCatalogBaseline() {
           <Grid>
             <Typography
               sx={{
-                left: 560,
+                left: 500,
                 top: 162,
                 fontSize: 14,
                 fontFamily: "Source Sans Pro",
@@ -653,7 +653,7 @@ export default function OSCALCatalogBaseline() {
           <Grid>
             <Typography
               sx={{
-                left: 663,
+                left: 603,
                 top: 161,
                 fontSize: 14,
                 fontFamily: "Source Sans Pro",
@@ -751,7 +751,7 @@ export default function OSCALCatalogBaseline() {
           <OSCALPrimaryButton
             sx={{
               height: 39,
-              width: 352,
+              width: 331,
               left: 0,
               borderRadius: 0,
               position: "absolute",
