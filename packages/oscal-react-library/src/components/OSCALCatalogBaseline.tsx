@@ -197,7 +197,6 @@ const StepperBar = styled(Stepper)`
   letter-spacing: 0em;
   text-align: left;
   color: #ffffff;
-  background: #23aa11;
 `;
 const StepItemLabel = styled(StepLabel)`
   width: 35px;
@@ -589,7 +588,7 @@ export default function OSCALCatalogBaseline() {
           <Grid>
             <Typography
               sx={{
-                left: 155,
+                left: 165,
                 top: 160,
                 fontSize: 16,
                 fontFamily: "Source Sans Pro",
@@ -607,7 +606,7 @@ export default function OSCALCatalogBaseline() {
           <Grid>
             <Typography
               sx={{
-                left: 235,
+                left: 225,
                 top: 162,
                 fontSize: 14,
                 fontFamily: "Source Sans Pro",
@@ -639,7 +638,7 @@ export default function OSCALCatalogBaseline() {
           <Grid>
             <Typography
               sx={{
-                left: 500,
+                left: 510,
                 top: 162,
                 fontSize: 14,
                 fontFamily: "Source Sans Pro",
@@ -654,7 +653,7 @@ export default function OSCALCatalogBaseline() {
           <Grid>
             <Typography
               sx={{
-                left: 603,
+                left: 625,
                 top: 161,
                 fontSize: 14,
                 fontFamily: "Source Sans Pro",
@@ -706,7 +705,7 @@ export default function OSCALCatalogBaseline() {
               {" "}
               Last Modified:{" "}
             </LastModified>
-            <ItemResult sx={{ top: usedTitle.length < 25 ? "32.69%" : "35.69%" }}>
+            <ItemResult sx={{ top: usedTitle.length < 25 ? "32.69%" : "35.69%", left: "35%" }}>
               {" "}
               {OSCALDateTimeConversion(item.lastModified ?? "")}
             </ItemResult>
@@ -719,7 +718,7 @@ export default function OSCALCatalogBaseline() {
             </Version>
           </Grid>
           <Grid>
-            <ItemResult sx={{ left: "35%", top: usedTitle.length < 25 ? "47.58%" : "49.58%" }}>
+            <ItemResult sx={{ left: "40%", top: usedTitle.length < 25 ? "47.58%" : "49.58%" }}>
               {" "}
               {item.version}{" "}
             </ItemResult>
@@ -735,7 +734,7 @@ export default function OSCALCatalogBaseline() {
           <Grid>
             <ItemResult
               sx={{
-                left: "32%",
+                left: "38%",
                 top: usedTitle.length < 25 ? "62.25%" : "64.25%",
               }}
             >
@@ -949,7 +948,6 @@ export default function OSCALCatalogBaseline() {
       }
     }
     function createNewProject() {
-      // if (AddAuthorDetails) return;
       if (createdNewCatalogBaseline) return;
       const rootFile = data.model.isCatalog ? "empty-catalog.json" : "empty-profile.json";
       const request_json = {
@@ -979,7 +977,7 @@ export default function OSCALCatalogBaseline() {
       const nowDate = date.toLocaleDateString();
       const nowTime = date.toLocaleTimeString();
       console.log("Start updating the metadata of this project ", newOSCALFilePath);
-      data.model.lastModified = nowDate + ", " + nowTime; // "2023-07-19T13:57:28.91745-04:00"
+      data.model.lastModified = nowDate + ", " + nowTime;
       data.model.projectUUID = getProjectUUID(newOSCALFilePath);
       const inputs = {
         oscal_file: newOSCALFilePath,
@@ -1044,16 +1042,16 @@ export default function OSCALCatalogBaseline() {
                 alternativeLabel
                 activeStep={step}
                 connector={
-                  <StepConnector sx={{ left: -155, width: 165, border: "1px solid #023E88" }} />
+                  <StepConnector sx={{ left: -165, width: 170, border: "1px solid #023E88" }} />
                 }
               >
                 <Step key="catalog" sx={{ width: 40, height: 40 }}>
                   <StepItemLabel>{Model} Details</StepItemLabel>
                 </Step>
-                <Step key="org" sx={{ width: 40, height: 40 }}>
+                <Step key="org" sx={{ width: 40, height: 40, left: 40 }}>
                   <StepItemLabel>Org Details</StepItemLabel>
                 </Step>
-                <Step key="author" sx={{ width: 40, height: 40 }}>
+                <Step key="author" sx={{ width: 40, height: 40, left: 80 }}>
                   <StepItemLabel>Author Details</StepItemLabel>
                 </Step>
               </StepperBar>
@@ -1239,14 +1237,14 @@ export default function OSCALCatalogBaseline() {
           sx={{ top: 80, left: 490, width: 600, position: "absolute" }}
         >
           <OSCALDialogTitle title={title} onClose={handleCloseAddNewCatalogBaseline} />
-          <DialogContent sx={{ width: "100%", height: 600, overflow: "hidden" }}>
+          <DialogContent sx={{ height: 600, overflow: "hidden" }}>
             <Grid container rowSpacing={2} justifyContent="center" sx={{ width: "100%" }}>
               <Grid item xs={12} sx={{ height: 100 }}>
                 <StepperBar
                   alternativeLabel
                   sx={{ width: "100%" }}
                   connector={
-                    <StepConnector sx={{ left: -165, width: 175, border: "1px solid #023E88" }} />
+                    <StepConnector sx={{ left: -165, width: 170, border: "1px solid #023E88" }} />
                   }
                 >
                   <Step key="catalog" sx={{ width: 40, height: 40 }}>
@@ -1255,7 +1253,7 @@ export default function OSCALCatalogBaseline() {
                   <Step key="org" sx={{ width: 40, height: 40, left: 50 }}>
                     <StepItemLabel>Org Details</StepItemLabel>
                   </Step>
-                  <Step key="author" sx={{ width: 40, height: 40, left: 90 }}>
+                  <Step key="author" sx={{ width: 40, height: 40, left: 100 }}>
                     <StepItemLabel>Author Details</StepItemLabel>
                   </Step>
                 </StepperBar>
