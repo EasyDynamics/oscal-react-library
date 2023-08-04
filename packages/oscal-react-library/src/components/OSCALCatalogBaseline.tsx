@@ -187,7 +187,7 @@ const FormHeaderLabel = styled(Typography)`
   color: #2b2b2b;
 `;
 const StepperBar = styled(Stepper)`
-  width: 586px;
+  width: 506px;
   height: 80px;
   border: 1px;
   font-family: "Source Sans Pro";
@@ -197,6 +197,7 @@ const StepperBar = styled(Stepper)`
   letter-spacing: 0em;
   text-align: left;
   color: #ffffff;
+  background: #23aa11;
 `;
 const StepItemLabel = styled(StepLabel)`
   width: 35px;
