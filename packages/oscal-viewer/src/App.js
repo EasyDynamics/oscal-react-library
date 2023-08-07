@@ -34,7 +34,7 @@ const LogoImage = styled("img")`
   margin-right: 1em;
 `;
 
-const isDevMode = true;
+const isDevMode = false;
 
 const drawerWidth = isDevMode ? "20rem" : "0rem";
 const appBarHeight = isDevMode ? "5rem" : "0rem";
