@@ -224,13 +224,7 @@ export interface OSCALParamsProps {
 }
 
 export const OSCALParams: React.FC<OSCALParamsProps> = ({ params }) => {
-  return (
-    <>
-      {params?.map((param) => (
-        <div key={param.id}>{<OSCALParam param={param} />}</div>
-      ))}
-    </>
-  );
+  return <>{params?.map((param) => <div key={param.id}>{<OSCALParam param={param} />}</div>)}</>;
 };
 
 export const OSCALParamsDialog = (props: OSCALParamsProps) => (

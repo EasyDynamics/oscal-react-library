@@ -175,6 +175,17 @@ export interface OSCALCatalogControlListItemProps
 }
 
 /**
+ * Creates a new catalog group using catalog metadata info
+ 
+export const OSCALCreateCatalogGroup: React.FC<OSCALModelMetadataInfo> = (item) => {
+  return (
+    <>
+      <CatalogBreadCrumbsMenu title={item.title}></CatalogBreadCrumbsMenu>
+    </>
+  );
+};
+*/
+/**
  * Creates a catalog list item component containing a catalog group/control.
  *
  * @returns A list item component which contains sub list item(s) and/or collapsible information

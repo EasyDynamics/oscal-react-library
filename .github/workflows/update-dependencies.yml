@@ -24,6 +24,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          ref: main
 
       - name: Setup node
         uses: actions/setup-node@v3
@@ -82,7 +84,7 @@ jobs:
             by running `npm-check-updates` and `npm install`.
           branch: automation/update-npm-dependencies
           delete-branch: true
-          base: develop
+          base: main
           committer: Easy Dynamics Automation <noreply@easydynamics.com>
           author: Easy Dynamics Automation <noreply@easydynamics.com>
           token: "${{ steps.generate-token.outputs.token }}"

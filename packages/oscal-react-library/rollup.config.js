@@ -5,7 +5,8 @@ import babel from "@rollup/plugin-babel";
 import json from "@rollup/plugin-json";
 import typescript from "rollup-plugin-typescript2";
 import postcss from "rollup-plugin-postcss";
-
+import url from '@rollup/plugin-url';
+import svgr from '@svgr/rollup';
 const packageJson = require("./package.json");
 
 const EXTENSIONS = [".js", ".jsx", ".ts", ".tsx"];
@@ -40,5 +41,7 @@ export default {
       extensions: EXTENSIONS,
       exclude: "**/node_modules/**",
     }),
+    url(),
+    svgr({ icon: true }),
   ],
 };

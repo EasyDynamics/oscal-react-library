@@ -47,7 +47,7 @@ interface DocumentTreeProps {
 export type OscalObjectList<T extends keyof Oscal> = Record<T, OscalObjectWrapped<T>[]>;
 export type OscalObjects = OscalObjectList<keyof Oscal>;
 
-const DocumentTree: React.FC<DocumentTreeProps> = (props) => {
+export const DocumentTree: React.FC<DocumentTreeProps> = (props) => {
   const { backendUrl, handleClose } = props;
   const [oscalObjects, setOscalObjects] = useState({} as OscalObjects);
 

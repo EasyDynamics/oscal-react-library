@@ -57,9 +57,7 @@ export const OSCALRevisions: React.FC<OSCALRevisionsProps> = (props) => {
         </TableRow>
       </StyledTableHead>
       <TableBody>
-        {revisions?.map((revision) => (
-          <OSCALRevision revision={revision} key={revision.version} />
-        ))}
+        {revisions?.map((revision) => <OSCALRevision revision={revision} key={revision.version} />)}
       </TableBody>
     </Table>
   );

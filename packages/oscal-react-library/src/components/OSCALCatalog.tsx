@@ -10,6 +10,7 @@ import { EditableFieldProps } from "./OSCALEditableTextField";
 import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
 import OSCALMetadata from "./OSCALMetadata";
 import { OSCALParams } from "./OSCALParam";
+import OSCALCatalogBaseline from "./OSCALCatalogBaseline";
 
 const UNGROUPED_CONTROLS_TITLE = "*Top*";
 
@@ -79,7 +80,7 @@ export const OSCALCatalog: React.FC<OSCALCatalogProps> = ({
     title: UNGROUPED_CONTROLS_TITLE,
     controls: catalog.controls,
   };
-
+  if (isEditable) return <OSCALCatalogBaseline></OSCALCatalogBaseline>;
   return (
     <OSCALDocumentRoot>
       <OSCALMetadata
