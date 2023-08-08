@@ -84,9 +84,7 @@ export const OSCALEditingDialog = (props) => {
       open
       onClose={(event, reason) => {
         if (reason !== "backdropClick") {
-          {
-            props.onClose();
-          }
+          props.onClose();
         }
       }}
     />

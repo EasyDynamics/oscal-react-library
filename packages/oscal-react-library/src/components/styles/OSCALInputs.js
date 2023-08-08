@@ -12,42 +12,35 @@ import {
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
-import { ErrorOutline, TryRounded } from "@mui/icons-material";
+import { ErrorOutline } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import React from "react";
 
 const RequiredAsterick = () => {
-  {
-    return <Typography sx={{ color: (theme) => theme.palette.destructive.main }}>*</Typography>;
-  }
+  return <Typography sx={{ color: (theme) => theme.palette.destructive.main }}>*</Typography>;
 };
 
 const OptionalText = () => {
-  {
-    return (
-      <Typography sx={{ color: (theme) => theme.palette.darkGray.main }}>
-        &nbsp;(optional)
-      </Typography>
-    );
-  }
+  return (
+    <Typography sx={{ color: (theme) => theme.palette.darkGray.main }}>&nbsp;(optional)</Typography>
+  );
 };
 
 const ErrorMessage = (props) => {
-  {
-    return (
-      <Stack
-        direction="row"
-        sx={{
-          fill: (theme) => theme.palette.destructive.main,
-          color: (theme) => theme.palette.destructive.main,
-          alignItems: "center",
-          fontWeight: (theme) => theme.typography.fontWeightBold,
-        }}
-      >
-        <ErrorOutline sx={{ width: "1rem" }} />
-        {props.error != true ? `\u00a0${props.error}` : `\u00a0This field is required`}
-      </Stack>
-    );
-  }
+  return (
+    <Stack
+      direction="row"
+      sx={{
+        fill: (theme) => theme.palette.destructive.main,
+        color: (theme) => theme.palette.destructive.main,
+        alignItems: "center",
+        fontWeight: (theme) => theme.typography.fontWeightBold,
+      }}
+    >
+      <ErrorOutline sx={{ width: "1rem" }} />
+      {props.error !== true ? `\u00a0${props.error}` : `\u00a0This field is required`}
+    </Stack>
+  );
 };
 
 export const OSCALFormLabel = (props) => {
