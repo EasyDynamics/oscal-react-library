@@ -25,7 +25,7 @@ import {
   OSCALAppBar,
 } from "@easydynamics/oscal-react-library";
 import logo from "./images/logo-header.svg";
-import { appTheme } from "./AppTheme";
+import { appTheme } from "./themes/AppTheme";
 import { OSCALGlobalStyles } from "./GlobalStyles";
 
 const OpenNavButton = styled(IconButton)(({ theme }) => `margin-right: ${theme.spacing(2)}`);
