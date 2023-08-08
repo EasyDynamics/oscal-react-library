@@ -12,12 +12,15 @@ export const OSCALSecondaryButton = (props) => {
       variant="outlined"
       color="primary"
       disableElevation
-      sx={{
+      sx={(theme) => ({
+        fill: theme.palette.primary.main,
+        transition: "0.3s",
         ":hover": {
-          backgroundColor: (theme) => theme.palette.secondary.main,
-          color: (theme) => theme.palette.white.main,
+          backgroundColor: theme.palette.secondary.main,
+          color: theme.palette.white.main,
+          fill: theme.palette.white.main,
         },
-      }}
+      })}
     />
   );
 };
@@ -31,9 +34,9 @@ export const OSCALSmallSecondaryButton = (props) => {
       disableElevation
       sx={{
         fontSize: "0.75rem",
-        marginTop: "0.75rem",
-        paddingX: "0.5rem",
-        minWidth: 0,
+        marginTop: "0.5rem",
+        marginBottom: 0,
+        padding: 0,
         ":hover": {
           backgroundColor: (theme) => theme.palette.secondary.main,
           color: (theme) => theme.palette.white.main,
@@ -53,6 +56,24 @@ export const OSCALTertiaryButton = (props) => {
       sx={{
         ":hover": {
           backgroundColor: (theme) => theme.palette.lightBlue.main,
+        },
+      }}
+    />
+  );
+};
+
+export const OSCALTertiaryGrayscaleButton = (props) => {
+  return (
+    <Button
+      {...props}
+      variant="text"
+      disableElevation
+      sx={{
+        paddingX: "0.25rem",
+        marginX: 0,
+        color: (theme) => theme.palette.black.main,
+        ":hover": {
+          backgroundColor: (theme) => theme.palette.gray.main,
         },
       }}
     />

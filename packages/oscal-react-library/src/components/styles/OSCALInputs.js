@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
-import { ErrorOutline } from "@mui/icons-material";
+import { ErrorOutline, TryRounded } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const RequiredAsterick = () => {
@@ -75,7 +75,6 @@ export const OSCALFormLabel = (props) => {
   );
 };
 
-// TODO: Add styling to GlobalStyles
 export const OSCALTextField = (props) => {
   return (
     <OSCALFormLabel {...props}>
@@ -101,6 +100,10 @@ export const OSCALTextField = (props) => {
       />
     </OSCALFormLabel>
   );
+};
+
+export const OSCALFormatField = (props) => {
+  return <OSCALTextField {...props} multiline rows={5} />;
 };
 
 // TODO: Add in SearchField
