@@ -1,7 +1,10 @@
+import { useContext } from "react";
+
 import { OscalContext } from "./OscalContext";
 import { useFetchers } from "./Fetchers";
 
 export function useHandlers() {
+  let context = useContext(OscalContext);
   const currentFile = context["currentFile"]["get"];
   const setCurrentFile = context["currentFile"]["set"];
   const currentPath = context["currentPath"]["get"];
