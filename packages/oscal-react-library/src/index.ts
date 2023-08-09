@@ -7,6 +7,7 @@ import {
 import { OSCALDrawerSelector } from "./components/OSCALDrawerSelector";
 import { OSCALPermanentDrawer } from "./components/OSCALPermanentDrawer";
 import { OSCALAppBar } from "./components/OSCALAppBar";
+import OSCALStyle from "./components/styles/OSCALStyle"
 
 /**
  * Bundels loaders and referenced components into "dist/" when rollup is run.
@@ -20,4 +21,5 @@ export {
   OSCALDrawerSelector,
   OSCALPermanentDrawer,
   OSCALAppBar,
+  OSCALStyle,
 };
