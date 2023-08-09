@@ -198,11 +198,7 @@ export const DocumentTree: React.FC<OSCALPermanentDrawerProps> = ({ drawerWidth 
         labelIcon={ProjectsIcon}
         labelIconExpanded={ProjectsHovIcon}
       >
-        <TabTreeItem
-          nodeId={"2.0"}
-          selectedNode={selectedNode}
-          labelText={"* Systems Example *"}
-        />
+        <TabTreeItem nodeId={"2.0"} selectedNode={selectedNode} labelText={"* Systems Example *"} />
       </TabTreeItem>
       <TabTreeItem
         nodeId={"3"}

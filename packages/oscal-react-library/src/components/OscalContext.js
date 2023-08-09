@@ -83,7 +83,6 @@ export const OscalContextProvider = ({ children }) => {
         eiControlIds: { get: eiControlIds, set: setEiControlIds },
         eiAssessPage: { get: eiAssessPage, set: setEiAssessPage },
 
-        eiMode,
         overlays,
       }}
     >
