@@ -284,7 +284,9 @@ export default function OSCALStyle() {
                 <OSCALTertiaryButton>Tertiary Button</OSCALTertiaryButton>
               </Grid>
               <Grid item md={3}>
-                <OSCALPrimaryDestructiveButton>Primary Destructive Button</OSCALPrimaryDestructiveButton>
+                <OSCALPrimaryDestructiveButton>
+                  Primary Destructive Button
+                </OSCALPrimaryDestructiveButton>
               </Grid>
             </Grid>
 

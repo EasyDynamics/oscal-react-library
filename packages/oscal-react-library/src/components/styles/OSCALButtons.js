@@ -1,4 +1,5 @@
 import Button from "@mui/material/Button";
+import React from "react";
 
 // TODO: Add class name
 export const OSCALPrimaryButton = (props) => {
