@@ -1,7 +1,7 @@
 import { Box, Card, FormControlLabel, Grid, RadioGroup, Typography } from "@mui/material";
 import React from "react";
 import {
-  OSCALDestructiveButton,
+  OSCALPrimaryDestructiveButton,
   OSCALPrimaryButton,
   OSCALSecondaryButton,
   OSCALTertiaryButton,
@@ -284,7 +284,7 @@ export default function OSCALStyle() {
                 <OSCALTertiaryButton>Tertiary Button</OSCALTertiaryButton>
               </Grid>
               <Grid item md={3}>
-                <OSCALDestructiveButton>Destructive Button</OSCALDestructiveButton>
+                <OSCALPrimaryDestructiveButton>Primary Destructive Button</OSCALPrimaryDestructiveButton>
               </Grid>
             </Grid>
 
