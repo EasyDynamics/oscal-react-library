@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { EditableFieldProps } from "./OSCALEditableTextField";
-import { Button, ButtonGroup, Link, NativeSelect, Select, TextField, Tooltip } from "@mui/material";
+import { Button, ButtonGroup, Link, NativeSelect, TextField, Tooltip } from "@mui/material";
 import BreadCrumbs from "@mui/material/Breadcrumbs";
 import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
@@ -35,6 +35,8 @@ import { OSCALTextField, OSCALRadio, OSCALFormLabel } from "./styles/OSCALInputs
 import { FormatBold, FormatItalic, FormatQuote, Subscript, Superscript } from "@mui/icons-material";
 
 import { CodeOffSharp } from "@mui/icons-material";
+
+import { GroupDrawer, MyDrawer } from "./OSCALCatalogManageGroup";
 
 const Hug = styled(Container)`
   position: absolute;
@@ -251,7 +253,7 @@ const OSCALBreadCrumbs = styled(BreadCrumbs)`
   height: 100px;
   top: 96px;
   left: 40px;
-  font-family: "Source Sans Pro";
+  font: "Source Sans Pro";
   line-height: 20px;
   :hover {
     color: #ff6600;
@@ -342,7 +344,8 @@ export const CatalogBreadCrumbsMenu: React.FC<OSCALModel | undefined> = (item) =
         <OSCALLink
           href="/"
           sx={{
-            fontWeight: "700",
+            fontWeight: "400",
+            color: "#1D1D1D",
           }}
         >
           CATALOGS & BASELINES
@@ -378,13 +381,12 @@ export const CatalogBreadCrumbsMenu: React.FC<OSCALModel | undefined> = (item) =
     );
 };
 
-export function CatalogBaselineTabs() {
+export function CatalogBaselineTabs(data: OSCALModel) {
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
-
   return (
     <Box
       sx={{
@@ -410,7 +412,10 @@ export function CatalogBaselineTabs() {
             <CTab label="Resources" value="4" />
           </TabList>
         </Box>
-        <TabPanel value="1">Controls</TabPanel>
+        <TabPanel value="1">
+          {/* <GroupDrawer projectUUID={data.model.projectUUID ?? ""}></GroupDrawer> */}
+          <MyDrawer projectUUID={data.model.projectUUID ?? ""}></MyDrawer>
+        </TabPanel>
         <TabPanel value="2">Catalog Details</TabPanel>
         <TabPanel value="3">Directory</TabPanel>
         <TabPanel value="4">Back Matter</TabPanel>
@@ -495,8 +500,8 @@ export default function OSCALCatalogBaseline() {
     }
   }
 
-  function renderTabs() {
-    if (openCatalogBaseline) return <CatalogBaselineTabs></CatalogBaselineTabs>;
+  function renderTabs(data: OSCALModel) {
+    if (openCatalogBaseline) return <CatalogBaselineTabs model={data.model}></CatalogBaselineTabs>;
     else return null;
   }
 
@@ -819,16 +824,20 @@ export default function OSCALCatalogBaseline() {
             <Grid xs={3}>
               <Container>
                 <NativeSelect
-                  defaultValue={30}
+                  defaultValue={1}
                   inputProps={{
                     name: "font",
                     id: "uncontrolled-native",
                   }}
                   sx={{ width: 100, border: "1px" }}
                 >
-                  <option value={10}>Times New Roman</option>
-                  <option value={20}>Sans Pro</option>
-                  <option value={30}>Normal</option>
+                  <option value={1}>Normal</option>
+                  <option value={2}>Heading 1</option>
+                  <option value={3}>Heading 2</option>
+                  <option value={4}>Heading 3</option>
+                  <option value={5}>Heading 4</option>
+                  <option value={6}>Heading 5</option>
+                  <option value={7}>Heading 6</option>
                 </NativeSelect>
               </Container>
             </Grid>
@@ -1140,7 +1149,7 @@ export default function OSCALCatalogBaseline() {
                 }}
               />
               <SecondLabel>State</SecondLabel>
-              <Select
+              <NativeSelect
                 defaultValue={contactInfo?.address?.state}
                 fullWidth
                 id={"state"}
@@ -1154,10 +1163,58 @@ export default function OSCALCatalogBaseline() {
                   },
                 }}
               >
-                <option value={"AL"}>AL</option>
-                <option value={"AR"}>AR</option>
-                <option value={"MD"}>MD</option>
-              </Select>
+                <option value="AL">Alabama</option>
+                <option value="AK">Alaska</option>
+                <option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option>
+                <option value="CA">California</option>
+                <option value="CO">Colorado</option>
+                <option value="CT">Connecticut</option>
+                <option value="DE">Delaware</option>
+                <option value="DC">District of Columbia</option>
+                <option value="FL">Florida</option>
+                <option value="GA">Georgia</option>
+                <option value="HI">Hawaii</option>
+                <option value="ID">Idaho</option>
+                <option value="IL">Illinois</option>
+                <option value="IN">Indiana</option>
+                <option value="IA">Iowa</option>
+                <option value="KS">Kansas</option>
+                <option value="KY">Kentucky</option>
+                <option value="LA">Louisiana</option>
+                <option value="ME">Maine</option>
+                <option value="MD">Maryland</option>
+                <option value="MA">Massachusetts</option>
+                <option value="MI">Michigan</option>
+                <option value="MN">Minnesota</option>
+                <option value="MS">Mississippi</option>
+                <option value="MO">Missouri</option>
+                <option value="MT">Montana</option>
+                <option value="NE">Nebraska</option>
+                <option value="NV">Nevada</option>
+                <option value="NH">New Hampshire</option>
+                <option value="NJ">New Jersey</option>
+                <option value="NM">New Mexico</option>
+                <option value="NY">New York</option>
+                <option value="NC">North Carolina</option>
+                <option value="ND">North Dakota</option>
+                <option value="OH">Ohio</option>
+                <option value="OK">Oklahoma</option>
+                <option value="OR">Oregon</option>
+                <option value="PA">Pennsylvania</option>
+                <option value="RI">Rhode Island</option>
+                <option value="SC">South Carolina</option>
+                <option value="SD">South Dakota</option>
+                <option value="TN">Tennessee</option>
+                <option value="TX">Texas</option>
+                <option value="UT">Utah</option>
+                <option value="VT">Vermont</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="WV">West Virginia</option>
+                <option value="WI">Wisconsin</option>
+                <option value="WY">Wyoming</option>
+              </NativeSelect>
               <SecondLabel>ZIP</SecondLabel>
               <TextField
                 defaultValue={contactInfo?.address?.zip}
@@ -1454,7 +1511,7 @@ export default function OSCALCatalogBaseline() {
   const trunckatedTitle = usedText.length > 45 ? usedText.substring(0, 44) + "..." : usedText;
   return (
     <MainContainer>
-      {renderTabs()}
+      {renderTabs({ model: createdModel })}
       <HeaderRow model={createdModel}></HeaderRow>
       <CatalogBreadCrumbsMenu model={createdModel}></CatalogBreadCrumbsMenu>
       <CatalogTooltip title={LabelText}>

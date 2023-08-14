@@ -25,6 +25,26 @@ export const OSCALSecondaryButton = (props) => {
   );
 };
 
+export const OSCALSecondaryButtonSmall = (props) => {
+  return (
+    <Button
+      {...props}
+      variant="outlined"
+      color="primary"
+      disableElevation
+      sx={{
+        height: 20,
+        ":hover": {
+          backgroundColor: "#023E88",
+          color: "#FFFFFF",
+        },
+      }}
+    />
+    //backgroundColor: (theme) => theme.palette.secondary.main,
+    //color: (theme) => theme.palette.white.main,
+  );
+};
+
 export const OSCALTertiaryButton = (props) => {
   return (
     <Button
