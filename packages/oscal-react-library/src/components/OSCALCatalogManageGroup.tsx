@@ -801,7 +801,6 @@ export function GroupDrawer(data: OSCALProject) {
       getSubGroups(data.group.groupLabel, data.group.projectUUID);
     }, [data.group.groupLabel, data.group.projectUUID]);
 
-
     const unitHeight = 48;
 
     const itemHeight = unitHeight;
@@ -810,7 +809,6 @@ export function GroupDrawer(data: OSCALProject) {
       event.stopPropagation();
       event.target.style.border = "1px solid #D2D2D2";
     };
-
 
     const startDrag = (event: any) => {
       event.preventDefault();
