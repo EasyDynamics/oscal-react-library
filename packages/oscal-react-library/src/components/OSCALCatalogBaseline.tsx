@@ -36,7 +36,7 @@ import { FormatBold, FormatItalic, FormatQuote, Subscript, Superscript } from "@
 
 import { CodeOffSharp } from "@mui/icons-material";
 
-import { GroupDrawer, MyDrawer } from "./OSCALCatalogManageGroup";
+import GroupDrawer from "./OSCALCatalogManageGroup";
 
 const Hug = styled(Container)`
   position: absolute;
@@ -72,8 +72,8 @@ const ItemBox = styled(Box)`
 
 const MainContainer = styled(Container)`
   position: absolute;
-  width: 1120px;
-  height: 900px;
+  min-width: 1120px;
+  min-height: 990px;
   top: 0px;
   left: 320px;
   border: 1px;
@@ -390,8 +390,8 @@ export function CatalogBaselineTabs(data: OSCALModel) {
   return (
     <Box
       sx={{
-        width: 1040,
-        height: 900,
+        minWidth: 1040,
+        minHeight: 900,
         typography: "body1",
         top: 200,
         left: 40,
@@ -413,8 +413,7 @@ export function CatalogBaselineTabs(data: OSCALModel) {
           </TabList>
         </Box>
         <TabPanel value="1">
-          {/* <GroupDrawer projectUUID={data.model.projectUUID ?? ""}></GroupDrawer> */}
-          <MyDrawer projectUUID={data.model.projectUUID ?? ""}></MyDrawer>
+          <GroupDrawer projectUUID={data.model.projectUUID ?? ""}></GroupDrawer>
         </TabPanel>
         <TabPanel value="2">Catalog Details</TabPanel>
         <TabPanel value="3">Directory</TabPanel>
