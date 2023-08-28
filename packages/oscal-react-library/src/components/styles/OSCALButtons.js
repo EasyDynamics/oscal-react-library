@@ -76,14 +76,8 @@ export const OSCALPrimaryButton = (props) => {
 };
 
 export const OSCALPrimaryDestructiveButton = (props) => {
-  return (
-      <OSCALHelperPrimaryDestructiveButton
-          {...props}
-          variant="contained"
-          disableElevation
-      />
-  )
-}
+  return <OSCALHelperPrimaryDestructiveButton {...props} variant="contained" disableElevation />;
+};
 
 export const OSCALSecondaryButton = (props) => {
   return <OSCALHelperSecondaryButton {...props} variant="outlined" disableElevation />;
