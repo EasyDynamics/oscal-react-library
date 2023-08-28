@@ -38,6 +38,13 @@ const OSCALHelperTertiaryButton = styled(Button)(({ theme }) => ({
   },
 }));
 
+const OSCALHelperTertiaryDestructiveButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.destructive.main,
+  ":hover": {
+    backgroundColor: theme.palette.lightPink.main,
+  },
+}));
+
 const OSCALHelperTertiaryGrayscaleButton = styled(Button)(({ theme }) => ({
   paddingX: "0.25rem",
   marginX: 0,
@@ -68,6 +75,18 @@ export const OSCALPrimaryButton = (props) => {
   return <Button {...props} variant="contained" color="primary" disableElevation />;
 };
 
+export const OSCALPrimaryDestructiveButton = (props) => {
+  return (
+      <OSCALHelperPrimaryDestructiveButton
+          {...props}
+          variant="contained"
+          disableElevation
+      />
+  )
+}
+
+export const OSCALSecondaryButton = (props) => {
+  return <OSCALHelperSecondaryButton {...props} variant="outlined" disableElevation />;
 };
 
 export const OSCALSmallSecondaryButton = (props) => {
