@@ -42,7 +42,11 @@ export default function OSCALStyle() {
           paddingTop="2.5rem"
         />
         <Typography variant="h3">OSCAL Style Guide</Typography>
-        <OSCALDialogTitle subtitle="This displays the implementation of the style guide." />
+        <OSCALDialogTitle
+          subtitle="This page displays the implementation of the style guide and
+          other styling aspects of the tool. This page can be used to test various styling features
+          in one place."
+        />
         <Grid
           container
           spacing={2}

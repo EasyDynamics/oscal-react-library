@@ -1,7 +1,7 @@
 import React from "react";
 import { GlobalStyles } from "@mui/material";
 
-const globalStyles = (theme) => ({
+const globalStyles = (theme, drawerWidth, appBarHeight) => ({
   // Common HTML
   body: {
     margin: 0,
@@ -20,7 +20,9 @@ const globalStyles = (theme) => ({
 
   // App
   ".App": {
-    textAlign: "center",
+    textAlign: "left",
+    marginLeft: drawerWidth,
+    marginTop: appBarHeight,
   },
   ".App-logo": {
     height: "40vmin",
@@ -178,6 +180,6 @@ const globalStyles = (theme) => ({
   },
 });
 
-export const OSCALGlobalStyles = ({ theme }) => {
-  return <GlobalStyles styles={globalStyles(theme)} />;
+export const OSCALGlobalStyles = ({ theme, drawerWidth, appBarHeight }) => {
+  return <GlobalStyles styles={globalStyles(theme, drawerWidth, appBarHeight)} />;
 };

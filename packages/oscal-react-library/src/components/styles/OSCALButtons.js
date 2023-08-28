@@ -1,135 +1,97 @@
+import styled from "@emotion/styled";
 import Button from "@mui/material/Button";
 import React from "react";
 
-// TODO: Add class name
+// Helper styling constants
+const OSCALHelperPrimaryDestructiveButton = styled(Button)(({ theme }) => ({
+  backgroundColor: theme.palette.destructive.main,
+  ":hover": {
+    backgroundColor: theme.palette.destructive.dark,
+  },
+}));
+
+const OSCALHelperSecondaryButton = styled(Button)(({ theme }) => ({
+  fill: theme.palette.primary.main,
+  transition: "0.3s",
+  ":hover": {
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.white.main,
+    fill: theme.palette.white.main,
+  },
+}));
+
+const OSCALHelperSmallSecondaryButton = styled(Button)(({ theme }) => ({
+  fontSize: "0.75rem",
+  marginTop: "0.5rem",
+  paddingX: "0.25rem",
+  marginBottom: 0,
+  paddingY: 0,
+  ":hover": {
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.white.main,
+  },
+}));
+
+const OSCALHelperTertiaryButton = styled(Button)(({ theme }) => ({
+  ":hover": {
+    backgroundColor: theme.palette.lightBlue.main,
+  },
+}));
+
+const OSCALHelperTertiaryGrayscaleButton = styled(Button)(({ theme }) => ({
+  paddingX: "0.25rem",
+  marginX: 0,
+  color: theme.palette.black.main,
+  ":hover": {
+    backgroundColor: theme.palette.gray.main,
+  },
+}));
+
+const OSCALHelperUnsatisfiedButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.black.main,
+  backgroundColor: theme.palette.lightPink.main,
+  ":hover": {
+    backgroundColor: theme.palette.lightPink.dark,
+  },
+}));
+
+const OSCALHelperSatisfiedButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.black.main,
+  backgroundColor: theme.palette.lightGreen.main,
+  ":hover": {
+    backgroundColor: theme.palette.lightGreen.dark,
+  },
+}));
+
+// Button components
 export const OSCALPrimaryButton = (props) => {
   return <Button {...props} variant="contained" color="primary" disableElevation />;
 };
 
-export const OSCALSecondaryButton = (props) => {
-  return (
-    <Button
-      {...props}
-      variant="outlined"
-      color="primary"
-      disableElevation
-      sx={(theme) => ({
-        fill: theme.palette.primary.main,
-        transition: "0.3s",
-        ":hover": {
-          backgroundColor: theme.palette.secondary.main,
-          color: theme.palette.white.main,
-          fill: theme.palette.white.main,
-        },
-      })}
-    />
-  );
-};
-
-export const OSCALPrimaryDestructiveButton = (props) => {
-  return (
-    <Button
-      {...props}
-      variant="contained"
-      disableElevation
-      sx={{
-        backgroundColor: (theme) => theme.palette.destructive.main,
-        ":hover": {
-          backgroundColor: (theme) => theme.palette.destructive.dark,
-        },
-      }}
-    />
-  );
 };
 
 export const OSCALSmallSecondaryButton = (props) => {
-  return (
-    <Button
-      {...props}
-      variant="outlined"
-      color="primary"
-      disableElevation
-      sx={{
-        fontSize: "0.75rem",
-        marginTop: "0.5rem",
-        marginBottom: 0,
-        paddingY: 0,
-        paddingX: "0.25rem",
-        ":hover": {
-          backgroundColor: (theme) => theme.palette.secondary.main,
-          color: (theme) => theme.palette.white.main,
-        },
-      }}
-    />
-  );
+  return <OSCALHelperSmallSecondaryButton {...props} variant="outlined" disableElevation />;
 };
 
 export const OSCALTertiaryButton = (props) => {
-  return (
-    <Button
-      {...props}
-      variant="text"
-      color="primary"
-      disableElevation
-      sx={{
-        ":hover": {
-          backgroundColor: (theme) => theme.palette.lightBlue.main,
-        },
-      }}
-    />
-  );
+  return <OSCALHelperTertiaryButton {...props} variant="text" color="primary" disableElevation />;
+};
+
+export const OSCALTertiaryDestructiveButton = (props) => {
+  return <OSCALHelperTertiaryDestructiveButton {...props} variant="text" disableElevation />;
 };
 
 export const OSCALTertiaryGrayscaleButton = (props) => {
-  return (
-    <Button
-      {...props}
-      variant="text"
-      disableElevation
-      sx={{
-        paddingX: "0.25rem",
-        marginX: 0,
-        color: (theme) => theme.palette.black.main,
-        ":hover": {
-          backgroundColor: (theme) => theme.palette.gray.main,
-        },
-      }}
-    />
-  );
+  return <OSCALHelperTertiaryGrayscaleButton {...props} variant="text" disableElevation />;
 };
 
 export const OSCALUnsatisfiedButton = (props) => {
-  return (
-    <Button
-      {...props}
-      variant="contained"
-      disableElevation
-      sx={{
-        color: (theme) => theme.palette.black.main,
-        backgroundColor: (theme) => theme.palette.lightPink.main,
-        ":hover": {
-          backgroundColor: (theme) => theme.palette.lightPink.dark,
-        },
-      }}
-    />
-  );
+  return <OSCALHelperUnsatisfiedButton {...props} variant="contained" disableElevation />;
 };
 
 export const OSCALSatisfiedButton = (props) => {
-  return (
-    <Button
-      {...props}
-      variant="contained"
-      disableElevation
-      sx={{
-        color: (theme) => theme.palette.black.main,
-        backgroundColor: (theme) => theme.palette.lightGreen.main,
-        ":hover": {
-          backgroundColor: (theme) => theme.palette.lightGreen.dark,
-        },
-      }}
-    />
-  );
+  return <OSCALHelperSatisfiedButton {...props} variant="contained" disableElevation />;
 };
 
 export const OSCALImportButton = (props) => {

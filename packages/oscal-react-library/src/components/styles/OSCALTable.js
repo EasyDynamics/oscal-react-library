@@ -2,10 +2,16 @@ import React from "react";
 import { TableCell, TableContainer } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableRow from "@mui/material/TableRow";
+import styled from "@emotion/styled";
 
 // Primary Table - seperation between rows, no border, primary color header
+const OSCALHelperPrimaryTable = styled(Table)(() => ({
+  borderSpacing: "0 0.5rem",
+  borderCollapse: "separate",
+}));
+
 export const OSCALPrimaryTable = (props) => {
-  return <Table {...props} sx={{ borderSpacing: "0 0.5rem", borderCollapse: "separate" }} />;
+  return <OSCALHelperPrimaryTable {...props} />;
 };
 
 export const OSCALPrimaryTableRow = (props) => {
@@ -13,16 +19,13 @@ export const OSCALPrimaryTableRow = (props) => {
 };
 
 // Secondary Table (commonly used in modals) - black outline, alternating row color
+const OSCALHelperSecondaryTable = styled(Table)(() => ({
+  borderCollapse: "separate",
+  maxHeight: "18.6rem",
+}));
+
 export const OSCALSecondaryTable = (props) => {
-  return (
-    <Table
-      {...props}
-      sx={{
-        borderCollapse: "separate",
-        maxHeight: "18.6rem",
-      }}
-    />
-  );
+  return <OSCALHelperSecondaryTable {...props} />;
 };
 
 export const OSCALSecondaryTableContainer = (props) => {
@@ -46,28 +49,21 @@ export const OSCALTertiaryTable = (props) => {
   return <Table {...props} className="TertiaryTable" />;
 };
 
+const OSCALHelperTertiaryTableOuterContainer = styled(TableContainer)(({ theme }) => ({
+  border: `1px solid ${theme.palette.lightGrayBlue.main}`,
+}));
+
 export const OSCALTertiaryTableOuterContainer = (props) => {
-  return (
-    <TableContainer
-      {...props}
-      sx={{
-        border: (theme) => `1px solid ${theme.palette.lightGrayBlue.main}`,
-      }}
-    />
-  );
+  return <OSCALHelperTertiaryTableOuterContainer {...props} />;
 };
 
+const OSCALHelperTertiaryTableContainer = styled(TableContainer)(() => ({
+  maxHeight: "50vh",
+  overflow: "auto",
+}));
+
 export const OSCALTertiaryTableContainer = (props) => {
-  return (
-    <TableContainer
-      {...props}
-      sx={{
-        maxHeight: "50vh",
-        overflow: "auto",
-      }}
-      className="RightScrollbar"
-    />
-  );
+  return <OSCALHelperTertiaryTableContainer {...props} className="RightScrollbar" />;
 };
 
 export const OSCALTertiaryTableSubHeaderRow = (props) => {

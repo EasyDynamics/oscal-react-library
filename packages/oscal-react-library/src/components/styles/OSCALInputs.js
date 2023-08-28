@@ -140,36 +140,32 @@ export const OSCALRadio = styled(Radio)(({ theme }) => ({
   },
 }));
 
+const OSCALHelperCancelButton = styled(IconButton)(({ theme }) => ({
+  color: theme.palette.secondary.main,
+  border: `0.1rem solid ${theme.palette.secondary.main}`,
+}));
+
 export const OSCALCancelButton = (props) => {
   return (
-    <IconButton
-      {...props}
-      size="small"
-      sx={{
-        color: (theme) => theme.palette.secondary.main,
-        border: (theme) => `0.1rem solid ${theme.palette.secondary.main}`,
-      }}
-    >
+    <OSCALHelperCancelButton {...props} size="small">
       <ClearIcon fontSize="small" />
-    </IconButton>
+    </OSCALHelperCancelButton>
   );
 };
 
+const OSCALHelperConfirmButton = styled(IconButton)(({ theme }) => ({
+  color: theme.palette.white.main,
+  backgroundColor: theme.palette.primaryAccent.main,
+  border: `0.1rem solid ${theme.palette.primaryAccent.main}`,
+  "&:hover": {
+    backgroundColor: theme.palette.primaryAccent.main,
+  },
+}));
+
 export const OSCALConfirmButton = (props) => {
   return (
-    <IconButton
-      {...props}
-      size="small"
-      sx={{
-        color: (theme) => theme.palette.white.main,
-        backgroundColor: (theme) => theme.palette.primaryAccent.main,
-        border: (theme) => `0.1rem solid ${theme.palette.primaryAccent.main}`,
-        "&:hover": {
-          backgroundColor: (theme) => theme.palette.primaryAccent.main,
-        },
-      }}
-    >
+    <OSCALHelperConfirmButton {...props} size="small">
       <DoneIcon fontSize="small" />
-    </IconButton>
+    </OSCALHelperConfirmButton>
   );
 };

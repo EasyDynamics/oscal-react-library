@@ -101,12 +101,6 @@ export const appTheme = createTheme({
           borderRadius: "3px",
           lineHeight: "20px",
         },
-        contained: {
-          backgroundColor: secondaryBlue,
-          "&:hover": {
-            backgroundColor: primaryBlue,
-          },
-        },
       },
     },
   },
