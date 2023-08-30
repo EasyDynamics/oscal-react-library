@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
 import OSCALControlImplementationImplReq from "./OSCALControlImplementationImplReq";
 import OSCALControlImplementationAdd from "./OSCALControlImplementationAdd";
-import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
+import { OSCALSection, OSCALSectionHeader } from "./styles/CommonPageStyles";
 import OSCALControlParamLegend from "./OSCALControlParamLegend";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 
