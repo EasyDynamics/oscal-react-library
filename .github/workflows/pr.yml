@@ -41,7 +41,7 @@ jobs:
           # Lint YAML files
           yamllint --format github --config-file .yaml-lint.yml .
   build_and_test:
-    name: Build and test (on NodeJS 18)
+    name: Build and test (on NodeJS 16)
     runs-on: ubuntu-latest
     defaults:
       run:
