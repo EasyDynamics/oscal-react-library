@@ -956,7 +956,7 @@ export default function OSCALCatalogBaseline() {
       }
     }
     function createNewProject() {
-      if (createdNewCatalogBaseline) return;
+      if (createdNewCatalogBaseline || data.model.title === undefined) return;
       const rootFile = data.model.isCatalog ? "empty-catalog.json" : "empty-profile.json";
       const request_json = {
         file: rootFile,

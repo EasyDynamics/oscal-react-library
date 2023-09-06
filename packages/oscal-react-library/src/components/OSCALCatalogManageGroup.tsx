@@ -27,8 +27,8 @@ import {
 
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
-import { OSCALSecondaryButtonSmall } from "./styles/OSCALButtons";
 import { EditableFieldProps } from "./OSCALEditableTextField";
+import { OSCALSecondaryButton } from "./styles/OSCALButtons";
 
 const GroupTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
@@ -51,12 +51,12 @@ export interface OSCALProject {
 }
 
 interface Group extends EditableFieldProps {
-  groupName: string;
-  groupLabel: string;
+  groupTitle: string;
+  groupID: string;
   projectUUID: string;
   controls?: Array<any>;
   subGroups: Array<Group>;
-  parent?: Group;
+  parentID: string;
   indent: number;
   rightSibling?: Group;
   others: Array<any>;
@@ -66,13 +66,30 @@ interface OSCALGroup extends EditableFieldProps {
   group: Group;
 }
 
+function generateUUID() {
+  // Public Domain/MIT
+  let d = new Date().getTime(); //Timestamp
+  let d2 = (typeof performance !== "undefined" && performance.now && performance.now() * 1000) || 0; //Time in microseconds since page-load or 0 if unsupported
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    let r = Math.random() * 16; //random number between 0 and 16
+    if (d > 0) {
+      //Use timestamp until depleted
+      r = (d + r) % 16 | 0;
+      d = Math.floor(d / 16);
+    } else {
+      //Use microseconds since page-load if supported
+      r = (d2 + r) % 16 | 0;
+      d2 = Math.floor(d2 / 16);
+    }
+    return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+  });
+}
+
 export function GroupDrawer(data: OSCALProject) {
-  const [items, setItems] = useState<Array<any>>([]);
-  const [baseGroupObjects, setBaseGroupObjects] = useState<any[]>([]);
+  const [baseGroups, setBaseGroups] = useState<Array<any>>([]);
 
   const fetchers = useFetchers();
   const fetchTransaction = fetchers["fetchTransaction"];
-  const fetchRest = fetchers["fetchRest"];
 
   const closedDrawerWidth = 55;
   const OpenDrawerWidth = 312;
@@ -105,8 +122,75 @@ export function GroupDrawer(data: OSCALProject) {
 
   useEffect(() => {
     getData();
-    RestGetGroups();
   }, []);
+
+  const groupsAndSubs: Array<Group> = baseGroups.map((x) => ({
+    groupTitle: x.title,
+    groupID: x.id,
+    projectUUID: data.projectUUID,
+    parentID: x.parent_id,
+    subGroups: [],
+    indent: 0,
+    others: [],
+  }));
+
+  const orderGroups: Array<Group> = [];
+  function reorderGroupsAndSetIndent() {
+    const parent_ids: Array<string> = [];
+    groupsAndSubs.forEach((elt) => {
+      if (!orderGroups.includes(elt)) {
+        if (elt.parentID === "") {
+          elt.indent = 0;
+          orderGroups.push(elt);
+          parent_ids.push(elt.groupID);
+        }
+      }
+    });
+
+    console.log(" order len ", orderGroups.length, " : all group len ", groupsAndSubs.length);
+    let depth = 0;
+    while (depth < 5) {
+      groupsAndSubs.forEach((elt) => {
+        if (!orderGroups.includes(elt)) {
+          if (parent_ids.includes(elt.parentID)) {
+            const index = orderGroups.findIndex((parent) => parent.groupID === elt.parentID);
+            if (index >= 0) {
+              elt.indent = orderGroups[index].indent + 10;
+              orderGroups[index].subGroups.push(elt);
+              if (index + 1 >= orderGroups.length) {
+                orderGroups.push(elt);
+                parent_ids.push(elt.groupID);
+              } else {
+                orderGroups.splice(index + 1, 0, elt);
+                parent_ids.push(elt.groupID);
+              }
+            }
+          }
+        }
+      });
+      depth = depth + 1;
+    }
+    console.log(" order len ", orderGroups.length, " : all group len ", groupsAndSubs.length);
+  }
+
+  reorderGroupsAndSetIndent();
+
+  orderGroups.forEach((elt) => {
+    setSiblings(elt.subGroups);
+  });
+
+  const orphans = orderGroups.filter((elt) => elt.parentID === "");
+  if (orphans.length > 0) {
+    let sibling = orphans[0];
+    for (let i = 1; i < orphans.length; i++) {
+      orphans[i].rightSibling = sibling;
+      sibling = orphans[i];
+    }
+  }
+
+  console.log("fin groups after parents :", groupsAndSubs);
+  console.log("ordered groups  after parents", orderGroups);
+  console.log("orphans", orphans);
 
   function EditGroupTitle(ID: string, Name: string) {
     const rootFile = "projects/catalog_" + data.projectUUID + "/oscal_data.json";
@@ -124,7 +208,7 @@ export function GroupDrawer(data: OSCALProject) {
     fetchTransaction("/edit_group_title", request_json, addNewGroupSuccess, addNewGroupFail);
   }
   function DeleteGroup(ID: string) {
-    const id = ID === "" ? selectedItemGroup?.groupLabel : ID;
+    const id = ID === "" ? selectedItemGroup?.groupID : ID;
     const rootFile = "projects/catalog_" + data.projectUUID + "/oscal_data.json";
     const request_json = {
       oscal_file: rootFile,
@@ -154,56 +238,6 @@ export function GroupDrawer(data: OSCALProject) {
     }
     fetchTransaction("/add_group", request_json, addNewGroupSuccess, addNewGroupFail);
   }
-  function RestGetGroups() {
-    const request_json = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-    const operation = "/catalog/" + data.projectUUID + "/catalog/groups";
-    fetchRest(operation, request_json, getCatalogGroupsSuccess, getCatalogGroupsFail);
-
-    function getCatalogGroupsSuccess(response: any) {
-      console.log("In FilledBoxItem: Successfull REST CAll with path", operation);
-      setBaseGroupObjects(response);
-    }
-    function getCatalogGroupsFail(e: any) {
-      console.log("In FilledBoxItem: Operation fail ", e.statusText);
-    }
-  }
-  console.log("All groups by REST", baseGroupObjects);
-  const AllGroups: Array<Group> = baseGroupObjects.map((x) => ({
-    groupName: x.title,
-    groupLabel: x.id,
-    projectUUID: data.projectUUID,
-    subGroups: [],
-    indent: 0,
-    others: x.groups ?? [],
-  }));
-  const realGroups: Array<Group> = [];
-
-  function listAllGroups() {
-    for (let i = 0; i < AllGroups.length; i++) {
-      listAllSubGroups(AllGroups[i]);
-    }
-  }
-  function listAllSubGroups(group: Group) {
-    const subs0: Array<Group> = group.others.map((x) => ({
-      groupName: x.title,
-      groupLabel: x.id,
-      projectUUID: data.projectUUID,
-      subGroups: [],
-      parent: group,
-      indent: group.indent + 10,
-      others: x.groups ?? [],
-    }));
-    group.subGroups = subs0;
-    for (let i = 0; i < subs0.length; i++) {
-      realGroups.push(subs0[i]);
-    }
-  }
-  console.log("New Groups", AllGroups);
-  listAllGroups();
-  console.log("all groups", realGroups);
   function MoveGroup(ID: string, Name: string, newParentID: string) {
     const rootFile = "projects/catalog_" + data.projectUUID + "/oscal_data.json";
     const request_json = {
@@ -219,45 +253,37 @@ export function GroupDrawer(data: OSCALProject) {
     }
     fetchTransaction("/move_group", request_json, moveGroupSuccess, moveGroupFail);
   }
-  function getGroups() {
+
+  function getGroupsAndSubs() {
     const rootFile = "projects/catalog_" + data.projectUUID + "/oscal_data.json";
     const request_json = {
       oscal_file: rootFile,
-      parent_id: "",
     };
 
-    fetchTransaction("/list_groups", request_json, getCatalogGroupsSuccess, getCatalogGroupsFail);
+    fetchTransaction(
+      "/list_all_groups",
+      request_json,
+      getCatalogGroupsSuccess,
+      getCatalogGroupsFail
+    );
     function getCatalogGroupsSuccess(response: any) {
       console.log("In GroupDrawer: Successfull Transaction Call to get groups");
-      setItems(response.groups);
-      // console.log("results", items);
+      setBaseGroups(response.groups);
     }
     function getCatalogGroupsFail(e: any) {
       console.log("In GroupDrawer: Operation fail ", e.statusText);
     }
   }
 
-  const groups: Array<Group> = items.map((x) => ({
-    groupName: x.title,
-    groupLabel: x.id,
-    projectUUID: data.projectUUID,
-    subGroups: [],
-    indent: 0,
-    others: [],
-  }));
   function setSiblings(groups: Array<Group>) {
-    let sibling: Group;
     if (groups.length === 0) return;
 
-    sibling = groups[0];
-    for (let i = 1; i < groups.length; i++) {
-      groups[i].rightSibling = sibling;
-      sibling = groups[i];
+    for (let i = 0; i < groups.length - 1; i++) {
+      groups[i].rightSibling = groups[i + 1];
     }
   }
-  setSiblings(groups);
   function getData() {
-    getGroups();
+    getGroupsAndSubs();
   }
 
   function handleAddNewGroup() {
@@ -268,26 +294,63 @@ export function GroupDrawer(data: OSCALProject) {
     function handleNewGroupClick() {
       setSelectedItemName("NewGroup");
     }
-    // useEffect(() => {
-    //   SaveNewGroup();
-    // }, []);
+    const selectedGroup = selectedItemGroup ?? defaultGroup;
     let ID = "";
     let Name = "";
+    let preID = "";
     function handleEditIDChange(event: { target: { value: string | undefined } }) {
-      ID = event.target.value ?? "";
+      preID = event.target.value ?? "";
+      ID = preID + "_" + generateUUID();
     }
-    function handleEditGroupNameChange(event: { target: { value: string } }) {
+    function handleEditgroupTitleChange(event: { target: { value: string } }) {
       Name = event.target.value;
+    }
+    function handleAddBelow() {
+      setAddNewGroup(true);
+      setAddBelow(true);
+      setNewGroupParent(selectedGroup);
+      handleSaveNewGroup();
+      setShowCardMenu(false);
+    }
+    function handleIncreaseIndent() {
+      const sibling = selectedGroup.rightSibling;
+      if (sibling === undefined) {
+        setShowCardMenu(false);
+        return;
+      }
+      MoveGroup(selectedGroup.groupID, selectedGroup.groupTitle, sibling.groupID);
+      // Reload the main data
+      getData();
+      setShowCardMenu(false);
+    }
+    function handleDecreaseIndent() {
+      const parentID = selectedGroup.parentID;
+      if (parentID === undefined) {
+        setShowCardMenu(false);
+        return;
+      }
+
+      const parent = orderGroups.find((x) => x.groupID === parentID) ?? defaultGroup;
+      const new_parent_id = parent.parentID;
+
+      MoveGroup(selectedGroup.groupID, selectedGroup.groupTitle, new_parent_id);
+      // Reload the main data
+      getData();
+      setShowCardMenu(false);
     }
     function handleSaveNewGroup() {
       if (edit) {
-        EditGroupTitle(ID, Name);
+        EditGroupTitle(selectedGroup.groupID, Name);
         setAddNewGroup(false);
         getData();
         return;
       }
+      if (Name.length < 1) return;
+      if (preID === "") {
+        ID = Name.substring(0, 1) + ID;
+      }
       if (addBelow) {
-        const parent_id = newGroupParent === undefined ? "" : newGroupParent.groupLabel;
+        const parent_id = newGroupParent === undefined ? "" : newGroupParent.groupID;
         SaveNewGroup(ID, Name, parent_id);
         setAddNewGroup(false);
         getData();
@@ -297,7 +360,8 @@ export function GroupDrawer(data: OSCALProject) {
       getData();
     }
     function handleDeleteGroup() {
-      DeleteGroup(ID);
+      DeleteGroup(selectedGroup.groupID);
+      getData();
       setAddNewGroup(false);
     }
 
@@ -325,7 +389,7 @@ export function GroupDrawer(data: OSCALProject) {
               <TextField
                 size="small"
                 label="ID"
-                defaultValue={selectedItemGroup?.groupLabel}
+                defaultValue={selectedItemGroup?.groupID.substring(0, 2)}
                 onChange={handleEditIDChange}
                 sx={{
                   left: 32,
@@ -347,8 +411,8 @@ export function GroupDrawer(data: OSCALProject) {
               <TextField
                 size="small"
                 label="Group Name"
-                onChange={handleEditGroupNameChange}
-                defaultValue={selectedItemGroup?.groupName}
+                onChange={handleEditgroupTitleChange}
+                defaultValue={selectedItemGroup?.groupTitle}
                 sx={{
                   left: 88,
                   top: 5,
@@ -370,6 +434,7 @@ export function GroupDrawer(data: OSCALProject) {
               <Grid xs={7}>
                 <IconButton
                   size="small"
+                  onClick={handleAddBelow}
                   sx={{
                     ":hover": {
                       backgroundColor: "#023E88",
@@ -381,6 +446,7 @@ export function GroupDrawer(data: OSCALProject) {
                 </IconButton>
                 <IconButton
                   size="small"
+                  onClick={handleDecreaseIndent}
                   sx={{
                     ":hover": {
                       backgroundColor: "#023E88",
@@ -392,6 +458,7 @@ export function GroupDrawer(data: OSCALProject) {
                 </IconButton>
                 <IconButton
                   size="small"
+                  onClick={handleIncreaseIndent}
                   sx={{
                     ":hover": {
                       backgroundColor: "#023E88",
@@ -483,17 +550,20 @@ export function GroupDrawer(data: OSCALProject) {
       setShowCardMenu(false);
     }
     function handleDelete() {
-      DeleteGroup(data.group.groupLabel);
+      DeleteGroup(data.group.groupID);
+      setAddNewGroup(false);
+      getData();
       setShowCardMenu(false);
     }
     function handleAddBelow() {
       setAddNewGroup(true);
       setAddBelow(true);
       setNewGroupParent(data.group);
+      getData();
       setShowCardMenu(false);
     }
     function handleIncreaseIndent() {
-      console.log("increasing indent of", data.group.groupName);
+      console.log("increasing indent of", data.group.groupTitle);
       if (data.group === undefined) {
         setShowCardMenu(false);
         return;
@@ -504,26 +574,27 @@ export function GroupDrawer(data: OSCALProject) {
         setShowCardMenu(false);
         return;
       }
-      MoveGroup(data.group.groupLabel, data.group.groupName, sibling.groupLabel);
+      MoveGroup(data.group.groupID, data.group.groupTitle, sibling.groupID);
       // Reload the main data
       getData();
       setShowCardMenu(false);
     }
     function handleDecreaseIndent() {
-      console.log("decreasing indent of", data.group.groupName);
+      console.log("decreasing indent of", data.group.groupTitle);
       if (data.group === undefined) {
         setShowCardMenu(false);
         return;
       }
 
-      const parent = data.group.parent;
-      if (parent === undefined) {
+      const parentID = data.group.parentID;
+      if (parentID === undefined) {
         setShowCardMenu(false);
         return;
       }
-      console.log("decreasing indent  with parent", data.group.parent);
-      const real_parent = parent.parent ?? { groupLabel: "", groupName: "", subGroups: [] };
-      MoveGroup(data.group.groupLabel, data.group.groupName, real_parent.groupLabel);
+      const parent = orderGroups.find((x) => x.groupID === parentID) ?? defaultGroup;
+      const new_parent_id = parent.parentID;
+      console.log("decreasing indent  with parent", data.group.parentID);
+      MoveGroup(data.group.groupID, data.group.groupTitle, new_parent_id);
       // Reload the main data
       getData();
       setShowCardMenu(false);
@@ -556,462 +627,76 @@ export function GroupDrawer(data: OSCALProject) {
       </Card>
     );
   };
- 
 
-  const RecurentGroupItem: React.FC<OSCALGroup> = (data) => {
-   // const [isDragged, setIsDragged] = useState(false);
+  const GroupItem: React.FC<OSCALGroup> = (data) => {
+    const [isDragged, setIsDragged] = useState(false);
+    const [DroppedGroup, setDroppedGroup] = useState<Group>();
+    const [doneDropping, setEndDropping] = useState(false);
+    const [draggingOver, setDraggingOver] = useState(false);
 
-    const handleDrop = (event: any) => {
-      event.preventDefault();
-      event.stopPropagation();
-      event.target.style.border = "1px solid #D2D2D2";
-    };
-
-    const startDrag = (event: any) => {
-      event.preventDefault();
-      //setIsDragged(true);
-    };
     const unitHeight = 48;
 
     const itemHeight = unitHeight;
 
-    const CoreSubGroupItem: React.FC<OSCALGroup> = (datum) => {
-      const [subItems, setSubItems] = useState<Array<any>>([]);
-      const [startDraggedGroup, setStartDraggedGroup] = useState<Group>();
-      const [DroppedGroup, setDroppedGroup] = useState<Group>();
-      const [isDragged, setIsDragged] = useState(false);
-      const [doneDropping, setEndDropping] = useState(false);
-      const [draggingOver, setDraggingOver] = useState(false);
-
-      function getSubGroups(parent_id: string, projectUUID: string) {
-        const rootFile = "projects/catalog_" + projectUUID + "/oscal_data.json";
-        const request_json = {
-          oscal_file: rootFile,
-          parent_id: parent_id,
-        };
-
-        fetchTransaction(
-          "/list_groups",
-          request_json,
-          getCatalogGroupsSuccess,
-          getCatalogGroupsFail
-        );
-        function getCatalogGroupsSuccess(response: any) {
-          console.log("In GroupDrawer: Successfull Transaction Call to get groups");
-          setSubItems(response.groups);
-        }
-        function getCatalogGroupsFail(e: any) {
-          console.log("In GroupDrawer: Operation fail ", e.statusText);
-        }
-      }
-
-      useEffect(() => {
-        getSubGroups(datum.group.groupLabel, datum.group.projectUUID);
-      }, [datum.group.groupLabel, datum.group.projectUUID]);
-
-      const subGroups: Array<Group> = subItems.map((x) => ({
-        groupName: x.title,
-        groupLabel: x.id,
-        projectUUID: datum.group.projectUUID,
-        parent: datum.group,
-        subGroups: [],
-        indent: datum.group.indent + 10,
-        others: [],
-      }));
-      setSiblings(subGroups);
-      datum.group.subGroups = subGroups;
-      console.log("group datum: ", datum, "subGroups:", datum.group.subGroups);
-      const handleCardMenu = (event: any) => {
-        setShowCardMenu(true);
-        setItemYCoordinate(event.clientY);
-      };
-
-      function allowDrop(event: any) {
-        event.preventDefault();
-        event.target.style.border = "4px dotted green";
-        const id = datum.group.groupLabel;
-        if (!Ids.includes(id)) {
-          Ids.push(id);
-        }
-        setDraggingOver(true);
-      }
-      function handleDragLeave(event: any) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.target.style.border = "1px solid #D2D2D2";
-        setDraggingOver(false);
-      }
-      const endDragNDrop: React.DragEventHandler<HTMLDivElement> | undefined = (event: any) => {
-        event.preventDefault();
-        draggedGroups = [];
-      };
-      const startDrag = (event: any) => {
-        draggedGroups = [];
-        Ids = [];
-        event.preventDefault();
-        setStartDraggedGroup(datum.group);
-        // console.log("start dragged id", startDraggedGroup?.groupLabel);
-        // console.log("dragged data", event.dataTransfer);
-        const id = datum.group.groupLabel;
-        if (!Ids.includes(id)) {
-          Ids.push(id);
-          draggedGroups.push(datum.group);
-        }
-        setIsDragged(true);
-      };
-      const handleDrop = (event: any) => {
-        event.preventDefault();
-        event.stopPropagation();
-        event.target.style.border = "1px solid #D2D2D2";
-        setDroppedGroup(datum.group);
-        setEndDropping(true);
-      };
-
-      if (datum.group.indent > 40) {
-        //(isDragged ||
-        return null;
-      }
-      console.log("droppedGroup is", DroppedGroup);
-      console.log("Ids", Ids);
-      if (doneDropping && draggedGroups?.length > 0) {
-        const subGroup = draggedGroups[0];
-        MoveGroup(subGroup.groupLabel, subGroup.groupName, datum.group.groupLabel);
-        // update groups
-        getData();
-        subGroup.parent = datum.group;
-        datum.group.subGroups?.push(subGroup);
-        setSiblings(datum.group.subGroups);
-      }
-      if (datum.group.subGroups.length > 0) {
-        return (
-          <>
-            {showCardMenu && <GroupItemMenuBar group={selectedItemGroup ?? defaultGroup} />}
-            {datum.group.parent === undefined && (
-              <Grid sx={{ height: 48 }} key={datum.group.groupLabel}>
-                <Container
-                  sx={{
-                    height: 48,
-                    left: open ? 20 + datum.group.indent : 8,
-                    position: "absolute",
-                    background: "#F6F6F6",
-                    border: "1px solid #D2D2D2",
-                    width: open ? 300 - datum.group.indent : 55,
-                    ":hover": {
-                      backgroundColor: "#EAEAEA",
-                    },
-                  }}
-                  key={datum.group.groupLabel.toUpperCase()}
-                  draggable="true"
-                  onDrag={startDrag}
-                  onDragOver={allowDrop}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                  onDragEnd={endDragNDrop}
-                  onClick={() => {
-                    setSelectedItemName(datum.group.groupName);
-                    getSelectedGroup(datum.group);
-                  }}
-                >
-                  {draggingOver && (
-                    <Box
-                      sx={{
-                        height: 5,
-                        left: 0,
-                        width: open ? 295 - datum.group.indent : 55,
-                        position: "absolute",
-                        background: "#FF6600",
-                      }}
-                    ></Box>
-                  )}
-                  {open && (
-                    <IconButton sx={{ left: 0, top: 2, position: "absolute" }}>
-                      <DragIndicatorIcon />
-                    </IconButton>
-                  )}
-                  <Box
-                    sx={{
-                      left: open ? 40 + datum.group.indent : 9,
-                      height: 35,
-                      width: 35,
-                      top: 5,
-                      border: "1px solid #000000",
-                      position: "absolute",
-                      background: "#002867",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontFamily: "Source Sans Pro",
-                        color: "#ffffff",
-                        left: 5,
-                        top: 5,
-                        position: "absolute",
-                      }}
-                    >
-                      {datum.group.groupLabel.toUpperCase().substring(0, 2)}
-                    </Typography>
-                  </Box>
-                  {open && (
-                    <GroupTooltip title={datum.group.groupName}>
-                      <Typography
-                        sx={{
-                          left: 89 + datum.group.indent,
-                          top: 10,
-                          position: "absolute",
-                          fontSize: 14,
-                          fontWeight: selectedItemName === datum.group.groupName ? 700 : 500,
-                        }}
-                      >
-                        {datum.group.groupName.length < 20
-                          ? datum.group.groupName
-                          : datum.group.groupName.substring(0, 19) + "..."}
-                      </Typography>
-                    </GroupTooltip>
-                  )}
-                  {open && (
-                    <IconButton
-                      sx={{ left: 260 - datum.group.indent, top: 2, position: "absolute" }}
-                      onClick={handleCardMenu}
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
-                  )}
-                  <Box
-                    sx={{
-                      left: open ? 292.5 - datum.group.indent : 48,
-                      width: 6,
-                      height: 48,
-                      position: "absolute",
-                      background:
-                        selectedItemName === datum.group.groupName ? "#FF6600" : "#F6F6F6",
-                    }}
-                  ></Box>{" "}
-                </Container>
-                {/* <CoreGroupItem group={subGroup}></CoreGroupItem> */}
-              </Grid>
-            )}
-            {datum.group.subGroups.map((subGroup) => (
-              <>
-                <Grid sx={{ height: 48 }} key={subGroup.groupLabel}>
-                  <Container
-                    sx={{
-                      height: 48,
-                      left: open ? 20 + subGroup.indent : 8,
-                      position: "absolute",
-                      background: "#F6F6F6",
-                      border: "1px solid #D2D2D2",
-                      width: open ? 300 - subGroup.indent : 55,
-                      ":hover": {
-                        backgroundColor: "#EAEAEA",
-                      },
-                    }}
-                    key={subGroup.groupLabel.toUpperCase()}
-                    draggable="true"
-                    onDrag={startDrag}
-                    onDragOver={allowDrop}
-                    onDragLeave={handleDragLeave}
-                    onDrop={handleDrop}
-                    onDragEnd={endDragNDrop}
-                    onClick={() => {
-                      setSelectedItemName(subGroup.groupName);
-                      getSelectedGroup(subGroup);
-                    }}
-                  >
-                    {draggingOver && (
-                      <Box
-                        sx={{
-                          height: 5,
-                          left: 0,
-                          width: open ? 295 - subGroup.indent : 55,
-                          position: "absolute",
-                          background: "#FF6600",
-                        }}
-                      ></Box>
-                    )}
-                    {open && (
-                      <IconButton sx={{ left: 0, top: 2, position: "absolute" }}>
-                        <DragIndicatorIcon />
-                      </IconButton>
-                    )}
-                    <Box
-                      sx={{
-                        left: open ? 40 + subGroup.indent : 9,
-                        height: 35,
-                        width: 35,
-                        top: 5,
-                        border: "1px solid #000000",
-                        position: "absolute",
-                        background: "#002867",
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          fontFamily: "Source Sans Pro",
-                          color: "#ffffff",
-                          left: 5,
-                          top: 5,
-                          position: "absolute",
-                        }}
-                      >
-                        {subGroup.groupLabel.toUpperCase().substring(0, 2)}
-                      </Typography>
-                    </Box>
-                    {open && (
-                      <GroupTooltip title={subGroup.groupName}>
-                        <Typography
-                          sx={{
-                            left: 89 + subGroup.indent,
-                            top: 10,
-                            position: "absolute",
-                            fontSize: 14,
-                            fontWeight: selectedItemName === subGroup.groupName ? 700 : 500,
-                          }}
-                        >
-                          {subGroup.groupName.length < 20
-                            ? subGroup.groupName
-                            : subGroup.groupName.substring(0, 19) + "..."}
-                        </Typography>
-                      </GroupTooltip>
-                    )}
-                    {open && (
-                      <IconButton
-                        sx={{ left: 260 - subGroup.indent, top: 2, position: "absolute" }}
-                        onClick={handleCardMenu}
-                      >
-                        <MoreVertIcon />
-                      </IconButton>
-                    )}
-                    <Box
-                      sx={{
-                        left: open ? 292.5 - subGroup.indent : 48,
-                        width: 6,
-                        height: 48,
-                        position: "absolute",
-                        background: selectedItemName === subGroup.groupName ? "#FF6600" : "#F6F6F6",
-                      }}
-                    ></Box>{" "}
-                  </Container>
-                  {/* <CoreGroupItem group={subGroup}></CoreGroupItem> */}
-                </Grid>
-                <CoreSubGroupItem group={subGroup} key={subGroup.groupLabel}></CoreSubGroupItem>
-                {showCardMenu && <GroupItemMenuBar group={selectedItemGroup ?? defaultGroup} />}
-              </>
-            ))}
-          </>
-        );
-      } else
-        return (
-          <>
-            {datum.group.parent === undefined && (
-              <Grid sx={{ height: 48 }} key={datum.group.groupLabel}>
-                <Container
-                  sx={{
-                    height: 48,
-                    left: open ? 20 + datum.group.indent : 8,
-                    position: "absolute",
-                    background: "#F6F6F6",
-                    border: "1px solid #D2D2D2",
-                    width: open ? 300 - datum.group.indent : 55,
-                    ":hover": {
-                      backgroundColor: "#EAEAEA",
-                    },
-                  }}
-                  key={datum.group.groupLabel.toUpperCase()}
-                  draggable="true"
-                  onDrag={startDrag}
-                  onDragOver={allowDrop}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                  onDragEnd={endDragNDrop}
-                  onClick={() => {
-                    setSelectedItemName(datum.group.groupName);
-                    getSelectedGroup(datum.group);
-                  }}
-                >
-                  {draggingOver && (
-                    <Box
-                      sx={{
-                        height: 5,
-                        left: 0,
-                        width: open ? 295 - datum.group.indent : 55,
-                        position: "absolute",
-                        background: "#FF6600",
-                      }}
-                    ></Box>
-                  )}
-                  {open && (
-                    <IconButton sx={{ left: 0, top: 2, position: "absolute" }}>
-                      <DragIndicatorIcon />
-                    </IconButton>
-                  )}
-                  <Box
-                    sx={{
-                      left: open ? 40 + datum.group.indent : 9,
-                      height: 35,
-                      width: 35,
-                      top: 5,
-                      border: "1px solid #000000",
-                      position: "absolute",
-                      background: "#002867",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontFamily: "Source Sans Pro",
-                        color: "#ffffff",
-                        left: 5,
-                        top: 5,
-                        position: "absolute",
-                      }}
-                    >
-                      {datum.group.groupLabel.toUpperCase().substring(0, 2)}
-                    </Typography>
-                  </Box>
-                  {open && (
-                    <GroupTooltip title={datum.group.groupName}>
-                      <Typography
-                        sx={{
-                          left: 89 + datum.group.indent,
-                          top: 10,
-                          position: "absolute",
-                          fontSize: 14,
-                          fontWeight: selectedItemName === datum.group.groupName ? 700 : 500,
-                        }}
-                      >
-                        {datum.group.groupName.length < 20
-                          ? datum.group.groupName
-                          : datum.group.groupName.substring(0, 19) + "..."}
-                      </Typography>
-                    </GroupTooltip>
-                  )}
-                  {open && (
-                    <IconButton
-                      sx={{ left: 260 - datum.group.indent, top: 2, position: "absolute" }}
-                      onClick={handleCardMenu}
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
-                  )}
-                  <Box
-                    sx={{
-                      left: open ? 292.5 - datum.group.indent : 48,
-                      width: 6,
-                      height: 48,
-                      position: "absolute",
-                      background:
-                        selectedItemName === datum.group.groupName ? "#FF6600" : "#F6F6F6",
-                    }}
-                  ></Box>{" "}
-                </Container>
-                {/* <CoreGroupItem group={subGroup}></CoreGroupItem> */}
-                {showCardMenu && <GroupItemMenuBar group={selectedItemGroup ?? defaultGroup} />}
-              </Grid>
-            )}
-          </>
-        );
+    const handleCardMenu = (event: any) => {
+      setShowCardMenu(true);
+      setItemYCoordinate(event.clientY);
     };
 
-    // if (isDragged) return null;
+    function allowDrop(event: any) {
+      event.preventDefault();
+      event.target.style.border = "4px dotted green";
+      const id = data.group.groupID;
+      if (!Ids.includes(id)) {
+        Ids.push(id);
+      }
+      setDraggingOver(true);
+    }
+    function handleDragLeave(event: any) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.target.style.border = "1px solid #D2D2D2";
+      setDraggingOver(false);
+    }
+    const endDragNDrop: React.DragEventHandler<HTMLDivElement> | undefined = (event: any) => {
+      event.preventDefault();
+      draggedGroups = [];
+    };
+    const startDrag = (event: any) => {
+      draggedGroups = [];
+      Ids = [];
+      event.preventDefault();
+
+      const id = data.group.groupID;
+      if (!Ids.includes(id)) {
+        Ids.push(id);
+        draggedGroups.push(data.group);
+      }
+      setIsDragged(true);
+    };
+    const handleDrop = (event: any) => {
+      event.preventDefault();
+      event.stopPropagation();
+      event.target.style.border = "1px solid #D2D2D2";
+      setDroppedGroup(data.group);
+      setEndDropping(true);
+    };
+
+    if (data.group.indent > 40) {
+      return null;
+    }
+    console.log("droppedGroup is", DroppedGroup);
+    console.log("Ids", Ids);
+    if (doneDropping && draggedGroups?.length > 0) {
+      const subGroup = draggedGroups[0];
+      MoveGroup(subGroup.groupID, subGroup.groupTitle, data.group.groupID);
+      // update groups
+      getData();
+      subGroup.parentID = data.group.parentID;
+      data.group.subGroups?.push(subGroup);
+      setSiblings(data.group.subGroups);
+    }
+    if (isDragged) return null;
 
     return (
       <>
@@ -1026,13 +711,113 @@ export function GroupDrawer(data: OSCALProject) {
           onDrag={startDrag}
           onDrop={handleDrop}
         >
-          <CoreSubGroupItem group={data.group}></CoreSubGroupItem>
+          <Grid sx={{ height: 48 }} key={data.group.groupID}>
+            <Container
+              sx={{
+                height: 48,
+                left: open ? 20 + data.group.indent : 8,
+                position: "absolute",
+                background: "#F6F6F6",
+                border: "1px solid #D2D2D2",
+                width: open ? 300 - data.group.indent : 55,
+                ":hover": {
+                  backgroundColor: "#EAEAEA",
+                },
+              }}
+              key={data.group.groupID.toUpperCase()}
+              draggable="true"
+              onDrag={startDrag}
+              onDragOver={allowDrop}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              onDragEnd={endDragNDrop}
+              onClick={() => {
+                setSelectedItemName(data.group.groupTitle);
+                getSelectedGroup(data.group);
+              }}
+            >
+              {draggingOver && (
+                <Box
+                  sx={{
+                    height: 5,
+                    left: 0,
+                    width: open ? 295 - data.group.indent : 55,
+                    position: "absolute",
+                    background: "#FF6600",
+                  }}
+                ></Box>
+              )}
+              {open && (
+                <IconButton sx={{ left: 0, top: 2, position: "absolute" }}>
+                  <DragIndicatorIcon />
+                </IconButton>
+              )}
+              <Box
+                sx={{
+                  left: open ? 40 + data.group.indent : 9,
+                  height: 35,
+                  width: 35,
+                  top: 5,
+                  border: "1px solid #000000",
+                  position: "absolute",
+                  background: "#002867",
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontFamily: "Source Sans Pro",
+                    color: "#ffffff",
+                    left: 5,
+                    top: 5,
+                    position: "absolute",
+                  }}
+                >
+                  {data.group.groupID.toUpperCase().substring(0, 2)}
+                </Typography>
+              </Box>
+              {open && (
+                <GroupTooltip title={data.group.groupTitle}>
+                  <Typography
+                    sx={{
+                      left: 89 + data.group.indent,
+                      top: 10,
+                      position: "absolute",
+                      fontSize: 14,
+                      fontWeight: selectedItemName === data.group.groupTitle ? 700 : 500,
+                    }}
+                  >
+                    {data.group.groupTitle.length < 20
+                      ? data.group.groupTitle
+                      : data.group.groupTitle.substring(0, 19) + "..."}
+                  </Typography>
+                </GroupTooltip>
+              )}
+              {open && (
+                <IconButton
+                  sx={{ left: 260 - data.group.indent, top: 2, position: "absolute" }}
+                  onClick={handleCardMenu}
+                >
+                  <MoreVertIcon />
+                </IconButton>
+              )}
+              <Box
+                sx={{
+                  left: open ? 292.5 - data.group.indent : 48,
+                  width: 6,
+                  height: 48,
+                  position: "absolute",
+                  background: selectedItemName === data.group.groupTitle ? "#FF6600" : "#F6F6F6",
+                }}
+              ></Box>{" "}
+            </Container>
+          </Grid>
         </Container>
+
         {showCardMenu && <GroupItemMenuBar group={selectedItemGroup ?? defaultGroup} />}
+        {/* {edit && <NewGroupDialog></NewGroupDialog>} */}
       </>
     );
   };
-
   const NewGroupButton: React.FC = () => {
     const text = open ? " NEW GROUP +" : "+";
     return (
@@ -1066,11 +851,12 @@ export function GroupDrawer(data: OSCALProject) {
     );
   };
   const defaultGroup: Group = {
-    groupLabel: "",
-    groupName: "",
+    groupID: "",
+    groupTitle: "",
     projectUUID: "",
     subGroups: [],
     indent: 0,
+    parentID: "",
     others: [],
   };
   return (
@@ -1097,11 +883,8 @@ export function GroupDrawer(data: OSCALProject) {
             </DrawerHeader>
             <RootLevel></RootLevel>
             <Divider />
-            {/* {groups.map((item) => (
-              <GroupItem group={item} key={item.groupName}></GroupItem>
-            ))} */}
-            {groups.map((item) => (
-              <RecurentGroupItem group={item} key={item.groupName}></RecurentGroupItem>
+            {orderGroups.map((item) => (
+              <GroupItem group={item} key={item.groupTitle}></GroupItem>
             ))}
             {addNewGroup && open && <NewGroupDialog></NewGroupDialog>}
             <NewGroupButton></NewGroupButton>
@@ -1145,9 +928,9 @@ export function GroupDrawer(data: OSCALProject) {
               <Grid sx={{ width: open ? 505 : 745 }}></Grid>
               <Grid>
                 {" "}
-                <OSCALSecondaryButtonSmall sx={{ position: "absolute", height: 20 }}>
+                <OSCALSecondaryButton sx={{ position: "absolute", height: 20 }}>
                   NEW CONTROL +
-                </OSCALSecondaryButtonSmall>{" "}
+                </OSCALSecondaryButton>{" "}
               </Grid>
             </Grid>
           </Box>
