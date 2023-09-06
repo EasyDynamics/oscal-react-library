@@ -117,6 +117,7 @@ export function GroupDrawer(data: OSCALProject) {
   const [showCardMenu, setShowCardMenu] = useState(false);
   const [itemYcoordinate, setItemYCoordinate] = useState(0);
   const [edit, setEdit] = useState(false);
+  const [editGroup, setEditGroup] = useState<Group>();
   const [addBelow, setAddBelow] = useState(false);
   const [newGroupParent, setNewGroupParent] = useState<Group>();
 
@@ -290,11 +291,11 @@ export function GroupDrawer(data: OSCALProject) {
     setAddNewGroup(true);
   }
 
-  const NewGroupDialog: React.FC = () => {
+  const GroupDialog: React.FC<OSCALGroup> = (data) => {
     function handleNewGroupClick() {
       setSelectedItemName("NewGroup");
     }
-    const selectedGroup = selectedItemGroup ?? defaultGroup;
+    const selectedGroup = data.group;
     let ID = "";
     let Name = "";
     let preID = "";
@@ -339,10 +340,11 @@ export function GroupDrawer(data: OSCALProject) {
       setShowCardMenu(false);
     }
     function handleSaveNewGroup() {
-      if (edit) {
+      if (edit && !addBelow) {
         EditGroupTitle(selectedGroup.groupID, Name);
         setAddNewGroup(false);
         getData();
+        setEditGroup(defaultGroup);
         return;
       }
       if (Name.length < 1) return;
@@ -354,6 +356,8 @@ export function GroupDrawer(data: OSCALProject) {
         SaveNewGroup(ID, Name, parent_id);
         setAddNewGroup(false);
         getData();
+        setAddBelow(false);
+        return;
       }
       SaveNewGroup(ID, Name, "");
       setAddNewGroup(false);
@@ -389,7 +393,7 @@ export function GroupDrawer(data: OSCALProject) {
               <TextField
                 size="small"
                 label="ID"
-                defaultValue={selectedItemGroup?.groupID.substring(0, 2)}
+                defaultValue={addBelow ? undefined : selectedItemGroup?.groupID.substring(0, 2)}
                 onChange={handleEditIDChange}
                 sx={{
                   left: 32,
@@ -412,7 +416,7 @@ export function GroupDrawer(data: OSCALProject) {
                 size="small"
                 label="Group Name"
                 onChange={handleEditgroupTitleChange}
-                defaultValue={selectedItemGroup?.groupTitle}
+                defaultValue={addBelow ? undefined : selectedItemGroup?.groupTitle}
                 sx={{
                   left: 88,
                   top: 5,
@@ -547,6 +551,7 @@ export function GroupDrawer(data: OSCALProject) {
     function handleEdit() {
       setEdit(true);
       setAddNewGroup(true);
+      setEditGroup(data.group);
       setShowCardMenu(false);
     }
     function handleDelete() {
@@ -559,6 +564,7 @@ export function GroupDrawer(data: OSCALProject) {
       setAddNewGroup(true);
       setAddBelow(true);
       setNewGroupParent(data.group);
+      setEditGroup(data.group);
       getData();
       setShowCardMenu(false);
     }
@@ -814,7 +820,9 @@ export function GroupDrawer(data: OSCALProject) {
         </Container>
 
         {showCardMenu && <GroupItemMenuBar group={selectedItemGroup ?? defaultGroup} />}
-        {/* {edit && <NewGroupDialog></NewGroupDialog>} */}
+        {open && editGroup?.groupID === data.group.groupID && (edit || addBelow) && (
+          <GroupDialog group={selectedItemGroup ?? defaultGroup}></GroupDialog>
+        )}
       </>
     );
   };
@@ -886,7 +894,9 @@ export function GroupDrawer(data: OSCALProject) {
             {orderGroups.map((item) => (
               <GroupItem group={item} key={item.groupTitle}></GroupItem>
             ))}
-            {addNewGroup && open && <NewGroupDialog></NewGroupDialog>}
+            {addNewGroup && open && !edit && !addBelow && (
+              <GroupDialog group={defaultGroup}></GroupDialog>
+            )}
             <NewGroupButton></NewGroupButton>
           </Box>
         </Grid>
