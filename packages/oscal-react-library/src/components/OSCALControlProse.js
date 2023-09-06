@@ -12,7 +12,6 @@ import StyledTooltip from "./OSCALStyledTooltip";
 import { getStatementByComponent } from "./oscal-utils/OSCALControlResolver";
 import * as restUtils from "./oscal-utils/OSCALRestUtils";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";
-import { NotSpecifiedTypography } from "./StyledTypography";
 import { HoverablePopover } from "./HoverablePopover";
 
 const OSCALStatementEditing = styled(Grid)`
@@ -309,10 +308,10 @@ export function OSCALReplacedProseWithParameterLabel(props) {
 
   if (!props.isImplemented) {
     return (
-      <NotSpecifiedTypography component="div">
-        {props.label} {props.modificationDisplayBefore} {prose}
+      <Typography className="NotSpecified" component="div">
+        {props.label} {prose}
         {props.modificationDisplay}
-      </NotSpecifiedTypography>
+      </Typography>
     );
   }
 

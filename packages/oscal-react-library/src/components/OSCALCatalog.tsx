@@ -1,7 +1,7 @@
 import { Catalog, ControlGroup } from "@easydynamics/oscal-types";
 import { Card, CardContent } from "@mui/material";
 import React, { useEffect } from "react";
-import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
+import { OSCALSection, OSCALSectionHeader } from "./styles/CommonPageStyles";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import OSCALBackMatter from "./OSCALBackMatter";
 import { OSCALCatalogControlListItem } from "./OSCALCatalogGroup";
@@ -10,6 +10,7 @@ import { EditableFieldProps } from "./OSCALEditableTextField";
 import { OSCALDocumentRoot } from "./OSCALLoaderStyles";
 import OSCALMetadata from "./OSCALMetadata";
 import { OSCALParams } from "./OSCALParam";
+import OSCALCatalogBaseline from "./OSCALCatalogBaseline";
 
 const UNGROUPED_CONTROLS_TITLE = "*Top*";
 
@@ -79,7 +80,7 @@ export const OSCALCatalog: React.FC<OSCALCatalogProps> = ({
     title: UNGROUPED_CONTROLS_TITLE,
     controls: catalog.controls,
   };
-
+  if (isEditable) return <OSCALCatalogBaseline></OSCALCatalogBaseline>;
   return (
     <OSCALDocumentRoot>
       <OSCALMetadata

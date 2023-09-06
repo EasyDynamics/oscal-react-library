@@ -14,7 +14,7 @@ import TableRow from "@mui/material/TableRow";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import StyledTooltip from "./OSCALStyledTooltip";
 import OSCALDiagram from "./OSCALDiagram";
-import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
+import { OSCALSection, OSCALSectionHeader } from "./styles/CommonPageStyles";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import { HoverablePopover } from "./HoverablePopover";
 import { OSCALMarkupLine, OSCALMarkupMultiLine } from "./OSCALMarkupProse";

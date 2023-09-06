@@ -7,7 +7,7 @@ import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
 import CardContent from "@mui/material/CardContent";
-import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
+import { OSCALSection, OSCALSectionHeader } from "./styles/CommonPageStyles";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 
 export default function OSCALProfileCatalogInheritance(props) {

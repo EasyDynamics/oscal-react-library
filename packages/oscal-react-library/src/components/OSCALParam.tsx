@@ -15,10 +15,10 @@ import {
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { OSCALPropertiesDialog } from "./OSCALProperties";
 import { Stack } from "@mui/system";
-import { Accordion, AccordionDetails, AccordionSummary } from "./StyedAccordion";
+import { Accordion, AccordionDetails, AccordionSummary } from "./styles/OSCALAccordion";
 import { ButtonLaunchedDialog } from "./ButtonLaunchedDialog";
 import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
-import { OSCALSectionHeader } from "../styles/CommonPageStyles";
+import { OSCALSectionHeader } from "./styles/CommonPageStyles";
 import {
   StyledHeaderTableCell,
   StyledTableHead,
@@ -224,13 +224,7 @@ export interface OSCALParamsProps {
 }
 
 export const OSCALParams: React.FC<OSCALParamsProps> = ({ params }) => {
-  return (
-    <>
-      {params?.map((param) => (
-        <div key={param.id}>{<OSCALParam param={param} />}</div>
-      ))}
-    </>
-  );
+  return <>{params?.map((param) => <div key={param.id}>{<OSCALParam param={param} />}</div>)}</>;
 };
 
 export const OSCALParamsDialog = (props: OSCALParamsProps) => (
