@@ -1,28 +1,67 @@
 import { createTheme } from "@mui/material/styles";
 
+// Common palette colors
+const primaryBlue = "#002867";
+const secondaryBlue = "#023E88";
+const backgroundGray = "#F6F6F6";
+const primaryAccent = "#FF6600";
+
 export const appTheme = createTheme({
   palette: {
     // Primary color palette
     primary: {
-      main: "#002867",
+      main: primaryBlue,
     },
     secondary: {
-      main: "#023E88",
+      main: secondaryBlue,
     },
     backgroundGray: {
-      main: "#F6F6F6",
+      main: backgroundGray,
     },
     primaryAccent: {
-      main: "#FF6600",
+      main: primaryAccent,
     },
-    lightBlue: {
-      main: "#E2ECFA",
-    },
+    // Secondary color palette
     lightGrayBlue: {
       main: "#E8EBF1",
     },
+    offWhite: {
+      main: "#F3F5F8",
+    },
+    white: {
+      main: "#FFFFFF",
+    },
+    black: {
+      main: "#2B2B2B",
+    },
+    gray: {
+      main: "#EAEAEA",
+    },
+    destructive: {
+      main: "#B31515",
+      dark: "#9B1616",
+    },
+    lightPink: {
+      main: "#FFD9D9",
+      dark: "#EEC8C8",
+    },
+    lightGreen: {
+      main: "#DBF4E7",
+      dark: "#CAE3D6",
+    },
+    lightYellow: {
+      main: "#F8ECCD",
+    },
+    lightBlue: {
+      main: "#A3C2EE",
+      dark: "#649DED",
+    },
     grayBlue: {
       main: "#B4BCCC",
+    },
+    // Other colors
+    darkGray: {
+      main: "#6A6A6A",
     },
   },
   typography: {
@@ -32,7 +71,7 @@ export const appTheme = createTheme({
     },
     h2: {
       fontWeight: "700",
-      color: "#002876",
+      color: primaryBlue,
       fontSize: "1.375rem",
     },
     h3: {
@@ -61,12 +100,6 @@ export const appTheme = createTheme({
           fontSize: "16px",
           borderRadius: "3px",
           lineHeight: "20px",
-        },
-        contained: {
-          backgroundColor: "#023E88",
-          "&:hover": {
-            backgroundColor: "#002867",
-          },
         },
       },
     },

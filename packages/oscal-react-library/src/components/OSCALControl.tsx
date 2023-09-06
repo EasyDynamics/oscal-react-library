@@ -24,7 +24,7 @@ import {
 import { EditableFieldProps } from "./OSCALEditableTextField";
 import { Stack } from "@mui/material";
 import { groupBy } from "../utils";
-import { Accordion, AccordionSummary, AccordionDetails } from "./StyedAccordion";
+import { Accordion, AccordionSummary, AccordionDetails } from "./styles/OSCALAccordion";
 import { Position } from "@easydynamics/oscal-types";
 import { OSCALParamsDialog } from "./OSCALParam";
 import { SmallInlineClassDisplay } from "./OSCALClass";

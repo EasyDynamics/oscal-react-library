@@ -12,7 +12,7 @@ import { Typography } from "@mui/material";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getAbsoluteUrl } from "./oscal-utils/OSCALLinkUtils";
-import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
+import { OSCALSection, OSCALSectionHeader } from "./styles/CommonPageStyles";
 import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 import OSCALEditableTextField, { EditableFieldProps } from "./OSCALEditableTextField";
@@ -20,7 +20,6 @@ import { Resource, BackMatter, ResourceLink } from "@easydynamics/oscal-types";
 import { ReactElement } from "react";
 import { OSCALPropertiesDialog } from "./OSCALProperties";
 import { propWithName } from "./oscal-utils/OSCALPropUtils";
-import { NotSpecifiedTypography } from "./StyledTypography";
 import { getFriendlyDisplayOfMediaType } from "./oscal-utils/OSCALMediaTypeUtils";
 import { HoverablePopover } from "./HoverablePopover";
 
@@ -255,7 +254,9 @@ function BackMatterResource(props: BackMatterResourceProps) {
                 properties={resource?.props}
                 title={
                   resource?.title ?? (
-                    <NotSpecifiedTypography component="span">Resource</NotSpecifiedTypography>
+                    <Typography className="NotSpecified" component="span">
+                      Resource
+                    </Typography>
                   )
                 }
               />

@@ -39,11 +39,6 @@ export const OscalContextProvider = ({ children }) => {
   const [eiControlIds, setEiControlIds] = useState(null);
   const [eiAssessPage, setEiAssessPage] = useState(0);
 
-  const eiMode = true;
-  //const eiMode = false
-  //const styleMode = true
-  const styleMode = false;
-
   const overlays = {
     "assessment-results": true,
     "enterprise-initiative": true,
@@ -88,8 +83,6 @@ export const OscalContextProvider = ({ children }) => {
         eiControlIds: { get: eiControlIds, set: setEiControlIds },
         eiAssessPage: { get: eiAssessPage, set: setEiAssessPage },
 
-        eiMode,
-        styleMode,
         overlays,
       }}
     >

@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import OSCALSystemImplementationUsers from "./OSCALSystemImplementationUsers";
 import { OSCALSystemImplementationComponents } from "./OSCALSystemImplementationComponents";
 import OSCALSystemImplementationInventoryItems from "./OSCALSystemImplementationInventoryItems";
-import { OSCALSection, OSCALSectionHeader } from "../styles/CommonPageStyles";
+import { OSCALSection, OSCALSectionHeader } from "./styles/CommonPageStyles";
 import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
 import { OSCALAnchorLinkHeader } from "./OSCALAnchorLinkHeader";
 

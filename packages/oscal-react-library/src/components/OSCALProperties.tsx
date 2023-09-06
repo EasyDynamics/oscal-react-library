@@ -5,20 +5,15 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
-import {
-  OSCALSystemImplementationTableTitle,
-  StyledHeaderTableCell,
-  StyledTableRow,
-  StyledTableHead,
-} from "./OSCALSystemImplementationTableStyles";
+import { Typography } from "@mui/material";
+import StyledTooltip from "./OSCALStyledTooltip";
+import TableHead from "@mui/material/TableHead";
+import { StyledTableRow } from "./OSCALSystemImplementationTableStyles";
 import { Property } from "@easydynamics/oscal-types";
 import { NIST_DEFAULT_NAMESPACE, namespaceOf } from "./oscal-utils/OSCALPropUtils";
-import { NotSpecifiedTypography } from "./StyledTypography";
-import { groupBy } from "../utils";
-import { ButtonLaunchedDialog } from "./ButtonLaunchedDialog";
 import { SmallInlineClassDisplay } from "./OSCALClass";
-import { HoverablePopover } from "./HoverablePopover";
-import { OSCALMarkupMultiLine } from "./OSCALMarkupProse";
+import { ButtonLaunchedDialog } from "./ButtonLaunchedDialog";
+import { groupBy } from "../utils";
 
 /**
  *  Helper to sort properties by their `name` field.
@@ -40,14 +35,10 @@ interface OSCALPropertyProps {
 }
 
 const OSCALProperty: React.FC<OSCALPropertyProps> = ({ property }) => {
-  const NO_INFORMATION = <NotSpecifiedTypography>Not Specified</NotSpecifiedTypography>;
+  const NO_INFORMATION = <Typography className="NotSpecified">Not Specified</Typography>;
 
   return (
-    <HoverablePopover
-      popoverContent={
-        property.remarks && <OSCALMarkupMultiLine>{property.remarks}</OSCALMarkupMultiLine>
-      }
-    >
+    <StyledTooltip title={property.remarks ?? ""}>
       <StyledTableRow key={property.uuid}>
         <TableCell>{property.name ?? NO_INFORMATION}</TableCell>
         <TableCell>
@@ -55,7 +46,7 @@ const OSCALProperty: React.FC<OSCALPropertyProps> = ({ property }) => {
         </TableCell>
         <TableCell>{property.value ?? NO_INFORMATION}</TableCell>
       </StyledTableRow>
-    </HoverablePopover>
+    </StyledTooltip>
   );
 };
 
@@ -74,18 +65,22 @@ const OSCALProperties: React.FC<OSCALPropertiesProps> = ({ properties, namespace
   if (!properties?.length) return null;
   return (
     <>
-      <OSCALSystemImplementationTableTitle variant="h6" id={`${namespace}-table-title`}>
+      <Typography
+        variant="h6"
+        id={`${namespace}-table-title`}
+        className="OSCALSystemImplementationTableTitle"
+      >
         {namespace}
-      </OSCALSystemImplementationTableTitle>
+      </Typography>
       <TableContainer sx={{ maxHeight: "20em" }}>
         <Table aria-label="Components" sx={{ height: "max-content" }}>
-          <StyledTableHead>
+          <TableHead className="StyledTableHead">
             <TableRow>
-              <StyledHeaderTableCell>Name</StyledHeaderTableCell>
-              <StyledHeaderTableCell>Class</StyledHeaderTableCell>
-              <StyledHeaderTableCell>Value</StyledHeaderTableCell>
+              <TableCell className="StyledHeaderTableCell">Name</TableCell>
+              <TableCell className="StyledHeaderTableCell">Class</TableCell>
+              <TableCell className="StyledHeaderTableCell">Value</TableCell>
             </TableRow>
-          </StyledTableHead>
+          </TableHead>
           <TableBody>
             {
               // The index must be used because there is no combination of attributes of
