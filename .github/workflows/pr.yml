@@ -22,7 +22,7 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           cache: "npm"
       - name: Globally update npm
         run: npm install -g npm@latest
@@ -41,7 +41,7 @@ jobs:
           # Lint YAML files
           yamllint --format github --config-file .yaml-lint.yml .
   build_and_test:
-    name: Build and test (on NodeJS 16)
+    name: Build and test (on NodeJS 18)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -55,7 +55,7 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           cache: "npm"
       - name: Globally update npm
         run: npm install -g npm@latest
@@ -79,7 +79,7 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           cache: "npm"
       - name: Setup pages
         uses: actions/configure-pages@v3
