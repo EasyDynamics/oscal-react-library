@@ -43,14 +43,14 @@ const Hug = styled(Container)`
   width: 348px;
   height: 36px;
   top: 120px;
-  left: 810px;
+  left: 840px;
 `;
 const HugPublish = styled(Container)`
   position: absolute;
   width: 448px;
   height: 36px;
   top: 120px;
-  left: 700px;
+  left: 710px;
 `;
 const StackBox = styled(Box)`
   position: absolute;
@@ -532,12 +532,12 @@ export default function OSCALCatalogBaseline() {
             disableElevation
             variant="text"
             color="primary"
-            sx={{ width: 170, height: 20, color: "#B31515" }}
+            sx={{ width: 170, height: 36, color: "#B31515" }}
           >
             <ButtonTypography> DELETE {Model.toUpperCase()}</ButtonTypography>
           </Button>
           <OSCALSecondaryButton
-            sx={{ width: 160, height: 20 }}
+            sx={{ width: 170, height: 36 }}
             onClick={handleAddNewCatalogBaseline}
           >
             <ButtonTypography> PUBLISH {Model.toUpperCase()}</ButtonTypography>
@@ -550,12 +550,12 @@ export default function OSCALCatalogBaseline() {
     return (
       <Hug>
         <Grid spacing={1}>
-          <OSCALTertiaryButton sx={{ width: 57, height: 20 }}>
+          <OSCALTertiaryButton sx={{ width: 57, height: 36 }}>
             {" "}
             <ButtonTypography> UPLOAD </ButtonTypography>{" "}
           </OSCALTertiaryButton>
           <OSCALSecondaryButton
-            sx={{ width: 88, height: 20 }}
+            sx={{ width: 140, height: 36 }}
             onClick={handleAddNewCatalogBaseline}
           >
             <ButtonTypography> CREATE NEW + </ButtonTypography>

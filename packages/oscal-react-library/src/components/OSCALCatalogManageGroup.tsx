@@ -6,6 +6,7 @@ import { ReactComponent as DeleteIcon } from "./images/icons/delete.svg";
 import { ReactComponent as FormatIndentDecreaseIcon } from "./images/icons/outdent.svg";
 import { ReactComponent as FormatIndentIncreaseIcon } from "./images/icons/indent.svg";
 import { ReactComponent as InsertIcon } from "./images/icons/insert.svg";
+import { ReactComponent as ErrorIcon } from "./images/icons/iconmonstr-error-lined.svg";
 import {
   Box,
   Button,
@@ -28,7 +29,12 @@ import {
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import { EditableFieldProps } from "./OSCALEditableTextField";
-import { OSCALSecondaryButton } from "./styles/OSCALButtons";
+import {
+  OSCALPrimaryDestructiveButton,
+  OSCALSecondaryButton,
+  OSCALTertiaryButton,
+} from "./styles/OSCALButtons";
+import { OSCALDialogTitle, OSCALWarningDialog } from "./styles/OSCALDialog";
 
 const GroupTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
@@ -120,6 +126,7 @@ export function GroupDrawer(data: OSCALProject) {
   const [editGroup, setEditGroup] = useState<Group>();
   const [addBelow, setAddBelow] = useState(false);
   const [newGroupParent, setNewGroupParent] = useState<Group>();
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   useEffect(() => {
     getData();
@@ -291,6 +298,78 @@ export function GroupDrawer(data: OSCALProject) {
     setAddNewGroup(true);
   }
 
+  const DeleteDialog: React.FC<OSCALGroup> = (data) => {
+    function handleClose() {
+      setOpenDeleteDialog(false);
+    }
+    const text = 'Type "delete" to confirm';
+    let statement = "";
+    function handleDeleteText(event: { target: { value: string | undefined } }) {
+      statement = event.target.value ?? "";
+    }
+    function handleDelete() {
+      if (statement.toLocaleLowerCase() === "delete") {
+        DeleteGroup(data.group.groupID);
+      }
+      setOpenDeleteDialog(false);
+    }
+    return (
+      <OSCALWarningDialog
+        open={openDeleteDialog}
+        onClose={handleClose}
+        sx={{ width: 531, height: 500, position: "absolute", left: 500, top: 450 }}
+        overflow={false}
+      >
+        <OSCALDialogTitle title={"Delete this Group?"} onClose={handleClose}>
+          <Typography>You cannot undo this action</Typography>
+        </OSCALDialogTitle>
+        <IconButton sx={{ top: 15, position: "absolute" }}>
+          <ErrorIcon />
+        </IconButton>
+        {/* <Typography
+          sx={{
+            top: 15,
+            left: 50,
+            position: "absolute",
+            fontFamily: "Source Sans Pro",
+            fontWeight: 700,
+          }}>
+            Delete this Group?
+        </Typography> */}
+
+        {/* <OSCALTextField
+          label={text}
+          id={"delete"}
+          onChange={}
+          small
+          sx={{ width: 180 }}
+        ></OSCALTextField> */}
+        <Typography>{text}</Typography>
+        <TextField
+          size="small"
+          label={text}
+          fullWidth
+          id={"address line 1"}
+          onChange={handleDeleteText}
+          sx={{
+            left: 100,
+            width: 200,
+          }}
+        ></TextField>
+        <Container sx={{ left: 100, top: 200, position: "absolute" }}>
+          <Grid spacing={1}>
+            <OSCALTertiaryButton sx={{ width: 57, height: 36 }} onClick={handleClose}>
+              {" "}
+              <Typography> CANCEL </Typography>{" "}
+            </OSCALTertiaryButton>
+            <OSCALPrimaryDestructiveButton sx={{ width: 170, height: 36 }} onClick={handleDelete}>
+              <Typography> DELETE GROUP</Typography>
+            </OSCALPrimaryDestructiveButton>
+          </Grid>
+        </Container>
+      </OSCALWarningDialog>
+    );
+  };
   const GroupDialog: React.FC<OSCALGroup> = (data) => {
     function handleNewGroupClick() {
       setSelectedItemName("NewGroup");
@@ -364,6 +443,7 @@ export function GroupDrawer(data: OSCALProject) {
       getData();
     }
     function handleDeleteGroup() {
+      //setOpenDeleteDialog(true);
       DeleteGroup(selectedGroup.groupID);
       getData();
       setAddNewGroup(false);
@@ -555,6 +635,7 @@ export function GroupDrawer(data: OSCALProject) {
       setShowCardMenu(false);
     }
     function handleDelete() {
+      //setOpenDeleteDialog(true);
       DeleteGroup(data.group.groupID);
       setAddNewGroup(false);
       getData();
@@ -608,7 +689,7 @@ export function GroupDrawer(data: OSCALProject) {
     return (
       <Card
         variant="outlined"
-        sx={{ height: 200, left: 255, top: itemYcoordinate - 200, position: "absolute" }}
+        sx={{ height: 250, left: 315, top: itemYcoordinate - 200, position: "absolute" }}
         elevation={2}
       >
         <CardContent>
@@ -617,15 +698,27 @@ export function GroupDrawer(data: OSCALProject) {
               <ListItemText>Edit Group</ListItemText>
             </MenuItem>
             <MenuItem>
+              <IconButton size="small">
+                <DeleteIcon></DeleteIcon>
+              </IconButton>
               <ListItemText onClick={handleDelete}>Delete Group</ListItemText>
             </MenuItem>
             <MenuItem>
+              <IconButton size="small">
+                <InsertIcon></InsertIcon>
+              </IconButton>
               <ListItemText onClick={handleAddBelow}>Add Group Below</ListItemText>
             </MenuItem>
             <MenuItem>
+              <IconButton size="small">
+                <FormatIndentIncreaseIcon></FormatIndentIncreaseIcon>
+              </IconButton>
               <ListItemText onClick={handleIncreaseIndent}>Increase Indent</ListItemText>
             </MenuItem>
             <MenuItem>
+              <IconButton size="small">
+                <FormatIndentDecreaseIcon></FormatIndentDecreaseIcon>
+              </IconButton>
               <ListItemText onClick={handleDecreaseIndent}>Decrease Indent</ListItemText>
             </MenuItem>
           </MenuList>
@@ -760,7 +853,7 @@ export function GroupDrawer(data: OSCALProject) {
               )}
               <Box
                 sx={{
-                  left: open ? 40 + data.group.indent : 9,
+                  left: open ? 40 : 9,
                   height: 35,
                   width: 35,
                   top: 5,
@@ -785,7 +878,7 @@ export function GroupDrawer(data: OSCALProject) {
                 <GroupTooltip title={data.group.groupTitle}>
                   <Typography
                     sx={{
-                      left: 89 + data.group.indent,
+                      left: 89,
                       top: 10,
                       position: "absolute",
                       fontSize: 14,
@@ -947,6 +1040,7 @@ export function GroupDrawer(data: OSCALProject) {
         </Grid>
       </Grid>
       {showCardMenu && <GroupItemMenuBar group={selectedItemGroup ?? defaultGroup} />}
+      <DeleteDialog group={selectedItemGroup ?? defaultGroup}></DeleteDialog>
     </>
   );
 }
