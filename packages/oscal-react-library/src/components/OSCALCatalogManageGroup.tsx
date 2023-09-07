@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import SaveIcon from "@mui/icons-material/Save";
+import EditIcon from "@mui/icons-material/Edit";
 import { useFetchers } from "./Fetchers";
 import { ReactComponent as DeleteIcon } from "./images/icons/delete.svg";
 import { ReactComponent as FormatIndentDecreaseIcon } from "./images/icons/outdent.svg";
@@ -689,12 +690,15 @@ export function GroupDrawer(data: OSCALProject) {
     return (
       <Card
         variant="outlined"
-        sx={{ height: 250, left: 315, top: itemYcoordinate - 200, position: "absolute" }}
+        sx={{ height: 240, left: 315, top: itemYcoordinate - 200, position: "absolute" }}
         elevation={2}
       >
         <CardContent>
           <MenuList>
             <MenuItem onClick={handleEdit}>
+              <IconButton size="small">
+                <EditIcon></EditIcon>
+              </IconButton>
               <ListItemText>Edit Group</ListItemText>
             </MenuItem>
             <MenuItem>
