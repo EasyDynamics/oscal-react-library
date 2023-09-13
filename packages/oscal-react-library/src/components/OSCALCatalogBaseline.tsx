@@ -1400,7 +1400,7 @@ export default function OSCALCatalogBaseline() {
     }
     function newFile() {
       const catalog_data = {
-        uuid: generateUUID(),
+        uuid: window.self.crypto.randomUUID(),
         metadata: {},
         groups: [],
       };
@@ -1408,7 +1408,7 @@ export default function OSCALCatalogBaseline() {
         catalog: catalog_data,
       };
       const profile_data = {
-        uuid: generateUUID(),
+        uuid: window.self.crypto.randomUUID(),
         metadata: {},
         import: [],
         "back-matter": {},
