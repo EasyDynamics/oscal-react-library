@@ -7,15 +7,16 @@ import { ReactComponent as DeleteIcon } from "./images/icons/delete.svg";
 import { ReactComponent as FormatIndentDecreaseIcon } from "./images/icons/outdent.svg";
 import { ReactComponent as FormatIndentIncreaseIcon } from "./images/icons/indent.svg";
 import { ReactComponent as InsertIcon } from "./images/icons/insert.svg";
-import { ReactComponent as ErrorIcon } from "./images/icons/iconmonstr-error-lined.svg";
 import {
   Box,
   Button,
   Card,
   CardContent,
   Container,
+  DialogContent,
   Divider,
   Grid,
+  Stack,
   IconButton,
   ListItemText,
   MenuItem,
@@ -35,7 +36,8 @@ import {
   OSCALSecondaryButton,
   OSCALTertiaryButton,
 } from "./styles/OSCALButtons";
-import { OSCALDialogTitle, OSCALWarningDialog } from "./styles/OSCALDialog";
+import { OSCALDialogActions, OSCALDialogTitle, OSCALWarningDialog } from "./styles/OSCALDialog";
+import { OSCALTextField } from "./styles/OSCALInputs";
 
 const GroupTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
@@ -71,25 +73,6 @@ interface Group extends EditableFieldProps {
 
 interface OSCALGroup extends EditableFieldProps {
   group: Group;
-}
-
-function generateUUID() {
-  // Public Domain/MIT
-  let d = new Date().getTime(); //Timestamp
-  let d2 = (typeof performance !== "undefined" && performance.now && performance.now() * 1000) || 0; //Time in microseconds since page-load or 0 if unsupported
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-    let r = Math.random() * 16; //random number between 0 and 16
-    if (d > 0) {
-      //Use timestamp until depleted
-      r = (d + r) % 16 | 0;
-      d = Math.floor(d / 16);
-    } else {
-      //Use microseconds since page-load if supported
-      r = (d2 + r) % 16 | 0;
-      d2 = Math.floor(d2 / 16);
-    }
-    return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
-  });
 }
 
 export function GroupDrawer(data: OSCALProject) {
@@ -156,9 +139,8 @@ export function GroupDrawer(data: OSCALProject) {
       }
     });
 
-    console.log(" order len ", orderGroups.length, " : all group len ", groupsAndSubs.length);
     let depth = 0;
-    while (depth < 5) {
+    while (depth < 8) {
       groupsAndSubs.forEach((elt) => {
         if (!orderGroups.includes(elt)) {
           if (parent_ids.includes(elt.parentID)) {
@@ -179,7 +161,6 @@ export function GroupDrawer(data: OSCALProject) {
       });
       depth = depth + 1;
     }
-    console.log(" order len ", orderGroups.length, " : all group len ", groupsAndSubs.length);
   }
 
   reorderGroupsAndSetIndent();
@@ -197,11 +178,7 @@ export function GroupDrawer(data: OSCALProject) {
     }
   }
 
-  console.log("fin groups after parents :", groupsAndSubs);
-  console.log("ordered groups  after parents", orderGroups);
-  console.log("orphans", orphans);
-
-  function EditGroupTitle(ID: string, Name: string) {
+  function editGroupTitle(ID: string, Name: string) {
     const rootFile = "projects/catalog_" + data.projectUUID + "/oscal_data.json";
     const request_json = {
       oscal_file: rootFile,
@@ -212,11 +189,11 @@ export function GroupDrawer(data: OSCALProject) {
       console.log("successful addition of a new group", response);
     }
     function addNewGroupFail(e: any) {
-      console.log("Fail to create a new group", e.statusText);
+      console.log("Fail to create a new group", e.statusText, " with request ", request_json);
     }
     fetchTransaction("/edit_group_title", request_json, addNewGroupSuccess, addNewGroupFail);
   }
-  function DeleteGroup(ID: string) {
+  function deleteGroup(ID: string) {
     const id = ID === "" ? selectedItemGroup?.groupID : ID;
     const rootFile = "projects/catalog_" + data.projectUUID + "/oscal_data.json";
     const request_json = {
@@ -227,11 +204,11 @@ export function GroupDrawer(data: OSCALProject) {
       console.log("successful deletion of the group", id, response);
     }
     function deleteGroupFail(e: any) {
-      console.log("Fail to delete the group", id, e.statusText);
+      console.log("Fail to delete the group", id, e.statusText, " with request ", request_json);
     }
     fetchTransaction("/delete_id", request_json, deleteGroupSuccess, deleteGroupFail);
   }
-  function SaveNewGroup(ID: string, Name: string, parentID: string) {
+  function saveNewGroup(ID: string, Name: string, parentID: string) {
     const rootFile = "projects/catalog_" + data.projectUUID + "/oscal_data.json";
     const request_json = {
       oscal_file: rootFile,
@@ -243,11 +220,11 @@ export function GroupDrawer(data: OSCALProject) {
       console.log("successful addition of a new group", response);
     }
     function addNewGroupFail(e: any) {
-      console.log("Fail to create a new group", e.statusText);
+      console.log("Fail to create a new group", e.statusText, "request ", request_json);
     }
     fetchTransaction("/add_group", request_json, addNewGroupSuccess, addNewGroupFail);
   }
-  function MoveGroup(ID: string, Name: string, newParentID: string) {
+  function moveGroup(ID: string, Name: string, newParentID: string) {
     const rootFile = "projects/catalog_" + data.projectUUID + "/oscal_data.json";
     const request_json = {
       oscal_file: rootFile,
@@ -258,7 +235,7 @@ export function GroupDrawer(data: OSCALProject) {
       console.log("successful addition of a new group", response);
     }
     function moveGroupFail(e: any) {
-      console.log("Fail to create a new group", e.statusText);
+      console.log("Fail to create a new group", e.statusText, "with request ", request_json);
     }
     fetchTransaction("/move_group", request_json, moveGroupSuccess, moveGroupFail);
   }
@@ -280,7 +257,7 @@ export function GroupDrawer(data: OSCALProject) {
       setBaseGroups(response.groups);
     }
     function getCatalogGroupsFail(e: any) {
-      console.log("In GroupDrawer: Operation fail ", e.statusText);
+      console.log("In GroupDrawer: Operation fail ", e.statusText, " with request ", request_json);
     }
   }
 
@@ -300,74 +277,51 @@ export function GroupDrawer(data: OSCALProject) {
   }
 
   const DeleteDialog: React.FC<OSCALGroup> = (data) => {
+    const [deleteText, setDeleteText] = useState("");
     function handleClose() {
       setOpenDeleteDialog(false);
     }
-    const text = 'Type "delete" to confirm';
-    let statement = "";
     function handleDeleteText(event: { target: { value: string | undefined } }) {
-      statement = event.target.value ?? "";
+      setDeleteText(event.target.value ?? "");
     }
     function handleDelete() {
-      if (statement.toLocaleLowerCase() === "delete") {
-        DeleteGroup(data.group.groupID);
+      if (deleteText.toLowerCase() === "delete") {
+        deleteGroup(data.group.groupID);
+        //reload Data
+        getData();
       }
       setOpenDeleteDialog(false);
     }
     return (
-      <OSCALWarningDialog
-        open={openDeleteDialog}
-        onClose={handleClose}
-        sx={{ width: 531, height: 500, position: "absolute", left: 500, top: 450 }}
-        overflow={false}
-      >
-        <OSCALDialogTitle title={"Delete this Group?"} onClose={handleClose}>
-          <Typography>You cannot undo this action</Typography>
-        </OSCALDialogTitle>
-        <IconButton sx={{ top: 15, position: "absolute" }}>
-          <ErrorIcon />
-        </IconButton>
-        {/* <Typography
-          sx={{
-            top: 15,
-            left: 50,
-            position: "absolute",
-            fontFamily: "Source Sans Pro",
-            fontWeight: 700,
-          }}>
-            Delete this Group?
-        </Typography> */}
-
-        {/* <OSCALTextField
-          label={text}
-          id={"delete"}
-          onChange={}
-          small
-          sx={{ width: 180 }}
-        ></OSCALTextField> */}
-        <Typography>{text}</Typography>
-        <TextField
-          size="small"
-          label={text}
-          fullWidth
-          id={"address line 1"}
-          onChange={handleDeleteText}
-          sx={{
-            left: 100,
-            width: 200,
-          }}
-        ></TextField>
-        <Container sx={{ left: 100, top: 200, position: "absolute" }}>
-          <Grid spacing={1}>
-            <OSCALTertiaryButton sx={{ width: 57, height: 36 }} onClick={handleClose}>
-              {" "}
-              <Typography> CANCEL </Typography>{" "}
-            </OSCALTertiaryButton>
-            <OSCALPrimaryDestructiveButton sx={{ width: 170, height: 36 }} onClick={handleDelete}>
-              <Typography> DELETE GROUP</Typography>
-            </OSCALPrimaryDestructiveButton>
-          </Grid>
-        </Container>
+      <OSCALWarningDialog open={openDeleteDialog} onClose={handleClose}>
+        <OSCALDialogTitle warning={true} title={"Delete Group?"} onClose={handleClose} />
+        <DialogContent>
+          <Stack>
+            <Typography>
+              If deleted, all associated subgroups and controls will be <b>permanently</b> deleted.
+              You cannot undo this action..
+            </Typography>
+            <Box padding={1} />
+            <Typography>Please enter {"'delete'"} to confirm.</Typography>
+            <Box padding={1} />
+            <OSCALTextField
+              id="delete-text"
+              aria-label="Please type 'delete'"
+              noLabel
+              placeholder={"delete"}
+              onChange={handleDeleteText}
+            />
+          </Stack>
+        </DialogContent>
+        <OSCALDialogActions>
+          <OSCALTertiaryButton onClick={handleClose}>Cancel</OSCALTertiaryButton>
+          <OSCALPrimaryDestructiveButton
+            onClick={handleDelete}
+            disabled={deleteText.toLowerCase() !== "delete"}
+          >
+            Delete Group
+          </OSCALPrimaryDestructiveButton>
+        </OSCALDialogActions>
       </OSCALWarningDialog>
     );
   };
@@ -381,7 +335,7 @@ export function GroupDrawer(data: OSCALProject) {
     let preID = "";
     function handleEditIDChange(event: { target: { value: string | undefined } }) {
       preID = event.target.value ?? "";
-      ID = preID + "_" + generateUUID();
+      ID = preID + "_" + window.self.crypto.randomUUID();
     }
     function handleEditgroupTitleChange(event: { target: { value: string } }) {
       Name = event.target.value;
@@ -399,7 +353,7 @@ export function GroupDrawer(data: OSCALProject) {
         setShowCardMenu(false);
         return;
       }
-      MoveGroup(selectedGroup.groupID, selectedGroup.groupTitle, sibling.groupID);
+      moveGroup(selectedGroup.groupID, selectedGroup.groupTitle, sibling.groupID);
       // Reload the main data
       getData();
       setShowCardMenu(false);
@@ -414,14 +368,14 @@ export function GroupDrawer(data: OSCALProject) {
       const parent = orderGroups.find((x) => x.groupID === parentID) ?? defaultGroup;
       const new_parent_id = parent.parentID;
 
-      MoveGroup(selectedGroup.groupID, selectedGroup.groupTitle, new_parent_id);
+      moveGroup(selectedGroup.groupID, selectedGroup.groupTitle, new_parent_id);
       // Reload the main data
       getData();
       setShowCardMenu(false);
     }
     function handleSaveNewGroup() {
       if (edit && !addBelow) {
-        EditGroupTitle(selectedGroup.groupID, Name);
+        editGroupTitle(selectedGroup.groupID, Name);
         setAddNewGroup(false);
         getData();
         setEditGroup(defaultGroup);
@@ -433,19 +387,19 @@ export function GroupDrawer(data: OSCALProject) {
       }
       if (addBelow) {
         const parent_id = newGroupParent === undefined ? "" : newGroupParent.groupID;
-        SaveNewGroup(ID, Name, parent_id);
+        saveNewGroup(ID, Name, parent_id);
         setAddNewGroup(false);
         getData();
         setAddBelow(false);
         return;
       }
-      SaveNewGroup(ID, Name, "");
+      saveNewGroup(ID, Name, "");
       setAddNewGroup(false);
       getData();
     }
     function handleDeleteGroup() {
-      //setOpenDeleteDialog(true);
-      DeleteGroup(selectedGroup.groupID);
+      setOpenDeleteDialog(true);
+      // DeleteGroup(selectedGroup.groupID);
       getData();
       setAddNewGroup(false);
     }
@@ -461,8 +415,9 @@ export function GroupDrawer(data: OSCALProject) {
             height: 73,
             left: 20,
             position: "absolute",
-            background: "#F6F6F6",
+            background: (theme) => theme.palette.backgroundGray.main,
             border: "1px solid #D2D2D2",
+            borderColor: (theme) => theme.palette.secondary.main,
             width: 300,
           }}
         >
@@ -599,7 +554,7 @@ export function GroupDrawer(data: OSCALProject) {
     function handleRootLevelClick() {
       setSelectedItemName("Root");
     }
-    const rootSelected = selectedItemName === "Root" ? true : false;
+    const rootSelected = selectedItemName === "Root";
     const text = open ? "Root Level Controls" : "RC";
     return (
       <Box
@@ -636,8 +591,8 @@ export function GroupDrawer(data: OSCALProject) {
       setShowCardMenu(false);
     }
     function handleDelete() {
-      //setOpenDeleteDialog(true);
-      DeleteGroup(data.group.groupID);
+      setOpenDeleteDialog(true);
+      // DeleteGroup(data.group.groupID);
       setAddNewGroup(false);
       getData();
       setShowCardMenu(false);
@@ -651,7 +606,6 @@ export function GroupDrawer(data: OSCALProject) {
       setShowCardMenu(false);
     }
     function handleIncreaseIndent() {
-      console.log("increasing indent of", data.group.groupTitle);
       if (data.group === undefined) {
         setShowCardMenu(false);
         return;
@@ -662,13 +616,12 @@ export function GroupDrawer(data: OSCALProject) {
         setShowCardMenu(false);
         return;
       }
-      MoveGroup(data.group.groupID, data.group.groupTitle, sibling.groupID);
+      moveGroup(data.group.groupID, data.group.groupTitle, sibling.groupID);
       // Reload the main data
       getData();
       setShowCardMenu(false);
     }
     function handleDecreaseIndent() {
-      console.log("decreasing indent of", data.group.groupTitle);
       if (data.group === undefined) {
         setShowCardMenu(false);
         return;
@@ -681,8 +634,7 @@ export function GroupDrawer(data: OSCALProject) {
       }
       const parent = orderGroups.find((x) => x.groupID === parentID) ?? defaultGroup;
       const new_parent_id = parent.parentID;
-      console.log("decreasing indent  with parent", data.group.parentID);
-      MoveGroup(data.group.groupID, data.group.groupTitle, new_parent_id);
+      moveGroup(data.group.groupID, data.group.groupTitle, new_parent_id);
       // Reload the main data
       getData();
       setShowCardMenu(false);
@@ -692,6 +644,7 @@ export function GroupDrawer(data: OSCALProject) {
         variant="outlined"
         sx={{ height: 240, left: 315, top: itemYcoordinate - 200, position: "absolute" }}
         elevation={2}
+        id="menuBar"
       >
         <CardContent>
           <MenuList>
@@ -733,7 +686,6 @@ export function GroupDrawer(data: OSCALProject) {
 
   const GroupItem: React.FC<OSCALGroup> = (data) => {
     const [isDragged, setIsDragged] = useState(false);
-    const [DroppedGroup, setDroppedGroup] = useState<Group>();
     const [doneDropping, setEndDropping] = useState(false);
     const [draggingOver, setDraggingOver] = useState(false);
 
@@ -781,18 +733,15 @@ export function GroupDrawer(data: OSCALProject) {
       event.preventDefault();
       event.stopPropagation();
       event.target.style.border = "1px solid #D2D2D2";
-      setDroppedGroup(data.group);
       setEndDropping(true);
     };
 
-    if (data.group.indent > 40) {
+    if (data.group.indent > 90) {
       return null;
     }
-    console.log("droppedGroup is", DroppedGroup);
-    console.log("Ids", Ids);
     if (doneDropping && draggedGroups?.length > 0) {
       const subGroup = draggedGroups[0];
-      MoveGroup(subGroup.groupID, subGroup.groupTitle, data.group.groupID);
+      moveGroup(subGroup.groupID, subGroup.groupTitle, data.group.groupID);
       // update groups
       getData();
       subGroup.parentID = data.group.parentID;
@@ -955,6 +904,9 @@ export function GroupDrawer(data: OSCALProject) {
       </>
     );
   };
+  function mainClick() {
+    if (showCardMenu) setShowCardMenu(false);
+  }
   const defaultGroup: Group = {
     groupID: "",
     groupTitle: "",
@@ -966,7 +918,7 @@ export function GroupDrawer(data: OSCALProject) {
   };
   return (
     <>
-      <Grid container spacing={2} direction={"row"}>
+      <Grid container spacing={2} direction={"row"} onClick={mainClick}>
         <Grid
           sx={{
             width: drawerWidth,

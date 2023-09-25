@@ -97,13 +97,11 @@ export const OSCALSecondaryButtonSmall = (props) => {
       sx={{
         height: 20,
         ":hover": {
-          backgroundColor: "#023E88",
-          color: "#FFFFFF",
+          backgroundColor: (theme) => theme.palette.secondary.main,
+          color: (theme) => theme.palette.white.main,
         },
       }}
     />
-    //backgroundColor: (theme) => theme.palette.secondary.main,
-    //color: (theme) => theme.palette.white.main,
   );
 };
 
