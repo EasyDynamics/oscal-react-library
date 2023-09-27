@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { EditableFieldProps } from "./OSCALEditableTextField";
-import { Button, ButtonGroup, Link, NativeSelect, Select, TextField, Tooltip } from "@mui/material";
+import { Alert, Button, ButtonGroup, NativeSelect, TextField, Tooltip } from "@mui/material";
 import BreadCrumbs from "@mui/material/Breadcrumbs";
 import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import { Divider, TooltipProps } from "@mui/material";
 import { Stack, styled } from "@mui/system";
 import { useFetchers } from "./Fetchers";
-import { OSCALDialogTitle, OSCALEditingDialog } from "./styles/OSCALDialog";
+import { OSCALDialogTitle, OSCALEditingDialog, OSCALWarningDialog } from "./styles/OSCALDialog";
 
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -23,25 +23,41 @@ import DialogContent from "@mui/material/DialogContent";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import IconButton from "@mui/material/IconButton";
+import FileIcon from "./images/icons/filebucket.svg";
+import UploadIcon from "./images/icons/fileUpload.svg";
+import Uploading from "./images/icons/uploading.svg";
+import GreenCircle from "./images/icons/greenCircle.svg";
+import GreenCheck from "./images/icons/greenCheck.svg";
+import RedCircle from "./images/icons/redCircle.svg";
+import RedCheck from "./images/icons/redX.svg";
+import BlueCircle from "./images/icons/blueCircle.svg";
+import SemiCircle from "./images/icons/semiCircleOrange.svg";
 import { Typography, Container, Grid } from "@mui/material";
 
 import {
   OSCALPrimaryButton,
   OSCALSecondaryButton,
   OSCALTertiaryButton,
+  OSCALTertiaryGrayscaleButton,
 } from "./styles/OSCALButtons";
 import { OSCALTextField, OSCALRadio, OSCALFormLabel } from "./styles/OSCALInputs";
 
 import { FormatBold, FormatItalic, FormatQuote, Subscript, Superscript } from "@mui/icons-material";
 
 import { CodeOffSharp } from "@mui/icons-material";
+import { OSCALAlertError, OSCALAlertWarning } from "./styles/OSCALAlerts";
+import GroupDrawer from "./OSCALCatalogManageGroup";
+
+const MainImage = styled("img")`
+  margin-right: 1em;
+`;
 
 const Hug = styled(Container)`
   position: absolute;
   width: 348px;
   height: 36px;
   top: 120px;
-  left: 810px;
+  left: 80%;
 `;
 const HugPublish = styled(Container)`
   position: absolute;
@@ -54,8 +70,8 @@ const StackBox = styled(Box)`
   position: absolute;
   top: 186px;
   left: 40px;
-  width: 1188px;
-  height: 800px;
+  width: 100%;
+  height: 100%;
 `;
 
 const ItemBox = styled(Box)`
@@ -257,15 +273,6 @@ const OSCALBreadCrumbs = styled(BreadCrumbs)`
     color: #ff6600;
   }
 `;
-const OSCALLink = styled(Link)`
-  color: "#002867";
-  font-weight: 400;
-  font-family: "Source Sans Pro";
-  line-height: 20px;
-  :hover {
-    color: #ff6600;
-  }
-`;
 const CatalogTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
 ))`
@@ -332,53 +339,7 @@ export interface ProjectUUIDs {
   readonly ProfileUUIDS: Array<string>;
 }
 
-export const CatalogBreadCrumbsMenu: React.FC<OSCALModel | undefined> = (item) => {
-  const usedTitle = item?.model.title ?? "";
-  const trunckatedTitle = usedTitle.length > 45 ? usedTitle.substring(0, 44) + "..." : usedTitle;
-  if (item !== undefined && item.model.title !== undefined && item.model.title.length > 0)
-    return (
-      <OSCALBreadCrumbs aria-label="breadcrumb">
-        <OSCALLink href="/">HOME</OSCALLink>
-        <OSCALLink
-          href="/"
-          sx={{
-            fontWeight: "700",
-          }}
-        >
-          CATALOGS & BASELINES
-        </OSCALLink>
-        <CatalogTooltip title={usedTitle.toUpperCase()}>
-          <OSCALLink
-            href="/"
-            sx={{
-              color: "#002867",
-              fontWeight: "700",
-            }}
-          >
-            {" "}
-            {trunckatedTitle.toUpperCase()}
-          </OSCALLink>
-        </CatalogTooltip>
-      </OSCALBreadCrumbs>
-    );
-  else
-    return (
-      <OSCALBreadCrumbs aria-label="breadcrumb">
-        <OSCALLink href="/">HOME</OSCALLink>
-        <OSCALLink
-          href="/"
-          sx={{
-            color: "#002867",
-            fontWeight: "700",
-          }}
-        >
-          CATALOGS & BASELINES
-        </OSCALLink>
-      </OSCALBreadCrumbs>
-    );
-};
-
-export function CatalogBaselineTabs() {
+export function CatalogBaselineTabs(data: OSCALModel) {
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -388,8 +349,10 @@ export function CatalogBaselineTabs() {
   return (
     <Box
       sx={{
-        width: 1040,
-        height: 900,
+        minWidth: 1040,
+        minHeight: 900,
+        height: "90%",
+        width: "90%",
         typography: "body1",
         top: 200,
         left: 40,
@@ -410,7 +373,9 @@ export function CatalogBaselineTabs() {
             <CTab label="Resources" value="4" />
           </TabList>
         </Box>
-        <TabPanel value="1">Controls</TabPanel>
+        <TabPanel value="1">
+          <GroupDrawer projectUUID={data.model.projectUUID ?? ""}></GroupDrawer>
+        </TabPanel>
         <TabPanel value="2">Catalog Details</TabPanel>
         <TabPanel value="3">Directory</TabPanel>
         <TabPanel value="4">Back Matter</TabPanel>
@@ -442,9 +407,11 @@ export default function OSCALCatalogBaseline() {
   const fetchers = useFetchers();
   const fetchTransaction = fetchers["fetchTransaction"];
   const fetchRest = fetchers["fetchRest"];
+  const fetchUploadFile = fetchers["fetchUploadFile"];
 
   let Model = "Catalog";
   const [AddNewCatalogBaseline, setAddNewCatalogBaseline] = useState(false);
+  const [uploadNewCatalogBaseline, setUploadNewCatalogBaseline] = useState(false);
   const [AddOrgDetails, setAddOrgDetails] = useState(false);
   const [createdNewCatalogBaseline, setCreatedNewCatalogBaseline] = useState(false);
   const [AddAuthorDetails, setAddAuthorDetails] = useState(false);
@@ -461,12 +428,17 @@ export default function OSCALCatalogBaseline() {
   const [authorContact, setAuthorContact] = useState<ContactInfo>({});
   const [openCatalogBaseline, setOpenCatalogBaseline] = useState(false);
   const [newOSCALModel, setNewOSCALModel] = useState<CatalogBaseline | undefined>(undefined);
+  const [noUploadCreateHug, setNoUploadCreatedHug] = useState(false);
   let newModelCreationDone = false;
   let address: Address = orgAddress;
   let contact: ContactInfo = {};
   address = authorAddress;
   const createdModel = newOSCALModel === undefined ? Data : newOSCALModel;
-  const LabelText = openCatalogBaseline ? createdModel.title : " Catalogs & Baselines";
+  const catalogBaselineTitle = openCatalogBaseline ? createdModel.title : " Catalogs & Baselines";
+  const LabelText = uploadNewCatalogBaseline
+    ? " Upload a Catalog or Baseline "
+    : catalogBaselineTitle;
+
   Model = createdModel.isCatalog ? "Catalog" : "Baseline";
 
   useEffect(() => {
@@ -495,8 +467,8 @@ export default function OSCALCatalogBaseline() {
     }
   }
 
-  function renderTabs() {
-    if (openCatalogBaseline) return <CatalogBaselineTabs></CatalogBaselineTabs>;
+  function renderTabs(data: OSCALModel) {
+    if (openCatalogBaseline) return <CatalogBaselineTabs model={data.model}></CatalogBaselineTabs>;
     else return null;
   }
 
@@ -520,10 +492,639 @@ export default function OSCALCatalogBaseline() {
       console.log("Operation fail " + e.statusText);
     }
   }
+  function loadPage() {
+    setCreatedNewCatalogBaseline(false);
+    setOpenCatalogBaseline(false);
+    setNewOSCALModel(undefined);
+    setUploadNewCatalogBaseline(false);
+    getCatalogIds();
+    getBaselineIds();
+    return { renderFilledItemBox };
+  }
+  const CatalogBreadCrumbsMenu: React.FC<OSCALModel | undefined> = (item) => {
+    const usedTitle = item?.model.title ?? "";
+    const trunckatedTitle = usedTitle.length > 30 ? usedTitle.substring(0, 29) + "..." : usedTitle;
+    if (item !== undefined && item.model.title !== undefined && item.model.title.length > 0)
+      return (
+        <BreadCrumbs
+          maxItems={3}
+          itemsBeforeCollapse={1}
+          itemsAfterCollapse={2}
+          aria-label="breadcrumb"
+          sx={{
+            position: "absolute",
+            width: 800,
+            height: 100,
+            top: 96,
+            left: 40,
+            ":hover": {
+              color: "#ff6600",
+            },
+          }}
+        >
+          <Typography
+            variant="h3"
+            sx={{
+              color: "#2b2b2b",
+              ":hover": {
+                color: "#ff6600",
+              },
+            }}
+            onClick={loadPage}
+          >
+            Home
+          </Typography>
+
+          <Typography
+            variant="h3"
+            sx={{
+              color: "#1d1d1d",
+              ":hover": {
+                color: "#ff6600",
+              },
+            }}
+            onClick={loadPage}
+          >
+            CATALOGS & BASELINES
+          </Typography>
+          <CatalogTooltip title={usedTitle.toUpperCase()}>
+            <Typography
+              color="primary"
+              variant={"h2"}
+              sx={{
+                width: 400,
+                ":hover": {
+                  color: "#ff6600",
+                },
+              }}
+            >
+              {trunckatedTitle.toUpperCase()}
+            </Typography>
+          </CatalogTooltip>
+        </BreadCrumbs>
+      );
+    else if (uploadNewCatalogBaseline) {
+      return (
+        <OSCALBreadCrumbs
+          aria-label="breadcrumb"
+          maxItems={3}
+          itemsBeforeCollapse={1}
+          itemsAfterCollapse={2}
+        >
+          <Typography
+            variant="h3"
+            sx={{
+              color: "#2b2b2b",
+              ":hover": {
+                color: "#ff6600",
+              },
+            }}
+            onClick={loadPage}
+          >
+            Home
+          </Typography>
+          <OSCALTertiaryGrayscaleButton>
+            <Typography
+              variant="h3"
+              sx={{
+                color: "#1d1d1d",
+                ":hover": {
+                  color: "#ff6600",
+                },
+              }}
+              onClick={loadPage}
+            >
+              CATALOGS & BASELINES
+            </Typography>
+          </OSCALTertiaryGrayscaleButton>
+          <Typography
+            color="primary"
+            variant={"h2"}
+            sx={{
+              fontWeight: (theme) => theme.typography.fontWeightBold,
+              textTransform: "uppercase",
+              ":hover": {
+                color: "#ff6600",
+              },
+              fontFamily: "Source Sans Pro",
+            }}
+          >
+            UPLOAD
+          </Typography>
+        </OSCALBreadCrumbs>
+      );
+    }
+    return (
+      <OSCALBreadCrumbs
+        aria-label="breadcrumb"
+        maxItems={3}
+        itemsBeforeCollapse={1}
+        itemsAfterCollapse={2}
+      >
+        <Typography
+          variant="h3"
+          sx={{
+            ":hover": {
+              color: "#ff6600",
+            },
+          }}
+          onClick={loadPage}
+        >
+          Home
+        </Typography>
+
+        <Typography
+          color="primary"
+          variant={"h2"}
+          sx={{
+            textTransform: "uppercase",
+            ":hover": {
+              color: "#ff6600",
+            },
+          }}
+        >
+          CATALOGS & BASELINES
+        </Typography>
+      </OSCALBreadCrumbs>
+    );
+  };
+  function RenderUpload() {
+    const [upload, setUpload] = useState(false);
+    const [uploadSuccessful, setUploadSuccessfulStatus] = useState(false);
+    const [startDropping, setStartDropping] = useState(false);
+    const [fileName, setFileName] = useState("");
+    const [newOSCALFilePath, setNewOSCALFilePath] = useState("");
+    const [endUploading, setEndUploading] = useState(false);
+    const [openWarningDialog, setOpenWarningDialog] = useState(true);
+    function handleUpload() {
+      setUpload(true);
+      setNoUploadCreatedHug(true);
+    }
+    function handleClose() {
+      setOpenWarningDialog(false);
+    }
+    const UploadTypo = styled(Typography)`
+      font-family: Source Sans Pro;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 25px;
+      letter-spacing: 0em;
+      text-align: left;
+      color: #002867;
+    `;
+    const onUpload = (event: any) => {
+      if (!event.target.files || event.target.files.length === 0) {
+        console.log("Issues handling file import. Browser may not support file system upload.");
+        return;
+      }
+      //const file = event.target.files[0];
+      //  const fileUrl = URL.createObjectURL(file);  TODO Keeping this line of code if later we need to upload a file from a url.
+      const files = event.target.files;
+      setUploadSuccessfulStatus(true);
+      doSubmitUploadFile(files[0]);
+    };
+    const handleDrag = (event: any) => {
+      event.target.style.border = "2px dotted #0028675E";
+      setStartDropping(true);
+      setEndUploading(false);
+      event.preventDefault();
+      event.stopPropagation();
+    };
+    const handleDrop = (event: any) => {
+      // Avoid opening document in new tab
+      event.preventDefault();
+      event.stopPropagation();
+      event.target.style.border = "1px solid #0028675E";
+      // Handle file import
+      console.log("file dropped");
+      console.log(event);
+      // Handle successful file drop
+      if (event.dataTransfer && event.dataTransfer.files.length !== 0) {
+        const files = event.dataTransfer.files;
+        console.log(files[0]);
+
+        doSubmitUploadFile(files[0]);
+      } else {
+        console.log("Issues handling file import. Browser may not support drag and drop.");
+      }
+    };
+
+    function doSubmitUploadFile(filename: File) {
+      if (filename === null) {
+        return;
+      }
+      setFileName(filename.name);
+      console.log("Main File", filename.name);
+      fetchUploadFile(filename, uploadFileSuccess, uploadFileFail);
+    }
+    function uploadFileSuccess(response: any) {
+      const filename = response["filename"];
+      console.log(
+        "File " + filename + " uploaded successfully. Response was " + JSON.stringify(response)
+      );
+
+      const request_json = {
+        file: filename,
+      };
+      fetchTransaction(
+        "/create_oscal_project",
+        request_json,
+        createOscalProjectSuccess,
+        createOscalProjectFail
+      );
+    }
+
+    function uploadFileFail(e: any) {
+      console.log("upload failed", e);
+      setUploadSuccessfulStatus(false);
+      setStartDropping(false);
+    }
+
+    function createOscalProjectSuccess(response: any) {
+      console.log("upload successful", response);
+      setNewOSCALFilePath(response["new_oscal_file"]);
+      setUploadSuccessfulStatus(true);
+      setStartDropping(false);
+      setEndUploading(true);
+    }
+
+    function createOscalProjectFail(e: any) {
+      console.log("upload failed", e);
+      setUploadSuccessfulStatus(false);
+      setStartDropping(false);
+      setEndUploading(true);
+    }
+    function handleGoBack() {
+      setStartDropping(false);
+      setEndUploading(false);
+      setUploadSuccessfulStatus(false);
+    }
+    function handleOpenFile() {
+      const request_json = {
+        oscal_file: newOSCALFilePath,
+      };
+      setUploadSuccessfulStatus(true);
+      setUpload(true);
+      setUploadNewCatalogBaseline(false);
+      fetchTransaction("/get_metadata", request_json, getMetadataSuccess, getMetadataFail);
+      function getMetadataSuccess(response: any) {
+        console.log("newly response", response);
+        const model: CatalogBaseline = {
+          title: response.title,
+          lastModified: response.lastModified,
+          documentVersion: response.version,
+          publicationDate: response.publicationDate,
+          projectUUID: response.projectUUID,
+          isVisible: true,
+        };
+        setNewOSCALModel(model);
+        setOpenCatalogBaseline(true);
+      }
+      function getMetadataFail(e: any) {
+        console.log("In FilledBoxItem: Operation fail ", e.statusText);
+      }
+    }
+    const zeroCatalogBaseline = catalogIds.length === 0 && baselineIds.length === 0;
+    return (
+      <>
+        {!uploadSuccessful && zeroCatalogBaseline && (
+          <Box sx={{ width: 300, height: 400 }} overflow={"hidden"}>
+            <MainImage
+              sx={{ top: 330, left: 470, width: 150, position: "absolute" }}
+              src={FileIcon}
+            />
+            <UploadTypo
+              variant="h1"
+              sx={{
+                top: 510,
+                left: 400,
+                width: 400,
+                height: 30,
+                position: "absolute",
+              }}
+            >
+              No catalogs or baselines defined!
+            </UploadTypo>
+            <OSCALPrimaryButton
+              sx={{ top: 550, left: 450, width: 91, height: 36, position: "absolute" }}
+              onClick={handleUpload}
+            >
+              <Typography>UPLOAD</Typography>
+            </OSCALPrimaryButton>
+            <OSCALTertiaryButton
+              sx={{ top: 550, left: 540, width: 140, height: 36, position: "absolute" }}
+              onClick={handleAddNewCatalogBaseline}
+            >
+              <Typography
+                sx={{
+                  fontFamily: "Source Sans Pro",
+                  fontSize: 16,
+                  fontWeight: 600,
+                  lineHeight: 20,
+                  letterSpacing: 0,
+                  textAlign: "left",
+                  color: "#023E88",
+                }}
+                onClick={handleAddNewCatalogBaseline}
+              >
+                CREATE NEW +
+              </Typography>
+            </OSCALTertiaryButton>
+          </Box>
+        )}
+        {(upload || uploadNewCatalogBaseline) && (
+          <Container
+            sx={{
+              top: 180,
+              left: 40,
+              height: 990,
+              width: 1030,
+              position: "absolute",
+            }}
+          >
+            <Box
+              sx={{
+                top: 0,
+                left: 0,
+                height: 550,
+                width: 1030,
+                position: "absolute",
+              }}
+              onDragOver={handleDrag}
+              onDrop={handleDrop}
+            >
+              <Box
+                sx={{
+                  top: 20,
+                  left: 0,
+                  height: 400,
+                  width: 1030,
+                  background: "#ffffff",
+                  position: "absolute",
+                  border: "1xp dotted #0028675E",
+                }}
+              >
+                {!startDropping && !endUploading && !uploadSuccessful && (
+                  <Container>
+                    <MainImage
+                      sx={{ top: 100, left: 470, width: 72, position: "absolute" }}
+                      src={UploadIcon}
+                    />
+                    <UploadTypo
+                      variant="h2"
+                      sx={{
+                        top: 200,
+                        left: 400,
+                        width: 400,
+                        position: "absolute",
+                      }}
+                    >
+                      Drag and Drop Your File Here
+                    </UploadTypo>
+                    <UploadTypo
+                      variant="h6"
+                      sx={{
+                        top: 250,
+                        left: 490,
+                        width: 100,
+                        position: "absolute",
+                      }}
+                    >
+                      OR
+                    </UploadTypo>
+                    <Button
+                      component="label"
+                      sx={{
+                        top: 285,
+                        left: 435,
+                        width: 150,
+                        position: "absolute",
+                      }}
+                    >
+                      Choose a File
+                      <input
+                        type="file"
+                        hidden
+                        accept="application/json"
+                        onChange={onUpload}
+                      ></input>
+                    </Button>
+                  </Container>
+                )}
+                {startDropping && (
+                  <Container>
+                    <MainImage
+                      sx={{
+                        top: 100,
+                        left: 505,
+                        width: 70,
+                        position: "absolute",
+                      }}
+                      src={BlueCircle}
+                      alt="Easy Dynamics Logo"
+                    />
+                    <MainImage
+                      sx={{
+                        top: 100,
+                        left: 538,
+                        width: 40,
+                        height: 70,
+                        position: "absolute",
+                      }}
+                      src={SemiCircle}
+                      alt="Easy Dynamics Logo"
+                    />
+                    <UploadTypo
+                      variant="h6"
+                      sx={{
+                        top: 220,
+                        left: 490,
+                        width: 200,
+                        position: "absolute",
+                      }}
+                    >
+                      Uploading ...
+                    </UploadTypo>
+                  </Container>
+                )}
+                {uploadSuccessful && (
+                  <Container>
+                    <MainImage
+                      sx={{
+                        top: 118,
+                        left: 505,
+                        width: 72,
+                        position: "absolute",
+                      }}
+                      src={GreenCircle}
+                      alt="Easy Dynamics Logo"
+                    />
+                    <MainImage
+                      sx={{
+                        top: 135,
+                        left: 515,
+                        width: 50,
+                        position: "absolute",
+                      }}
+                      src={GreenCheck}
+                      alt="Easy Dynamics Logo"
+                    />
+                    <UploadTypo
+                      variant="h6"
+                      sx={{
+                        top: 220,
+                        left: 470,
+                        width: 200,
+                        position: "absolute",
+                      }}
+                    >
+                      Upload Complete
+                    </UploadTypo>
+                    <Typography sx={{ top: 260, left: 390, width: 400, position: "absolute" }}>
+                      {fileName} has been successfully uploaded.
+                    </Typography>
+                    <OSCALTertiaryButton
+                      sx={{ top: 300, left: 370, position: "absolute" }}
+                      onClick={loadPage}
+                    >
+                      GO BACK
+                    </OSCALTertiaryButton>
+                    <OSCALSecondaryButton
+                      sx={{ top: 300, left: 470, position: "absolute" }}
+                      onClick={handleGoBack}
+                    >
+                      UPLOAD MORE FILES
+                    </OSCALSecondaryButton>
+                    <OSCALPrimaryButton
+                      sx={{ top: 300, left: 660, position: "absolute" }}
+                      onClick={handleOpenFile}
+                    >
+                      {" "}
+                      GO TO FILE
+                    </OSCALPrimaryButton>
+                  </Container>
+                )}
+                {!uploadSuccessful && endUploading && (
+                  <Container>
+                    <MainImage
+                      sx={{
+                        top: 127,
+                        left: 490,
+                        width: 72,
+                        position: "absolute",
+                      }}
+                      src={RedCircle}
+                      alt="Easy Dynamics Logo"
+                    />
+                    <MainImage
+                      sx={{
+                        top: 140,
+                        left: 503,
+                        width: 45,
+                        position: "absolute",
+                      }}
+                      src={RedCheck}
+                      alt="Easy Dynamics Logo"
+                    />
+                    <UploadTypo
+                      variant="h6"
+                      sx={{
+                        top: 220,
+                        left: 470,
+                        width: 200,
+                        position: "absolute",
+                      }}
+                    >
+                      Upload Error
+                    </UploadTypo>
+                    <Typography sx={{ top: 260, left: 390, width: 400, position: "absolute" }}>
+                      {fileName} was not uploaded.
+                    </Typography>
+                    <OSCALPrimaryButton
+                      sx={{ top: 300, left: 370, position: "absolute" }}
+                      onClick={loadPage}
+                    >
+                      GO BACK
+                    </OSCALPrimaryButton>
+                    <OSCALSecondaryButton
+                      sx={{ top: 300, left: 470, position: "absolute" }}
+                      onClick={handleGoBack}
+                    >
+                      UPLOAD MORE FILES
+                    </OSCALSecondaryButton>
+                  </Container>
+                )}
+              </Box>
+            </Box>
+            {!endUploading && (
+              <UploadTypo
+                sx={{
+                  top: 422,
+                  left: 5,
+                  position: "absolute",
+                }}
+              >
+                Accepted File Types: OSCAL Catalog or Profile in .xml or .json format only
+              </UploadTypo>
+            )}
+            {!uploadSuccessful && endUploading && (
+              <>
+                <UploadTypo
+                  sx={{
+                    top: 422,
+                    left: 5,
+                    position: "absolute",
+                  }}
+                >
+                  Accepted File Types: OSCAL Catalog or Profile in .xml or .json format only
+                </UploadTypo>
+                <Alert
+                  severity="error"
+                  sx={{
+                    borderLeft: `10px solid #B31515`,
+                    borderTop: `1px solid #B31515`,
+                    borderBottom: `1px solid #B31515`,
+                    borderRight: `1px solid #B31515`,
+                    backgroundColor: "#FFD9D9",
+                    minWidth: "30rem",
+                    maxHeight: "17rem",
+                    top: 465,
+                    left: 0,
+                    width: 990,
+                    height: 80,
+                    position: "absolute",
+                  }}
+                >
+                  <Typography
+                    variant={"h2"}
+                    sx={{ top: 10, color: "#1A1A1A", position: "absolute" }}
+                  >
+                    ERROR!
+                  </Typography>
+                  <Typography
+                    sx={{
+                      top: 35,
+                      textTransform: "uppercase",
+                      textAlign: "left",
+                      color: "#1A1A1A",
+                      position: "absolute",
+                    }}
+                  >
+                    Invalid file format:
+                  </Typography>
+                </Alert>
+              </>
+            )}
+          </Container>
+        )}
+      </>
+    );
+  }
+
   function DeleteCatalogBaseline() {
     return (
       <HugPublish>
-        <Grid spacing={1}>
+        <Grid spacing={1} container>
           <Button
             disableElevation
             variant="text"
@@ -533,7 +1134,7 @@ export default function OSCALCatalogBaseline() {
             <ButtonTypography> DELETE {Model.toUpperCase()}</ButtonTypography>
           </Button>
           <OSCALSecondaryButton
-            sx={{ width: 160, height: 20 }}
+            sx={{ width: 170, height: 20 }}
             onClick={handleAddNewCatalogBaseline}
           >
             <ButtonTypography> PUBLISH {Model.toUpperCase()}</ButtonTypography>
@@ -542,16 +1143,20 @@ export default function OSCALCatalogBaseline() {
       </HugPublish>
     );
   }
+  function handleUpload() {
+    setUploadNewCatalogBaseline(true);
+  }
   function HugHug() {
+    if (noUploadCreateHug) return null;
     return (
       <Hug>
-        <Grid spacing={1}>
-          <OSCALTertiaryButton sx={{ width: 57, height: 20 }}>
+        <Grid spacing={1} container>
+          <OSCALTertiaryButton sx={{ width: 57, height: 36 }} onClick={handleUpload}>
             {" "}
             <ButtonTypography> UPLOAD </ButtonTypography>{" "}
           </OSCALTertiaryButton>
           <OSCALSecondaryButton
-            sx={{ width: 88, height: 20 }}
+            sx={{ width: 150, height: 36 }}
             onClick={handleAddNewCatalogBaseline}
           >
             <ButtonTypography> CREATE NEW + </ButtonTypography>
@@ -718,7 +1323,7 @@ export default function OSCALCatalogBaseline() {
             </Version>
           </Grid>
           <Grid>
-            <ItemResult sx={{ left: "40%", top: usedTitle.length < 25 ? "47.58%" : "49.58%" }}>
+            <ItemResult sx={{ left: "43%", top: usedTitle.length < 25 ? "47.58%" : "49.58%" }}>
               {" "}
               {item.version}{" "}
             </ItemResult>
@@ -819,16 +1424,20 @@ export default function OSCALCatalogBaseline() {
             <Grid xs={3}>
               <Container>
                 <NativeSelect
-                  defaultValue={30}
+                  defaultValue={1}
                   inputProps={{
                     name: "font",
                     id: "uncontrolled-native",
                   }}
                   sx={{ width: 100, border: "1px" }}
                 >
-                  <option value={10}>Times New Roman</option>
-                  <option value={20}>Sans Pro</option>
-                  <option value={30}>Normal</option>
+                  <option value={1}>Normal</option>
+                  <option value={2}>Heading 1</option>
+                  <option value={3}>Heading 2</option>
+                  <option value={4}>Heading 3</option>
+                  <option value={5}>Heading 4</option>
+                  <option value={6}>Heading 5</option>
+                  <option value={7}>Heading 6</option>
                 </NativeSelect>
               </Container>
             </Grid>
@@ -928,7 +1537,8 @@ export default function OSCALCatalogBaseline() {
     };
     const handleCreateNewCatalogBaseline = () => {
       setCreatedNewCatalogBaseline(true);
-      createNewProject();
+      // createNewProject();
+      submitNewFile();
       wrapper();
       setAddOrgDetails(false);
       setAddNewCatalogBaseline(false);
@@ -939,7 +1549,8 @@ export default function OSCALCatalogBaseline() {
     };
 
     useEffect(() => {
-      createNewProject();
+      // createNewProject();
+      submitNewFile();
       wrapper();
     });
     function wrapper() {
@@ -947,28 +1558,65 @@ export default function OSCALCatalogBaseline() {
         updateMetadata();
       }
     }
-    function createNewProject() {
-      if (createdNewCatalogBaseline) return;
-      const rootFile = data.model.isCatalog ? "empty-catalog.json" : "empty-profile.json";
-      const request_json = {
-        file: rootFile,
+    function newFile() {
+      const catalog_data = {
+        uuid: window.self.crypto.randomUUID(),
+        metadata: {},
+        groups: [],
       };
-      function createNewModelSuccess(response: any) {
-        console.log("successful creation of a new catalog/baseline", response["new_oscal_file"]);
-        setNewOSCALFilePath(response["new_oscal_file"]);
+      const catalog = {
+        catalog: catalog_data,
+      };
+      const profile_data = {
+        uuid: window.self.crypto.randomUUID(),
+        metadata: {},
+        import: [],
+        "back-matter": {},
+      };
+      const profile = {
+        profile: profile_data,
+      };
+      const catalog_file = new Blob([JSON.stringify(catalog)], { type: "application/json" });
+      const profile_file = new Blob([JSON.stringify(profile)], { type: "application/json" });
+      const file = data.model.isCatalog ? catalog_file : profile_file;
+      return file;
+    }
+    function submitNewFile() {
+      if (createdNewCatalogBaseline || data.model.title === undefined) return;
+      const filename = newFile();
+      if (filename === null) {
+        return;
       }
-      function createNewModelFail(e: any) {
-        console.log("Fail to create a new Catalog/Baseline", e.statusText);
-      }
+      console.log("Main File", filename);
+      fetchUploadFile(filename, uploadFileSuccess, uploadFileFail);
+    }
+    function uploadFileFail(error: any) {
+      console.log("Failed to create new file error message:", error);
+    }
+    function uploadFileSuccess(response: any) {
+      const filename = response["filename"];
+      console.log(
+        "File " + filename + " uploaded successfully. Response was " + JSON.stringify(response)
+      );
+
+      const request_json = {
+        file: filename,
+      };
       if (!newModelCreationDone) {
-        console.log("starting the creation of a new catalog/baseline");
         fetchTransaction(
           "/create_oscal_project",
           request_json,
-          createNewModelSuccess,
-          createNewModelFail
+          createOscalProjectSuccess,
+          createOscalProjectFail
         );
         newModelCreationDone = true;
+      }
+      function createOscalProjectSuccess(response: any) {
+        console.log("successful creation of a new catalog/baseline", response["new_oscal_file"]);
+        setNewOSCALFilePath(response["new_oscal_file"]);
+      }
+      function createOscalProjectFail(e: any) {
+        console.log("Fail to create a new Catalog/Baseline", e.statusText);
       }
     }
 
@@ -1140,7 +1788,7 @@ export default function OSCALCatalogBaseline() {
                 }}
               />
               <SecondLabel>State</SecondLabel>
-              <Select
+              <NativeSelect
                 defaultValue={contactInfo?.address?.state}
                 fullWidth
                 id={"state"}
@@ -1154,10 +1802,58 @@ export default function OSCALCatalogBaseline() {
                   },
                 }}
               >
-                <option value={"AL"}>AL</option>
-                <option value={"AR"}>AR</option>
-                <option value={"MD"}>MD</option>
-              </Select>
+                <option value="AL">Alabama</option>
+                <option value="AK">Alaska</option>
+                <option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option>
+                <option value="CA">California</option>
+                <option value="CO">Colorado</option>
+                <option value="CT">Connecticut</option>
+                <option value="DE">Delaware</option>
+                <option value="DC">District of Columbia</option>
+                <option value="FL">Florida</option>
+                <option value="GA">Georgia</option>
+                <option value="HI">Hawaii</option>
+                <option value="ID">Idaho</option>
+                <option value="IL">Illinois</option>
+                <option value="IN">Indiana</option>
+                <option value="IA">Iowa</option>
+                <option value="KS">Kansas</option>
+                <option value="KY">Kentucky</option>
+                <option value="LA">Louisiana</option>
+                <option value="ME">Maine</option>
+                <option value="MD">Maryland</option>
+                <option value="MA">Massachusetts</option>
+                <option value="MI">Michigan</option>
+                <option value="MN">Minnesota</option>
+                <option value="MS">Mississippi</option>
+                <option value="MO">Missouri</option>
+                <option value="MT">Montana</option>
+                <option value="NE">Nebraska</option>
+                <option value="NV">Nevada</option>
+                <option value="NH">New Hampshire</option>
+                <option value="NJ">New Jersey</option>
+                <option value="NM">New Mexico</option>
+                <option value="NY">New York</option>
+                <option value="NC">North Carolina</option>
+                <option value="ND">North Dakota</option>
+                <option value="OH">Ohio</option>
+                <option value="OK">Oklahoma</option>
+                <option value="OR">Oregon</option>
+                <option value="PA">Pennsylvania</option>
+                <option value="RI">Rhode Island</option>
+                <option value="SC">South Carolina</option>
+                <option value="SD">South Dakota</option>
+                <option value="TN">Tennessee</option>
+                <option value="TX">Texas</option>
+                <option value="UT">Utah</option>
+                <option value="VT">Vermont</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="WV">West Virginia</option>
+                <option value="WI">Wisconsin</option>
+                <option value="WY">Wyoming</option>
+              </NativeSelect>
               <SecondLabel>ZIP</SecondLabel>
               <TextField
                 defaultValue={contactInfo?.address?.zip}
@@ -1380,46 +2076,43 @@ export default function OSCALCatalogBaseline() {
     );
   }
   function renderFilledItemBox() {
-    if (openCatalogBaseline) return null;
+    const zeroCatalogBaseline = catalogIds.length === 0 && baselineIds.length === 0;
+    if (openCatalogBaseline || uploadNewCatalogBaseline || zeroCatalogBaseline) {
+      if (uploadNewCatalogBaseline || zeroCatalogBaseline) return <RenderUpload></RenderUpload>;
+      return null;
+    }
     return (
       <RenderCatalogItems CatalogUUIDS={catalogIds} ProfileUUIDS={baselineIds}></RenderCatalogItems>
     );
   }
   const FilledBoxItem: React.FC<Project> = (project) => {
     const [metadataObject, setMetadataObject] = useState<any>({});
-    console.log("In FilledBoxItem Id= ", project.ProjectUUID);
-    console.log("In FilledBoxItem model=", project.model);
     useEffect(() => {
       getData();
     }, []);
 
     const isCatalog = project.model === "catalog" ? true : false;
     function getData() {
+      const filePath = "projects/" + project.model + "_" + project.ProjectUUID + "/oscal_data.json";
+
       const request_json = {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
+        oscal_file: filePath,
       };
-      const operation =
-        "/" + project.model + "/" + project.ProjectUUID + "/" + project.model + "/metadata";
 
-      console.log(
-        "In FilledItemBox: Starting fetching with operation",
-        operation,
-        "with request",
-        request_json
+      fetchTransaction(
+        "get_metadata",
+        request_json,
+        getCatalogMetadataSuccess,
+        getCatalogMetadataFail
       );
-
-      fetchRest(operation, request_json, getCatalogMetadataSuccess, getCatalogMetadataFail);
-
       function getCatalogMetadataSuccess(response: any) {
-        console.log("In FilledBoxItem: Successfull REST CAll with path", operation);
+        console.log("In FilledBoxItem: Successfull REST CAll with path", request_json);
         setMetadataObject(response);
       }
       function getCatalogMetadataFail(e: any) {
-        console.log("In FilledBoxItem: Operation fail ", e.statusText);
+        console.log("In FilledBoxItem: Operation fail ", e.statusText, request_json);
       }
     }
-    console.log("In FilledItemBox: Done fetching...");
 
     return (
       <CatalogBaselineItem
@@ -1434,8 +2127,6 @@ export default function OSCALCatalogBaseline() {
     );
   };
   const RenderCatalogItems: React.FC<ProjectUUIDs> = (entries) => {
-    console.log("In RenderCatalogItems:");
-    console.log("entries", entries);
     return (
       <StackBox>
         <Stack spacing={{ xs: 10, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
@@ -1453,18 +2144,75 @@ export default function OSCALCatalogBaseline() {
   const usedText = LabelText ?? "";
   const trunckatedTitle = usedText.length > 45 ? usedText.substring(0, 44) + "..." : usedText;
   return (
-    <MainContainer>
-      {renderTabs()}
-      <HeaderRow model={createdModel}></HeaderRow>
-      <CatalogBreadCrumbsMenu model={createdModel}></CatalogBreadCrumbsMenu>
-      <CatalogTooltip title={LabelText}>
-        <FormHeaderLabel>{trunckatedTitle}</FormHeaderLabel>
-      </CatalogTooltip>
-      {renderHugHug()}
-      {renderFilledItemBox()}
-      {renderAddNewCatalogBaselineDialog()}
-      {renderOrgDetailsDialog()}
-      {renderAuthorDetailDialog()}
-    </MainContainer>
+    // <Container
+    //   component={"main"}
+    //   sx={{
+    //     position: "absolute",
+    //     width: "80%",
+    //     height: "100%",
+    //     top: 0,
+    //     left: 320,
+    //     border: "1px",
+    //     background: "#f6f6f6",
+    //   }}
+    // >
+    //   {renderTabs({ model: createdModel })}
+    //   <HeaderRow model={createdModel}></HeaderRow>
+    //   <CatalogBreadCrumbsMenu model={createdModel}></CatalogBreadCrumbsMenu>
+    //   <CatalogTooltip title={LabelText}>
+    //     <Typography
+    //       variant={"h1"}
+    //       sx={{ position: "absolute", width: 700, height: 40, top: 116, left: 40 }}
+    //     >
+    //       {trunckatedTitle}
+    //     </Typography>
+    //   </CatalogTooltip>
+    //   {renderHugHug()}
+    //   {renderFilledItemBox()}
+    //   {renderAddNewCatalogBaselineDialog()}
+    //   {renderOrgDetailsDialog()}
+    //   {renderAuthorDetailDialog()}
+    //  </Container>
+
+    <Grid
+      container
+      component={"main"}
+      sx={{
+        position: "absolute",
+        width: "82%",
+        height: "90%",
+        left: 323,
+        top: 80,
+        border: "5px solid",
+        background: "#f6f6f6",
+      }}
+    >
+      {/* <Grid   
+      sx={{
+        position: "absolute", 
+        width: "100%",
+        height: "100%",
+        left: 0,
+        top: 0,
+        overflow: "hidden",
+      }} > */}
+         {renderTabs({ model: createdModel })}
+       <HeaderRow model={createdModel}></HeaderRow>
+       <CatalogBreadCrumbsMenu model={createdModel}></CatalogBreadCrumbsMenu>
+       <CatalogTooltip title={LabelText}>
+        <Typography
+           variant={"h1"}
+           sx={{ position: "absolute", width: 700, height: 40, top: 116, left: 40 }}
+         >
+           {trunckatedTitle}
+         </Typography>
+       </CatalogTooltip>
+       {renderHugHug()}
+       {renderFilledItemBox()}
+       {renderAddNewCatalogBaselineDialog()}
+       {renderOrgDetailsDialog()}
+       {renderAuthorDetailDialog()}
+      {/* </Grid> */}
+    </Grid>
   );
 }
