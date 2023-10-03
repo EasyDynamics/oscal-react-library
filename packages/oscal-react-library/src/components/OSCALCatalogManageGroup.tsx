@@ -166,7 +166,7 @@ export function GroupDrawer(data: OSCALProject) {
     }
   }
 
-  function EditGroupTitle(ID: string, Name: string) {
+  function editGroupTitle(ID: string, Name: string) {
     const rootFile = "projects/catalog_" + data.projectUUID + "/oscal_data.json";
     const request_json = {
       oscal_file: rootFile,
@@ -181,7 +181,7 @@ export function GroupDrawer(data: OSCALProject) {
     }
     fetchTransaction("/edit_group_title", request_json, addNewGroupSuccess, addNewGroupFail);
   }
-  function DeleteGroup(ID: string) {
+  function deleteGroup(ID: string) {
     const id = ID === "" ? selectedItemGroup?.groupID : ID;
     const rootFile = "projects/catalog_" + data.projectUUID + "/oscal_data.json";
     const request_json = {
@@ -196,7 +196,7 @@ export function GroupDrawer(data: OSCALProject) {
     }
     fetchTransaction("/delete_id", request_json, deleteGroupSuccess, deleteGroupFail);
   }
-  function SaveNewGroup(ID: string, Name: string, parentID: string) {
+  function saveNewGroup(ID: string, Name: string, parentID: string) {
     const rootFile = "projects/catalog_" + data.projectUUID + "/oscal_data.json";
     const request_json = {
       oscal_file: rootFile,
@@ -274,7 +274,7 @@ export function GroupDrawer(data: OSCALProject) {
     }
     function handleDelete() {
       if (deleteText.toLowerCase() === "delete") {
-        DeleteGroup(data.group.groupID);
+        deleteGroup(data.group.groupID);
         //reload Data
         getData();
       }
@@ -332,7 +332,7 @@ export function GroupDrawer(data: OSCALProject) {
       setAddNewGroup(true);
       setAddBelow(true);
       setNewGroupParent(selectedGroup);
-      handleSaveNewGroup();
+      handlesaveNewGroup();
       setShowCardMenu(false);
     }
     function handleIncreaseIndent() {
@@ -361,9 +361,9 @@ export function GroupDrawer(data: OSCALProject) {
       getData();
       setShowCardMenu(false);
     }
-    function handleSaveNewGroup() {
+    function handlesaveNewGroup() {
       if (edit && !addBelow) {
-        EditGroupTitle(selectedGroup.groupID, Name);
+        editGroupTitle(selectedGroup.groupID, Name);
         setAddNewGroup(false);
         getData();
         setEditGroup(defaultGroup);
@@ -375,19 +375,19 @@ export function GroupDrawer(data: OSCALProject) {
       }
       if (addBelow) {
         const parent_id = newGroupParent === undefined ? "" : newGroupParent.groupID;
-        SaveNewGroup(ID, Name, parent_id);
+        saveNewGroup(ID, Name, parent_id);
         setAddNewGroup(false);
         getData();
         setAddBelow(false);
         return;
       }
-      SaveNewGroup(ID, Name, "");
+      saveNewGroup(ID, Name, "");
       setAddNewGroup(false);
       getData();
     }
-    function handleDeleteGroup() {
+    function handledeleteGroup() {
       setOpenDeleteDialog(true);
-      // DeleteGroup(selectedGroup.groupID);
+      // deleteGroup(selectedGroup.groupID);
       getData();
       setAddNewGroup(false);
     }
@@ -503,7 +503,7 @@ export function GroupDrawer(data: OSCALProject) {
                       color: "#FFFFFF",
                     },
                   }}
-                  onClick={handleDeleteGroup}
+                  onClick={handledeleteGroup}
                 >
                   <DeleteIcon />
                 </IconButton>
@@ -517,7 +517,7 @@ export function GroupDrawer(data: OSCALProject) {
                       color: "#FFFFFF",
                     },
                   }}
-                  onClick={handleSaveNewGroup}
+                  onClick={handlesaveNewGroup}
                 >
                   <SaveIcon></SaveIcon>
                 </IconButton>
