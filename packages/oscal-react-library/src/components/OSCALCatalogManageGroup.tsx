@@ -462,8 +462,7 @@ export function GroupDrawer(data: OSCALProject) {
                   background: "#ffffff",
                   "& .MuiOutlinedInput-root": {
                     "& > fieldset": {
-                      borderColor: (theme: { palette: { secondary: { main: any } } }) =>
-                        theme.palette.secondary.main,
+                      borderColor: (theme) => theme.palette.secondary.main,
                     },
                   },
                 }}
