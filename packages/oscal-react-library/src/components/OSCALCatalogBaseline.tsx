@@ -7,8 +7,8 @@ import Dialog from "@mui/material/Dialog";
 import { Divider, TooltipProps } from "@mui/material";
 import { Stack, styled } from "@mui/system";
 import { useFetchers } from "./Fetchers";
-import { OSCALDialogTitle, OSCALEditingDialog, OSCALWarningDialog } from "./styles/OSCALDialog";
-
+import { OSCALDialogTitle, OSCALEditingDialog } from "./styles/OSCALDialog";
+import CloseIcon from "@mui/icons-material/Close";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -25,7 +25,6 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import IconButton from "@mui/material/IconButton";
 import FileIcon from "./images/icons/filebucket.svg";
 import UploadIcon from "./images/icons/fileUpload.svg";
-import Uploading from "./images/icons/uploading.svg";
 import GreenCircle from "./images/icons/greenCircle.svg";
 import GreenCheck from "./images/icons/greenCheck.svg";
 import RedCircle from "./images/icons/redCircle.svg";
@@ -45,7 +44,6 @@ import { OSCALTextField, OSCALRadio, OSCALFormLabel } from "./styles/OSCALInputs
 import { FormatBold, FormatItalic, FormatQuote, Subscript, Superscript } from "@mui/icons-material";
 
 import { CodeOffSharp } from "@mui/icons-material";
-import { OSCALAlertError, OSCALAlertWarning } from "./styles/OSCALAlerts";
 import GroupDrawer from "./OSCALCatalogManageGroup";
 
 const MainImage = styled("img")`
@@ -57,14 +55,14 @@ const Hug = styled(Container)`
   width: 348px;
   height: 36px;
   top: 120px;
-  left: 80%;
+  left: 75%;
 `;
 const HugPublish = styled(Container)`
   position: absolute;
   width: 448px;
   height: 36px;
   top: 120px;
-  left: 700px;
+  left: 65.8%;
 `;
 const StackBox = styled(Box)`
   position: absolute;
@@ -82,16 +80,6 @@ const ItemBox = styled(Box)`
   box-shadow: 0px 0px 10px 0px #00000029;
   position: relative;
   background: #ffffff;
-`;
-
-const MainContainer = styled(Container)`
-  position: absolute;
-  width: 1120px;
-  height: 900px;
-  top: 0px;
-  left: 320px;
-  border: 1px;
-  background: #f6f6f6;
 `;
 
 const ItemTitle = styled(Typography)`
@@ -190,18 +178,7 @@ const ItemDivider = styled(Divider)`
   bottom: 74.09%;
   border: 1px solid #d9dfe8;
 `;
-const FormHeaderLabel = styled(Typography)`
-  position: absolute;
-  width: 700px;
-  height: 40px;
-  top: 116px;
-  left: 40px;
-  font-family: "Source Sans Pro";
-  font-size: 32px;
-  font-weight: 700px;
-  line-height: 40.22px;
-  color: #2b2b2b;
-`;
+
 const StepperBar = styled(Stepper)`
   width: 506px;
   height: 80px;
@@ -351,8 +328,6 @@ export function CatalogBaselineTabs(data: OSCALModel) {
       sx={{
         minWidth: 1040,
         minHeight: 900,
-        height: "90%",
-        width: "90%",
         typography: "body1",
         top: 200,
         left: 40,
@@ -655,13 +630,12 @@ export default function OSCALCatalogBaseline() {
     const [fileName, setFileName] = useState("");
     const [newOSCALFilePath, setNewOSCALFilePath] = useState("");
     const [endUploading, setEndUploading] = useState(false);
-    const [openWarningDialog, setOpenWarningDialog] = useState(true);
     function handleUpload() {
       setUpload(true);
       setNoUploadCreatedHug(true);
     }
     function handleClose() {
-      setOpenWarningDialog(false);
+      handleGoBack();
     }
     const UploadTypo = styled(Typography)`
       font-family: Source Sans Pro;
@@ -695,14 +669,9 @@ export default function OSCALCatalogBaseline() {
       event.preventDefault();
       event.stopPropagation();
       event.target.style.border = "1px solid #0028675E";
-      // Handle file import
-      console.log("file dropped");
-      console.log(event);
-      // Handle successful file drop
       if (event.dataTransfer && event.dataTransfer.files.length !== 0) {
         const files = event.dataTransfer.files;
-        console.log(files[0]);
-
+        console.log("File Successfully from, now uploading the file to the server");
         doSubmitUploadFile(files[0]);
       } else {
         console.log("Issues handling file import. Browser may not support drag and drop.");
@@ -1095,6 +1064,16 @@ export default function OSCALCatalogBaseline() {
                     position: "absolute",
                   }}
                 >
+                  <IconButton
+                    onClick={handleClose}
+                    sx={{
+                      position: "absolute",
+                      right: 5,
+                      top: 3,
+                    }}
+                  >
+                    <CloseIcon />
+                  </IconButton>
                   <Typography
                     variant={"h2"}
                     sx={{ top: 10, color: "#1A1A1A", position: "absolute" }}
@@ -1129,12 +1108,12 @@ export default function OSCALCatalogBaseline() {
             disableElevation
             variant="text"
             color="primary"
-            sx={{ width: 170, height: 20, color: "#B31515" }}
+            sx={{ width: 170, height: 36, color: "#B31515" }}
           >
             <ButtonTypography> DELETE {Model.toUpperCase()}</ButtonTypography>
           </Button>
           <OSCALSecondaryButton
-            sx={{ width: 170, height: 20 }}
+            sx={{ width: 170, height: 36 }}
             onClick={handleAddNewCatalogBaseline}
           >
             <ButtonTypography> PUBLISH {Model.toUpperCase()}</ButtonTypography>
@@ -2106,7 +2085,7 @@ export default function OSCALCatalogBaseline() {
         getCatalogMetadataFail
       );
       function getCatalogMetadataSuccess(response: any) {
-        console.log("In FilledBoxItem: Successfull REST CAll with path", request_json);
+        console.log("In FilledBoxItem: Successfull get_metadata CAll with path", request_json);
         setMetadataObject(response);
       }
       function getCatalogMetadataFail(e: any) {
@@ -2174,45 +2153,33 @@ export default function OSCALCatalogBaseline() {
     //   {renderAuthorDetailDialog()}
     //  </Container>
 
-    <Grid
-      container
-      component={"main"}
+    <Container
       sx={{
         position: "absolute",
-        width: "82%",
-        height: "90%",
+        height: "95%",
+        width: "77.6%",
         left: 323,
-        top: 80,
-        border: "5px solid",
+        top: 0,
         background: "#f6f6f6",
       }}
     >
-      {/* <Grid   
-      sx={{
-        position: "absolute", 
-        width: "100%",
-        height: "100%",
-        left: 0,
-        top: 0,
-        overflow: "hidden",
-      }} > */}
-         {renderTabs({ model: createdModel })}
-       <HeaderRow model={createdModel}></HeaderRow>
-       <CatalogBreadCrumbsMenu model={createdModel}></CatalogBreadCrumbsMenu>
-       <CatalogTooltip title={LabelText}>
+      {renderTabs({ model: createdModel })}
+      <HeaderRow model={createdModel}></HeaderRow>
+      <CatalogBreadCrumbsMenu model={createdModel}></CatalogBreadCrumbsMenu>
+      <CatalogTooltip title={LabelText}>
         <Typography
-           variant={"h1"}
-           sx={{ position: "absolute", width: 700, height: 40, top: 116, left: 40 }}
-         >
-           {trunckatedTitle}
-         </Typography>
-       </CatalogTooltip>
-       {renderHugHug()}
-       {renderFilledItemBox()}
-       {renderAddNewCatalogBaselineDialog()}
-       {renderOrgDetailsDialog()}
-       {renderAuthorDetailDialog()}
+          variant={"h1"}
+          sx={{ position: "absolute", width: 700, height: 40, top: 116, left: 40 }}
+        >
+          {trunckatedTitle}
+        </Typography>
+      </CatalogTooltip>
+      {renderHugHug()}
+      {renderFilledItemBox()}
+      {renderAddNewCatalogBaselineDialog()}
+      {renderOrgDetailsDialog()}
+      {renderAuthorDetailDialog()}
       {/* </Grid> */}
-    </Grid>
+    </Container>
   );
 }

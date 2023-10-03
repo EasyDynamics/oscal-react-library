@@ -1,6 +1,5 @@
-import React, { useState, useEffect, MutableRefObject } from "react";
+import React, { useState, MutableRefObject } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import SaveIcon from "@mui/icons-material/Save";
 import EditIcon from "@mui/icons-material/Edit";
 import { useFetchers } from "./Fetchers";
 import { ReactComponent as DeleteIcon } from "./images/icons/delete.svg";
@@ -15,12 +14,9 @@ import { FormatBold, FormatItalic, Subscript, Superscript } from "@mui/icons-mat
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Box,
-  Button,
   Card,
   CardContent,
   Container,
-  DialogContent,
-  Divider,
   Grid,
   Stack,
   IconButton,
@@ -32,21 +28,12 @@ import {
   TooltipProps,
   Typography,
   styled,
-  Input,
   Paper,
 } from "@mui/material";
 
-import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import { EditableFieldProps } from "./OSCALEditableTextField";
-import {
-  OSCALPrimaryDestructiveButton,
-  OSCALSecondaryButton,
-  OSCALTertiaryButton,
-} from "./styles/OSCALButtons";
-import { OSCALDialogActions, OSCALDialogTitle, OSCALWarningDialog } from "./styles/OSCALDialog";
-import { OSCALTextField } from "./styles/OSCALInputs";
-import { makeStyles } from "@mui/material/styles";
+import { OSCALSecondaryButton } from "./styles/OSCALButtons";
 
 const ControlTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
@@ -100,7 +87,6 @@ export function ControlManager(data: OSCALGroup) {
   const [newControlParent, setNewControlParent] = useState<Control>();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [addNewControl, setAddNewControl] = useState(false);
-  const [selectedGroupIn, setSelectedGroupIn] = useState<Group>();
 
   const fetchers = useFetchers();
   const fetchTransaction = fetchers["fetchTransaction"];
@@ -108,17 +94,10 @@ export function ControlManager(data: OSCALGroup) {
   let draggedControls: Array<Control> = [];
   let Ids: string[] = [];
 
-  console.log(
-    "previousGroup: ",
-    data.previousGroupTitle?.current,
-    " new Group Title:",
-    data.group.groupTitle
-  );
-  if (data.previousGroupTitle?.current !== data.group.groupTitle) getData();
-
-  // useEffect(() => {
-  //   getData();
-  // }, []);
+  const loadControls = data.previousGroupTitle?.current !== data.group.groupTitle;
+  if (loadControls) {
+    getData();
+  }
 
   const orderControls: Array<Control> = [];
   const controlsAndSubs: Array<Control> = baseControls.map((x) => ({
@@ -129,9 +108,6 @@ export function ControlManager(data: OSCALGroup) {
     subControls: [],
     indent: 0,
   }));
-  // function reloadComponent() {
-  //   if (data.newSelection) getData();
-  // }
 
   function reorderControlsAndSetIndent() {
     const parent_ids: Array<string> = [];
@@ -197,44 +173,48 @@ export function ControlManager(data: OSCALGroup) {
       getCatalogControlsFail
     );
     function getCatalogControlsSuccess(response: any) {
-      console.log("In ControlManager: Successfull Transaction Call to get controls: ");
+      console.log(
+        "In ControlManager: Successfull Transaction Call to get controls for Group ",
+        data.group.groupID
+      );
       setBaseControls(response.controls);
     }
     function getCatalogControlsFail(e: any) {
       console.log("In ControlManager: Operation fail ", e.statusText, " resquest: ", request_json);
     }
   }
-
-  function EditControlTitle(ID: string, Name: string) {
-    const rootFile = "projects/catalog_" + data.group.projectUUID + "/oscal_data.json";
-    const request_json = {
-      oscal_file: rootFile,
-      id: ID,
-      title: Name,
-    };
-    function addNewControlSuccess(response: any) {
-      console.log("successful addition of a new Control", response);
-    }
-    function addNewControlFail(e: any) {
-      console.log("Fail to create a new Control", e.statusText);
-    }
-    fetchTransaction("/edit_Control_title", request_json, addNewControlSuccess, addNewControlFail);
-  }
-  function DeleteControl(ID: string) {
-    const id = ID === "" ? selectedControl?.controlID : ID;
-    const rootFile = "projects/catalog_" + data.group.projectUUID + "/oscal_data.json";
-    const request_json = {
-      oscal_file: rootFile,
-      id: id,
-    };
-    function deleteControlSuccess(response: any) {
-      console.log("successful deletion of the Control", id, response);
-    }
-    function deleteControlFail(e: any) {
-      console.log("Fail to delete the Control", id, e.statusText);
-    }
-    fetchTransaction("/delete_id", request_json, deleteControlSuccess, deleteControlFail);
-  }
+  // TODO This code will be used to implement Control editing
+  // function EditControlTitle(ID: string, Name: string) {
+  //   const rootFile = "projects/catalog_" + data.group.projectUUID + "/oscal_data.json";
+  //   const request_json = {
+  //     oscal_file: rootFile,
+  //     id: ID,
+  //     title: Name,
+  //   };
+  //   function addNewControlSuccess(response: any) {
+  //     console.log("successful addition of a new Control", response);
+  //   }
+  //   function addNewControlFail(e: any) {
+  //     console.log("Fail to create a new Control", e.statusText);
+  //   }
+  //   fetchTransaction("/edit_Control_title", request_json, addNewControlSuccess, addNewControlFail);
+  // }
+  //TODO this code will be use to implement control deletion
+  // function DeleteControl(ID: string) {
+  //   const id = ID === "" ? selectedControl?.controlID : ID;
+  //   const rootFile = "projects/catalog_" + data.group.projectUUID + "/oscal_data.json";
+  //   const request_json = {
+  //     oscal_file: rootFile,
+  //     id: id,
+  //   };
+  //   function deleteControlSuccess(response: any) {
+  //     console.log("successful deletion of the Control", id, response);
+  //   }
+  //   function deleteControlFail(e: any) {
+  //     console.log("Fail to delete the Control", id, e.statusText);
+  //   }
+  //   fetchTransaction("/delete_id", request_json, deleteControlSuccess, deleteControlFail);
+  // }
   function MoveControl(ID: string, Name: string, newParentID: string) {
     const rootFile = "projects/catalog_" + data.group.projectUUID + "/oscal_data.json";
     const request_json = {
@@ -250,46 +230,73 @@ export function ControlManager(data: OSCALGroup) {
     }
     fetchTransaction("/move_control", request_json, moveControlSuccess, moveControlFail);
   }
-  const NewControlButton: React.FC = () => {
+  const NewControlButton: React.FC<{ disabled?: boolean; noControls?: boolean }> = (input) => {
+    function handleClick() {
+      setAddNewControl(true);
+    }
     return (
       <Grid
         container
         direction="row"
         sx={{
-          height: 30,
+          height: 48,
+          width: data.open ? "65.5%" : "89.5%",
           position: "absolute",
+          border: input.noControls ? "1px solid #D2D2D2" : "0px",
         }}
       >
-        <Grid sx={{ width: data.open ? 537 : 790 }}></Grid>
-        <Grid>
-          {" "}
-          <OSCALSecondaryButton sx={{ position: "absolute", height: 20 }} disabled={addNewControl}>
-            NEW CONTROL +
-          </OSCALSecondaryButton>{" "}
-        </Grid>
+        {!input.noControls && (
+          <>
+            <Grid xs={data.open ? 9.47 : 10.14}></Grid>
+            <Grid xs={data.open ? 2.53 : 1.86}>
+              <OSCALSecondaryButton
+                sx={{ position: "absolute", height: 20 }}
+                disabled={addNewControl}
+                onClick={handleClick}
+              >
+                NEW CONTROL +
+              </OSCALSecondaryButton>
+            </Grid>
+          </>
+        )}
+        {input.noControls && (
+          <>
+            <Grid xs={data.open ? 5.2 : 5.1}></Grid>
+            <Grid xs={data.open ? 6.8 : 6.9}>
+              <OSCALSecondaryButton
+                sx={{ position: "absolute", top: 13, height: 20 }}
+                disabled={addNewControl}
+                onClick={handleClick}
+              >
+                NEW CONTROL +
+              </OSCALSecondaryButton>{" "}
+            </Grid>
+          </>
+        )}
       </Grid>
     );
   };
   const ControlDialog: React.FC<OSCALControl> = (data) => {
     const [hasTitle, setHasTitle] = useState(false);
-    const idValue = data.control.controlID.substring(0, 2);
+    const [preID, setPreID] = useState("");
+    const index = data.control.controlID.indexOf("_");
+    const idValue = index > 0 ? data.control.controlID.substring(0, index) : data.control.controlID;
 
     let title = "";
     const ID = "";
-    let preID = "";
     function SaveNewControl(ID: string, Name: string, parentID: string) {
       const rootFile = "projects/catalog_" + data.control.projectUUID + "/oscal_data.json";
+      let tempID = preID;
       if (preID === "") {
-        preID = Name.substring(0, 2) + preID;
+        tempID = Name.substring(0, 2);
       }
-      ID = preID + "_" + window.self.crypto.randomUUID();
+      ID = tempID + "_" + window.self.crypto.randomUUID();
       const request_json = {
         oscal_file: rootFile,
         id: ID,
         title: Name,
         parent_id: parentID,
       };
-
       function addNewControlSuccess(response: any) {
         console.log("successful addition of a new Control", response);
       }
@@ -311,7 +318,7 @@ export function ControlManager(data: OSCALGroup) {
     }));
 
     function handleEditIDChange(event: { target: { value: string | undefined } }) {
-      preID = event.target.value ?? "";
+      setPreID(event.target.value ?? "");
     }
     function handleEditControlTitleChange(event: { target: { value: string } }) {
       title = event.target.value;
@@ -319,17 +326,21 @@ export function ControlManager(data: OSCALGroup) {
       if (title.length >= 2) setHasTitle(true);
     }
     function handleSaveControl() {
+      if (addBelow) {
+        SaveNewControl(ID, title, newControlParent?.controlID ?? data.control.parentID);
+      }
       SaveNewControl(ID, title, data.control.parentID);
-    }
+      //Reload all Data after saving new control
+      getData();
 
+      ///TODO these lines below are only to fix the linting issue
+      setInit(true);
+    }
+    if ((!addNewControl && !addBelow) || (loadControls && addNewControl)) {
+      setAddNewControl(false);
+      return null;
+    }
     return (
-      // <Container
-      //   sx={{
-      //     height: 78,
-      //     left: 0,
-      //     background: (theme) => theme.palette.primary.main,
-      //   }}
-      // >
       <Grid
         direction={"row"}
         container
@@ -466,17 +477,12 @@ export function ControlManager(data: OSCALGroup) {
           </Grid>
         </Grid>
       </Grid>
-      // </Container>
     );
   };
   const ControlItem: React.FC<OSCALControl> = (data) => {
     const [isDragged, setIsDragged] = useState(false);
     const [doneDropping, setEndDropping] = useState(false);
     const [draggingOver, setDraggingOver] = useState(false);
-
-    const unitHeight = 48;
-
-    const itemHeight = unitHeight;
 
     const handleCardMenu = (event: any) => {
       setShowCardMenu(true);
@@ -523,12 +529,15 @@ export function ControlManager(data: OSCALGroup) {
     };
 
     if (data.control.indent > 140) {
+      /// TODO These lines are just to fix linting issues. These parameters will be used when implementing Edit control and delete control
+      if (selectedItemName === "" && openDeleteDialog && draggingOver) setInit(true);
+      ///End TODO
       return null;
     }
 
     if (doneDropping && draggedControls?.length > 0) {
       const subControl = draggedControls[0];
-      console.log("Startt Moving control ", subControl.controlID, "into ", data.control.controlID);
+      console.log("Start Moving control ", subControl.controlID, "into ", data.control.controlID);
       MoveControl(subControl.controlID, subControl.controlTitle, data.control.controlID);
       getData();
       subControl.parentID = data.control.parentID;
@@ -622,6 +631,7 @@ export function ControlManager(data: OSCALGroup) {
               </ControlTooltip>
               <IconButton
                 sx={{ top: 15, left: 5, height: 20, color: "#002867", position: "relative" }}
+                onClick={handleCardMenu}
               >
                 <MoreVertIcon />
               </IconButton>
@@ -642,10 +652,9 @@ export function ControlManager(data: OSCALGroup) {
           </Grid>
         </Card>
         <Box sx={{ height: 5, width: data.open ? 680 : 925 }}></Box>
-        {/* </Card> */}
 
         {showCardMenu && <ControlItemMenuBar control={selectedControl ?? defaultControl} />}
-        {data.open && editControl?.controlID === data.control.controlID && (edit || addBelow) && (
+        {editControl?.controlID === data.control.controlID && (edit || addBelow) && (
           <ControlDialog control={selectedControl ?? defaultControl}></ControlDialog>
         )}
       </>
@@ -665,7 +674,7 @@ export function ControlManager(data: OSCALGroup) {
       setShowCardMenu(false);
     }
     function handleAddBelow() {
-      setAddNewControl(true);
+      setAddNewControl(false);
       setAddBelow(true);
       setNewControlParent(data.control);
       seteditControl(data.control);
@@ -709,7 +718,7 @@ export function ControlManager(data: OSCALGroup) {
     return (
       <Card
         variant="outlined"
-        sx={{ height: 240, left: 315, top: itemYcoordinate - 10, position: "absolute" }}
+        sx={{ height: 240, left: "85%", top: itemYcoordinate - 200, position: "absolute" }}
         elevation={2}
         id="menuBar"
       >
@@ -719,19 +728,19 @@ export function ControlManager(data: OSCALGroup) {
               <IconButton size="small">
                 <EditIcon></EditIcon>
               </IconButton>
-              <ListItemText>Edit Group</ListItemText>
+              <ListItemText>Edit Control</ListItemText>
             </MenuItem>
             <MenuItem>
               <IconButton size="small">
                 <DeleteIcon></DeleteIcon>
               </IconButton>
-              <ListItemText onClick={handleDelete}>Delete Group</ListItemText>
+              <ListItemText onClick={handleDelete}>Delete Control</ListItemText>
             </MenuItem>
             <MenuItem>
               <IconButton size="small">
                 <InsertIcon></InsertIcon>
               </IconButton>
-              <ListItemText onClick={handleAddBelow}>Add Group Below</ListItemText>
+              <ListItemText onClick={handleAddBelow}>Add Control Below</ListItemText>
             </MenuItem>
             <MenuItem>
               <IconButton size="small">
@@ -755,15 +764,12 @@ export function ControlManager(data: OSCALGroup) {
   }
 
   //Now let us process the data collected before rendering the component.
-  console.log("baseControls", baseControls);
-
-  console.log(" controls and subs", controlsAndSubs);
   reorderControlsAndSetIndent();
   orderControls.forEach((elt) => {
     setSiblings(elt.subControls);
   });
 
-  const orphans = orderControls.filter((elt) => elt.parentID === "");
+  const orphans = orderControls.filter((elt) => elt.parentID === data.group.groupID);
   if (orphans.length > 0) {
     let sibling = orphans[0];
     for (let i = 1; i < orphans.length; i++) {
@@ -771,13 +777,12 @@ export function ControlManager(data: OSCALGroup) {
       sibling = orphans[i];
     }
   }
-  console.log("ordered controls", orderControls);
+  const noControl = orderControls.length === 0;
   return (
     <Box component={"main"} sx={{ width: data.open ? 680 : 932, height: 800 }}>
       <Paper
         ref={data.inputRef}
         onClick={() => {
-          console.log("ref Paper clicked");
           getData();
         }}
       ></Paper>
@@ -785,16 +790,8 @@ export function ControlManager(data: OSCALGroup) {
       {orderControls.map((item) => (
         <ControlItem open={data.open} control={item} key={item.controlID}></ControlItem>
       ))}
-      {/* <Container
-        sx={{
-          border: "1px solid #D2D2D266",
-          left: 0,
-          height: 785,
-          borderRadius: "0px, 3px, 3px, 3px",
-          background: "#F6F6F6",
-        }}
-      ></Container> */}
-      <NewControlButton></NewControlButton>
+      <NewControlButton noControls={noControl}></NewControlButton>
+      {showCardMenu && <ControlItemMenuBar control={selectedControl ?? defaultControl} />}
     </Box>
   );
 }

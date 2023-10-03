@@ -26,17 +26,11 @@ import {
   TooltipProps,
   Typography,
   styled,
-  Input,
 } from "@mui/material";
 
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
-import { EditableFieldProps } from "./OSCALEditableTextField";
-import {
-  OSCALPrimaryDestructiveButton,
-  OSCALSecondaryButton,
-  OSCALTertiaryButton,
-} from "./styles/OSCALButtons";
+import { OSCALPrimaryDestructiveButton, OSCALTertiaryButton } from "./styles/OSCALButtons";
 import { OSCALDialogActions, OSCALDialogTitle, OSCALWarningDialog } from "./styles/OSCALDialog";
 import { OSCALTextField } from "./styles/OSCALInputs";
 import { Group, OSCALGroup, ControlManager } from "./OSCALCatalogManageControl";
@@ -92,7 +86,6 @@ export function GroupDrawer(data: OSCALProject) {
   const [addNewGroup, setAddNewGroup] = useState(false);
   const [selectedItemName, setSelectedItemName] = useState<string>("");
   const [selectedItemGroup, getSelectedGroup] = useState<Group>();
-  const [newSelection, setNewSelection] = useState(false);
   const [showCardMenu, setShowCardMenu] = useState(false);
   const [itemYcoordinate, setItemYCoordinate] = useState(0);
   const [edit, setEdit] = useState(false);
@@ -110,24 +103,8 @@ export function GroupDrawer(data: OSCALProject) {
     getData();
   }, []);
 
-  // const button: React.FC<HTMLInputElement> = () => {
-  //   return <HTMLInputElement></HTMLInputElement>;
-  // };
-  // const elt = () => {
-  //   return <HTMLInputElement></HTMLInputElement>;
-  // };
   const inputElement = useRef<RefObject>();
-  const focusInput = () => {
-    console.log(" focus out clicked");
 
-    if (inputElement.current !== undefined) {
-      // console.log(" focus in clicked");
-      // //inputElement.current.onFocus();
-      // inputElement.current.clickMe();
-      // console.log("just clicked me");
-      
-    }
-  };
   const groupsAndSubs: Array<Group> = baseGroups.map((x) => ({
     groupTitle: x.title,
     groupID: x.id,
@@ -563,6 +540,15 @@ export function GroupDrawer(data: OSCALProject) {
   const RootLevel: React.FC = () => {
     function handleRootLevelClick() {
       setSelectedItemName("Root");
+      const RootGroup: Group = {
+        groupID: "",
+        groupTitle: "Root",
+        projectUUID: data.projectUUID,
+        subGroups: [],
+        indent: 0,
+        parentID: "",
+      };
+      getSelectedGroup(RootGroup);
     }
     const rootSelected = selectedItemName === "Root" ? true : false;
     const text = open ? "Root Level Controls" : "RC";
@@ -798,9 +784,7 @@ export function GroupDrawer(data: OSCALProject) {
               onClick={() => {
                 setSelectedItemName(data.group.groupTitle);
                 getSelectedGroup(data.group);
-                setNewSelection(true);
                 setLoadGroup(true);
-                focusInput();
               }}
             >
               {draggingOver && (
