@@ -41,10 +41,10 @@ import { OSCALTextField } from "./styles/OSCALInputs";
 
 const GroupTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
-))`
-  font-size: 20;
-  box-shadow: 0px 0px 10px 0px #00000029;
-`;
+))(({ theme }) => ({
+  fontSize: 20,
+  boxShadow: `0px 0px 10px 0px ${theme.palette.smokyWhite.main}`,
+}));
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -186,12 +186,12 @@ export function GroupDrawer(data: OSCALProject) {
       title: Name,
     };
     function addNewGroupSuccess(response: any) {
-      console.log("successful addition of a new group", response);
+      console.log("Successful addition of a new group", response);
     }
-    function addNewGroupFail(e: any) {
-      console.log("Fail to create a new group", e.statusText, " with request ", request_json);
+    function addNewGroupFailed(e: any) {
+      console.log("Failed to create a new group", e.statusText, " with request ", request_json);
     }
-    fetchTransaction("/edit_group_title", request_json, addNewGroupSuccess, addNewGroupFail);
+    fetchTransaction("/edit_group_title", request_json, addNewGroupSuccess, addNewGroupFailed);
   }
   function deleteGroup(ID: string) {
     const id = ID === "" ? selectedItemGroup?.groupID : ID;
@@ -201,12 +201,12 @@ export function GroupDrawer(data: OSCALProject) {
       id: id,
     };
     function deleteGroupSuccess(response: any) {
-      console.log("successful deletion of the group", id, response);
+      console.log("Successful deletion of the group", id, response);
     }
-    function deleteGroupFail(e: any) {
-      console.log("Fail to delete the group", id, e.statusText, " with request ", request_json);
+    function deleteGroupFailed(e: any) {
+      console.log("Failed to delete the group", id, e.statusText, " with request ", request_json);
     }
-    fetchTransaction("/delete_id", request_json, deleteGroupSuccess, deleteGroupFail);
+    fetchTransaction("/delete_id", request_json, deleteGroupSuccess, deleteGroupFailed);
   }
   function saveNewGroup(ID: string, Name: string, parentID: string) {
     const rootFile = "projects/catalog_" + data.projectUUID + "/oscal_data.json";
@@ -217,12 +217,12 @@ export function GroupDrawer(data: OSCALProject) {
       parent_id: parentID,
     };
     function addNewGroupSuccess(response: any) {
-      console.log("successful addition of a new group", response);
+      console.log("Successful addition of a new group", response);
     }
-    function addNewGroupFail(e: any) {
-      console.log("Fail to create a new group", e.statusText, "request ", request_json);
+    function addNewGroupFailed(e: any) {
+      console.log("Failed to create a new group", e.statusText, "request ", request_json);
     }
-    fetchTransaction("/add_group", request_json, addNewGroupSuccess, addNewGroupFail);
+    fetchTransaction("/add_group", request_json, addNewGroupSuccess, addNewGroupFailed);
   }
   function moveGroup(ID: string, Name: string, newParentID: string) {
     const rootFile = "projects/catalog_" + data.projectUUID + "/oscal_data.json";
@@ -232,12 +232,12 @@ export function GroupDrawer(data: OSCALProject) {
       new_parent_id: newParentID,
     };
     function moveGroupSuccess(response: any) {
-      console.log("successful addition of a new group", response);
+      console.log("Successful addition of a new group", response);
     }
-    function moveGroupFail(e: any) {
-      console.log("Fail to create a new group", e.statusText, "with request ", request_json);
+    function moveGroupFailed(e: any) {
+      console.log("Failed to create a new group", e.statusText, "with request ", request_json);
     }
-    fetchTransaction("/move_group", request_json, moveGroupSuccess, moveGroupFail);
+    fetchTransaction("/move_group", request_json, moveGroupSuccess, moveGroupFailed);
   }
 
   function getGroupsAndSubs() {
@@ -250,14 +250,19 @@ export function GroupDrawer(data: OSCALProject) {
       "/list_all_groups",
       request_json,
       getCatalogGroupsSuccess,
-      getCatalogGroupsFail
+      getCatalogGroupsFailed
     );
     function getCatalogGroupsSuccess(response: any) {
       console.log("In GroupDrawer: Successfull Transaction Call to get groups");
       setBaseGroups(response.groups);
     }
-    function getCatalogGroupsFail(e: any) {
-      console.log("In GroupDrawer: Operation fail ", e.statusText, " with request ", request_json);
+    function getCatalogGroupsFailed(e: any) {
+      console.log(
+        "In GroupDrawer: Operation list_all_groups failed ",
+        e.statusText,
+        " with request ",
+        request_json
+      );
     }
   }
 
@@ -399,8 +404,6 @@ export function GroupDrawer(data: OSCALProject) {
     }
     function handleDeleteGroup() {
       setOpenDeleteDialog(true);
-      // DeleteGroup(selectedGroup.groupID);
-      getData();
       setAddNewGroup(false);
     }
 
@@ -408,7 +411,13 @@ export function GroupDrawer(data: OSCALProject) {
     return (
       <Container
         onClick={handleNewGroupClick}
-        sx={{ height: 73, border: "1px solid #D2D2D2", background: "#EAEAEA", width: 312 }}
+        sx={{
+          height: 73,
+          border: "1px solid",
+          borderColor: (theme) => theme.palette.lightGray.main,
+          background: (theme) => theme.palette.gray.main,
+          width: 312,
+        }}
       >
         <Container
           sx={{
@@ -416,8 +425,8 @@ export function GroupDrawer(data: OSCALProject) {
             left: 20,
             position: "absolute",
             background: (theme) => theme.palette.backgroundGray.main,
-            border: "1px solid #D2D2D2",
-            borderColor: (theme) => theme.palette.secondary.main,
+            border: "1px solid",
+            borderColor: (theme) => theme.palette.lightGray.main,
             width: 300,
           }}
         >
@@ -439,7 +448,7 @@ export function GroupDrawer(data: OSCALProject) {
                   position: "absolute",
                   fontSize: 10,
                   fontWeight: 200,
-                  background: "#ffffff",
+                  background: (theme) => theme.palette.white.main,
                   "& .MuiOutlinedInput-root": {
                     "& > fieldset": {
                       borderColor: (theme: { palette: { secondary: { main: any } } }) =>
@@ -459,7 +468,7 @@ export function GroupDrawer(data: OSCALProject) {
                   position: "absolute",
                   height: 32,
                   width: 198,
-                  background: "#ffffff",
+                  background: (theme) => theme.palette.white.main,
                   "& .MuiOutlinedInput-root": {
                     "& > fieldset": {
                       borderColor: (theme) => theme.palette.secondary.main,
@@ -476,8 +485,8 @@ export function GroupDrawer(data: OSCALProject) {
                   onClick={handleAddBelow}
                   sx={{
                     ":hover": {
-                      backgroundColor: "#023E88",
-                      color: "#FFFFFF",
+                      backgroundColor: (theme) => theme.palette.secondary.main,
+                      color: (theme) => theme.palette.white.main,
                     },
                   }}
                 >
@@ -488,8 +497,8 @@ export function GroupDrawer(data: OSCALProject) {
                   onClick={handleDecreaseIndent}
                   sx={{
                     ":hover": {
-                      backgroundColor: "#023E88",
-                      color: "#FFFFFF",
+                      backgroundColor: (theme) => theme.palette.secondary.main,
+                      color: (theme) => theme.palette.white.main,
                     },
                   }}
                 >
@@ -500,8 +509,8 @@ export function GroupDrawer(data: OSCALProject) {
                   onClick={handleIncreaseIndent}
                   sx={{
                     ":hover": {
-                      backgroundColor: "#023E88",
-                      color: "#FFFFFF",
+                      backgroundColor: (theme) => theme.palette.secondary.main,
+                      color: (theme) => theme.palette.white.main,
                     },
                   }}
                 >
@@ -511,8 +520,8 @@ export function GroupDrawer(data: OSCALProject) {
                   size="small"
                   sx={{
                     ":hover": {
-                      backgroundColor: "#ffffff",
-                      color: "#FFFFFF",
+                      backgroundColor: (theme) => theme.palette.white.main,
+                      color: (theme) => theme.palette.white.main,
                     },
                   }}
                   onClick={handleDeleteGroup}
@@ -523,10 +532,10 @@ export function GroupDrawer(data: OSCALProject) {
                   size="small"
                   color="primary"
                   sx={{
-                    color: "#023E88",
+                    color: (theme) => theme.palette.secondary.main,
                     ":hover": {
-                      backgroundColor: "#023E88",
-                      color: "#FFFFFF",
+                      backgroundColor: (theme) => theme.palette.secondary.main,
+                      color: (theme) => theme.palette.white.main,
                     },
                   }}
                   onClick={handleSaveNewGroup}
@@ -543,7 +552,9 @@ export function GroupDrawer(data: OSCALProject) {
             width: 6,
             height: 73,
             position: "absolute",
-            background: isSelected ? "#FF6600" : "#F6F6F6",
+            background: isSelected
+              ? (theme) => theme.palette.primaryAccent.main
+              : (theme) => theme.palette.backgroundGray.main,
           }}
         ></Box>
       </Container>
@@ -558,8 +569,9 @@ export function GroupDrawer(data: OSCALProject) {
     return (
       <Box
         sx={{
-          background: "#F6F6F6",
-          border: "1px solid #D2D2D2",
+          background: (theme) => theme.palette.backgroundGray.main,
+          border: "1px solid",
+          borderColor: (theme) => theme.palette.lightGray.main,
           height: 48,
         }}
         onClick={handleRootLevelClick}
@@ -576,7 +588,9 @@ export function GroupDrawer(data: OSCALProject) {
             width: 6,
             height: 48,
             position: "absolute",
-            background: rootSelected ? "#FF6600" : "#F6F6F6",
+            background: rootSelected
+              ? (theme) => theme.palette.primaryAccent.main
+              : (theme) => theme.palette.backgroundGray.main,
           }}
         ></Box>
       </Box>
@@ -591,7 +605,6 @@ export function GroupDrawer(data: OSCALProject) {
     }
     function handleDelete() {
       setOpenDeleteDialog(true);
-      // DeleteGroup(data.group.groupID);
       setAddNewGroup(false);
       getData();
       setShowCardMenu(false);
@@ -699,7 +712,6 @@ export function GroupDrawer(data: OSCALProject) {
 
     function allowDrop(event: any) {
       event.preventDefault();
-      event.target.style.border = "4px dotted green";
       const id = data.group.groupID;
       if (!Ids.includes(id)) {
         Ids.push(id);
@@ -709,7 +721,6 @@ export function GroupDrawer(data: OSCALProject) {
     function handleDragLeave(event: any) {
       event.preventDefault();
       event.stopPropagation();
-      event.target.style.border = "1px solid #D2D2D2";
       setDraggingOver(false);
     }
     const endDragNDrop: React.DragEventHandler<HTMLDivElement> | undefined = (event: any) => {
@@ -731,7 +742,6 @@ export function GroupDrawer(data: OSCALProject) {
     const handleDrop = (event: any) => {
       event.preventDefault();
       event.stopPropagation();
-      event.target.style.border = "1px solid #D2D2D2";
       setEndDropping(true);
     };
 
@@ -754,8 +764,10 @@ export function GroupDrawer(data: OSCALProject) {
         <Container
           sx={{
             minHeight: itemHeight,
-            border: "1px solid #D2D2D2",
-            background: "#EAEAEA",
+            borderWidth: "1px",
+            borderStyle: "solid",
+            borderColor: (theme) => theme.palette.lightGray.main,
+            background: (theme) => theme.palette.gray.main,
             width: drawerWidth,
           }}
           draggable={true}
@@ -768,11 +780,12 @@ export function GroupDrawer(data: OSCALProject) {
                 height: 48,
                 left: open ? 20 + data.group.indent : 8,
                 position: "absolute",
-                background: "#F6F6F6",
-                border: "1px solid #D2D2D2",
+                background: (theme) => theme.palette.backgroundGray.main,
+                border: "1px solid",
+                borderColor: (theme) => theme.palette.lightGray.main,
                 width: open ? 300 - data.group.indent : 55,
                 ":hover": {
-                  backgroundColor: "#EAEAEA",
+                  backgroundColor: (theme) => theme.palette.gray.main,
                 },
               }}
               key={data.group.groupID.toUpperCase()}
@@ -794,7 +807,7 @@ export function GroupDrawer(data: OSCALProject) {
                     left: 0,
                     width: open ? 295 - data.group.indent : 55,
                     position: "absolute",
-                    background: "#FF6600",
+                    background: (theme) => theme.palette.primaryAccent.main,
                   }}
                 ></Box>
               )}
@@ -809,15 +822,15 @@ export function GroupDrawer(data: OSCALProject) {
                   height: 35,
                   width: 35,
                   top: 5,
-                  border: "1px solid #000000",
+                  border: "1px solid",
                   position: "absolute",
-                  background: "#002867",
+                  background: (theme) => theme.palette.primary.main,
                 }}
               >
                 <Typography
                   sx={{
                     fontFamily: "Source Sans Pro",
-                    color: "#ffffff",
+                    color: (theme) => theme.palette.white.main,
                     left: 5,
                     top: 5,
                     position: "absolute",
@@ -857,7 +870,10 @@ export function GroupDrawer(data: OSCALProject) {
                   width: 6,
                   height: 48,
                   position: "absolute",
-                  background: selectedItemName === data.group.groupTitle ? "#FF6600" : "#F6F6F6",
+                  background:
+                    selectedItemName === data.group.groupTitle
+                      ? (theme) => theme.palette.primaryAccent.main
+                      : (theme) => theme.palette.backgroundGray.main,
                 }}
               ></Box>{" "}
             </Container>
@@ -887,8 +903,8 @@ export function GroupDrawer(data: OSCALProject) {
                 height: 20,
                 width: open ? 150 : 10,
                 ":hover": {
-                  backgroundColor: "#023E88",
-                  color: "#FFFFFF",
+                  backgroundColor: (theme) => theme.palette.secondary.main,
+                  color: (theme) => theme.palette.white.main,
                 },
               }}
               disabled={addNewGroup}
@@ -927,13 +943,22 @@ export function GroupDrawer(data: OSCALProject) {
           }}
         >
           <Box component="main">
-            <DrawerHeader sx={{ background: "#002867" }}>
+            <DrawerHeader sx={{ background: (theme) => theme.palette.primary.main }}>
               {open && (
-                <Typography sx={{ color: "#ffffff", left: 20, position: "absolute" }}>
+                <Typography
+                  sx={{
+                    color: (theme) => theme.palette.white.main,
+                    left: 20,
+                    position: "absolute",
+                  }}
+                >
                   GROUPS
                 </Typography>
               )}
-              <IconButton onClick={handleDrawerOpenClose} sx={{ color: "#ffffff" }}>
+              <IconButton
+                onClick={handleDrawerOpenClose}
+                sx={{ color: (theme) => theme.palette.white.main }}
+              >
                 <KeyboardDoubleArrowLeftIcon />{" "}
               </IconButton>
             </DrawerHeader>
@@ -959,7 +984,7 @@ export function GroupDrawer(data: OSCALProject) {
                 fontWeight: 700,
                 lineHeight: "25px",
                 letterSpacing: "0em",
-                color: "#002867",
+                color: (theme) => theme.palette.primary.main,
               }}
             >
               {" "}
@@ -968,29 +993,31 @@ export function GroupDrawer(data: OSCALProject) {
             <Container
               sx={{
                 height: 48,
-                border: "1px solid #D2D2D266",
+                border: "1px solid",
+                borderColor: (theme) => theme.palette.lightGray.main,
                 top: 125,
                 width: open ? 670 : 910,
                 position: "absolute",
               }}
-            ></Container>
-            <Grid
-              container
-              direction="row"
-              sx={{
-                height: 30,
-                top: 180,
-                position: "absolute",
-              }}
             >
-              <Grid sx={{ width: open ? 505 : 745 }}></Grid>
-              <Grid>
-                {" "}
-                <OSCALSecondaryButton sx={{ position: "absolute", height: 20 }}>
-                  NEW CONTROL +
-                </OSCALSecondaryButton>{" "}
+              <Grid
+                container
+                direction="row"
+                sx={{
+                  height: 30,
+                  top: 15,
+                  position: "absolute",
+                }}
+              >
+                <Grid sx={{ width: open ? 285 : 345 }}></Grid>
+                <Grid>
+                  {" "}
+                  <OSCALSecondaryButton sx={{ position: "absolute", height: 20 }}>
+                    NEW CONTROL +
+                  </OSCALSecondaryButton>{" "}
+                </Grid>
               </Grid>
-            </Grid>
+            </Container>
           </Box>
         </Grid>
       </Grid>
