@@ -1937,9 +1937,6 @@ export default function OSCALCatalogBaseline() {
                 </StepperBar>
               </Grid>
               <Grid item xs={12}>
-                {/* <AddInformationLabel>
-                  Add information about the {Model.toLowerCase()}:
-                </AddInformationLabel> */}
                 <Typography variant="h2">
                   Add information about the {Model.toLowerCase()}:
                 </Typography>
