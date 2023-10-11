@@ -211,7 +211,7 @@ export function ControlManager(data: OSCALGroup) {
       setBaseControls(response.controls);
     }
     function getCatalogControlsFail(e: any) {
-      console.log("In ControlManager: Operation fail ", e.statusText, " resquest: ", request_json);
+      console.log("In ControlManager: Operation fail ", e.statusText, " request: ", request_json);
     }
   }
   //TODO This code will be used to implement Control editing
@@ -381,7 +381,7 @@ export function ControlManager(data: OSCALGroup) {
         console.log("Successful addition of a new Control", response);
       }
       function addNewControlFail(e: any) {
-        console.log("Fail to create a new Control", e.statusText, "resquest_json: ", request_json);
+        console.log("Fail to create a new Control", e.statusText, "request_json: ", request_json);
       }
       fetchTransaction("/add_control", request_json, addNewControlSuccess, addNewControlFail);
     }
@@ -604,8 +604,8 @@ export function ControlManager(data: OSCALGroup) {
         <DialogContent>
           <Stack>
             <Typography>
-              If deleted, all associated subgroups and controls will be <b>permanently</b> deleted.
-              You cannot undo this action..
+              If deleted, all associated controls will be <b>permanently</b> deleted.
+              You cannot undo this action.
             </Typography>
             <Box padding={1} />
             <Typography>Please enter {"'delete'"} to confirm.</Typography>
@@ -625,7 +625,7 @@ export function ControlManager(data: OSCALGroup) {
             onClick={handleDelete}
             disabled={deleteText.toLowerCase() !== "delete"}
           >
-            Delete Group
+            Delete Control
           </OSCALPrimaryDestructiveButton>
         </OSCALDialogActions>
       </OSCALWarningDialog>

@@ -299,7 +299,7 @@ export function GroupDrawer(data: OSCALProject) {
           <Stack>
             <Typography>
               If deleted, all associated subgroups and controls will be <b>permanently</b> deleted.
-              You cannot undo this action..
+              You cannot undo this action.
             </Typography>
             <Box padding={1} />
             <Typography>Please enter {"'delete'"} to confirm.</Typography>
