@@ -604,8 +604,8 @@ export function ControlManager(data: OSCALGroup) {
         <DialogContent>
           <Stack>
             <Typography>
-              If deleted, all associated controls will be <b>permanently</b> deleted.
-              You cannot undo this action.
+              If deleted, all associated controls will be <b>permanently</b> deleted. You cannot
+              undo this action.
             </Typography>
             <Box padding={1} />
             <Typography>Please enter {"'delete'"} to confirm.</Typography>
