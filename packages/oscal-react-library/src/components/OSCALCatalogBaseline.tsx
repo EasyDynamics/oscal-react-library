@@ -683,75 +683,196 @@ export default function OSCALCatalogBaseline() {
         console.log("In FilledBoxItem: Operation fail ", e.statusText);
       }
     }
+    const InitUpload: React.FC = () => {
+      return (
+        <Grid
+          sx={{
+            top: 260,
+            left: 40,
+            right: 120,
+            height: 450,
+            position: "absolute",
+          }}
+        >
+          <Grid
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ height: 200, width: "100%" }}
+          >
+            <MainImage sx={{ height: 156, width: 150 }} src={FileIcon} />
+          </Grid>
+          <Grid
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ height: 40, width: "100%" }}
+          >
+            <Typography
+              variant="h2"
+              sx={{
+                height: 30,
+                position: "absolute",
+              }}
+            >
+              No catalogs or baselines defined!
+            </Typography>
+          </Grid>
+          <Grid
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ height: 40, width: "100%" }}
+          >
+            <OSCALPrimaryButton sx={{ width: 91, height: 36 }} onClick={handleUpload}>
+              <Typography>UPLOAD</Typography>
+            </OSCALPrimaryButton>
+            <OSCALTertiaryButton
+              sx={{ width: 127, height: 36 }}
+              onClick={handleAddNewCatalogBaseline}
+            >
+              <Typography
+                sx={{
+                  fontFamily: "Source Sans Pro",
+                  fontSize: 16,
+                  fontWeight: 600,
+                  lineHeight: 20,
+                  letterSpacing: 0,
+                  textAlign: "left",
+                  color: (theme) => theme.palette.secondary.main,
+                }}
+                onClick={handleAddNewCatalogBaseline}
+              >
+                CREATE NEW +
+              </Typography>
+            </OSCALTertiaryButton>
+          </Grid>
+        </Grid>
+      );
+    };
+    const ChooseUploadMethod: React.FC = () => {
+      return (
+        <Grid>
+          <Grid
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ height: 70, width: "100%" }}
+          ></Grid>
+          <Grid
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ height: 150, width: "100%" }}
+          >
+            <MainImage sx={{ top: 100, width: 72 }} src={UploadIcon} />
+          </Grid>
+          <Grid
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ width: "100%", height: 30 }}
+          >
+            <Typography variant="h2">Drag and Drop Your File Here</Typography>
+          </Grid>
+          <Grid
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ width: "100%", height: 30 }}
+          >
+            <Typography
+              sx={{
+                fontFamily: "Source Sans Pro",
+                fontSize: 12,
+                fontWeight: 700,
+                color: (theme) => theme.palette.primary.main,
+              }}
+            >
+              OR
+            </Typography>
+          </Grid>
+          <Grid display="flex" justifyContent="center" alignItems="center" sx={{ width: "100%" }}>
+            <Button
+              component="label"
+              sx={{
+                width: 200,
+                height: 30,
+                textTransform: "none",
+              }}
+            >
+              <Typography variant="h2" sx={{ textDecoration: "underline" }}>
+                Choose a File
+              </Typography>
+              <input type="file" hidden accept="application/json" onChange={onUpload}></input>
+            </Button>
+          </Grid>
+        </Grid>
+      );
+    };
+    const SuccessfullUpload: React.FC = () => {
+      return (
+        <Grid container>
+          <Grid sx={{ height: 150, width: "100%" }}></Grid>
+          <Grid sx={{ height: 75, width: "100%" }}>
+            <MainImage
+              sx={{
+                position: "absolute",
+                width: 72,
+                left: "46.5%",
+              }}
+              src={GreenCircle}
+              alt="Easy Dynamics Logo"
+            />
+            <Box sx={{ height: 20 }}></Box>
+            <MainImage
+              sx={{
+                position: "absolute",
+                width: 45,
+                left: "48%",
+              }}
+              src={GreenCheck}
+              alt="Easy Dynamics Logo"
+            />
+          </Grid>
+          <Grid
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ height: 40, width: "100%" }}
+          >
+            <Typography variant="h2">Upload Complete</Typography>
+          </Grid>
+          <Grid display="flex" justifyContent="center" alignItems="center" sx={{ width: "100%" }}>
+            <Typography sx={{ height: 40 }}>{fileName} has been successfully uploaded.</Typography>
+          </Grid>
+          <Grid
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ height: 50, width: "100%" }}
+          >
+            <OSCALTertiaryButton onClick={loadPage} x={{ width: 90 }}>
+              GO BACK
+            </OSCALTertiaryButton>
+            <OSCALSecondaryButton onClick={handleGoBack} x={{ width: 140 }}>
+              UPLOAD MORE FILES
+            </OSCALSecondaryButton>
+            <Box sx={{ width: 20 }}></Box>
+            <OSCALPrimaryButton onClick={handleOpenFile} x={{ width: 90 }}>
+              {" "}
+              GO TO FILE
+            </OSCALPrimaryButton>
+          </Grid>
+        </Grid>
+      );
+    };
+
     const zeroCatalogBaseline =
       catalogIds.length === 0 && baselineIds.length === 0 && newOSCALModel === undefined;
     return (
       <>
-        {!uploadSuccessful && zeroCatalogBaseline && (
-          <Grid
-            sx={{
-              top: 260,
-              left: 40,
-              right: 120,
-              height: 450,
-              position: "absolute",
-            }}
-          >
-            <Grid
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              sx={{ height: 200, width: "100%" }}
-            >
-              <MainImage sx={{ height: 156, width: 150 }} src={FileIcon} />
-            </Grid>
-            <Grid
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              sx={{ height: 40, width: "100%" }}
-            >
-              <Typography
-                variant="h2"
-                sx={{
-                  height: 30,
-                  position: "absolute",
-                }}
-              >
-                No catalogs or baselines defined!
-              </Typography>
-            </Grid>
-            <Grid
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              sx={{ height: 40, width: "100%" }}
-            >
-              <OSCALPrimaryButton sx={{ width: 91, height: 36 }} onClick={handleUpload}>
-                <Typography>UPLOAD</Typography>
-              </OSCALPrimaryButton>
-              <OSCALTertiaryButton
-                sx={{ width: 127, height: 36 }}
-                onClick={handleAddNewCatalogBaseline}
-              >
-                <Typography
-                  sx={{
-                    fontFamily: "Source Sans Pro",
-                    fontSize: 16,
-                    fontWeight: 600,
-                    lineHeight: 20,
-                    letterSpacing: 0,
-                    textAlign: "left",
-                    color: (theme) => theme.palette.secondary.main,
-                  }}
-                  onClick={handleAddNewCatalogBaseline}
-                >
-                  CREATE NEW +
-                </Typography>
-              </OSCALTertiaryButton>
-            </Grid>
-          </Grid>
-        )}
+        {!uploadSuccessful && zeroCatalogBaseline && <InitUpload></InitUpload>}
         {(upload || uploadNewCatalogBaseline) && (
           <Box
             sx={{
@@ -785,72 +906,7 @@ export default function OSCALCatalogBaseline() {
                 }}
               >
                 {!startDropping && !endUploading && !uploadSuccessful && (
-                  <Grid>
-                    <Grid
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      sx={{ height: 70, width: "100%" }}
-                    ></Grid>
-                    <Grid
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      sx={{ height: 150, width: "100%" }}
-                    >
-                      <MainImage sx={{ top: 100, width: 72 }} src={UploadIcon} />
-                    </Grid>
-                    <Grid
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      sx={{ width: "100%", height: 30 }}
-                    >
-                      <Typography variant="h2">Drag and Drop Your File Here</Typography>
-                    </Grid>
-                    <Grid
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      sx={{ width: "100%", height: 30 }}
-                    >
-                      <Typography
-                        sx={{
-                          fontFamily: "Source Sans Pro",
-                          fontSize: 12,
-                          fontWeight: 700,
-                          color: (theme) => theme.palette.primary.main,
-                        }}
-                      >
-                        OR
-                      </Typography>
-                    </Grid>
-                    <Grid
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      sx={{ width: "100%" }}
-                    >
-                      <Button
-                        component="label"
-                        sx={{
-                          width: 200,
-                          height: 30,
-                          textTransform: "none",
-                        }}
-                      >
-                        <Typography variant="h2" sx={{ textDecoration: "underline" }}>
-                          Choose a File
-                        </Typography>
-                        <input
-                          type="file"
-                          hidden
-                          accept="application/json"
-                          onChange={onUpload}
-                        ></input>
-                      </Button>
-                    </Grid>
-                  </Grid>
+                  <ChooseUploadMethod></ChooseUploadMethod>
                 )}
                 {startDropping && (
                   <Grid>
@@ -878,68 +934,7 @@ export default function OSCALCatalogBaseline() {
                     </Grid>
                   </Grid>
                 )}
-                {uploadSuccessful && (
-                  <Grid container>
-                    <Grid sx={{ height: 150, width: "100%" }}></Grid>
-                    <Grid sx={{ height: 75, width: "100%" }}>
-                      <MainImage
-                        sx={{
-                          position: "absolute",
-                          width: 72,
-                          left: "46.5%",
-                        }}
-                        src={GreenCircle}
-                        alt="Easy Dynamics Logo"
-                      />
-                      <Box sx={{ height: 20 }}></Box>
-                      <MainImage
-                        sx={{
-                          position: "absolute",
-                          width: 45,
-                          left: "48%",
-                        }}
-                        src={GreenCheck}
-                        alt="Easy Dynamics Logo"
-                      />
-                    </Grid>
-                    <Grid
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      sx={{ height: 40, width: "100%" }}
-                    >
-                      <Typography variant="h2">Upload Complete</Typography>
-                    </Grid>
-                    <Grid
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      sx={{ width: "100%" }}
-                    >
-                      <Typography sx={{ height: 40 }}>
-                        {fileName} has been successfully uploaded.
-                      </Typography>
-                    </Grid>
-                    <Grid
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      sx={{ height: 50, width: "100%" }}
-                    >
-                      <OSCALTertiaryButton onClick={loadPage} sx={{ width: 90 }}>
-                        GO BACK
-                      </OSCALTertiaryButton>
-                      <OSCALSecondaryButton onClick={handleGoBack} x={{ width: 140 }}>
-                        UPLOAD MORE FILES
-                      </OSCALSecondaryButton>
-                      <Box sx={{ width: 20 }}></Box>
-                      <OSCALPrimaryButton onClick={handleOpenFile} x={{ width: 90 }}>
-                        {" "}
-                        GO TO FILE
-                      </OSCALPrimaryButton>
-                    </Grid>
-                  </Grid>
-                )}
+                {uploadSuccessful && <SuccessfullUpload></SuccessfullUpload>}
                 {!uploadSuccessful && endUploading && (
                   <Grid container>
                     <Grid sx={{ height: 150, width: "100%" }}></Grid>
@@ -986,11 +981,12 @@ export default function OSCALCatalogBaseline() {
                       alignItems="center"
                       sx={{ height: 50, width: "100%" }}
                     >
-                      <OSCALPrimaryButton onClick={loadPage} x={{ width: 90 }}>
+                      <OSCALPrimaryButton onClick={loadPage} x={{ width: 100 }}>
                         {" "}
                         GO BACK
                       </OSCALPrimaryButton>
-                      <OSCALSecondaryButton onClick={handleGoBack}>
+                      <Box sx={{ width: 10 }}></Box>
+                      <OSCALSecondaryButton onClick={handleGoBack} x={{ width: 160 }}>
                         UPLOAD MORE FILES
                       </OSCALSecondaryButton>
                     </Grid>
@@ -1028,7 +1024,7 @@ export default function OSCALCatalogBaseline() {
                 </Typography>
                 {showAlert && (
                   <OSCALError
-                    sx={{ top: 465, left: 0, width: 990, height: 80, position: "absolute" }}
+                    sx={{ top: 465, left: 0, right: 5, height: 80, position: "absolute" }}
                   >
                     <IconButton
                       onClick={handleCloseAlert}
