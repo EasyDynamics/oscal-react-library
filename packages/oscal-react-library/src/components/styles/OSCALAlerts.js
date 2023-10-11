@@ -1,5 +1,23 @@
-import { Alert, Typography } from "@mui/material";
+import { Alert, Typography, styled } from "@mui/material";
 import React from "react";
+
+const ErrorAlert = styled(Alert)(({ theme }) => ({
+  borderLeft: `10px solid ${theme.palette.destructive.main}`,
+  borderTop: `1px solid ${theme.palette.destructive.main}`,
+  borderBottom: `1px solid ${theme.palette.destructive.main}`,
+  borderRight: `1px solid ${theme.palette.destructive.main}`,
+  backgroundColor: (theme) => theme.palette.lightPink.main,
+  minWidth: "30rem",
+  maxHeight: "17rem",
+}));
+
+export const OSCALError = (props) => {
+  return (
+    <ErrorAlert severity="error" {...props}>
+      {props.children}
+    </ErrorAlert>
+  );
+};
 
 export const OSCALAlertError = (props) => {
   return (
