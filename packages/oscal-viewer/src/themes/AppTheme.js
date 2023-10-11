@@ -68,15 +68,6 @@ export const appTheme = createTheme({
     shadyGray: {
       main: "#D9DFE8",
     },
-    shadyBlue: {
-      main: "#0028675E",
-    },
-    lightGray: {
-      main: "#D2D2D2",
-    },
-    shadyGray: {
-      main: "#D9DFE8",
-    },
     // Other colors
     darkGray: {
       main: "#6A6A6A",
