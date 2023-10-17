@@ -84,6 +84,12 @@ export const appTheme = createTheme({
     smokyWhite: {
       main: "#00000029",
     },
+    darkWhite: {
+      main: "#00000040",
+    },
+    simpleBlue: {
+      main: "#00286754",
+    },
   },
   typography: {
     h1: {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { EditableFieldProps } from "./OSCALEditableTextField";
-import { Button, ButtonGroup, NativeSelect, TextField, Tooltip } from "@mui/material";
+import { Button, NativeSelect, TextField, Tooltip } from "@mui/material";
 import BreadCrumbs from "@mui/material/Breadcrumbs";
 import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
@@ -8,6 +8,8 @@ import { Divider, TooltipProps } from "@mui/material";
 import { Stack, styled } from "@mui/system";
 import { useFetchers } from "./Fetchers";
 import { OSCALDialogTitle, OSCALEditingDialog } from "./styles/OSCALDialog";
+import { ReactComponent as QuoteIcon } from "./images/icons/quote.svg";
+import { ReactComponent as CodeIcon } from "./images/icons/code.svg";
 
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -45,9 +47,9 @@ import {
 } from "./styles/OSCALButtons";
 import { OSCALTextField, OSCALRadio, OSCALFormLabel } from "./styles/OSCALInputs";
 
-import { FormatBold, FormatItalic, FormatQuote, Subscript, Superscript } from "@mui/icons-material";
+import { FormatBold, FormatItalic, Subscript, Superscript } from "@mui/icons-material";
 
-import { CodeOffSharp } from "@mui/icons-material";
+import GroupDrawer from "./OSCALCatalogManageGroup";
 import { OSCALError } from "./styles/OSCALAlerts";
 
 const MainImage = styled("img")`
@@ -215,7 +217,7 @@ export interface ProjectUUIDs {
   readonly ProfileUUIDS: Array<string>;
 }
 
-export function CatalogBaselineTabs(_data: OSCALModel) {
+export function CatalogBaselineTabs(data: OSCALModel) {
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -284,7 +286,9 @@ export function CatalogBaselineTabs(_data: OSCALModel) {
             />
           </TabList>
         </Box>
-        <TabPanel value="1">Control</TabPanel>
+        <TabPanel value="1">
+          <GroupDrawer projectUUID={data.model.projectUUID ?? ""}></GroupDrawer>
+        </TabPanel>
         <TabPanel value="2">Catalog Details</TabPanel>
         <TabPanel value="3">Directory</TabPanel>
         <TabPanel value="4">Back Matter</TabPanel>
@@ -679,75 +683,196 @@ export default function OSCALCatalogBaseline() {
         console.log("In FilledBoxItem: Operation fail ", e.statusText);
       }
     }
+    const InitUpload: React.FC = () => {
+      return (
+        <Grid
+          sx={{
+            top: 260,
+            left: 40,
+            right: 120,
+            height: 450,
+            position: "absolute",
+          }}
+        >
+          <Grid
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ height: 200, width: "100%" }}
+          >
+            <MainImage sx={{ height: 156, width: 150 }} src={FileIcon} />
+          </Grid>
+          <Grid
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ height: 40, width: "100%" }}
+          >
+            <Typography
+              variant="h2"
+              sx={{
+                height: 30,
+                position: "absolute",
+              }}
+            >
+              No catalogs or baselines defined!
+            </Typography>
+          </Grid>
+          <Grid
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ height: 40, width: "100%" }}
+          >
+            <OSCALPrimaryButton sx={{ width: 91, height: 36 }} onClick={handleUpload}>
+              <Typography>UPLOAD</Typography>
+            </OSCALPrimaryButton>
+            <OSCALTertiaryButton
+              sx={{ width: 127, height: 36 }}
+              onClick={handleAddNewCatalogBaseline}
+            >
+              <Typography
+                sx={{
+                  fontFamily: "Source Sans Pro",
+                  fontSize: 16,
+                  fontWeight: 600,
+                  lineHeight: 20,
+                  letterSpacing: 0,
+                  textAlign: "left",
+                  color: (theme) => theme.palette.secondary.main,
+                }}
+                onClick={handleAddNewCatalogBaseline}
+              >
+                CREATE NEW +
+              </Typography>
+            </OSCALTertiaryButton>
+          </Grid>
+        </Grid>
+      );
+    };
+    const ChooseUploadMethod: React.FC = () => {
+      return (
+        <Grid>
+          <Grid
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ height: 70, width: "100%" }}
+          ></Grid>
+          <Grid
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ height: 150, width: "100%" }}
+          >
+            <MainImage sx={{ top: 100, width: 72 }} src={UploadIcon} />
+          </Grid>
+          <Grid
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ width: "100%", height: 30 }}
+          >
+            <Typography variant="h2">Drag and Drop Your File Here</Typography>
+          </Grid>
+          <Grid
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ width: "100%", height: 30 }}
+          >
+            <Typography
+              sx={{
+                fontFamily: "Source Sans Pro",
+                fontSize: 12,
+                fontWeight: 700,
+                color: (theme) => theme.palette.primary.main,
+              }}
+            >
+              OR
+            </Typography>
+          </Grid>
+          <Grid display="flex" justifyContent="center" alignItems="center" sx={{ width: "100%" }}>
+            <Button
+              component="label"
+              sx={{
+                width: 200,
+                height: 30,
+                textTransform: "none",
+              }}
+            >
+              <Typography variant="h2" sx={{ textDecoration: "underline" }}>
+                Choose a File
+              </Typography>
+              <input type="file" hidden accept="application/json" onChange={onUpload}></input>
+            </Button>
+          </Grid>
+        </Grid>
+      );
+    };
+    const SuccessfullUpload: React.FC = () => {
+      return (
+        <Grid container>
+          <Grid sx={{ height: 150, width: "100%" }}></Grid>
+          <Grid sx={{ height: 75, width: "100%" }}>
+            <MainImage
+              sx={{
+                position: "absolute",
+                width: 72,
+                left: "46.5%",
+              }}
+              src={GreenCircle}
+              alt="Easy Dynamics Logo"
+            />
+            <Box sx={{ height: 20 }}></Box>
+            <MainImage
+              sx={{
+                position: "absolute",
+                width: 45,
+                left: "48%",
+              }}
+              src={GreenCheck}
+              alt="Easy Dynamics Logo"
+            />
+          </Grid>
+          <Grid
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ height: 40, width: "100%" }}
+          >
+            <Typography variant="h2">Upload Complete</Typography>
+          </Grid>
+          <Grid display="flex" justifyContent="center" alignItems="center" sx={{ width: "100%" }}>
+            <Typography sx={{ height: 40 }}>{fileName} has been successfully uploaded.</Typography>
+          </Grid>
+          <Grid
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ height: 50, width: "100%" }}
+          >
+            <OSCALTertiaryButton onClick={loadPage} x={{ width: 90 }}>
+              GO BACK
+            </OSCALTertiaryButton>
+            <OSCALSecondaryButton onClick={handleGoBack} x={{ width: 140 }}>
+              UPLOAD MORE FILES
+            </OSCALSecondaryButton>
+            <Box sx={{ width: 20 }}></Box>
+            <OSCALPrimaryButton onClick={handleOpenFile} x={{ width: 90 }}>
+              {" "}
+              GO TO FILE
+            </OSCALPrimaryButton>
+          </Grid>
+        </Grid>
+      );
+    };
+
     const zeroCatalogBaseline =
       catalogIds.length === 0 && baselineIds.length === 0 && newOSCALModel === undefined;
     return (
       <>
-        {!uploadSuccessful && zeroCatalogBaseline && (
-          <Grid
-            sx={{
-              top: 260,
-              left: 40,
-              right: 120,
-              height: 450,
-              position: "absolute",
-            }}
-          >
-            <Grid
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              sx={{ height: 200, width: "100%" }}
-            >
-              <MainImage sx={{ height: 156, width: 150 }} src={FileIcon} />
-            </Grid>
-            <Grid
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              sx={{ height: 40, width: "100%" }}
-            >
-              <Typography
-                variant="h2"
-                sx={{
-                  height: 30,
-                  position: "absolute",
-                }}
-              >
-                No catalogs or baselines defined!
-              </Typography>
-            </Grid>
-            <Grid
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              sx={{ height: 40, width: "100%" }}
-            >
-              <OSCALPrimaryButton sx={{ width: 91, height: 36 }} onClick={handleUpload}>
-                <Typography>UPLOAD</Typography>
-              </OSCALPrimaryButton>
-              <OSCALTertiaryButton
-                sx={{ width: 127, height: 36 }}
-                onClick={handleAddNewCatalogBaseline}
-              >
-                <Typography
-                  sx={{
-                    fontFamily: "Source Sans Pro",
-                    fontSize: 16,
-                    fontWeight: 600,
-                    lineHeight: 20,
-                    letterSpacing: 0,
-                    textAlign: "left",
-                    color: (theme) => theme.palette.secondary.main,
-                  }}
-                  onClick={handleAddNewCatalogBaseline}
-                >
-                  CREATE NEW +
-                </Typography>
-              </OSCALTertiaryButton>
-            </Grid>
-          </Grid>
-        )}
+        {!uploadSuccessful && zeroCatalogBaseline && <InitUpload></InitUpload>}
         {(upload || uploadNewCatalogBaseline) && (
           <Box
             sx={{
@@ -781,72 +906,7 @@ export default function OSCALCatalogBaseline() {
                 }}
               >
                 {!startDropping && !endUploading && !uploadSuccessful && (
-                  <Grid>
-                    <Grid
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      sx={{ height: 70, width: "100%" }}
-                    ></Grid>
-                    <Grid
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      sx={{ height: 150, width: "100%" }}
-                    >
-                      <MainImage sx={{ top: 100, width: 72 }} src={UploadIcon} />
-                    </Grid>
-                    <Grid
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      sx={{ width: "100%", height: 30 }}
-                    >
-                      <Typography variant="h2">Drag and Drop Your File Here</Typography>
-                    </Grid>
-                    <Grid
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      sx={{ width: "100%", height: 30 }}
-                    >
-                      <Typography
-                        sx={{
-                          fontFamily: "Source Sans Pro",
-                          fontSize: 12,
-                          fontWeight: 700,
-                          color: (theme) => theme.palette.primary.main,
-                        }}
-                      >
-                        OR
-                      </Typography>
-                    </Grid>
-                    <Grid
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      sx={{ width: "100%" }}
-                    >
-                      <Button
-                        component="label"
-                        sx={{
-                          width: 200,
-                          height: 30,
-                          textTransform: "none",
-                        }}
-                      >
-                        <Typography variant="h2" sx={{ textDecoration: "underline" }}>
-                          Choose a File
-                        </Typography>
-                        <input
-                          type="file"
-                          hidden
-                          accept="application/json"
-                          onChange={onUpload}
-                        ></input>
-                      </Button>
-                    </Grid>
-                  </Grid>
+                  <ChooseUploadMethod></ChooseUploadMethod>
                 )}
                 {startDropping && (
                   <Grid>
@@ -874,68 +934,7 @@ export default function OSCALCatalogBaseline() {
                     </Grid>
                   </Grid>
                 )}
-                {uploadSuccessful && (
-                  <Grid container>
-                    <Grid sx={{ height: 150, width: "100%" }}></Grid>
-                    <Grid sx={{ height: 75, width: "100%" }}>
-                      <MainImage
-                        sx={{
-                          position: "absolute",
-                          width: 72,
-                          left: "46.5%",
-                        }}
-                        src={GreenCircle}
-                        alt="Easy Dynamics Logo"
-                      />
-                      <Box sx={{ height: 20 }}></Box>
-                      <MainImage
-                        sx={{
-                          position: "absolute",
-                          width: 45,
-                          left: "48%",
-                        }}
-                        src={GreenCheck}
-                        alt="Easy Dynamics Logo"
-                      />
-                    </Grid>
-                    <Grid
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      sx={{ height: 40, width: "100%" }}
-                    >
-                      <Typography variant="h2">Upload Complete</Typography>
-                    </Grid>
-                    <Grid
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      sx={{ width: "100%" }}
-                    >
-                      <Typography sx={{ height: 40 }}>
-                        {fileName} has been successfully uploaded.
-                      </Typography>
-                    </Grid>
-                    <Grid
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      sx={{ height: 50, width: "100%" }}
-                    >
-                      <OSCALTertiaryButton onClick={loadPage} sx={{ width: 90 }}>
-                        GO BACK
-                      </OSCALTertiaryButton>
-                      <OSCALSecondaryButton onClick={handleGoBack} x={{ width: 140 }}>
-                        UPLOAD MORE FILES
-                      </OSCALSecondaryButton>
-                      <Box sx={{ width: 20 }}></Box>
-                      <OSCALPrimaryButton onClick={handleOpenFile} x={{ width: 90 }}>
-                        {" "}
-                        GO TO FILE
-                      </OSCALPrimaryButton>
-                    </Grid>
-                  </Grid>
-                )}
+                {uploadSuccessful && <SuccessfullUpload></SuccessfullUpload>}
                 {!uploadSuccessful && endUploading && (
                   <Grid container>
                     <Grid sx={{ height: 150, width: "100%" }}></Grid>
@@ -982,11 +981,12 @@ export default function OSCALCatalogBaseline() {
                       alignItems="center"
                       sx={{ height: 50, width: "100%" }}
                     >
-                      <OSCALPrimaryButton onClick={loadPage} x={{ width: 90 }}>
+                      <OSCALPrimaryButton onClick={loadPage} x={{ width: 100 }}>
                         {" "}
                         GO BACK
                       </OSCALPrimaryButton>
-                      <OSCALSecondaryButton onClick={handleGoBack}>
+                      <Box sx={{ width: 10 }}></Box>
+                      <OSCALSecondaryButton onClick={handleGoBack} x={{ width: 160 }}>
                         UPLOAD MORE FILES
                       </OSCALSecondaryButton>
                     </Grid>
@@ -1024,7 +1024,7 @@ export default function OSCALCatalogBaseline() {
                 </Typography>
                 {showAlert && (
                   <OSCALError
-                    sx={{ top: 465, left: 0, width: 990, height: 80, position: "absolute" }}
+                    sx={{ top: 465, left: 0, right: 5, height: 80, position: "absolute" }}
                   >
                     <IconButton
                       onClick={handleCloseAlert}
@@ -1339,40 +1339,64 @@ export default function OSCALCatalogBaseline() {
       </ItemBox>
     );
   };
-
+  const Item = styled(Box)(({ theme }) => ({
+    backgroundColor: "#ffffff",
+    padding: theme.spacing(1),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+    height: 9,
+    width: 15,
+    justifyContent: "center",
+    border: "1px solid",
+  }));
   function ButtonBar() {
     return (
-      <Grid
+      <Container
+        component={"span"}
         sx={{
           flexGrow: 1,
           top: 15,
           background: (theme) => theme.palette.white.main,
           height: 20,
         }}
-        container
-        spacing={0}
       >
-        <ButtonGroup size="small" aria-label="small button group">
-          <IconButton edge="start" aria-label="menu">
-            <FormatBold sx={{ border: "1px solid" }} />
-          </IconButton>
-          <IconButton edge="start" aria-label="menu">
-            <FormatItalic sx={{ border: "1px solid" }} />
-          </IconButton>
-          <IconButton edge="start" aria-label="menu">
-            <CodeOffSharp sx={{ border: "1px solid" }} />
-          </IconButton>
-          <IconButton edge="start" aria-label="menu">
-            <FormatQuote sx={{ border: "1px solid" }} />
-          </IconButton>
-          <IconButton edge="start" aria-label="menu">
-            <Subscript sx={{ border: "1px solid" }} />
-          </IconButton>
-          <IconButton edge="start" aria-label="menu">
-            <Superscript sx={{ border: "1px solid" }} />
-          </IconButton>
-        </ButtonGroup>
-      </Grid>
+        <Stack spacing={0} direction="row">
+          <Item>
+            <IconButton size="small" sx={{ left: -5, top: -10, position: "relative" }}>
+              <FormatBold />
+            </IconButton>
+          </Item>
+          <Item>
+            <IconButton size="small" sx={{ left: -5, top: -10, position: "relative" }}>
+              <FormatItalic />
+            </IconButton>
+          </Item>
+          <Item>
+            <IconButton size="small" sx={{ left: -5, top: -10, position: "relative" }}>
+              <CodeIcon />
+            </IconButton>
+          </Item>
+          <Item>
+            <IconButton
+              size="small"
+              color="primary"
+              sx={{ left: -5, top: -10, position: "relative" }}
+            >
+              <QuoteIcon />
+            </IconButton>
+          </Item>
+          <Item>
+            <IconButton size="small" sx={{ left: -5, top: -10, position: "relative" }}>
+              <Superscript />
+            </IconButton>
+          </Item>
+          <Item>
+            <IconButton size="small" sx={{ left: -5, top: -10, position: "relative" }}>
+              <Subscript />
+            </IconButton>
+          </Item>
+        </Stack>
+      </Container>
     );
   }
   const ToolBarMenu: React.FC<{ hasDropdown: boolean | null }> = (item) => {
@@ -1385,10 +1409,10 @@ export default function OSCALCatalogBaseline() {
           }}
         >
           <Grid container spacing={0}>
-            <Grid xs={5} container>
+            <Grid xs={4} container>
               <Container></Container>
             </Grid>
-            <Grid xs={3} container>
+            <Grid xs={2.6} container>
               <Container>
                 <NativeSelect
                   defaultValue={1}
@@ -1408,7 +1432,7 @@ export default function OSCALCatalogBaseline() {
                 </NativeSelect>
               </Container>
             </Grid>
-            <Grid xs={4} container>
+            <Grid xs={5.4} container>
               <Box>
                 <ButtonBar></ButtonBar>
               </Box>
@@ -1422,13 +1446,15 @@ export default function OSCALCatalogBaseline() {
           justifyContent="center"
           sx={{
             height: 12,
+            top: 8,
+            position: "relative",
           }}
         >
           <Grid container spacing={1}>
-            <Grid xs={8}>
+            <Grid xs={6.7}>
               <Container></Container>
             </Grid>
-            <Grid xs={4}>
+            <Grid xs={5.3}>
               <Box>
                 <ButtonBar></ButtonBar>
               </Box>
@@ -1934,6 +1960,9 @@ export default function OSCALCatalogBaseline() {
                 </StepperBar>
               </Grid>
               <Grid item xs={12}>
+                {/* <AddInformationLabel>
+                  Add information about the {Model.toLowerCase()}:
+                </AddInformationLabel> */}
                 <Typography variant="h2">
                   Add information about the {Model.toLowerCase()}:
                 </Typography>

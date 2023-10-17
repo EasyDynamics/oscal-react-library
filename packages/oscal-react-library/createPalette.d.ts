@@ -23,6 +23,8 @@ declare module "@mui/material/styles/createPalette" {
     shadyGray: PaletteColor;
     shadyBlue: PaletteColor;
     smokyWhite: PaletteColor;
+    darkWhite: PaletteColor;
+    simpleBlue: PaletteColor;
   }
   interface PaletteOptions {
     backgroundGray?: PaletteColorOptions;
@@ -45,5 +47,7 @@ declare module "@mui/material/styles/createPalette" {
     shadyGray?: PaletteColorOptions;
     shadyBlue?: PaletteColorOptions;
     smokyWhite?: PaletteColorOptions;
+    darkWhite?: PaletteColorOptions;
+    simpleBlue?: PaletteColorOptions;
   }
 }
