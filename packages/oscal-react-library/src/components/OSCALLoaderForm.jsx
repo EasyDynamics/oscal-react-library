@@ -40,40 +40,40 @@ export default function OSCALLoaderForm(props) {
       <Grid container spacing={3}>
         {!props.isRestMode && (
           <>
-            <Grid item xs={6} md={9}>
-              <TextField
-                id="oscal-url"
-                label={`OSCAL ${props.oscalObjectType.name} URL`}
-                defaultValue={props.oscalUrl}
-                helperText="(JSON Format)"
-                variant="outlined"
-                fullWidth
-                inputRef={url}
-              />
-            </Grid>
-            <Grid item xs={4} md={2}>
+            <Grid item xs={12} md={12}>
               <Stack direction="row" spacing={1}>
-                <Button
-                  variant="contained"
-                  size="large"
-                  color="primary"
-                  endIcon={<ReplayIcon>send</ReplayIcon>}
-                  disabled={!props.isResolutionComplete}
-                  type="submit"
-                >
-                  Reload
-                </Button>
-                <Button
-                  variant="contained"
-                  size="large"
-                  color="secondary"
-                  endIcon={<FileUploadIcon />}
-                  component="label"
-                  disabled={!props.isResolutionComplete}
-                >
-                  Upload
-                  <input type="file" hidden accept="application/json" onChange={onUpload} />
-                </Button>
+                <TextField
+                  id="oscal-url"
+                  label={`OSCAL ${props.oscalObjectType.name} URL`}
+                  defaultValue={props.oscalUrl}
+                  helperText="(JSON Format)"
+                  variant="outlined"
+                  fullWidth
+                  inputRef={url}
+                />
+                <Stack direction="row" spacing={1} sx={{ height: "3.5rem" }}>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    color="primary"
+                    endIcon={<ReplayIcon>send</ReplayIcon>}
+                    disabled={!props.isResolutionComplete}
+                    type="submit"
+                  >
+                    Reload
+                  </Button>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    color="secondary"
+                    endIcon={<FileUploadIcon />}
+                    component="label"
+                    disabled={!props.isResolutionComplete}
+                  >
+                    Upload
+                    <input type="file" hidden accept="application/json" onChange={onUpload} />
+                  </Button>
+                </Stack>
               </Stack>
             </Grid>
           </>
