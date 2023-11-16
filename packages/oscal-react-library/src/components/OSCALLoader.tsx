@@ -17,6 +17,7 @@ import OSCALComponentDefinition from "./OSCALComponentDefinition";
 import OSCALProfile from "./OSCALProfile";
 import OSCALLoaderForm from "./OSCALLoaderForm";
 import OSCALJsonEditor from "./OSCALJsonEditor";
+import OSCALCatalogBaseline from "./OSCALCatalogBaseline";
 import {
   Catalog,
   ComponentDefinition,
@@ -28,6 +29,7 @@ import {
 import { ReactElement } from "react-markdown/lib/react-markdown";
 import { AnchorLinkProps } from "./OSCALAnchorLinkHeader";
 
+const isDevMode = false; // This boolean is used to switch to dev mode
 const EditorToolbar = styled(Box)(
   ({ theme }) => `
   position: sticky;
@@ -437,7 +439,9 @@ export function OSCALCatalogLoader(props: OSCALDocumentLoaderProps) {
       }}
     />
   );
-  return (
+  return isDevMode ? (
+    <OSCALCatalogBaseline></OSCALCatalogBaseline>
+  ) : (
     <OSCALLoader
       oscalObjectType={oscalObjectType}
       renderer={renderer}

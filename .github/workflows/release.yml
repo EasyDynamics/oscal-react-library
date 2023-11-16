@@ -19,20 +19,20 @@ jobs:
         # filtered from log output automatically
         id: generate-token
         # This maps to v1.6.0 https://github.com/tibdex/github-app-token/releases/tag/v1.6.0
-        uses: tibdex/github-app-token@b62528385c34dbc9f38e5f4225ac829252d1ea92
+        uses: tibdex/github-app-token@0914d50df753bbc42180d982a6550f195390069f
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: develop
           fetch-depth: 0
           token: ${{ steps.generate-token.outputs.token }}
 
       - name: Setup NodeJS
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "lts/*"
           cache: npm
