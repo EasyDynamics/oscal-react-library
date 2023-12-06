@@ -8,6 +8,7 @@
 // match the expected interface, even if the JSON is valid.
 
 export interface Oscal {
+    readonly $schema?: string;
     readonly catalog?: Catalog;
     readonly profile?: Profile;
     readonly 'component-definition'?: ComponentDefinition;
@@ -30,7 +31,7 @@ export interface SecurityAssessmentPlanSAP {
      * the referenced SSP.
      */
     readonly 'local-definitions'?: AssessmentPlanLocalDefinitions;
-    readonly metadata: PublicationMetadata;
+    readonly metadata: DocumentMetadata;
     readonly 'reviewed-controls': ReviewedControlsAndControlObjectives;
     readonly tasks?: Task[];
     /**
@@ -82,7 +83,8 @@ export interface AssessmentPlatform {
 }
 
 /**
- * A reference to a local or remote resource
+ * A reference to a local or remote resource, that has a specific relation to the containing
+ * object.
  */
 export interface Link {
     /**
@@ -90,15 +92,20 @@ export interface Link {
      */
     readonly href: string;
     /**
-     * Specifies a media type as defined by the Internet Assigned Numbers Authority (IANA) Media
-     * Types Registry.
+     * A label that indicates the nature of a resource, as a data serialization or format.
      */
     readonly 'media-type'?: string;
     /**
-     * Describes the type of relationship provided by the link. This can be an indicator of the
-     * link's purpose.
+     * Describes the type of relationship provided by the link's hypertext reference. This can
+     * be an indicator of the link's purpose.
      */
     readonly rel?: string;
+    /**
+     * In case where the href points to a back-matter/resource, this value will indicate the URI
+     * fragment to append to any rlink associated with the resource. This value MUST be URI
+     * encoded.
+     */
+    readonly 'resource-fragment'?: string;
     /**
      * A textual label to associate with the link, which may be used for presentation in a tool.
      */
@@ -107,19 +114,20 @@ export interface Link {
 
 /**
  * An attribute, characteristic, or quality of the containing object expressed as a
- * namespace qualified name/value pair. The value of a property is a simple scalar value,
- * which may be expressed as a list of values.
+ * namespace qualified name/value pair.
  */
 export interface Property {
     /**
-     * A textual label that provides a sub-type or characterization of the property's name. This
-     * can be used to further distinguish or discriminate between the semantics of multiple
-     * properties of the same object with the same name and ns.
+     * A textual label that provides a sub-type or characterization of the property's name.
      */
     readonly class?: string;
     /**
-     * A textual label that uniquely identifies a specific attribute, characteristic, or quality
-     * of the property's containing object.
+     * An identifier for relating distinct sets of properties.
+     */
+    readonly group?: string;
+    /**
+     * A textual label, within a namespace, that uniquely identifies a specific attribute,
+     * characteristic, or quality of the property's containing object.
      */
     readonly name: string;
     /**
@@ -129,10 +137,7 @@ export interface Property {
     readonly ns?: string;
     readonly remarks?: string;
     /**
-     * A machine-oriented, globally unique identifier with cross-instance scope that can be used
-     * to reference this defined property elsewhere in this or other OSCAL instances. This UUID
-     * should be assigned per-subject, which means it should be consistently used to identify
-     * the same subject across revisions of the document.
+     * A unique identifier for a property.
      */
     readonly uuid?: string;
     /**
@@ -157,8 +162,8 @@ export interface UsesComponent {
 }
 
 /**
- * A reference to a set of organizations or persons that have responsibility for performing
- * a referenced role in the context of the containing object.
+ * A reference to a set of persons and/or organizations that have responsibility for
+ * performing the referenced role in the context of the containing object.
  */
 export interface ResponsibleParty {
     readonly links?: Link[];
@@ -166,7 +171,7 @@ export interface ResponsibleParty {
     readonly props?: Property[];
     readonly remarks?: string;
     /**
-     * A human-oriented identifier reference to roles served by the user.
+     * A reference to a role performed by a party.
      */
     readonly 'role-id': string;
 }
@@ -260,8 +265,9 @@ export enum Transport {
 }
 
 /**
- * A reference to one or more roles with responsibility for performing a function relative
- * to the containing object.
+ * A reference to a role with responsibility for performing a function relative to the
+ * containing object, optionally associated with a set of persons and/or organizations that
+ * perform that role.
  */
 export interface ResponsibleRole {
     readonly links?: Link[];
@@ -269,7 +275,7 @@ export interface ResponsibleRole {
     readonly props?: Property[];
     readonly remarks?: string;
     /**
-     * A human-oriented identifier reference to roles responsible for the business function.
+     * A human-oriented identifier reference to a role performed.
      */
     readonly 'role-id': string;
 }
@@ -343,28 +349,28 @@ export interface IncludeAll {
 }
 
 /**
- * A collection of resources, which may be included directly or by reference.
+ * A collection of resources that may be referenced from within the OSCAL document instance.
  */
 export interface BackMatter {
     readonly resources?: Resource[];
 }
 
 /**
- * A resource associated with content in the containing document. A resource may be directly
- * included in the document base64 encoded or may point to one or more equivalent internet
- * resources.
+ * A resource associated with content in the containing document instance. A resource may be
+ * directly included in the document using base64 encoding or may point to one or more
+ * equivalent internet resources.
  */
 export interface Resource {
     /**
-     * The Base64 alphabet in RFC 2045 - aligned with XSD.
+     * A resource encoded using the Base64 alphabet defined by RFC 2045.
      */
     readonly base64?: Base64;
     /**
-     * A citation consisting of end note text and optional structured bibliographic data.
+     * An optional citation consisting of end note text using structured markup.
      */
     readonly citation?: Citation;
     /**
-     * A short summary of the resource used to indicate the purpose of the resource.
+     * An optional short summary of the resource used to indicate the purpose of the resource.
      */
     readonly description?: string;
     readonly 'document-ids'?: DocumentIdentifier[];
@@ -372,20 +378,18 @@ export interface Resource {
     readonly remarks?: string;
     readonly rlinks?: ResourceLink[];
     /**
-     * A name given to the resource, which may be used by a tool for display and navigation.
+     * An optional name given to the resource, which may be used by a tool for display and
+     * navigation.
      */
     readonly title?: string;
     /**
-     * A machine-oriented, globally unique identifier with cross-instance scope that can be used
-     * to reference this defined resource elsewhere in this or other OSCAL instances. This UUID
-     * should be assigned per-subject, which means it should be consistently used to identify
-     * the same subject across revisions of the document.
+     * A unique identifier for a resource.
      */
     readonly uuid: string;
 }
 
 /**
- * The Base64 alphabet in RFC 2045 - aligned with XSD.
+ * A resource encoded using the Base64 alphabet defined by RFC 2045.
  */
 export interface Base64 {
     /**
@@ -394,15 +398,14 @@ export interface Base64 {
      */
     readonly filename?: string;
     /**
-     * Specifies a media type as defined by the Internet Assigned Numbers Authority (IANA) Media
-     * Types Registry.
+     * A label that indicates the nature of a resource, as a data serialization or format.
      */
     readonly 'media-type'?: string;
     readonly value: string;
 }
 
 /**
- * A citation consisting of end note text and optional structured bibliographic data.
+ * An optional citation consisting of end note text using structured markup.
  */
 export interface Citation {
     readonly links?: Link[];
@@ -414,11 +417,7 @@ export interface Citation {
 }
 
 /**
- * A document identifier qualified by an identifier scheme. A document identifier provides a
- * globally unique identifier with a cross-instance scope that is used for a group of
- * documents that are to be treated as different versions of the same document. If this
- * element does not appear, or if the value of this element is empty, the value of
- * "document-id" is equal to the value of the "uuid" flag of the top-level root element.
+ * A document identifier qualified by an identifier scheme.
  */
 export interface DocumentIdentifier {
     readonly identifier: string;
@@ -430,18 +429,17 @@ export interface DocumentIdentifier {
 }
 
 /**
- * A pointer to an external resource with an optional hash for verification and change
- * detection.
+ * A URL-based pointer to an external resource with an optional hash for verification and
+ * change detection.
  */
 export interface ResourceLink {
     readonly hashes?: Hash[];
     /**
-     * A resolvable URI reference to a resource.
+     * A resolvable URL pointing to the referenced resource.
      */
     readonly href: string;
     /**
-     * Specifies a media type as defined by the Internet Assigned Numbers Authority (IANA) Media
-     * Types Registry.
+     * A label that indicates the nature of a resource, as a data serialization or format.
      */
     readonly 'media-type'?: string;
 }
@@ -452,7 +450,7 @@ export interface ResourceLink {
  */
 export interface Hash {
     /**
-     * Method by which a hash is derived
+     * The digest method by which a hash is derived.
      */
     readonly algorithm: string;
     readonly value: string;
@@ -568,9 +566,9 @@ export interface AssessedControls {
      * A human-readable description of in-scope controls specified for assessment.
      */
     readonly description?: string;
-    readonly 'exclude-controls'?: SelectControl[];
+    readonly 'exclude-controls'?: ControlSelectionExcludeControl[];
     readonly 'include-all'?: IncludeAll;
-    readonly 'include-controls'?: SelectControl[];
+    readonly 'include-controls'?: ControlSelectionExcludeControl[];
     readonly links?: Link[];
     readonly props?: Property[];
     readonly remarks?: string;
@@ -582,11 +580,11 @@ export interface AssessedControls {
  * to only specific control statements providing more granularity over the specific
  * statements that are within the asessment scope.
  */
-export interface SelectControl {
+export interface ControlSelectionExcludeControl {
     /**
-     * A human-oriented identifier reference to a control with a corresponding id value. When
-     * referencing an externally defined control, the Control Identifier Reference must be used
-     * in the context of the external / imported OSCAL instance (e.g., uri-reference).
+     * A reference to a control with a corresponding id value. When referencing an externally
+     * defined control, the Control Identifier Reference must be used in the context of the
+     * external / imported OSCAL instance (e.g., uri-reference).
      */
     readonly 'control-id': string;
     readonly 'statement-ids'?: string[];
@@ -666,9 +664,9 @@ export interface ImplementedComponent {
  */
 export interface AssessmentSpecificControlObjective {
     /**
-     * A human-oriented identifier reference to a control with a corresponding id value. When
-     * referencing an externally defined control, the Control Identifier Reference must be used
-     * in the context of the external / imported OSCAL instance (e.g., uri-reference).
+     * A reference to a control with a corresponding id value. When referencing an externally
+     * defined control, the Control Identifier Reference must be used in the context of the
+     * external / imported OSCAL instance (e.g., uri-reference).
      */
     readonly 'control-id': string;
     /**
@@ -682,32 +680,28 @@ export interface AssessmentSpecificControlObjective {
 }
 
 /**
- * A partition of a control's definition or a child of another part.
+ * An annotated, markup-based textual element of a control's or catalog group's definition,
+ * or a child of another part.
  */
 export interface Part {
     /**
-     * A textual label that provides a sub-type or characterization of the part's name. This can
-     * be used to further distinguish or discriminate between the semantics of multiple parts of
-     * the same control with the same name and ns.
+     * An optional textual providing a sub-type or characterization of the part's name, or a
+     * category to which the part belongs.
      */
     readonly class?: string;
     /**
-     * A human-oriented, locally unique identifier with cross-instance scope that can be used to
-     * reference this defined part elsewhere in this or other OSCAL instances. When referenced
-     * from another OSCAL instance, this identifier must be referenced in the context of the
-     * containing resource (e.g., import-profile). This id should be assigned per-subject, which
-     * means it should be consistently used to identify the same subject across revisions of the
-     * document.
+     * A unique identifier for the part.
      */
     readonly id?: string;
     readonly links?: Link[];
     /**
-     * A textual label that uniquely identifies the part's semantic type.
+     * A textual label that uniquely identifies the part's semantic type, which exists in a
+     * value space qualified by the ns.
      */
     readonly name: string;
     /**
-     * A namespace qualifying the part's name. This allows different organizations to associate
-     * distinct semantics with the same name.
+     * An optional namespace qualifying the part's name. This allows different organizations to
+     * associate distinct semantics with the same name.
      */
     readonly ns?: string;
     readonly parts?: Part[];
@@ -717,7 +711,8 @@ export interface Part {
      */
     readonly prose?: string;
     /**
-     * A name given to the part, which may be used by a tool for display and navigation.
+     * An optional name given to the part, which may be used by a tool for display and
+     * navigation.
      */
     readonly title?: string;
 }
@@ -771,15 +766,17 @@ export interface Privilege {
 }
 
 /**
- * Provides information about the publication and availability of the containing document.
+ * Provides information about the containing document, and defines concepts that are shared
+ * across the document.
  */
-export interface PublicationMetadata {
+export interface DocumentMetadata {
+    readonly actions?: Action[];
     readonly 'document-ids'?: DocumentIdentifier[];
     readonly 'last-modified': Date;
     readonly links?: Link[];
     readonly locations?: Location[];
     readonly 'oscal-version': string;
-    readonly parties?: PartyOrganizationOrPerson[];
+    readonly parties?: Party[];
     readonly props?: Property[];
     readonly published?: Date;
     readonly remarks?: string;
@@ -794,10 +791,39 @@ export interface PublicationMetadata {
 }
 
 /**
- * A location, with associated metadata that can be referenced.
+ * An action applied by a role within a given party to the content.
+ */
+export interface Action {
+    /**
+     * The date and time when the action occurred.
+     */
+    readonly date?: Date;
+    readonly links?: Link[];
+    readonly props?: Property[];
+    readonly remarks?: string;
+    readonly 'responsible-parties'?: ResponsibleParty[];
+    /**
+     * Specifies the action type system used.
+     */
+    readonly system: string;
+    /**
+     * The type of action documented by the assembly, such as an approval.
+     */
+    readonly type: string;
+    /**
+     * A unique identifier that can be used to reference this defined action elsewhere in an
+     * OSCAL document. A UUID should be consistently used for a given location across revisions
+     * of the document.
+     */
+    readonly uuid: string;
+}
+
+/**
+ * A physical point of presence, which may be associated with people, organizations, or
+ * other concepts within the current or linked OSCAL document.
  */
 export interface Location {
-    readonly address: Address;
+    readonly address?: Address;
     readonly 'email-addresses'?: string[];
     readonly links?: Link[];
     readonly props?: Property[];
@@ -809,12 +835,7 @@ export interface Location {
     readonly title?: string;
     readonly urls?: string[];
     /**
-     * A machine-oriented, globally unique identifier with cross-instance scope that can be used
-     * to reference this defined location elsewhere in this or other OSCAL instances. The
-     * locally defined UUID of the location can be used to reference the data item locally or
-     * globally (e.g., from an importing OSCAL instance). This UUID should be assigned
-     * per-subject, which means it should be consistently used to identify the same subject
-     * across revisions of the document.
+     * A unique ID for the location, for reference.
      */
     readonly uuid: string;
 }
@@ -833,11 +854,11 @@ export interface Address {
      */
     readonly country?: string;
     /**
-     * Postal or ZIP code for mailing address
+     * Postal or ZIP code for mailing address.
      */
     readonly 'postal-code'?: string;
     /**
-     * State, province or analogous geographical region for mailing address
+     * State, province or analogous geographical region for a mailing address.
      */
     readonly state?: string;
     /**
@@ -847,7 +868,7 @@ export interface Address {
 }
 
 /**
- * Contact number by telephone.
+ * A telephone service number as defined by ITU-T E.164.
  */
 export interface TelephoneNumber {
     readonly number: string;
@@ -858,9 +879,10 @@ export interface TelephoneNumber {
 }
 
 /**
- * A responsible entity which is either a person or an organization.
+ * An organization or person, which may be associated with roles or other concepts within
+ * the current or linked OSCAL document.
  */
-export interface PartyOrganizationOrPerson {
+export interface Party {
     readonly addresses?: Address[];
     readonly 'email-addresses'?: string[];
     readonly 'external-ids'?: PartyExternalIdentifier[];
@@ -883,19 +905,14 @@ export interface PartyOrganizationOrPerson {
      */
     readonly type: PartyType;
     /**
-     * A machine-oriented, globally unique identifier with cross-instance scope that can be used
-     * to reference this defined party elsewhere in this or other OSCAL instances. The locally
-     * defined UUID of the party can be used to reference the data item locally or globally
-     * (e.g., from an importing OSCAL instance). This UUID should be assigned per-subject, which
-     * means it should be consistently used to identify the same subject across revisions of the
-     * document.
+     * A unique identifier for the party.
      */
     readonly uuid: string;
 }
 
 /**
  * An identifier for a person or organization using a designated scheme. e.g. an Open
- * Researcher and Contributor ID (ORCID)
+ * Researcher and Contributor ID (ORCID).
  */
 export interface PartyExternalIdentifier {
     readonly id: string;
@@ -911,8 +928,8 @@ export enum PartyType {
 }
 
 /**
- * An entry in a sequential list of revisions to the containing document in reverse
- * chronological order (i.e., most recent previous revision first).
+ * An entry in a sequential list of revisions to the containing document, expected to be in
+ * reverse chronological order (i.e. latest first).
  */
 export interface RevisionHistoryEntry {
     readonly 'last-modified'?: Date;
@@ -930,7 +947,7 @@ export interface RevisionHistoryEntry {
 }
 
 /**
- * Defines a function assumed or expected to be assumed by a party in a specific situation.
+ * Defines a function, which might be assigned to a party in a specific situation.
  */
 export interface Role {
     /**
@@ -938,13 +955,7 @@ export interface Role {
      */
     readonly description?: string;
     /**
-     * A human-oriented, locally unique identifier with cross-instance scope that can be used to
-     * reference this defined role elsewhere in this or other OSCAL instances. When referenced
-     * from another OSCAL instance, the locally defined ID of the Role from the imported OSCAL
-     * instance must be referenced in the context of the containing resource (e.g., import,
-     * import-component-definition, import-profile, import-ssp or import-ap). This ID should be
-     * assigned per-subject, which means it should be consistently used to identify the same
-     * subject across revisions of the document.
+     * A unique identifier for the role.
      */
     readonly id: string;
     readonly links?: Link[];
@@ -1150,7 +1161,7 @@ export interface SecurityAssessmentResultsSAR {
      * the referenced SSP.
      */
     readonly 'local-definitions'?: AssessmentResultsLocalDefinitions;
-    readonly metadata: PublicationMetadata;
+    readonly metadata: DocumentMetadata;
     readonly results: AssessmentResult[];
     /**
      * A machine-oriented, globally unique identifier with cross-instance scope that can be used
@@ -1847,24 +1858,23 @@ export interface ThreatID {
 }
 
 /**
- * A collection of controls.
+ * A structured, organized collection of control information.
  */
 export interface Catalog {
     readonly 'back-matter'?: BackMatter;
     readonly controls?: Control[];
-    readonly groups?: ControlGroup[];
-    readonly metadata: PublicationMetadata;
+    readonly groups?: CatalogGroup[];
+    readonly metadata: DocumentMetadata;
     readonly params?: Parameter[];
     /**
-     * A globally unique identifier with cross-instance scope for this catalog instance. This
-     * UUID should be changed when this document is revised.
+     * Provides a globally unique means to identify a given catalog instance.
      */
     readonly uuid: string;
 }
 
 /**
- * A structured information object representing a security or privacy control. Each security
- * or privacy control within the Catalog is defined by a distinct control instance.
+ * A structured object representing a requirement or guideline, which when implemented will
+ * reduce an aspect of risk related to an information system and its information.
  */
 export interface Control {
     /**
@@ -1873,10 +1883,8 @@ export interface Control {
     readonly class?: string;
     readonly controls?: Control[];
     /**
-     * A human-oriented, locally unique identifier with instance scope that can be used to
-     * reference this control elsewhere in this and other OSCAL instances (e.g., profiles). This
-     * id should be assigned per-subject, which means it should be consistently used to identify
-     * the same control across revisions of the document.
+     * Identifies a control such that it can be referenced in the defining catalog and other
+     * OSCAL instances (e.g., profiles).
      */
     readonly id: string;
     readonly links?: Link[];
@@ -1894,23 +1902,19 @@ export interface Control {
  */
 export interface Parameter {
     /**
-     * A textual label that provides a characterization of the parameter.
+     * A textual label that provides a characterization of the type, purpose, use or scope of
+     * the parameter.
      */
     readonly class?: string;
     readonly constraints?: Constraint[];
     /**
-     * **(deprecated)** Another parameter invoking this one. This construct has been deprecated
-     * and should not be used.
+     * (deprecated) Another parameter invoking this one. This construct has been deprecated and
+     * should not be used.
      */
     readonly 'depends-on'?: string;
     readonly guidelines?: Guideline[];
     /**
-     * A human-oriented, locally unique identifier with cross-instance scope that can be used to
-     * reference this defined parameter elsewhere in this or other OSCAL instances. When
-     * referenced from another OSCAL instance, this identifier must be referenced in the context
-     * of the containing resource (e.g., import-profile). This id should be assigned
-     * per-subject, which means it should be consistently used to identify the same subject
-     * across revisions of the document.
+     * A unique identifier for the parameter.
      */
     readonly id: string;
     /**
@@ -1923,14 +1927,14 @@ export interface Parameter {
     readonly remarks?: string;
     readonly select?: Selection;
     /**
-     * Describes the purpose and use of a parameter
+     * Describes the purpose and use of a parameter.
      */
     readonly usage?: string;
     readonly values?: string[];
 }
 
 /**
- * A formal or informal expression of a constraint or test
+ * A formal or informal expression of a constraint or test.
  */
 export interface Constraint {
     /**
@@ -1945,7 +1949,7 @@ export interface Constraint {
  */
 export interface ConstraintTest {
     /**
-     * A formal (executable) expression of a constraint
+     * A formal (executable) expression of a constraint.
      */
     readonly expression: string;
     readonly remarks?: string;
@@ -1962,7 +1966,7 @@ export interface Guideline {
 }
 
 /**
- * Presenting a choice among alternatives
+ * Presenting a choice among alternatives.
  */
 export interface Selection {
     readonly choice?: string[];
@@ -1981,18 +1985,16 @@ export enum ParameterCardinality {
 /**
  * A group of controls, or of groups of controls.
  */
-export interface ControlGroup {
+export interface CatalogGroup {
     /**
      * A textual label that provides a sub-type or characterization of the group.
      */
     readonly class?: string;
     readonly controls?: Control[];
-    readonly groups?: ControlGroup[];
+    readonly groups?: CatalogGroup[];
     /**
-     * A human-oriented, locally unique identifier with cross-instance scope that can be used to
-     * reference this defined group elsewhere in in this and other OSCAL instances (e.g.,
-     * profiles). This id should be assigned per-subject, which means it should be consistently
-     * used to identify the same group across revisions of the document.
+     * Identifies the group for the purpose of cross-linking within the defining instance or
+     * from other instances that reference the catalog.
      */
     readonly id?: string;
     readonly links?: Link[];
@@ -2013,14 +2015,9 @@ export interface ComponentDefinition {
     readonly capabilities?: Capability[];
     readonly components?: ComponentDefinitionComponent[];
     readonly 'import-component-definitions'?: ImportComponentDefinition[];
-    readonly metadata: PublicationMetadata;
+    readonly metadata: DocumentMetadata;
     /**
-     * A machine-oriented, globally unique identifier with cross-instance scope that can be used
-     * to reference this component definition elsewhere in this or other OSCAL instances. The
-     * locally defined UUID of the component definition can be used to reference the data item
-     * locally or globally (e.g., in an imported OSCAL instance). This UUID should be assigned
-     * per-subject, which means it should be consistently used to identify the same subject
-     * across revisions of the document.
+     * Provides a globally unique means to identify a given component definition instance.
      */
     readonly uuid: string;
 }
@@ -2043,12 +2040,7 @@ export interface Capability {
     readonly props?: Property[];
     readonly remarks?: string;
     /**
-     * A machine-oriented, globally unique identifier with cross-instance scope that can be used
-     * to reference this capability elsewhere in this or other OSCAL instances. The locally
-     * defined UUID of the capability can be used to reference the data item locally or globally
-     * (e.g., in an imported OSCAL instance).This UUID should be assigned per-subject, which
-     * means it should be consistently used to identify the same subject across revisions of the
-     * document.
+     * Provides a globally unique means to identify a given capability.
      */
     readonly uuid: string;
 }
@@ -2072,12 +2064,8 @@ export interface ControlImplementationSet {
      */
     readonly source: string;
     /**
-     * A machine-oriented, globally unique identifier with cross-instance scope that can be used
-     * to reference a set of implemented controls elsewhere in this or other OSCAL instances.
-     * The locally defined UUID of the control implementation set can be used to reference the
-     * data item locally or globally (e.g., in an imported OSCAL instance). This UUID should be
-     * assigned per-subject, which means it should be consistently used to identify the same
-     * subject across revisions of the document.
+     * Provides a means to identify a set of control implementations that are supported by a
+     * given component or capability.
      */
     readonly uuid: string;
 }
@@ -2087,14 +2075,15 @@ export interface ControlImplementationSet {
  */
 export interface ImplementedRequirementElement {
     /**
-     * A human-oriented identifier reference to a control with a corresponding id value. When
-     * referencing an externally defined control, the Control Identifier Reference must be used
-     * in the context of the external / imported OSCAL instance (e.g., uri-reference).
+     * A reference to a control with a corresponding id value. When referencing an externally
+     * defined control, the Control Identifier Reference must be used in the context of the
+     * external / imported OSCAL instance (e.g., uri-reference).
      */
     readonly 'control-id': string;
     /**
-     * A suggestion for how the specified control may be implemented if the containing component
-     * or capability is instantiated in a system security plan.
+     * A suggestion from the supplier (e.g., component vendor or author) for how the specified
+     * control may be implemented if the containing component or capability is instantiated in a
+     * system security plan.
      */
     readonly description: string;
     readonly links?: Link[];
@@ -2104,12 +2093,8 @@ export interface ImplementedRequirementElement {
     readonly 'set-parameters'?: SetParameterValue[];
     readonly statements?: ControlStatementImplementation[];
     /**
-     * A machine-oriented, globally unique identifier with cross-instance scope that can be used
-     * to reference a specific control implementation elsewhere in this or other OSCAL
-     * instances. The locally defined UUID of the control implementation can be used to
-     * reference the data item locally or globally (e.g., in an imported OSCAL instance).This
-     * UUID should be assigned per-subject, which means it should be consistently used to
-     * identify the same subject across revisions of the document.
+     * Provides a globally unique means to identify a given control implementation by a
+     * component.
      */
     readonly uuid: string;
 }
@@ -2154,7 +2139,7 @@ export interface ControlStatementImplementation {
 }
 
 /**
- * TBD
+ * The collection of components comprising this capability.
  */
 export interface IncorporatesComponent {
     /**
@@ -2194,12 +2179,7 @@ export interface ComponentDefinitionComponent {
      */
     readonly type: string;
     /**
-     * A machine-oriented, globally unique identifier with cross-instance scope that can be used
-     * to reference this component elsewhere in this or other OSCAL instances. The locally
-     * defined UUID of the component can be used to reference the data item locally or globally
-     * (e.g., in an imported OSCAL instance). This UUID should be assigned per-subject, which
-     * means it should be consistently used to identify the same subject across revisions of the
-     * document.
+     * Provides a globally unique means to identify a given component.
      */
     readonly uuid: string;
 }
@@ -2221,9 +2201,10 @@ export interface ImportComponentDefinition {
  */
 export interface PlanOfActionAndMilestonesPOAM {
     readonly 'back-matter'?: BackMatter;
+    readonly findings?: Finding[];
     readonly 'import-ssp'?: ImportSystemSecurityPlan;
     readonly 'local-definitions'?: PlanOfActionAndMilestonesLocalDefinitions;
-    readonly metadata: PublicationMetadata;
+    readonly metadata: DocumentMetadata;
     readonly observations?: Observation[];
     readonly 'poam-items': POAMItem[];
     readonly risks?: IdentifiedRisk[];
@@ -2242,6 +2223,7 @@ export interface PlanOfActionAndMilestonesPOAM {
  * where no OSCAL-based SSP exists, or is not delivered with the POA&M.
  */
 export interface PlanOfActionAndMilestonesLocalDefinitions {
+    readonly 'assessment-assets'?: AssessmentAssets;
     readonly components?: AssessmentAssetsComponent[];
     readonly 'inventory-items'?: InventoryItem[];
     readonly remarks?: string;
@@ -2258,6 +2240,7 @@ export interface POAMItem {
     readonly links?: Link[];
     readonly origins?: PoamItemOrigin[];
     readonly props?: Property[];
+    readonly 'related-findings'?: RelatedFinding[];
     readonly 'related-observations'?: PoamItemRelatedObservation[];
     readonly 'related-risks'?: PoamItemRelatedRisk[];
     readonly remarks?: string;
@@ -2279,6 +2262,16 @@ export interface POAMItem {
  */
 export interface PoamItemOrigin {
     readonly actors: OriginatingActor[];
+}
+
+/**
+ * Relates the poam-item to referenced finding(s).
+ */
+export interface RelatedFinding {
+    /**
+     * A machine-oriented identifier reference to a finding defined in the list of findings.
+     */
+    readonly 'finding-uuid': string;
 }
 
 /**
@@ -2320,44 +2313,38 @@ export interface SystemIdentification {
 }
 
 /**
- * Each OSCAL profile is defined by a Profile element
+ * Each OSCAL profile is defined by a profile element.
  */
 export interface Profile {
     readonly 'back-matter'?: BackMatter;
     readonly imports: ImportResource[];
     readonly merge?: MergeControls;
-    readonly metadata: PublicationMetadata;
+    readonly metadata: DocumentMetadata;
     readonly modify?: ModifyControls;
     /**
-     * A machine-oriented, globally unique identifier with cross-instance scope that can be used
-     * to reference this profile elsewhere in this or other OSCAL instances. The locally defined
-     * UUID of the profile can be used to reference the data item locally or globally (e.g., in
-     * an imported OSCAL instance).This identifier should be assigned per-subject, which means
-     * it should be consistently used to identify the same profile across revisions of the
-     * document.
+     * Provides a globally unique means to identify a given profile instance.
      */
     readonly uuid: string;
 }
 
 /**
- * The import designates a catalog or profile to be included (referenced and potentially
- * modified) by this profile. The import also identifies which controls to select using the
- * include-all, include-controls, and exclude-controls directives.
+ * Designates a referenced source catalog or profile that provides a source of control
+ * information for use in creating a new overlay or baseline.
  */
 export interface ImportResource {
-    readonly 'exclude-controls'?: Call[];
+    readonly 'exclude-controls'?: ImportExcludeControl[];
     /**
      * A resolvable URL reference to the base catalog or profile that this profile is tailoring.
      */
     readonly href: string;
     readonly 'include-all'?: IncludeAll;
-    readonly 'include-controls'?: Call[];
+    readonly 'include-controls'?: ImportExcludeControl[];
 }
 
 /**
- * Call a control by its ID
+ * Select a control or controls from an imported control set.
  */
-export interface Call {
+export interface ImportExcludeControl {
     readonly matching?: MatchControlsByPattern[];
     /**
      * When a control is included, whether its child (dependent) controls are also included.
@@ -2367,7 +2354,7 @@ export interface Call {
 }
 
 /**
- * Select controls by (regular expression) match on ID
+ * Selecting a set of controls by matching their IDs with a wildcard pattern.
  */
 export interface MatchControlsByPattern {
     /**
@@ -2382,37 +2369,37 @@ export enum IncludeContainedControlsWithControl {
 }
 
 /**
- * A Merge element provides structuring directives that drive how controls are organized
- * after resolution.
+ * Provides structuring directives that instruct how controls are organized after profile
+ * resolution.
  */
 export interface MergeControls {
     /**
-     * An As-is element indicates that the controls should be structured in resolution as they
-     * are structured in their source catalogs. It does not contain any elements or attributes.
+     * Indicates that the controls selected should retain their original grouping as defined in
+     * the import source.
      */
     readonly 'as-is'?: boolean;
     /**
-     * A Combine element defines how to combine multiple (competing) versions of the same
-     * control.
+     * A Combine element defines how to resolve duplicate instances of the same control (e.g.,
+     * controls with the same ID).
      */
     readonly combine?: CombinationRule;
     /**
-     * A Custom element frames a structure for embedding represented controls in resolution.
+     * Provides an alternate grouping structure that selected controls will be placed in.
      */
     readonly custom?: CustomGrouping;
     /**
-     * Use the flat structuring method.
+     * Directs that controls appear without any grouping structure.
      */
-    readonly flat?: Flat;
+    readonly flat?: FlatWithoutGrouping;
 }
 
 /**
- * A Combine element defines how to combine multiple (competing) versions of the same
- * control.
+ * A Combine element defines how to resolve duplicate instances of the same control (e.g.,
+ * controls with the same ID).
  */
 export interface CombinationRule {
     /**
-     * How clashing controls should be handled
+     * Declare how clashing controls should be handled.
      */
     readonly method?: CombinationMethod;
 }
@@ -2424,15 +2411,15 @@ export enum CombinationMethod {
 }
 
 /**
- * A Custom element frames a structure for embedding represented controls in resolution.
+ * Provides an alternate grouping structure that selected controls will be placed in.
  */
 export interface CustomGrouping {
     readonly groups?: CustomGroup[];
-    readonly 'insert-controls'?: SelectControls[];
+    readonly 'insert-controls'?: InsertControls[];
 }
 
 /**
- * A group of (selected) controls or of groups of controls
+ * A group of (selected) controls or of groups of controls.
  */
 export interface CustomGroup {
     /**
@@ -2441,21 +2428,16 @@ export interface CustomGroup {
     readonly class?: string;
     readonly groups?: CustomGroup[];
     /**
-     * A human-oriented, locally unique identifier with cross-instance scope that can be used to
-     * reference this defined group elsewhere in this or other OSCAL instances. When referenced
-     * from another OSCAL instance, this identifier must be referenced in the context of the
-     * containing resource (e.g., import-profile). This id should be assigned per-subject, which
-     * means it should be consistently used to identify the same group across revisions of the
-     * document.
+     * Identifies the group.
      */
     readonly id?: string;
-    readonly 'insert-controls'?: SelectControls[];
+    readonly 'insert-controls'?: InsertControls[];
     readonly links?: Link[];
     readonly params?: Parameter[];
     readonly parts?: Part[];
     readonly props?: Property[];
     /**
-     * A name given to the group, which may be used by a tool for display and navigation.
+     * A name to be given to the group for use in display.
      */
     readonly title: string;
 }
@@ -2463,10 +2445,10 @@ export interface CustomGroup {
 /**
  * Specifies which controls to use in the containing context.
  */
-export interface SelectControls {
-    readonly 'exclude-controls'?: Call[];
+export interface InsertControls {
+    readonly 'exclude-controls'?: ImportExcludeControl[];
     readonly 'include-all'?: IncludeAll;
-    readonly 'include-controls'?: Call[];
+    readonly 'include-controls'?: ImportExcludeControl[];
     /**
      * A designation of how a selection of controls in a profile is to be ordered.
      */
@@ -2480,13 +2462,13 @@ export enum Order {
 }
 
 /**
- * Use the flat structuring method.
+ * Directs that controls appear without any grouping structure.
  */
-export interface Flat {
+export interface FlatWithoutGrouping {
 }
 
 /**
- * Set parameters or amend controls in resolution
+ * Set parameters or amend controls in resolution.
  */
 export interface ModifyControls {
     readonly alters?: Alteration[];
@@ -2494,22 +2476,21 @@ export interface ModifyControls {
 }
 
 /**
- * An Alter element specifies changes to be made to an included control when a profile is
- * resolved.
+ * Specifies changes to be made to an included control when a profile is resolved.
  */
 export interface Alteration {
     readonly adds?: Addition[];
     /**
-     * A human-oriented identifier reference to a control with a corresponding id value. When
-     * referencing an externally defined control, the Control Identifier Reference must be used
-     * in the context of the external / imported OSCAL instance (e.g., uri-reference).
+     * A reference to a control with a corresponding id value. When referencing an externally
+     * defined control, the Control Identifier Reference must be used in the context of the
+     * external / imported OSCAL instance (e.g., uri-reference).
      */
     readonly 'control-id': string;
     readonly removes?: Removal[];
 }
 
 /**
- * Specifies contents to be added into controls, in resolution
+ * Specifies contents to be added into controls, in resolution.
  */
 export interface Addition {
     /**
@@ -2520,7 +2501,8 @@ export interface Addition {
     readonly params?: Parameter[];
     readonly parts?: Part[];
     /**
-     * Where to add the new content with respect to the targeted element (beside it or inside it)
+     * Where to add the new content with respect to the targeted element (beside it or inside
+     * it).
      */
     readonly position?: Position;
     readonly props?: Property[];
@@ -2551,12 +2533,12 @@ export interface Removal {
      */
     readonly 'by-id'?: string;
     /**
-     * Identify items to remove by the name of the item's information element name, e.g. title
-     * or prop
+     * Identify items to remove by the name of the item's information object name, e.g. title or
+     * prop.
      */
-    readonly 'by-item-name'?: string;
+    readonly 'by-item-name'?: ItemNameReference;
     /**
-     * Identify items to remove by matching their assigned name
+     * Identify items remove by matching their assigned name.
      */
     readonly 'by-name'?: string;
     /**
@@ -2566,8 +2548,17 @@ export interface Removal {
     readonly 'by-ns'?: string;
 }
 
+export enum ItemNameReference {
+    LINK = 'link',
+    MAP = 'map',
+    MAPPING = 'mapping',
+    PARAM = 'param',
+    PART = 'part',
+    PROP = 'prop',
+}
+
 /**
- * A parameter setting, to be propagated to points of insertion
+ * A parameter setting, to be propagated to points of insertion.
  */
 export interface ParameterSetting {
     /**
@@ -2588,31 +2579,26 @@ export interface ParameterSetting {
     readonly label?: string;
     readonly links?: Link[];
     /**
-     * A human-oriented, locally unique identifier with cross-instance scope that can be used to
-     * reference this defined parameter elsewhere in this or other OSCAL instances. When
-     * referenced from another OSCAL instance, this identifier must be referenced in the context
-     * of the containing resource (e.g., import-profile). This id should be assigned
-     * per-subject, which means it should be consistently used to identify the same subject
-     * across revisions of the document.
+     * An identifier for the parameter.
      */
     readonly 'param-id': string;
     readonly props?: Property[];
     readonly select?: Selection;
     /**
-     * Describes the purpose and use of a parameter
+     * Describes the purpose and use of a parameter.
      */
     readonly usage?: string;
     readonly values?: string[];
 }
 
 /**
- * A system security plan, such as those described in NIST SP 800-18
+ * A system security plan, such as those described in NIST SP 800-18.
  */
 export interface SystemSecurityPlanSSP {
     readonly 'back-matter'?: BackMatter;
     readonly 'control-implementation': ControlImplementationClass;
     readonly 'import-profile': ImportProfile;
-    readonly metadata: PublicationMetadata;
+    readonly metadata: DocumentMetadata;
     readonly 'system-characteristics': SystemCharacteristics;
     readonly 'system-implementation': SystemImplementation;
     /**
@@ -2645,9 +2631,9 @@ export interface ControlImplementationClass {
 export interface ControlBasedRequirement {
     readonly 'by-components'?: ComponentControlImplementation[];
     /**
-     * A human-oriented identifier reference to a control with a corresponding id value. When
-     * referencing an externally defined control, the Control Identifier Reference must be used
-     * in the context of the external / imported OSCAL instance (e.g., uri-reference).
+     * A reference to a control with a corresponding id value. When referencing an externally
+     * defined control, the Control Identifier Reference must be used in the context of the
+     * external / imported OSCAL instance (e.g., uri-reference).
      */
     readonly 'control-id': string;
     readonly links?: Link[];
@@ -2885,11 +2871,11 @@ export interface SystemCharacteristics {
     readonly props?: Property[];
     readonly remarks?: string;
     readonly 'responsible-parties'?: ResponsibleParty[];
-    readonly 'security-impact-level': SecurityImpactLevel;
+    readonly 'security-impact-level'?: SecurityImpactLevel;
     /**
      * The overall information system sensitivity categorization, such as defined by FIPS-199.
      */
-    readonly 'security-sensitivity-level': string;
+    readonly 'security-sensitivity-level'?: string;
     readonly status: SystemCharacteristicsStatus;
     readonly 'system-ids': SystemIdentification[];
     readonly 'system-information': SystemInformation;
@@ -3030,26 +3016,14 @@ export interface SystemInformation {
  * the system, such as privacy information, and those defined in NIST SP 800-60.
  */
 export interface InformationType {
-    /**
-     * The expected level of impact resulting from the disruption of access to or use of the
-     * described information or the information system.
-     */
-    readonly 'availability-impact': AvailabilityImpactLevel;
+    readonly 'availability-impact'?: ImpactLevel;
     readonly categorizations?: InformationTypeCategorization[];
-    /**
-     * The expected level of impact resulting from the unauthorized disclosure of the described
-     * information.
-     */
-    readonly 'confidentiality-impact': ConfidentialityImpactLevel;
+    readonly 'confidentiality-impact'?: ImpactLevel;
     /**
      * A summary of how this information type is used within the system.
      */
     readonly description: string;
-    /**
-     * The expected level of impact resulting from the unauthorized modification of the
-     * described information.
-     */
-    readonly 'integrity-impact': IntegrityImpactLevel;
+    readonly 'integrity-impact'?: ImpactLevel;
     readonly links?: Link[];
     readonly props?: Property[];
     /**
@@ -3069,10 +3043,9 @@ export interface InformationType {
 }
 
 /**
- * The expected level of impact resulting from the disruption of access to or use of the
- * described information or the information system.
+ * The expected level of impact resulting from the described information.
  */
-export interface AvailabilityImpactLevel {
+export interface ImpactLevel {
     readonly 'adjustment-justification'?: string;
     readonly base: string;
     readonly links?: Link[];
@@ -3090,30 +3063,6 @@ export interface InformationTypeCategorization {
      * Specifies the information type identification system used.
      */
     readonly system: string;
-}
-
-/**
- * The expected level of impact resulting from the unauthorized disclosure of the described
- * information.
- */
-export interface ConfidentialityImpactLevel {
-    readonly 'adjustment-justification'?: string;
-    readonly base: string;
-    readonly links?: Link[];
-    readonly props?: Property[];
-    readonly selected?: string;
-}
-
-/**
- * The expected level of impact resulting from the unauthorized modification of the
- * described information.
- */
-export interface IntegrityImpactLevel {
-    readonly 'adjustment-justification'?: string;
-    readonly base: string;
-    readonly links?: Link[];
-    readonly props?: Property[];
-    readonly selected?: string;
 }
 
 /**
@@ -3314,6 +3263,7 @@ function r(name: string) {
 
 const typeMap: any = {
     "Oscal": o([
+        { json: "$schema", js: "$schema", typ: u(undefined, "") },
         { json: "catalog", js: "catalog", typ: u(undefined, r("Catalog")) },
         { json: "profile", js: "profile", typ: u(undefined, r("Profile")) },
         { json: "component-definition", js: "component-definition", typ: u(undefined, r("ComponentDefinition")) },
@@ -3328,7 +3278,7 @@ const typeMap: any = {
         { json: "back-matter", js: "back-matter", typ: u(undefined, r("BackMatter")) },
         { json: "import-ssp", js: "import-ssp", typ: r("ImportSystemSecurityPlan") },
         { json: "local-definitions", js: "local-definitions", typ: u(undefined, r("AssessmentPlanLocalDefinitions")) },
-        { json: "metadata", js: "metadata", typ: r("PublicationMetadata") },
+        { json: "metadata", js: "metadata", typ: r("DocumentMetadata") },
         { json: "reviewed-controls", js: "reviewed-controls", typ: r("ReviewedControlsAndControlObjectives") },
         { json: "tasks", js: "tasks", typ: u(undefined, a(r("Task"))) },
         { json: "terms-and-conditions", js: "terms-and-conditions", typ: u(undefined, r("AssessmentPlanTermsAndConditions")) },
@@ -3350,10 +3300,12 @@ const typeMap: any = {
         { json: "href", js: "href", typ: "" },
         { json: "media-type", js: "media-type", typ: u(undefined, "") },
         { json: "rel", js: "rel", typ: u(undefined, "") },
+        { json: "resource-fragment", js: "resource-fragment", typ: u(undefined, "") },
         { json: "text", js: "text", typ: u(undefined, "") },
     ], false),
     "Property": o([
         { json: "class", js: "class", typ: u(undefined, "") },
+        { json: "group", js: "group", typ: u(undefined, "") },
         { json: "name", js: "name", typ: "" },
         { json: "ns", js: "ns", typ: u(undefined, "") },
         { json: "remarks", js: "remarks", typ: u(undefined, "") },
@@ -3510,14 +3462,14 @@ const typeMap: any = {
     ], false),
     "AssessedControls": o([
         { json: "description", js: "description", typ: u(undefined, "") },
-        { json: "exclude-controls", js: "exclude-controls", typ: u(undefined, a(r("SelectControl"))) },
+        { json: "exclude-controls", js: "exclude-controls", typ: u(undefined, a(r("ControlSelectionExcludeControl"))) },
         { json: "include-all", js: "include-all", typ: u(undefined, r("IncludeAll")) },
-        { json: "include-controls", js: "include-controls", typ: u(undefined, a(r("SelectControl"))) },
+        { json: "include-controls", js: "include-controls", typ: u(undefined, a(r("ControlSelectionExcludeControl"))) },
         { json: "links", js: "links", typ: u(undefined, a(r("Link"))) },
         { json: "props", js: "props", typ: u(undefined, a(r("Property"))) },
         { json: "remarks", js: "remarks", typ: u(undefined, "") },
     ], false),
-    "SelectControl": o([
+    "ControlSelectionExcludeControl": o([
         { json: "control-id", js: "control-id", typ: "" },
         { json: "statement-ids", js: "statement-ids", typ: u(undefined, a("")) },
     ], false),
@@ -3582,13 +3534,14 @@ const typeMap: any = {
         { json: "functions-performed", js: "functions-performed", typ: a("") },
         { json: "title", js: "title", typ: "" },
     ], false),
-    "PublicationMetadata": o([
+    "DocumentMetadata": o([
+        { json: "actions", js: "actions", typ: u(undefined, a(r("Action"))) },
         { json: "document-ids", js: "document-ids", typ: u(undefined, a(r("DocumentIdentifier"))) },
         { json: "last-modified", js: "last-modified", typ: Date },
         { json: "links", js: "links", typ: u(undefined, a(r("Link"))) },
         { json: "locations", js: "locations", typ: u(undefined, a(r("Location"))) },
         { json: "oscal-version", js: "oscal-version", typ: "" },
-        { json: "parties", js: "parties", typ: u(undefined, a(r("PartyOrganizationOrPerson"))) },
+        { json: "parties", js: "parties", typ: u(undefined, a(r("Party"))) },
         { json: "props", js: "props", typ: u(undefined, a(r("Property"))) },
         { json: "published", js: "published", typ: u(undefined, Date) },
         { json: "remarks", js: "remarks", typ: u(undefined, "") },
@@ -3598,8 +3551,18 @@ const typeMap: any = {
         { json: "title", js: "title", typ: "" },
         { json: "version", js: "version", typ: "" },
     ], false),
+    "Action": o([
+        { json: "date", js: "date", typ: u(undefined, Date) },
+        { json: "links", js: "links", typ: u(undefined, a(r("Link"))) },
+        { json: "props", js: "props", typ: u(undefined, a(r("Property"))) },
+        { json: "remarks", js: "remarks", typ: u(undefined, "") },
+        { json: "responsible-parties", js: "responsible-parties", typ: u(undefined, a(r("ResponsibleParty"))) },
+        { json: "system", js: "system", typ: "" },
+        { json: "type", js: "type", typ: "" },
+        { json: "uuid", js: "uuid", typ: "" },
+    ], false),
     "Location": o([
-        { json: "address", js: "address", typ: r("Address") },
+        { json: "address", js: "address", typ: u(undefined, r("Address")) },
         { json: "email-addresses", js: "email-addresses", typ: u(undefined, a("")) },
         { json: "links", js: "links", typ: u(undefined, a(r("Link"))) },
         { json: "props", js: "props", typ: u(undefined, a(r("Property"))) },
@@ -3621,7 +3584,7 @@ const typeMap: any = {
         { json: "number", js: "number", typ: "" },
         { json: "type", js: "type", typ: u(undefined, "") },
     ], false),
-    "PartyOrganizationOrPerson": o([
+    "Party": o([
         { json: "addresses", js: "addresses", typ: u(undefined, a(r("Address"))) },
         { json: "email-addresses", js: "email-addresses", typ: u(undefined, a("")) },
         { json: "external-ids", js: "external-ids", typ: u(undefined, a(r("PartyExternalIdentifier"))) },
@@ -3720,7 +3683,7 @@ const typeMap: any = {
         { json: "back-matter", js: "back-matter", typ: u(undefined, r("BackMatter")) },
         { json: "import-ap", js: "import-ap", typ: r("ImportAssessmentPlan") },
         { json: "local-definitions", js: "local-definitions", typ: u(undefined, r("AssessmentResultsLocalDefinitions")) },
-        { json: "metadata", js: "metadata", typ: r("PublicationMetadata") },
+        { json: "metadata", js: "metadata", typ: r("DocumentMetadata") },
         { json: "results", js: "results", typ: a(r("AssessmentResult")) },
         { json: "uuid", js: "uuid", typ: "" },
     ], false),
@@ -3967,8 +3930,8 @@ const typeMap: any = {
     "Catalog": o([
         { json: "back-matter", js: "back-matter", typ: u(undefined, r("BackMatter")) },
         { json: "controls", js: "controls", typ: u(undefined, a(r("Control"))) },
-        { json: "groups", js: "groups", typ: u(undefined, a(r("ControlGroup"))) },
-        { json: "metadata", js: "metadata", typ: r("PublicationMetadata") },
+        { json: "groups", js: "groups", typ: u(undefined, a(r("CatalogGroup"))) },
+        { json: "metadata", js: "metadata", typ: r("DocumentMetadata") },
         { json: "params", js: "params", typ: u(undefined, a(r("Parameter"))) },
         { json: "uuid", js: "uuid", typ: "" },
     ], false),
@@ -4011,10 +3974,10 @@ const typeMap: any = {
         { json: "choice", js: "choice", typ: u(undefined, a("")) },
         { json: "how-many", js: "how-many", typ: u(undefined, r("ParameterCardinality")) },
     ], false),
-    "ControlGroup": o([
+    "CatalogGroup": o([
         { json: "class", js: "class", typ: u(undefined, "") },
         { json: "controls", js: "controls", typ: u(undefined, a(r("Control"))) },
-        { json: "groups", js: "groups", typ: u(undefined, a(r("ControlGroup"))) },
+        { json: "groups", js: "groups", typ: u(undefined, a(r("CatalogGroup"))) },
         { json: "id", js: "id", typ: u(undefined, "") },
         { json: "links", js: "links", typ: u(undefined, a(r("Link"))) },
         { json: "params", js: "params", typ: u(undefined, a(r("Parameter"))) },
@@ -4027,7 +3990,7 @@ const typeMap: any = {
         { json: "capabilities", js: "capabilities", typ: u(undefined, a(r("Capability"))) },
         { json: "components", js: "components", typ: u(undefined, a(r("ComponentDefinitionComponent"))) },
         { json: "import-component-definitions", js: "import-component-definitions", typ: u(undefined, a(r("ImportComponentDefinition"))) },
-        { json: "metadata", js: "metadata", typ: r("PublicationMetadata") },
+        { json: "metadata", js: "metadata", typ: r("DocumentMetadata") },
         { json: "uuid", js: "uuid", typ: "" },
     ], false),
     "Capability": o([
@@ -4096,9 +4059,10 @@ const typeMap: any = {
     ], false),
     "PlanOfActionAndMilestonesPOAM": o([
         { json: "back-matter", js: "back-matter", typ: u(undefined, r("BackMatter")) },
+        { json: "findings", js: "findings", typ: u(undefined, a(r("Finding"))) },
         { json: "import-ssp", js: "import-ssp", typ: u(undefined, r("ImportSystemSecurityPlan")) },
         { json: "local-definitions", js: "local-definitions", typ: u(undefined, r("PlanOfActionAndMilestonesLocalDefinitions")) },
-        { json: "metadata", js: "metadata", typ: r("PublicationMetadata") },
+        { json: "metadata", js: "metadata", typ: r("DocumentMetadata") },
         { json: "observations", js: "observations", typ: u(undefined, a(r("Observation"))) },
         { json: "poam-items", js: "poam-items", typ: a(r("POAMItem")) },
         { json: "risks", js: "risks", typ: u(undefined, a(r("IdentifiedRisk"))) },
@@ -4106,6 +4070,7 @@ const typeMap: any = {
         { json: "uuid", js: "uuid", typ: "" },
     ], false),
     "PlanOfActionAndMilestonesLocalDefinitions": o([
+        { json: "assessment-assets", js: "assessment-assets", typ: u(undefined, r("AssessmentAssets")) },
         { json: "components", js: "components", typ: u(undefined, a(r("AssessmentAssetsComponent"))) },
         { json: "inventory-items", js: "inventory-items", typ: u(undefined, a(r("InventoryItem"))) },
         { json: "remarks", js: "remarks", typ: u(undefined, "") },
@@ -4115,6 +4080,7 @@ const typeMap: any = {
         { json: "links", js: "links", typ: u(undefined, a(r("Link"))) },
         { json: "origins", js: "origins", typ: u(undefined, a(r("PoamItemOrigin"))) },
         { json: "props", js: "props", typ: u(undefined, a(r("Property"))) },
+        { json: "related-findings", js: "related-findings", typ: u(undefined, a(r("RelatedFinding"))) },
         { json: "related-observations", js: "related-observations", typ: u(undefined, a(r("PoamItemRelatedObservation"))) },
         { json: "related-risks", js: "related-risks", typ: u(undefined, a(r("PoamItemRelatedRisk"))) },
         { json: "remarks", js: "remarks", typ: u(undefined, "") },
@@ -4123,6 +4089,9 @@ const typeMap: any = {
     ], false),
     "PoamItemOrigin": o([
         { json: "actors", js: "actors", typ: a(r("OriginatingActor")) },
+    ], false),
+    "RelatedFinding": o([
+        { json: "finding-uuid", js: "finding-uuid", typ: "" },
     ], false),
     "PoamItemRelatedObservation": o([
         { json: "observation-uuid", js: "observation-uuid", typ: "" },
@@ -4138,17 +4107,17 @@ const typeMap: any = {
         { json: "back-matter", js: "back-matter", typ: u(undefined, r("BackMatter")) },
         { json: "imports", js: "imports", typ: a(r("ImportResource")) },
         { json: "merge", js: "merge", typ: u(undefined, r("MergeControls")) },
-        { json: "metadata", js: "metadata", typ: r("PublicationMetadata") },
+        { json: "metadata", js: "metadata", typ: r("DocumentMetadata") },
         { json: "modify", js: "modify", typ: u(undefined, r("ModifyControls")) },
         { json: "uuid", js: "uuid", typ: "" },
     ], false),
     "ImportResource": o([
-        { json: "exclude-controls", js: "exclude-controls", typ: u(undefined, a(r("Call"))) },
+        { json: "exclude-controls", js: "exclude-controls", typ: u(undefined, a(r("ImportExcludeControl"))) },
         { json: "href", js: "href", typ: "" },
         { json: "include-all", js: "include-all", typ: u(undefined, r("IncludeAll")) },
-        { json: "include-controls", js: "include-controls", typ: u(undefined, a(r("Call"))) },
+        { json: "include-controls", js: "include-controls", typ: u(undefined, a(r("ImportExcludeControl"))) },
     ], false),
-    "Call": o([
+    "ImportExcludeControl": o([
         { json: "matching", js: "matching", typ: u(undefined, a(r("MatchControlsByPattern"))) },
         { json: "with-child-controls", js: "with-child-controls", typ: u(undefined, r("IncludeContainedControlsWithControl")) },
         { json: "with-ids", js: "with-ids", typ: u(undefined, a("")) },
@@ -4160,33 +4129,33 @@ const typeMap: any = {
         { json: "as-is", js: "as-is", typ: u(undefined, true) },
         { json: "combine", js: "combine", typ: u(undefined, r("CombinationRule")) },
         { json: "custom", js: "custom", typ: u(undefined, r("CustomGrouping")) },
-        { json: "flat", js: "flat", typ: u(undefined, r("Flat")) },
+        { json: "flat", js: "flat", typ: u(undefined, r("FlatWithoutGrouping")) },
     ], false),
     "CombinationRule": o([
         { json: "method", js: "method", typ: u(undefined, r("CombinationMethod")) },
     ], false),
     "CustomGrouping": o([
         { json: "groups", js: "groups", typ: u(undefined, a(r("CustomGroup"))) },
-        { json: "insert-controls", js: "insert-controls", typ: u(undefined, a(r("SelectControls"))) },
+        { json: "insert-controls", js: "insert-controls", typ: u(undefined, a(r("InsertControls"))) },
     ], false),
     "CustomGroup": o([
         { json: "class", js: "class", typ: u(undefined, "") },
         { json: "groups", js: "groups", typ: u(undefined, a(r("CustomGroup"))) },
         { json: "id", js: "id", typ: u(undefined, "") },
-        { json: "insert-controls", js: "insert-controls", typ: u(undefined, a(r("SelectControls"))) },
+        { json: "insert-controls", js: "insert-controls", typ: u(undefined, a(r("InsertControls"))) },
         { json: "links", js: "links", typ: u(undefined, a(r("Link"))) },
         { json: "params", js: "params", typ: u(undefined, a(r("Parameter"))) },
         { json: "parts", js: "parts", typ: u(undefined, a(r("Part"))) },
         { json: "props", js: "props", typ: u(undefined, a(r("Property"))) },
         { json: "title", js: "title", typ: "" },
     ], false),
-    "SelectControls": o([
-        { json: "exclude-controls", js: "exclude-controls", typ: u(undefined, a(r("Call"))) },
+    "InsertControls": o([
+        { json: "exclude-controls", js: "exclude-controls", typ: u(undefined, a(r("ImportExcludeControl"))) },
         { json: "include-all", js: "include-all", typ: u(undefined, r("IncludeAll")) },
-        { json: "include-controls", js: "include-controls", typ: u(undefined, a(r("Call"))) },
+        { json: "include-controls", js: "include-controls", typ: u(undefined, a(r("ImportExcludeControl"))) },
         { json: "order", js: "order", typ: u(undefined, r("Order")) },
     ], false),
-    "Flat": o([
+    "FlatWithoutGrouping": o([
     ], false),
     "ModifyControls": o([
         { json: "alters", js: "alters", typ: u(undefined, a(r("Alteration"))) },
@@ -4209,7 +4178,7 @@ const typeMap: any = {
     "Removal": o([
         { json: "by-class", js: "by-class", typ: u(undefined, "") },
         { json: "by-id", js: "by-id", typ: u(undefined, "") },
-        { json: "by-item-name", js: "by-item-name", typ: u(undefined, "") },
+        { json: "by-item-name", js: "by-item-name", typ: u(undefined, r("ItemNameReference")) },
         { json: "by-name", js: "by-name", typ: u(undefined, "") },
         { json: "by-ns", js: "by-ns", typ: u(undefined, "") },
     ], false),
@@ -4230,7 +4199,7 @@ const typeMap: any = {
         { json: "back-matter", js: "back-matter", typ: u(undefined, r("BackMatter")) },
         { json: "control-implementation", js: "control-implementation", typ: r("ControlImplementationClass") },
         { json: "import-profile", js: "import-profile", typ: r("ImportProfile") },
-        { json: "metadata", js: "metadata", typ: r("PublicationMetadata") },
+        { json: "metadata", js: "metadata", typ: r("DocumentMetadata") },
         { json: "system-characteristics", js: "system-characteristics", typ: r("SystemCharacteristics") },
         { json: "system-implementation", js: "system-implementation", typ: r("SystemImplementation") },
         { json: "uuid", js: "uuid", typ: "" },
@@ -4330,8 +4299,8 @@ const typeMap: any = {
         { json: "props", js: "props", typ: u(undefined, a(r("Property"))) },
         { json: "remarks", js: "remarks", typ: u(undefined, "") },
         { json: "responsible-parties", js: "responsible-parties", typ: u(undefined, a(r("ResponsibleParty"))) },
-        { json: "security-impact-level", js: "security-impact-level", typ: r("SecurityImpactLevel") },
-        { json: "security-sensitivity-level", js: "security-sensitivity-level", typ: "" },
+        { json: "security-impact-level", js: "security-impact-level", typ: u(undefined, r("SecurityImpactLevel")) },
+        { json: "security-sensitivity-level", js: "security-sensitivity-level", typ: u(undefined, "") },
         { json: "status", js: "status", typ: r("SystemCharacteristicsStatus") },
         { json: "system-ids", js: "system-ids", typ: a(r("SystemIdentification")) },
         { json: "system-information", js: "system-information", typ: r("SystemInformation") },
@@ -4382,17 +4351,17 @@ const typeMap: any = {
         { json: "props", js: "props", typ: u(undefined, a(r("Property"))) },
     ], false),
     "InformationType": o([
-        { json: "availability-impact", js: "availability-impact", typ: r("AvailabilityImpactLevel") },
+        { json: "availability-impact", js: "availability-impact", typ: u(undefined, r("ImpactLevel")) },
         { json: "categorizations", js: "categorizations", typ: u(undefined, a(r("InformationTypeCategorization"))) },
-        { json: "confidentiality-impact", js: "confidentiality-impact", typ: r("ConfidentialityImpactLevel") },
+        { json: "confidentiality-impact", js: "confidentiality-impact", typ: u(undefined, r("ImpactLevel")) },
         { json: "description", js: "description", typ: "" },
-        { json: "integrity-impact", js: "integrity-impact", typ: r("IntegrityImpactLevel") },
+        { json: "integrity-impact", js: "integrity-impact", typ: u(undefined, r("ImpactLevel")) },
         { json: "links", js: "links", typ: u(undefined, a(r("Link"))) },
         { json: "props", js: "props", typ: u(undefined, a(r("Property"))) },
         { json: "title", js: "title", typ: "" },
         { json: "uuid", js: "uuid", typ: u(undefined, "") },
     ], false),
-    "AvailabilityImpactLevel": o([
+    "ImpactLevel": o([
         { json: "adjustment-justification", js: "adjustment-justification", typ: u(undefined, "") },
         { json: "base", js: "base", typ: "" },
         { json: "links", js: "links", typ: u(undefined, a(r("Link"))) },
@@ -4402,20 +4371,6 @@ const typeMap: any = {
     "InformationTypeCategorization": o([
         { json: "information-type-ids", js: "information-type-ids", typ: u(undefined, a("")) },
         { json: "system", js: "system", typ: "" },
-    ], false),
-    "ConfidentialityImpactLevel": o([
-        { json: "adjustment-justification", js: "adjustment-justification", typ: u(undefined, "") },
-        { json: "base", js: "base", typ: "" },
-        { json: "links", js: "links", typ: u(undefined, a(r("Link"))) },
-        { json: "props", js: "props", typ: u(undefined, a(r("Property"))) },
-        { json: "selected", js: "selected", typ: u(undefined, "") },
-    ], false),
-    "IntegrityImpactLevel": o([
-        { json: "adjustment-justification", js: "adjustment-justification", typ: u(undefined, "") },
-        { json: "base", js: "base", typ: "" },
-        { json: "links", js: "links", typ: u(undefined, a(r("Link"))) },
-        { json: "props", js: "props", typ: u(undefined, a(r("Property"))) },
-        { json: "selected", js: "selected", typ: u(undefined, "") },
     ], false),
     "SystemImplementation": o([
         { json: "components", js: "components", typ: a(r("AssessmentAssetsComponent")) },
@@ -4493,6 +4448,14 @@ const typeMap: any = {
         "before",
         "ending",
         "starting",
+    ],
+    "ItemNameReference": [
+        "link",
+        "map",
+        "mapping",
+        "param",
+        "part",
+        "prop",
     ],
     "FluffyState": [
         "disposition",
