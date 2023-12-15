@@ -46,7 +46,7 @@ jobs:
           REACT_APP_GOOGLE_ANALYTICS: "${{ secrets.GA4_CODE }}"
           PUBLIC_URL: "/"
       - name: Archive viewer
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: oscal-viewer
           path: packages/oscal-viewer/build
