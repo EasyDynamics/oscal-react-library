@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Get information about the latest release
         id: fetch-data
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             const prerelease = context.payload?.inputs?.prerelease ?? false;
