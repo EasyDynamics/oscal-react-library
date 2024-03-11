@@ -73,7 +73,7 @@ jobs:
         working-directory: packages/oscal-react-library
 
       - name: Create a GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
           tag_name: v${{ env.PKG_VERSION }}
