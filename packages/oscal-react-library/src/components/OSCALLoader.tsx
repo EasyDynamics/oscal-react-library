@@ -121,32 +121,62 @@ export default function OSCALLoader(props: OSCALLoaderProps): ReactElement {
   const oscalObjectUuid = useParams()?.id ?? "";
   const buildOscalUrl = (uuid: string) =>
     `${props.backendUrl}/${props.oscalObjectType.restPath}/${uuid}`;
-  const determineDefaultOscalUrl = () =>
+  const determineDefaultOscalUrl = () => 
     (props.isRestMode ? null : getRequestedUrl()) || props.oscalObjectType.defaultUrl;
 
   const [oscalUrl, setOscalUrl] = useState(determineDefaultOscalUrl());
+  
+  const [username, setUsername] = useState("");
+  const handleUsernameChange = (value: string) => {
+    setUsername(value);
+  };
+
+  const [password, setPassword] = useState("");
+  const handlePasswordChange = (value: string) => {
+    setPassword(value);
+  };
+
+  const [checked, setChecked] = useState(false);
+  const handleCheckboxChange = (value: boolean) => {
+    setChecked(value);
+  };
 
   const loadOscalData = (newOscalUrl: string) => {
     if (!newOscalUrl) {
       setIsLoaded(true);
       return;
     }
-    fetch(newOscalUrl)
-      .then((response) => {
-        if (!response.ok) throw new Error(response.status.toString());
-        else return response.text();
-      })
-      .then((result) => Convert.toOscal(result))
-      .then((oscalObj) => {
-        if (isMounted.current) {
-          const source = Convert.oscalToJson(oscalObj);
-          // TODO: Currently data is passed to components through modifying objects.
-          // This approach should be revisited.
-          // https://github.com/EasyDynamics/oscal-react-library/issues/297
-          setOscalData({ ...oscalObj, oscalSource: source });
-          setIsLoaded(true);
-        }
-      }, handleError);
+    
+	  const options = checked
+		? {
+			method: 'GET',
+			headers: {
+			  'Authorization': `Basic ${btoa(username + ":" + password)}`,
+			  'Content-Type': 'application/json',
+			},
+		  }
+		: {};
+
+	  fetch(newOscalUrl, options)
+		.then((response) => {
+		  if (!response.ok) {
+			throw new Error(response.status.toString());
+		  }
+		  return response.text();
+		})
+		.then((result) => Convert.toOscal(result))
+		.then((oscalObj) => {
+		  if (isMounted.current) {
+			const source = Convert.oscalToJson(oscalObj);
+			// TODO: Currently data is passed to components through modifying objects.
+			// This approach should be revisited.
+			// https://github.com/EasyDynamics/oscal-react-library/issues/297
+			setOscalData({ ...oscalObj, oscalSource: source });
+			setIsLoaded(true);
+		  }
+		})
+		.catch(handleError);
+    
   };
 
   const handleFieldSave: OnFieldSaveHandlerWrapped = (
@@ -304,7 +334,7 @@ export default function OSCALLoader(props: OSCALLoaderProps): ReactElement {
   let form;
   if (props.renderForm && hasDefaultUrl) {
     form = (
-      <OSCALLoaderForm
+      <OSCALLoaderForm        
         oscalObjectType={props.oscalObjectType}
         oscalUrl={oscalUrl}
         onUrlChange={handleUrlChange}
@@ -313,6 +343,9 @@ export default function OSCALLoader(props: OSCALLoaderProps): ReactElement {
         isResolutionComplete={isResolutionComplete}
         onError={handleError}
         backendUrl={props.backendUrl}
+        onUsernameChange={handleUsernameChange}
+        onPasswordChange={handlePasswordChange}
+        onCheckboxChange={handleCheckboxChange}
       />
     );
   }
