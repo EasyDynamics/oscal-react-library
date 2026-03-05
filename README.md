@@ -1,5 +1,16 @@
 # OSCAL React Library
 
+> [!IMPORTANT]
+> **REPOSITORY STATUS: archived (read-only).** The ecosystem has shifted. With modern LLM-assisted development,
+> many teams can build small, purpose-built OSCAL UIs quickly, and we have not seen sustained community demand to
+> justify maintaining a standalone React component library over the long term.
+>
+> Easy Dynamics is a member of the [OSCAL Foundation](https://oscalfoundation.org/) and remains deeply committed to OSCAL. Ongoing development and support
+> has moved to our maintained OSCAL Viewer application:
+> https://github.com/EasyDynamics/oscal-viewer
+>
+> Please use the viewer repository for updates, issues, and contributions.
+
 A library of React components and an [example application](/packages/oscal-viewer) that provides
 a direct view into NIST's Open Security Controls Assessment Language ([OSCAL](https://pages.nist.gov/OSCAL/)) data
 in JSON format.
@@ -22,7 +33,7 @@ in the manner that best fits their application.
 Documentation for the React components, as well as an editable mockup of each component, can be found on our
 [Storybook page](https://docs.oscal-react-library.msd.easydynamics.com/).
 
-The [viewer appplication](./packages/oscal-viewer/) shows how those components can be assembled
+The [viewer application](./packages/oscal-viewer/) shows how those components can be assembled
 to create an OSCAL Viewer application.
 
 ## Setting Up
