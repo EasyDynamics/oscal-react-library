@@ -1,7 +1,7 @@
 # OSCAL React Library
 
 > [!IMPORTANT]
-> **Repository status: archived (read-only).** The ecosystem has shifted: with modern LLM-assisted development,
+> **REPOSITORY STATUS: archived (read-only).** The ecosystem has shifted. With modern LLM-assisted development,
 > many teams can build small, purpose-built OSCAL UIs quickly, and we have not seen sustained community demand to
 > justify maintaining a standalone React component library over the long term.
 >
